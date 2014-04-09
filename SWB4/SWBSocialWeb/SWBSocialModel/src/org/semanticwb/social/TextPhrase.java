@@ -108,6 +108,7 @@ public class TextPhrase extends org.semanticwb.social.base.TextPhraseBase
 //          System.out.println(" "+(int)value.charAt(x));
 //      }
         if (mode.equals("edit") || mode.equals("create")) {
+            ret.append("<div class=\"streamPhrases\">");
             ret.append("<input name=\"" + name + "\" size=\"30\" value=\"" + value + "\"");
 
             if (DOJO) {
@@ -170,10 +171,7 @@ public class TextPhrase extends org.semanticwb.social.base.TextPhraseBase
                     }
                 }
             }
-            
-            //ret.append("<img src=\"/swbadmin/css/images/config-tw.png\" />");   //Twitter
-            //ret.append("<img src=\"/swbadmin/css/images/config-fb.png\" />");   //Facebook
-            //ret.append("<img src=\"/swbadmin/css/images/config-yt.png\" />");   //Youtube
+            ret.append("</div>");            
         } else if (mode.equals("view")) {
             ret.append("<span name=\"" + name + "\">" + value + "</span>");
         }

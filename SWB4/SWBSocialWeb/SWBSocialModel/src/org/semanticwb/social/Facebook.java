@@ -2004,15 +2004,19 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     }
     
     @Override
-    public void createPageTab(PageTab pageTab) {
-        System.out.println("CREANDO TAB!!!!!!");
-        //throw new UnsupportedOperationException("Not supported yet.");
+    public boolean createPageTab(PageTab pageTab) {
+        System.out.println("Entra a Create...Facebook");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void removePageTab(PageTab pageTab) {
-        System.out.println("ELIMINANDO TAB!!!!!!");
-        //throw new UnsupportedOperationException("Not supported yet.");
+    public boolean removePageTab(PageTab pageTab) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removePageTab(FanPage fanPage, String app_id) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

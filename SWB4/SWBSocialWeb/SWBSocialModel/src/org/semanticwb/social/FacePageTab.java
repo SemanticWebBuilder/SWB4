@@ -1,5 +1,6 @@
 package org.semanticwb.social;
 
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
@@ -21,41 +22,82 @@ public class FacePageTab extends org.semanticwb.social.base.FacePageTabBase
         FacePageTab.sclass.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
+                //System.out.println("FacePageTab-1");
                 if(action!=null && obj.instanceOf(FacePageTab.social_FacePageTab))
                 {
                     FacePageTab facePageTab = (FacePageTab) obj.createGenericInstance();
                     WebPage parentPage=facePageTab.getParent();
+                    //System.out.println("FacePageTab-2:"+parentPage);
                     if(parentPage instanceof FacebookFanPage)
                     {
                         FacebookFanPage faceFanPage=(FacebookFanPage)parentPage;
+                        //System.out.println("FacePageTab-3:"+faceFanPage);
                         if(faceFanPage.getSn_socialNet()!=null && faceFanPage.getSn_socialNet() instanceof Pageable)
                         {
                             Pageable pageable=(Pageable)faceFanPage.getSn_socialNet();
-                            SemanticProperty semProp = (SemanticProperty) prop;;
-                            System.out.println("facePageTab/Accion:"+action+", facePageTab:"+facePageTab.getURI()+",semProp:"+semProp);
-                            if(action.equalsIgnoreCase("CREATE"))   //Quiere decir que se esta creando una instancia de la clase nueva
+                            //System.out.println("FacePageTab-4:"+pageable);
+                            if(pageable!=null)
                             {
-                                System.out.println("Entra a facePageTab/Create...");
-                                
-                                pageable.createPageTab(facePageTab);
-                                
-                                //Revisar si esta activo el facePageTab y tiene un app_id, ligar con la página
-                            }else if(action.equalsIgnoreCase("REMOVE") && semProp==null)  //Quiere decir que se esta eliminando una instancia de clase completa, no una propiedad
-                            {
-                                System.out.println("Entra a facePageTab/Remove...");
-                                
-                                pageable.removePageTab(facePageTab);
-
-                                //Desligar app_id de página.
-                            }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(FacePageTab.social_face_appid.getURI()))))
-                            {
-                                //Revisar
-
-                                //si desactivaron el FacePageTab, eliminar el tab de la página
-
-                                //Si activaron el el FacePageTab,  y tiene un app_id, ligarlo con la página
-
-                                //Si cambiaron el app_id y esta activa la FacePageTab, eliminar el app_id(desligar) y ligar el nuevo (aunque haya sido el anterior)
+                                if(prop!=null)
+                                {
+                                    SemanticProperty semProp = (SemanticProperty) prop;
+                                    //System.out.println("FacePageTab-5:"+action+",semProp:"+semProp.getName()+",semPropValue:"+obj.getProperty(semProp)+"Activeble:"+Activeable.swb_active.getName());
+                                    if((action.equalsIgnoreCase("SET") && semProp!=null && (semProp.getName().equals(Activeable.swb_active.getName()) ||
+                                            semProp.getName().equals(FacePageTab.social_face_appid.getName()))))
+                                    {
+                                        if(semProp.getName().equals(Activeable.swb_active.getName()))   //Si la propiedad es Active
+                                        {
+                                            if(obj.getBooleanProperty(semProp)) //Si se activa el tab
+                                            {
+                                                if(facePageTab.getFace_appid()!=null)   //Crear Tab
+                                                {
+                                                    //System.out.println("FacePageTab-6-Eliminar Antiguo");
+                                                    if(facePageTab.getFace_old_appid()!=null){
+                                                        pageable.removePageTab(faceFanPage, facePageTab.getFace_old_appid());
+                                                    }
+                                                    if(pageable.createPageTab(facePageTab))  //Si facebook regresa que si se pudo crear el tab en la página
+                                                    {
+                                                        //System.out.println("FacePageTab-6.6-Crear Nuevo");
+                                                        facePageTab.setFace_old_appid(facePageTab.getFace_appid());
+                                                    }
+                                                }
+                                            }else if(!obj.getBooleanProperty(semProp))
+                                            {
+                                                if(facePageTab.getFace_appid()!=null)   //Eliminar Tab
+                                                {
+                                                    //System.out.println("FacePageTab-7--Eliminar");
+                                                    pageable.removePageTab(facePageTab);
+                                                }
+                                            }
+                                        }else if(semProp.getName().equals(FacePageTab.social_face_appid.getName()))   //Si la propiedad es app_id
+                                        {
+                                            //System.out.println("Va eliminar x propiedad K");
+                                            if(facePageTab.isActive())
+                                            {
+                                                if(facePageTab.getFace_old_appid()!=null){
+                                                    //System.out.println("Va eliminar x propiedad K-1");
+                                                    pageable.removePageTab(faceFanPage, facePageTab.getFace_old_appid());
+                                                }
+                                                if(pageable.createPageTab(facePageTab))  //Si facebook regresa que si se pudo crear el tab en la página
+                                                {
+                                                    //System.out.println("Va crear x propiedad K-2");
+                                                    facePageTab.setFace_old_appid(facePageTab.getFace_appid());
+                                                }
+                                            }
+                                        }
+                                    }else if((action.equalsIgnoreCase("REMOVE") && semProp.getName().equals(FacePageTab.social_face_appid.getName()))) //Set a null la propiedad app_id
+                                    {
+                                        if(facePageTab.isActive())
+                                        {
+                                            //System.out.println("FacePageTab-7--Eliminar Por Propiedad");
+                                            pageable.removePageTab(facePageTab);
+                                        }
+                                    }
+                                }else if(action.equalsIgnoreCase("REMOVE"))  //Elimina el FacePageTab
+                                {
+                                    //System.out.println("FacePageTab-7--Eliminar Por Eliminar");
+                                    pageable.removePageTab(facePageTab);
+                                }
                             }
                         }
                     }

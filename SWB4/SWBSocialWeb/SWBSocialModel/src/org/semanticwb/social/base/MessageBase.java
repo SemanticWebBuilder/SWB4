@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje 
    */
-public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.social.PostTextable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.social.FileAble,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.social.PostDataable
+public abstract class MessageBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Tagable,org.semanticwb.model.CalendarRefable,org.semanticwb.social.PostDataable,org.semanticwb.social.FileAble,org.semanticwb.model.Traceable,org.semanticwb.model.Referensable,org.semanticwb.social.PostTextable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo mensaje
