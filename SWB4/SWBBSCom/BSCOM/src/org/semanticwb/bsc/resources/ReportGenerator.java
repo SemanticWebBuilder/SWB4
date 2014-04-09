@@ -119,7 +119,7 @@ public class ReportGenerator extends GenericResource {
             }
         }
         
-        String propertiesScript = getClassesProperties(childMap);
+        String propertiesScript = this.getClassesProperties(childMap);
         output.append("      </select>\n");
         output.append("    </div>\n");
         output.append("    <div class=\"\"><label for=\"title\">");
@@ -133,7 +133,7 @@ public class ReportGenerator extends GenericResource {
         output.append("      </select>\n");
         output.append("    </div>\n");
         
-        Iterator<Period> periods = getAllowedPeriods(paramRequest).iterator();
+        Iterator<Period> periods = this.getAllowedPeriods(paramRequest).iterator();
         StringBuilder periodOpt = new StringBuilder(128);
         while (periods.hasNext()) {
             Period period = periods.next();
@@ -185,7 +185,7 @@ public class ReportGenerator extends GenericResource {
         output.append(paramRequest.getLocaleString("lbl_noSelection"));
         output.append("</option>\n");
         
-        Iterator<User> champions = userListByRole(paramRequest.getLocaleString("usersRole2List"), repository);
+        Iterator<User> champions = this.userListByRole(paramRequest.getLocaleString("usersRole2List"), repository);
         while (champions != null && champions.hasNext()) {
             User champion = champions.next();
             output.append("        <option value=\"");
@@ -209,7 +209,7 @@ public class ReportGenerator extends GenericResource {
             output.append(paramRequest.getLocaleString("lbl_noSelection"));
             output.append("</option>\n");
 
-            Iterator<User> sponsors = userListByRole("Sponsor", repository);
+            Iterator<User> sponsors = this.userListByRole("Sponsor", repository);
             while (sponsors != null && sponsors.hasNext()) {
                 User sponsor = sponsors.next();
                 output.append("        <option value=\"");
@@ -314,9 +314,9 @@ public class ReportGenerator extends GenericResource {
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
         if (mode != null && mode.equals("elementList")) {
-            doElementList(request, response, paramRequest);
+            this.doElementList(request, response, paramRequest);
         } else if (mode != null && mode.equals("report")) {
-            doReport(request, response, paramRequest);
+            this.doReport(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -391,8 +391,8 @@ public class ReportGenerator extends GenericResource {
         
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(256);
-        ReportCriteria criteria = createCriteria(request);
-        ArrayList<SemanticObject> results = processReport(criteria, paramRequest);
+        ReportCriteria criteria = this.createCriteria(request);
+        ArrayList<SemanticObject> results = this.processReport(criteria, paramRequest);
         int itemsCount = 0;
         int titleIndex = -1;
         
@@ -422,11 +422,11 @@ public class ReportGenerator extends GenericResource {
                 
                 output.append("    <td>\n");
                 if (sameKind) {
-                    output.append(renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
+                    output.append(this.renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
                 } else {
                     //de los objetos relacionados solo se va a mostrar el titulo en la tabla
                     if (itemsCount == titleIndex) {
-                        output.append(renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
+                        output.append(this.renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
                     } else {
                         output.append("      &nbsp;\n");
                     }
@@ -517,7 +517,7 @@ public class ReportGenerator extends GenericResource {
                 int cont = 0;
                 while (properties.hasNext()) {
                     SemanticProperty prop = properties.next();
-                    if ((prop.getDisplayProperty() != null || displayElementExists(prop))) {
+                    if ((prop.getDisplayProperty() != null || this.displayElementExists(prop))) {
 //                        script.append("  ");
                         if (cont > 0) {
                             script.append(",\n");
