@@ -2,6 +2,7 @@ package org.semanticwb.social;
 
 import org.semanticwb.model.Activeable;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticProperty;
@@ -22,7 +23,6 @@ public class FacePageTab extends org.semanticwb.social.base.FacePageTabBase
         FacePageTab.sclass.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
-                //System.out.println("FacePageTab-1");
                 if(action!=null && obj.instanceOf(FacePageTab.social_FacePageTab))
                 {
                     FacePageTab facePageTab = (FacePageTab) obj.createGenericInstance();
@@ -32,7 +32,7 @@ public class FacePageTab extends org.semanticwb.social.base.FacePageTabBase
                     {
                         FacebookFanPage faceFanPage=(FacebookFanPage)parentPage;
                         //System.out.println("FacePageTab-3:"+faceFanPage);
-                        if(faceFanPage.getSn_socialNet()!=null && faceFanPage.getSn_socialNet() instanceof Pageable)
+                        if(!faceFanPage.isFp_notLinked() && faceFanPage.getSn_socialNet()!=null && faceFanPage.getSn_socialNet() instanceof Pageable)
                         {
                             Pageable pageable=(Pageable)faceFanPage.getSn_socialNet();
                             //System.out.println("FacePageTab-4:"+pageable);

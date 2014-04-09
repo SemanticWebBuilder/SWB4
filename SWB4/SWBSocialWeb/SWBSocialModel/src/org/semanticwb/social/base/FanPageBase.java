@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class FanPageBase extends org.semanticwb.social.SociaNetPage implements org.semanticwb.model.Searchable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Traceable,org.semanticwb.model.Rankable,org.semanticwb.model.Localeable,org.semanticwb.model.Viewable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Indexable,org.semanticwb.model.RoleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.TemplateRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Expirable,org.semanticwb.model.Resourceable,org.semanticwb.model.Tagable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Filterable
+public abstract class FanPageBase extends org.semanticwb.social.SociaNetPage implements org.semanticwb.model.TemplateRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.model.Undeleteable,org.semanticwb.model.RuleRefable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Localeable,org.semanticwb.model.Searchable,org.semanticwb.model.Expirable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Rankable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.Resourceable,org.semanticwb.model.Activeable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Viewable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -11,6 +11,10 @@ public abstract class FanPageBase extends org.semanticwb.social.SociaNetPage imp
    * Cuenta de SocialNetwork a la cual esta haciendose referencia para su manejo.
    */
     public static final org.semanticwb.platform.SemanticProperty social_sn_socialNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#sn_socialNet");
+   /**
+   * Propiedad que indica que se desligue todo lo que se realice en la página de Social con la Red Social Seleccionada. De no seleccionarse esta opción y si ya exiten elementos ligados para la página (Tabs), de eliminarse la página se eliminarían dichos tabs de las redes sociales.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_fp_notLinked=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#fp_notLinked");
     public static final org.semanticwb.platform.SemanticClass social_FanPage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#FanPage");
    /**
    * The semantic class that represents the currentObject
@@ -615,5 +619,23 @@ public abstract class FanPageBase extends org.semanticwb.social.SociaNetPage imp
              ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Fp_notLinked property
+* @return boolean with the Fp_notLinked
+*/
+    public boolean isFp_notLinked()
+    {
+        return getSemanticObject().getBooleanProperty(social_fp_notLinked);
+    }
+
+/**
+* Sets the Fp_notLinked property
+* @param value long with the Fp_notLinked
+*/
+    public void setFp_notLinked(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_fp_notLinked, value);
     }
 }
