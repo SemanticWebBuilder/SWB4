@@ -1819,12 +1819,12 @@
         var fCanAdd = _this.canAddToDiagram;
         var fSetText = _this.setText;
         var fUpdateText = null;
-        _this.index = -1;
+        _this.lindex = -1;
         
         _this.setElementType("Lane");
         
         _this.setIndex = function(idx) {
-            _this.index = idx;
+            _this.lindex = idx;
         };
         
         return _this;
@@ -2841,8 +2841,8 @@
                 ob.setParent(obj);
                 obj.lanes.push(ob);
                 
-                if (ob.index === -1) {
-                    ob.index = obj.lanes.length;
+                if (ob.lindex === -1) {
+                    ob.lindex = obj.lanes.length;
                 }
                 
                 var totHeight = 0;
@@ -2865,7 +2865,7 @@
             obj.updateLanes = function() {
                 //console.log("lineOffset:"+obj.headerLine.lineOffset);
                 var totWidth = obj.getWidth()-obj.headerLine.lineOffset;
-                obj.lanes.sort(function(a,b){return a.index-b.index;});
+                obj.lanes.sort(function(a,b){return a.lindex-b.lindex;});
                 if (obj.lanes.length > 0) {
                     var ypos = obj.getY() - obj.getHeight()/2;
                     for (var i = 0; i < obj.lanes.length; i++) {
@@ -3213,7 +3213,10 @@
                     ret.isCollection=false;//TODO: agregar método para verificar colección
                 }
                 if (obj.elementType==="Lane") {
-                    ret.index=obj.index;
+                    ret.lindex=obj.lindex;
+                }
+                if (obj.index && obj.index!==null) {
+                    ret.index = obj.index;
                 }
             }
             
@@ -3266,7 +3269,7 @@
                         var obj = Modeler.mapObject("Pool");
                         obj.setURI(tmp.uri);
 
-                        if (tmp.title != null) {
+                        if (tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
                         obj.layer = null;
@@ -3276,7 +3279,7 @@
                         
                         //Evitar edición de texto
                         if (Modeler.mode === "view") {
-                            if (obj.text && obj.text != null) {
+                            if (obj.text && obj.text !== null) {
                                 obj.text.ondblclick = function(evt) {
                                     return false;
                                 };
@@ -3294,8 +3297,8 @@
                         if (tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
-                        if (tmp.index !== null) {
-                            obj.setIndex(tmp.index);
+                        if (tmp.lindex !== null) {
+                            obj.setIndex(tmp.lindex);
                         }
                         obj.resize(tmp.w, tmp.h);
                         var par = Modeler.getGraphElementByURI(null, tmp.parent);
@@ -3328,6 +3331,10 @@
                         if (obj.resizeable !== null && obj.resizeable) {
                             obj.resize(tmp.w, tmp.h);
                         }
+                        
+                        if (tmp.index !== null && tmp.index) {
+                            obj.index = tmp.index;
+                        }
 
                         if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting !== null) {
                             var par = Modeler.getGraphElementByURI(null, tmp.parent);
@@ -3342,7 +3349,7 @@
                         
                         //Evitar edición de texto
                         if (Modeler.mode === "view") {
-                            if (obj.text && obj.text != null) {
+                            if (obj.text && obj.text !== null) {
                                 obj.text.ondblclick = function(evt) {
                                     return false;
                                 };
