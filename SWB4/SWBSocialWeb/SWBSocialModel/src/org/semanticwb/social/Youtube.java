@@ -941,7 +941,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             external.setPostId(idItem);
                             external.setCreatorId(uploader);
                             external.setCreatorName(uploader);
-                            external.setCreationTime(formatter.parse(uploadedStr));
+                            if(formatter.parse(uploadedStr).after(new Date())){
+                                external.setCreationTime(new Date());
+                            }else{
+                                external.setCreationTime(formatter.parse(uploadedStr));
+                            }
                             //external.setUpdateTime(updatedItem);
                             external.setMessage(description);
                             external.setCategory(categoryItem);
@@ -1778,7 +1782,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             }
         }
         
-        System.out.println("Final String-->" + parsedPhrases + "<-");        
+        System.out.println("Youtube Final String-->" + parsedPhrases + "<-");        
         return parsedPhrases;
     }
 }
