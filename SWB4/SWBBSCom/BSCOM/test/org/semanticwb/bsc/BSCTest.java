@@ -377,7 +377,6 @@ public class BSCTest {
 //SVGjs.append(" pos.y = rect.y.baseVal.value;").append("\n");
 //SVGjs.append(" pos = pos.matrixTransform(ctmOffset);").append("\n");        
         
-        
         // def eje de coordenadas
         SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'id','axis');").append("\n");
@@ -407,23 +406,34 @@ public class BSCTest {
         SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+MARGEN_LEFT+w_+1)+","+(y_+h_+1)+",0,0,'yellow',1,'yellow',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
+        // abscisas
+        SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'x','"+(x_+MARGEN_LEFT)+"');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING)+"');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
+        SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
+        SVGjs.append(" g.appendChild(use);").append("\n");
+        //ordenadas
+        SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'x','"+x_+"');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING-HEADER_3)+"');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
+        SVGjs.append(" use.setAttributeNS(null,'transform','rotate(270,"+x_+","+(y_+2*h_+BOX_SPACING-HEADER_3)+")');").append("\n");
+        SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
+        SVGjs.append(" g.appendChild(use);").append("\n");
         
-// abscisas
-SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'x','"+(x_+MARGEN_LEFT)+"');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING)+"');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
-SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
-SVGjs.append(" g.appendChild(use);").append("\n");
-//ordenadas
-SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'x','"+x_+"');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING-HEADER_3)+"');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
-SVGjs.append(" use.setAttributeNS(null,'transform','rotate(270,"+x_+","+(y_+2*h_+BOX_SPACING-HEADER_3)+")');").append("\n");
-SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
-SVGjs.append(" g.appendChild(use);").append("\n");
-
+        // puntos en el plano
+        expression = "/riskmap/risk";
+        NodeList nlRisk = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
+        for(int j=0; j<nlRisk.getLength(); j++) {
+            node = nlRisk.item(j);
+            if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
+                attrs = node.getAttributes();
+                String pid = attrs.getNamedItem("id").getNodeValue();
+                int impact = Integer.parseInt(attrs.getNamedItem("impact").getNodeValue());
+                int likehood = Integer.parseInt(attrs.getNamedItem("likehood").getNodeValue());
+            }
+        }
         
         
         
