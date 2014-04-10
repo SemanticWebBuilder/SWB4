@@ -32,6 +32,7 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.formelement.DateElement;
 import org.semanticwb.bsc.formelement.TextAreaElement;
+import org.semanticwb.bsc.tracing.Agreement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
@@ -1096,6 +1097,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         } else if (messageType == null && (genericObject instanceof Perspective && workClassSC != Perspective.sclass)) {
             messageType = "objectTypeMissmatch";
         } else if (messageType == null && (genericObject instanceof Theme && workClassSC != Theme.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Agreement && workClassSC != Agreement.sclass)) {
             messageType = "objectTypeMissmatch";
         }
 
