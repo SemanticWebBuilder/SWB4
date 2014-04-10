@@ -190,6 +190,7 @@ public class BSCTest {
         }
     }
     
+    public static final String WORD_SPACING = "20 20 20 20 20 20 20 20 20 20";
     
     public static final String HEADER_PREFIX = "head_";
     public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
@@ -199,10 +200,9 @@ public class BSCTest {
     
     public static final int HEADER_HEIGHT = 150; // altura del encabezado
     public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
-    public static final int HEADER_2 = 18; // tamaño de fuente para misión, visión
-    public static final int HEADER_3 = 16; // tamaño de fuente para temas
-    public static final int HEADER_4 = 14; // tamaño de fuente para diferenciadores
-    public static final int HEADER_5 = 12; // tamaño de fuente para objetivos
+    public static final int HEADER_2 = 16; // tamaño de fuente para subtítulo
+    public static final int HEADER_3 = 14; // tamaño de fuente para coordenadas
+    public static final int HEADER_4 = 12; // tamaño de fuente para texto
     
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
@@ -322,7 +322,7 @@ public class BSCTest {
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" document.body.appendChild(svg);").append("\n");
         
-        SVGjs.append(" var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');").append("\n");
+        SVGjs.append(" var defs = document.createElementNS(SVG_, 'defs');").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
         
         SVGjs.append(" var w;").append("\n");       // anchura
@@ -331,6 +331,7 @@ public class BSCTest {
         SVGjs.append(" var rect;").append("\n");    // elemento
         SVGjs.append(" var path;").append("\n");    // flecha de la relación causa/efecto
         SVGjs.append(" var lnk;").append("\n");     // liga
+        SVGjs.append(" var use;").append("\n");     // etiqueta use
         
         // encabezado del mapa
         expression = "/riskmap/header";
@@ -358,7 +359,7 @@ public class BSCTest {
         
         // plano cartesiano
         x = MARGEN_LEFT;
-        y += HEADER_1+MARGEN_TOP;
+        y += HEADER_HEIGHT + MARGEN_TOP;
         int x_ = 0;
         int y_ = 0;
         int w_ = 150;
@@ -376,64 +377,64 @@ public class BSCTest {
 //SVGjs.append(" pos.y = rect.y.baseVal.value;").append("\n");
 //SVGjs.append(" pos = pos.matrixTransform(ctmOffset);").append("\n");        
         
-        // eje |----|----|----|----|----|
-        SVGjs.append(" path = document.createElementNS(SVG_,'path');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null, 'id', 'axis');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null, 'd', 'M0,0 L"+2*w_+",0);").append("\n");
-        SVGjs.append(" path.setAttributeNS(null, 'fill', 'none');").append("\n");
-        SVGjs.append(" defs.appendChild(path);").append("\n");
-        // escala 1  2  3  4  5...
         
-//        SVGjs.append(" path = createPath('abscissa',"+x_+","+(y_+2*h_+2)+","+(x_+2*w_)+","+(y_+2*h_+20)+");").append("\n");
-//        SVGjs.append(" defs.appendChild(path);").append("\n");
-        
-        SVGjs.append(" var use = document.createElementNS(SVG_,'use');").append("\n");
-        SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
-        
-        //<use xlink:href="#geometry" stroke="#000000" stroke-width="4" stroke-dasharray="1,20" />
-        SVGjs.append(" g.appendChild(use);").append("\n");
+        // def eje de coordenadas
         SVGjs.append(" txt = document.createElementNS(SVG_,'text');").append("\n");
-//        SVGjs.append(" txt.setAttributeNS(null,'x',"+x_+");").append("\n");
-//        SVGjs.append(" txt.setAttributeNS(null,'y',"+(y_+2*h_+BOX_SPACING_BOTTOM)+");").append("\n");
-        SVGjs.append(" txt.setAttributeNS(null,'font-size',14);").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'id','axis');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'word-spacing',10);").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'font-size',"+HEADER_3+");").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
-        SVGjs.append(" g.appendChild(txt);").append("\n");
-SVGjs.append(" var txtpth = document.createElementNS(SVG_, 'textPath');").append("\n");
-SVGjs.append(" txtpth.setAttributeNS(XLINK_,'xlink:href', '#abscissa');").append("\n");
-SVGjs.append(" txtpth.setAttributeNS(null,'fill', '#000000');").append("\n");
-SVGjs.append(" txtpth.setAttributeNS(null,'color', '#000000');").append("\n");
-SVGjs.append(" txtpth.textContent = '0 1 2 3 4 5 6 7 8 9 10'; ").append("\n");
-SVGjs.append(" txt.appendChild(txtpth);").append("\n");
-
-        SVGjs.append(" ").append("\n");
-        // eje y (ordenadas)
-        SVGjs.append(" path = createPath('ordinate',"+(x_-BOX_SPACING_LEFT)+","+y_+","+(x-BOX_SPACING_LEFT)+","+(y+2*h_)+");").append("\n");
-        SVGjs.append(" defs.appendChild(path);").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
-        SVGjs.append(" ").append("\n");
+        SVGjs.append(" defs.appendChild(txt);").append("\n");
+        // escala 0
+        SVGjs.append(" var text_node = document.createTextNode('0');").append("\n");
+        SVGjs.append(" var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+        SVGjs.append(" tspan_element.appendChild(text_node);").append("\n");
+        SVGjs.append(" txt.appendChild(tspan_element);").append("\n");        
+        // escala 1  2  3  4  5...
+        SVGjs.append(" text_node = document.createTextNode('12345678910');").append("\n");
+        SVGjs.append(" tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
+        SVGjs.append(" tspan_element.setAttributeNS(null,'dx','"+WORD_SPACING+"');").append("\n");
+        SVGjs.append(" tspan_element.appendChild(text_node);").append("\n");
+        SVGjs.append(" txt.appendChild(tspan_element);").append("\n");
         
         // cuadrantes
-        SVGjs.append(" rect = createRect('quadrant_"+0+"_lg"+"',"+w_+","+h_+","+x_+","+y_+",0,0,'red',1,'red',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_+MARGEN_LEFT)+","+y_+",0,0,'red',1,'red',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'blue',1,'blue',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+MARGEN_LEFT+w_+1)+","+y_+",0,0,'blue',1,'blue',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+x_+","+(y_+h_+1)+",0,0,'green',1,'green',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_+MARGEN_LEFT)+","+(y_+h_+1)+",0,0,'green',1,'green',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+(y_+h_+1)+",0,0,'yellow',1,'yellow',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+MARGEN_LEFT+w_+1)+","+(y_+h_+1)+",0,0,'yellow',1,'yellow',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
+        
+// abscisas
+SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'x','"+(x_+MARGEN_LEFT)+"');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING)+"');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
+SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
+SVGjs.append(" g.appendChild(use);").append("\n");
+//ordenadas
+SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'x','"+x_+"');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING-HEADER_3)+"');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'style','visibility:visible;fill:#000000');").append("\n");
+SVGjs.append(" use.setAttributeNS(null,'transform','rotate(270,"+x_+","+(y_+2*h_+BOX_SPACING-HEADER_3)+")');").append("\n");
+SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
+SVGjs.append(" g.appendChild(use);").append("\n");
+
+        
+        
+        
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
         SVGjs.append("//---------------").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
-        
-        
         
         
         // funciones
