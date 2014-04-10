@@ -61,6 +61,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.io.SWBFile;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebPage;
@@ -824,7 +825,11 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
         System.out.println("Entra al metodo listen.... Youtube");
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
-        String searchPhrases = getPhrases(stream.getPhrase());
+        String searchPhrases = formatsYoutubePhrases(stream);//getPhrases(stream.getPhrase());
+        if(searchPhrases == null || searchPhrases.isEmpty()){
+            log.warn("\n Not a valid value to make a youtube search:" + searchPhrases);
+            return;
+        }
         String category = "";
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
         DecimalFormat df = new DecimalFormat("#.00");
@@ -1001,7 +1006,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             int noOfPhrases = phrasesStream.length;
             for (int i = 0; i < noOfPhrases; i++) {
                 if(!phrasesStream[i].trim().isEmpty()){
-                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for only one space
                     //parsedPhrases += ((tmp.contains(" ")) ? ("\"" + tmp + "\"") : tmp); // if spaces found, it means more than one word in a phrase
                     parsedPhrases += "\"" + tmp + "\""; // if spaces found, it means more than one word in a phrase
                     if ((i + 1) < noOfPhrases) {
@@ -1700,5 +1705,80 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         }
         //System.out.println("RETURNED MESSAGE:" + msgText);
         return msgText;
+    }
+    
+    /**
+     * Formats phrases according to Query requirements.
+     * takes all the phrases from the search fields and formats the 'words' according to 
+     * the twitter requirements.
+     * @param stream
+     * @return Formated phrases.
+     */
+    private String formatsYoutubePhrases(Stream stream){
+        String parsedPhrases = ""; // parsed phrases - the result
+        String exactPhrases = "";
+        String notPhrases = "";
+        String allPhrases ="";
+
+        
+        if(stream.getStream_allPhrases() != null && !stream.getStream_allPhrases().trim().isEmpty()){//All phrases
+            allPhrases = stream.getStream_allPhrases();
+            allPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(allPhrases);
+            allPhrases = allPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = allPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){
+                    tmpString += words[i];
+                    if ((i + 1) < wordsNumber) {
+                        tmpString += " ";
+                    }
+                }
+            }
+            allPhrases = tmpString;
+        }
+        if(stream.getStream_notPhrase() != null && !stream.getStream_notPhrase().trim().isEmpty()){//Not phrases
+            notPhrases = stream.getStream_notPhrase();
+            notPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(notPhrases);
+            notPhrases = notPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = notPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){
+                    tmpString += ( i>0 ? " " : "") + "-" + words[i];
+                }
+            }
+            notPhrases = tmpString;
+        }
+        if(stream.getStream_exactPhrase() != null && !stream.getStream_exactPhrase().trim().isEmpty()){//Exact phrase
+            exactPhrases = stream.getStream_exactPhrase();
+            exactPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(exactPhrases);
+            exactPhrases = exactPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            exactPhrases = "\"" + exactPhrases + "\"";
+        }
+
+        if(!allPhrases.isEmpty()){
+            parsedPhrases += allPhrases;
+        }
+        if(!exactPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = exactPhrases;
+            }else{
+                parsedPhrases += " " + exactPhrases;
+            }
+        }        
+
+        if(!notPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = notPhrases;
+            }else{
+                parsedPhrases += " " + notPhrases;
+            }
+        }
+        
+        System.out.println("Final String-->" + parsedPhrases + "<-");        
+        return parsedPhrases;
     }
 }
