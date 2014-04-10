@@ -20,7 +20,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.PeriodStatusAssignable;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.utils.SummaryView;
@@ -33,6 +32,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
+import org.semanticwb.bsc.tracing.Agreement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
@@ -135,6 +135,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
                 identifier = paramRequest.getLocaleString("value_DeliverableId");
                 filters = paramRequest.getLocaleString("value_DeliverableFilter");
+            } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
+                identifier = paramRequest.getLocaleString("value_AgreementId");
+                filters = paramRequest.getLocaleString("value_AgreementFilter");
             }
             //objeto JSON que almacenara la estructura del grid de Dojo
             JSONObject structure = new JSONObject();
