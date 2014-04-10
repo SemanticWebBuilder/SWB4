@@ -32,6 +32,7 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         
         String toReturn = null;
+        String websiteId = (String) request.getAttribute("websiteId");
         
         if (mode == null) {
             mode = "view";
@@ -41,12 +42,20 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
         } else if (mode.equals("view")) {
             boolean showLink = false;
             StringBuilder viewString = new StringBuilder(128);
+            String baseUrl = null;
             
             GenericObject genObject = obj.createGenericInstance();
             if (genObject instanceof Objective || genObject instanceof Indicator ||
                     genObject instanceof Initiative || genObject instanceof Deliverable) {
                 showLink = true;
                 viewString.append("<a href=\"");
+                if (websiteId != null && request.getRequestURI().contains(websiteId)) {
+                    baseUrl = request.getRequestURI().substring(0,
+                            request.getRequestURI().indexOf(websiteId) + websiteId.length() + 1);
+                }
+                if (baseUrl != null) {
+                    viewString.append(baseUrl);
+                }
                 viewString.append(genObject.getClass().getSimpleName());
                 viewString.append("?suri=");
                 viewString.append(obj.getEncodedURI());
