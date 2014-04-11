@@ -374,8 +374,8 @@
                 if (sN instanceof Facebook) {
             %>
             <div>
-                <input type="radio" name="socialNetwork" id="grafFacebook" value="<%=sN.getTitle()%>" >
-                <label title="FaceBook" for="grafFacebook"><%=sN.getTitle()%></label>
+                <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafFacebook" value="<%=sN.getTitle()%>" >
+                <label title="FaceBook" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                 <div id="<%=sN.getTitle()%>"></div>
 
                 <%
@@ -383,16 +383,16 @@
                 } else if (sN instanceof Twitter) {
                 %>     
                 <div>
-                    <input type="radio" name="socialNetwork" id="grafTwitter" value="<%=sN.getTitle()%>" > 
-                    <label title="Twitter" for="grafTwitter"><%=sN.getTitle()%></label>
+                    <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafTwitter" value="<%=sN.getTitle()%>" > 
+                    <label title="Twitter" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                     <div id="<%=sN.getTitle()%>"></div>
 
                     <%
                     } else if (sN instanceof Youtube) {
                     %>
                     <div>
-                        <input type="radio" name="socialNetwork" id="grafYoutube" value="<%=sN.getTitle()%>" > 
-                        <label title="YouTube" for="grafYoutube"><%=sN.getTitle()%></label>
+                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafYoutube" value="<%=sN.getTitle()%>" > 
+                        <label title="YouTube" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                         <div id="<%=sN.getTitle()%>"></div>
 
                         <%
