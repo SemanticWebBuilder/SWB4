@@ -35,8 +35,9 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     {
                         //System.out.println("Entra a Stream/Create...");
                         ListenerMgr.createUpdateTimers(stream);
-                    }else if((action.equalsIgnoreCase("SET") && (semProp.getURI().equals("http://www.semanticwebbuilder.org/swb4/ontology#active") || semProp.getURI().equals(Stream.social_keepAliveManager.getURI())
-                       || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getURI().equals(social_stream_phrase)))
+                    }else if((action.equalsIgnoreCase("SET") && (semProp.getName().equals(Activeable.swb_active.getName()) || semProp.getURI().equals(Stream.social_keepAliveManager.getURI())
+                       || semProp.getURI().equals(social_stream_PoolTime.getURI()) || semProp.getName().equals(social_stream_phrase.getName()) || semProp.getName().equals(social_stream_allPhrases.getName())
+                            || semProp.getName().equals(social_stream_exactPhrase.getName()) || semProp.getName().equals(social_stream_fromAccount.getName()) || semProp.getName().equals(social_stream_notPhrase.getName())))
                        || (action.equalsIgnoreCase("ADD") && semProp.getURI().equals(social_hasStream_socialNetwork.getURI()))
                        || (action.equalsIgnoreCase("REMOVE") && semProp!=null && semProp.getURI().equals(social_hasStream_socialNetwork.getURI())))
                     {

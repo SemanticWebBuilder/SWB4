@@ -94,15 +94,15 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        //System.out.println("createUpdateTimers/STREAM:"+stream);
+        System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
             synchronized(stream)
             {
-              //System.out.println("createUpdateTimers-1");  
+              System.out.println("createUpdateTimers-1");  
               if(canEnter)
               {
-                  //System.out.println("createUpdateTimers-2");  
+                  System.out.println("createUpdateTimers-2");  
                   canEnter=false;
                   createUpdateTimersReBind(stream);
               }
@@ -134,18 +134,18 @@ public class ListenerMgr implements SWBAppObject {
             try
             {
                 //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
-                //System.out.println("ListerJ1");
+                System.out.println("ListerJ1");
                 //Se revisa si el timer del stream puede ser creado, esto es, si el stream esta activo, si hay palabras a buscar, etc., si no es así, se elimina
                 if(!createTimer(stream))    
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
-                    //System.out.println("ListerJ1.1");
+                    System.out.println("ListerJ1.1");
                     removeTimer(stream, true);
                     //System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
-                    //System.out.println("ListerJ2");
+                    System.out.println("ListerJ2");
                     Timer timer=removeTimer(stream, true);
                     timer=new Timer();
                     int time=stream.getPoolTime();
@@ -164,11 +164,11 @@ public class ListenerMgr implements SWBAppObject {
             }
         }else
         {
-            //System.out.println("ListerJ3");
+            System.out.println("ListerJ3");
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
-                //System.out.println("Levanta Timer:"+stream.getPoolTime());
+                System.out.println("Levanta Timer:"+stream.getPoolTime());
                 Timer timer = new Timer();
                 int time=stream.getPoolTime();
                 //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
@@ -270,9 +270,10 @@ public class ListenerMgr implements SWBAppObject {
      */
     private static boolean createTimer(Stream stream)
     {
-        //System.out.println("ListerJ5");
+        System.out.println("ListerJ5");
         if(stream!=null && stream.getSocialSite().isValid()  && stream.isActive() && !stream.isDeleted()  && stream.listSocialNetworks().hasNext())
         {
+            System.out.println("ListerJ5.1:"+stream.getPhrase());
             if(stream.getPhrase()!=null || stream.getStream_allPhrases()!=null || stream.getStream_exactPhrase()!=null || stream.getStream_fromAccount()!=null)
             {
                 Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
@@ -281,15 +282,17 @@ public class ListenerMgr implements SWBAppObject {
                     SocialNetwork socialNets=itNets.next();
                     if(!socialNets.isActive() || socialNets.isDeleted())
                     {
+                        System.out.println("ListerJ6-FALSE");
                         return false;
                     }
                 }
-
+                
                 //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
                 //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
-                //System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
+                System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
                 if(stream.isKeepAliveManager() || stream.getPoolTime() > 0)
                 {
+                    System.out.println("ListerJ7-True");
                     return true;
                 }
                 //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten

@@ -155,6 +155,9 @@ public class ExternalPost {
      */
     private String userGeoLocation;
     
+    
+    private String userUrl;
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -183,6 +186,19 @@ public class ExternalPost {
         return creatorName;
     }
     
+    /**
+     * @return the User Url
+     */
+    public String getUserUrl(){
+        return userUrl;
+    }
+    
+     /**
+     * @return the User Url
+     */
+    public void setUserUrl(String userUrl){
+        this.userUrl=userUrl;
+    }
     
     /**
      * @param creatorName the creatorName to set
@@ -611,5 +627,7 @@ public class ExternalPost {
     {
         return userGeoLocation;
     }
+    
+    
     
 }

@@ -48,6 +48,10 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_id");
    /**
+   * Url del usuario en la red social
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_userUrl=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#userUrl");
+   /**
    * Relación sentimental del usuario en la red social. 1=Soltero; 2=Unión Libre; 3=Casado; 4=Divordiado; 5=Viudo;
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_relationShipStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_relationShipStatus");
@@ -590,6 +594,24 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
     public void setSnu_id(String value)
     {
         getSemanticObject().setProperty(social_snu_id, value);
+    }
+
+/**
+* Gets the UserUrl property
+* @return String with the UserUrl
+*/
+    public String getUserUrl()
+    {
+        return getSemanticObject().getProperty(social_userUrl);
+    }
+
+/**
+* Sets the UserUrl property
+* @param value long with the UserUrl
+*/
+    public void setUserUrl(String value)
+    {
+        getSemanticObject().setProperty(social_userUrl, value);
     }
 
 /**
