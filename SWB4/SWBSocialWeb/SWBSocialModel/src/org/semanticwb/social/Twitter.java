@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import javaQuery.j2ee.tinyURL;
@@ -403,7 +404,11 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                                     external.setCreatorName("@"+status.getUser().getScreenName());
-                                    external.setCreationTime(status.getCreatedAt());
+                                    if(status.getCreatedAt().before(new Date())){
+                                        external.setCreationTime(status.getCreatedAt());
+                                    }else{
+                                        external.setCreationTime(new Date());
+                                    }
                                     external.setDevice(status.getSource());
                                     if (status.getText()!=null) {
                                        external.setMessage(status.getText());
