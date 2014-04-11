@@ -845,11 +845,14 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         while (it.hasNext()) {//More categories
             category = category + "|" + it.next().getId();
         }
-
-        int blockOfVideos = 0; //this is the default Value, 
-        if(stream.getBlockofMsgToClassify() > 0){
-            blockOfVideos = stream.getBlockofMsgToClassify();
-        }
+        SocialSite socialSite = (SocialSite)WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        
+        int blockOfVideos = 500; //this is the default Value,
+        try{
+            if(socialSite.getBlockofMsgToClassify() > 0){
+                blockOfVideos = socialSite.getBlockofMsgToClassify();
+            }
+        }catch(Exception e){}
         System.out.println("Message Block Youtube:" + blockOfVideos);
         
         int limit = 500;
