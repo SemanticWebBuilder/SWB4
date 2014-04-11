@@ -83,13 +83,12 @@
             }
             totalPost++;
         }
-        System.out.println("ANTES DE ENVIAT TOTAL POST" + totalPost);
         Iterator it = map.entrySet().iterator();
         if (filter.equals("all")) {
             while (it.hasNext()) {
                 Map.Entry e = (Map.Entry) it.next();
                 ArrayList lista = (ArrayList) e.getValue();
-                getJson(node, lista, totalPost, e.getKey().toString());
+                getJsonLang(node, lista, totalPost, e.getKey().toString(), lang);
 
             }
         } else {
@@ -125,7 +124,7 @@
 
     }
 
-    public JSONArray getJson(JSONArray node, ArrayList list, int totalPost, String nombre) throws Exception {
+    public JSONArray getJsonLang(JSONArray node, ArrayList list, int totalPost, String nombre, String lang) throws Exception {
         float intPorcentaje = 0;
         if (totalPost > 0) {
             intPorcentaje = ((float) list.size() * 100) / (float) totalPost; //total de post de mexico
@@ -146,7 +145,7 @@
                 if (p.getMsg_lang() == null) {
                     nombre = "No definido";
                 } else {
-                    nombre = p.getMsg_lang().getTitle();
+                    nombre = p.getMsg_lang().getDisplayTitle(lang); //p.getMsg_lang().getTitle();
                 }
                 total++;
                 if (p.getPostSentimentalType() == 0) {

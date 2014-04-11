@@ -80,8 +80,8 @@
 
         <div class="grafOptions">            
             <div>
-                <input id="todoPostOutNet"  type="radio" name="postOutSocialNetwork" value="all" checked="">
-                <label title="Todos" for="todoPostOutNet">Todos</label>
+                <input id="todored"  type="radio" name="postOutSocialNetwork" value="all" checked="">
+                <label title="Todos" for="todored">Todos</label>
                 <div id="todoSocialTopicNetworkDiv"></div>
             </div>
 
@@ -98,28 +98,31 @@
                     if (sn instanceof Facebook) {
             %>
             <div>
-                <input type="radio" name="postOutSocialNetwork" id="grafFacebookPostOutNet" value="<%=sn.getTitle()%>" >
-                <label title="FaceBook" for="grafFacebookPostOutNet"><%=sn.getTitle()%></label>
+                <input type="radio" id="<%=sn.getURI()%>FB" class="grafFacebookPostOutNet" name="postOutSocialNetwork"  value="<%=sn.getTitle()%>" >
+                <label title="FaceBook" for="<%=sn.getURI()%>FB"><%=sn.getTitle()%></label>
                 <div id="<%=sn.getTitle()%>"></div>
+            </div>
                 <%
 
                 } else if (sn instanceof Twitter) {
                 %>     
                 <div>
-                    <input type="radio" name="postOutSocialNetwork" id="grafTwitterPostOutNet" value="<%=sn.getTitle()%>" > 
-                    <label title="Twitter" for="grafTwitterPostOutNet"><%=sn.getTitle()%></label>
+                    <input type="radio" id="<%=sn.getURI()%>TW"  class="grafTwitterPostOutNet"  name="postOutSocialNetwork"  value="<%=sn.getTitle()%>" > 
+                    <label title="Twitter" for="<%=sn.getURI()%>TW"><%=sn.getTitle()%></label>
                     <div id="<%=sn.getTitle()%>"></div>
+                </div>
                     <%
                     } else if (sn instanceof Youtube) {
                     %>
                     <div>
-                        <input type="radio" name="postOutSocialNetwork" id="grafYoutubePostOutNet" value="<%=sn.getTitle()%>" > 
-                        <label title="YouTube" for="grafYoutubePostOutNet"><%=sn.getTitle()%></label>
+                        <input type="radio" id="<%=sn.getURI()%>YT"   class="grafYoutubePostOutNet"   name="postOutSocialNetwork" value="<%=sn.getTitle()%>" > 
+                        <label title="YouTube" for="<%=sn.getURI()%>YT"><%=sn.getTitle()%></label>
                         <div id="<%=sn.getTitle()%>"></div>
+                         </div>
                         <%
                             }
                         %>
-                    </div>
+                   
                     <%
                         }
                     %>
@@ -359,9 +362,6 @@
 
 
 
-        </div>
-
-    </div>
 
 
     <!--grafica mesnajes enviados por usuario--->
