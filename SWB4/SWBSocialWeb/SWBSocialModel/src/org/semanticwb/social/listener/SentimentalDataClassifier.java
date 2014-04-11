@@ -700,6 +700,12 @@ public class SentimentalDataClassifier {
                 }else {
                     postIn.setPi_createdInSocialNet(postIn.getPi_created());
                 }
+                
+                //Sets the postUrl that refers to the socialNetwork
+                if(externalPost.getPostUrl()!=null)
+                {
+                    postIn.setMsg_url(externalPost.getPostUrl());
+                }
 
                 /*
                  if(externalPost.getDescription()!=null)
