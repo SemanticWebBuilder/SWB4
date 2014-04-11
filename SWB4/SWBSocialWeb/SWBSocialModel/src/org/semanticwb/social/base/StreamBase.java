@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Trashable,org.semanticwb.social.Geolocable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.social.Geolocable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -83,17 +83,13 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
    /**
-   * Temas en los que se clasificaran los mensajes
+   * Topics to classify messages
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasTopics2Apply=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasTopics2Apply");
    /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad baja
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterIntensityLow=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityLow");
-   /**
-   * Enviar al clasificador un determinado número de mensajes o todos los que puedan llegar por la red social de un solo golpe. Si se registra un número en este campo apareceran los mensajes mas rapidamente clasificados en la pestaña "Mensajes de entrada" de un Stream y de los socialTopic, sin embargo, esto puede hacer que se generen mayor cantidad de threads en el aplicativo.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_blockofMsgToClassify=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#blockofMsgToClassify");
    /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad alta
    */
@@ -1105,24 +1101,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setGeoCenterLatitude(float value)
     {
         getSemanticObject().setFloatProperty(social_geoCenterLatitude, value);
-    }
-
-/**
-* Gets the BlockofMsgToClassify property
-* @return int with the BlockofMsgToClassify
-*/
-    public int getBlockofMsgToClassify()
-    {
-        return getSemanticObject().getIntProperty(social_blockofMsgToClassify);
-    }
-
-/**
-* Sets the BlockofMsgToClassify property
-* @param value long with the BlockofMsgToClassify
-*/
-    public void setBlockofMsgToClassify(int value)
-    {
-        getSemanticObject().setIntProperty(social_blockofMsgToClassify, value);
     }
 
 /**

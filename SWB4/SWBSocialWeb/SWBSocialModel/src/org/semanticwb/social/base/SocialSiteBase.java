@@ -4,12 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site (Marca). 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Localeable
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable
 {
    /**
    * Número de Días antes de que se refresque información del usuario en las redes sociales
    */
     public static final org.semanticwb.platform.SemanticProperty social_numDaysToRefreshUserData=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#numDaysToRefreshUserData");
+   /**
+   * Enviar al clasificador un determinado número de mensajes o todos los que puedan llegar por la red social de un solo golpe. Si se registra un número en este campo apareceran los mensajes mas rapidamente clasificados en la pestaña "Mensajes de entrada" de un Stream y de los socialTopic, sin embargo, esto puede hacer que se generen mayor cantidad de threads en el aplicativo.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_blockofMsgToClassify=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#blockofMsgToClassify");
    /**
    * Contador que indica cuantas ligas se han codificado.
    */
@@ -428,6 +432,24 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public void setNumDaysToRefreshUserData(int value)
     {
         getSemanticObject().setIntProperty(social_numDaysToRefreshUserData, value);
+    }
+
+/**
+* Gets the BlockofMsgToClassify property
+* @return int with the BlockofMsgToClassify
+*/
+    public int getBlockofMsgToClassify()
+    {
+        return getSemanticObject().getIntProperty(social_blockofMsgToClassify);
+    }
+
+/**
+* Sets the BlockofMsgToClassify property
+* @param value long with the BlockofMsgToClassify
+*/
+    public void setBlockofMsgToClassify(int value)
+    {
+        getSemanticObject().setIntProperty(social_blockofMsgToClassify, value);
     }
 
 /**
