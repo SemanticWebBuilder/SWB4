@@ -40,7 +40,9 @@
         i = Language.ClassMgr.listLanguages(ss);
         while (i.hasNext()) {
             Language language = (Language) i.next();
-            map.put(reemplazar(language.getTitle()), new ArrayList<PostIn>());
+            if (language != null) {
+                map.put(reemplazar(language.getDisplayTitle(lang)), new ArrayList<PostIn>());
+            }
 
         }
 
@@ -76,7 +78,7 @@
             } else {
 
                 key = postIn.getMsg_lang();
-                title = reemplazar(key.getTitle());
+                title = reemplazar(key.getDisplayTitle(lang));
 
                 map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
                 //  }
