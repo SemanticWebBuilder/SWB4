@@ -799,6 +799,10 @@ public class SentimentalDataClassifier {
                         } else {
                             getUserData(socialNetUser, days, true);
                         }
+                        if(externalPost.getUserUrl()!=null) //sets the user url in the social Network
+                        {
+                            socialNetUser.setUserUrl(externalPost.getUserUrl());
+                        }
                         //System.out.println("socialNetUser-2:"+socialNetUser);
                     } else if (upDateSocialUserNetworkData) {
                         //System.out.println("socialNetUser-3:"+socialNetUser);
@@ -819,8 +823,14 @@ public class SentimentalDataClassifier {
                         } else {
                             getUserData(socialNetUser, days, false);
                         }
+                        
+                        if(externalPost.getUserUrl()!=null) //sets the user url in the social Network
+                        {
+                            socialNetUser.setUserUrl(externalPost.getUserUrl());
+                        }
 
                         socialNetUser.setUpdated(new Date());
+                        
                     }
                     //System.out.println("Poner en UserGe-0");
                     if (socialNetUser != null) {
