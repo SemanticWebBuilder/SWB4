@@ -1584,7 +1584,7 @@ border-radius:4px;
 .grafOptions	{ text-align:center}
 .grafOptions input[type=radio] + label 		   { display:inline-block; height:50px; width:70px; cursor:pointer; text-indent:-99999px; float:left;}
 .grafOptions input[type=radio]:hover + label   { }
-.grafOptions input[type=radio]:checked + label { background-color:#d0d0d0} 
+.grafOptions input[type=radio]:checked + label { background-color:#FFF} 
 .grafOptions div { display:inline-block; width:70px; margin-bottom:10px; text-align:left;}
 .grafOptions input[type=radio] + label + div { background: url(images/graf-posnegneu-1.png) no-repeat #f7f7f7 7px 9px; border:solid 1px #ececec; border-top:none; margin:0 !important; padding:5px 3px 5px 15px; width:50px;  
 border-radius:0px 0px 4px 4px; 
@@ -1646,12 +1646,12 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #adjo + label { background:url(images/graf-adjo1.png) no-repeat;}
 .grafOptions #adul + label { background:url(images/graf-adul1.png) no-repeat;}
 .grafOptions #terc + label { background:url(images/graf-terc1.png) no-repeat;}
-.grafOptions #grafTwitter + label { background:url(images/graf-twit1.png) no-repeat;}
-.grafOptions #grafTwitterPostOutNet + label { background:url(images/graf-twit1.png) no-repeat;}
-.grafOptions #grafFacebook + label { background:url(images/graf-face1.png) no-repeat;}
-.grafOptions #grafFacebookPostOutNet + label { background:url(images/graf-face1.png) no-repeat;}
-.grafOptions #grafYoutube + label { background:url(images/graf-yout1.png) no-repeat;}
-.grafOptions #grafYoutubePostOutNet + label { background:url(images/graf-yout1.png) no-repeat;}
+.grafOptions .grafTwitter + label { background:url(images/graf-twit1.png) no-repeat;}
+.grafOptions .grafTwitterPostOutNet + label { background:url(images/graf-twit1.png) no-repeat;}
+.grafOptions .grafFacebook + label { background:url(images/graf-face1.png) no-repeat;}
+.grafOptions .grafFacebookPostOutNet + label { background:url(images/graf-face1.png) no-repeat;}
+.grafOptions .grafYoutube + label { background:url(images/graf-yout1.png) no-repeat;}
+.grafOptions .grafYoutubePostOutNet + label { background:url(images/graf-yout1.png) no-repeat;}
 
 .grafOptions #feme:checked + label { background:url(images/graf-fem2.png) no-repeat;}
 .grafOptions #masc:checked + label { background:url(images/graf-masc2.png) no-repeat;}
@@ -1668,12 +1668,12 @@ border-radius:0px 0px 4px 4px;
 .grafOptions #adjo:checked + label { background:url(images/graf-adjo2.png) no-repeat;}
 .grafOptions #adul:checked + label { background:url(images/graf-adul2.png) no-repeat;}
 .grafOptions #terc:checked + label { background:url(images/graf-terc2.png) no-repeat;}
-.grafOptions #grafTwitter:checked + label { background:url(images/graf-twit2.png) no-repeat;}
-.grafOptions #grafTwitterPostOutNet:checked + label { background:url(images/graf-twit2.png) no-repeat;}
-.grafOptions #grafFacebook:checked + label { background:url(images/graf-face2.png) no-repeat;}
-.grafOptions #grafFacebookPostOutNet:checked + label { background:url(images/graf-face2.png) no-repeat;}
-.grafOptions #grafYoutube:checked + label { background:url(images/graf-yout2.png) no-repeat;}
-.grafOptions #grafYoutubePostOutNet:checked + label { background:url(images/graf-yout2.png) no-repeat;}
+.grafOptions .grafTwitter:checked + label { background:url(images/graf-twit2.png) no-repeat;}
+.grafOptions .grafTwitterPostOutNet:checked + label { background:url(images/graf-twit2.png) no-repeat;}
+.grafOptions .grafFacebook:checked + label { background:url(images/graf-face2.png) no-repeat;}
+.grafOptions .grafFacebookPostOutNet:checked + label { background:url(images/graf-face2.png) no-repeat;}
+.grafOptions .grafYoutube:checked + label { background:url(images/graf-yout2.png) no-repeat;}
+.grafOptions .grafYoutubePostOutNet:checked + label { background:url(images/graf-yout2.png) no-repeat;}
 
 .grafOptions .geoselect	{ border:solid 1px #ececec; width:160px; text-align:left; margin:6px 18px 0 18px !important; height:105px; background:#f7f7f7; font-size:11px; color:#666; overflow-x:hidden; overflow-y:scroll;
 border-radius:4px; 
