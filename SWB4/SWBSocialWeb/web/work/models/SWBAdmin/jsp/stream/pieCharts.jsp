@@ -1303,7 +1303,7 @@
                     Iterator<CountryState> i = CountryState.ClassMgr.listCountryStates();
                     while (i.hasNext()) {
                         CountryState c = i.next();
-                        if (c.getCountry().getId().equals("MX")) {
+                        if (c != null && c.getCountry().getId().equals("MX")) {
                 %>
                 <input id="bcn<%=c.getTitle()%>" type="radio" name="geo" value="<%=c.getTitle()%>">
                 <label for="bcn<%=c.getTitle()%>"><%=c.getTitle()%></label>
@@ -1569,7 +1569,7 @@
                     Iterator<CountryState> ieU = CountryState.ClassMgr.listCountryStates();
                     while (ieU.hasNext()) {
                         CountryState c = ieU.next();
-                        if (c.getCountry().getId().equals("US")) {
+                        if (c != null && c.getCountry().getId().equals("US")) {
                 %>
                 <input id="bcn<%=c.getTitle()%>" type="radio" name="geoUS" value="<%=c.getTitle()%>">
                 <label for="bcn<%=c.getTitle()%>"><%=c.getTitle()%></label>
@@ -1828,11 +1828,13 @@
                     Iterator languagei = Language.ClassMgr.listLanguages(SWBSocialUtil.getConfigWebSite());
                     while (languagei.hasNext()) {
                         Language language = (Language) languagei.next();
+                        if(language != null){
 
                 %>
                 <input id="bcn<%=language.getTitle()%>" type="radio" name="language" value="<%=reemplazar(language.getTitle())%>">
                 <label for="bcn<%=language.getTitle()%>"><%=language.getTitle()%></label>
                 <%
+                               }
                     }
                 %>
             </div>
@@ -2098,10 +2100,12 @@
                     Iterator<Country> country = Country.ClassMgr.listCountries(ss);
                     while (country.hasNext()) {
                         Country co = country.next();
+                        if(co != null){
                 %>
                 <input id="bcn<%=co.getId()%>" type="radio" name="country" value="<%=reemplazar(co.getTitle())%>">
                 <label for="bcn<%=co.getId()%>"><%=co.getTitle()%></label>
                 <%
+                               }
                     }
                 %>
             </div>
