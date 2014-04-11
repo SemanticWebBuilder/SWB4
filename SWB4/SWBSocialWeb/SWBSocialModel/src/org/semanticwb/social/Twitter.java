@@ -404,6 +404,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                                     external.setCreatorName("@"+status.getUser().getScreenName());
+                                    external.setPostUrl("https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId()));
+                                    external.setUserUrl("https://twitter.com/" + status.getUser().getScreenName());
                                     if(status.getCreatedAt().before(new Date())){
                                         external.setCreationTime(status.getCreatedAt());
                                     }else{

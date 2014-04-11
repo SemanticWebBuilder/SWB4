@@ -944,6 +944,9 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                             external.setPostId(idItem);
                             external.setCreatorId(uploader);
                             external.setCreatorName(uploader);
+                            
+                            external.setUserUrl("https://www.youtube.com/" + uploader);
+                            external.setPostUrl("https://www.youtube.com/watch?v=" + idItem + "&feature=youtube_gdata");
                             if(formatter.parse(uploadedStr).after(new Date())){
                                 external.setCreationTime(new Date());
                             }else{
@@ -1723,10 +1726,28 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
      */
     private String formatsYoutubePhrases(Stream stream){
         String parsedPhrases = ""; // parsed phrases - the result
+        String orPhrases = "";
         String exactPhrases = "";
         String notPhrases = "";
         String allPhrases ="";
 
+        if(stream.getPhrase() != null && !stream.getPhrase().trim().isEmpty()){//OR (Default)
+            orPhrases = stream.getPhrase();            
+            orPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(orPhrases);
+            orPhrases = orPhrases.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String words[] = orPhrases.split(" ");
+            int wordsNumber = words.length;
+            String tmpString = "";
+            for (int i = 0; i < wordsNumber; i++) {
+                if(!words[i].trim().isEmpty()){ 
+                    tmpString += words[i];
+                    if ((i + 1) < wordsNumber) {
+                        tmpString += " | ";
+                    }
+                }
+            }
+            orPhrases = tmpString;
+        }
         
         if(stream.getStream_allPhrases() != null && !stream.getStream_allPhrases().trim().isEmpty()){//All phrases
             allPhrases = stream.getStream_allPhrases();
@@ -1769,13 +1790,22 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         if(!allPhrases.isEmpty()){
             parsedPhrases += allPhrases;
         }
+        
         if(!exactPhrases.isEmpty()){
             if(parsedPhrases.isEmpty()){
                 parsedPhrases = exactPhrases;
             }else{
                 parsedPhrases += " " + exactPhrases;
             }
-        }        
+        }
+        
+        if(!orPhrases.isEmpty()){
+            if(parsedPhrases.isEmpty()){
+                parsedPhrases = orPhrases;
+            }else{
+                parsedPhrases += " " + orPhrases;
+            }
+        }
 
         if(!notPhrases.isEmpty()){
             if(parsedPhrases.isEmpty()){

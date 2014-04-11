@@ -69,33 +69,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * @param stream - phrases to search delimited by pipe
      * @return Formated phrases.
      */
-    private String getPhrases(String phrase) {
-        String parsedString = null;
-        HashSet<String> parsedPhrases = new HashSet<String>();
-        if (phrase != null && !phrase.isEmpty()) {
-            parsedString = "";
-            String[] phrasesStream = phrase.split(","); //Delimiter
-            String tmp;
-            int noOfPhrases = phrasesStream.length;
-            for (int i = 0; i < noOfPhrases; i++) {
-                if (!phrasesStream[i].trim().isEmpty()) {
-                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
-                    parsedPhrases.add(tmp);
-                }
-            }
-
-            Iterator<String> words = parsedPhrases.iterator();
-            noOfPhrases = parsedPhrases.size();
-            int i = 0;
-            while (words.hasNext()) {
-                parsedString += words.next();
-                if ((i + 1) < noOfPhrases) {
-                    parsedString += ",";
-                }
-                i++;
-            }
+    private String getPhrases(Stream stream) {
+        String parsedString = null;        
+        String sourceString  = stream.getPhrase();
+        if (sourceString != null && !sourceString.trim().isEmpty()) {            
+            parsedString = sourceString.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for only one space
         }
-        //System.out.println("PARSED STRING:"  + parsedString);
+        System.out.println("PARSED STRING:"  + parsedString);
         return parsedString;
     }
 
@@ -116,7 +96,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
-        String phrasesInStream = getPhrases(stream.getPhrase());
+        String phrasesInStream = getPhrases(stream);
         if (phrasesInStream == null || phrasesInStream.isEmpty()) {
             return;
         }
@@ -277,8 +257,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                          Pudo haberse quitado un termino del stream entonces debe de removerse del nextdatetosearch
                          */
                         //String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
-                        String phrasesInStream = getPhrases(stream.getPhrase());
-                        String[] phrasesArray = phrasesInStream.split(",");
+                        String phrasesInStream = getPhrases(stream);
+                        String[] phrasesArray = new String[1];//phrasesInStream.split(",");
+                        phrasesArray[0] = phrasesInStream;
                         String[] oldLimits = socialStreamSerch.getNextDatetoSearch().split(":");
                         String[] newLimits = limits.toString().split(":");
                         String finalLimits = "";
@@ -511,6 +492,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 external.setCreationTime(formatter.parse(postsData.getJSONObject(k).getString("created_time")));
                                 external.setUpdateTime(formatter.parse(postsData.getJSONObject(k).getString("updated_time")));
                                 external.setCreatorPhotoUrl("http://graph.facebook.com/" + postsData.getJSONObject(k).getJSONObject("from").getString("id") + "/picture?width=150&height=150");
+                                
+                                String postId = "";
+                                if(postsData.getJSONObject(k).getString("id").contains("_")){
+                                    postId = postsData.getJSONObject(k).getString("id").split("_")[1];
+                                }else{
+                                    postId = postsData.getJSONObject(k).getString("id");
+                                }
+                                external.setUserUrl("https://www.facebook.com/" + postsData.getJSONObject(k).getJSONObject("from").getString("id"));
+                                external.setPostUrl("https://www.facebook.com/" + postsData.getJSONObject(k).getJSONObject("from").getString("id") + "/posts/" + postId);
+                                
                                 if (postsData.getJSONObject(k).has("message")) {
                                     external.setMessage(postsData.getJSONObject(k).getString("message"));
                                 }
