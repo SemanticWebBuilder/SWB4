@@ -25,6 +25,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -339,12 +340,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //System.out.println("Red SocialID:"+this.getId()+", Red Title:"+this.getTitle()+", sitio:"+wsite.getId());
         //System.out.println("Creador:" + this.getCreator());
         //List<Status> twitterResults = new ArrayList<Status>();
-        int  tweetsReceived = 0;
+        SocialSite socialSite = (SocialSite)WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());        
+        int  tweetsReceived = 500;
         ArrayList <ExternalPost> aListExternalPost;
         int blockOfTweets = 0; //this is the default Value, 
-        if(stream.getBlockofMsgToClassify() > 0){
-            blockOfTweets = stream.getBlockofMsgToClassify();
-        }
+        try{
+            if(socialSite.getBlockofMsgToClassify() > 0){
+                blockOfTweets = socialSite.getBlockofMsgToClassify();
+            }
+        }catch(Exception e){}
         //System.out.println("Message Block Twitter:" + blockOfTweets);
         
         try{            
