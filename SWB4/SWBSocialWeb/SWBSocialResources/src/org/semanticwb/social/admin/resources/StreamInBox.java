@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.SocketException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -60,8 +61,11 @@ import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.social.Facebook;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.Twitter;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 /**
@@ -2719,7 +2723,9 @@ public class StreamInBox extends GenericResource {
         SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
         out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                 + "'); return false;\"></a>");
-
+        if(postIn.getMsg_url() != null && !postIn.getMsg_url().isEmpty()){
+            out.println("<a class=\"verWWW\" href=\"" + postIn.getMsg_url() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\"></a>");
+        }
         if(userCanRetopicMsg || userCandoEveryThing)
         {
             //ReClasifyByTpic
@@ -2745,7 +2751,20 @@ public class StreamInBox extends GenericResource {
                         + "'); return false;\"></a>");
             }
         }
-
+        
+        /*if(postIn.getPostInSocialNetwork() instanceof Facebook){
+            String postId = "";
+            if(postIn.getSocialNetMsgId().contains("_")){
+                postId = postIn.getSocialNetMsgId().split("_")[1];
+            }else{
+                postId = postIn.getSocialNetMsgId();
+            }
+            out.println("<a href=\"" + "https://www.facebook.com/" + postIn.getPostInSocialNetworkUser().getSnu_id() + "/posts/" + postId + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+        }else if(postIn.getPostInSocialNetwork() instanceof Youtube){
+            out.println("<a href=\"" + "https://www.youtube.com/watch?v=" + postIn.getSocialNetMsgId() +"&feature=youtube_gdata"  + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+        }else if(postIn.getPostInSocialNetwork() instanceof Twitter){
+            out.println("<a href=\"" + "https://twitter.com/" + postIn.getPostInSocialNetworkUser().getSnu_name() + "/status/" + postIn.getSocialNetMsgId() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+        }*/
         //Respuestas que posee un PostIn
         if (postIn.listpostOutResponseInvs().hasNext()) {
             SWBResourceURL urlresponses = paramRequest.getRenderUrl().setMode(Mode_RESPONSES).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -2813,9 +2832,10 @@ public class StreamInBox extends GenericResource {
         //Show Creation Time
         out.println("<td>");
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
+        SimpleDateFormat df = new SimpleDateFormat();
         if(postIn.getPi_createdInSocialNet()!=null)
         {
-            out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
+            out.println("<span title=\"" + df.format(postIn.getPi_createdInSocialNet()) + "\">" + SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang) + "</span>");
         }else{
             out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
         }

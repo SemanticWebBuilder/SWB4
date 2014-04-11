@@ -2527,7 +2527,9 @@ public class SocialTopicInBox extends GenericResource {
         SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
         out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                 + "'); return false;\"></a>");
-
+        if(postIn.getMsg_url() != null && !postIn.getMsg_url().isEmpty()){
+            out.println("<a class=\"verWWW\" href=\"" + postIn.getMsg_url() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\"></a>");
+        }
 
         //ReClasifyByTpic
         if(userCanRetopicMsg || userCandoEveryThing)
