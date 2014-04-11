@@ -341,9 +341,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //System.out.println("Creador:" + this.getCreator());
         //List<Status> twitterResults = new ArrayList<Status>();
         SocialSite socialSite = (SocialSite)WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());        
-        int  tweetsReceived = 500;
+        int  tweetsReceived = 0;
         ArrayList <ExternalPost> aListExternalPost;
-        int blockOfTweets = 0; //this is the default Value, 
+        int blockOfTweets = 500; //this is the default Value, 
         try{
             if(socialSite.getBlockofMsgToClassify() > 0){
                 blockOfTweets = socialSite.getBlockofMsgToClassify();
