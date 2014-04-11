@@ -155,8 +155,15 @@ public class ExternalPost {
      */
     private String userGeoLocation;
     
-    
+    /**
+     * Indicates the userUrl in the social network that the user belongs
+     */
     private String userUrl;
+    
+    /*
+     * Indicates the post url that refers to the social Network
+     */
+    private String postUrl;
     
 
     /**
@@ -193,11 +200,28 @@ public class ExternalPost {
         return userUrl;
     }
     
+    
      /**
      * @return the User Url
      */
     public void setUserUrl(String userUrl){
         this.userUrl=userUrl;
+    }
+    
+    
+    /**
+     * @return the Post Url
+     */
+    public String getPostUrl(){
+        return postUrl;
+    }
+    
+    
+     /**
+     * @return the User Url
+     */
+    public void setPostUrl(String postUrl){
+        this.postUrl=postUrl;
     }
     
     /**
