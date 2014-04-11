@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social YouTube. 
    */
-public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.FilterableNode,org.semanticwb.social.Videoable,org.semanticwb.social.Messageable,org.semanticwb.social.SocialMonitorable,org.semanticwb.social.Oauthable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Listenerable,org.semanticwb.model.Trashable,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Kloutable,org.semanticwb.model.Traceable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Relationable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class YoutubeBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.social.SocialMonitorable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Videoable,org.semanticwb.social.Listenerable,org.semanticwb.social.Kloutable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Messageable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Relationable,org.semanticwb.model.FilterableNode,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Secreteable,org.semanticwb.social.Oauthable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable
 {
    /**
    * Categorias a llenar en una colección.
