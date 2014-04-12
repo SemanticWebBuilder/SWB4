@@ -126,7 +126,7 @@ public class ReportGenerator extends GenericResource {
         output.append(paramRequest.getLocaleString("lbl_title"));
         output.append("</label></div>\n");
         output.append("    <div class=\"\">\n");
-        output.append("      <select name=\"title\" id=\"titleSelect\">\n");
+        output.append("      <select name=\"title\" id=\"titleSelect\" onchange=\"listStatus(this);\">\n");
         output.append("        <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_title_opt"));
         output.append("</option>\n");
@@ -287,13 +287,37 @@ public class ReportGenerator extends GenericResource {
         output.append("        propsSelect.disabled = true;\n");
         output.append("      }\n");
         output.append("    }\n");
+        SWBResourceURL urlStatus = paramRequest.getRenderUrl();
+        urlStatus.setMode("statusList");
+        urlStatus.setCallMethod(SWBResourceURL.Call_DIRECT);
+        output.append("    function listStatus(fromSelect) {\n");
+        output.append("      var statusSelect = document.getElementById(\"status\");\n");
+        output.append("      cleanSelect(\"status\");\n");
+        output.append("      if (fromSelect.selectedIndex > 0) {\n");
+        
+        output.append("        var statusResponse = getJSON(\"");
+        output.append(urlStatus.toString());
+        output.append("?element=\" + encodeURIComponent(fromSelect.value));\n");
+        //Se llena el select de titulos con la respuesta de la peticion
+        output.append("        populateSelect(statusSelect, statusResponse);\n");
+        output.append("      \n");
+        output.append("      } else {\n");
+        output.append("        var optionToAdd = new Option(\"");
+        output.append(paramRequest.getLocaleString("lbl_title_opt"));
+        output.append("\", \"\", false, false);\n");
+        output.append("        statusSelect.options.add(optionToAdd);\n");
+        output.append("      }\n");
+        
+        output.append("    }\n");
         output.append("    function populateSelect(select2Feed, dataContainer) {\n");
         output.append("      if (dataContainer.data.length > 0) {\n");
         output.append("        for (var i = 0; i < dataContainer.data.length; i++) {\n");
         output.append("          var optionToAdd = new Option(dataContainer.data[i].label, dataContainer.data[i].value, false, false);\n");
         output.append("          select2Feed.options.add(optionToAdd);\n");
         output.append("        }\n");
-        output.append("        select2Feed.selectedIndex = 0;\n");
+        output.append("        if (select2Feed.name != \"props2Show\") {");
+        output.append("          select2Feed.selectedIndex = 0;\n");
+        output.append("        }\n");
         output.append("      }\n");
         output.append("    }\n");
         output.append("    function cleanSelect(elementId) {\n");
@@ -303,7 +327,34 @@ public class ReportGenerator extends GenericResource {
         output.append("      }\n");
         output.append("    }\n");
         output.append("    function evaluate2Submit(form) {\n");
-        output.append("      form.submit();\n");
+        output.append("      var passedValidation = true;\n");
+        output.append("      if (form.elementType.selectedIndex < 1 && form.initialPeriod.selectedIndex < 1 && \n");
+        output.append("          form.finalPeriod.selectedIndex < 1 && form.status.selectedIndex < 1 && \n");
+        output.append("          form.champion.selectedIndex < 1) {\n");
+        output.append("        alert(\"");
+        output.append(paramRequest.getLocaleString("msg_noSelectedCriteria"));
+        output.append("\");\n");
+        output.append("        passedValidation = false;");
+        output.append("      }\n");
+        output.append("      if ((form.initialPeriod.selectedIndex < 1 && form.finalPeriod.selectedIndex > 0) ||\n");
+        output.append("          (form.initialPeriod.selectedIndex > 0 && form.finalPeriod.selectedIndex < 1)) {\n");
+        output.append("        alert(\"");
+        output.append(paramRequest.getLocaleString("msg_noIntervalSelected"));
+        output.append("\");\n");
+        output.append("        passedValidation = false;");
+        output.append("      }\n");
+        output.append("      if ((form.initialPeriod.selectedIndex > 0 && form.finalPeriod.selectedIndex > 0) &&\n");
+        output.append("          (form.initialPeriod.selectedIndex > form.finalPeriod.selectedIndex)) {\n");
+        output.append("        alert(\"");
+        output.append(paramRequest.getLocaleString("msg_periodsNotValid"));
+        output.append("\");\n");
+        output.append("        passedValidation = false;");
+        output.append("      }\n");
+        output.append("      if (passedValidation) {\n");
+        output.append("        form.submit();\n");
+        output.append("      } else {\n");
+        output.append("        return;\n");
+        output.append("      }\n");
         output.append("    }\n");
         output.append("  </script>");
         out.println(output.toString());
@@ -317,6 +368,8 @@ public class ReportGenerator extends GenericResource {
             this.doElementList(request, response, paramRequest);
         } else if (mode != null && mode.equals("report")) {
             this.doReport(request, response, paramRequest);
+        } else if (mode != null && mode.equals("statusList")) {
+            this.doStatusList(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -342,6 +395,7 @@ public class ReportGenerator extends GenericResource {
         PrintWriter out = response.getWriter();
         StringBuilder list = new StringBuilder(256);
         String type = request.getParameter("type");
+        User user = paramRequest.getUser();
         int cont = 0;
         
         if (type != null) {
@@ -356,7 +410,8 @@ public class ReportGenerator extends GenericResource {
                 Iterator<SemanticObject> listing = objectBase.listInstances();
                 while (listing != null && listing.hasNext()) {
                     SemanticObject element = listing.next().createGenericInstance().getSemanticObject();
-                    if (element.getBooleanProperty(BSCElement.swb_active, false, false)) {
+                    if (element.getBooleanProperty(BSCElement.swb_active, false, false) && 
+                            user.haveAccess(element.createGenericInstance())) {
                         if (cont > 0) {
                             list.append(",\n");
                         }
@@ -373,6 +428,63 @@ public class ReportGenerator extends GenericResource {
             }
         }
         
+        out.println(list.toString());
+    }
+    
+    public void doStatusList(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
+        ArrayList<State> states = new ArrayList<State>();
+        StringBuilder list = new StringBuilder(256);
+        String elementUri = request.getParameter("element");
+        int cont = 0;
+        SemanticObject object = SemanticObject.createSemanticObject(elementUri,
+                paramRequest.getWebPage().getWebSite().getSemanticModel());
+        
+        if (object != null) {
+            list.append("      {\n");
+            list.append("        data: [\n");
+            list.append("          { value: \"\", label: \"");
+            list.append(paramRequest.getLocaleString("lbl_noSelection"));
+            list.append("\"},\n");
+            GenericObject generic = object.createGenericInstance();
+            Iterator<State> iterator = null;
+            if (generic instanceof Objective) {
+                iterator = ((Objective) generic).listStates();
+            } else if (generic instanceof Indicator) {
+                iterator = ((Indicator) generic).getObjective().listStates();
+            } else if (generic instanceof Initiative) {
+                iterator = ((Initiative) generic).listStates();
+            } else if (generic instanceof Deliverable) {
+                iterator = ((Deliverable) generic).getInitiative().listStates();
+            }
+            while (iterator != null && iterator.hasNext()) {
+                State state = iterator.next();
+                if (state != null && state.isValid()) {
+                    states.add(state);
+                }
+            }
+            Collections.sort(states);
+            iterator = states.iterator();
+            while (iterator != null && iterator.hasNext()) {
+                State state = iterator.next();
+                if (cont > 0) {
+                    list.append(",\n");
+                }
+                list.append("          { value: \"");
+                list.append(state.getURI());
+                list.append("\", label: \"");
+                list.append(state.getTitle());
+                list.append("\" }");
+                cont++;
+            }
+            list.append("\n        ]");
+            list.append("\n      }");
+        }
         out.println(list.toString());
     }
     
@@ -395,6 +507,8 @@ public class ReportGenerator extends GenericResource {
         ArrayList<SemanticObject> results = this.processReport(criteria, paramRequest);
         int itemsCount = 0;
         int titleIndex = -1;
+        
+        request.setAttribute("websiteId", paramRequest.getWebPage().getWebSiteId());
         
         output.append("<table>\n");
         output.append("  <tr>\n");
@@ -459,6 +573,19 @@ public class ReportGenerator extends GenericResource {
                     return !s.isValid() || !user.haveAccess(s);
                 }
             });
+        Collections.sort(periods);
+        //TODO:eliminar despues de pruebas
+        System.out.println("\nPeriodos a mostrar en combo");
+        ArrayList<Period> _4test = new ArrayList<Period>(128);
+        for (int i = 0; i < periods.size(); i++) {
+            _4test.add(periods.get(i));
+        }
+        System.out.println("src.size: " + periods.size() + "  dest.size: " + _4test.size());
+//        Collections.copy(_4test, periods);
+        for (Period p: _4test) {
+            System.out.println("Periodo: " + p.getTitle());
+        }
+        
         return periods;
     }
     
@@ -555,6 +682,8 @@ public class ReportGenerator extends GenericResource {
         if (st != null) {
             exists = true;
         }
+        //TODO:eliminar despues de pruebas
+        System.out.println("Propiedad: " + property.getDisplayName() + ", tiene displayElement: " + exists);
         return exists;
     }
 
@@ -637,8 +766,8 @@ public class ReportGenerator extends GenericResource {
                     }
                     properties.add(prop);
                 }
-                criteria.setProps2Show(properties);
             }
+            criteria.setProps2Show(properties);
         }
         if (!related.isEmpty()) {
             criteria.setRelatedElements(related);
@@ -647,6 +776,8 @@ public class ReportGenerator extends GenericResource {
         if (criteria.getProps2Show().isEmpty() || !criteria.getProps2Show().contains(Descriptiveable.swb_title)) {
             criteria.getProps2Show().add(0, Descriptiveable.swb_title);
         }
+        //TODO:eliminar despues de pruebas
+        System.out.println("\ncriteria para la peticion: " + criteria.toString());
         return criteria;
     }
     
@@ -660,7 +791,9 @@ public class ReportGenerator extends GenericResource {
         
         SWBModel model = paramRequest.getWebPage().getWebSite();
         Iterator initialSet = null;
-        System.out.println("Criteria: \n" + criteria.toString());
+        User user = paramRequest.getUser();
+        
+        System.out.println("Criteria en processReport: \n" + criteria.toString());
         if (criteria.getElementType() != null) {
             ArrayList<SemanticObject> forNow = new ArrayList<SemanticObject>(128);
             String id = null;
@@ -671,64 +804,76 @@ public class ReportGenerator extends GenericResource {
             if (criteria.getElementType().equals(Objective.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Objective element = Objective.ClassMgr.getObjective(id, model);
-                    if (element != null) {
+                    if (element != null && element.isValid() && user.haveAccess(element)) {
                         forNow.add(element.getSemanticObject());
-                    } else {
-                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    } else if (element == null) {
+                        ReportGenerator.log.error("Objective con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
                     Iterator<Objective> firstSet = Objective.ClassMgr.listObjectives(model);
                     while (firstSet != null && firstSet.hasNext()) {
-                        forNow.add(firstSet.next().getSemanticObject());
+                        Objective obj = firstSet.next();
+                        if (obj.isValid() && user.haveAccess(obj)) {
+                            forNow.add(obj.getSemanticObject());
+                        }
                     }
                     initialSet = forNow.iterator();
                 }
             } else if (criteria.getElementType().equals(Indicator.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Indicator element = Indicator.ClassMgr.getIndicator(id, model);
-                    if (element != null) {
+                    if (element != null && element.isValid() && user.haveAccess(element)) {
                         forNow.add(element.getSemanticObject());
-                    } else {
-                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    } else if (element == null) {
+                        ReportGenerator.log.error("Indicator con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
                     Iterator<Indicator> firstSet = Indicator.ClassMgr.listIndicators(model);
                     while (firstSet != null && firstSet.hasNext()) {
-                        forNow.add(firstSet.next().getSemanticObject());
+                        Indicator indi = firstSet.next();
+                        if (indi.isValid() && user.haveAccess(indi)) {
+                            forNow.add(indi.getSemanticObject());
+                        }
                     }
                     initialSet = forNow.iterator();
                 }
             } else if (criteria.getElementType().equals(Initiative.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Initiative element = Initiative.ClassMgr.getInitiative(id, model);
-                    if (element != null) {
+                    if (element != null && element.isValid() && user.haveAccess(element)) {
                         forNow.add(element.getSemanticObject());
-                    } else {
-                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    } else if (element == null) {
+                        ReportGenerator.log.error("Initiative con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
                     Iterator<Initiative> firstSet = Initiative.ClassMgr.listInitiatives(model);
                     while (firstSet != null && firstSet.hasNext()) {
-                        forNow.add(firstSet.next().getSemanticObject());
+                        Initiative ini = firstSet.next();
+                        if (ini.isValid() && user.haveAccess(ini)) {
+                            forNow.add(ini.getSemanticObject());
+                        }
                     }
                     initialSet = forNow.iterator();
                 }
             } else if (criteria.getElementType().equals(Deliverable.sclass.getName())) {
                 if (criteria.getObjectTitle() != null) {
                     Deliverable element = Deliverable.ClassMgr.getDeliverable(id, model);
-                    if (element != null) {
+                    if (element != null && element.isValid() && user.haveAccess(element)) {
                         forNow.add(element.getSemanticObject());
-                    } else {
-                        System.out.println("BSCElement con id: " + id + " --No encontrado");
+                    } else if (element == null) {
+                        ReportGenerator.log.error("Deliverable con id: " + id + " --No encontrado");
                     }
                     initialSet = forNow.iterator();
                 } else {
                     Iterator<Deliverable> firstSet = Deliverable.ClassMgr.listDeliverables(model);
                     while (firstSet != null && firstSet.hasNext()) {
-                        forNow.add(firstSet.next().getSemanticObject());
+                        Deliverable deli = firstSet.next();
+                        if (deli.isValid() && user.haveAccess(deli)) {
+                            forNow.add(deli.getSemanticObject());
+                        }
                     }
                     initialSet = forNow.iterator();
                 }
@@ -740,16 +885,28 @@ public class ReportGenerator extends GenericResource {
             Iterator<Initiative> initiatives = Initiative.ClassMgr.listInitiatives(model);
             Iterator<Deliverable> deliverables = Deliverable.ClassMgr.listDeliverables(model);
             while (objectives != null && objectives.hasNext()) {
-                allTypes.add(objectives.next().getSemanticObject());
+                Objective obj = objectives.next();
+                if (obj != null && obj.isValid() && user.haveAccess(obj)) {
+                    allTypes.add(obj.getSemanticObject());
+                }
             }
             while (indicators != null && indicators.hasNext()) {
-                allTypes.add(indicators.next().getSemanticObject());
+                Indicator indi = indicators.next();
+                if (indi != null && indi.isValid() && user.haveAccess(indi)) {
+                    allTypes.add(indi.getSemanticObject());
+                }
             }
             while (initiatives != null && initiatives.hasNext()) {
-                allTypes.add((initiatives.next().getSemanticObject()));
+                Initiative ini = initiatives.next();
+                if (ini != null && ini.isValid() && user.haveAccess(ini)) {
+                    allTypes.add((ini.getSemanticObject()));
+                }
             }
             while (deliverables != null && deliverables.hasNext()) {
-                allTypes.add(deliverables.next().getSemanticObject());
+                Deliverable deli = deliverables.next();
+                if (deli != null && deli.isValid() && user.haveAccess(deli)) {
+                    allTypes.add(deli.getSemanticObject());
+                }
             }
             initialSet = allTypes.iterator();
         }
@@ -895,7 +1052,13 @@ public class ReportGenerator extends GenericResource {
             }
             count++;
         }
+        //TODO: eliminar despues de pruebas
+        System.out.println("\nElementos a mostrar en reporte");
+        for (SemanticObject so: processed) {
+            System.out.println("   - " + so.getURI());
+        }
         System.out.println("Conjunto de " + count + " elementos iniciales");
+        
         return processed;
     }
     
@@ -975,6 +1138,8 @@ public class ReportGenerator extends GenericResource {
         //se agregan los elementos seleccionados a resultSet
         for (SemanticObject addition : additional) {
             resultSet.add(addition);
+            //TODO:eliminar despues de pruebas
+            System.out.println("Elemento agregado: " + addition.getURI());
         }
     }
     
@@ -1026,6 +1191,6 @@ public class ReportGenerator extends GenericResource {
             }
         }
         return ret != null ? ret : "";
-    }    
+    }
 }
 
