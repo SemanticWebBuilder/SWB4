@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.SWBUtils.Collections;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -54,9 +55,9 @@ public class RemoveMessagesResource extends GenericResource {
                 Stream stream = (Stream)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                 String wsiteId = stream.getSemanticObject().getModel().getName();
                 WebSite wsite=WebSite.ClassMgr.getWebSite(wsiteId);
-                //Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
+                Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
                 //long noOfMessages = SWBUtils.Collections.sizeOf(itPostIn);
-                long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
+                //long StreamPostIns = wsite.getSemanticModel().countStatements(null, PostIn.social_postInStream.getRDFProperty(), stream.getSemanticObject().getRDFResource(), null);
                 //out.println("<div class=\"swbform\">");
                 //out.println("<form type=\"dijit.form.Form\" id=\"del\" action=\"" +  paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "\" method=\"post\" onsubmit=\"submitForm('del'); return false;\">");            
                 /*
@@ -81,13 +82,18 @@ public class RemoveMessagesResource extends GenericResource {
                 * */
                 out.println("<div id=\"msj-eliminar\">");
                 out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
+                
+                System.out.println("Mensajes 1 George:"+itPostIn.hasNext());
 
+                long lPostIns=Collections.sizeOf(itPostIn); 
+                
+                System.out.println("Mensajes 2 George:"+lPostIns);
 
-                if(StreamPostIns >0L){
+                if(lPostIns>0L){ 
                     out.println("<div class=\"bloque bloque1\">");
                     out.println("<p class=\"bloqtit\">Todos</p>");
-                    out.println("<p class=\"bloqnum\">" + StreamPostIns +"</p>");
-                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("<p class=\"bloqnum\">" + lPostIns +"</p>");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(SWBResourceURL.Action_REMOVE).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ lPostIns +" mensajes de entrada\">Eliminar</a>");
                     out.println("</div>");
                     
                     /*out.println("<div class=\"eliminar-boton streamtot-on\">");
@@ -99,7 +105,7 @@ public class RemoveMessagesResource extends GenericResource {
                     out.println("<div class=\"bloque bloque1\">");
                     out.println("<p class=\"bloqtit\">Todos</p>");
                     out.println("<p class=\"bloqnum\">" + "0" +"</p>");
-                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ lPostIns +" mensajes de entrada\">Eliminar</a>");
                     out.println("</div>");
                     
                     /*out.println("<div class=\"eliminar-boton streamtot-off\">");
@@ -130,7 +136,7 @@ public class RemoveMessagesResource extends GenericResource {
                     out.println("<div class=\"bloque bloque1\">");
                     out.println("<p class=\"bloqtit\">Sin clasificar</p>");
                     out.println("<p class=\"bloqnum\">" + aList.size() +"</p>");
-                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ lPostIns +" mensajes de entrada\">Eliminar</a>");
                     out.println("</div>");
                     /*out.println("<div class=\"eliminar-boton streamsin-on\">");
                         out.println("<a onclick=\"if(confirm('Desea eliminar todos los mensajes sin tema?'))" + "{ submitUrl('" + paramRequest.getActionUrl().setAction(Action_REMOVEWOTOPIC).setParameter("suri", objUri) + "',this); } else { return false;}\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">");
@@ -141,7 +147,7 @@ public class RemoveMessagesResource extends GenericResource {
                     out.println("<div class=\"bloque bloque1\">");
                     out.println("<p class=\"bloqtit\">Sin clasificar</p>");
                     out.println("<p class=\"bloqnum\">" + "0" +"</p>");
-                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ StreamPostIns +" mensajes de entrada\">Eliminar</a>");
+                    out.println("<a onclick=\"return false;\" title=\"Eliminar "+ aList.size() +" mensajes de entrada\">Eliminar</a>");
                     out.println("</div>");
                     /*out.println("<div class=\"eliminar-boton streamsin-off\">");
                     out.println("<span>");
