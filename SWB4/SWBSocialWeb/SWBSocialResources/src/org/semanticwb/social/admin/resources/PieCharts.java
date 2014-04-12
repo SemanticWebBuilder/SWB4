@@ -436,12 +436,12 @@ public class PieCharts extends GenericResource {
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 13));
 
             // creo una nueva fila
-            Row trow = sheet.createRow((short) 0);
+            Row trow = sheet.createRow(0);
             createTituloCell(wb, trow, 0, CellStyle.ALIGN_CENTER,
                     CellStyle.VERTICAL_CENTER, "Mensajes " + title);
 
             // Creo la cabecera de mi listado en Excel
-            Row row = sheet.createRow((short) 2);
+            Row row = sheet.createRow(2);
 
             // Creo las celdas de mi fila, se puede poner un diseño a la celda
 
@@ -488,7 +488,7 @@ public class PieCharts extends GenericResource {
                 //PostIn postIn = (PostIn) listIterator.next();
                 //  System.out.println("--------------->" + postIn);
                 // PostIn postIn = null;//(PostIn) pairs.getValue();
-                Row troww = sheet.createRow((short) i);
+                Row troww = sheet.createRow(i);
 
                 if (postIn.getMsg_Text() != null) {
                     if (postIn.getMsg_Text().length() > 2000) {
