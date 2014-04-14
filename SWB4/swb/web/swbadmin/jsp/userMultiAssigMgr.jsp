@@ -40,9 +40,20 @@
             {
                 User ur = it2.next();
                 String txt=ur.getLogin()+" ("+ur.getFullName()+")";
-                if(search.length()==0 || txt.toLowerCase().indexOf(search)>-1)
+                
+                StringTokenizer st=new StringTokenizer(search,",;");
+                if(!st.hasMoreTokens())
                 {
                     out.println("<option value=\""+ur.getId()+"\">"+txt+"</option>");
+                }
+                while(st.hasMoreTokens())
+                {
+                    String t=st.nextToken().trim();                    
+                    if(search.length()==0 || txt.toLowerCase().indexOf(t)>-1)
+                    {
+                        out.println("<option value=\""+ur.getId()+"\">"+txt+"</option>");
+                        break;
+                    }
                 }
             }
         }
@@ -307,7 +318,7 @@ showStatus('Acción realizada correctamente...');
                 </td>
             </tr>
             <tr>
-                <td class="labels"><label for="userRep">Buscador de Usuarios:</label></td>
+                <td class="labels"><label for="userRep">Buscar por ID o Nombre de Usuario:</label></td>
                 <td>
                     <input id="uf_search" type="text" dojoType="dijit.form.TextBox"> &nbsp; 
                     <button dojoType="dijit.form.Button" onclick="
