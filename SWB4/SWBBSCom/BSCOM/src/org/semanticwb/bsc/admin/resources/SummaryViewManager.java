@@ -1,6 +1,5 @@
 package org.semanticwb.bsc.admin.resources;
 
-
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,6 +19,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.utils.SummaryView;
@@ -38,22 +38,26 @@ import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticOntology;
 
-
 /**
  * Recurso que administra instancias de tipo {@code SummaryView}. Permite crear,
- * editar y eliminar objetos {@code SummaryView} y asignar como vista de despliegue 
- * uno de ellos en particular.
+ * editar y eliminar objetos {@code SummaryView} y asignar como vista de
+ * despliegue uno de ellos en particular.
+ *
  * @author jose.jimenez
  */
-public class SummaryViewManager extends SummaryViewManagerBase {
+public class SummaryViewManager extends SummaryViewManagerBase implements PDFExportable {
 
-
-    /** Realiza operaciones en la bitacora de eventos. */
+    /**
+     * Realiza operaciones en la bitacora de eventos.
+     */
     private static Logger log = SWBUtils.getLogger(GenericSemResource.class);
 
     /**
@@ -64,7 +68,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
 
     /**
      * Constructs a SummaryViewManager with a SemanticObject
-     * @param base The SemanticObject with the properties for the SummaryViewManager
+     *
+     * @param base The SemanticObject with the properties for the
+     * SummaryViewManager
      */
     public SummaryViewManager(SemanticObject base) {
 
@@ -72,16 +78,20 @@ public class SummaryViewManager extends SummaryViewManagerBase {
     }
 
     /**
-     * Genera el c&oacute;digo HTML que representa la vista de este recurso en el 
-     * espacio asignado del lado de la aplicaci&oacute;n. Por si mismo genera el 
-     * c&oacute;digo HTML o delega esta tarea a otros m&eacute;todos o JSP's.
+     * Genera el c&oacute;digo HTML que representa la vista de este recurso en
+     * el espacio asignado del lado de la aplicaci&oacute;n. Por si mismo genera
+     * el c&oacute;digo HTML o delega esta tarea a otros m&eacute;todos o JSP's.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
-     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro 
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
-     *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
-     * @throws IOException  si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -91,15 +101,15 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         StringBuilder output = new StringBuilder(128);
         String lang = paramRequest.getUser().getLanguage();
         User user = paramRequest.getUser();
-        
+
         if (this.getActiveView() == null) {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
         } else {
             SummaryView activeView = this.getActiveView();
             List propsInView = SWBUtils.Collections.copyIterator(activeView.listPropertyListItems());
-        
-        //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
-        //se tiene captura de datos en el periodo obtenido
+
+            //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
+            //se tiene captura de datos en el periodo obtenido
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
             WebSite website = this.getResourceBase().getWebSite();
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
@@ -107,11 +117,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             String filters = null;
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
             boolean addStatus = false;
-            
+
             //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(website.getId()) != null
-                           ? request.getParameter(website.getId()) : null;
+                        ? request.getParameter(website.getId()) : null;
                 if (periodId != null) {
                     request.getSession(true).setAttribute(website.getId(), periodId);
                 }
@@ -119,7 +129,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             Period thisPeriod = periodId != null
                     ? Period.ClassMgr.getPeriod(periodId, website)
                     : null;
-            
+
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
             if (semWorkClass.equals(Objective.bsc_Objective)) {
                 identifier = paramRequest.getLocaleString("value_ObjectiveId");
@@ -164,10 +174,10 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     continue;
                 }
                 GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
-                
+
                 JSONObject row = new JSONObject();
                 StringBuilder status = new StringBuilder(128);
-                
+
                 if (addStatus) {
                     PeriodStatus perStat = null;
                     if (generic instanceof Objective) {
@@ -175,8 +185,8 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         perStat = obj.getPeriodStatus(thisPeriod);
                     } else if (generic instanceof Indicator) {
                         Indicator indicator = (Indicator) generic;
-                        Measure measure = indicator != null && indicator.getStar() != null 
-                                          ? indicator.getStar().getMeasure(thisPeriod) : null;
+                        Measure measure = indicator != null && indicator.getStar() != null
+                                ? indicator.getStar().getMeasure(thisPeriod) : null;
                         if (measure != null && measure.getEvaluation() != null) {
                             perStat = measure.getEvaluation();
                         }
@@ -196,21 +206,20 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                             status.append("</span>");
                         }
                     } else {
-                            status.append("<span class=\"indefinido\">Indefinido</span>");
+                        status.append("<span class=\"indefinido\">Indefinido</span>");
                     }
                     try {
                         row.put("status", status.toString());
                     } catch (JSONException jsone) {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
-                    
+
                 }
-                
+
                 //Por cada propiedad en la vista:
                 while (viewPropertiesList.hasNext()) {
                     PropertyListItem propListItem = viewPropertiesList.next();
-                    SemanticProperty elementProperty = propListItem.getElementProperty(
-                                                       ).transformToSemanticProperty();
+                    SemanticProperty elementProperty = propListItem.getElementProperty().transformToSemanticProperty();
                     String propertyValue = null; //para las propiedades tipo objeto
                     //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
                     propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
@@ -220,7 +229,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                     }
                 }
-                
+
                 //Se utiliza el URI como identificador de los elementos del grid
                 //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
                 try {
@@ -236,12 +245,12 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             } catch (JSONException jsone) {
                 SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
             }
-            
+
             //Obtiene encabezados de tabla y propiedades para filtros
             Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
             ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
             TreeMap headings2Show = new TreeMap();
-            
+
             if (addStatus) {
                 String[] statusHeading = {
                     "status",
@@ -251,13 +260,12 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 headingsArray.add(statusHeading);//Para los filtros
                 headings2Show.put(Integer.parseInt("0"), statusHeading);
             }
-            
+
             boolean showFiltering = false;
             if (viewPropertiesList != null) {
                 while (viewPropertiesList.hasNext()) {
                     PropertyListItem propListItem = viewPropertiesList.next();
-                    SemanticProperty property = propListItem.getElementProperty(
-                                                ).transformToSemanticProperty();
+                    SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
                     int arrayIndex = propListItem.getPropertyOrder();
                     if (addStatus) { //Si se agrego la columna de status, las demas se recorren
                         arrayIndex++;
@@ -265,11 +273,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
 
                     if (propListItem != null && property != null) {
                         String[] heading = {
-                                            property.getName(),
-                                            property.getLabel(lang),
-                                            (filters != null && filters.contains(property.getName()))
-                                            ? "true" : "false"
-                                           };
+                            property.getName(),
+                            property.getLabel(lang),
+                            (filters != null && filters.contains(property.getName()))
+                            ? "true" : "false"
+                        };
                         headingsArray.add(heading);
                         headings2Show.put(new Integer(arrayIndex), heading);
                         if (filters != null && filters.contains(property.getName())) {
@@ -278,7 +286,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     }
                 }
             }
-            
+
             //Declara el codigo HTML para inclusion de Dojo.Grid y sus estilos
             output.append("<script type=\"text/javascript\">\n");
             output.append("  dojo.require('dojo.parser');\n");
@@ -311,7 +319,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             int iCount = 0;
             while (thisHeading != null) {
                 Integer thisKey = (Integer) thisHeading.getKey();
-                
+
                 if (iCount > 0) {
                     output.append(",\n");
                 } else {
@@ -350,7 +358,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             output.append("<style type=\"text/css\">\n");
             output.append("  .dojoxGrid table { margin: 0; } ");
             output.append("</style>\n");
-            
+
             //Se evalua el mostrar la forma para filtrado en grid
             if (filters != null && showFiltering) {
                 output.append("<div class=\"filter\">\n");
@@ -399,7 +407,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append(this.getId());
                 output.append("');\n");
                 output.append("                if (choosenValue.value != '') {\n");
-                
+
                 //Evalua entre los diferentes criterios de filtrado
                 for (int i = 0; i < headingsArray.size(); i++) {
                     String[] heading = headingsArray.get(i);
@@ -423,7 +431,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 output.append("  </form>\n");
                 output.append("</div>\n");
             }
-            
+
             output.append("<div id=\"grid\"></div>\n");
 
         }
@@ -431,23 +439,28 @@ public class SummaryViewManager extends SummaryViewManagerBase {
     }
 
     /**
-     * Muestra la interface por la que el usuario puede especificar la clase de 
-     * objetos que se desplegar&aacute;n en la vista de la aplicaci&oacute;n o aquella
-     * en la que se administran las instancias de la clase especificada. La clase 
-     * de objetos a administrar solo puede especificarse una vez y a apartir de ese momento
-     * se puede administrar las instancias de la clase seleccionada.
+     * Muestra la interface por la que el usuario puede especificar la clase de
+     * objetos que se desplegar&aacute;n en la vista de la aplicaci&oacute;n o
+     * aquella en la que se administran las instancias de la clase especificada.
+     * La clase de objetos a administrar solo puede especificarse una vez y a
+     * apartir de ese momento se puede administrar las instancias de la clase
+     * seleccionada.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
-     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro 
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
-     *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
-     * @throws IOException si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         boolean workClassIsValid = false;
         if (this.getWorkClass() != null) {
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
@@ -462,14 +475,19 @@ public class SummaryViewManager extends SummaryViewManagerBase {
     }
 
     /**
-     * Muestra la interface que permite al usuario administrar las vistas resumen.
+     * Muestra la interface que permite al usuario administrar las vistas
+     * resumen.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
-     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro 
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
-     *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
-     * @throws IOException si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
      */
     public void doShowForm(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -477,20 +495,19 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
         String viewUri = request.getParameter("viewUri") != null
-                         ? request.getParameter("viewUri") : "";
+                ? request.getParameter("viewUri") : "";
         String suri = request.getParameter("suri");
         String operation = request.getParameter("operation") == null
-                           ? "add" : request.getParameter("operation");
+                ? "add" : request.getParameter("operation");
         String statusMsg = request.getParameter("statusMsg");
         StringBuilder baseListHtml = new StringBuilder(256);
         StringBuilder viewListHtml = new StringBuilder(256);
-        
+
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        
+
         //Poner validacion de clase a utilizar, debe ser descendiente de BSCElement
         String lang = paramRequest.getUser().getLanguage();
-        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) 
-                SWBUtils.Collections.copyIterator(semWorkClass.listProperties());
+        ArrayList<SemanticProperty> propsList = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listProperties());
         Collections.sort(propsList, new PropertiesComparator());
         Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         SWBFormMgr formMgr = null;
@@ -505,11 +522,11 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             if (viewSemObject == null) {
                 throw new SWBResourceException("View URI is null while editing");
             }
-            
+
             modeUsed = SWBFormMgr.MODE_EDIT;
             formMgr = new SWBFormMgr(SummaryView.bsc_SummaryView, viewSemObject.getSemanticObject(), modeUsed);
             url.setAction("editView");
-            
+
             if (semWorkClass != null) {
                 GenericIterator<PropertyListItem> viewPropertiesList = viewSemObject.listPropertyListItems();
                 HashMap<Integer, String> selectedOptions = new HashMap<Integer, String>(16);
@@ -520,18 +537,18 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                         SemanticProperty elementPropertySO = listItem.getElementProperty().transformToSemanticProperty();
                         if (listItem != null && elementPropertySO != null) {
                             selectedOptions.put(listItem.getPropertyOrder(),
-                                    elementPropertySO.getURI() + "|" +
-                                    elementPropertySO.getDisplayName(lang));
+                                    elementPropertySO.getURI() + "|"
+                                    + elementPropertySO.getDisplayName(lang));
                         }
                     }
                 }
-                
+
                 //generar un listado de HTML con las propiedades en baseList menos las de viewList
                 while (basePropertiesList.hasNext()) {
                     SemanticProperty prop = basePropertiesList.next();
-                    if ((prop.getDisplayProperty() != null || displayElementExists(prop)) &&
-                            !selectedOptions.containsValue(prop.getURI() + "|" + prop.getDisplayName(lang))) {
-                        
+                    if ((prop.getDisplayProperty() != null || displayElementExists(prop))
+                            && !selectedOptions.containsValue(prop.getURI() + "|" + prop.getDisplayName(lang))) {
+
                         //generar HTML de la opcion
                         baseListHtml.append("                        <option value=\"");
                         baseListHtml.append(prop.getURI());
@@ -545,18 +562,18 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                     String optionData = selectedOptions.get(i);
                     if (optionData != null) {
                         viewListHtml.append("                        <option value=\"");
-                        viewListHtml.append(optionData.indexOf("|") > 0 
-                                            ? optionData.substring(0, optionData.indexOf("|"))
-                                            : optionData);
+                        viewListHtml.append(optionData.indexOf("|") > 0
+                                ? optionData.substring(0, optionData.indexOf("|"))
+                                : optionData);
                         viewListHtml.append("\">");
                         viewListHtml.append(optionData.indexOf("|") > 0
-                                            ? optionData.substring(optionData.indexOf("|") + 1)
-                                            : optionData);
+                                ? optionData.substring(optionData.indexOf("|") + 1)
+                                : optionData);
                         viewListHtml.append("</option>\n");
                     }
                 }
             }
-            
+
         } else if (operation.equals("add")) {
             modeUsed = SWBFormMgr.MODE_CREATE;
             formMgr = new SWBFormMgr(SummaryView.sclass, null, modeUsed);
@@ -582,7 +599,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("  dojo.require('dijit.form.Button');\n");
         output.append("  dojo.require('dijit.form.MultiSelect');\n");
         output.append("</script>\n");
-        
+
         output.append("        <div>\n");
         output.append("            <form dojoType=\"dijit.form.Form\" name=\"vistaForm");
         output.append(this.getId());
@@ -621,15 +638,13 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         if (operation.equals("edit") && viewSemObject != null) {
             output.append(
                     formMgr.getFormElement(SummaryView.swb_title).renderElement(
-                            request, viewSemObject.getSemanticObject(), SummaryView.swb_title,
-                            SummaryView.swb_title.getName(), "dojo", modeUsed, lang)
-                );
+                    request, viewSemObject.getSemanticObject(), SummaryView.swb_title,
+                    SummaryView.swb_title.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
             output.append(
                     formMgr.getFormElement(SummaryView.swb_title).renderElement(
-                            request, null, SummaryView.swb_title, SummaryView.swb_title.getName(),
-                            "dojo", modeUsed, lang)
-                );
+                    request, null, SummaryView.swb_title, SummaryView.swb_title.getName(),
+                    "dojo", modeUsed, lang));
         }
         output.append("                </td>\n");
         output.append("            </tr>\n");
@@ -643,15 +658,13 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         if (operation.equals("edit") && viewSemObject != null) {
             output.append(
                     formMgr.getFormElement(SummaryView.swb_description).renderElement(
-                            request, viewSemObject.getSemanticObject(), SummaryView.swb_description,
-                            SummaryView.swb_description.getName(), "dojo", modeUsed, lang)
-                    );
+                    request, viewSemObject.getSemanticObject(), SummaryView.swb_description,
+                    SummaryView.swb_description.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
             output.append(
                     formMgr.getFormElement(SummaryView.swb_description).renderElement(
-                            request, null, SummaryView.swb_description, SummaryView.swb_description.getName(),
-                            "dojo", modeUsed, lang)
-                    );
+                    request, null, SummaryView.swb_description, SummaryView.swb_description.getName(),
+                    "dojo", modeUsed, lang));
         }
         output.append("                </td>\n");
         output.append("            </tr>\n");
@@ -757,7 +770,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                    var oldIndex = view.selectedIndex;\n");
         output.append("                                    if (oldIndex > 0) {\n");
         output.append("                                        var optionMoved = new Option(view.options[oldIndex].text, view.options[oldIndex].value, false, true);\n");
-                                                //crear una nueva coleccion de options con el nuevo orden
+        //crear una nueva coleccion de options con el nuevo orden
         output.append("                                        var newOptions = new Array();\n");
         output.append("                                        for (var i = 0; i < view.options.length; i++) {\n");
         output.append("                                            var optionToAdd = new Option(view.options[i].text, view.options[i].value, false, false);\n");
@@ -768,14 +781,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                                newOptions.push(optionToAdd);\n");
         output.append("                                            }\n");
         output.append("                                        }\n");
-                                                //se eliminan los elementos del select
+        //se eliminan los elementos del select
         output.append("                                        while (view.options.length > 0) {\n");
         output.append("                                            view.remove(view.options.length - 1);\n");
         output.append("                                        }\n");
-                                                //se agregan los elementos ordenados
+        //se agregan los elementos ordenados
         output.append("                                        for (var i = 0; i < newOptions.length; i++) {\n");
         output.append("                                            try {\n");
-                                                                        // for IE earlier than version 8
+        // for IE earlier than version 8
         output.append("                                                view.add(newOptions[i], view.options[null]);\n");
         output.append("                                            } catch (e) {\n");
         output.append("                                                view.add(newOptions[i], null);\n");
@@ -810,7 +823,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                    if (oldIndex < view.options.length - 1) {\n");
         output.append("                                        var optionMoved = new Option(");
         output.append("view.options[oldIndex].text, view.options[oldIndex].value, false, true);\n");
-                                                //crear una nueva coleccion de options con el nuevo orden
+        //crear una nueva coleccion de options con el nuevo orden
         output.append("                                        var newOptions = new Array();\n");
         output.append("                                        for (var i = 0; i < view.options.length; i++) {\n");
         output.append("                                            var optionToAdd = new Option(");
@@ -822,14 +835,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("                                                newOptions.push(optionMoved);\n");
         output.append("                                            }\n");
         output.append("                                        }\n");
-                                                //se eliminan los elementos del select
+        //se eliminan los elementos del select
         output.append("                                        while (view.options.length > 0) {\n");
         output.append("                                            view.remove(view.options.length - 1);\n");
         output.append("                                        }\n");
-                                                //se agregan los elementos ordenados
+        //se agregan los elementos ordenados
         output.append("                                        for (var i = 0; i < newOptions.length; i++) {\n");
         output.append("                                            try {\n");
-                                                                       // for IE earlier than version 8
+        // for IE earlier than version 8
         output.append("                                                view.add(newOptions[i], view.options[null]);\n");
         output.append("                                            } catch (e) {\n");
         output.append("                                                view.add(newOptions[i], null);\n");
@@ -904,7 +917,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         output.append("</fieldset>\n");
         output.append("            </form>\n");
         output.append("        </div>\n");
-        
+
         //Muestra mensaje sobre resultado de la operacion realizada
         if (statusMsg != null && !statusMsg.isEmpty()) {
             statusMsg = paramRequest.getLocaleString(statusMsg);
@@ -919,25 +932,29 @@ public class SummaryViewManager extends SummaryViewManagerBase {
     }
 
     /**
-     * Realiza operaciones con la informaci&oacute;n de manera segura evitando la ejecuci&oacute;n
-     * de una misma operaci&oacute;n m&aacute;s de una vez, teniendo en cuenta el estado de la aplicaci&oacute;n.
+     * Realiza operaciones con la informaci&oacute;n de manera segura evitando
+     * la ejecuci&oacute;n de una misma operaci&oacute;n m&aacute;s de una vez,
+     * teniendo en cuenta el estado de la aplicaci&oacute;n.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @throws SWBResourceException  si se presenta alg&uacute;n problema dentro 
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
-     *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
-     * @throws IOException si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response)
             throws SWBResourceException, IOException {
-        
+
         String action = response.getAction();
         String title = request.getParameter("title");
         String descrip = request.getParameter("description");
         String propertyUries = request.getParameter("propsIn2Save") != null
-                               ? request.getParameter("propsIn2Save")
-                               : "";
+                ? request.getParameter("propsIn2Save")
+                : "";
         String summaryViewUri = request.getParameter("svUri");
         String statusMsg = null;
         String lang = response.getUser().getLanguage();
@@ -947,48 +964,48 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         boolean formRedirect = false;
 
         if (!"addView".equals(action)) {
-                summaryView = SemanticObject.getSemanticObject(summaryViewUri) != null
-                              ? ((SummaryView) SemanticObject.getSemanticObject(
-                                      summaryViewUri).createGenericInstance())
-                              : null;
+            summaryView = SemanticObject.getSemanticObject(summaryViewUri) != null
+                    ? ((SummaryView) SemanticObject.getSemanticObject(
+                    summaryViewUri).createGenericInstance())
+                    : null;
         }
-        if ("addView".equals(action) ||
-                "editView".equals(action)) {
-            
+        if ("addView".equals(action)
+                || "editView".equals(action)) {
+
             SemanticOntology ontology = SWBPlatform.getSemanticMgr().getOntology();
             String[] uries = propertyUries.split("\\|");
-            
+
             if ("addView".equals(action)) {
                 SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-                
+
                 if (semWorkClass != null) {
                     summaryView = SummaryView.ClassMgr.createSummaryView(bscModel);
                     summaryView.setObjectsType(semWorkClass.getURI());
                     statusMsg = "msg_ViewCreated";
                 }
             } else if ("editView".equals(action)) {
-                
+
                 if (summaryView != null && uries.length > 0) {
                     removeAllPropertyListItem(summaryView);
                 }
                 statusMsg = "msg_ViewUpdated";
             }
             if (summaryView != null && !propertyUries.isEmpty()) {
-                
+
                 for (int i = 0; i < uries.length; i++) {
                     //Se crean instancias de PropertyListItem con los uries y el orden seleccionado, se almacenan en summaryView
                     SemanticObject propSO = SemanticObject.getSemanticObject(uries[i]);
                     SemanticProperty prop = ontology.getSemanticProperty(uries[i]);
-                        
-                        if (prop == null) {
-                            prop = propSO.transformToSemanticProperty();
-                        }
-                        if (prop != null) {
-                            PropertyListItem property = PropertyListItem.ClassMgr.createPropertyListItem(bscModel);
-                            property.setPropertyOrder(i);
-                            property.setElementProperty(prop.getSemanticObject());
-                            summaryView.addPropertyListItem(property);
-                        }
+
+                    if (prop == null) {
+                        prop = propSO.transformToSemanticProperty();
+                    }
+                    if (prop != null) {
+                        PropertyListItem property = PropertyListItem.ClassMgr.createPropertyListItem(bscModel);
+                        property.setPropertyOrder(i);
+                        property.setElementProperty(prop.getSemanticObject());
+                        summaryView.addPropertyListItem(property);
+                    }
                 }
                 //Se actualiza informacion de Traceable
                 SWBPortal.getServiceMgr().updateTraceable(summaryView.getSemanticObject(), response.getUser());
@@ -1000,9 +1017,9 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 response.setRenderParameter("operation", "edit");
             }
             formRedirect = true;
-            
+
         } else if ("deleteView".equals(action)) {
-            
+
             if (summaryView != null) {
                 if (this.getActiveView() != null && this.getActiveView() == summaryView) {
                     this.setActiveView(null);
@@ -1012,7 +1029,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 statusMsg = "msg_ViewDeleted";
             }
             listingRedirect = true;
-            
+
         } else if (action.equalsIgnoreCase("makeActive") && summaryView != null) {
             //asignar a SummaryViewAdm la instancia de SummaryView correspondiente al uri recibido en request
             this.setActiveView(summaryView);
@@ -1021,7 +1038,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         } else {
             super.processAction(request, response);
         }
-        
+
         if (statusMsg != null) {
             response.setRenderParameter("statusMsg", statusMsg);
         }
@@ -1031,14 +1048,16 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             response.setMode("showForm");
         }
     }
-    
+
     /**
-     * Elimina todos los elementos PropertyListItem asociados al objeto summaryView proporcionado
+     * Elimina todos los elementos PropertyListItem asociados al objeto
+     * summaryView proporcionado
+     *
      * @param summaryView la vista resumen a la que se le eliminar&aacute;n los
-     *        elementos PropertyListItem relacionados
+     * elementos PropertyListItem relacionados
      */
     private void removeAllPropertyListItem(SummaryView summaryView) {
-        
+
         GenericIterator<PropertyListItem> listItems = summaryView.listPropertyListItems();
         if (listItems != null && listItems.hasNext()) {
             while (listItems.hasNext()) {
@@ -1047,20 +1066,25 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             }
         }
     }
-    
+
     /**
-     * Genera el c&oacute;digo HTML del listado de vistas resumen disponibles a administrar
+     * Genera el c&oacute;digo HTML del listado de vistas resumen disponibles a
+     * administrar
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
-     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro 
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del m&eacute;todo.
-     *         Como la extracci&oacute;n de valores para par&aacute;metros de i18n.
-     * @throws IOException si ocurre un problema con la lectura/escritura de la petici&oacute;n/respuesta.
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
      */
     private void doViewsList(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -1069,26 +1093,26 @@ public class SummaryViewManager extends SummaryViewManagerBase {
         String lang = paramRequest.getUser().getLanguage();
         BSC bsc = (BSC) this.getResource().getWebSite();
         SemanticClass workClassSC = this.getWorkClass() != null
-                                    ? this.getWorkClass().transformToSemanticClass()
-                                    : null;
+                ? this.getWorkClass().transformToSemanticClass()
+                : null;
         String objectsType = workClassSC != null
-                             ? workClassSC.getURI() : null;
+                ? workClassSC.getURI() : null;
         String statusMsg = request.getParameter("statusMsg");
         String statusErr = request.getParameter("statusErr");
-        
+
         if (bsc != null && objectsType != null) {
             SWBResourceURL urlCreate = paramRequest.getRenderUrl();
             urlCreate.setParameter("operation", "add");
             urlCreate.setMode("showForm");
             Iterator listOfViews = SummaryView.ClassMgr.listSummaryViews(bsc);
-            
+
             if (listOfViews != null && listOfViews.hasNext()) {
                 ArrayList<SummaryView> viewsList = new ArrayList<SummaryView>(32);
                 while (listOfViews.hasNext()) {
                     SummaryView view2Include = (SummaryView) listOfViews.next();
-                    if (view2Include.getObjectsType() != null &&
-                            view2Include.getObjectsType().equals(objectsType)) {
-                            viewsList.add(view2Include);
+                    if (view2Include.getObjectsType() != null
+                            && view2Include.getObjectsType().equals(objectsType)) {
+                        viewsList.add(view2Include);
                     }
                 }
                 listOfViews = viewsList.iterator();
@@ -1134,7 +1158,7 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             listCode.append("        </tr>\n");
             listCode.append("    </thead>\n");
             listCode.append("    <tbody>\n");
-                
+
             //Se agrega al listado cada vista creada
             while (listOfViews.hasNext()) {
                 SummaryView view = (SummaryView) listOfViews.next();
@@ -1247,14 +1271,14 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             listCode.append("    </script>\n");
             listCode.append("</div>\n");
         }
-        
+
         out.println(listCode.toString());
     }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         if (paramRequest.getMode().equals("showForm")) {
             doShowForm(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("viewsList")) {
@@ -1263,23 +1287,28 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             super.processRequest(request, response, paramRequest);
         }
     }
-    
+
     /**
-     * Devuelve el despliegue correspondiente al valor de la propiedad especificada, del objeto indicado.
+     * Devuelve el despliegue correspondiente al valor de la propiedad
+     * especificada, del objeto indicado.
+     *
      * @param request petici&oacute;n HTTP realizada por el cliente
-     * @param elementBSC representa el objeto del cual se desea extraer la informaci&oacute;n
-     * @param propUri representa la uri de la propiedad semantica de la que se desea obtener su valor
-     * @param lang representa el lenguaje en que se desea mostrar el valor de la propiedad indicada
+     * @param elementBSC representa el objeto del cual se desea extraer la
+     * informaci&oacute;n
+     * @param propUri representa la uri de la propiedad semantica de la que se
+     * desea obtener su valor
+     * @param lang representa el lenguaje en que se desea mostrar el valor de la
+     * propiedad indicada
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
             String propUri, String lang) {
-        
+
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
-        
-        
+
+
         //Codigo prueba para obtener el displayElement
         Statement st = semProp.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
@@ -1298,26 +1327,30 @@ public class SummaryViewManager extends SummaryViewManagerBase {
                 }
             }
         }
-        
+
         if (ret == null) {
             FormElement formElement = formMgr.getFormElement(semProp);
             if (formElement != null) {
                 ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(), SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
             }
         }
-        
+
         return ret != null ? ret : "";
     }
-    
+
     /**
-     * Verifica la existencia de un valor para el displayElement de una propiedad en la ontolog&iacute;a
-     * @param property la propiedad sem&aacute;ntica de la que se requiere el displayElement
-     * @return {@literal true} si existe un valor para el displayElement en la ontolog&iacute;a, {@literal false} de lo contrario
+     * Verifica la existencia de un valor para el displayElement de una
+     * propiedad en la ontolog&iacute;a
+     *
+     * @param property la propiedad sem&aacute;ntica de la que se requiere el
+     * displayElement
+     * @return {@literal true} si existe un valor para el displayElement en la
+     * ontolog&iacute;a, {@literal false} de lo contrario
      */
     private boolean displayElementExists(SemanticProperty property) {
-        
+
         boolean exists = false;
-        
+
         Statement st = property.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
                 "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
@@ -1325,5 +1358,74 @@ public class SummaryViewManager extends SummaryViewManagerBase {
             exists = true;
         }
         return exists;
+    }
+
+    /**
+     * Recorre los recursos y evalua aquel que contengan los atributos
+     * PDFExportable.viewType con valor PDFExportable.VIEW_Summary y
+     * PDFExportable.bsc_itemType con valor el nombre de la clase del elemento
+     * BSC al que pertenezca.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con la liga
+     * y el icono correspondiente al elemento a exportar.
+     * @throws SWBResourceException SWBResourceException Excepti&oacute;n
+     * utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    @Override
+    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        StringBuilder toReturn = new StringBuilder();
+        String surl = "";
+        Resource base2 = null;
+        String icon = "";
+        WebSite ws = paramRequest.getWebPage().getWebSite();
+        String nameClass = getWorkClass().transformToSemanticClass().getClassName();
+        Iterator<Resource> itp = ws.listResources();
+        while (itp.hasNext()) {
+            Resource resource = itp.next();
+            String itemType = resource.getData(PDFExportable.bsc_itemType);
+            String view = resource.getData(PDFExportable.viewType);
+            if ((view != null && view.equals(PDFExportable.VIEW_Summary))
+                    && (itemType != null && itemType.equals(nameClass))) {
+                if (resource.isActive()) {
+                    base2 = resource;
+                    break;
+                }
+            }
+        }
+
+        if (base2 != null) {
+            Iterator<Resourceable> res = base2.listResourceables();
+            while (res.hasNext()) {
+                Resourceable re = res.next();
+                if (re instanceof WebPage) {
+                    surl = ((WebPage) re).getUrl();
+                    break;
+                }
+            }
+
+            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+            String image = "pdfOnline.jpg";
+            String alt = paramRequest.getLocaleString("alt");
+            toReturn.append("<a href=\"");
+            toReturn.append(surl);
+            toReturn.append("\" class=\"export-stgy\" title=\"");
+            toReturn.append(alt);
+            toReturn.append("\" target=\"_blank\">");
+            toReturn.append("<img src=\"");
+            toReturn.append(webWorkPath);
+            toReturn.append(image);
+            toReturn.append("\" alt=\"");
+            toReturn.append(alt);
+            toReturn.append("\" class=\"toolbar-img\" />");
+            toReturn.append("</a>");
+            icon = toReturn.toString();
+        }
+        return icon;
     }
 }
