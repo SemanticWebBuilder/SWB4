@@ -5,7 +5,7 @@ import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.bsc.tracing.Agreement;
+import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
