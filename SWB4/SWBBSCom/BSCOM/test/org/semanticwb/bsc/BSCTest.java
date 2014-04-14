@@ -1,6 +1,7 @@
 
 package org.semanticwb.bsc;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.xml.xpath.XPath;
@@ -465,7 +466,7 @@ public class BSCTest {
                 int impact = Integer.parseInt(attrs.getNamedItem("impact").getNodeValue());
                 int likehood = Integer.parseInt(attrs.getNamedItem("likehood").getNodeValue());
                 //SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*30)+","+(aux-likehood*30)+",6,'#000000',1,1,1,1);").append("\n");
-                SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*24)+","+(aux-likehood*24)+",5,'#000000',1,'#000000',1,1);").append("\n");
+                SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*24)+","+(aux-likehood*24)+",5,'#000000',1,'none',1,1);").append("\n");
                 SVGjs.append(" g.appendChild(pto);").append("\n");
             }
         }
@@ -475,15 +476,20 @@ public class BSCTest {
         SVGjs.append(" framingRect(rect,rect.width.baseVal.value+"+BOX_SPACING_RIGHT+",'none',1,'#000000',1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
-        
-        
+        // leyenda de creación
+        SVGjs.append(" pto = svg.createSVGPoint();").append("\n");
+        SVGjs.append(" pto.x = rect.x.baseVal.value;").append("\n");
+        SVGjs.append(" pto.y = rect.y.baseVal.value + rect.height.baseVal.value + "+(BOX_SPACING_BOTTOM+HEADER_4)+";").append("\n");
+        SVGjs.append(" pto = pto.matrixTransform(g.getCTM());").append("\n");
+        SVGjs.append(" txt = createText('Creado "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" svg.appendChild(txt);").append("\n");
+                
         // tabla de riesgos
         // calcular la posición del rectángulo del diagrama para translate la tabla de riesgos
         // caja de la gráfica
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
         SVGjs.append(" var w = Math.round(rect.width.baseVal.value);").append("\n");
         SVGjs.append(" x = x + w + "+MARGEN_LEFT+";").append("\n");
-        
         
         x_ = 0;
         y_ = 0;
@@ -544,7 +550,7 @@ public class BSCTest {
             node = nlRisk.item(j);
             if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
-                String rid = attrs.getNamedItem("id").getNodeValue();
+                //String rid = attrs.getNamedItem("id").getNodeValue();
                 String prefix = attrs.getNamedItem("prefix").getNodeValue();
                 int impact = Integer.parseInt(attrs.getNamedItem("impact").getNodeValue());
                 int likehood = Integer.parseInt(attrs.getNamedItem("likehood").getNodeValue());
@@ -593,7 +599,6 @@ public class BSCTest {
                 SVGjs.append(" }").append("\n");
             }
         }
-        
         
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
