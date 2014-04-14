@@ -103,7 +103,7 @@
                     if (key == null) {
                         title = "No definido";
                     } else {
-                        title = key.getTitle();
+                        title = key.getDisplayTitle(lang);
                     }
                     map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
                     totalPost++;

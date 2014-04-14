@@ -32,12 +32,14 @@
         }
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if (postIn.getPostSentimentalType() == 0) {
-                neutrals++;
-            } else if (postIn.getPostSentimentalType() == 1) {
-                positives++;
-            } else if (postIn.getPostSentimentalType() == 2) {
-                negatives++;
+            if (postIn != null) {
+                if (postIn.getPostSentimentalType() == 0) {
+                    neutrals++;
+                } else if (postIn.getPostSentimentalType() == 1) {
+                    positives++;
+                } else if (postIn.getPostSentimentalType() == 2) {
+                    negatives++;
+                }
             }
         }
         float intTotalVotos = positives + negatives + neutrals;
@@ -63,8 +65,8 @@
 
         if (intPorcentajePositive > 0) {
             JSONObject node1 = new JSONObject();
-                                    
-            node1.put("label", ""+SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang));
+
+            node1.put("label", "" + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang));
             node1.put("value1", "" + positives);
             node1.put("value2", "" + round(intPorcentajePositive));
             node1.put("color", "#008000");
@@ -73,7 +75,7 @@
         }
         if (intPorcentajeNegative > 0) {
             JSONObject node2 = new JSONObject();
-            node2.put("label", ""+SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang));
+            node2.put("label", "" + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang));
             node2.put("value1", "" + negatives);
             node2.put("value2", "" + round(intPorcentajeNegative));
             node2.put("color", "#FF0000");
@@ -82,7 +84,7 @@
         }
         if (intPorcentajeNeutral > 0) {
             JSONObject node3 = new JSONObject();
-            node3.put("label", ""+SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
+            node3.put("label", "" + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
             node3.put("value1", "" + neutrals);
             node3.put("value2", "" + round(intPorcentajeNeutral));
             node3.put("color", "#FFD700");
@@ -111,7 +113,8 @@
     //System.out.println("Entra 0jjjjjjjjjjj");
     if (request.getParameter("objUri") != null) {
         //System.out.println("Entra 1:"+request.getParameter("objUri"));
-        SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
+        //SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
+        SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
         //System.out.println("Entra 2:"+lang);
         out.println(getObject(semObj, lang));

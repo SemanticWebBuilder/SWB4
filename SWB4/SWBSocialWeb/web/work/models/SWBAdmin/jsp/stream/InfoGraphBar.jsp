@@ -35,28 +35,33 @@
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
 
+        if (itObjPostIns == null) {
 
+            JSONArray node = new JSONArray();
+            return node;
+        }
         java.util.Date date = null;
-        Calendar calendario = Calendar.getInstance();        
-      
-        
-        String anio = request.getParameter("selectedAnio");        
-        if(anio.equals("")){        
-        anio = String.valueOf(calendario.get(Calendar.YEAR)) ;
+        Calendar calendario = Calendar.getInstance();
+
+
+        String anio = request.getParameter("selectedAnio");
+        if (anio.equals("")) {
+            anio = String.valueOf(calendario.get(Calendar.YEAR));
         }
 
         String selectedAnio = anio;
-        String selectAnio = request.getParameter("selectAnio") ; //== "2013" ? "" : request.getParameter("selectAnio");
+        String selectAnio = request.getParameter("selectAnio"); //== "2013" ? "" : request.getParameter("selectAnio");
         String selectMonth = request.getParameter("selectMes") == null ? "" : request.getParameter("selectMes");
 
 
         JSONArray node = new JSONArray();
         ArrayList listPostIn = new ArrayList();
         Iterator iListPostIn;
-        int neutrals = 0, positives = 0, negatives = 0;
+
 
         if (!selectedAnio.equals("") && selectMonth.equals("")) {
-           
+                    int neutrals = 0, positives = 0, negatives = 0;
+
             int selectedA = Integer.parseInt(selectedAnio);
             int nPostIn = 0;
             int[][] months = new int[12][4];
@@ -64,21 +69,25 @@
             while (itObjPostIns.hasNext()) {
                 PostIn postIn = itObjPostIns.next();
 
-                if (postIn.getPostSentimentalType() == 0) {
-                    neutrals++;
-                } else if (postIn.getPostSentimentalType() == 1) {
-                    positives++;
-                } else if (postIn.getPostSentimentalType() == 2) {
-                    negatives++;
-                }
+                if (postIn != null) {
+                    if (postIn.getPostSentimentalType() == 0) {
+                        neutrals++;
+                    } else if (postIn.getPostSentimentalType() == 1) {
+                        positives++;
+                    } else if (postIn.getPostSentimentalType() == 2) {
+                        negatives++;
+                    }
+                    if (postIn.getPi_created() != null) {
+                        date = postIn.getPi_created();
+                    }
+                    nPostIn++;
 
-                date = postIn.getPi_created();
-        
+                }
                 calendario.setTime(date);
                 int year = calendario.get(Calendar.YEAR);
-                
+
                 if (year == selectedA) {
-                
+
                     months[calendario.get(Calendar.MONTH)][0] += 1;
                     months[calendario.get(Calendar.MONTH)][1] += neutrals;
                     months[calendario.get(Calendar.MONTH)][2] += negatives;
@@ -90,14 +99,13 @@
                 neutrals = 0;
                 negatives = 0;
                 positives = 0;
-                listPostIn.add(date);
-                nPostIn++;
+                  listPostIn.add(date);
 
 
 
             }
 
-            iListPostIn = listPostIn.iterator();
+            // iListPostIn = listPostIn.iterator();
 
             int meses = 1;
             for (int idx = 0; idx < months.length; idx++) {
@@ -111,7 +119,7 @@
                     node1.put("month", meses);
                     node1.put("year", calendario.get(Calendar.YEAR));
                     node1.put("post", elem);
-                     node1.put("neutrals", neutrals_sYear);
+                    node1.put("neutrals", neutrals_sYear);
                     node1.put("positives", positives_sYear);
                     node1.put("negatives", negatives_sYear);
                     node1.put("chartclass", "possClass");
@@ -130,7 +138,7 @@
 
         } else if (!selectAnio.equals("") && !selectMonth.equals("")) {
 
-            
+
             int selectedYear = Integer.parseInt(selectAnio);
             int selectMonthint = Integer.parseInt(selectMonth);
 
@@ -143,19 +151,23 @@
 
             int neutrals_ = 0, positives_ = 0, negatives_ = 0;
             int[][] dias = new int[days][4];
-            
-            
+
+
             while (itObjPostIns.hasNext()) {
                 PostIn postIn = itObjPostIns.next();
-                if (postIn.getPostSentimentalType() == 0) {
-                    neutrals_++;
-                } else if (postIn.getPostSentimentalType() == 1) {
-                    positives_++;
-                } else if (postIn.getPostSentimentalType() == 2) {
-                    negatives_++;
+                if (postIn != null) {
+                    if (postIn.getPostSentimentalType() == 0) {
+                        neutrals_++;
+                    } else if (postIn.getPostSentimentalType() == 1) {
+                        positives_++;
+                    } else if (postIn.getPostSentimentalType() == 2) {
+                        negatives_++;
+                    }
+                    if (postIn.getPi_created() != null) {
+                        date = postIn.getPi_created();
+                    }
+                    nPostIn++;
                 }
-
-                date = postIn.getPi_created();
 
                 calendario.setTime(date);
 
@@ -173,10 +185,10 @@
                 }
                 neutrals_ = 0;
                 negatives_ = 0;
-                positives_= 0;
+                positives_ = 0;
                 listPostIn.add(date);
                 //System.out.println("es el mismo año");
-                nPostIn++;
+
 
             }
 
@@ -206,9 +218,9 @@
                     d++;
                 }
             }
-           
+
             iListPostIn = listPostIn.iterator();
-            
+
 
         }
 
@@ -221,7 +233,7 @@
 %>
 <%
 
-    if (request.getParameter("selectedAnio") != null) {        
+    if (request.getParameter("selectedAnio") != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
         out.println(getObject(semObj, lang, request));
