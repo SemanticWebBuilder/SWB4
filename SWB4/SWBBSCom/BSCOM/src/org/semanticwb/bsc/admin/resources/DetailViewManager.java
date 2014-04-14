@@ -32,7 +32,7 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.formelement.DateElement;
 import org.semanticwb.bsc.formelement.TextAreaElement;
-import org.semanticwb.bsc.tracing.Agreement;
+import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;

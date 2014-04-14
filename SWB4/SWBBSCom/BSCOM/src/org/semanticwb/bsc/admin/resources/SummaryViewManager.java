@@ -32,7 +32,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.bsc.admin.resources.base.SummaryViewManagerBase;
-import org.semanticwb.bsc.tracing.Agreement;
+import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.PropertiesComparator;
