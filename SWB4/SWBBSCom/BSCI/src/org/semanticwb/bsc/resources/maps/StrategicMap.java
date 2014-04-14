@@ -1,4 +1,3 @@
-
 package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
@@ -17,14 +16,17 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.accessory.DifferentiatorGroup;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -47,19 +49,19 @@ import org.w3c.dom.NodeList;
  * @version %I%, %G%
  * @since 1.0
  */
-public class StrategicMap extends GenericResource {
-    
+public class StrategicMap extends GenericResource implements PDFExportable {
+
     public static final String Mode_PNGImage = "png";
     public static final String Mode_PDFDocument = "pdf";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if(Mode_PNGImage.equals(mode)) {
+        if (Mode_PNGImage.equals(mode)) {
             doGetPNGImage(request, response, paramRequest);
-        }else if(Mode_PDFDocument.equals(mode)) {
+        } else if (Mode_PDFDocument.equals(mode)) {
             doGetPDFDocument(request, response, paramRequest);
-        }else {
+        } else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -81,37 +83,36 @@ public class StrategicMap extends GenericResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         Resource base = getResourceBase();
         WebSite webSite = base.getWebSite();
-        if(webSite instanceof BSC)
-        {
+        if (webSite instanceof BSC) {
             PrintWriter out = response.getWriter();
-            BSC model = (BSC)webSite;
+            BSC model = (BSC) webSite;
             Document dom = model.getDom();
             Document map = null;
             try {
                 map = getDom(dom);
-            }catch(XPathExpressionException xpathe) {
-                System.out.println("XPath con problemas... "+xpathe);
+            } catch (XPathExpressionException xpathe) {
+                System.out.println("XPath con problemas... " + xpathe);
             }
             String SVGjs = null;
             try {
-                 SVGjs = getSvg(request, map);
-            }catch(XPathExpressionException xpe) {
+                SVGjs = getSvg(request, map);
+            } catch (XPathExpressionException xpe) {
                 System.out.println(xpe.toString());
             }
             out.println(SVGjs);
-            
+
             final String suri = request.getParameter("suri");
             SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
             out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
-            out.println("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
+            out.println("  <input type=\"hidden\" name=\"suri\" value=\"" + suri + "\" />");
             out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
-            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('"+exportUrl.setMode(Mode_PNGImage)+"')\"  />");
-            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('"+exportUrl.setMode(Mode_PDFDocument)+"')\"  />");
+            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + exportUrl.setMode(Mode_PNGImage) + "')\"  />");
+            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('" + exportUrl.setMode(Mode_PDFDocument) + "')\"  />");
             out.println(" </form>");
-            
+
             out.println(" <script type=\"text/javascript\">");
             out.println("  function getFile(url) {");
             out.println("   var form = document.getElementById('svgform');");
@@ -121,20 +122,19 @@ public class StrategicMap extends GenericResource {
             out.println("   form['data'].value = svg_xml;");
             out.println("   form.submit();");
             out.println("  };");
-            out.println(" </script>");   
-        }     
+            out.println(" </script>");
+        }
     }
-    
-    public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+
+    public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite webSite = getResourceBase().getWebSite();
         response.setContentType("image/png; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+".png\"");
-        
-        
-        if(webSite instanceof BSC) {
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".png\"");
+
+
+        if (webSite instanceof BSC) {
 //            Period period = getPeriod(request);
 //            if(period != null) {
 //
@@ -151,20 +151,19 @@ public class StrategicMap extends GenericResource {
                 t.transcode(input, output);
                 response.getOutputStream().flush();
                 response.getOutputStream().close();
-            }catch(TranscoderException tcdre) {
+            } catch (TranscoderException tcdre) {
             }
         }
     }
 
-    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite webSite = getResourceBase().getWebSite();
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+".pdf\"");
-        
-        if(webSite instanceof BSC) {
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".pdf\"");
+
+        if (webSite instanceof BSC) {
 //            Period period = getPeriod(request);
 //            if(period != null) {
 //
@@ -181,11 +180,11 @@ public class StrategicMap extends GenericResource {
                 t.transcode(input, output);
                 response.getOutputStream().flush();
                 response.getOutputStream().close();
-            }catch(TranscoderException tcdre) {
+            } catch (TranscoderException tcdre) {
             }
         }
     }
-    
+
     /**
      * Permite capturar y almacenar la informaci&oacute;n para configurar un
      * mapa estrat&eacute;gico
@@ -622,7 +621,7 @@ public class StrategicMap extends GenericResource {
         sb.append("\n<input id=\"colorRelOO\" name=\"colorRelOO\" type=\"text\" ");
         sb.append("value=\"");
         sb.append(colorRelOO);
-        sb.append( "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
 
         sb.append("\n<li class=\"swbform-li\">");
@@ -654,7 +653,7 @@ public class StrategicMap extends GenericResource {
         sb.append(colorRelTT);
         sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
-        
+
         sb.append("\n<li class=\"swbform-li\">");
         sb.append("\n<label for=\"colorRelPP\" class=\"swbform-label\">");
         sb.append(paramRequest.getLocaleString("cssPP"));
@@ -663,8 +662,8 @@ public class StrategicMap extends GenericResource {
         sb.append("value=\"");
         sb.append(colorRelPP);
         sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");        
-        
+        sb.append("\n</li>");
+
         String select = base.getData("margins") == null ? "" : "checked";
         sb.append("\n<li class=\"swbform-li\"><input id=\"margins");
         sb.append("\" name=\"margins");
@@ -706,7 +705,7 @@ public class StrategicMap extends GenericResource {
         sb.append("\" type=\"text\" ");
         sb.append("value=\"");
         sb.append(ty_vision);
-        sb.append( "\" dojoType=\"dijit.form.ValidationTextBox\">");
+        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
         sb.append("\n</li>");
 
         String strVision1 = "bg_vision";
@@ -717,7 +716,7 @@ public class StrategicMap extends GenericResource {
         sb.append(": </label>");
         sb.append("\n<input id=\"");
         sb.append(strVision1);
-        sb.append( "\" name=\"");
+        sb.append("\" name=\"");
         sb.append(strVision1);
         sb.append("\" type=\"text\" ");
         sb.append("value=\"");
@@ -792,11 +791,10 @@ public class StrategicMap extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\"abc.pdf\"");
-        
+
         WebSite webSite = getResourceBase().getWebSite();
-        if(webSite instanceof BSC)
-        {
-            BSC model = (BSC)webSite;
+        if (webSite instanceof BSC) {
+            BSC model = (BSC) webSite;
             PrintWriter out = response.getWriter();
             Document dom = model.getDom();
             out.println(SWBUtils.XML.domToXml(dom));
@@ -804,7 +802,7 @@ public class StrategicMap extends GenericResource {
             out.close();
         }
     }
-    
+
     /**
      * Realiza las operaciones de almacenamiento de la configuraci&oacute;n para
      * la visualizaci&oacute;n del mapa estrat&eacute;gico.
@@ -817,8 +815,7 @@ public class StrategicMap extends GenericResource {
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         Resource base = response.getResourceBase();
         WebSite ws = response.getWebPage().getWebSite();
@@ -854,17 +851,16 @@ public class StrategicMap extends GenericResource {
      * @return un objeto {@code Periodo} que representa el Periodo actual
      * seleccionado
      */
-    private Period getPeriod(HttpServletRequest request)
-    {
+    private Period getPeriod(HttpServletRequest request) {
         WebSite model = getResourceBase().getWebSite();
         Period period = null;
-        
+
         HttpSession session = request.getSession(true);
-        final String pid = (String)session.getAttribute(model.getId());
-        if(Period.ClassMgr.hasPeriod(pid, model)) {
+        final String pid = (String) session.getAttribute(model.getId());
+        if (Period.ClassMgr.hasPeriod(pid, model)) {
             period = Period.ClassMgr.getPeriod(pid, model);
         }
-        
+
 //        if (request.getSession(true).getAttribute(id) != null) {
 //            String pid = (String) request.getSession(true).getAttribute(id);
 //            if(Period.ClassMgr.hasPeriod(pid, ws)) {
@@ -877,59 +873,55 @@ public class StrategicMap extends GenericResource {
 //        }
         return period;
     }
-    
     private String urlBase = null;
-    
+
     @Override
-    public void setResourceBase(Resource base) throws SWBResourceException
-    {
+    public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
         urlBase = "#";
     }
-    
     public static final String HEADER_PREFIX = "head_";
     public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
     public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
-    
     public static final int HEADER_HEIGHT = 150; // altura del encabezado
     public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
     public static final int HEADER_2 = 18; // tamaño de fuente para misión, visión
     public static final int HEADER_3 = 16; // tamaño de fuente para temas
     public static final int HEADER_4 = 14; // tamaño de fuente para diferenciadores
     public static final int HEADER_5 = 12; // tamaño de fuente para objetivos
-    
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_RIGHT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_TOP = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
-    
     public static final int PADDING_TOP = 4; // Especifica el espacio libre arriba entre rectángulos para pintar las ligas
     public static final int PADDING_LEFT = 2; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
     public static final int PADDING_RIGHT = 2; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final int PADDING_DOWN = 4; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
     public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
     public static final String XLNK_NS_URI = "http://www.w3.org/1999/xlink";
-    
     private int width, height;
+
     public int getWidth() {
         return width;
     }
+
     private void setWidth(int width) {
         this.width = width;
     }
+
     public int getHeight() {
         return height;
     }
+
     private void setHeight(int height) {
         this.height = height;
     }
-    
-    public Document getDom(Document documentBSC) throws XPathExpressionException, NumberFormatException
-    {
+
+    public Document getDom(Document documentBSC) throws XPathExpressionException, NumberFormatException {
 //        Resource base = getResourceBase();
 //        final BSC scorecard = (BSC)base.getWebSite();
 //        setWidth(assertValue(base.getAttribute("width", "1024")));
@@ -938,17 +930,17 @@ public class StrategicMap extends GenericResource {
         height = 1400;
         //final Period period = getPeriod(request);
         //Document documentBSC = scorecard.getDom(period);
-        
+
         //Document documentBSC = scorecard.getDom();
-        Element root = documentBSC.getDocumentElement();        
+        Element root = documentBSC.getDocumentElement();
         root.setAttribute("width", Integer.toString(width));
         root.setAttribute("height", Integer.toString(height));
-                
+
         XPath xPath = XPathFactory.newInstance().newXPath();
-        
+
         //header
         Element header = documentBSC.createElement("header");
-        header.setAttribute("id", HEADER_PREFIX+"DADT");
+        header.setAttribute("id", HEADER_PREFIX + "DADT");
         header.setAttribute("width", Integer.toString(width));
         header.setAttribute("height", Integer.toString(HEADER_HEIGHT));
         header.setAttribute("x", Integer.toString(PADDING_LEFT));
@@ -965,104 +957,99 @@ public class StrategicMap extends GenericResource {
         expression = "/bsc/logo";
         node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
         header.appendChild(node);
-        
+
         expression = "/bsc/perspective[1]";
-        Node p1 = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);        
+        Node p1 = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
         root.insertBefore(header, p1);
-        
+
         final int px;
         final int pw;
         final int perspCount;
         String uri;
-        
+
         //para cada perspectiva: width, height, x, y
         expression = "/bsc/perspective";
         NodeList nodeList = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
         perspCount = nodeList.getLength();
-        pw = width-MARGEN_LEFT-MARGEN_RIGHT;
+        pw = width - MARGEN_LEFT - MARGEN_RIGHT;
         px = MARGEN_LEFT;
-        
+
         //lista de perspectivas
-        for(int j=0; j<perspCount; j++) {
+        for (int j = 0; j < perspCount; j++) {
             Node nodep = nodeList.item(j);
-            if(nodep.getNodeType()==Node.ELEMENT_NODE)
-            {
+            if (nodep.getNodeType() == Node.ELEMENT_NODE) {
                 //perspectiva
-                Element p = (Element)nodep;
+                Element p = (Element) nodep;
                 uri = p.getAttribute("id");
                 p.setAttribute("width", Integer.toString(pw));
                 p.setAttribute("x", Integer.toString(px));
-                
+
                 //diferenciadores de la perspectiva
-                expression = "/bsc/perspective[@id='"+uri+"']/diffgroup[1]/diff";
-                NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                expression = "/bsc/perspective[@id='" + uri + "']/diffgroup[1]/diff";
+                NodeList nlDiffs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                 final int nlDiffsCount = nlDiffs.getLength();
-                final boolean hasDifferentiators = nlDiffsCount>0;
-                if(hasDifferentiators) {
-                    final int dw = pw/nlDiffsCount;
-                    for(int k=0; k<nlDiffsCount; k++) {
+                final boolean hasDifferentiators = nlDiffsCount > 0;
+                if (hasDifferentiators) {
+                    final int dw = pw / nlDiffsCount;
+                    for (int k = 0; k < nlDiffsCount; k++) {
                         Node noded = nlDiffs.item(k);
-                        Element d = (Element)noded;
+                        Element d = (Element) noded;
                         d.setAttribute("width", Integer.toString(dw - PADDING_RIGHT));
-                        d.setAttribute("x", Integer.toString(px + k*dw + PADDING_RIGHT));
+                        d.setAttribute("x", Integer.toString(px + k * dw + PADDING_RIGHT));
                     }
                 }
-                
+
                 //lista de temas por perspectiva                
-                expression = "/bsc/perspective[@id='"+uri+"']/themes/theme";
-                NodeList nlThms = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                expression = "/bsc/perspective[@id='" + uri + "']/themes/theme";
+                NodeList nlThms = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                 final int nlThmsCount = nlThms.getLength();
-                final  boolean hasThemes = nlThmsCount>0;
-                if(hasThemes)
-                {
-                    final int tw = pw/nlThmsCount;
+                final boolean hasThemes = nlThmsCount > 0;
+                if (hasThemes) {
+                    final int tw = pw / nlThmsCount;
                     int tx;
-                    for(int k=0; k<nlThmsCount; k++)
-                    {
+                    for (int k = 0; k < nlThmsCount; k++) {
                         Node nodet = nlThms.item(k);
-                        if(nodet.getNodeType()==Node.ELEMENT_NODE) {
-                            Element t = (Element)nodet;
+                        if (nodet.getNodeType() == Node.ELEMENT_NODE) {
+                            Element t = (Element) nodet;
                             uri = t.getAttribute("id");
-                            t.setAttribute("width", Integer.toString(tw-BOX_SPACING_RIGHT));
-                            tx = px + k*tw;
+                            t.setAttribute("width", Integer.toString(tw - BOX_SPACING_RIGHT));
+                            tx = px + k * tw;
                             t.setAttribute("x", Integer.toString(tx));
-                            
+
                             //relaciones con este tema
-                            expression = "//rel[@to='"+uri+"']";
-                            NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                            for(int v=0; v<nlRels.getLength(); v++) {
+                            expression = "//rel[@to='" + uri + "']";
+                            NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                            for (int v = 0; v < nlRels.getLength(); v++) {
                                 Node noder = nlRels.item(v);
-                                if(noder!=null && noder.getNodeType()==Node.ELEMENT_NODE) {
-                                    Element rel = (Element)noder;
-                                    rel.setAttribute("rx", Integer.toString(tx+tw/2));
+                                if (noder != null && noder.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element rel = (Element) noder;
+                                    rel.setAttribute("rx", Integer.toString(tx + tw / 2));
                                 }
                             }
-                            
+
                             //lista de objetivos por tema
-                            expression = "//theme[@id='"+uri+"']/obj";
-                            NodeList nlObjs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                            expression = "//theme[@id='" + uri + "']/obj";
+                            NodeList nlObjs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
                             final int nlObjsCount = nlObjs.getLength();
-                            if(nlObjsCount>0)
-                            {
-                                for(int l=0; l<nlObjsCount; l++)
-                                {
+                            if (nlObjsCount > 0) {
+                                for (int l = 0; l < nlObjsCount; l++) {
                                     Node nodeo = nlObjs.item(l);
                                     int ox = tx;
-                                    if(nodeo.getNodeType()==Node.ELEMENT_NODE) {
-                                        Element o = (Element)nodeo;
-                                        uri = o.getAttribute("id");                                
-                                        o.setAttribute("width", Integer.toString(tw-BOX_SPACING_LEFT));
-                                        o.setAttribute("x", Integer.toString(ox+BOX_SPACING_LEFT));  
-                                        o.setAttribute("href",  urlBase+uri);
+                                    if (nodeo.getNodeType() == Node.ELEMENT_NODE) {
+                                        Element o = (Element) nodeo;
+                                        uri = o.getAttribute("id");
+                                        o.setAttribute("width", Integer.toString(tw - BOX_SPACING_LEFT));
+                                        o.setAttribute("x", Integer.toString(ox + BOX_SPACING_LEFT));
+                                        o.setAttribute("href", urlBase + uri);
 
                                         //relaciones con este objetivo
-                                        expression = "//rel[@to='"+uri+"']";
-                                        nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                                        for(int m=0; m<nlRels.getLength(); m++) {
+                                        expression = "//rel[@to='" + uri + "']";
+                                        nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                                        for (int m = 0; m < nlRels.getLength(); m++) {
                                             Node noder = nlRels.item(m);
-                                            if(noder.getNodeType()==Node.ELEMENT_NODE) {
-                                                Element rel = (Element)noder;
-                                                rel.setAttribute("rx", Integer.toString(ox+tw/2));
+                                            if (noder.getNodeType() == Node.ELEMENT_NODE) {
+                                                Element rel = (Element) noder;
+                                                rel.setAttribute("rx", Integer.toString(ox + tw / 2));
                                             }
                                         }
                                     }
@@ -1073,52 +1060,50 @@ public class StrategicMap extends GenericResource {
                 }
             }
         } //lista de perspectivas
-        
-        
-        
+
+
+
         // TODO imagen logo
         // atributo href de los objetivos
-        
+
         return documentBSC;
     }
-    
+
 //    public String getSvg() throws XPathExpressionException
 //    {
 //        Document xmlBSC = getDom()
 //    }
-    
-    public String getSvg(HttpServletRequest request, Document documentBSC) throws XPathExpressionException
-    {
+    public String getSvg(HttpServletRequest request, Document documentBSC) throws XPathExpressionException {
         Resource base = getResourceBase();
-        String  id, txt, expression;
+        String id, txt, expression;
 
         int w, h, w_, h_;
-        int x, y=0, x_, y_;
+        int x, y = 0, x_, y_;
         StringBuilder SVGjs = new StringBuilder();
 //        final String emapId = base.getWebSiteId();
         final String emapId = "bgj001";
-        
+
         //Document documentBSC = getDom();
         Element rootBSC = documentBSC.getDocumentElement();
         width = assertValue(rootBSC.getAttribute("width"));
         height = assertValue(rootBSC.getAttribute("height"));
         width = 1024;
         height = 1400;
-    
+
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
-        SVGjs.append(" var width = "+width+";").append("\n");
-        SVGjs.append(" var height = "+height+";").append("\n");
-        SVGjs.append(" var SVG_ = '"+SVG_NS_URI+"';").append("\n");
-        SVGjs.append(" var XLINK_ = '"+XLNK_NS_URI+"';").append("\n");
+        SVGjs.append(" var width = " + width + ";").append("\n");
+        SVGjs.append(" var height = " + height + ";").append("\n");
+        SVGjs.append(" var SVG_ = '" + SVG_NS_URI + "';").append("\n");
+        SVGjs.append(" var XLINK_ = '" + XLNK_NS_URI + "';").append("\n");
         SVGjs.append(" window.onload = function() {").append("\n");
         SVGjs.append(" var svg = document.createElementNS(SVG_,'svg'); ").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'id','"+emapId+"');").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'width','"+width+"');").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'height','"+height+"');").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0,"+width+","+height+"');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'id','" + emapId + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'width','" + width + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'height','" + height + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0," + width + "," + height + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" document.body.appendChild(svg);").append("\n");
-        
+
         SVGjs.append(" var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');").append("\n");
         SVGjs.append(" var marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'id', 'arrow_1');").append("\n");
@@ -1137,7 +1122,7 @@ public class StrategicMap extends GenericResource {
         SVGjs.append(" marker.appendChild(path);").append("\n");
         SVGjs.append(" defs.appendChild(marker);").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
-        
+
         SVGjs.append(" var stat;").append("\n");    // figura para representar el estatus de objetivo
         SVGjs.append(" var r;").append("\n");       // relación causa/efecto
         SVGjs.append(" var w;").append("\n");       // width
@@ -1152,13 +1137,12 @@ public class StrategicMap extends GenericResource {
         SVGjs.append(" var matxFrm;").append("\n"); // matriz del objetivo fuente(source) de la relación
         SVGjs.append(" var posTo;").append("\n");   // posición del objetivo destino(target) de la relación
         SVGjs.append(" var posFrm;").append("\n");  //  posición del objetivo fuente(source) de la relación
-        
+
         // Encabezado
         XPath xPath = XPathFactory.newInstance().newXPath();
         expression = "/bsc/header";
         Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-        if(node!=null && node instanceof Element)
-        {
+        if (node != null && node instanceof Element) {
             NamedNodeMap attrs = node.getAttributes();
             id = attrs.getNamedItem("id").getNodeValue();
             w = assertValue(attrs.getNamedItem("width").getNodeValue());
@@ -1167,7 +1151,7 @@ public class StrategicMap extends GenericResource {
             y = assertValue(attrs.getNamedItem("y").getNodeValue());
 
             SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
-            SVGjs.append(" g.setAttributeNS(null,'id','"+id+"');").append("\n");
+            SVGjs.append(" g.setAttributeNS(null,'id','" + id + "');").append("\n");
             SVGjs.append(" svg.appendChild(g);").append("\n");
 
             x_ = x;
@@ -1177,51 +1161,51 @@ public class StrategicMap extends GenericResource {
             // título mapa
             expression = "/bsc/header/title";
             txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-            SVGjs.append(" txt = createText('"+txt+"',"+(x_+w_/2)+","+y_+","+HEADER_1+",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('" + txt + "'," + (x_ + w_ / 2) + "," + y_ + "," + HEADER_1 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
 //            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_1+","+x_+","+y_+");").append("\n");
 //            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 //            SVGjs.append(" framingRect(rect,'"+id+"_ptitle',"+w_+","+vPadding(HEADER_1)+","+x_+","+y_+");").append("\n");
 //            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
-            
+
             // pleca Mision
             y_ = y + vPadding(HEADER_1) + topPadding(HEADER_2) + PADDING_DOWN;
-            w_ = w/3;
+            w_ = w / 3;
             h_ = h - vPadding(HEADER_1) - PADDING_DOWN;
-            
-            SVGjs.append(" txt = createText('Mision',"+(x_+w_/2)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+
+            SVGjs.append(" txt = createText('Mision'," + (x_ + w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
 //            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
 //            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 //            SVGjs.append(" framingRect(rect,'"+id+"_pmission',"+w_+","+vPadding(HEADER_2)+","+x_+","+y_+");").append("\n");
 //            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
-            
+
             // pleca Vision
-            SVGjs.append(" txt = createText('Vision',"+(x_+5*w_/2)+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('Vision'," + (x_ + 5 * w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
 //            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
 //            SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
 //            SVGjs.append(" framingRect(rect,'"+id+"_pvision',"+w_+","+vPadding(HEADER_2)+","+(x_+2*w_)+","+y_+");").append("\n");
 //            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
-            
+
             // logo
             expression = "/bsc/header/logo";
             node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
-            if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
+            if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
-                if(attrs.getNamedItem("src").getNodeValue().isEmpty()) {
-                    SVGjs.append(" rect = createRect('"+id+"_lg"+"',"+(w_-BOX_SPACING)+","+(h_-BOX_SPACING)+","+(x_+w_+PADDING_LEFT)+","+(y_-HEADER_2+PADDING_TOP)+",0,0,'none',1,'red',1,1);").append("\n");
+                if (attrs.getNamedItem("src").getNodeValue().isEmpty()) {
+                    SVGjs.append(" rect = createRect('" + id + "_lg" + "'," + (w_ - BOX_SPACING) + "," + (h_ - BOX_SPACING) + "," + (x_ + w_ + PADDING_LEFT) + "," + (y_ - HEADER_2 + PADDING_TOP) + ",0,0,'none',1,'red',1,1);").append("\n");
                     SVGjs.append(" g.appendChild(rect);").append("\n");
-                }else {
+                } else {
                     SVGjs.append(" var img = document.createElementNS(SVG_,'image');").append("\n");
-                    SVGjs.append(" img.setAttributeNS(null,'width',"+(w_-BOX_SPACING)+");").append("\n");
-                    SVGjs.append(" img.setAttributeNS(null,'height',"+(h_-BOX_SPACING)+");").append("\n");
-                    SVGjs.append(" img.setAttributeNS(null,'x',"+(x_+w_+PADDING_LEFT)+");").append("\n");
-                    SVGjs.append(" img.setAttributeNS(null,'y',"+(y_-HEADER_2+PADDING_TOP)+");").append("\n");
-                    SVGjs.append(" img.setAttributeNS(XLINK_,'href', '"+request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+attrs.getNamedItem("src").getNodeValue()+"');").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'width'," + (w_ - BOX_SPACING) + ");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'height'," + (h_ - BOX_SPACING) + ");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'x'," + (x_ + w_ + PADDING_LEFT) + ");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'y'," + (y_ - HEADER_2 + PADDING_TOP) + ");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(XLINK_,'href', '" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + attrs.getNamedItem("src").getNodeValue() + "');").append("\n");
                     SVGjs.append(" img.setAttributeNS(null, 'visibility', 'visible');").append("\n");
                     SVGjs.append(" g.appendChild(img);").append("\n");
                 }
@@ -1229,95 +1213,90 @@ public class StrategicMap extends GenericResource {
 
             // contenido Mision
             y_ = y_ + vPadding(HEADER_2);
-            h_ = h_ - vPadding(HEADER_2);    
+            h_ = h_ - vPadding(HEADER_2);
             expression = "/bsc/header/mission";
             txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-            SVGjs.append(" txt = createText('"+txt+"',"+x_+","+y_+",14,'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('" + txt + "'," + x_ + "," + y_ + ",14,'Verdana');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
-            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+x_+","+y_+");").append("\n");
+            SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + h_ + "," + x_ + "," + y_ + ");").append("\n");
             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-            SVGjs.append(" framingRect(rect,'"+id+"_cmission',"+w_+","+h_+","+x_+","+y_+");").append("\n");
+            SVGjs.append(" framingRect(rect,'" + id + "_cmission'," + w_ + "," + h_ + "," + x_ + "," + y_ + ");").append("\n");
             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             // contenido Vision
             expression = "/bsc/header/vision";
             txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-            SVGjs.append(" txt = createText('"+txt+"',"+(x_+2*w_)+","+y_+",14,'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('" + txt + "'," + (x_ + 2 * w_) + "," + y_ + ",14,'Verdana');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
-            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
+            SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + h_ + "," + (x_ + 2 * w_) + "," + y_ + ");").append("\n");
             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-            SVGjs.append(" framingRect(rect,'"+id+"_cvision',"+w_+","+h_+","+(x_+2*w_)+","+y_+");").append("\n");
+            SVGjs.append(" framingRect(rect,'" + id + "_cvision'," + w_ + "," + h_ + "," + (x_ + 2 * w_) + "," + y_ + ");").append("\n");
             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         }
-        
-        
-        
+
+
+
         String title, perspectiveName;
         y = y + HEADER_HEIGHT + MARGEN_TOP;
-        SVGjs.append(" var y = "+y+";").append("\n");
+        SVGjs.append(" var y = " + y + ";").append("\n");
         StringBuilder info;
         // lista de perspectivas
         expression = "/bsc/perspective";
         NodeList nlPersp = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-        for(int j=0; j<nlPersp.getLength(); j++) {
+        for (int j = 0; j < nlPersp.getLength(); j++) {
             node = nlPersp.item(j);
-            if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
+            if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
                 NamedNodeMap attrs = node.getAttributes();
                 String pid = attrs.getNamedItem("id").getNodeValue();
                 int pw = assertValue(attrs.getNamedItem("width").getNodeValue());
                 int px = assertValue(attrs.getNamedItem("x").getNodeValue());
 
                 // título de la perspectiva
-                expression = "/bsc/perspective[@id='"+pid+"']/title";
-                perspectiveName = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+                expression = "/bsc/perspective[@id='" + pid + "']/title";
+                perspectiveName = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
 
                 SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
-                SVGjs.append(" g.setAttributeNS(null,'id','"+pid+"');").append("\n");
+                SVGjs.append(" g.setAttributeNS(null,'id','" + pid + "');").append("\n");
                 SVGjs.append(" svg.appendChild(g);").append("\n");
-                SVGjs.append(" g.setAttributeNS(null,'transform','translate("+px+",'+y+')');").append("\n");
-                SVGjs.append(" var y_ = "+PADDING_TOP+";").append("\n");
-        
+                SVGjs.append(" g.setAttributeNS(null,'transform','translate(" + px + ",'+y+')');").append("\n");
+                SVGjs.append(" var y_ = " + PADDING_TOP + ";").append("\n");
+
                 // diferenciadores de la perspectiva
-                expression = "/bsc/perspective[@id='"+pid+"']/diffgroup[1]/diff";
-                NodeList nlDiffs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                boolean hasDifferentiators = nlDiffs.getLength()>0;
-                if(hasDifferentiators)
-                {
-                    SVGjs.append(" y_ += "+BOX_SPACING+";").append("\n");
-                    for(int k=0; k<nlDiffs.getLength(); k++)
-                    {
+                expression = "/bsc/perspective[@id='" + pid + "']/diffgroup[1]/diff";
+                NodeList nlDiffs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                boolean hasDifferentiators = nlDiffs.getLength() > 0;
+                if (hasDifferentiators) {
+                    SVGjs.append(" y_ += " + BOX_SPACING + ";").append("\n");
+                    for (int k = 0; k < nlDiffs.getLength(); k++) {
                         Node nodeD = nlDiffs.item(k);
-                        if(nodeD!=null && nodeD.getNodeType()==Node.ELEMENT_NODE)
-                        {
+                        if (nodeD != null && nodeD.getNodeType() == Node.ELEMENT_NODE) {
                             attrs = nodeD.getAttributes();
                             String did = attrs.getNamedItem("id").getNodeValue();
                             w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                             x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
-                            SVGjs.append(" txt = createText('"+nodeD.getFirstChild().getNodeValue()+"',"+x_+",y_,"+HEADER_4+",'Verdana');").append("\n");
+                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "'," + x_ + ",y_," + HEADER_4 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
-                            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+topPadding(HEADER_4)+","+x_+",y_);").append("\n");
+                            SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + topPadding(HEADER_4) + "," + x_ + ",y_);").append("\n");
                             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                            SVGjs.append(" framingRect(rect,'"+did+"',"+w_+",rect.height.baseVal.value,"+x_+",y_);").append("\n");
-                            SVGjs.append(" rect.y.baseVal.value = y_-"+HEADER_4+";").append("\n");
+                            SVGjs.append(" framingRect(rect,'" + did + "'," + w_ + ",rect.height.baseVal.value," + x_ + ",y_);").append("\n");
+                            SVGjs.append(" rect.y.baseVal.value = y_-" + HEADER_4 + ";").append("\n");
                             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         }
                     }
                 }
-        
+
                 SVGjs.append(" var y__;").append("\n");
 
                 // temas de la perspectiva
-                if(hasDifferentiators) {
-                    SVGjs.append(" y__ = y_ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
-                }else {
-                    SVGjs.append(" y__ = y_ + "+BOX_SPACING+";").append("\n");
+                if (hasDifferentiators) {
+                    SVGjs.append(" y__ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
+                } else {
+                    SVGjs.append(" y__ = y_ + " + BOX_SPACING + ";").append("\n");
                 }
-                expression = "/bsc/perspective[@id='"+pid+"']/themes/theme";
-                NodeList nlThms = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                for(int l=0; l<nlThms.getLength(); l++)
-                {
+                expression = "/bsc/perspective[@id='" + pid + "']/themes/theme";
+                NodeList nlThms = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                for (int l = 0; l < nlThms.getLength(); l++) {
                     Node nodeT = nlThms.item(l);
-                    if(nodeT!=null && nodeT.getNodeType()==Node.ELEMENT_NODE)
-                    {
+                    if (nodeT != null && nodeT.getNodeType() == Node.ELEMENT_NODE) {
                         attrs = nodeT.getAttributes();
                         boolean isHidden = Boolean.parseBoolean(attrs.getNamedItem("hidden").getNodeValue());
                         String tid = attrs.getNamedItem("id").getNodeValue();
@@ -1327,40 +1306,37 @@ public class StrategicMap extends GenericResource {
                         // r guarda algunas valores de la perspectiva actual para después recuperarlas por su identificador
                         // esto resulta muy conveniente para construir los paths de relaciones causa/efecto
                         SVGjs.append(" r = document.createElementNS(SVG_,'rect');").append("\n");
-                        SVGjs.append(" r.setAttributeNS(null,'id','w_"+pid+"');").append("\n");
-                        SVGjs.append(" r.setAttributeNS(null,'width',"+w_+");").append("\n");
-                        SVGjs.append(" defs.appendChild(r);").append("\n");                
+                        SVGjs.append(" r.setAttributeNS(null,'id','w_" + pid + "');").append("\n");
+                        SVGjs.append(" r.setAttributeNS(null,'width'," + w_ + ");").append("\n");
+                        SVGjs.append(" defs.appendChild(r);").append("\n");
 
                         // rectángulo tema
-                        if(!isHidden)
-                        {
-                            expression = "/bsc/perspective[@id='"+pid+"']/themes/theme[@id='"+tid+"']/title";
-                            title = (String)xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
-                            SVGjs.append(" txt = createText('"+title+"',"+x_+",y__,"+HEADER_3+",'Verdana');").append("\n");
+                        if (!isHidden) {
+                            expression = "/bsc/perspective[@id='" + pid + "']/themes/theme[@id='" + tid + "']/title";
+                            title = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+                            SVGjs.append(" txt = createText('" + title + "'," + x_ + ",y__," + HEADER_3 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
-                            SVGjs.append(" fixParagraphToWidth(txt,"+w_+","+x_+");").append("\n");
+                            SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + x_ + ");").append("\n");
                             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                            SVGjs.append(" framingRect(rect,'"+tid+"',"+w_+",rect.height.baseVal.value,"+x_+",y__);").append("\n");
+                            SVGjs.append(" framingRect(rect,'" + tid + "'," + w_ + ",rect.height.baseVal.value," + x_ + ",y__);").append("\n");
                             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         }
 
                         // relaciones causa-efecto con este tema
-                        expression = "//theme[@id='"+tid+"']/rel";
-                        NodeList nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        expression = "//theme[@id='" + tid + "']/rel";
+                        NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
 //                        SVGjs.append(" console.log('el tema "+tid+" ');");
 //                        SVGjs.append(" console.log('tiene "+nlRels.getLength()+" relaciones ');");
-                        for(int n=0; n<nlRels.getLength(); n++)
-                        {
+                        for (int n = 0; n < nlRels.getLength(); n++) {
                             Node nodeR = nlRels.item(n);
-                            if(nodeR!=null && nodeR.getNodeType()==Node.ELEMENT_NODE)
-                            {
+                            if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
                                 attrs = nodeR.getAttributes();
                                 String to = attrs.getNamedItem("to").getNodeValue();
                                 String parent = attrs.getNamedItem("parent").getNodeValue();
-                                SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
-                                SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
+                                SVGjs.append(" to = document.getElementById('" + to + "');").append("\n");
+                                SVGjs.append(" parent = document.getElementById('" + parent + "');").append("\n");
 
-                                SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
+                                SVGjs.append(" r = document.getElementById('w_" + parent + "');").append("\n");
                                 SVGjs.append(" if(r) {").append("\n");
                                 SVGjs.append("     w = r.width.baseVal.value;").append("\n");
                                 SVGjs.append("     w = w/2;").append("\n");
@@ -1382,26 +1358,24 @@ public class StrategicMap extends GenericResource {
                                 SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
                                 SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
 //                                SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
-                                SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
+                                SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
                                 SVGjs.append("   svg.appendChild(path);").append("\n");
                                 SVGjs.append(" }").append("\n");
                             }
                         }
 
                         // lista de objetivos
-                        if(!isHidden) {
-                            SVGjs.append(" y_ = y__ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
-                        }else {
-                            SVGjs.append(" y_ = y__ + "+BOX_SPACING+";").append("\n");
+                        if (!isHidden) {
+                            SVGjs.append(" y_ = y__ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
+                        } else {
+                            SVGjs.append(" y_ = y__ + " + BOX_SPACING + ";").append("\n");
                         }
 
-                        expression = "//theme[@id='"+tid+"']/obj";
-                        NodeList nlObjs = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                        for(int m=0; m<nlObjs.getLength(); m++)
-                        {
+                        expression = "//theme[@id='" + tid + "']/obj";
+                        NodeList nlObjs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        for (int m = 0; m < nlObjs.getLength(); m++) {
                             Node nodeO = nlObjs.item(m);
-                            if(nodeO!=null && nodeO.getNodeType()==Node.ELEMENT_NODE)
-                            {
+                            if (nodeO != null && nodeO.getNodeType() == Node.ELEMENT_NODE) {
                                 attrs = nodeO.getAttributes();
                                 String oid = attrs.getNamedItem("id").getNodeValue();
                                 String href = attrs.getNamedItem("href").getNodeValue();
@@ -1410,47 +1384,45 @@ public class StrategicMap extends GenericResource {
                                 txt = attrs.getNamedItem("status").getNodeValue();
 
                                 info = new StringBuilder();
-                                expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/prefix";
+                                expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/prefix";
                                 info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
                                 info.append(" ");
-                                expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/title";
+                                expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/title";
                                 info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
                                 info.append(" ");
-                                expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/sponsor";
+                                expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/sponsor";
                                 info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
                                 info.append(" ");
-                                expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/frequency";
+                                expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/frequency";
                                 info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
 
                                 // rectángulo objetivo
-                                SVGjs.append(" lnk = createLink('"+href+"');").append("\n");
+                                SVGjs.append(" lnk = createLink('" + href + "');").append("\n");
                                 SVGjs.append(" g.appendChild(lnk);").append("\n");
-                                SVGjs.append(" txt = createText('"+info+"',"+x_+",y_,"+HEADER_5+",'Verdana');").append("\n");
+                                SVGjs.append(" txt = createText('" + info + "'," + x_ + ",y_," + HEADER_5 + ",'Verdana');").append("\n");
                                 SVGjs.append(" lnk.appendChild(txt);").append("\n");
-                                SVGjs.append(" fixParagraphToWidth(txt,"+w_+","+x_+");").append("\n");
+                                SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + x_ + ");").append("\n");
                                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                                SVGjs.append(" framingRect(rect,'"+oid+"',"+w_+",0,"+x_+",y_);").append("\n");
+                                SVGjs.append(" framingRect(rect,'" + oid + "'," + w_ + ",0," + x_ + ",y_);").append("\n");
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
-                                SVGjs.append(" y_ = y_ + rect.height.baseVal.value + "+BOX_SPACING+";").append("\n");
+                                SVGjs.append(" y_ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
 //                                SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y='+rect.y.baseVal.value);").append("\n");
-                                SVGjs.append(" stat = createCircle('stts_"+oid+"',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
+                                SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
-                                
+
                                 //relaciones causa-efecto con este objetivo
-                                expression = "//theme[@id='"+tid+"']/obj[@id='"+oid+"']/rel";
-                                nlRels = (NodeList)xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
-                                for(int n=0; n<nlRels.getLength(); n++)
-                                {
+                                expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/rel";
+                                nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                                for (int n = 0; n < nlRels.getLength(); n++) {
                                     Node nodeR = nlRels.item(n);
-                                    if(nodeR!=null && nodeR.getNodeType()==Node.ELEMENT_NODE)
-                                    {
+                                    if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
                                         attrs = nodeR.getAttributes();
                                         String to = attrs.getNamedItem("to").getNodeValue();
                                         String parent = attrs.getNamedItem("parent").getNodeValue();
-                                        SVGjs.append(" to = document.getElementById('"+to+"');").append("\n");
-                                        SVGjs.append(" parent = document.getElementById('"+parent+"');").append("\n");
-                                        
-                                        SVGjs.append(" r = document.getElementById('w_"+parent+"');").append("\n");
+                                        SVGjs.append(" to = document.getElementById('" + to + "');").append("\n");
+                                        SVGjs.append(" parent = document.getElementById('" + parent + "');").append("\n");
+
+                                        SVGjs.append(" r = document.getElementById('w_" + parent + "');").append("\n");
                                         SVGjs.append(" if(r) {").append("\n");
                                         SVGjs.append("     w = r.width.baseVal.value;").append("\n");
                                         SVGjs.append("     w = w/2;").append("\n");
@@ -1459,8 +1431,8 @@ public class StrategicMap extends GenericResource {
                                         SVGjs.append(" }").append("\n");
 
                                         SVGjs.append(" if(to && parent) {").append("\n");
-SVGjs.append("   to.addEventListener('mouseover', fadeout, false);").append("\n");
-SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
+                                        SVGjs.append("   to.addEventListener('mouseover', fadeout, false);").append("\n");
+                                        SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
 //                                        SVGjs.append("   console.log('to='+to.id+', parent='+parent.id);").append("\n");
                                         SVGjs.append("   matxTo = parent.getCTM();").append("\n");
                                         SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
@@ -1474,7 +1446,7 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
                                         SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
                                         SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
 //                                        SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
-                                        SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+"+(w_/2)+",posFrm.y,posTo.x,posTo.y);").append("\n");
+                                        SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
                                         SVGjs.append("   svg.appendChild(path);").append("\n");
                                         SVGjs.append(" }").append("\n");
                                     }
@@ -1486,7 +1458,7 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
 
                 // caja de la perspectiva
                 SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
-                SVGjs.append(" rect.setAttributeNS(null,'id','"+pid+"_rct');").append("\n");
+                SVGjs.append(" rect.setAttributeNS(null,'id','" + pid + "_rct');").append("\n");
                 SVGjs.append(" if(rect.height.baseVal.value<150) {").append("\n");
                 SVGjs.append("   rect.height.baseVal.value = 150;").append("\n");
                 SVGjs.append(" }").append("\n");
@@ -1499,24 +1471,24 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
                 SVGjs.append(" rect.setAttributeNS(null, 'stroke-opacity','1');").append("\n");
                 SVGjs.append(" g.insertBefore(rect,g.firstChild);").append("\n");
                 // título de la perspectiva
-                SVGjs.append(" txt = createText('"+perspectiveName+"',("+px+"+h_/2),(h_-"+BOX_SPACING_RIGHT+"),"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('" + perspectiveName + "',(" + px + "+h_/2),(h_-" + BOX_SPACING_RIGHT + ")," + HEADER_3 + ",'Verdana');").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'textLength',rect.height.baseVal.value);").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'lengthAdjust','spacingAndGlyphs');").append("\n");
-                SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270,"+px+",'+h_+')');").append("\n");
+                SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270," + px + ",'+h_+')');").append("\n");
                 SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
                 SVGjs.append(" g.appendChild(txt);").append("\n");
 
-                SVGjs.append(" y = y + h_ + "+MARGEN_BOTTOM+";").append("\n");
+                SVGjs.append(" y = y + h_ + " + MARGEN_BOTTOM + ";").append("\n");
             } // perspectiva
         } // lista de perspectivas
         SVGjs.append("};").append("\n");
-                
+
 //        SVGjs.append("").append("\n");
 //        SVGjs.append("").append("\n");
 //        SVGjs.append("").append("\n");
 //        SVGjs.append("").append("\n");
 //        SVGjs.append("").append("\n");
-        
+
         // funciones
         SVGjs.append("function createLink(url) {").append("\n");
         SVGjs.append("  var a = document.createElementNS(SVG_ ,'a');").append("\n");
@@ -1569,7 +1541,7 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
         SVGjs.append("  txt.textContent=text;").append("\n");
         SVGjs.append("  return txt;").append("\n");
         SVGjs.append("}").append("\n");
-        
+
         SVGjs.append("function createCircle(id,cx,cy,r,fill,fillopacity,stroke,strokewidth, strokeopacity) {").append("\n");
         SVGjs.append("  var circle = document.createElementNS(SVG_,'circle');").append("\n");
         SVGjs.append("  circle.setAttributeNS(null,'id',id);").append("\n");
@@ -1700,7 +1672,7 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
         SVGjs.append("  rect.height.baseVal.value = bbox.height;").append("\n");
         SVGjs.append("  return rect;").append("\n");
         SVGjs.append(" }").append("\n");
-        
+
         SVGjs.append("function createParagraph(text_element, width, height, x, y) {").append("\n");
         SVGjs.append("    fixParagraphToWidth(text_element, width, x);").append("\n");
         SVGjs.append("    fixParagraphToHeight(text_element, height);").append("\n");
@@ -1755,33 +1727,98 @@ SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
         SVGjs.append("</script>").append("\n");
         return SVGjs.toString();
     }
-    
-    private int assertValue(final String textVal)
-    {
+
+    private int assertValue(final String textVal) {
         int val;
         try {
             val = Integer.parseInt(textVal);
-        }catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             val = 0;
-        }catch(NullPointerException nulle) {
+        } catch (NullPointerException nulle) {
             val = 0;
         }
         return val;
     }
-    
+
     private int vPadding(int value) {
-        return value+PADDING_TOP+PADDING_DOWN;
+        return value + PADDING_TOP + PADDING_DOWN;
     }
-    
+
     private int topPadding(int value) {
-        return value+PADDING_TOP;
+        return value + PADDING_TOP;
     }
-    
+
     private int bottomPadding(int value) {
-        return value+PADDING_TOP;
+        return value + PADDING_TOP;
     }
-    
+
     private int hPadding(int value) {
-        return value+PADDING_LEFT+PADDING_RIGHT;
+        return value + PADDING_LEFT + PADDING_RIGHT;
+    }
+
+    /**
+     * Recorre los recursos y evalua aquel que contengan los atributos
+     * PDFExportable.viewType con valor PDFExportable.PDF_StrategyMap y genera
+     * un url con la p&aacute;gina web que contenga el recurso.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con la liga
+     * y el icono correspondiente al elemento a exportar.
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    @Override
+    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        StringBuilder toReturn = new StringBuilder();
+        String surl = "";
+        Resource base2 = null;
+        String icon = "";
+        WebSite ws = paramRequest.getWebPage().getWebSite();
+        String nameClass = PDFExportable.PDF_StrategyMap;
+        Iterator<Resource> itp = ws.listResources();
+        while (itp.hasNext()) {
+            Resource resource = itp.next();
+            String itemType = resource.getData(PDFExportable.bsc_itemType);
+            if (itemType != null && itemType.equals(nameClass)) {
+                if (resource.isActive()) {
+                    base2 = resource;
+                    break;
+                }
+            }
+        }
+
+        if (base2 != null) {
+            Iterator<Resourceable> res = base2.listResourceables();
+            while (res.hasNext()) {
+                Resourceable re = res.next();
+                if (re instanceof WebPage) {
+                    surl = ((WebPage) re).getUrl() + "/_rid/" + base2.getId()
+                            + "/_mto/3/_mod/pdf";
+                    break;
+                }
+            }
+
+            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+            String image = "pdfOnline.jpg";
+            String alt = paramRequest.getLocaleString("alt");
+            toReturn.append("<a href=\"");
+            toReturn.append(surl);
+            toReturn.append("\" class=\"export-stgy\" title=\"");
+            toReturn.append(alt);
+            toReturn.append("\" target=\"_blank\">");
+            toReturn.append("<img src=\"");
+            toReturn.append(webWorkPath);
+            toReturn.append(image);
+            toReturn.append("\" alt=\"");
+            toReturn.append(alt);
+            toReturn.append("\" class=\"toolbar-img\" />");
+            toReturn.append("</a>");
+            icon = toReturn.toString();
+        }
+        return icon;
     }
 }
