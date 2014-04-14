@@ -194,19 +194,19 @@ public class BSCTest {
     public static final String WORD_SPACING = "14 14 14 14 14 14 14 14 14 14";
     
     public static final String HEADER_PREFIX = "head_";
-    public static final int MARGEN_LEFT = 10; // Especifica el margen izquierdo del rectángulo de una perspectiva
+    public static final int MARGEN_LEFT = 20; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 10; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
     public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
     
-    public static final int HEADER_HEIGHT = 150; // altura del encabezado
+    public static final int HEADER_HEIGHT = 50; // altura del encabezado
     public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
     public static final int HEADER_2 = 16; // tamaño de fuente para subtítulo
     public static final int HEADER_3 = 14; // tamaño de fuente para coordenadas
     public static final int HEADER_4 = 12; // tamaño de fuente para texto
     
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_LEFT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_RIGHT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_TOP = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
@@ -334,7 +334,7 @@ public class BSCTest {
         SVGjs.append(" var lnk;").append("\n");     // liga
         SVGjs.append(" var use;").append("\n");     // etiqueta use
         
-        // encabezado del mapa
+        // Encabezado del mapa
         expression = "/riskmap/header";
         node = (Node) xPath.compile(expression).evaluate(map, XPathConstants.NODE);
         if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
@@ -347,7 +347,7 @@ public class BSCTest {
             w = assertValue(attrs.getNamedItem("width").getNodeValue(), width);
             h = assertValue(attrs.getNamedItem("height").getNodeValue(), height);
             
-            // título mapa
+            // Título mapa
             expression = "/riskmap/header/title";
             txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
             txt = "Mapa de riesgos " + txt;
@@ -376,8 +376,8 @@ public class BSCTest {
             }
         }
         
-        // plano cartesiano
-        x = BOX_SPACING_LEFT;
+        // Plano cartesiano
+        x = MARGEN_LEFT;
         y += HEADER_HEIGHT + MARGEN_TOP;
         int x_ = 0;
         int y_ = 0;
@@ -387,7 +387,7 @@ public class BSCTest {
         SVGjs.append(" var x = "+x+";").append("\n");
         SVGjs.append(" var y = "+y+";").append("\n");
         
-        // gráfica de riestos
+        // Gráfica de riestos
         SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
         SVGjs.append(" svg.appendChild(g);").append("\n");
         SVGjs.append(" g.setAttributeNS(null,'transform','translate('+x+','+y+')');").append("\n");
@@ -405,20 +405,20 @@ public class BSCTest {
         SVGjs.append(" txt.setAttributeNS(null,'font-size',"+HEADER_3+");").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
         SVGjs.append(" defs.appendChild(txt);").append("\n");
-        // escala 0
+        // Escala 0
         SVGjs.append(" var text_node = document.createTextNode('0');").append("\n");
         SVGjs.append(" var tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
         SVGjs.append(" tspan_element.appendChild(text_node);").append("\n");
         SVGjs.append(" txt.appendChild(tspan_element);").append("\n");        
-        // escala 1  2  3  4  5...
+        // Escala 1  2  3  4  5...
         SVGjs.append(" text_node = document.createTextNode('12345678910');").append("\n");
         SVGjs.append(" tspan_element = document.createElementNS(SVG_, 'tspan');").append("\n");
         SVGjs.append(" tspan_element.setAttributeNS(null,'dx','"+WORD_SPACING+"');").append("\n");
         SVGjs.append(" tspan_element.appendChild(text_node);").append("\n");
         SVGjs.append(" txt.appendChild(tspan_element);").append("\n");
-        // fin def eje de coordenadas
+        // Fin def eje de coordenadas
         
-        // cuadrantes
+        // Cuadrantes
         SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_)+","+y_+",0,0,'blue',1,'blue',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'red',1,'red',1,1);").append("\n");
@@ -440,7 +440,7 @@ public class BSCTest {
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         
-        //ordenadas (valores de probabilidad)
+        // Ordenadas (valores de probabilidad)
         SVGjs.append(" use = document.createElementNS(SVG_,'use');").append("\n");
         SVGjs.append(" use.setAttributeNS(null,'x','"+(x_+2*w_+HEADER_3)+"');").append("\n");
         SVGjs.append(" use.setAttributeNS(null,'y','"+(y_+2*h_+BOX_SPACING-HEADER_3)+"');").append("\n");
@@ -454,7 +454,7 @@ public class BSCTest {
         SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270,"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+")');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         
-        // puntos en el plano
+        // Puntos en el plano
         expression = "/riskmap/risks/risk";
         NodeList nlRisk = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
         int aux = y_+2*h_;
@@ -471,12 +471,13 @@ public class BSCTest {
             }
         }
         
-        // recuadro de gráfica
+        // Recuadro de gráfica
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
-        SVGjs.append(" framingRect(rect,rect.width.baseVal.value+"+BOX_SPACING_RIGHT+",'none',1,'#000000',1);").append("\n");
+        SVGjs.append(" framingRect(rect,rect.width.baseVal.value+"+(BOX_SPACING_LEFT+BOX_SPACING_RIGHT)+",'none',1,'#000000',1);").append("\n");
+        SVGjs.append(" rect.x.baseVal.value = rect.x.baseVal.value-"+BOX_SPACING_LEFT+";").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
-        // leyenda de creación
+        // Leyenda de creación
         SVGjs.append(" pto = svg.createSVGPoint();").append("\n");
         SVGjs.append(" pto.x = rect.x.baseVal.value;").append("\n");
         SVGjs.append(" pto.y = rect.y.baseVal.value + rect.height.baseVal.value + "+(BOX_SPACING_BOTTOM+HEADER_4)+";").append("\n");
@@ -484,9 +485,9 @@ public class BSCTest {
         SVGjs.append(" txt = createText('Creado "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
                 
-        // tabla de riesgos
-        // calcular la posición del rectángulo del diagrama para translate la tabla de riesgos
-        // caja de la gráfica
+        // Tabla de riesgos
+        // Calcular la posición del rectángulo del diagrama para translate la tabla de riesgos
+        // Caja de la gráfica
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
         SVGjs.append(" var w = Math.round(rect.width.baseVal.value);").append("\n");
         SVGjs.append(" x = x + w + "+MARGEN_LEFT+";").append("\n");
@@ -495,16 +496,16 @@ public class BSCTest {
         y_ = 0;
         w_ = 100;
         h_ = 0;
-        // listado de riesgos
+        // Listado de riesgos
         SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
         SVGjs.append(" svg.appendChild(g);").append("\n");
         SVGjs.append(" g.setAttributeNS(null,'transform','translate('+x+','+y+')');").append("\n");
         
-        // encabezado tabla
+        // Encabezado tabla
         SVGjs.append(" var x_ = 0;").append("\n");
         SVGjs.append(" var y_ = 0;").append("\n");
         SVGjs.append(" var h_;").append("\n");
-        // prefijo
+        // Prefijo
         SVGjs.append(" txt = createText('N. Riesgo',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
