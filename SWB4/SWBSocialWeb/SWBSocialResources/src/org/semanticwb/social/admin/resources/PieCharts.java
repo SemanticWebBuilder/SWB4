@@ -223,7 +223,7 @@ public class PieCharts extends GenericResource {
                 }
             }
             setso = getGeoLocation(suri, lang, filter, filterGeneral, map, country);
-           // System.out.println(" FILTER JAVA : " + filter);
+            // System.out.println(" FILTER JAVA : " + filter);
             //System.out.println(" FILTER GENERAL JAVA : " + filterGeneral);
             ArrayList lista = new ArrayList<PostIn>();
             if (filterGeneral.equals("all")) {
@@ -235,7 +235,7 @@ public class PieCharts extends GenericResource {
                         continue;
                     }
                     for (int j = 0; j < list.size(); j++) {
-                       // System.out.println("agreago a lista de post : " + list.get(j));
+                        // System.out.println("agreago a lista de post : " + list.get(j));
                         if (filter.equals("")) {
                             lista.add(list.get(j));
                         } else if (filter.equals(e.getKey())) {
@@ -353,7 +353,7 @@ public class PieCharts extends GenericResource {
 
             setso = getLanguage(suri, lang, filter, filterGeneral, map);
             //System.out.println(" FILTER JAVA language : " + filter);
-           // System.out.println(" FILTER GENERAL JAVA language : " + filterGeneral);
+            // System.out.println(" FILTER GENERAL JAVA language : " + filterGeneral);
             ArrayList lista = new ArrayList<PostIn>();
             if (reemplazar(filterGeneral).equals("all")) {
                 while (setso.hasNext()) {
@@ -786,35 +786,38 @@ public class PieCharts extends GenericResource {
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
+            if (postIn.getPostInSocialNetworkUser() != null) {
+                if (filterGeneral.equals("all")) {
+                    //System.out.println("entro en filte r general all");
+                    //System.out.println("postIn.getPostInSocialNetworkUser()"+postIn.getPostInSocialNetworkUser());
+                    //System.out.println("postIn.getPostInSocialNetworkUser()..getSnu_gender()"+postIn.getPostInSocialNetworkUser().getSnu_gender() );
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                        all.add(postIn);
+                    }
 
-            if (filterGeneral.equals("all")) {
-                //System.out.println("entro en filte r general all");
-                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE || postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
-                    all.add(postIn);
                 }
 
-            }
+                if (filterGeneral.equals("male")) {
+                    //System.out.println("entro en filter general male");
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                        male.add(postIn);
+                    }
 
-            if (filterGeneral.equals("male")) {
-                //System.out.println("entro en filter general male");
-                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
-                    male.add(postIn);
+
                 }
 
-
-            }
-
-            if (filterGeneral.equals("female")) {
-                //System.out.println("entro en filter general female");
-                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
-                    female.add(postIn);
+                if (filterGeneral.equals("female")) {
+                    //System.out.println("entro en filter general female");
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                        female.add(postIn);
+                    }
                 }
-            }
 
-            if (filterGeneral.equals("nodefine")) {
-                //System.out.println("entro en no define filter genral");
-                if (postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
-                    nodefine.add(postIn);
+                if (filterGeneral.equals("nodefine")) {
+                    //System.out.println("entro en no define filter genral");
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                        nodefine.add(postIn);
+                    }
                 }
             }
         }
@@ -824,19 +827,21 @@ public class PieCharts extends GenericResource {
 
             while (allI.hasNext()) {
                 PostIn postInAll = (PostIn) allI.next();
+                  if (postInAll.getPostInSocialNetworkUser() != null) {
 
-                if (filter.equals("Masculino") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
+                if (filter.equals("Masculino") && postInAll.getPostInSocialNetworkUser() != null && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_MALE) {
                     // System.out.println("agrego a all male");
                     allMale.add(postInAll);
 
-                } else if (filter.equals("Femenino") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
+                } else if (filter.equals("Femenino") && postInAll.getPostInSocialNetworkUser() != null && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_FEMALE) {
                     //System.out.println("agrego a allfemale");
                     allFemale.add(postInAll);
 
-                } else if (filter.equals("No definido") && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postInAll.getPostInSocialNetworkUser().getSnu_gender() == 0) {
+                } else if (filter.equals("No definido") && postInAll.getPostInSocialNetworkUser() != null && postInAll.getPostInSocialNetworkUser().getSnu_gender() == SocialNetworkUser.USER_GENDER_UNDEFINED || postInAll.getPostInSocialNetworkUser().getSnu_gender() == 0) {
                     // System.out.println("agregar a all nodefine");
                     allNodefine.add(postInAll);
                 }
+            }
             }
         } else if (filterGeneral.equals("male")) {
 
@@ -989,31 +994,32 @@ public class PieCharts extends GenericResource {
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
             //totalPost++;
+            if (postIn.getPostInSocialNetworkUser() != null) {
+                if (filterGeneral.equals("all")) {
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL
+                            || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE
+                            || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE
+                            || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                        all.add(postIn);
+                    }
 
-            if (filterGeneral.equals("all")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL
-                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE
-                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE
-                        || postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
-                    all.add(postIn);
-                }
+                } else if (filterGeneral.equals("secundaria")) {
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
+                        highSchool.add(postIn);
+                    }
 
-            } else if (filterGeneral.equals("secundaria")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
-                    highSchool.add(postIn);
-                }
-
-            } else if (filterGeneral.equals("mediosuperior")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
-                    college.add(postIn);
-                }
-            } else if (filterGeneral.equals("graduado")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
-                    graduate.add(postIn);
-                }
-            } else if (filterGeneral.equals("undefined")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
-                    undefined.add(postIn);
+                } else if (filterGeneral.equals("mediosuperior")) {
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
+                        college.add(postIn);
+                    }
+                } else if (filterGeneral.equals("graduado")) {
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
+                        graduate.add(postIn);
+                    }
+                } else if (filterGeneral.equals("undefined")) {
+                    if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                        undefined.add(postIn);
+                    }
                 }
             }
         }
@@ -1025,22 +1031,24 @@ public class PieCharts extends GenericResource {
 
             while (allI.hasNext()) {
                 PostIn postIn = (PostIn) allI.next();
+            if (postIn.getPostInSocialNetworkUser() != null) {
 
-                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
+                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) {
                     //  System.out.println("agrego a all secundaria");
                     allSecundaria.add(postIn);
 
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_COLLEGE) {
                     // System.out.println("agrego a mediosuperioe");
                     allMedioSuperior.add(postIn);
 
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_GRADUATE) {
                     //  System.out.println("agregar a all graduado");
                     allGraduado.add(postIn);
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)) && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_education() == SocialNetworkUser.USER_EDUCATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_education() == 0) {
                     //   System.out.println("agregar a all undefine");
                     allUdefined.add(postIn);
                 }
+            }
             }
         } else if (filterGeneral.equals("secundaria")) {
 
@@ -1240,7 +1248,9 @@ public class PieCharts extends GenericResource {
             PostIn postIn = itObjPostIns.next();
 
             if (filterGeneral.equals("all")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE
                         || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED
                         || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED
                         || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED
@@ -1248,31 +1258,43 @@ public class PieCharts extends GenericResource {
                     //  System.out.println("agregar todos");
                     all.add(postIn);
                 }
+                            }
             } else if (filterGeneral.equals("single")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
                     //  System.out.println("agregar single");
                     singleArray.add(postIn);
                 }
+                            }
             } else if (filterGeneral.equals("married")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
                     //   System.out.println("agregar a married");
                     marriedArray.add(postIn);
                 }
+                            }
             } else if (filterGeneral.equals("widowed")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
                     // System.out.println("agregar widowed");
                     widowedArray.add(postIn);
                 }
+                            }
             } else if (filterGeneral.equals("divorced")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
                     //  System.out.println("agregar divorced");
                     divorcedArray.add(postIn);
                 }
             } else if (filterGeneral.equals("undefined")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
                     //   System.out.println("agregar undefined");
                     undefinedArray.add(postIn);
                 }
+                            }
             }
 
         }
@@ -1283,25 +1305,28 @@ public class PieCharts extends GenericResource {
             Iterator allI = all.iterator();
             while (allI.hasNext()) {
                 PostIn postIn = (PostIn) allI.next();
+                            if (postIn.getPostInSocialNetworkUser() != null) {
+
                 //  System.out.println("SWBSocialResUtil.Util.getStringFromGenericLocale(\"undefinedRelation\", lang)" + SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang));
-                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
+                if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_SINGLE) {
                     //    System.out.println("agrego a all single");
                     allSingle.add(postIn);
 
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_MARRIED) {
                     //     System.out.println("agrego a married");
                     allMarried.add(postIn);
 
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_WIDOWED) {
                     //    System.out.println("agregar a all widowed");
                     allWidowed.add(postIn);
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_DIVORCED) {
                     //   System.out.println("agregar a all divorced");
                     allDivorced.add(postIn);
-                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)) && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
+                } else if (filter.equals(SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang)) && postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == SocialNetworkUser.USER_RELATION_UNDEFINED || postIn.getPostInSocialNetworkUser().getSnu_relationShipStatus() == 0) {
                     // System.out.println("agregar a all undefined");
                     allUndefined.add(postIn);
                 }
+            }
             }
 
         } else if (filterGeneral.equals("single")) {
@@ -1540,7 +1565,7 @@ public class PieCharts extends GenericResource {
             PostIn postIn = itObjPostIns.next();
             //   System.out.println("enel while");
             if (filterGeneral.equals("all")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null
+                if ( postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null
                         || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")
                         || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")
                         || postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")
@@ -1553,7 +1578,7 @@ public class PieCharts extends GenericResource {
                 }
 
             } else if (filterGeneral.equals("child")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Child")) {
                         childArray.add(postIn);
                     }
@@ -1561,28 +1586,28 @@ public class PieCharts extends GenericResource {
 
             } else if (filterGeneral.equals("young")) {
                 //      System.out.println("entro a youngarray");
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Young")) {
                         youngArray.add(postIn);
                     }
                 }
 
             } else if (filterGeneral.equals("teenAge")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("TeenAge")) {
                         teenAgeArray.add(postIn);
                     }
                 }
 
             } else if (filterGeneral.equals("youngAdult")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("YoungAdult")) {
                         youngAdultArray.add(postIn);
                     }
                 }
 
             } else if (filterGeneral.equals("adult")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("Adult")) {
                         adultArray.add(postIn);
                     }
@@ -1590,21 +1615,21 @@ public class PieCharts extends GenericResource {
 
 
             } else if (filterGeneral.equals("thirdAge")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() != null) {
                     if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage().getId().equals("ThirdAge")) {
                         thirdAgeArray.add(postIn);
                     }
                 }
 
             } else if (filterGeneral.equals("nodefine")) {
-                if (postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
+                if (postIn.getPostInSocialNetworkUser() != null && postIn.getPostInSocialNetworkUser().getSnu_LifeStage() == null) {
                     noDefine.add(postIn);
                 }
 
 
             }
         }
-
+        
 
 
         if (filterGeneral.equals("all")) {
