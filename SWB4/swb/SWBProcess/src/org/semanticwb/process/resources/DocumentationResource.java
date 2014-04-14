@@ -23,6 +23,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -177,6 +179,7 @@ public class DocumentationResource extends GenericAdmResource {
         try {
             org.w3c.dom.Document dom = getDom(request.getParameter("suri"), response, paramRequest);
             String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
+            //Lo comentado es para xsl
 //            File folder = new File(basePath);
 //            if (!folder.exists()) {
 //                folder.mkdirs();
