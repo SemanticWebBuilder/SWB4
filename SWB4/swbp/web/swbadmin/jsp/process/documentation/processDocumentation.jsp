@@ -1,3 +1,5 @@
+<%@page import="org.semanticwb.SWBUtils"%>
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.process.model.ParallelStartEventGateway"%>
 <%@page import="org.semanticwb.process.model.ComplexGateway"%>
 <%@page import="org.semanticwb.process.model.ParallelStartEvent"%>
@@ -42,11 +44,12 @@
 <%@page import="org.semanticwb.process.model.Process" %>
 
 <%
+    
+    
 SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramRequest");
 String pid = request.getParameter("pid");
 WebPage wp = paramRequest.getWebPage();
 Process process = null;
-
 if (wp instanceof WrapperProcessWebPage) {
     process = ((WrapperProcessWebPage)wp).getProcess();
 } else if (pid != null && !pid.trim().equals("")) {
