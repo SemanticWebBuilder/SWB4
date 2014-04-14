@@ -4,13 +4,7 @@
  */
 package org.semanticwb.process.resources;
 
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
-import com.lowagie.text.Image;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.html.simpleparser.HTMLWorker;
-import com.lowagie.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.zip.ZipOutputStream;
@@ -27,17 +23,25 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.process.model.Activity;
-import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.DataObject;
 import org.semanticwb.process.model.Documentation;
@@ -46,8 +50,9 @@ import org.semanticwb.process.model.Gateway;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.Lane;
 import org.semanticwb.process.model.ProcessElement;
-import org.semanticwb.process.model.SequenceFlow;
 import org.semanticwb.process.model.SubProcess;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /**
  *
@@ -55,32 +60,9 @@ import org.semanticwb.process.model.SubProcess;
  */
 public class DocumentationResource extends GenericAdmResource {
 
-    public static String MOD_UPDATETEXT = "updateText";
-    public static String PARAM_TEXT = "txt";
     private static Logger log = SWBUtils.getLogger(DocumentationResource.class);
-
-    void doUpdate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        String suri = request.getParameter("suri");
-        String idDocumentation = request.getParameter("idDocumentation");
-        if (suri != null) {
-            ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-            if (pe != null) {
-                String txt = request.getParameter(PARAM_TEXT);
-                request.setAttribute("suri", suri);
-                //TODO: Actualizar el texto del richText
-                Documentation doc = Documentation.ClassMgr.getDocumentation(idDocumentation, paramRequest.getWebPage().getWebSite());
-                //Guardar el texto de la documentación
-                if (doc != null) {
-                    doc.setText(txt.trim());
-                    if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
-                        doc.setText("<p>" + paramRequest.getLocaleString("hereDoc") + "</p>");
-                    }
-                    doc.setTextFormat("text/html");
-                }
-            }
-        }
-        doView(request, response, paramRequest);
-    }
+    public static String PARAM_TEXT = "txt";
+    javax.xml.transform.Templates tpl;
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -112,8 +94,6 @@ public class DocumentationResource extends GenericAdmResource {
         try {
             if ("documentation".equals(mode)) {
                 doProcessDocumentation(request, response, paramRequest);
-            } else if (MOD_UPDATETEXT.equals(mode)) {
-                doUpdate(request, response, paramRequest);
             } else if ("doExportDocument".equals(mode)) {
                 doExportDocument(request, response, paramRequest);
             } else if ("viewDocumentation".equals(mode)) {
@@ -128,33 +108,52 @@ public class DocumentationResource extends GenericAdmResource {
         }
     }
 
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        if (action.equals(SWBResourceURL.Action_ADD)) {
+            String suri = request.getParameter("suri") != null ? request.getParameter("suri") : "";
+            String uridoc = request.getParameter("uridoc") != null ? request.getParameter("uridoc") : "";
+            ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+            Documentation doc = (Documentation) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(uridoc);
+            String txt = request.getParameter("txt") != null ? request.getParameter("txt").trim() : "";
+            if (pe != null && doc != null) {
+                doc.setText(txt.trim());
+                if (doc.getText().replace("&nbsp;", "").trim().length() < 62) {
+                    doc.setText("<p>" + response.getLocaleString("hereDoc") + "</p>");
+                }
+                doc.setTextFormat("text/html");
+            }
+        } else {
+            super.processAction(request, response);
+        }
+    }
+
     public void doViewModel(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=UTF-8");
-        String path = SWBPlatform.getContextPath() + "/swbadmin/jsp/process/documentation/documentationModel.jsp";
+        String path = "/swbadmin/jsp/process/documentation/documentationModel.jsp";
         request.setAttribute("paramRequest", paramRequest);
         request.setAttribute("suri", request.getParameter("suri"));
         RequestDispatcher rd = request.getRequestDispatcher(path);
         try {
             rd.include(request, response);
         } catch (Exception e) {
-            log.error("Error on doViewModel, " + path + ", " + e.getCause());
+            log.error("Error on doViewModel, " + path + ", " + e.getMessage());
         }
     }
 
     public void doProcessDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=UTF-8");
         String path = "/swbadmin/jsp/process/documentation/documentationResource.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(path);
         String suri = request.getParameter("suri");
-        System.out.println("suri: " + suri);
-        response.setContentType("text/html; charset=UTF-8");
         try {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("suri", request.getParameter("suri"));
             if (suri != null) {
                 ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
                 Documentation doc = pe.getDocumentation();
-                if(doc==null)
-                {
+                if (doc == null) {
                     //Si no existe documentación, crearla
                     doc = Documentation.ClassMgr.createDocumentation(paramRequest.getWebPage().getWebSite());
                     //Agregar la documentación al elemento
@@ -162,582 +161,162 @@ public class DocumentationResource extends GenericAdmResource {
                     doc.setText("<p>" + paramRequest.getLocaleString("hereDoc") + "</p>");
                     pe.addDocumentation(doc);
                 }
-                request.setAttribute("idDocumentation", doc.getId());
+                request.setAttribute("uridocpro", doc.getURI());
             }
             rd.include(request, response);
         } catch (Exception ex) {
-            log.error("Error doProcessDocumentation.jsp, " + ex.getMessage());
-            ex.printStackTrace();
+            log.error("Error doProcessDocumentation.jsp, " + path + ", " + ex.getMessage());
+        }
+    }
+
+    void doViewDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        String suri = request.getParameter("suri") != null ? request.getParameter("suri") : "";
+        ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+        try {
+            org.w3c.dom.Document dom = getDom(request.getParameter("suri"), response, paramRequest);
+            String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
+//            File folder = new File(basePath);
+//            if (!folder.exists()) {
+//                folder.mkdirs();
+//            }
+//            File xmlFile = new File(basePath + pe.getTitle() + ".xml");
+//            DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+//            dom = documentBuilder.parse(xmlFile);
+//            FileOutputStream fout = new FileOutputStream(xmlFile);
+//            fout.write(dom.getTextContent().getBytes());
+//            fout.flush();
+//            fout.close();
+
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            Result output = new StreamResult(new File(basePath + pe.getTitle() + ".xml"));
+            Source input = new DOMSource(dom);
+            transformer.transform(input, output);
+
+
+            if (dom != null) {
+                String tlpPath = "/swbadmin/jsp/process/documentation/testTemplate.xsl";
+
+                tpl = SWBUtils.XML.loadTemplateXSLT(new FileInputStream(SWBUtils.getApplicationPath() + tlpPath));
+                out.print(SWBUtils.XML.transformDom(tpl, dom));
+            }
+        } catch (Exception e) {
+            log.error(e);
         }
     }
 
     void doExportDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException, DocumentException, Exception {
         response.setContentType("text/html; charset=UTF-8");
-        OutputStream ou = response.getOutputStream();
-        String suri = request.getParameter("suri") != null ? request.getParameter("suri").toString() : "";
-        String format = request.getParameter("format") != null ? request.getParameter("format").toString() : "";
-        String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
-        String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
-        String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
-        String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
-        String dataT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
-        if (!format.equals("") && !suri.equals("")) {
-            ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-            if (pe != null) {
-                ArrayList lane = new ArrayList();
-                ArrayList activity = new ArrayList();
-                ArrayList gateway = new ArrayList();
-                ArrayList event = new ArrayList();
-                ArrayList dataob = new ArrayList();
-                Iterator<GraphicalElement> iterator = null;
-                GraphicalElement ge = null;
-                if (pe instanceof org.semanticwb.process.model.Process) {
-                    org.semanticwb.process.model.Process process = (org.semanticwb.process.model.Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-                    if (format.equals("pdf")) { // is pdf
-                        response.setContentType("application/pdf");
-                        response.setHeader("Content-Disposition", "attachment; filename=\"" + pe.getTitle() + ".pdf\";");
-                        iterator = process.listAllContaineds();
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            if (ge instanceof Lane) {
-                                lane.add(ge);
-                            }
-                            if (ge instanceof Activity) {
-                                activity.add(ge);
-                            }
-                            if (ge instanceof Gateway) {
-                                gateway.add(ge);
-                            }
-                            if (ge instanceof Event) {
-                                event.add(ge);
-                            }
-                            if (ge instanceof DataObject) {
-                                dataob.add(ge);
-                            }
-                        }
-                        Document doc = new Document(PageSize.A4);
-                        File file = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + process.getTitle() + ".pdf");
-                        if (file.exists()) {
-                            file.delete();
-                            file = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + process.getTitle() + ".pdf");
-                        }
-                        FileOutputStream fileOut = new FileOutputStream(file);
-                        //Save on server
-                        PdfWriter.getInstance(doc, fileOut);
-                        //Show on response
-                        PdfWriter.getInstance(doc, ou);
-                        doc.open();
-                        doc.addAuthor(paramRequest.getUser().getFullName());
-                        doc.addCreator(paramRequest.getUser().getFullName());
-                        doc.addCreationDate();
-                        doc.addTitle(process.getTitle());
 
-                        Image header = Image.getInstance(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/documentation/styles/css/images/logoprocess.png");
-                        if (header != null) {
-                            header.setAlignment(Chunk.ALIGN_LEFT);
-                            header.rectangle(230, 20);
-                            doc.add(header);
-                        }
-                        HTMLWorker hw = new HTMLWorker(doc);
-                        //Documentatión from process
-                        hw.parse(new StringReader(process.getDocumentation().getText()));
-                        //Lane
-                        iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>" + laneT + "</h1>"));
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            hw.parse(new StringReader("<br><h4>" + ge.getTitle() + "</h4>"));
-                            hw.parse(new StringReader(ge.getDocumentation().getText()));
+        org.semanticwb.process.model.Process pe = (org.semanticwb.process.model.Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(URLDecoder.decode(request.getParameter("suri")));
+        response.setContentType("application/zip");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + pe.getTitle() + ".zip\"");
+        String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
 
-                        }
-                        //Activity
-                        iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>" + activityT + "</h1>"));
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            hw.parse(new StringReader("<br><h4>" + ge.getTitle() + "</h4>"));
-                            hw.parse(new StringReader(ge.getDocumentation().getText()));
-                        }
-                        //Gateway
-                        iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>" + gatewayT + "</h1>"));
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            hw.parse(new StringReader("<br><h4>" + ge.getTitle() + "</h4>"));
-                            hw.parse(new StringReader(ge.getDocumentation().getText()));
-                            //ConnectionObject
-                            Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
-                            while (itConObj.hasNext()) {
-                                ConnectionObject connectionObj = itConObj.next();
-                                if (connectionObj instanceof SequenceFlow) {
-                                    hw.parse(new StringReader("<br><h4>" + connectionObj.getTitle() + "</h4>"));
-                                    hw.parse(new StringReader(connectionObj.getDocumentation().getText()));
-                                }
-                            }
-                        }
-                        //Event
-                        iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>" + eventT + "</h1>"));
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            hw.parse(new StringReader("<br><h4>" + ge.getTitle() + "</h4>"));
-                            hw.parse(new StringReader(ge.getDocumentation().getText()));
-                        }
-                        //Data
-                        iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-                        hw.parse(new StringReader("<br><h1>" + eventT + "</h1>"));
-                        while (iterator.hasNext()) {
-                            ge = iterator.next();
-                            hw.parse(new StringReader("<br><h4>" + ge.getTitle() + "</h4>"));
-                            hw.parse(new StringReader(ge.getDocumentation().getText()));
-                        }
-                        doc.close();
-                    } else { // is html
-                        String webPath = SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/documentation/styles/";
-                        String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
-
-                        File dest = new File(basePath);
-                        if (!dest.exists()) {
-                            dest.mkdirs();
-                        }
-                        //Create model
-                        createModel(suri, basePath);
-
-                        if (pe instanceof org.semanticwb.process.model.Process) {
-                            process = (org.semanticwb.process.model.Process) pe;
-                            iterator = process.listContaineds();
-                            Iterator<GraphicalElement> itFiles = process.listAllContaineds();
-                            while (itFiles.hasNext()) {
-                                GraphicalElement geFiles = itFiles.next();
-                                if (geFiles instanceof SubProcess) {
-                                    createHtmlSubProcess(process, ((SubProcess) geFiles), paramRequest, basePath, suri);
-//                                    createModel(suri, basePath);
-                                }
-                            }
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                if (ge instanceof Lane) {
-                                    lane.add(ge);
-                                }
-                                if (ge instanceof Activity) {
-                                    activity.add(ge);
-                                }
-                                if (ge instanceof Gateway) {
-                                    gateway.add(ge);
-                                }
-                                if (ge instanceof Event) {
-                                    event.add(ge);
-                                }
-                                if (ge instanceof DataObject) {
-                                    dataob.add(ge);
-                                }
-                            }
-                        }
-//                        SWBUtils.IO.copyStructure(webPath, basePath);
-//                        System.out.println("webPath: " + webPath);
-//                        System.out.println("basePath: " + basePath);
-                        File bootstrap = new File(basePath + "bootstrap/");
-                        if (!bootstrap.exists()) {
-                            bootstrap.mkdirs();
-                        }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/css/bootstrap/", basePath + "/bootstrap/");
-                        //Add directory documentation
-                        File documentation = new File(basePath + "documentation/");
-                        if (!documentation.exists()) {
-                            documentation.mkdirs();
-                        }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/documentation/css/", basePath + "/documentation/");
-                        //Add jquery
-                        File jquery = new File(basePath + "jquery/");
-                        if (!jquery.exists()) {
-                            jquery.mkdirs();
-                        }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/js/jquery/", basePath + "/jquery/");
-                        //Add modeler
-//                        File modeler = new File(basePath + "modeler/");
-//                        if (!modeler.exists()) {
-//                            modeler.mkdirs();
-//                        }
-//                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/", basePath + "/modeler/");
-                        File modeler = new File(basePath + "modeler/");
-                        if (!modeler.exists()) {
-                            modeler.mkdirs();
-                        }
-                        File toolkitFile = new File(basePath + "modeler/toolkit.js");
-                        File modelerFile = new File(basePath + "modeler/modeler.js");
-                        File css = new File(basePath + "modeler/modelerFrame.css");
-
-                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/toolkit.js", basePath + "/modeler/toolkit.js");
-                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/modeler.js", basePath + "/modeler/modeler.js");
-                        copyFile(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/modeler/images/modelerFrame.css", basePath + "/modeler/modelerFrame.css");
-
-
-                        //Add taskInbox
-                        File taskInbox = new File(basePath + "taskInbox/css/");
-                        if (!taskInbox.exists()) {
-                            taskInbox.mkdirs();
-                        }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/taskInbox/css/", basePath + "/taskInbox/css/");
-                        //Add fontawesome
-                        File fontawesome = new File(basePath + "fontawesome/");
-                        if (!fontawesome.exists()) {
-                            fontawesome.mkdirs();
-                        }
-                        SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/css/fontawesome/", basePath + "/fontawesome/");
-                        String html = "";
-                        //Index
-                        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
-                                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
-                                + "<link href=\"fontawesome/css/font-awesome.css\" rel=\"stylesheet\">\n"
-                                + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
-                                + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
-                                + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
-                                + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
-                                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
-                                + "<script type=\'text/javascript\'> //Activate tooltips\n"
-                                + "    $(document).ready(function() {\n"
-                                + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
-                                + "            $(\"[data-toggle=tooltip]\").tooltip();\n"
-                                + "        }\n"
-                                + "        $('body').off('.data-api');"
-                                + "    });\n"
-                                + "</script>\n"; //End imports
-
-                        html += "<div class=\"swbp-content-wrapper\">";//Begin wrapper
-                        html += "<div class=\"row swbp-header hidden-xs\">\n" //Begin header
-                                + "    <a href=\"#\">\n"
-                                + "        <div class=\"swbp-brand\"></div>\n"
-                                + "    </a>\n"
-                                + "</div>\n"
-                                + "<nav class=\"swbp-toolbar hidden-xs\" role=\"navigation\">\n"
-                                + "<div style=\"text-align: center;\">\n"
-                                + "    <ul class=\"swbp-nav\">\n"
-                                + "<li><h2><i class=\"fa fa-gears\" style=\"width: auto;\"></i> " + pe.getTitle() + "</h2></li>\n"
-                                //                                + "        <li class=\"active\">"
-                                //                                + "<a href=\"#\"><i class=\"fa fa-gears\"></i><span>" + pe.getTitle() + "</span></a>\n"
-                                //                                + "</li>\n"
-                                + "</ul>\n"
-                                + "</div>\n"
-                                + "</nav>\n"; //End header
-                        html += "<div class=\"swbp-user-menu\">\n";
-                        html += "<ul class=\"breadcrumb\">"; //Begin ruta
-                        html += "<li class=\"active\">" + process.getTitle() + "</li>\n"; //Ruta
-                        html += "</ul>"; //End ruta
-                        html += "</div>";
-                        String ref = "";
-                        html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">\n";//Begin menu
-                        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"fa fa-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
-                        html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
-                        html += "<ul class=\"nav nav-pills nav-stacked\">";
-                        if (lane.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#lanemenu\">" + laneT + "<span class=\"badge pull-right\">" + lane.size() + "</span></a></li>\n";
-                            iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                                if (ge instanceof SubProcess) {
-                                    ref = ((SubProcess) ge).getTitle() + ".html";
-                                }
-                                html += "<li><a href=\"" + ref + "\" data-placement=\"bottom\">" + ge.getTitle() + "</a></li>\n";
-                            }
-                        }
-                        if (activity.size() > 0) {
-                            html += "<li class=\"active\"> <a href=\"#activitymenu\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>\n";
-                            iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                                if (ge instanceof SubProcess) {
-                                    ref = ((SubProcess) ge).getTitle() + ".html";
-                                }
-                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
-                            }
-                        }
-                        if (gateway.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#gatewaymenu\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>\n";
-                            iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                                if (ge instanceof SubProcess) {
-                                    ref = ((SubProcess) ge).getTitle() + ".html";
-                                }
-                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
-                            }
-                        }
-                        if (event.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#eventmenu\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>\n";
-                            iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                                if (ge instanceof SubProcess) {
-                                    ref = ((SubProcess) ge).getTitle() + ".html";
-                                }
-                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
-                            }
-                        }
-                        if (dataob.size() > 0) {
-                            html += "<li class=\"active\"><a href=\"#dataobmenu\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>\n";
-                            iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                                if (ge instanceof SubProcess) {
-                                    ref = ((SubProcess) ge).getTitle() + ".html";
-                                }
-                                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>\n";
-                            }
-                        }
-                        html += "</ul>\n";
-                        html += "</div>\n";//End body menu
-                        html += "</div>\n";//End menu
-                        html += "<div class=\"col-lg-10 col-md-10 col-sm-8\" role=\"main\">\n";//Begin content
-                        html += "<div class=\"contenido\">\n"; //Begin body content
-                        /**
-                         * BEGIN IMAGE MODEL
-                         */
-                        String data = process.getData() != null ? process.getData() : paramRequest.getLocaleString("noImage");
-//                        html += "<div id=\"ruta\">" + data + "</div>"; 
-                        html += "\n<div id=\"ruta\">\n";
-                        html += "<div class=\"panel panel-default visible-lg\">\n"
-                                + "                    <div class=\"panel-body\">";
-                        html += getStyleModel();
-                        html += "</div>\n";
-                        html += "</div>\n";
-                        html += "</div>\n";
-
-                        /**
-                         * END IMAGE MODEL
-                         */
-                        html += "<div class=\"panel panel-default\">\n"//Documentation Process
-                                + "   <div class=\"panel-heading\">\n"
-                                + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromPro") + " " + pe.getTitle() + "</strong></div>\n"
-                                + "<a href=\"Model_" + pe.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right fa fa-fullscreen hidden-lg\"></a>"
-                                + "   </div>\n"
-                                + "   <div class=\"panel-body\">\n"
-                                + pe.getDocumentation().getText()
-                                + "   </div>\n"
-                                + "</div>";
-                        if (lane.size() > 0) {//Lane
-                            html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"lanemenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + laneT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
-                            html += "<div class=\"panel-body\">";
-                            iterator = SWBComparator.sortByDisplayName(lane.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
-                                html += ge.getDocumentation().getText();
-                            }
-                            html += "</div>";
-                            html += "</div>";
-                        }
-                        if (activity.size() > 0) {
-                            html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
-                            html += "<div class=\"panel-body\">";
-                            iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
-                                html += ge.getDocumentation().getText();
-                            }
-                            html += "</div>\n";
-                            html += "</div>\n";
-                        }
-                        if (gateway.size() > 0) {
-                            html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
-                            html += "<div class=\"panel-body\">";
-                            iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
-                                html += ge.getDocumentation().getText();
-                                //Begin ConnectionObject
-                                Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
-                                while (itConObj.hasNext()) {
-                                    ConnectionObject connectionObj = itConObj.next();
-                                    if (connectionObj instanceof SequenceFlow) {
-                                        html += "<i class=\"fa fa-arrow-right\"></i> <h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>";
-                                        html += connectionObj.getDocumentation().getText();
-                                    }
-                                }
-                                //End ConnectionObject
-                            }
-                            html += "</div>\n";
-                            html += "</div>\n";
-                        }
-                        if (event.size() > 0) {
-                            html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
-                            html += "<div class=\"panel-body\">";
-                            iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
-                                html += ge.getDocumentation().getText();
-                            }
-                            html += "</div>\n";
-                            html += "</div>\n";
-                        }
-                        if (dataob.size() > 0) {
-                            html += "<div class=\"panel panel-default\">";
-                            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>";
-                            html += "<div class=\"panel-body\">";
-                            iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-                            while (iterator.hasNext()) {
-                                ge = iterator.next();
-                                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>";
-                                html += ge.getDocumentation().getText();
-                            }
-                            html += "</div>\n";
-                            html += "</div>\n";
-                        }
-                        html += "</div>\n";//End body content
-                        html += "</div>\n";//End content
-                        html += "</div>\n";//End wrapper
-
-                        html += "<script type=\"text/javascript\">\n";
-                        html += "Modeler.init('modeler', {mode: 'view', layerNavigation: false}, callbackHandler);\n"
-                                + "    var zoomFactor = 1.1;\n"
-                                + "    var panRate = 10;\n";
-                        html += "function callbackHandler() {\n";
-                        html += "var json;\n";
-                        html += "json = '" + data + "';\n";
-                        html += "Modeler.loadProcess(json);\n";
-                        html += "}\n";
-                        html += "Modeler._svgSize = getDiagramSize();\n"
-                                + "        fitToScreen();\n";
-                        html += "\n"
-                                + "\n"
-                                + "    function zoomin() {\n"
-                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
-                                + "        var viewBoxValues = viewBox.split(' ');\n"
-                                + "\n"
-                                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
-                                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
-                                + "\n"
-                                + "        viewBoxValues[2] /= zoomFactor;\n"
-                                + "        viewBoxValues[3] /= zoomFactor;\n"
-                                + "\n"
-                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
-                                + "    }\n"
-                                + "\n"
-                                + "    function zoomout() {\n"
-                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
-                                + "        var viewBoxValues = viewBox.split(' ');\n"
-                                + "\n"
-                                + "        viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
-                                + "        viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
-                                + "\n"
-                                + "        viewBoxValues[2] *= zoomFactor;\n"
-                                + "        viewBoxValues[3] *= zoomFactor;\n"
-                                + "\n"
-                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
-                                + "    }\n"
-                                + "\n"
-                                + "    function resetZoom() {\n"
-                                + "        var el = document.getElementById(\"modeler\");\n"
-                                + "        el.setAttribute('viewBox', '0 0 ' + $(\"#modeler\").parent().width() + ' ' + $(\"#modeler\").parent().height());\n"
-                                + "        el.setAttribute('width', '1024');\n"
-                                + "        el.setAttribute('height', '768');\n"
-                                + "    }\n"
-                                + "\n"
-                                + "    function handlePanning(code) {\n"
-                                + "        var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
-                                + "        var viewBoxValues = viewBox.split(' ');\n"
-                                + "        viewBoxValues[0] = parseFloat(viewBoxValues[0]);\n"
-                                + "        viewBoxValues[1] = parseFloat(viewBoxValues[1]);\n"
-                                + "\n"
-                                + "        switch (code) {\n"
-                                + "            case 'left':\n"
-                                + "                viewBoxValues[0] += panRate;\n"
-                                + "                break;\n"
-                                + "            case 'right':\n"
-                                + "                viewBoxValues[0] -= panRate;\n"
-                                + "                break;\n"
-                                + "            case 'up':\n"
-                                + "                viewBoxValues[1] += panRate;\n"
-                                + "                break;\n"
-                                + "            case 'down':\n"
-                                + "                viewBoxValues[1] -= panRate;\n"
-                                + "                break;\n"
-                                + "        }\n"
-                                + "        document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
-                                + "    }\n"
-                                + "\n"
-                                + "    function getDiagramSize() {\n"
-                                + "        var cw = 0;\n"
-                                + "        var ch = 0;\n"
-                                + "        var fx = null;\n"
-                                + "        var fy = null;\n"
-                                + "        for (var i = 0; i < ToolKit.contents.length; i++) {\n"
-                                + "            var obj = ToolKit.contents[i];\n"
-                                + "            if (obj.typeOf && (obj.typeOf(\"GraphicalElement\") || obj.typeOf(\"Pool\"))) {\n"
-                                + "                if (obj.layer === ToolKit.layer) {\n"
-                                + "                    if (obj.getX() > cw) {\n"
-                                + "                        cw = obj.getX();\n"
-                                + "                        fx = obj;\n"
-                                + "                    }\n"
-                                + "\n"
-                                + "                    if (obj.getY() > ch) {\n"
-                                + "                        ch = obj.getY();\n"
-                                + "                        fy = obj;\n"
-                                + "                    }\n"
-                                + "                }\n"
-                                + "            }\n"
-                                + "        }\n"
-                                + "        cw = cw + fx.getBBox().width;\n"
-                                + "        ch = ch + fy.getBBox().height;\n"
-                                + "\n"
-                                + "        var ret = {w: cw, h: ch};\n"
-                                + "        return ret;\n"
-                                + "    }\n"
-                                + "\n"
-                                + "    function fitToScreen() {\n"
-                                + "        resetZoom();\n"
-                                + "        var ws = $(\"#modeler\").parent().width();\n"
-                                + "        var hs = $(\"#modeler\").parent().height();\n"
-                                + "        var wi = Modeler._svgSize.w;\n"
-                                + "        var hi = Modeler._svgSize.h;\n"
-                                + "\n"
-                                + "        if (wi > ws || hi > hs) {\n"
-                                + "            var el = document.getElementById(\"modeler\");\n"
-                                + "            el.setAttribute('viewBox', '0 0 ' + wi + ' ' + hi);\n"
-                                + "            el.setAttribute('width', ws);\n"
-                                + "            el.setAttribute('height', hs);\n"
-                                + "        }\n"
-                                + "    }";
-                        html += "</script>\n";
-
-                        File index = new File(basePath + "index.html");
-                        FileOutputStream out = new FileOutputStream(index);
-                        out.write(html.getBytes());
-                        out.flush();
-                        out.close();
-                        //In response for save or view
-                        response.setContentType("application/zip");
-                        response.setHeader("Content-Disposition", "attachment; filename=\"" + pe.getTitle() + ".zip\"");
-                        //For create file on server
-//                        File zip = new File(SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + ".zip");
-//                        if (zip.exists()) {
-//                            zip.delete();
-//                        }
-//                        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zip));
-                        //Show on response
-                        ZipOutputStream zos = new ZipOutputStream(ou);
-                        SWBUtils.IO.zip(dest, new File(basePath), zos);
-                        zos.flush();
-                        zos.close();
-                        deleteDerectory(dest);
-                    }
-                    ou.flush();
-                    ou.close();
+        try {
+            Document dom = getDom(request.getParameter("suri"), response, paramRequest);
+            if (dom != null) {
+                //Copy bootstrap files
+                copyFileFromSWBAdmin("/swbadmin/css/bootstrap/bootstrap.css", basePath + "css/bootstrap/", "/bootstrap.css");
+                copyFileFromSWBAdmin("/swbadmin/js/bootstrap/bootstrap.js", basePath + "js/bootstrap/", "/bootstrap.js");
+                //Copy font-awesome files
+                copyFileFromSWBAdmin("/swbadmin/css/fontawesome/font-awesome.css", basePath + "css/fontawesome/", "/font-awesome.css");
+                copyFileFromSWBAdmin("/swbadmin/css/fonts/FontAwesome.otf", basePath + "css/fonts/", "/FontAwesome.otf");
+                copyFileFromSWBAdmin("/swbadmin/css/fonts/fontawesome-webfont.eot", basePath + "css/fonts/", "/fontawesome-webfont.eot");
+                copyFileFromSWBAdmin("/swbadmin/css/fonts/fontawesome-webfont.svg", basePath + "css/fonts/", "/fontawesome-webfont.svg");
+                copyFileFromSWBAdmin("/swbadmin/css/fonts/fontawesome-webfont.ttf", basePath + "css/fonts/", "/fontawesome-webfont.ttf");
+                copyFileFromSWBAdmin("/swbadmin/css/fonts/fontawesome-webfont.woff", basePath + "css/fonts/", "/fontawesome-webfont.woff");
+                //Copy jquery files
+                copyFileFromSWBAdmin("/swbadmin/js/jquery/jquery.js", basePath + "js/jquery/", "/jquery.js");
+                //Add modeler
+                File modeler = new File(basePath + "css/modeler/");
+                if (!modeler.exists()) {
+                    modeler.mkdirs();
                 }
+                modeler = new File(basePath + "js/modeler/");
+                if (!modeler.exists()) {
+                    modeler.mkdirs();
+                }
+                copyFile(SWBUtils.getApplicationPath() + "swbadmin/jsp/process/modeler/toolkit.js", basePath + "/js/modeler/toolkit.js");
+                copyFile(SWBUtils.getApplicationPath() + "swbadmin/jsp/process/modeler/modeler.js", basePath + "/js/modeler/modeler.js");
+                copyFile(SWBUtils.getApplicationPath() + "swbadmin/jsp/process/modeler/images/modelerFrame.css", basePath + "/css/modeler/modelerFrame.css");
+                copyFile(SWBUtils.getApplicationPath() + "swbadmin/jsp/process/commons/css/swbp.css", basePath + "/css/swbp.css");
+                copyFile(SWBUtils.getApplicationPath() + "swbadmin/jsp/process/documentation/css/style.css", basePath + "/css/style.css");
+                //Add images
+                File images = new File(basePath + "css/images/");
+                if (!images.exists()) {
+                    images.mkdirs();
+                }
+                SWBUtils.IO.copyStructure(SWBUtils.getApplicationPath() + "/swbadmin/jsp/process/commons/css/images/", basePath + "/css/images/");
+
+                File dest = new File(basePath);
+                if (!dest.exists()) {
+                    dest.mkdirs();
+                }
+                String tlpPath = "/swbadmin/jsp/process/documentation/testTemplate.xsl";
+                tpl = SWBUtils.XML.loadTemplateXSLT(new FileInputStream(SWBUtils.getApplicationPath() + tlpPath));
+                //Write index.html
+                File index = new File(basePath + "index.html");
+                FileOutputStream out = new FileOutputStream(index);
+                out.write(SWBUtils.XML.transformDom(tpl, dom).getBytes());
+                out.flush();
+                out.close();
+                Iterator<GraphicalElement> itFiles = pe.listAllContaineds();
+                while (itFiles.hasNext()) {
+                    GraphicalElement geFiles = itFiles.next();
+                    if (geFiles instanceof SubProcess) {
+                        dom = getDom(geFiles.getEncodedURI(), response, paramRequest);
+                        String fileName = removeAcent(geFiles.getTitle());
+                        File geFile = new File(basePath + fileName + ".html");
+                        FileOutputStream outFile = new FileOutputStream(geFile);
+                        outFile.write(SWBUtils.XML.transformDom(tpl, dom).getBytes());
+                        outFile.flush();
+                        outFile.close();
+                    }
+                }
+                OutputStream ou = response.getOutputStream();
+                ZipOutputStream zos = new ZipOutputStream(ou);
+                SWBUtils.IO.zip(dest, new File(basePath), zos);
+                zos.flush();
+                zos.close();
+                ou.flush();
+                ou.close();
+                deleteDerectory(dest);
             }
+        } catch (Exception e) {
+            log.error(e);
         }
+    }
+
+    public static String removeAcent(String input) {
+        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ";
+        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC";
+        String output = input;
+        for (int i = 0; i < original.length(); i++) {
+            output = output.replace(original.charAt(i), ascii.charAt(i));
+        }
+        return output;
+    }
+
+    public static void copyFileFromSWBAdmin(String source, String destination, String fileName) throws FileNotFoundException, IOException {
+        InputStream inputStream = SWBPortal.getAdminFileStream(source);
+        File css = new File(destination);
+        if (!css.exists()) {
+            css.mkdirs();
+        }
+
+        File file = new File(css.getAbsolutePath() + fileName);
+        OutputStream outputStream = new FileOutputStream(file);
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, len);
+        }
+//        outputStream.write(SWBUtils.IO.readInputStream(inputStream).getBytes());
+        outputStream.close();
+        inputStream.close();
     }
 
     public static void copyFile(String sourceFile, String destFile) throws IOException {
@@ -760,266 +339,6 @@ public class DocumentationResource extends GenericAdmResource {
             log.error("Error to copy file " + sourceFile + ", " + e.getMessage());
         }
     }
-//    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
-
-    public static void createHtmlSubProcess(org.semanticwb.process.model.Process process, SubProcess subProcess, SWBParamRequest paramRequest, String basePath, String suri) throws FileNotFoundException, IOException, SWBResourceException {
-        ArrayList activity = new ArrayList();
-        ArrayList gateway = new ArrayList();
-        ArrayList event = new ArrayList();
-        ArrayList dataob = new ArrayList();
-        Iterator<GraphicalElement> iterator = subProcess.listContaineds();
-        GraphicalElement ge = null;
-        Containerable con = null;
-        String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
-        String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
-        String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
-        String dataT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
-        String path = "";
-        while (iterator.hasNext()) {
-            ge = iterator.next();
-            if (ge instanceof Activity) {
-                activity.add(ge);
-            }
-            if (ge instanceof Gateway) {
-                gateway.add(ge);
-            }
-            if (ge instanceof Event) {
-                event.add(ge);
-            }
-            if (ge instanceof DataObject) {
-                dataob.add(ge);
-            }
-        }
-
-        con = subProcess.getContainer();
-        while (con != null) {
-            path = ((ProcessElement) con).getURI() + "|" + path;
-            if (con instanceof SubProcess) {
-                con = ((SubProcess) con).getContainer();
-            } else {
-                con = null;
-            }
-        }
-
-
-        String html = "";
-        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
-                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"fontawesome/css/font-awesome.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
-                + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
-                + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
-                + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
-                + "<script type=\'text/javascript\'> //Activate tooltips\n"
-                + "    $(document).ready(function() {\n"
-                + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
-                + "            $(\"[data-toggle=tooltip]\").tooltip();\n"
-                + "        }\n"
-                + "        $('body').off('.data-api');"
-                + "    });\n"
-                + "</script>\n"; //End imports
-        html += "<div class=\"swbp-content-wrapper\">";//Begin wrapper
-        html += "<div class=\"row swbp-header hidden-xs\">\n" //Begin header
-                + "    <a href=\"#\">\n"
-                + "        <div class=\"swbp-brand\"></div>\n"
-                + "    </a>\n"
-                + "</div>\n"
-                + "<nav class=\"swbp-toolbar hidden-xs\" role=\"navigation\">\n"
-                + "<div style=\"text-align: center;\">\n"
-                + "    <ul class=\"swbp-nav\">\n"
-                + "<li><h2><i class=\"fa fa-gears\" style=\"width: auto;\"></i> " + subProcess.getTitle() + "</h2></li>"
-                + "</li>\n"
-                + "</ul>\n"
-                + "</div>\n"
-                + "</nav>\n"; //End header
-        html += "<div class=\"swbp-user-menu\">";
-
-        /**
-         * ********************** BEGIN RUTA*********************************
-         */
-        html += "<ul class=\"breadcrumb \">\n"; //Begin ruta
-        String[] urls = path.split("\\|");
-        for (int i = 0; i < urls.length; i++) {
-//            System.out.println("urls[i]: " + urls[i]);
-            ProcessElement peAux = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(urls[i]);
-            String title = peAux.getTitle();
-            String refAux = title + ".html";
-            if (i == 0) {
-                refAux = "index.html";
-            }
-            html += "<li><a href=\"" + refAux + "\">" + title + "</a></li>\n";
-        }
-        html += "<li class=\"active\">" + subProcess.getTitle() + "</li>\n";
-        html += "</ul>\n"; //End ruta
-        html += "</div>\n";
-        /**
-         * ********************** END RUTA*********************************
-         */
-        String ref = "";
-        html += "<div class=\"col-lg-2 col-md-2 col-sm-4 hidden-xs\">";//Begin menu
-        //html += "<a href=\"#ruta\" style=\"width: 100%;\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("home") + "\" class=\"btn btn-success btn-sm swbp-btn-start\"><i class=\"fa fa-home\"></i>" + paramRequest.getLocaleString("home") + "</a>";//Ruta
-        html += "<div class=\"swbp-left-menu swbp-left-menu-doc\">";//Begin body menu
-        html += "<ul class=\"nav nav-pills nav-stacked\">";
-        if (activity.size() > 0) {
-            html += "<li class=\"active\"> <a href=\"#activitymenu\">" + activityT + "<span class=\"badge pull-right\">" + activity.size() + "</span></a></li>";
-            iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                if (ge instanceof SubProcess) {
-                    ref = ((SubProcess) ge).getTitle() + ".html";
-                }
-                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
-            }
-        }
-        if (gateway.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#gatewaymenu\">" + gatewayT + "<span class=\"badge pull-right\">" + gateway.size() + "</span></a></li>";
-            iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                if (ge instanceof SubProcess) {
-                    ref = ((SubProcess) ge).getTitle() + ".html";
-                }
-                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
-            }
-        }
-        if (event.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#eventmenu\">" + eventT + "<span class=\"badge pull-right\">" + event.size() + "</span></a></li>";
-            iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                if (ge instanceof SubProcess) {
-                    ref = ((SubProcess) ge).getTitle() + ".html";
-                }
-                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
-            }
-        }
-        if (dataob.size() > 0) {
-            html += "<li class=\"active\"><a href=\"#dataobmenu\">" + dataT + "<span class=\"badge pull-right\">" + dataob.size() + "</span></a></li>";
-            iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                ref = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
-                if (ge instanceof SubProcess) {
-                    ref = ((SubProcess) ge).getTitle() + ".html";
-                }
-                html += "<li><a href=\"" + ref + "\">" + ge.getTitle() + "</a></li>";
-            }
-        }
-        html += "</ul>";
-        html += "</div>";//End body menu
-        html += "</div>";//End menu
-        html += "<div class=\"col-lg-10 col-md-10 col-sm-8 col-xs-\" role=\"main\">\n";//Begin content
-        html += "<div class=\"contenido\">\n"; //Begin body content
-        /**
-         * BEGIN IMAGE MODEL
-         */
-        String data = subProcess.getData() != null ? subProcess.getData() : paramRequest.getLocaleString("noImage");
-        html += "<div id=\"ruta\">";
-        html += getStyleModel();
-        html += "</div>\n";
-        /**
-         * END IMAGE MODEL
-         */
-        html += "<div class=\"panel panel-default\">\n"//Documentation Process
-                + "   <div class=\"panel-heading\">\n"
-                + "        <div class=\"panel-title\"><strong>" + paramRequest.getLocaleString("docFromSub") + " " + subProcess.getTitle() + "</strong></div>\n"
-                + "<a href=\"Model_" + subProcess.getTitle() + ".html\" target=\"_blank\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + paramRequest.getLocaleString("viewModel") + "\" class=\"pull-right fa fa-fullscreen hidden-lg\"></a>"
-                + "   </div>\n"
-                + "   <div class=\"panel-body\">\n"
-                + subProcess.getDocumentation().getText()
-                + "   </div>\n"
-                + "</div>";
-
-
-        if (activity.size() > 0) {
-            html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"activitymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + activityT + "</strong></div></div>\n";
-            html += "<div class=\"panel-body\">";
-            iterator = SWBComparator.sortByDisplayName(activity.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
-                html += ge.getDocumentation().getText();
-            }
-            html += "</div>\n";
-            html += "</div>\n";
-        }
-        if (gateway.size() > 0) {
-            html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"gatewaymenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + gatewayT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
-            html += "<div class=\"panel-body\">\n";
-            iterator = SWBComparator.sortByDisplayName(gateway.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
-                html += ge.getDocumentation().getText();
-                //Begin ConnectionObject
-                Iterator<ConnectionObject> itConObj = SWBComparator.sortByDisplayName(((Gateway) ge).listOutputConnectionObjects(), paramRequest.getUser().getLanguage());
-                while (itConObj.hasNext()) {
-                    ConnectionObject connectionObj = itConObj.next();
-                    if (connectionObj instanceof SequenceFlow) {
-                        html += "<i class=\"fa fa-arrow-right\"></i><h4 id=\"" + connectionObj.getURI() + "\" title=\"" + connectionObj.getTitle() + "\">" + connectionObj.getTitle() + "</h4>\n";
-                        html += connectionObj.getDocumentation().getText();
-                    }
-                }
-                //End ConnectionObject
-            }
-            html += "</div>\n";
-            html += "</div>\n";
-        }
-        if (event.size() > 0) {
-            html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"eventmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + eventT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
-            html += "<div class=\"panel-body\">\n";
-            iterator = SWBComparator.sortByDisplayName(event.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
-                html += ge.getDocumentation().getText();
-            }
-            html += "</div>\n";
-            html += "</div>\n";
-        }
-        if (dataob.size() > 0) {
-            html += "<div class=\"panel panel-default\">\n";
-            html += "<div id=\"dataobmenu\" class=\"panel-heading\"><div class=\"panel-title\"><strong>" + dataT + "</strong><a href=\"#ruta\" style=\"cursor: pointer; text-decoration:none;\" class=\"pull-right fa fa-level-up\"></a></div></div>\n";
-            html += "<div class=\"panel-body\">\n";
-            iterator = SWBComparator.sortByDisplayName(dataob.iterator(), paramRequest.getUser().getLanguage());
-            while (iterator.hasNext()) {
-                ge = iterator.next();
-                html += "<h4 id=\"" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId() + "\" title=\"" + ge.getTitle() + "\">" + ge.getTitle() + "</h4>\n";
-                html += ge.getDocumentation().getText();
-            }
-            html += "</div>\n";
-            html += "</div>\n";
-        }
-        html += "</div>\n";//End body content
-        html += "</div>";//End content
-        html += "</div>\n";//End wrapper
-
-
-        html += "<script type=\"text/javascript\">\n";
-        html += "   Modeler.init('modeler', 'view', callbackHandler);\n";
-        html += "   function callbackHandler() {\n";
-        html += "       var json;\n";
-        html += "       json = '" + data + "';\n";
-        html += "       Modeler.loadProcess(json);\n";
-        html += "       var obj = Modeler.getGraphElementByURI(null, \"" + suri + "\");\n"
-                + "     ToolKit.setLayer(obj.subLayer);";
-        html += "}\n";
-        html += "</script>\n";
-
-        File index = new File(basePath + "/" + subProcess.getTitle() + ".html");
-        FileOutputStream out = new FileOutputStream(index);
-        out.write(html.getBytes());
-        out.flush();
-        out.close();
-    }
 
     public static void deleteDerectory(File dir) {
         File[] files = dir.listFiles();
@@ -1035,29 +354,20 @@ public class DocumentationResource extends GenericAdmResource {
         dir.delete();
     }
 
-    void doViewDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
-        String path = "/swbadmin/jsp/process/documentation/viewDocumentation.jsp";
-        RequestDispatcher rd = request.getRequestDispatcher(path);
-        request.setAttribute("paramRequest", paramRequest);
-        request.setAttribute("suri", request.getParameter("suri"));
-        request.setAttribute("despliege", request.getParameter("despliege"));
-        response.setContentType("text/html; charset=UTF-8");
-        rd.include(request, response);
-    }
-
     public static void createModel(String suri, String basePath) throws FileNotFoundException, IOException {
 //        System.out.println("entre createModel: " + suri);
         ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
         String html = "";
-        html += "<script type=\"text/javascript\" src=\"bootstrap/bootstrap.js\"></script>\n"//Begin imports
-                + "<link href=\"bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"fontawesome/css/font-awesome.min.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"taskInbox/css/swbp.css\" rel=\"stylesheet\">\n"
-                + "<script type=\"text/javascript\" src=\"jquery/jquery.js\"></script>\n"
-                + "<script type=\"text/javascript\" src=\"modeler/toolkit.js\"></script>\n"
-                + "<script type=\"text/javascript\" src=\"modeler/modeler.js\"></script>\n"
+        html += "<link href=\"css/bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"css/fontawesome/font-awesome.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"css/swbp.css\" rel=\"stylesheet\">\n"
+                + "<link href=\"css/style.css\" rel=\"stylesheet\">\n"
+                + "<script type=\"text/javascript\" src=\"js/jquery/jquery.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"js/bootstrap/bootstrap.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"js/modeler/toolkit.js\"></script>\n"
+                + "<script type=\"text/javascript\" src=\"js/modeler/modeler.js\"></script>\n"
                 + "<link href=\"documentation/style.css\" rel=\"stylesheet\">\n"
-                + "<link href=\"modeler/modelerFrame.css\" rel=\"stylesheet\">"
+                + "<link href=\"css/modeler/modelerFrame.css\" rel=\"stylesheet\">"
                 + "<script type=\'text/javascript\'> //Activate tooltips\n"
                 + "    $(document).ready(function() {\n"
                 + "        if ($(\"[data-toggle=tooltip]\").length) {\n"
@@ -1073,7 +383,7 @@ public class DocumentationResource extends GenericAdmResource {
                 + "        </div>\n"
                 + "    </div>\n"
                 + "    <div class=\"panel-body text-center\">\n"
-                + "        <ul class=\"list-unstyled list-inline hidden-print visible-lg\">\n"
+                + "        <ul class=\"list-unstyled list-inline hidden-print\">\n"
                 + "            <li>\n"
                 + "                <a href=\"#\" class=\"btn btn-default\" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"Zoom in\" onclick=\"zoomin();\n"
                 + "                                return false;\"><i class=\"fa fa-search-plus\"></i></a>\n"
@@ -1123,6 +433,7 @@ public class DocumentationResource extends GenericAdmResource {
         html += "Modeler.loadProcess(json);\n";
         if (pe instanceof org.semanticwb.process.model.SubProcess) {
             html += "var obj = Modeler.getGraphElementByURI(null, \"" + suri + "\");\n"
+                    + "console.log('suri on only model : ' + " + suri + ");"
                     + "ToolKit.setLayer(obj.subLayer);";
         }
         html += "}\n";
@@ -1229,7 +540,8 @@ public class DocumentationResource extends GenericAdmResource {
                 + "        }\n"
                 + "    }";
         html += "</script>\n";
-        File index = new File(basePath + "Model_" + pe.getTitle() + ".html");
+        String fileName = removeAcent(pe.getTitle());
+        File index = new File(basePath + "Model_" + fileName + ".html");
         FileOutputStream out = new FileOutputStream(index);
         out.write(html.getBytes());
         out.flush();
@@ -1910,5 +1222,316 @@ public class DocumentationResource extends GenericAdmResource {
                 + "                </defs>\n"
                 + "                </svg>";
         return style;
+    }
+
+    public org.w3c.dom.Document getDom(String suri, javax.servlet.http.HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, TransformerConfigurationException, TransformerException {
+        String mode = paramRequest.getMode();
+        org.w3c.dom.Document doc = SWBUtils.XML.getNewDocument();
+        if (!suri.equals("")) {
+            ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(URLDecoder.decode(suri));
+            Iterator<GraphicalElement> iterator = null;
+            GraphicalElement ge = null;
+            org.semanticwb.process.model.Process process = null;
+            SubProcess subProcess = null;
+            ArrayList lane = new ArrayList();
+            ArrayList activity = new ArrayList();
+            ArrayList gateway = new ArrayList();
+            ArrayList event = new ArrayList();
+            ArrayList dataob = new ArrayList();
+            ArrayList urls = new ArrayList();
+            String laneT = paramRequest.getLocaleString("lane") != null ? paramRequest.getLocaleString("lane") : "Lane";
+            String activityT = paramRequest.getLocaleString("activity") != null ? paramRequest.getLocaleString("activity") : "Activity";
+            String gatewayT = paramRequest.getLocaleString("gateway") != null ? paramRequest.getLocaleString("gateway") : "Gateway";
+            String eventT = paramRequest.getLocaleString("event") != null ? paramRequest.getLocaleString("event") : "Event";
+            String dataOBT = paramRequest.getLocaleString("data") != null ? paramRequest.getLocaleString("data") : "Data";
+            String data = "";
+            if (pe != null) {
+                if (pe.listDocumentations().hasNext()) {
+                    Element elements = doc.createElement("elements");
+                    elements.setAttribute("title", pe.getTitle());
+                    doc.appendChild(elements);
+                    Element elProcess = doc.createElement("process");
+                    elements.appendChild(elProcess);
+                    SWBResourceURL urlExport = paramRequest.getRenderUrl().setMode("doExportDocument");
+                    urlExport.setParameter("format", "html");
+                    if (pe instanceof org.semanticwb.process.model.Process) {
+                        process = (org.semanticwb.process.model.Process) pe;
+                        elProcess.setAttribute("process", process.getTitle());
+                        elProcess.setAttribute("title", process.getTitle());
+                        elProcess.setAttribute("type", "process");
+                        if (mode.equals("doExportDocument")) {
+                            elProcess.setAttribute("url", "index.html");
+                        } else {
+                            elProcess.setAttribute("url", "?suri=" + process.getEncodedURI());
+                        }
+                        addElem(doc, elProcess, "documentation", process.getDocumentation().getText());
+                        data = process.getData();
+                        iterator = process.listContaineds();
+                        urlExport.setParameter("suri", process.getEncodedURI());
+                    }
+                    if (pe instanceof SubProcess) {
+                        subProcess = (SubProcess) pe;
+                        elProcess.setAttribute("process", subProcess.getProcess().getTitle());
+                        if (mode.equals("doExportDocument")) {
+                            elProcess.setAttribute("url", "index.html");
+                        } else {
+                            elProcess.setAttribute("url", "?suri=" + subProcess.getProcess().getEncodedURI());
+                        }
+                        elProcess.setAttribute("title", subProcess.getTitle());
+                        elProcess.setAttribute("type", "subprocess");
+                        //Add path
+                        String thePath = "";
+                        Containerable con = subProcess.getContainer();
+                        thePath = pe.getTitle() + ";" + pe.getEncodedURI() + "|" + thePath;
+                        urls.add(subProcess);
+                        while (con != null) {
+                            thePath = ((ProcessElement) con).getTitle() + ";" + ((ProcessElement) con).getEncodedURI() + "|" + thePath;
+                            if (con instanceof SubProcess) {
+                                con = ((SubProcess) con).getContainer();
+                                urls.add(((SubProcess) con));//Test
+                            } else {
+                                con = null;
+                            }
+                        }
+                        elProcess.setAttribute("path", thePath);
+                        addElem(doc, elProcess, "documentation", subProcess.getDocumentation().getText());
+                        addElem(doc, elProcess, "model", subProcess.getData());
+                        data = subProcess.getProcess().getData();
+                        iterator = subProcess.listContaineds();
+                        urlExport.setParameter("suri", subProcess.getProcess().getEncodedURI());
+                    }
+                    String theImports = "";
+                    if (mode.equals("doExportDocument")) {
+                        theImports = ""
+                                + "        <link href=\"css/bootstrap/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"css/fontawesome/font-awesome.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"css/swbp.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"css/style.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"css/modeler/modelerFrame.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <script src=\"js/jquery/jquery.js\"></script>\n"
+                                + "        <script type=\"text/javascript\" src=\"js/modeler/toolkit.js\"></script>\n"
+                                + "        <script type=\"text/javascript\" src=\"js/modeler/modeler.js\"></script>\n"
+                                + "        <script src=\"js/bootstrap/bootstrap.js\"></script>\n";
+                    } else {
+                        String btnDownload =
+                                "       <a class=\"btn btn-default\" href=\" " + urlExport.toString() + " \" data-placement=\"bottom\" data-toggle=\"tooltip\" data-original-title=\"" + pe.getTitle() + "\">\n"
+                                + "         <span class=\"fa fa-download\"></span>\n"
+                                + "     </a>";
+                        addElem(doc, elProcess, "btnDownload", btnDownload);
+                        theImports = ""
+                                + "        <link href=\"" + SWBPortal.getContextPath() + "/swbadmin/css/bootstrap/bootstrap.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"" + SWBPortal.getContextPath() + "/swbadmin/css/fontawesome/font-awesome.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/commons/css/swbp.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/documentation/css/style.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <link href=\"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/modeler/images/modelerFrame.css\" rel=\"stylesheet\" type=\"text/css\"></link>\n"
+                                + "        <script src=\"" + SWBPortal.getContextPath() + "/swbadmin/js/jquery/jquery.js\"></script>\n"
+                                + "        <script type=\"text/javascript\" src=\"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/modeler/toolkit.js\"></script>\n"
+                                + "        <script type=\"text/javascript\" src=\"" + SWBPortal.getContextPath() + "/swbadmin/jsp/process/modeler/modeler.js\"></script>\n"
+                                + "        <script src=\"" + SWBPortal.getContextPath() + "/swbadmin/js/bootstrap/bootstrap.js\"></script>\n";
+                    }
+                    elProcess.setAttribute("context", SWBPortal.getContextPath());
+                    //imports css and js
+                    addElem(doc, elProcess, "imports", theImports);
+                    if (iterator != null) {
+                        while (iterator.hasNext()) {
+                            ge = iterator.next();
+                            if (ge instanceof Lane) {
+                                lane.add(ge);
+                            }
+                            if (ge instanceof Activity) {
+                                activity.add(ge);
+                            }
+                            if (ge instanceof Gateway) {
+                                gateway.add(ge);
+                            }
+                            if (ge instanceof Event) {
+                                event.add(ge);
+                            }
+                            if (ge instanceof DataObject) {
+                                dataob.add(ge);
+                            }
+                        }
+                    }
+                    if (urls.size() > 0) {//Test
+                        addProcessElements(doc, elements, urls, "urls", "urls", "URL", paramRequest);
+                    }
+                    if (lane.size() > 0) {
+                        addProcessElements(doc, elements, lane, "lanes", "lane", laneT, paramRequest);
+                    }
+                    if (activity.size() > 0) {
+                        addProcessElements(doc, elements, activity, "activities", "actvity", activityT, paramRequest);
+                    }
+                    if (gateway.size() > 0) {
+                        addProcessElements(doc, elements, gateway, "gateways", "gateway", gatewayT, paramRequest);
+                    }
+                    if (event.size() > 0) {
+                        addProcessElements(doc, elements, event, "events", "event", eventT, paramRequest);
+                    }
+                    if (dataob.size() > 0) {
+                        addProcessElements(doc, elements, dataob, "dataobjects", "dataobject", dataOBT, paramRequest);
+                    }
+                    addElem(doc, elProcess, "model", getStyleModel());
+                    // Add te javascript
+                    String script = "<script type=\"text/javascript\">\n"
+                            + "             Modeler.init('modeler', {mode: 'view', layerNavigation: false}, callbackHandler);\n"
+                            + "             var zoomFactor = 1.1;\n"
+                            + "             var panRate = 10;\n"
+                            + "             function callbackHandler() {\n"
+                            + "                 var strJSON = '" + data + "';\n"
+                            + "                 Modeler.loadProcess(strJSON);\n";
+                    if (subProcess != null) {// For SubProcess
+                        script += "             var obj = Modeler.getGraphElementByURI(null, \"" + subProcess.getURI() + "\");\n"
+                                + "             ToolKit.setLayer(obj.subLayer);\n";
+                    }
+                    script += "\n                 Modeler._svgSize = getDiagramSize();\n"
+                            + "                 fitToScreen();\n"
+                            + "             }\n"
+                            + "             function zoomin() {\n"
+                            + "                 var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                            + "                 var viewBoxValues = viewBox.split(' ');\n"
+                            + "\n"
+                            + "                 viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                            + "                 viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                            + "\n"
+                            + "                 viewBoxValues[2] /= zoomFactor;\n"
+                            + "                 viewBoxValues[3] /= zoomFactor;\n"
+                            + "\n"
+                            + "                 document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                            + "             }\n"
+                            + "\n"
+                            + "             function zoomout() {\n"
+                            + "                 var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                            + "                 var viewBoxValues = viewBox.split(' ');\n"
+                            + "\n"
+                            + "                 viewBoxValues[2] = parseFloat(viewBoxValues[2]);\n"
+                            + "                 viewBoxValues[3] = parseFloat(viewBoxValues[3]);\n"
+                            + "\n"
+                            + "                 viewBoxValues[2] *= zoomFactor;\n"
+                            + "                 viewBoxValues[3] *= zoomFactor;\n"
+                            + "\n"
+                            + "                 document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                            + "             }\n"
+                            + "\n"
+                            + "             function resetZoom() {\n"
+                            + "                 var el = document.getElementById(\"modeler\");\n"
+                            + "                 el.setAttribute('viewBox', '0 0 ' + $(\"#modeler\").parent().width() + ' ' + $(\"#modeler\").parent().height());\n"
+                            + "                 el.setAttribute('width', '1024');\n"
+                            + "                 el.setAttribute('height', '768');\n"
+                            + "             }\n"
+                            + "\n"
+                            + "             function handlePanning(code) {\n"
+                            + "                 var viewBox = document.getElementById(\"modeler\").getAttribute('viewBox');\n"
+                            + "                 var viewBoxValues = viewBox.split(' ');\n"
+                            + "                 viewBoxValues[0] = parseFloat(viewBoxValues[0]);\n"
+                            + "                 viewBoxValues[1] = parseFloat(viewBoxValues[1]);\n"
+                            + "\n"
+                            + "                 switch (code) {\n"
+                            + "                     case 'left':\n"
+                            + "                         viewBoxValues[0] += panRate;\n"
+                            + "                         break;\n"
+                            + "                     case 'right':\n"
+                            + "                         viewBoxValues[0] -= panRate;\n"
+                            + "                         break;\n"
+                            + "                     case 'up':\n"
+                            + "                         viewBoxValues[1] += panRate;\n"
+                            + "                         break;\n"
+                            + "                         case 'down':\n"
+                            + "                         viewBoxValues[1] -= panRate;\n"
+                            + "                         break;\n"
+                            + "                 }\n"
+                            + "                 document.getElementById(\"modeler\").setAttribute('viewBox', viewBoxValues.join(' '));\n"
+                            + "             }\n"
+                            + "\n"
+                            + "             function getDiagramSize() {\n"
+                            + "                 var cw = 0;\n"
+                            + "                 var ch = 0;\n"
+                            + "                 var fx = null;\n"
+                            + "                 var fy = null;\n"
+                            + "                 for (var i = 0; i < ToolKit.contents.length; i++) {\n"
+                            + "                     var obj = ToolKit.contents[i];\n"
+                            + "                     if (obj.typeOf && (obj.typeOf(\"GraphicalElement\") || obj.typeOf(\"Pool\"))) {\n"
+                            + "                         if (obj.layer === ToolKit.layer) {\n"
+                            + "                             if (obj.getX() > cw) {\n"
+                            + "                                 cw = obj.getX();\n"
+                            + "                                 fx = obj;\n"
+                            + "                             }\n"
+                            + "\n"
+                            + "                             if (obj.getY() > ch) {\n"
+                            + "                                 ch = obj.getY();\n"
+                            + "                                 fy = obj;\n"
+                            + "                             }\n"
+                            + "                         }\n"
+                            + "                     }\n"
+                            + "                 }\n"
+                            + "                 cw = cw + fx.getBBox().width;\n"
+                            + "                 ch = ch + fy.getBBox().height;\n"
+                            + "\n"
+                            + "                 var ret = {w: cw, h: ch};\n"
+                            + "                 return ret;\n"
+                            + "             }\n"
+                            + "\n"
+                            + "             function fitToScreen() {\n"
+                            + "                 resetZoom();\n"
+                            + "                 var ws = $(\"#modeler\").parent().width();\n"
+                            + "                 var hs = $(\"#modeler\").parent().height();\n"
+                            + "                 var wi = Modeler._svgSize.w;\n"
+                            + "                 var hi = Modeler._svgSize.h;\n"
+                            + "\n"
+                            + "                 if (wi > ws || hi > hs) {\n"
+                            + "                     var el = document.getElementById(\"modeler\");\n"
+                            + "                     el.setAttribute('viewBox', '0 0 ' + wi + ' ' + hi);\n"
+                            + "                     el.setAttribute('width', ws);\n"
+                            + "                     el.setAttribute('height', hs);\n"
+                            + "                 }\n"
+                            + "             }\n"
+                            + "     </script>";
+                    addElem(doc, elProcess, "script", script);
+
+                }
+            }
+        }
+        return doc;
+    }
+
+    public void addProcessElements(org.w3c.dom.Document doc, Element elements, ArrayList arrayList, String type, String subType, String title, SWBParamRequest paramRequest) throws UnsupportedEncodingException, IOException {
+        Element father = null;
+        String url = "";
+        String mode = paramRequest.getMode();
+        if (arrayList.size() > 0) {
+            father = doc.createElement("father");
+            elements.appendChild(father);
+            father.setAttribute("type", type);
+            father.setAttribute("title", title);
+            father.setAttribute("id", type + "menu");
+            father.setAttribute("url", "#" + type + "menu");
+            father.setAttribute("size", arrayList.size() + "");
+            Element son = null;
+            Iterator<GraphicalElement> iterator = SWBComparator.sortByDisplayName(arrayList.iterator(), paramRequest.getUser().getLanguage());
+            while (iterator.hasNext()) {
+                GraphicalElement ge = iterator.next();
+                son = doc.createElement("son");
+                father.appendChild(son);
+                son.setAttribute("title", ge.getTitle());
+                url = "#" + ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId();
+                if (ge instanceof SubProcess) {
+                    if (mode.equals("doExportDocument")) {
+                        url = removeAcent(ge.getTitle()) + ".html";
+                    } else {
+                        url = "?suri=" + URLEncoder.encode(((SubProcess) ge).getEncodedURI());
+                    }
+                }
+                son.setAttribute("id", ge.getSemanticObject().getSemanticClass().getName() + "" + ge.getId());
+                son.setAttribute("url", url);
+                addElem(doc, son, "documentation", ge.getDocumentation().getText());
+            }
+        }
+    }
+
+    private void addElem(org.w3c.dom.Document doc, Element parent, String elemName, String elemValue) {
+        if (elemValue != null) {
+            Element elem = doc.createElement(elemName);
+            elem.appendChild(doc.createTextNode(elemValue));
+            parent.appendChild(elem);
+        }
     }
 }
