@@ -214,6 +214,7 @@ public class PieChart extends GenericResource {
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
+            if(postIn != null){
             if (postIn.getPostSentimentalType() == 0) {
                 neutrals++;
                 neutralsArray.add(postIn);
@@ -225,6 +226,7 @@ public class PieChart extends GenericResource {
                 negativesArray.add(postIn);
             }
             totalArray.add(postIn);
+            }
         }
 
 
@@ -264,6 +266,7 @@ public class PieChart extends GenericResource {
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
+            if(postIn != null && postIn.getPostInSocialNetwork() != null ){
             if (filterGeneral.equals("all") || postIn.getPostInSocialNetwork().getTitle().equals(filterGeneral)) {
                 totalArray.add(postIn);
                 if (postIn.getPostSentimentalType() == 0) {
@@ -277,7 +280,7 @@ public class PieChart extends GenericResource {
                     negativesArray.add(postIn);
                 }
             }
-
+        }
         }
 
 
