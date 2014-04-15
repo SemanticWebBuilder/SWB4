@@ -394,7 +394,7 @@ public class Timeline extends GenericResource{
             String idStatus = request.getParameter("id");            
 
             try {
-                socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+                socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(objUri).getGenericInstance();
             }catch(Exception e){
                 //System.out.println("Error getting the SocialNetwork " + e);
                 log.error("Error getting the SocialNetwork ", e);
@@ -409,12 +409,14 @@ public class Timeline extends GenericResource{
                 
                 PostIn post = PostIn.getPostInbySocialMsgId(model, status.getId()+"");
                 PostIn postIn = null; //The post
-                if(post == null){                                                    
-                    postIn = MessageIn.ClassMgr.createMessageIn(model);
+                if(post == null){ 
+                    postIn = MessageIn.ClassMgr.createMessageIn(model);                    
                     postIn.setSocialNetMsgId(status.getId()+"");
                     postIn.setMsg_Text(status.getText());
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
+                    postIn.setPi_createdInSocialNet(status.getCreatedAt());
+                    postIn.setMsg_url("https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId()));
                     Calendar calendario = Calendar.getInstance();
                     postIn.setPi_created(calendario.getTime());
                     postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);
@@ -455,6 +457,7 @@ public class Timeline extends GenericResource{
                         socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
                         socialNetUser.setSnu_photoUrl(status.getUser().getBiggerProfileImageURL());
+                        socialNetUser.setUserUrl("https://twitter.com/" + status.getUser().getScreenName());
                         if(twitterUser != null){
                             socialNetUser.setCreated(twitterUser.getCreatedAt());
                             socialNetUser.setFollowers(twitterUser.getFollowersCount());
@@ -776,6 +779,8 @@ public class Timeline extends GenericResource{
                     postIn.setMsg_Text(status.getText());
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
+                    postIn.setPi_createdInSocialNet(status.getCreatedAt());
+                    postIn.setMsg_url("https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId()));
                     Calendar calendario = Calendar.getInstance();
                     postIn.setPi_created(calendario.getTime());
                     postIn.setPi_type(SWBSocialUtil.POST_TYPE_MESSAGE);                
@@ -804,6 +809,7 @@ public class Timeline extends GenericResource{
                         socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
                         socialNetUser.setSnu_id(status.getUser().getId()+"");
                         socialNetUser.setSnu_klout(userKloutScore);
+                        socialNetUser.setUserUrl("https://twitter.com/" + status.getUser().getScreenName());
                         //System.out.println("setting user name = " + status.getUser().getScreenName());
                         socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());

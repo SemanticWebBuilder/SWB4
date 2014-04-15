@@ -408,8 +408,6 @@ public class FacebookWall extends GenericResource {
                 //System.out.println("Response: " + fbResponse);
                 response.setRenderParameter("postID", postID);
                 response.setRenderParameter("suri", objUri);
-                //System.out.println("Reply-End");
-                //twitter.updateStatus(new StatusUpdate(answer).inReplyToStatusId(id));
                 response.setRenderParameter("repliedPost", "ok");
                 response.setMode("postSent");
             } catch (Exception ex) {
@@ -456,6 +454,7 @@ public class FacebookWall extends GenericResource {
                     socialNetUser.setSnu_id(postData.getJSONObject("from").getString("id"));
                     socialNetUser.setSnu_name(postData.getJSONObject("from").getString("name"));
                     socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
+                    socialNetUser.setUserUrl("https://www.facebook.com/" + postData.getJSONObject("from").getString("id"));
                     socialNetUser.setSnu_photoUrl("https://graph.facebook.com/" + postData.getJSONObject("from").getString("id") + "/picture?width=150&height=150");
                     socialNetUser.setCreated(new Date());
                     socialNetUser.setFollowers(0);
@@ -482,24 +481,6 @@ public class FacebookWall extends GenericResource {
                             } else if (!postData.isNull("story")) {
                                 story = (!postData.isNull("story")) ? postData.getString("story") : "";
                                 story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
-                                /*
-                                 if(story.contains("likes a photo")){
-                                 photoLike = getPostFromId(postData.getString("id"), "id,from,name,name_tags,picture,source,link,tags", facebook);
-                                 isAPhotoLike = true;
-                                 //System.out.println("THE RECOVERED OBJECT:" + jSONObject);
-                                 }else if(story.contains("likes a link")){
-                                 linkLike = getPostFromId(postData.getString("id"), "id,from,name,picture,link,tags,message", facebook);
-                                 System.out.println("\n\n\nLINKED LIKED:" +  linkLike);
-                                 isALinkLike = true;
-                                 }
-                                 if(story.contains("likes a status")){
-                                 statusLike = getPostFromId(postData.getString("id"), null, facebook);
-                                 isAStatusLike = true;
-                                 System.out.println("\n\n\nSTATUS LIKED:" +  statusLike);
-                                 if(statusLike.has("message")){
-                                 message = statusLike.getString("message");
-                                 }
-                                 }*/
                             }
                             if (!message.isEmpty()) {
                                 postIn.setMsg_Text(message);
@@ -518,20 +499,6 @@ public class FacebookWall extends GenericResource {
                             if (!postData.isNull("message")) {
                                 message = SWBSocialResUtil.Util.createHttpLink(postData.getString("message"));
                             }
-                            /*
-                             if(postData.has("link") && postData.has("name")){
-                             System.out.println("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");
-                             postIn.setTitle("<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>");//Link o Title
-                             if(!story.isEmpty())
-                             story = story + ": " + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";                            
-                             if(!message.isEmpty())
-                             message = message + ":" + "<a href=\"" + postData.getString("link") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
-
-                             }*/
-                            /*
-                             if(postData.has("description")){
-                             postIn.setDescription(postData.getString("description"));
-                             }*/
 
                             if (!message.isEmpty()) {
                                 postIn.setMsg_Text(message);
@@ -547,6 +514,17 @@ public class FacebookWall extends GenericResource {
                         postIn.setSocialNetMsgId(postData.getString("id"));
                         postIn.setPostInSocialNetwork(socialNetwork);
                         postIn.setPostInStream(null);
+                        String facebookDate = postData.getString("created_time");
+                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
+                        formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+
+                        Date postTime = formatter.parse(facebookDate);
+                        if(postTime.after(new Date())){
+                            postIn.setPi_createdInSocialNet(new Date());
+                        }else{
+                            postIn.setPi_createdInSocialNet(postTime);
+                        }                        
+                        postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postData.getString("id"));
                         postIn.setPostInSocialNetworkUser(socialNetUser);
                         Calendar calendario = Calendar.getInstance();
                         postIn.setPi_created(calendario.getTime());
@@ -571,22 +549,7 @@ public class FacebookWall extends GenericResource {
                             story = (!postData.isNull("story")) ? postData.getString("story") : "";
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                         }
-
-                        /*if(postData.has("source") && postData.has("name")){
-                         if(!story.isEmpty())
-                         story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
-                         if(!message.isEmpty())
-                         message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
-                         }else if(postData.has("source") && !postData.has("name")){
-                         if(!story.isEmpty())
-                         story = story + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
-                         if(!message.isEmpty())
-                         message = message + ": " + "<a href=\"" + postData.getString("source") + "\" target=\"_blank\">View video</a>";
-                         }*/
-                        /*
-                         if(postData.has("description")){
-                         postIn.setDescription(postData.getString("description"));
-                         }*/
+                      
 
                         //System.out.println("THE MESSAGE******\n" + message);
                         //System.out.println("THE STORY******\n" + story);
@@ -611,6 +574,17 @@ public class FacebookWall extends GenericResource {
                         postIn.setSocialNetMsgId(postData.getString("id"));
                         postIn.setPostInSocialNetwork(socialNetwork);
                         postIn.setPostInStream(null);
+                        String facebookDate = postData.getString("created_time");
+                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
+                        formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+
+                        Date postTime = formatter.parse(facebookDate);
+                        if(postTime.after(new Date())){
+                            postIn.setPi_createdInSocialNet(new Date());
+                        }else{
+                            postIn.setPi_createdInSocialNet(postTime);
+                        }                        
+                        postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postData.getString("id"));
                         postIn.setPostInSocialNetworkUser(socialNetUser);
                         Calendar calendario = Calendar.getInstance();
                         postIn.setPi_created(calendario.getTime());
@@ -637,23 +611,6 @@ public class FacebookWall extends GenericResource {
                             story = getTagsFromPost(postData.getJSONObject("story_tags"), story);
                         }
 
-                        /*if(postData.has("picture") && postData.has("name")){
-                         if(!story.isEmpty())
-                         story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
-                         if(!message.isEmpty())
-                         message = message + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">" + postData.getString("name") + "</a>";
-                         }else if(postData.has("picture") && !postData.has("name")){
-                         if(!story.isEmpty())
-                         story = story + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
-                         if(!message.isEmpty())
-                         message = message + ": " + "<a href=\"" + postData.getString("picture").replace("_s.", "_n.") + "\" target=\"_blank\">View picture</a>";
-                         }*/
-
-
-                        /*
-                         if(postData.has("description")){
-                         postIn.setDescription(postData.getString("description"));
-                         }*/
                         //System.out.println("\tMESSAGE:" + message);
                         //System.out.println("\tSTORY:" + story);
                         if (!message.isEmpty()) {
@@ -674,6 +631,17 @@ public class FacebookWall extends GenericResource {
                         postIn.setSocialNetMsgId(postData.getString("id"));
                         postIn.setPostInSocialNetwork(socialNetwork);
                         postIn.setPostInStream(null);
+                        String facebookDate = postData.getString("created_time");
+                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
+                        formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+
+                        Date postTime = formatter.parse(facebookDate);
+                        if(postTime.after(new Date())){
+                            postIn.setPi_createdInSocialNet(new Date());
+                        }else{
+                            postIn.setPi_createdInSocialNet(postTime);
+                        }                        
+                        postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postData.getString("id"));
                         postIn.setPostInSocialNetworkUser(socialNetUser);
                         Calendar calendario = Calendar.getInstance();
                         postIn.setPi_created(calendario.getTime());
@@ -1007,6 +975,7 @@ public class FacebookWall extends GenericResource {
                         socialNetUser.setSnu_name(postData.getJSONObject("from").getString("name"));
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
                         socialNetUser.setSnu_photoUrl("https://graph.facebook.com/" + postData.getJSONObject("from").getString("id") + "/picture?width=150&height=150");
+                        socialNetUser.setUserUrl("https://www.facebook.com/" + postData.getJSONObject("from").getString("id"));
                         socialNetUser.setCreated(new Date());
                         //TODO: Llamar al getUserInfoById
                         socialNetUser.setFollowers(0);
@@ -1061,14 +1030,6 @@ public class FacebookWall extends GenericResource {
                             //System.out.println("********************LINK guardado OK");
                         }
 
-                        //Information of post IN
-//                        postIn.setSocialNetMsgId(postData.getString("id"));
-//                        postIn.setPostInSocialNetwork(socialNetwork);
-//                        postIn.setPostInStream(null);
-//                        postIn.setPostInSocialNetworkUser(socialNetUser);
-//                        Calendar calendario = Calendar.getInstance();
-//                        postIn.setPi_created(calendario.getTime());
-
                     } else if (postType.equals("video") || postType.equals("swf")) {
                         postIn = VideoIn.ClassMgr.createVideoIn(model);
                         postIn.setPi_type(SWBSocialUtil.POST_TYPE_VIDEO);
@@ -1099,14 +1060,6 @@ public class FacebookWall extends GenericResource {
                             videoIn.setVideo(postData.getString("source"));
                         }
 
-                        //Information of post IN
-//                        postIn.setSocialNetMsgId(postData.getString("id"));
-//                        postIn.setPostInSocialNetwork(socialNetwork);
-//                        postIn.setPostInStream(null);
-//                        postIn.setPostInSocialNetworkUser(socialNetUser);
-//                        Calendar calendario = Calendar.getInstance();
-//                        postIn.setPi_created(calendario.getTime());
-
                         System.out.println("********************VIDEO guardado OK");
                         //response.setRenderParameter("postUri", postIn.getURI());
                     } else if (postType.equals("photo")) {
@@ -1136,13 +1089,6 @@ public class FacebookWall extends GenericResource {
                             photoIn.addPhoto(photo);
                         }
 
-//                        //Information of post IN
-//                        postIn.setSocialNetMsgId(postData.getString("id"));
-//                        postIn.setPostInSocialNetwork(socialNetwork);
-//                        postIn.setPostInStream(null);
-//                        postIn.setPostInSocialNetworkUser(socialNetUser);
-//                        Calendar calendario = Calendar.getInstance();
-//                        postIn.setPi_created(calendario.getTime());                        
                         System.out.println("********************STATUS guardado OK");
                         //response.setRenderParameter("postUri", postIn.getURI());
                     }
@@ -1151,6 +1097,23 @@ public class FacebookWall extends GenericResource {
                     postIn.setSocialNetMsgId(postData.getString("id"));
                     postIn.setPostInSocialNetwork(socialNetwork);
                     postIn.setPostInStream(null);
+                    String facebookDate = postData.getString("created_time");
+                    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
+                    formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
+
+                    Date postTime = formatter.parse(facebookDate);
+                    if(postTime.after(new Date())){
+                        postIn.setPi_createdInSocialNet(new Date());
+                    }else{
+                        postIn.setPi_createdInSocialNet(postTime);
+                    }
+                    String postId = "";
+                    if(postData.getString("id").contains("_")){
+                        postId = postData.getString("id").split("_")[1];
+                    }else{
+                        postId = postData.getString("id");
+                    }
+                    postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postId);
                     postIn.setPostInSocialNetworkUser(socialNetUser);
                     Calendar calendario = Calendar.getInstance();
                     postIn.setPi_created(calendario.getTime());
