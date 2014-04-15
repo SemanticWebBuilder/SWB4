@@ -286,6 +286,7 @@ public class ReportGenerator extends GenericResource {
         output.append("        titleSelect.options.add(optionToAdd);\n");
         output.append("        propsSelect.disabled = true;\n");
         output.append("      }\n");
+        output.append("      disableRelated(elementSelect);\n");
         output.append("    }\n");
         SWBResourceURL urlStatus = paramRequest.getRenderUrl();
         urlStatus.setMode("statusList");
@@ -355,6 +356,28 @@ public class ReportGenerator extends GenericResource {
         output.append("      } else {\n");
         output.append("        return;\n");
         output.append("      }\n");
+        output.append("    }\n");
+        output.append("    function disableRelated(elementSelect) {\n");
+        output.append("      var forma = elementSelect.form;\n");
+        output.append("      for (var i = 0; i < forma.elements.length; i++) {\n");
+        output.append("        if (elementSelect.selectedIndex > 0) {\n");
+        output.append("          if (forma.elements[i].type == \"checkbox\" && forma.elements[i].value.indexOf(elementSelect.value) != -1) {\n");
+        output.append("            forma.elements[i].checked = false;\n");
+        output.append("            forma.elements[i].disabled = true;\n");
+        output.append("          } else {\n");
+        output.append("            forma.elements[i].checked = false;\n");
+        output.append("            forma.elements[i].disabled = false;\n");
+        output.append("          }\n");
+        output.append("        } else {\n");
+        output.append("          if (forma.elements[i].type == \"checkbox\") {\n");
+        output.append("            forma.elements[i].checked = false;\n");
+        output.append("            forma.elements[i].disabled = false;\n");
+        output.append("          }\n");
+        output.append("        }\n");
+        output.append("      }\n");
+        output.append("        \n");
+        output.append("        \n");
+        output.append("        \n");
         output.append("    }\n");
         output.append("  </script>");
         out.println(output.toString());
@@ -510,7 +533,7 @@ public class ReportGenerator extends GenericResource {
         
         request.setAttribute("websiteId", paramRequest.getWebPage().getWebSiteId());
         
-        output.append("<table>\n");
+        output.append("<table border=\"1\">\n");
         output.append("  <tr>\n");
         for (SemanticProperty prop : criteria.getProps2Show()) {
             output.append("    <th>");
@@ -549,6 +572,13 @@ public class ReportGenerator extends GenericResource {
                 itemsCount++;
             }
             output.append("  </tr>\n");
+        }
+        if (results.isEmpty()) {
+            output.append("  <tr><td colspan=\"");
+            output.append(criteria.getProps2Show().size());
+            output.append("\">");
+            output.append(paramRequest.getLocaleString("msg_noResults"));
+            output.append("</td></tr>\n");
         }
         output.append("</table>");
         out.print(output.toString());
@@ -929,6 +959,7 @@ public class ReportGenerator extends GenericResource {
                             mustBeAdded = true;
                         }
                     } else {
+                        System.out.println(" - - - Evaluar criterio de Estado +++");
                         //el estatus seleccionado, debe estar asignado en el intervalo indicado
                         Period thisPeriod = criteria.getInitialPeriod();
                         boolean intervalFinished = false;
@@ -954,8 +985,11 @@ public class ReportGenerator extends GenericResource {
                                     periodStatus = measure.getEvaluation();
                                 }
                             }
+                            System.out.println("  - Evaluando periodo: " + periodStatus != null ? periodStatus.getPeriod() : "-");
                             //Si los estados de criterios y del periodo evaluado son iguales, se debe agregar el elemento
                             if (periodStatus != null && periodStatus.getStatus().equals(criteria.getStatus())) {
+                                System.out.println("Con estatus coincidente: " + periodStatus.getStatus().getTitle() + 
+                                        ", en periodo: " + periodStatus.getPeriod().getTitle());
                                 mustBeAdded = true;
                                 break;
                             }
@@ -996,6 +1030,7 @@ public class ReportGenerator extends GenericResource {
                 //si los periodos no se indicaron, no es filtro de seleccion
                 mustBeAdded = true;
             }
+            System.out.println(" - - - Evaluacion de periodos y estado: " + mustBeAdded);
             //Se evalua filtro de Champion
             if (criteria.getChampion() != null && mustBeAdded) {
                 mustBeAdded = false;
@@ -1015,9 +1050,10 @@ public class ReportGenerator extends GenericResource {
                     }
                     //para iniciativas y entregables no se consideran relaciones indirectas para obtener el champion
                 }
-            } else if (criteria.getChampion() == null) {
+            } else if (criteria.getChampion() == null && mustBeAdded) {
                 mustBeAdded = true;
             }
+            System.out.println(" - - - Evaluacion de champion: " + mustBeAdded);
             //se evalua filtro de Sponsor
             if (criteria.getSponsor() != null && mustBeAdded) {
                 mustBeAdded = false;
@@ -1040,10 +1076,11 @@ public class ReportGenerator extends GenericResource {
                         }
                     }
                 }
-            } else if (criteria.getSponsor() == null) {
+            } else if (criteria.getSponsor() == null && mustBeAdded) {
                 mustBeAdded = true;
             }
             
+            System.out.println(" - - - Evaluacion de sponsor: " + mustBeAdded);
             if (mustBeAdded) {
                 processed.add(inTurn.getSemanticObject());
                 if (criteria.getRelatedElements() != null) {
@@ -1054,8 +1091,10 @@ public class ReportGenerator extends GenericResource {
         }
         //TODO: eliminar despues de pruebas
         System.out.println("\nElementos a mostrar en reporte");
+        count = 0;
         for (SemanticObject so: processed) {
             System.out.println("   - " + so.getURI());
+            count++;
         }
         System.out.println("Conjunto de " + count + " elementos iniciales");
         
