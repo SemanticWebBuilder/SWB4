@@ -619,8 +619,10 @@ SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\
         // Tooltip
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
-        SVGjs.append(" txt = createText('',0,0,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('',0,0,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'id','tooltip');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'font-weight','bold');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'fill','#000000');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'visibility','hidden');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
 //        SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
