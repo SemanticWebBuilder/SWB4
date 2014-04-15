@@ -193,7 +193,6 @@ public class BSCTest {
     
     public static final String WORD_SPACING = "14 14 14 14 14 14 14 14 14 14";
     
-    public static final String HEADER_PREFIX = "head_";
     public static final int MARGEN_LEFT = 20; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 10; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
@@ -204,6 +203,8 @@ public class BSCTest {
     public static final int HEADER_2 = 16; // tamaño de fuente para subtítulo
     public static final int HEADER_3 = 14; // tamaño de fuente para coordenadas
     public static final int HEADER_4 = 12; // tamaño de fuente para texto
+    
+    public static final int CELL_WIDTH = 100; // ancho de las celdas de la tabla de riesgos
     
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_LEFT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
@@ -225,8 +226,8 @@ public class BSCTest {
 //        Document documentBSC = scorecard.getDom();
 //        setWidth(assertValue(base.getAttribute("width", "1024")));
 //        setHeight(assertValue(base.getAttribute("height", "1400")));
-        int width = 1024;
-        int height = 1400;
+        int width = 1050;
+        int height = 800;
         //final Period period = getPeriod(request);
         //Document documentBSC = scorecard.getDom(period);
         Element bsc = documentBSC.getDocumentElement();
@@ -308,8 +309,8 @@ public class BSCTest {
         
         Element root = map.getDocumentElement();
         XPath xPath = XPathFactory.newInstance().newXPath();        
-        width = assertValue(root.getAttribute("width"), 1024);
-        height = assertValue(root.getAttribute("height"), 1400); 
+        width = assertValue(root.getAttribute("width"), 1050);
+        height = assertValue(root.getAttribute("height"), 800); 
         StringBuilder SVGjs = new StringBuilder();
         
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
@@ -321,6 +322,7 @@ public class BSCTest {
         SVGjs.append(" svg.setAttributeNS(null,'height','"+height+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0,"+width+","+height+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'onload','init(evt)');").append("\n");
         SVGjs.append(" document.body.appendChild(svg);").append("\n");
         
         SVGjs.append(" var defs = document.createElementNS(SVG_, 'defs');").append("\n");
@@ -463,10 +465,15 @@ public class BSCTest {
             if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
                 String rid = attrs.getNamedItem("id").getNodeValue();
+                String prefix = attrs.getNamedItem("prefix").getNodeValue();
                 int impact = Integer.parseInt(attrs.getNamedItem("impact").getNodeValue());
                 int likehood = Integer.parseInt(attrs.getNamedItem("likehood").getNodeValue());
                 //SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*30)+","+(aux-likehood*30)+",6,'#000000',1,1,1,1);").append("\n");
                 SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*24)+","+(aux-likehood*24)+",5,'#000000',1,'none',1,1);").append("\n");
+                SVGjs.append(" pto.setAttributeNS(null,'id','"+prefix+" ("+impact+","+likehood+")');").append("\n");
+SVGjs.append(" pto.addEventListener('mousemove', showTooltip, false);").append("\n");
+SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\n");
+                SVGjs.append("").append("\n");
                 SVGjs.append(" g.appendChild(pto);").append("\n");
             }
         }
@@ -486,17 +493,19 @@ public class BSCTest {
         SVGjs.append(" svg.appendChild(txt);").append("\n");
                 
         // Tabla de riesgos
-        // Calcular la posición del rectángulo del diagrama para translate la tabla de riesgos
-        // Caja de la gráfica
+        // Calcular la posición del rectángulo del diagrama para trasladar la tabla de riesgos (transform=translate)
+        // Recuadro de la gráfica
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
         SVGjs.append(" var w = Math.round(rect.width.baseVal.value);").append("\n");
         SVGjs.append(" x = x + w + "+MARGEN_LEFT+";").append("\n");
         
+        
+        // Listado de riesgos
         x_ = 0;
         y_ = 0;
-        w_ = 100;
+        w_ = CELL_WIDTH;
         h_ = 0;
-        // Listado de riesgos
+        
         SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
         SVGjs.append(" svg.appendChild(g);").append("\n");
         SVGjs.append(" g.setAttributeNS(null,'transform','translate('+x+','+y+')');").append("\n");
@@ -546,7 +555,9 @@ public class BSCTest {
         SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
         SVGjs.append(" }").append("\n");
+        // fin Encabezado tabla
         
+        // Lista de riesgos
         for(int j=0; j<nlRisk.getLength(); j++) {
             node = nlRisk.item(j);
             if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
@@ -556,6 +567,7 @@ public class BSCTest {
                 int impact = Integer.parseInt(attrs.getNamedItem("impact").getNodeValue());
                 int likehood = Integer.parseInt(attrs.getNamedItem("likehood").getNodeValue());
                 String title = node.getFirstChild().getNodeValue();
+                // prefijo del riesgo
                 SVGjs.append(" x_ = 0;").append("\n");
                 SVGjs.append(" y_ = y_ + h_ + "+PADDING_LEFT+";").append("\n");
                 SVGjs.append(" txt = createText('"+prefix+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
@@ -565,7 +577,7 @@ public class BSCTest {
                 SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',1,'#ffffff',1);").append("\n");
                 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 SVGjs.append(" h_ = rect.height.baseVal.value;").append("\n");
-                
+                // título del riesgo
                 SVGjs.append(" x_ = x_+rect.width.baseVal.value+"+PADDING_LEFT+";").append("\n");
                 SVGjs.append(" txt = createText('"+title+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
                 SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -576,9 +588,10 @@ public class BSCTest {
                 SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
                 SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
                 SVGjs.append(" }").append("\n");
-                
+                // impacto del riesgo
                 SVGjs.append(" x_ = x_+rect.width.baseVal.value+"+PADDING_LEFT+";").append("\n");
-                SVGjs.append(" txt = createText('"+impact+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('"+impact+"',x_+"+(CELL_WIDTH-BOX_SPACING_RIGHT)+",y_,"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt.setAttributeNS(null,'text-anchor','end');").append("\n");
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
@@ -587,9 +600,10 @@ public class BSCTest {
                 SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
                 SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
                 SVGjs.append(" }").append("\n");
-                
+                // probabilidad del riesgo
                 SVGjs.append(" x_ = x_+rect.width.baseVal.value+"+PADDING_LEFT+";").append("\n");
-                SVGjs.append(" txt = createText('"+likehood+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('"+likehood+"',x_+"+(CELL_WIDTH-BOX_SPACING_RIGHT)+",y_,"+HEADER_3+",'Verdana');").append("\n");
+                SVGjs.append(" txt.setAttributeNS(null,'text-anchor','end');").append("\n");
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
@@ -601,6 +615,15 @@ public class BSCTest {
             }
         }
         
+        
+        // Tooltip
+        SVGjs.append("").append("\n");
+        SVGjs.append("").append("\n");
+        SVGjs.append(" txt = createText('',0,0,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'id','tooltip');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'visibility','hidden');").append("\n");
+        SVGjs.append(" svg.appendChild(txt);").append("\n");
+        
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("//---------------").append("\n");
@@ -608,6 +631,26 @@ public class BSCTest {
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
+        
+        
+        
+        
+
+SVGjs.append(" function showTooltip(evt) {").append("\n");
+//SVGjs.append("    evt.target.style.stroke = '#0000FF';").append("\n");
+//SVGjs.append("    evt.target.style.strokeWidth = '7';").append("\n");
+//SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',1);").append("\n");
+SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
+SVGjs.append("   tooltip.setAttributeNS(null,'x',evt.clientX+5);").append("\n");
+SVGjs.append("   tooltip.setAttributeNS(null,'y',evt.clientY+5);").append("\n");
+SVGjs.append("   tooltip.textContent = '('+evt.target.getAttribute('x')+','+evt.target.getAttribute('y')+')';").append("\n");
+SVGjs.append("   tooltip.setAttributeNS(null,'visibility','visible');").append("\n");
+SVGjs.append(" }").append("\n");
+
+SVGjs.append(" function hideTooltip(evt) {").append("\n");
+SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
+SVGjs.append("   tooltip.setAttributeNS(null,'visibility','hidden');").append("\n");
+SVGjs.append(" }").append("\n");
         
         
         // funciones
