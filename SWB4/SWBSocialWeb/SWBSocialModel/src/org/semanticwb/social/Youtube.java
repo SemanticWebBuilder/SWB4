@@ -1742,7 +1742,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 if(!words[i].trim().isEmpty()){ 
                     tmpString += words[i];
                     if ((i + 1) < wordsNumber) {
-                        tmpString += " | ";
+                        tmpString += "|";
                     }
                 }
             }
