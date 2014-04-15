@@ -91,7 +91,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
             filtros = value;
         }
 
-        System.out.println("EN EL RECURSO: "+filtros);
+        //System.out.println("EN EL RECURSO: "+filtros);
 
         String multiple = "false;";        
         if (!"view".equals(mode)) {
@@ -233,7 +233,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                 }
             }
         }
-        System.out.println("Entra a SocialFileUpload/renderElement-1:" + buffer.toString());
+        //System.out.println("Entra a SocialFileUpload/renderElement-1:" + buffer.toString());
         return buffer.toString();
     }
 
