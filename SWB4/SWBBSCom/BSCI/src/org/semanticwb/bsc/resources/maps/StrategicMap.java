@@ -1776,21 +1776,8 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder toReturn = new StringBuilder();
         String surl = "";
-        Resource base2 = null;
+        Resource base2 = getResourceBase();
         String icon = "";
-        WebSite ws = paramRequest.getWebPage().getWebSite();
-        String nameClass = PDFExportable.PDF_StrategyMap;
-        Iterator<Resource> itp = ws.listResources();
-        while (itp.hasNext()) {
-            Resource resource = itp.next();
-            String itemType = resource.getData(PDFExportable.bsc_itemType);
-            if (itemType != null && itemType.equals(nameClass)) {
-                if (resource.isActive()) {
-                    base2 = resource;
-                    break;
-                }
-            }
-        }
 
         if (base2 != null) {
             Iterator<Resourceable> res = base2.listResourceables();
