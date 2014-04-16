@@ -14,6 +14,7 @@ import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Perspective;
 import org.semanticwb.bsc.element.Theme;
+import org.semanticwb.bsc.tracing.Risk;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.w3c.dom.Attr;
@@ -104,6 +105,20 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                         }            
                                                                     });
         return validPerspectives;
+    }
+    
+    public List<Risk> listValidRisks() {
+        List<Risk> validRisks = SWBUtils.Collections.filterIterator(listRisks(), new GenericFilterRule<Risk>() {
+                                                                        @Override
+                                                                        public boolean filter(Risk r) {
+                                                                            if(r==null) {
+                                                                                return true;
+                                                                            }
+                                                                            User user = SWBContext.getSessionUser();
+                                                                            return !r.isValid() || !user.haveAccess(r);
+                                                                        }            
+                                                                    });
+        return validRisks;
     }
     
     public Document getDom()
@@ -278,6 +293,24 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                 }
             }
         }
+        
+        
+        // lista de riesgos
+        List<Risk> risks = listValidRisks();
+        if(!risks.isEmpty()) {
+            Element erskgp = doc.createElement("risks");
+            eroot.appendChild(erskgp);
+            for(Risk r:risks) {
+                e = doc.createElement("risk");
+                e.setAttribute("id", r.getId());
+                e.setAttribute("prefix", r.getPrefix());
+                e.setAttribute("likehood", Integer.toString(r.getFinAssessmentLikelihood()));
+                e.setAttribute("impact", Integer.toString(r.getFinAssessmentImpactLevel()));
+                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle()):r.getDisplayTitle(lang)));
+                erskgp.appendChild(e);
+            }
+        }
+        
         return doc;
     }
     
@@ -459,6 +492,23 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                 }
             }
         }
+        
+        //riesgos
+        List<Risk> risks = listValidRisks();
+        if(!risks.isEmpty()) {
+            Element rsksgroup = doc.createElement("riskgroup");
+            eroot.appendChild(rsksgroup);
+            for(Risk r:risks) {
+                e = doc.createElement("risk");
+                e.setAttribute("id", r.getId());
+                e.setAttribute("prefix", r.getPrefix());
+                e.setAttribute("likehood", Integer.toString(r.getFinAssessmentLikelihood()));
+                e.setAttribute("impact", Integer.toString(r.getFinAssessmentImpactLevel()));
+                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle()):r.getDisplayTitle(lang)));
+                rsksgroup.appendChild(e);
+            }
+        }
+        
         return doc;
     }
 
