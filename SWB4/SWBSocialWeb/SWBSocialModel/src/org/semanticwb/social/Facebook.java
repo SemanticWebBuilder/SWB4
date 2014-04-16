@@ -69,11 +69,32 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * @param stream - phrases to search delimited by pipe
      * @return Formated phrases.
      */
-    private String getPhrases(Stream stream) {
-        String parsedString = null;        
-        String sourceString  = stream.getPhrase();
-        if (sourceString != null && !sourceString.trim().isEmpty()) {            
-            parsedString = sourceString.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for only one space
+    private String getPhrases(String phrase) {
+        String parsedString = null;
+        HashSet<String> parsedPhrases = new HashSet<String>();
+        if (phrase != null && !phrase.isEmpty()) {
+            parsedString = "";
+            phrase = phrase.trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+            String[] phrasesStream = phrase.split(" "); //Delimiter
+            String tmp;
+            int noOfPhrases = phrasesStream.length;
+            for (int i = 0; i < noOfPhrases; i++) {
+                if (!phrasesStream[i].trim().isEmpty()) {
+                    tmp = phrasesStream[i].trim().replaceAll("\\s+", " "); //replace multiple spaces beetwen words for one only one space
+                    parsedPhrases.add(tmp);
+                }
+            }
+
+            Iterator<String> words = parsedPhrases.iterator();
+            noOfPhrases = parsedPhrases.size();
+            int i = 0;
+            while (words.hasNext()) {
+                parsedString += words.next();
+                if ((i + 1) < noOfPhrases) {
+                    parsedString += ",";
+                }
+                i++;
+            }
         }
         System.out.println("PARSED STRING:"  + parsedString);
         return parsedString;
@@ -96,7 +117,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
-        String phrasesInStream = getPhrases(stream);
+        String phrasesInStream = getPhrases(stream.getPhrase());
         if (phrasesInStream == null || phrasesInStream.isEmpty()) {
             return;
         }
@@ -256,10 +277,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                          Pudo haber agregado un nuevo termino y trajo resultados, debe de guardarse
                          Pudo haberse quitado un termino del stream entonces debe de removerse del nextdatetosearch
                          */
-                        //String phrasesInStream = stream.getPhrase() != null ? stream.getPhrase() : "";
-                        String phrasesInStream = getPhrases(stream);
-                        String[] phrasesArray = new String[1];//phrasesInStream.split(",");
-                        phrasesArray[0] = phrasesInStream;
+                        
+                        String phrasesInStream = getPhrases(stream.getPhrase());
+                        String[] phrasesArray = phrasesInStream.split(",");
                         String[] oldLimits = socialStreamSerch.getNextDatetoSearch().split(":");
                         String[] newLimits = limits.toString().split(":");
                         String finalLimits = "";
@@ -358,6 +378,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //Se obtienen los limites desde los cuales se haran consultas en Facebook
                 SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
                 if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
+                    System.out.println("PACONE:" + socialStreamSerch.getNextDatetoSearch() + "");
                     String[] phraseElements = socialStreamSerch.getNextDatetoSearch().split(":");
                     for (int i = 0; i < phraseElements.length; i++) {
                         String[] pair = phraseElements[i].split("=");
