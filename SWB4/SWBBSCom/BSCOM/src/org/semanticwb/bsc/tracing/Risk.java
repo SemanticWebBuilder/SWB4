@@ -1,10 +1,10 @@
 package org.semanticwb.bsc.tracing;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import org.semanticwb.platform.SemanticObject;
 
 public class Risk extends org.semanticwb.bsc.tracing.base.RiskBase {
@@ -21,45 +21,12 @@ public class Risk extends org.semanticwb.bsc.tracing.base.RiskBase {
     public String getPrefix() {
         String prefix = super.getPrefix();
         if (prefix == null) {
-            prefix = getConsecutive();
-            setPrefix(prefix);
+            setPrefix(Calendar.getInstance().get(Calendar.YEAR)+"_"+getConsecutive());
+            setYearRisk(Calendar.getInstance().get(Calendar.YEAR));
         }
         return prefix;
     }
-
-    /**
-     * Obtiene el siguiente prefijo consecutivo para un Riesgo.
-     * @return el objeto String que representa el siguiente prefijo para un Riesgo
-     */
-    private String getConsecutive() {
-        String consecutive = "";
-        List map = new ArrayList();
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        Iterator<SemanticObject> it = getBSC().getSemanticModel()
-                .listSubjects(bsc_yearRisk, year + "");
-        while (it.hasNext()) {
-            SemanticObject obj = it.next();
-            String prefix = obj.getProperty(bsc_prefix, false);
-            if (prefix != null && prefix.lastIndexOf("_") > -1) {
-                prefix = prefix.substring(prefix.lastIndexOf("_") + 1,
-                        prefix.length());
-                int intPrefix = Integer.parseInt(prefix);
-                map.add(intPrefix);
-            }
-        }
-        try {
-            Collections.sort(map);
-            int index = Integer.parseInt(map.get(map.size() - 1)
-                    .toString());
-            index++;
-            consecutive = year + "_" + index;
-        } catch (Exception ex) {
-            consecutive = year + "_" + "1";
-        }
-        return consecutive;
-    }
-
+    
     /**
      * Almacena el prefijo del Riesgo actual.
      * @param value el objeto String que representa el prefijo de un Riesgo
@@ -67,7 +34,33 @@ public class Risk extends org.semanticwb.bsc.tracing.base.RiskBase {
     @Override
     public void setPrefix(String value) {
         super.setPrefix(value);
-        String prefix = value.substring(0, value.lastIndexOf("_"));
-        setYearRisk(prefix);
+    }
+
+    /**
+     * Obtiene el siguiente prefijo consecutivo para un Riesgo.
+     * @return el objeto String que representa el siguiente prefijo para un Riesgo
+     */
+    private synchronized int getConsecutive() {
+        int consecutive = 0;
+        SortedSet<Integer> map = new TreeSet<Integer>();
+        Iterator<SemanticObject> it = getBSC().getSemanticModel().listSubjects(Risk.bsc_yearRisk, Calendar.getInstance().get(Calendar.YEAR));
+        while (it.hasNext()) {
+            SemanticObject obj = it.next();
+            String prefix = obj.getProperty(Risk.bsc_prefix, false);
+            if(prefix != null && prefix.lastIndexOf("_") > -1) {
+                prefix = prefix.substring(prefix.lastIndexOf("_") + 1);
+                int serial = Integer.parseInt(prefix);
+                map.add(serial);
+            }
+        }
+        //Collections.sort(map);
+        try {
+            consecutive = map.last();  //map.get(map.size() - 1;
+        }catch(NoSuchElementException nse) {
+            consecutive = 0;
+        }finally {
+            consecutive++;
+        }
+        return consecutive;
     }
 }
