@@ -71,6 +71,11 @@
             node1.put("value2", "" + round(intPorcentajePositive));
             node1.put("color", "#008000");
             node1.put("chartclass", "possClass");
+            JSONObject joc = new JSONObject();
+            joc.put("positivos", "" + positives);
+            joc.put("negativos", "" + negatives);
+            joc.put("neutros", "" + neutrals);
+            node1.put("valor", joc);
             node.put(node1);
         }
         if (intPorcentajeNegative > 0) {
@@ -80,6 +85,11 @@
             node2.put("value2", "" + round(intPorcentajeNegative));
             node2.put("color", "#FF0000");
             node2.put("chartclass", "negClass");
+            JSONObject joc = new JSONObject();
+            joc.put("positivos", "" + positives);
+            joc.put("negativos", "" + negatives);
+            joc.put("neutros", "" + neutrals);
+            node2.put("valor", joc);
             node.put(node2);
         }
         if (intPorcentajeNeutral > 0) {
@@ -89,6 +99,11 @@
             node3.put("value2", "" + round(intPorcentajeNeutral));
             node3.put("color", "#FFD700");
             node3.put("chartclass", "neuClass");
+            JSONObject joc = new JSONObject();
+            joc.put("positivos", "" + positives);
+            joc.put("negativos", "" + negatives);
+            joc.put("neutros", "" + neutrals);
+            node3.put("valor", joc);
             node.put(node3);
         }
 
@@ -100,6 +115,11 @@
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
             node3.put("chartclass", "neuClass");
+            JSONObject joc = new JSONObject();
+            joc.put("positivos", "" + 0);
+            joc.put("negativos", "" + 0);
+            joc.put("neutros", "" + 0);
+            node3.put("valor", joc);
             node.put(node3);
         }
         return node;
