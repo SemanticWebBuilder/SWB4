@@ -371,7 +371,7 @@ public class ReportGenerator extends GenericResource {
         output.append("        } else {\n");
         output.append("          if (forma.elements[i].type == \"checkbox\") {\n");
         output.append("            forma.elements[i].checked = false;\n");
-        output.append("            forma.elements[i].disabled = false;\n");
+        output.append("            forma.elements[i].disabled = true;\n");
         output.append("          }\n");
         output.append("        }\n");
         output.append("      }\n");
