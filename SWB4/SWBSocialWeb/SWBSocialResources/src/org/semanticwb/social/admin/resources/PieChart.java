@@ -16,6 +16,8 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
@@ -92,7 +94,7 @@ public class PieChart extends GenericResource {
             doPreview(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("showGraphBar") || paramRequest.getMode().equals("anioMes")) {
             showGraphBar(request, response, paramRequest);
-        }  else if (paramRequest.getMode().equals("exportExcel")) {
+        } else if (paramRequest.getMode().equals("exportExcel")) {
             try {
                 doGenerateReport(request, response, paramRequest);
             } catch (Exception e) {
@@ -174,13 +176,12 @@ public class PieChart extends GenericResource {
 
         if (type.equals("socialNetwork")) {
             setso = getSocialNetwork(suri, lang, filterGeneral, filter);
+        } else if (type.equals("graphBar")) {
+            setso = getGraphBar(request, suri, lang, filterGeneral, filter);
         } else {
             setso = getListSentiment(suri, lang, filter);
 
         }
-
-
-
 
         try {
 
@@ -214,18 +215,18 @@ public class PieChart extends GenericResource {
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if(postIn != null){
-            if (postIn.getPostSentimentalType() == 0) {
-                neutrals++;
-                neutralsArray.add(postIn);
-            } else if (postIn.getPostSentimentalType() == 1) {
-                positives++;
-                positivesArray.add(postIn);
-            } else if (postIn.getPostSentimentalType() == 2) {
-                negatives++;
-                negativesArray.add(postIn);
-            }
-            totalArray.add(postIn);
+            if (postIn != null) {
+                if (postIn.getPostSentimentalType() == 0) {
+                    neutrals++;
+                    neutralsArray.add(postIn);
+                } else if (postIn.getPostSentimentalType() == 1) {
+                    positives++;
+                    positivesArray.add(postIn);
+                } else if (postIn.getPostSentimentalType() == 2) {
+                    negatives++;
+                    negativesArray.add(postIn);
+                }
+                totalArray.add(postIn);
             }
         }
 
@@ -266,21 +267,21 @@ public class PieChart extends GenericResource {
 
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
-            if(postIn != null && postIn.getPostInSocialNetwork() != null ){
-            if (filterGeneral.equals("all") || postIn.getPostInSocialNetwork().getTitle().equals(filterGeneral)) {
-                totalArray.add(postIn);
-                if (postIn.getPostSentimentalType() == 0) {
-                    neutrals++;
-                    neutralsArray.add(postIn);
-                } else if (postIn.getPostSentimentalType() == 1) {
-                    positives++;
-                    positivesArray.add(postIn);
-                } else if (postIn.getPostSentimentalType() == 2) {
-                    negatives++;
-                    negativesArray.add(postIn);
+            if (postIn != null && postIn.getPostInSocialNetwork() != null) {
+                if (filterGeneral.equals("all") || postIn.getPostInSocialNetwork().getTitle().equals(filterGeneral)) {
+                    totalArray.add(postIn);
+                    if (postIn.getPostSentimentalType() == 0) {
+                        neutrals++;
+                        neutralsArray.add(postIn);
+                    } else if (postIn.getPostSentimentalType() == 1) {
+                        positives++;
+                        positivesArray.add(postIn);
+                    } else if (postIn.getPostSentimentalType() == 2) {
+                        negatives++;
+                        negativesArray.add(postIn);
+                    }
                 }
             }
-        }
         }
 
 
@@ -539,5 +540,60 @@ public class PieChart extends GenericResource {
         cellStyle.setTopBorderColor((short) 8);
         cell.setCellStyle(cellStyle);
 
+    }
+
+    private Iterator<PostIn> getGraphBar(HttpServletRequest request, String suri, String lang, String filterGeneral, String filter) {
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        ArrayList totalArray = new ArrayList();
+        Iterator i = null;
+        String selectedAnio = request.getParameter("selectedAnio");
+        String selectAnio = request.getParameter("selectAnio");
+        String selectMes = request.getParameter("selectMes");
+        String selectDay = request.getParameter("selectDay");
+        String selectMonth2 = request.getParameter("selectMonth2");
+
+
+        Iterator<PostIn> itObjPostIns = null;
+        if (semObj.getGenericInstance() instanceof Stream) {
+            Stream stream = (Stream) semObj.getGenericInstance();
+            itObjPostIns = stream.listPostInStreamInvs();
+        } else if (semObj.getGenericInstance() instanceof SocialTopic) {
+            SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+            itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+        }
+
+
+        Calendar calendario = Calendar.getInstance();
+
+
+        String anio = request.getParameter("selectedAnio");
+        if (selectedAnio.equals("")) {
+            selectedAnio = String.valueOf(calendario.get(Calendar.YEAR));
+        }
+        Date date; // your date
+        Calendar cal = Calendar.getInstance();
+
+        while (itObjPostIns.hasNext()) {
+            PostIn postIn = itObjPostIns.next();
+            if (postIn != null && postIn.getPostInSocialNetwork() != null) {
+                cal.setTime(postIn.getPi_created());
+
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH) + 1;
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                if (!selectedAnio.equals("") && !selectMes.equals("") && selectDay.equals("")) {
+                    if (year == Integer.parseInt(selectedAnio) && month == Integer.parseInt(selectMes)) {
+                        totalArray.add(postIn);
+                    }
+                } else if (!selectedAnio.equals("") && !selectMonth2.equals("") && !selectDay.equals("")) {
+                    if (year == Integer.parseInt(selectedAnio) && month == Integer.parseInt(selectMonth2)+1 && day == Integer.parseInt(selectDay)) {
+                        totalArray.add(postIn);
+                    }
+                }
+            }
+        }
+        i = totalArray.iterator();
+        return i;
     }
 }
