@@ -36,6 +36,8 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -305,7 +307,7 @@ public class PieChart extends GenericResource {
             String title = t;;
 
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            XSSFWorkbook wb = new XSSFWorkbook();
 
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
@@ -456,7 +458,7 @@ public class PieChart extends GenericResource {
             OutputStream ou = response.getOutputStream();
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
+            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
             response.setContentType("application/octet-stream");
             wb.write(ou);
             ou.close();
@@ -466,14 +468,14 @@ public class PieChart extends GenericResource {
         }
     }
 
-    public static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        XSSFFont cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -488,14 +490,14 @@ public class PieChart extends GenericResource {
 
     }
 
-    public static void createHead(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createHead(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        XSSFFont cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
