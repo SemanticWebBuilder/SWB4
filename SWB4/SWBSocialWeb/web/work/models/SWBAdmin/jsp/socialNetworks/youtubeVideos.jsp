@@ -54,123 +54,8 @@
     span.inline { display:inline; }
 </style>
 
-<%!
-//Favorites Add-> Add as favorites
-//Like
-//Don't like
-//Comment
 
-//This view displays the videos of a Single user. The current user (default) or
-//another user.
-/*
-public static String getRequest(Map<String, String> params, String url,
-            String userAgent, String accessToken) throws IOException {
-        
-        CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
-        URL serverUrl = new URL(url + "?" +  paramString);       
-        System.out.println("URL:" +  serverUrl);
-        
-        HttpURLConnection conex = null;
-        InputStream in = null;
-        String response = null;
-       
-        try {
-            conex = (HttpURLConnection) serverUrl.openConnection();
-            if (userAgent != null) {
-                conex.setRequestProperty("user-agent", userAgent);                
-            }
-            ///Validate if i am looking for the default user or another
-            if(accessToken != null){
-                conex.setRequestProperty("Authorization", "Bearer " + accessToken);
-            }
-            ///
-            conex.setConnectTimeout(30000);
-            conex.setReadTimeout(60000);
-            conex.setRequestMethod("GET");
-            conex.setDoOutput(true);
-            conex.connect();
-            in = conex.getInputStream();
-            response = getResponse(in);
-            //System.out.println("RESPONSE:" + response);
-                        
-        } catch (java.io.IOException ioe) {
-            if (conex.getResponseCode() >= 400) {
-                response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
-            }
-            ioe.printStackTrace();
-        } finally {
-            close(in);
-            if (conex != null) {
-                conex.disconnect();
-            }
-        }
-        if (response == null) {
-            response = "";
-        }
-        return response;
-    }
-
-    public static CharSequence delimit(Collection<Map.Entry<String, String>> entries,
-            String delimiter, String equals, boolean doEncode)
-            throws UnsupportedEncodingException {
-
-        if (entries == null || entries.isEmpty()) {
-            return null;
-        }
-        StringBuilder buffer
-                = new StringBuilder(64);
-	boolean notFirst = false;
-        for (Map.Entry<String, String> entry : entries ) {
-            if (notFirst) {
-                buffer.append(delimiter);
-            } else {
-                notFirst = true;
-            }
-            CharSequence value = entry.getValue();
-            buffer.append(entry.getKey());
-            buffer.append(equals);
-            buffer.append(doEncode ? encode(value) : value);
-        }
-        return buffer;
-    }
-    
-    private static String encode(CharSequence target) throws UnsupportedEncodingException {
-
-        String result = "";
-        if (target != null) {
-            result = target.toString();
-            result = URLEncoder.encode(result, "UTF8");
-        }
-        return result;
-    }
-    
-    public static String getResponse(InputStream data) throws IOException {
-
-        Reader in = new BufferedReader(new InputStreamReader(data, "UTF-8"));
-        StringBuilder response = new StringBuilder(256);
-        char[] buffer = new char[1000];
-        int charsRead = 0;
-        while (charsRead >= 0) {
-            response.append(buffer, 0, charsRead);
-            charsRead = in.read(buffer);
-        }
-        in.close();
-        return response.toString();
-    }
-    
-    public static void close( Closeable c ) {
-        if ( c != null ) {
-            try {
-                c.close();
-            }
-            catch ( IOException ex ) {             
-            }
-        }
-    }
- */
-%>
-
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
         <%
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("v", "2");
@@ -185,7 +70,7 @@ public static String getRequest(Map<String, String> params, String url,
             out.println("Problem refreshing access token");
             return;
         }
-        out.print("<div align=\"center\"><h1>Videos de " + semanticYoutube.getTitle() + "</h1></div>");
+        out.println("<div class=\"timelineTab-title\" style=\"width: 620px !important;\"><p style=\"width:620px\"><strong>" + "Mis Videos" + "</strong>" + semanticYoutube.getTitle() + "</p></div>");
         
         //Validate token from youtube and pass it as param.
                 //String ytResponse = getRequest(params, "http://gdata.youtube.com/feeds/api/users/" + "xxxreckoningxxx" + "/uploads" ,blackcat060406
@@ -203,20 +88,7 @@ public static String getRequest(Map<String, String> params, String url,
             }
         }
         
-        
-        /*HashMap<String, String> paramsComments = new HashMap<String, String>(3);
-        paramsComments.put("v", "2");
-        paramsComments.put("max-results", "5");
-        paramsComments.put("start-index", "1");
-        paramsComments.put("alt", "json");
-        
-        HashMap<String, String> paramsUsr = new HashMap<String, String>(3);
-        paramsUsr.put("v", "2");
-        paramsUsr.put("fields", "media:thumbnail");
-        paramsUsr.put("alt", "json");
-        
-        //DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX");
-        */
+                
         SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
         SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         String postURI = null;
@@ -225,7 +97,6 @@ public static String getRequest(Map<String, String> params, String url,
         if(user.isSigned()){
             socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         }
-        //System.out.println("SocialUserExtAttributes:" + socialUserExtAttr);
 
         UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");                            
         //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
@@ -239,11 +110,12 @@ public static String getRequest(Map<String, String> params, String url,
             if(totalVideos >= 25){
     %>
                 <div id="<%=objUri%>/getMoreVideos" dojoType="dojox.layout.ContentPane">
-                    <div align="center">
-                        <label id="<%=objUri%>/moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("getMoreVideos").setParameter("maxVideoId", totalVideos+"").setParameter("suri", objUri)%>','<%=objUri%>' + '/getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">More Videos</a></label>
+                    <div align="center" style="margin-bottom: 10px;">
+                        <label id="<%=objUri%>/moreVideosLabel"><a href="#" onclick="appendHtmlAt('<%=paramRequest.getRenderUrl().setMode("getMoreVideos").setParameter("maxVideoId", totalVideos+"").setParameter("suri", objUri)%>','<%=objUri%>' + '/getMoreVideos', 'bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;">Mas Videos</a></label>
                     </div>
                 </div>
     <%
             }
         }
     %>
+    </div>

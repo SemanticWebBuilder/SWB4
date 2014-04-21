@@ -45,8 +45,10 @@
     //Div dummy para detectar evento de carga y modificar titulo
     out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
 
-    out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_youtube\">");
-
+    //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
+    //out.println("<div class=\"swbform timelineCont\" style=\" width : 2400px; overflow-y: hidden; height:500px;\">");
+    //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_youtube\">");
+    out.println("<div class=\"swbform timelineCont\" style=\" width : 1050px; overflow-y: hidden; height:500px;\">");
     //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
     out.println("    <script type=\"dojo/connect\">");
     out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
@@ -54,12 +56,13 @@
     out.println("       });    ");
     out.println("    </script>");    
     
-   
-    out.println("<div id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myVideos")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 650px !important; height:500px;\" id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myVideos")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    //out.println("<div class=\"pub-redes\" id=\""+ objUri + HOME_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myVideos")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + HOME_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
 
-    out.println("<div id=\""+ objUri + CONEXION +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myConnections")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONEXION +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + CONEXION +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myConnections")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONEXION +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    //out.println("<div class=\"pub-redes\" style=\"width: 800px; height:500px;\" id=\""+ objUri + CONEXION +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("myConnections")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + CONEXION +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
-
+    
     out.println("</div><!-- end Bottom TabContainer -->");   
 %>
