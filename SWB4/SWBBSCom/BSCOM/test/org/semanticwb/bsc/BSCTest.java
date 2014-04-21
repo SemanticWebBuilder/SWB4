@@ -471,8 +471,8 @@ public class BSCTest {
                 //SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*30)+","+(aux-likehood*30)+",6,'#000000',1,1,1,1);").append("\n");
                 SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*24)+","+(aux-likehood*24)+",5,'#000000',1,'none',1,1);").append("\n");
                 SVGjs.append(" pto.setAttributeNS(null,'id','"+prefix+" ("+impact+","+likehood+")');").append("\n");
-SVGjs.append(" pto.addEventListener('mousemove', showTooltip, false);").append("\n");
-SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\n");
+                SVGjs.append(" pto.addEventListener('mousemove', showTooltip, false);").append("\n");
+                SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\n");
                 SVGjs.append("").append("\n");
                 SVGjs.append(" g.appendChild(pto);").append("\n");
             }
@@ -636,36 +636,26 @@ SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\
         SVGjs.append("//---------------").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
-        SVGjs.append("").append("\n");
-        SVGjs.append("").append("\n");
-        
-        
-        
-        
 
-SVGjs.append(" function showTooltip(evt) {").append("\n");
-//SVGjs.append("    evt.target.style.stroke = '#0000FF';").append("\n");
-//SVGjs.append("    evt.target.style.strokeWidth = '7';").append("\n");
-//SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',1);").append("\n");
-SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
-SVGjs.append("   tooltip.setAttributeNS(null,'x',evt.clientX+5);").append("\n");
-SVGjs.append("   tooltip.setAttributeNS(null,'y',evt.clientY+5);").append("\n");
-SVGjs.append("   tooltip.textContent = evt.target.getAttribute('id');").append("\n");
-SVGjs.append("   tooltip.setAttributeNS(null,'visibility','visible');").append("\n");
-SVGjs.append(" }").append("\n");
+        SVGjs.append(" function showTooltip(evt) {").append("\n");
+        SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'x',evt.clientX+5);").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'y',evt.clientY+5);").append("\n");
+        SVGjs.append("   tooltip.textContent = evt.target.getAttribute('id');").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'visibility','visible');").append("\n");
+        SVGjs.append(" }").append("\n");
 
-SVGjs.append(" function hideTooltip(evt) {").append("\n");
-SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
-SVGjs.append("   tooltip.setAttributeNS(null,'visibility','hidden');").append("\n");
-SVGjs.append(" }").append("\n");
-        
+        SVGjs.append(" function hideTooltip(evt) {").append("\n");
+        SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'visibility','hidden');").append("\n");
+        SVGjs.append(" }").append("\n");
         
         // funciones
-        /*SVGjs.append("function createLink(url) {").append("\n");
-        SVGjs.append("  var a = document.createElementNS(SVG_ ,'a');").append("\n");
-        SVGjs.append("  a.setAttributeNS(XLINK_,'xlink:href',url);").append("\n");
-        SVGjs.append("  a.setAttributeNS(null,'title','Ver detalle...');").append("\n");
-        SVGjs.append("  return a;").append("\n");
+        SVGjs.append("function createLink(url) {").append("\n");
+        SVGjs.append("    var a = document.createElementNS(SVG_ ,'a');").append("\n");
+        SVGjs.append("    a.setAttributeNS(XLINK_,'xlink:href',url);").append("\n");
+        SVGjs.append("    a.setAttributeNS(null,'title','Ver detalle...');").append("\n");
+        SVGjs.append("    return a;").append("\n");
         SVGjs.append("}").append("\n");
         
         SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
@@ -718,7 +708,7 @@ SVGjs.append(" }").append("\n");
         SVGjs.append("  rect.setAttributeNS(null, 'stroke-width',strokewidth);").append("\n");
         SVGjs.append("  rect.setAttributeNS(null, 'stroke-opacity',strokeopacity);").append("\n");
         SVGjs.append("  return rect;").append("\n");
-        SVGjs.append("}").append("\n");*/
+        SVGjs.append("}").append("\n");
 
         SVGjs.append("function framingRect(rect,width, fill, fillOpacity, stroke, strokeOpacity, rx, ry) {").append("\n");
         SVGjs.append("  rect.width.baseVal.value = width;").append("\n");
@@ -731,7 +721,7 @@ SVGjs.append(" }").append("\n");
         SVGjs.append("  rect.setAttributeNS(null, 'ry',ry);").append("\n");
         SVGjs.append("}").append("\n");
 
-/*        SVGjs.append(" function fixParagraphAtBounding(text_element, width, height, x, y) {").append("\n");
+        SVGjs.append(" function fixParagraphAtBounding(text_element, width, height, x, y) {").append("\n");
         SVGjs.append("     var dy = getFontSize(text_element);").append("\n");
         SVGjs.append("     if(dy<13) {").append("\n");
         SVGjs.append("     	createParagraph(text_element, width, height, x, y);").append("\n");
@@ -867,7 +857,7 @@ SVGjs.append(" }").append("\n");
         SVGjs.append("        }").append("\n");
         SVGjs.append("        h = getBoundingHeight(text_element);").append("\n");
         SVGjs.append("    }").append("\n");
-        SVGjs.append("}").append("\n");*/
+        SVGjs.append("}").append("\n");
 
         SVGjs.append("</script>").append("\n");
         return SVGjs.toString();
