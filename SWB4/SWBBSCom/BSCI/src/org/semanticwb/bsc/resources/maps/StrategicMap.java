@@ -2,7 +2,6 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,7 +24,6 @@ import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -33,6 +31,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -1198,26 +1197,18 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     @Override
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder toReturn = new StringBuilder();
-        String surl = "";
         Resource base2 = getResourceBase();
         String icon = "";
 
         if (base2 != null) {
-            Iterator<Resourceable> res = base2.listResourceables();
-            while (res.hasNext()) {
-                Resourceable re = res.next();
-                if (re instanceof WebPage) {
-                    surl = ((WebPage) re).getUrl() + "/_rid/" + base2.getId()
-                            + "/_mto/3/_mod/pdf";
-                    break;
-                }
-            }
-
+            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+            url.setMode(Mode_PDFDocument);
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
             String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
             String image = "pdfOnline.jpg";
             String alt = paramRequest.getLocaleString("alt");
             toReturn.append("<a href=\"");
-            toReturn.append(surl);
+            toReturn.append(url.toString());
             toReturn.append("\" class=\"export-stgy\" title=\"");
             toReturn.append(alt);
             toReturn.append("\" target=\"_blank\">");
