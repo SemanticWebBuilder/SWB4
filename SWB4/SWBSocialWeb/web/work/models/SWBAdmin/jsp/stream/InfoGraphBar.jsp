@@ -60,11 +60,11 @@
 
 
         if (!selectedAnio.equals("") && selectMonth.equals("")) {
-                    int neutrals = 0, positives = 0, negatives = 0;
+            int neutrals = 0, positives = 0, negatives = 0;
 
             int selectedA = Integer.parseInt(selectedAnio);
             int nPostIn = 0;
-            int[][] months = new int[12][4];
+            int[][] months = new int[12][5];
 
             while (itObjPostIns.hasNext()) {
                 PostIn postIn = itObjPostIns.next();
@@ -92,6 +92,7 @@
                     months[calendario.get(Calendar.MONTH)][1] += neutrals;
                     months[calendario.get(Calendar.MONTH)][2] += negatives;
                     months[calendario.get(Calendar.MONTH)][3] += positives;
+                    months[calendario.get(Calendar.MONTH)][4] = year;
                 }
 
 
@@ -99,7 +100,7 @@
                 neutrals = 0;
                 negatives = 0;
                 positives = 0;
-                  listPostIn.add(date);
+                listPostIn.add(date);
 
 
 
@@ -114,10 +115,12 @@
                     int neutrals_sYear = months[idx][1];
                     int negatives_sYear = months[idx][2];
                     int positives_sYear = months[idx][3];
+                    int year = months[idx][4];
                     JSONObject node1 = new JSONObject();
-                    node1.put("day", calendario.get(Calendar.DAY_OF_MONTH));
+                    node1.put("day", "");
                     node1.put("month", meses);
-                    node1.put("year", calendario.get(Calendar.YEAR));
+                    node1.put("month2", meses);
+                    node1.put("year", year);
                     node1.put("post", elem);
                     node1.put("neutrals", neutrals_sYear);
                     node1.put("positives", positives_sYear);
@@ -150,7 +153,7 @@
 
 
             int neutrals_ = 0, positives_ = 0, negatives_ = 0;
-            int[][] dias = new int[days][4];
+            int[][] dias = new int[days][7];
 
 
             while (itObjPostIns.hasNext()) {
@@ -171,7 +174,6 @@
 
                 calendario.setTime(date);
 
-                calendario.setTime(date);
                 int year = calendario.get(Calendar.YEAR);
 
                 int comMonth = calendario.get(Calendar.MONTH);
@@ -181,6 +183,9 @@
                     dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][1] += neutrals_;
                     dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][2] += negatives_;
                     dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][3] += positives_;
+                    dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][4] = comMonth;
+                    dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][5] = year;
+                    dias[calendario.get(Calendar.DAY_OF_MONTH) - 1][6] = calendario.get(Calendar.DAY_OF_MONTH);
 
                 }
                 neutrals_ = 0;
@@ -200,11 +205,15 @@
                     int neutrals_s = dias[idx][1];
                     int negatives_s = dias[idx][2];
                     int positives_s = dias[idx][3];
+                    int mes = dias[idx][4];
+                    int year = dias[idx][5];
+                    int dia = dias[idx][6];
 
                     JSONObject node1 = new JSONObject();
-                    node1.put("day", calendario.get(Calendar.MONTH));
+                    node1.put("day", dia);
                     node1.put("month", (idx + 1));
-                    node1.put("year", calendario.get(Calendar.YEAR));
+                    node1.put("month2", mes);
+                    node1.put("year", year);
                     node1.put("neutrals", neutrals_s);
                     node1.put("positives", positives_s);
                     node1.put("negatives", negatives_s);
