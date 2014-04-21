@@ -217,6 +217,15 @@
         </div>    
         <div id="pieChart">
         </div>
+
+        <div class="grafOptions">
+            <div title="Positivos" class="grafSentiPos" id="grafSentiPospieChart">
+            </div>
+            <div title="Negativos" class="grafSentiNeg" id="grafSentiNegpieChart">
+            </div>
+            <div title="Neutros" class="grafSentiNeu" id="grafSentiNeupieChart">
+            </div>
+        </div>
         <div class="clear"></div>
     </div>
 
@@ -340,6 +349,71 @@
                 .attr("y",function(d) {
                     return - width/2;
                 });
+                
+                if(cont == 0){
+                    var xArray = new Array();
+                    for (var i = 0; i < data.length; i++) {    
+                        xArray.push(data[i].valor);                                            
+                    }  
+                    if(xArray.length==1){
+                        for (var x = data.length-1; x < data.length; x++) {  
+                            var to;
+                            to = data[x].valor;
+                  
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
+
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
+                                
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
+
+                            var element = document.getElementById("grafSentiPospieChart");                            
+                            element.appendChild(paraPositives);
+                            var element1 = document.getElementById("grafSentiNegpieChart");                          
+                            element1.appendChild(paraNegatives);
+                            var element2 = document.getElementById("grafSentiNeupieChart");                            
+                            element2.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }  
+                    
+                    }
+                 
+                    if(xArray.length!=1){                      
+                   
+                        for (var x = data.length-1; x < data.length; x++) {  
+                            var to;
+                            to = data[x].valor;
+                            var paraPositives= document.createElement("p");   
+                            var paraNegatives= document.createElement("p");   
+                            var paraNeutrals= document.createElement("p");   
+
+                            var nodPositives = document.createTextNode(to.positivos);
+                            var nodNegatives= document.createTextNode(to.negativos);
+                            var nodNeutrals = document.createTextNode(to.neutros);
+                                
+                            paraPositives.appendChild(nodPositives);
+                            paraNegatives.appendChild(nodNegatives);
+                            paraNeutrals.appendChild(nodNeutrals);
+
+                            var element = document.getElementById("grafSentiPospieChart");                            
+                            element.appendChild(paraPositives);
+                            var element1 = document.getElementById("grafSentiNegpieChart");                     
+                            element1.appendChild(paraNegatives);
+                            var element2 = document.getElementById("grafSentiNeupieChart");                     
+                            element2.appendChild(paraNeutrals);
+                            break;
+                            cont++;
+                        }    
+                    }
+                   
+             
+                }     
 
             });
         }
@@ -586,7 +660,7 @@
                         
                         for (var i = 0; i < data.length; i++) {               
                             xArray.push(data[i].valor);       
-                                                            xArrayRedes.push(data[i].label3);                                            
+                            xArrayRedes.push(data[i].label3);                                            
 
                         }  
                         
@@ -594,252 +668,252 @@
 
                             for (var x = data.length-1; x < data.length; x++) {  
                                 var to;
-                                    var to;
-                                    to = data[x].valor;
+                                var to;
+                                to = data[x].valor;
                   
-                                    var paraPositives= document.createElement("p");   
-                                    var paraNegatives= document.createElement("p");   
-                                    var paraNeutrals= document.createElement("p");   
+                                var paraPositives= document.createElement("p");   
+                                var paraNegatives= document.createElement("p");   
+                                var paraNeutrals= document.createElement("p");   
 
-                                    var nodPositives = document.createTextNode(to.positivos);
-                                    var nodNegatives= document.createTextNode(to.negativos);
-                                    var nodNeutrals = document.createTextNode(to.neutros);
+                                var nodPositives = document.createTextNode(to.positivos);
+                                var nodNegatives= document.createTextNode(to.negativos);
+                                var nodNeutrals = document.createTextNode(to.neutros);
                             
-                                    paraPositives.appendChild(nodPositives);
-                                    paraNegatives.appendChild(nodNegatives);
-                                    paraNeutrals.appendChild(nodNeutrals);
+                                paraPositives.appendChild(nodPositives);
+                                paraNegatives.appendChild(nodNegatives);
+                                paraNeutrals.appendChild(nodNeutrals);
                         
-                                    var element = document.getElementById("todoSocialNetworkDiv");                            
-                                    element.appendChild(paraPositives);
-                                    element.appendChild(paraNegatives);
-                                    element.appendChild(paraNeutrals);
-                                    break;
-                                    cont++;
-                                } 
+                                var element = document.getElementById("todoSocialNetworkDiv");                            
+                                element.appendChild(paraPositives);
+                                element.appendChild(paraNegatives);
+                                element.appendChild(paraNeutrals);
+                                break;
+                                cont++;
+                            } 
                                 
-                                for (var j = 0; j <xArrayRedes.length ; j++) {   
-                                    var paraPositive = document.createElement("p");                                  
-                                    var paraNegative = document.createElement("p");                                  
-                                    var paraNeutrals = document.createElement("p");                      
-                                    var myJSONObject = xArrayRedes[j];                               
+                            for (var j = 0; j <xArrayRedes.length ; j++) {   
+                                var paraPositive = document.createElement("p");                                  
+                                var paraNegative = document.createElement("p");                                  
+                                var paraNeutrals = document.createElement("p");                      
+                                var myJSONObject = xArrayRedes[j];                               
                         
-                                    var nodePositives = document.createTextNode(myJSONObject.positivos);
-                                    var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                                    var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+                                var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
                         
-                                    paraPositive.appendChild(nodePositives);
-                                    paraNegative.appendChild(nodeNegatives);
-                                    paraNeutrals.appendChild(nodeNeutros);
-                                    var element; 
+                                paraPositive.appendChild(nodePositives);
+                                paraNegative.appendChild(nodeNegatives);
+                                paraNeutrals.appendChild(nodeNeutros);
+                                var element; 
                             
-                                    element =   document.getElementById(data[j].label);                            
-                                    element.appendChild(paraPositive);
-                                    element.appendChild(paraNegative);
-                                    element.appendChild(paraNeutrals);
+                                element =   document.getElementById(data[j].label);                            
+                                element.appendChild(paraPositive);
+                                element.appendChild(paraNegative);
+                                element.appendChild(paraNeutrals);
                                     
                         
-                                }
+                            }
                         
-                            }      
-                        }
+                        }      
+                    }
                                
-                        cont++;
+                    cont++;
         
-                        var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
-                        for(var i=0; i<opciones.length; i++) {        
-                            opciones[i].disabled = false;
-                        }
-                    });
+                    var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
+                    for(var i=0; i<opciones.length; i++) {        
+                        opciones[i].disabled = false;
+                    }
+                });
                 
-                }
+            }
     
-                pieNetworkSocial('all', '0');
+            pieNetworkSocial('all', '0');
     
         </script>
         <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>
         <script type="text/javascript" >
-                function postHtml(url, tagid)
-                {
+            function postHtml(url, tagid)
+            {
             
-                    dojo.xhrPost({
-                        url: url,
-                        load: function(response)
-                        {
-                            var tag=dojo.byId(tagid);
-                            if(tag){
-                                var pan=dojo.byId(tagid);
-                                if(pan && pan.attr)
-                                {
-                                    pan.attr('content',response);
-                                }else
-                                {
-                                    tag.innerHTML = response;
-                                }
-                            }else {
-                                alert("No existe ningún elemento con id " + tagid);
+                dojo.xhrPost({
+                    url: url,
+                    load: function(response)
+                    {
+                        var tag=dojo.byId(tagid);
+                        if(tag){
+                            var pan=dojo.byId(tagid);
+                            if(pan && pan.attr)
+                            {
+                                pan.attr('content',response);
+                            }else
+                            {
+                                tag.innerHTML = response;
                             }
-                            return response;
-                        },
-                        error: function(response)
-                        {
-                            if(dojo.byId(tagid)) {
-                                dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
-                            }else {
-                                alert("No existe ningún elemento con id " + tagid);
-                            }
-                            return response;
-                        },
-                        handleAs: "text"
-                    });
-                }
+                        }else {
+                            alert("No existe ningún elemento con id " + tagid);
+                        }
+                        return response;
+                    },
+                    error: function(response)
+                    {
+                        if(dojo.byId(tagid)) {
+                            dojo.byId(tagid).innerHTML = "<p>Ocurrió un error con respuesta:<br />" + response + "</p>";
+                        }else {
+                            alert("No existe ningún elemento con id " + tagid);
+                        }
+                        return response;
+                    },
+                    handleAs: "text"
+                });
+            }
             
-                function mostrar(selected){
+            function mostrar(selected){
            
-                    var div  ;
-                    if(selected ==  1){
-                        div = document.getElementById('divAnual');
-                        div.style.display='block';
+                var div  ;
+                if(selected ==  1){
+                    div = document.getElementById('divAnual');
+                    div.style.display='block';
                 
-                        var mensual =  document.getElementById('divAnualMensual');
-                        mensual.style.display='none';
+                    var mensual =  document.getElementById('divAnualMensual');
+                    mensual.style.display='none';
                 
-                    }else {
-                        div = document.getElementById('divAnualMensual');                
-                        div.style.display='block';
+                }else {
+                    div = document.getElementById('divAnualMensual');                
+                    div.style.display='block';
                 
-                        var anual = document.getElementById('divAnual');
-                        anual.style.display='none';
+                    var anual = document.getElementById('divAnual');
+                    anual.style.display='none';
                 
                 
-                    }
-            
-            
                 }
+            
+            
+            }
     
-                function valid(id){
-                    if(id ==1){    
-                        var selectAnio=  document.getElementById("selectAnio").value;
-                        if(selectAnio== ""){
-                            alert('Seleccione el año');
-                            return;
-                        }
-                    }else{                  
-                        var selectAnio2=  document.getElementById("selectAnio2").value;
-                        var selectMes = document.getElementById("selectMes").value;
-                        if(selectAnio2== ""){
-                            alert('Seleccione el año');
-                            return;
-                        }
-                        if(selectMes== ""){
-                            alert('Seleccione el mes');
-                            return;
-                        }
-                    }                   
-                }
+            function valid(id){
+                if(id ==1){    
+                    var selectAnio=  document.getElementById("selectAnio").value;
+                    if(selectAnio== ""){
+                        alert('Seleccione el año');
+                        return;
+                    }
+                }else{                  
+                    var selectAnio2=  document.getElementById("selectAnio2").value;
+                    var selectMes = document.getElementById("selectMes").value;
+                    if(selectAnio2== ""){
+                        alert('Seleccione el año');
+                        return;
+                    }
+                    if(selectMes== ""){
+                        alert('Seleccione el mes');
+                        return;
+                    }
+                }                   
+            }
         </script>
         <div class="clear"></div>
     </div>
-        
+
 </div>
-        
-        <div>
-            <h1>Mensajes recibidos de :<%=title%></h1>
-            <div class="pub-redes">
-                <p class="titulo">Tipo de filtro que desea:</p> 
-                <form name="formgraphBar" id="formgraphBar" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
+
+<div>
+    <h1>Mensajes recibidos de :<%=title%></h1>
+    <div class="pub-redes">
+        <p class="titulo">Tipo de filtro que desea:</p> 
+        <form name="formgraphBar" id="formgraphBar" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
+            <table>
+                <tr>
+                <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="mostrar(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value);">
+                    <option value="0">--Seleccione--</option>
+                    <option value="1" selected="">Anual</option>
+                    <option value="2">Mensual</option>
+                </select>
+                </tr>
+            </table>
+        </form>
+
+        <div id="divAnual" class="pub-redes"  style="display:none;">
+            <p class="titulo">Seleccione:</p>      
+            <div id="graphBardivd"  >
+                <form name="formgraphBarAnio" id="formgraphBarAnio" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
                     <table>
                         <tr>
-                        <select name="select_sh" id="select_sh"  dojoType="dijit.form.Select" onchange="mostrar(document.formgraphBar.select_sh[document.formgraphBar.select_sh.selectedIndex].value);">
-                            <option value="0">--Seleccione--</option>
-                            <option value="1" selected="">Anual</option>
-                            <option value="2">Mensual</option>
+                        <select name="selectAnio" id="selectAnio">
+                            <option value=""><---Seleccione el año----></option>
+                            <%
+                                while (iAnio.hasNext()) {
+                                    String anio = (String) iAnio.next();
+                            %>
+                            <option value="<%=anio%>"><%=anio%></option>
+                            <%}%>                            
                         </select>
+                        </tr>
+                        <tr>
+                        <input id="mostrarGraficaOculto"  type="hidden" value="Mostrar" onclick="postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
+                        <input id="mostrarGraficaR"  type="button" value="Mostrar" onclick="javascript:valid('1');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
                         </tr>
                     </table>
                 </form>
-
-                <div id="divAnual" class="pub-redes"  style="display:none;">
-                    <p class="titulo">Seleccione:</p>      
-                    <div id="graphBardivd"  >
-                        <form name="formgraphBarAnio" id="formgraphBarAnio" dojoType="dijit.form.Form" method="post" enctype="multipart/form-data" action="">
-                            <table>
-                                <tr>
-                                <select name="selectAnio" id="selectAnio">
-                                    <option value=""><---Seleccione el año----></option>
-                                    <%
-                                        while (iAnio.hasNext()) {
-                                            String anio = (String) iAnio.next();
-                                    %>
-                                    <option value="<%=anio%>"><%=anio%></option>
-                                    <%}%>                            
-                                </select>
-                                </tr>
-                                <tr>
-                                <input id="mostrarGraficaOculto"  type="hidden" value="Mostrar" onclick="postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
-                                <input id="mostrarGraficaR"  type="button" value="Mostrar" onclick="javascript:valid('1');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectedAnio='+escape(document.formgraphBarAnio.selectAnio[document.formgraphBarAnio.selectAnio.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>', 'showgraphBar');">
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
-                </div>
-
-
-                <div id="divAnualMensual" style="display:none;">
-                    <p class="titulo">Seleccione:</p>      
-                    <form type="dijit.form.Form" id="createPost" name="createPost" action="" method="post" >
-                        <input type="hidden" id="suri" name="suri" value="<%=URLEncoder.encode(suri)%>" >
-                        <table>
-                            <tr>
-                                <td>
-                                    <select name="selectAnio2" id="selectAnio2">
-                                        <option value=""><---Seleccione el año----></option>
-                                        <%
-                                            String a = String.valueOf(calendario.get(Calendar.YEAR));
-                                            String b = String.valueOf(calendario.get(Calendar.YEAR) - 1);
-                                            String c = String.valueOf(calendario.get(Calendar.YEAR) - 2);
-                                        %>
-                                        <option value="<%=a%>"><%=a%></option>
-                                        <option value="<%=b%>"><%=b%></option>
-                                        <option value="<%=c%>"><%=c%></option>
-
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="selectMes" id="selectMes">
-                                        <option value=""><---Seleccione el mes----></option>
-                                        <%
-                                            int valuemonth = 1;
-                                            while (iMeses.hasNext()) {
-                                                String mes = (String) iMeses.next();
-                                        %>
-                                        <option value="<%=valuemonth%>"><%=mes%></option>
-                                        <%
-                                                valuemonth++;
-                                            }
-                                        %>                            
-                                    </select>
-                                </td>
-                                <td></td>
-                                <td>
-                                    <input   type="button" value="Mostrar" onclick="javascript:valid('2');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectAnio='+escape(document.createPost.selectAnio2[document.createPost.selectAnio2.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>&selectMes='+escape(document.createPost.selectMes[document.createPost.selectMes.selectedIndex].value) +'', 'showgraphBar');">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-            </div>
-
-
-
-            <div id="selectgraphBar" dojoType="dijit.layout.ContentPane">
-            </div>         
-
-
-            <div id="showgraphBar" dojoType="dijit.layout.ContentPane" title="Preguntas" selected="true">
             </div>
         </div>
-                                
-                                
-        </body>
+
+
+        <div id="divAnualMensual" style="display:none;">
+            <p class="titulo">Seleccione:</p>      
+            <form type="dijit.form.Form" id="createPost" name="createPost" action="" method="post" >
+                <input type="hidden" id="suri" name="suri" value="<%=URLEncoder.encode(suri)%>" >
+                <table>
+                    <tr>
+                        <td>
+                            <select name="selectAnio2" id="selectAnio2">
+                                <option value=""><---Seleccione el año----></option>
+                                <%
+                                    String a = String.valueOf(calendario.get(Calendar.YEAR));
+                                    String b = String.valueOf(calendario.get(Calendar.YEAR) - 1);
+                                    String c = String.valueOf(calendario.get(Calendar.YEAR) - 2);
+                                %>
+                                <option value="<%=a%>"><%=a%></option>
+                                <option value="<%=b%>"><%=b%></option>
+                                <option value="<%=c%>"><%=c%></option>
+
+                            </select>
+                        </td>
+                        <td>
+                            <select name="selectMes" id="selectMes">
+                                <option value=""><---Seleccione el mes----></option>
+                                <%
+                                    int valuemonth = 1;
+                                    while (iMeses.hasNext()) {
+                                        String mes = (String) iMeses.next();
+                                %>
+                                <option value="<%=valuemonth%>"><%=mes%></option>
+                                <%
+                                        valuemonth++;
+                                    }
+                                %>                            
+                            </select>
+                        </td>
+                        <td></td>
+                        <td>
+                            <input   type="button" value="Mostrar" onclick="javascript:valid('2');postHtml('<%=urlRender.setMode("showGraphBar")%>&selectAnio='+escape(document.createPost.selectAnio2[document.createPost.selectAnio2.selectedIndex].value)+'&suri=<%=URLEncoder.encode(suri)%>&selectMes='+escape(document.createPost.selectMes[document.createPost.selectMes.selectedIndex].value) +'', 'showgraphBar');">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div id="selectgraphBar" dojoType="dijit.layout.ContentPane">
+    </div>         
+
+
+    <div id="showgraphBar" dojoType="dijit.layout.ContentPane" title="Preguntas" selected="true">
+    </div>
+</div>
+
+
+</body>
 
 
