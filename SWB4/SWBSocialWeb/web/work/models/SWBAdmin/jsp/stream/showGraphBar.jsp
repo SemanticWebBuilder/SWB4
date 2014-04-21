@@ -29,15 +29,16 @@
     if (semObj == null) {
         return;
     }
-    
+
     String args = "?objUri=" + semObj.getEncodedURI();
-    
+
     String selectedAnio = request.getParameter("selectedAnio");
-    String selectAnio =  request.getParameter("selectAnio");
+    String selectAnio = request.getParameter("selectAnio");
     String selectMes = request.getParameter("selectMes");
     args += "&selectedAnio=" + selectedAnio;
     args += "&selectAnio=" + selectAnio;
-    args += "&selectMes=" + selectMes;   
+    args += "&selectMes=" + selectMes;
+    SWBResourceURL urlRender = paramRequest.getRenderUrl();
 %>
 
 
@@ -78,7 +79,7 @@
             .bar_neutrals:hover {
                 fill: #FFD700 ;
             }
-            
+
             .bar_negatives {
                 fill: #FF0000;
             }
@@ -86,8 +87,8 @@
             .bar_negatives:hover {
                 fill: #FF0000;
             }
-            
-            
+
+
             .bar_positives {
                 fill: #008000;
             }
@@ -225,7 +226,7 @@
                     }else if(negatives>neutrals){                        
                         return "bar_negatives";                        
                     }else {
-                         return "bar_neutrals";                        
+                        return "bar_neutrals";                        
                     }        
                     
                 })
@@ -235,6 +236,10 @@
                 .attr("height", function(d) {return height - y(d.post);}) 
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide)
+                .on("click", function(d) {
+                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "graphBar").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri)%>&selectedAnio="+d.year+"&selectMes="+d.month+"&selectAnio="+d.year+"&selectDay="+d.day+"&selectMonth2="+d.month2;
+                    document.location.href = url;
+                }) 
    
             });
 
