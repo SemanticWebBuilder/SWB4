@@ -604,17 +604,6 @@ public class ReportGenerator extends GenericResource {
                 }
             });
         Collections.sort(periods);
-        //TODO:eliminar despues de pruebas
-        System.out.println("\nPeriodos a mostrar en combo");
-        ArrayList<Period> _4test = new ArrayList<Period>(128);
-        for (int i = 0; i < periods.size(); i++) {
-            _4test.add(periods.get(i));
-        }
-        System.out.println("src.size: " + periods.size() + "  dest.size: " + _4test.size());
-//        Collections.copy(_4test, periods);
-        for (Period p: _4test) {
-            System.out.println("Periodo: " + p.getTitle());
-        }
         
         return periods;
     }
@@ -712,8 +701,6 @@ public class ReportGenerator extends GenericResource {
         if (st != null) {
             exists = true;
         }
-        //TODO:eliminar despues de pruebas
-        System.out.println("Propiedad: " + property.getDisplayName() + ", tiene displayElement: " + exists);
         return exists;
     }
 
@@ -806,8 +793,6 @@ public class ReportGenerator extends GenericResource {
         if (criteria.getProps2Show().isEmpty() || !criteria.getProps2Show().contains(Descriptiveable.swb_title)) {
             criteria.getProps2Show().add(0, Descriptiveable.swb_title);
         }
-        //TODO:eliminar despues de pruebas
-        System.out.println("\ncriteria para la peticion: " + criteria.toString());
         return criteria;
     }
     
@@ -823,7 +808,6 @@ public class ReportGenerator extends GenericResource {
         Iterator initialSet = null;
         User user = paramRequest.getUser();
         
-        System.out.println("Criteria en processReport: \n" + criteria.toString());
         if (criteria.getElementType() != null) {
             ArrayList<SemanticObject> forNow = new ArrayList<SemanticObject>(128);
             String id = null;
@@ -959,7 +943,6 @@ public class ReportGenerator extends GenericResource {
                             mustBeAdded = true;
                         }
                     } else {
-                        System.out.println(" - - - Evaluar criterio de Estado +++");
                         //el estatus seleccionado, debe estar asignado en el intervalo indicado
                         Period thisPeriod = criteria.getInitialPeriod();
                         boolean intervalFinished = false;
@@ -985,11 +968,8 @@ public class ReportGenerator extends GenericResource {
                                     periodStatus = measure.getEvaluation();
                                 }
                             }
-                            System.out.println("  - Evaluando periodo: " + periodStatus != null ? periodStatus.getPeriod() : "-");
                             //Si los estados de criterios y del periodo evaluado son iguales, se debe agregar el elemento
                             if (periodStatus != null && periodStatus.getStatus().equals(criteria.getStatus())) {
-                                System.out.println("Con estatus coincidente: " + periodStatus.getStatus().getTitle() + 
-                                        ", en periodo: " + periodStatus.getPeriod().getTitle());
                                 mustBeAdded = true;
                                 break;
                             }
@@ -1030,7 +1010,6 @@ public class ReportGenerator extends GenericResource {
                 //si los periodos no se indicaron, no es filtro de seleccion
                 mustBeAdded = true;
             }
-            System.out.println(" - - - Evaluacion de periodos y estado: " + mustBeAdded);
             //Se evalua filtro de Champion
             if (criteria.getChampion() != null && mustBeAdded) {
                 mustBeAdded = false;
@@ -1053,7 +1032,6 @@ public class ReportGenerator extends GenericResource {
             } else if (criteria.getChampion() == null && mustBeAdded) {
                 mustBeAdded = true;
             }
-            System.out.println(" - - - Evaluacion de champion: " + mustBeAdded);
             //se evalua filtro de Sponsor
             if (criteria.getSponsor() != null && mustBeAdded) {
                 mustBeAdded = false;
@@ -1080,7 +1058,6 @@ public class ReportGenerator extends GenericResource {
                 mustBeAdded = true;
             }
             
-            System.out.println(" - - - Evaluacion de sponsor: " + mustBeAdded);
             if (mustBeAdded) {
                 processed.add(inTurn.getSemanticObject());
                 if (criteria.getRelatedElements() != null) {
@@ -1089,14 +1066,6 @@ public class ReportGenerator extends GenericResource {
             }
             count++;
         }
-        //TODO: eliminar despues de pruebas
-        System.out.println("\nElementos a mostrar en reporte");
-        count = 0;
-        for (SemanticObject so: processed) {
-            System.out.println("   - " + so.getURI());
-            count++;
-        }
-        System.out.println("Conjunto de " + count + " elementos iniciales");
         
         return processed;
     }
@@ -1177,8 +1146,6 @@ public class ReportGenerator extends GenericResource {
         //se agregan los elementos seleccionados a resultSet
         for (SemanticObject addition : additional) {
             resultSet.add(addition);
-            //TODO:eliminar despues de pruebas
-            System.out.println("Elemento agregado: " + addition.getURI());
         }
     }
     
