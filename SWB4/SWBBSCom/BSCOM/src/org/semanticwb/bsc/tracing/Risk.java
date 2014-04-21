@@ -20,9 +20,11 @@ public class Risk extends org.semanticwb.bsc.tracing.base.RiskBase {
     @Override
     public String getPrefix() {
         String prefix = super.getPrefix();
-        if (prefix == null) {
-            setPrefix(Calendar.getInstance().get(Calendar.YEAR)+"_"+getConsecutive());
-            setYearRisk(Calendar.getInstance().get(Calendar.YEAR));
+        if(prefix == null) {
+            final int y = Calendar.getInstance().get(Calendar.YEAR);
+            prefix = y+"_"+getConsecutive();
+            setPrefix(prefix);
+            setYearRisk(y);
         }
         return prefix;
     }
