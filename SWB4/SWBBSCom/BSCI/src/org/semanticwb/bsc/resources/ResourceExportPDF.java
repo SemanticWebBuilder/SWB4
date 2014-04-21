@@ -12,10 +12,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.model.GenericIterator;
-import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResource;
@@ -55,16 +53,12 @@ public class ResourceExportPDF extends GenericResource {
         String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
         String image = "pdfOffline.jpg";
         String alt = paramRequest.getLocaleString("alt");
-        icon.append("<a href=\"#\" class=\"export-stgy\" title=\"");
-        icon.append(alt);
-        icon.append("\" target=\"_blank\">");
         icon.append("<img src=\"");
         icon.append(webWorkPath);
         icon.append(image);
         icon.append("\" alt=\"");
         icon.append(alt);
         icon.append("\" class=\"toolbar-img\" />");
-        icon.append("</a>");
         String iconString = icon.toString();
         if (listRes != null) {
             while (listRes.hasNext()) {
