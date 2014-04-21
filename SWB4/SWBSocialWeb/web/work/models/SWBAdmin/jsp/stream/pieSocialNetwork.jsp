@@ -131,7 +131,7 @@
         if (filter.equals("all")) {
             intPorcentaje = ((float) total * 100) / (float) totalPost;
             JSONObject node1 = new JSONObject();
-            node1.put("label", "" + title);
+            node1.put("label", ""+title);
             node1.put("value1", "" + total);
             node1.put("value2", "" + round(intPorcentaje));
               JSONObject joChild = new JSONObject();
