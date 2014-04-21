@@ -114,21 +114,20 @@ public class BscDOM_G_Enabled_Test_2 {
             
             Document doc = null;
             StrategicMap sm = new StrategicMap();
-            try {
-                //getDom(dom);
-                doc = sm.getDom(dom);
-                System.out.println("map:\n"+SWBUtils.XML.domToXml(dom));
-            }catch(XPathExpressionException xpathe) {
-                fail("XPath con problemas... "+xpathe);
-            }
+//            try {
+//                doc = sm.getDom(dom);
+//                System.out.println("map:\n"+SWBUtils.XML.domToXml(dom));
+//            }catch(XPathExpressionException xpathe) {
+//                fail("XPath con problemas... "+xpathe);
+//            }
             
-            try {
+            /*try {
                 //String svg = getSvg(dom);
                 String svg = sm.getSvg(null,doc);
                 System.out.println("svg:\n"+svg);
             }catch(XPathExpressionException xpe) {
                 fail(xpe.toString());
-            }
+            }*/
         }
         else
         {
@@ -146,17 +145,17 @@ public class BscDOM_G_Enabled_Test_2 {
             Document dom = model.getDom();
             StrategicMap sm = new StrategicMap();
             Document doc = null;
-            try {
-                doc = sm.getDom(dom);
-            }catch(XPathExpressionException xpathe) {
-                fail("XPath con problemas... "+xpathe);
-            }            
-            try {
+//////            try {
+//////                doc = sm.getDom(dom);
+//////            }catch(XPathExpressionException xpathe) {
+//////                fail("XPath con problemas... "+xpathe);
+//////            }            
+            /*try {
                 String svg = sm.getSvg(null,doc);
                 System.out.println("svg:\n"+svg);
             }catch(XPathExpressionException xpe) {
                 fail(xpe.toString());
-            }
+            }*/
         }
         else
         {
