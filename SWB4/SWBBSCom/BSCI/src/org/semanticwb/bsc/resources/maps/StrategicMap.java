@@ -2,7 +2,6 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,15 +15,15 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.PDFExportable;
-import org.semanticwb.bsc.accessory.DifferentiatorGroup;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.bsc.element.Perspective;
-import org.semanticwb.bsc.element.Theme;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.WebPage;
@@ -50,9 +49,34 @@ import org.w3c.dom.NodeList;
  * @since 1.0
  */
 public class StrategicMap extends GenericResource implements PDFExportable {
+    private static final Logger log = SWBUtils.getLogger(StrategicMap.class);
 
     public static final String Mode_PNGImage = "png";
     public static final String Mode_PDFDocument = "pdf";
+    public static final String Action_UPDATE = "update";
+    
+    public static final String HEADER_PREFIX = "head_";
+    public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
+    public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
+    public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
+    public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
+    public static final int HEADER_HEIGHT = 150; // altura del encabezado
+    public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
+    public static final int HEADER_2 = 18; // tamaño de fuente para misión, visión
+    public static final int HEADER_3 = 16; // tamaño de fuente para temas
+    public static final int HEADER_4 = 14; // tamaño de fuente para diferenciadores
+    public static final int HEADER_5 = 12; // tamaño de fuente para objetivos
+    public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_RIGHT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_TOP = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
+    public static final int PADDING_TOP = 4; // Especifica el espacio libre arriba entre rectángulos para pintar las ligas
+    public static final int PADDING_LEFT = 2; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
+    public static final int PADDING_RIGHT = 2; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
+    public static final int PADDING_DOWN = 4; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
+    public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
+    public static final String XLNK_NS_URI = "http://www.w3.org/1999/xlink";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -89,16 +113,16 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         if (webSite instanceof BSC) {
             PrintWriter out = response.getWriter();
             BSC model = (BSC) webSite;
-            Document dom = model.getDom();
-            Document map = null;
-            try {
-                map = getDom(dom);
-            } catch (XPathExpressionException xpathe) {
-                System.out.println("XPath con problemas... " + xpathe);
-            }
+//            Document dom = model.getDom();
+//            Document map = null;
+//            try {
+//                map = getDom(dom);
+//            } catch (XPathExpressionException xpathe) {
+//                System.out.println("XPath con problemas... " + xpathe);
+//            }
             String SVGjs = null;
             try {
-                SVGjs = getSvg(request, map);
+                SVGjs = getSvg(request);
             } catch (XPathExpressionException xpe) {
                 System.out.println(xpe.toString());
             }
@@ -132,8 +156,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".png\"");
-
-
         if (webSite instanceof BSC) {
 //            Period period = getPeriod(request);
 //            if(period != null) {
@@ -199,590 +221,64 @@ public class StrategicMap extends GenericResource implements PDFExportable {
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     @Override
-    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        Resource base=getResourceBase();
         PrintWriter out = response.getWriter();
-        StringBuffer sb = new StringBuffer();
-        String id = paramRequest.getResourceBase().getId();
-        SWBResourceURL url = paramRequest.getActionUrl().setAction("update");
-        Resource base = paramRequest.getResourceBase();
-        WebSite ws = paramRequest.getWebPage().getWebSite();
 
-        String amountPerspective = base.getData("amountPerspective") == null ? ""
-                : base.getData("amountPerspective");
-        String amountTheme = base.getData("amountTheme") == null ? ""
-                : base.getData("amountTheme");
-        String amountObjective = base.getData("amountObjective") == null ? ""
-                : base.getData("amountObjective");
-        String widthHorizontalObjective = base.getData("widthHorizontalObjective") == null ? ""
-                : base.getData("widthHorizontalObjective");
-        String widthVerticalObjective = base.getData("widthVerticalObjective") == null ? ""
-                : base.getData("widthVerticalObjective");
-        String amountDifferentiatorGroup = base.getData("amountDifferentiatorGroup") == null ? ""
-                : base.getData("amountDifferentiatorGroup");
-        String amountDifferentiator = base.getData("amountDifferentiator") == null ? ""
-                : base.getData("amountDifferentiator");
-        String widthHorizontalDifferentiator = base.getData("widthHorizontalDifferentiator") == null ? ""
-                : base.getData("widthHorizontalDifferentiator");
-        String colorRelOO = base.getData("colorRelOO") == null ? "" : base.getData("colorRelOO");
-        String colorRelOT = base.getData("colorRelOT") == null ? "" : base.getData("colorRelOT");
-        String colorRelTO = base.getData("colorRelTO") == null ? "" : base.getData("colorRelTO");
-        String colorRelTT = base.getData("colorRelTT") == null ? "" : base.getData("colorRelTT");
-        String colorRelPP = base.getData("colorRelPP") == null ? "" : base.getData("colorRelPP");
-        String ty_vision = base.getData("ty_vision") == null ? "" : base.getData("ty_vision");
-        String bg_vision = base.getData("bg_vision") == null ? "" : base.getData("bg_vision");
-        String ty_mision = base.getData("ty_mision") == null ? "" : base.getData("ty_mision");
-        String bg_mision = base.getData("bg_mision") == null ? "" : base.getData("bg_mision");
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if(SWBParamRequest.Action_ADD.equals(action) || SWBParamRequest.Action_EDIT.equals(action))
+        {
+            StringBuilder htm = new StringBuilder();
+            final String path = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+            SWBResourceURL url = paramRequest.getActionUrl().setAction(Action_UPDATE);
+            htm.append("<script type=\"text/javascript\">\n");
+            htm.append("  dojo.require('dijit.layout.ContentPane');\n");
+            htm.append("  dojo.require('dijit.form.Form');\n");
+            htm.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            htm.append("  dojo.require('dijit.form.Button');\n");
+            htm.append("</script>\n");
 
-        sb.append("<script type=\"text/javascript\">\n");
-        sb.append("  dojo.require('dijit.form.Form');\n");
-        sb.append("</script>\n");
-        sb.append("\n<script type=\"text/javascript\">\n");
-        sb.append("<!--\n");
-        sb.append("var swOk=0, optionObj;");
-        sb.append("\nfunction jsValida()");
-        sb.append("{");
-        sb.append("   var ele=document.getElementById(\"frmAdm");
-        sb.append(id);
-        sb.append("\");");
-        sb.append("   var ele1=document.getElementById(\"widthHorizontalObjective\");");
-        sb.append("   var ele2=document.getElementById(\"widthVerticalObjective\");");
-        sb.append("   var ele3=document.getElementById(\"widthHorizontalDifferentiator\");");
+            htm.append("<div class=\"swbform\">\n");
+            htm.append("<form id=\"frmPromo\" dojoType=\"dijit.form.Form\" method=\"post\" action=\""+url+"\">\n");
+            htm.append("<div title=\"Configuración del estilo\" open=\"true\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">\n");
+            htm.append("<fieldset>\n");
+            htm.append("    <legend>Estilo</legend>\n");
+            htm.append("    <ul class=\"swbform-ul\">\n");
 
-        sb.append("   var ele5=document.getElementById(\"amountDifferentiator\");");
-        sb.append("   var ele6=document.getElementById(\"amountObjective\");");
-        sb.append("   var ele7=document.getElementById(\"amountDifferentiator\");");
-        sb.append("   var ele8=document.getElementById(\"amountPerspective\");");
-        sb.append("   var ele9=document.getElementById(\"amountTheme\");");
-        sb.append("   var ele10=document.getElementById(\"amountDifferentiatorGroup\");");
-        sb.append("   if(!isNumber(ele1)) return false;");
-        sb.append("   if(!isNumber(ele2)) return false;");
-        sb.append("   if(!isNumber(ele3)) return false;");
-        sb.append("   if(!isNumber(ele5)) return false;");
-        sb.append("   if(!isNumber(ele6)) return false;");
-        sb.append("   if(!isNumber(ele7)) return false;");
-        sb.append("   if(!isNumber(ele8)) return false;");
-        sb.append("   if(!isNumber(ele9)) return false;");
-        sb.append("   if(!isNumber(ele10)) return false;");
-        sb.append("   return true;");
-        sb.append("}");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen (pixeles)</label>\n");
+            htm.append("          <input type=\"text\" id=\"width\" name=\"width\" regExp=\"\\d{2,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("width","1024")+"\" maxlength=\"4\" />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen (pixeles)</label>\n");
+            htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d{2,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","1400")+"\" maxlength=\"4\" />\n");
+            htm.append("        </li>\n");
+            
+            htm.append("</ul>\n");
+            htm.append("</fieldset>\n");
+            htm.append("</div>\n");
 
-        sb.append("\nfunction isNumber(pIn)");
-        sb.append("\n{");
-        sb.append("\n   pCaracter=pIn.value;");
-        sb.append("\n   for (var i=0;i<pCaracter.length;i++)");
-        sb.append("\n   {");
-        sb.append("\n       var sByte=pCaracter.substring(i,i+1);");
-        sb.append("\n       if (sByte<\"0\" || sByte>\"9\")");
-        sb.append("\n       {");
-        sb.append("\n           pIn.focus();");
-        sb.append("\n           alert('" + SWBUtils.TEXT.getLocaleString("locale_swb_util",
-                "usrmsg_WBResource_loadIsNumber_msg") + ".');");
-        sb.append("\n           return false;");
-        sb.append("\n       }");
-        sb.append("\n   }");
-        sb.append("\n   return true;");
-        sb.append("\n}");
-
-        sb.append("\n-->");
-        sb.append("\n</script>");
-
-        sb.append("\n<div class=\"swbform\">");
-        sb.append("\n<form type=\"dijit.form.Form\" class=\"swbform\" id=\"frmAdm");
-        sb.append(id);
-        sb.append("\" onsubmit=\"return jsValida()\" name=\"frmAdm");
-        sb.append(id);
-        sb.append("\" action=\"");
-        sb.append(url);
-        sb.append("\" method=\"post\" >");
-        sb.append("\n<input type=\"hidden\" name=\"suri\" value=\"");
-        sb.append(id);
-        sb.append("\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configPerspec"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"amountPerspective\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("amountText"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"amountPerspective\" name=\"amountPerspective\" type=\"text\" ");
-        sb.append(" regExp=\"\\d+\" value=\"");
-        sb.append(amountPerspective);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe");
-        sb.append(" ser númerico.\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-        Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
-        while (itPers.hasNext()) {
-            Perspective perspective = itPers.next();
-            String colorTextPerspective = base.getData("ty_perspective" + perspective.getId())
-                    == null ? "" : base.getData("ty_perspective" + perspective.getId());
-            String viewPerspective = base.getData("perspective" + id + perspective.getId()) == null ? ""
-                    : base.getData("perspective" + id + perspective.getId());
-
-            sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">");
-            sb.append(perspective.getTitle());
-            sb.append(": </li>");
-
-            String select = viewPerspective.equals("") ? "" : "checked";
-            sb.append("\n<li class=\"swbform-li\"><input id=\"perspective");
-            sb.append(id);
-            sb.append(perspective.getId());
-            sb.append("\" name=\"perspective");
-            sb.append(id);
-            sb.append(perspective.getId());
-            sb.append("\" type=\"checkbox\" value=\"");
-            sb.append(perspective.getId());
-            sb.append("\" ");
-            sb.append(" data-dojo-type=\"dijit.form.CheckBox\" ");
-            sb.append(select);
-            sb.append(" class=\"swbform-label\">");
-            sb.append("\n<label for=\"perspective");
-            sb.append(id);
-            sb.append(perspective.getId());
-            sb.append("\">");
-            sb.append(paramRequest.getLocaleString("showPerspective"));
-            sb.append("\n</label></li>");
-            sb.append("\n</ul>");
-
-            String strPers = "ty_perspective" + perspective.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"");
-            sb.append(strPers);
-            sb.append("\" class=\"swbform-label\">");
-            sb.append(paramRequest.getLocaleString("letterColor"));
-            sb.append(": </label>");
-            sb.append("\n<input id=\"");
-            sb.append(strPers);
-            sb.append("\" name=\"");
-            sb.append(strPers);
-            sb.append("\" type=\"text\" ");
-            sb.append("value=\"");
-            sb.append(colorTextPerspective);
-            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-            sb.append("\n</li>");
+            htm.append("<fieldset>\n");
+            htm.append("   <legend></legend>\n");
+            htm.append("   <ul class=\"swbform-ul\">\n");
+            htm.append("      <li>\n");
+            htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\" onclick=\"return isValid()\">Guardar</button>\n");
+            htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
+            htm.append("      </li>\n");
+            htm.append("   </ul>\n");
+            htm.append("</fieldset>\n");
+            htm.append("</form>\n");
+            htm.append("</div>\n");        
+            out.print(htm.toString());
         }
-
-        sb.append("\n</fieldset>");
-        sb.append("\n<div id=\"configcol\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("configThemes"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configThemes"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"amountTheme\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("amountText"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"amountTheme\" name=\"amountTheme\" type=\"text\" regExp=\"\\d+\"");
-        sb.append(" value=\"");
-        sb.append(amountTheme);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
-        sb.append("ser númerico.\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-
-        Iterator<Theme> itTheme = Theme.ClassMgr.listThemes(ws);
-        while (itTheme.hasNext()) {
-            Theme theme = itTheme.next();
-            String colorBgTheme = base.getData("bg_theme_" + theme.getId()) == null ? ""
-                    : base.getData("bg_theme_" + theme.getId());
-            String colorTxtTheme = base.getData("ty_theme_" + theme.getId()) == null ? ""
-                    : base.getData("ty_theme_" + theme.getId());
-            sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">");
-            sb.append(theme.getTitle());
-            sb.append(": </li>");
-
-            String strTheme = "ty_theme_" + theme.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"");
-            sb.append(strTheme);
-            sb.append("\" class=\"swbform-label\">");
-            sb.append(paramRequest.getLocaleString("letterColor"));
-            sb.append(": </label>");
-            sb.append("\n<input id=\"");
-            sb.append(strTheme);
-            sb.append("\" name=\"");
-            sb.append(strTheme);
-            sb.append("\" type=\"text\" ");
-            sb.append("value=\"");
-            sb.append(colorTxtTheme);
-            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-            sb.append("\n</li>");
-
-            String strTheme1 = "bg_theme_" + theme.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"");
-            sb.append(strTheme1);
-            sb.append("\" class=\"swbform-label\">");
-            sb.append(paramRequest.getLocaleString("bgColor"));
-            sb.append(": </label>");
-            sb.append("\n<input id=\"");
-            sb.append(strTheme1);
-            sb.append("\" name=\"");
-            sb.append(strTheme1);
-            sb.append("\" type=\"text\" ");
-            sb.append("value=\"");
-            sb.append(colorBgTheme);
-            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-            sb.append("\n</li>");
-            sb.append("\n</ul>");
+        else if(Action_UPDATE.equals(action))
+        {
+            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
+            out.println("   alert('Se actualizó exitosamente el recurso con identificador "+base.getId()+"');");
+            out.println("   window.location.href='"+paramRequest.getRenderUrl().setAction(SWBParamRequest.Action_EDIT)+"';");
+            out.println("</script>");
         }
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-        sb.append("\n<div id=\"configObj\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("configObjec"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configObjec"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"widthHorizontalObjective\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("heightHoriz"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"widthHorizontalObjective\" name=\"widthHorizontalObjective\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"");
-        sb.append(widthHorizontalObjective);
-        sb.append("\" ");
-        sb.append("dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
-        sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"widthVerticalObjective\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("heightVert"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"widthVerticalObjective\" name=\"widthVerticalObjective\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"");
-        sb.append(widthVerticalObjective);
-        sb.append("\"");
-        sb.append(" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
-        sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"amountObjective\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("amountText"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"amountObjective\" name=\"amountObjective\" type=\"text\" regExp=\"\\d+\"");
-        sb.append(" value=\"");
-        sb.append(amountObjective);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
-        sb.append("ser númerico.\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-
-        sb.append("\n<div id=\"configGDiffere\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("configGDiff"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configGDiff"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\"><label for=\"amountDifferentiatorGroup\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("amountText"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"amountDifferentiatorGroup\" name=\"amountDifferentiatorGroup\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"");
-        sb.append(amountDifferentiatorGroup);
-        sb.append("\"");
-        sb.append(" dojoType=\"dijit.form.ValidationTextBox\" promptMessage=\"Captura cantidad.\"");
-        sb.append(" invalidMessage=\"El valor proporcionado debe ser númerico.\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-        Iterator<DifferentiatorGroup> itDiffeG = DifferentiatorGroup.ClassMgr.listDifferentiatorGroups(ws);
-        while (itDiffeG.hasNext()) {
-            DifferentiatorGroup diffG = itDiffeG.next();
-            String colorBgTheme = base.getData("bg_diffG_" + diffG.getId()) == null ? ""
-                    : base.getData("bg_diffG_" + diffG.getId());
-            String colorTxtTheme = base.getData("ty_diffG_" + diffG.getId()) == null ? ""
-                    : base.getData("ty_diffG_" + diffG.getId());
-            sb.append("\n<ul class=\"swbform-ul\">");
-            sb.append("\n<li class=\"swbform-li\">");
-            sb.append(diffG.getTitle());
-            sb.append(": </li>");
-
-            String strTheme = "ty_diffG_" + diffG.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"");
-            sb.append(strTheme);
-            sb.append("\" class=\"swbform-label\">");
-            sb.append(paramRequest.getLocaleString("letterColor"));
-            sb.append(": </label>");
-            sb.append("\n<input id=\"");
-            sb.append(strTheme);
-            sb.append("\" name=\"");
-            sb.append(strTheme);
-            sb.append("\" type=\"text\" ");
-            sb.append("value=\"");
-            sb.append(colorTxtTheme);
-            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-            sb.append("\n</li>");
-
-            String strTheme1 = "bg_diffG_" + diffG.getId();
-            sb.append("\n<li class=\"swbform-li\"><label for=\"");
-            sb.append(strTheme1);
-            sb.append("\" class=\"swbform-label\">");
-            sb.append(paramRequest.getLocaleString("bgColor"));
-            sb.append(": </label>");
-            sb.append("\n<input id=\"");
-            sb.append(strTheme1);
-            sb.append("\" name=\"");
-            sb.append(strTheme1);
-            sb.append("\" type=\"text\" ");
-            sb.append("value=\"");
-            sb.append(colorBgTheme);
-            sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-            sb.append("\n</li>");
-            sb.append("\n</ul>");
-
-        }
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-
-        sb.append("\n<div id=\"configDife\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("configDiff"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configDiff"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"widthHorizontalDifferentiator\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("heightHoriz"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"widthHorizontalDifferentiator\" name=\"widthHorizontalDifferentiator\" ");
-        sb.append("type=\"text\" regExp=\"\\d+\" ");
-        sb.append("value=\"");
-        sb.append(widthHorizontalDifferentiator);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado ");
-        sb.append("debe ser númerico.\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"amountDifferentiator\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("amountText"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"amountDifferentiator\" name=\"amountDifferentiator\" type=\"text\" ");
-        sb.append("regExp=\"\\d+\" value=\"");
-        sb.append(amountDifferentiator);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\" ");
-        sb.append("promptMessage=\"Captura cantidad.\" invalidMessage=\"El valor proporcionado debe ");
-        sb.append("ser númerico.\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-        sb.append("\n<div id=\"configCausal\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("confCausal"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("confCausal"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"colorRelOO\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("cssOO"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"colorRelOO\" name=\"colorRelOO\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(colorRelOO);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"colorRelOT\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("cssOT"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"colorRelOT\" name=\"colorRelOT\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(colorRelOT);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"colorRelTO\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("cssTO"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"colorRelTO\" name=\"colorRelTO\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(colorRelTO);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"colorRelTT\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("cssTT"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"colorRelTT\" name=\"colorRelTT\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(colorRelTT);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        sb.append("\n<li class=\"swbform-li\">");
-        sb.append("\n<label for=\"colorRelPP\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("cssPP"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"colorRelPP\" name=\"colorRelPP\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(colorRelPP);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        String select = base.getData("margins") == null ? "" : "checked";
-        sb.append("\n<li class=\"swbform-li\"><input id=\"margins");
-        sb.append("\" name=\"margins");
-        sb.append("\" type=\"checkbox\" value=\"margins\" ");
-        sb.append(" data-dojo-type=\"dijit.form.CheckBox\" ");
-        sb.append(select);
-        sb.append(" class=\"swbform-label\">");
-        sb.append("\n<label for=\"margins\">");
-        sb.append(paramRequest.getLocaleString("addMargin"));
-        sb.append("\n</label></li>");
-
-        sb.append("\n</ul>");
-
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-        sb.append("\n<div id=\"configHeaders\\/");
-        sb.append(id);
-        sb.append("\" dojoType=\"dijit.TitlePane\" title=\"");
-        sb.append(paramRequest.getLocaleString("configVM"));
-        sb.append("\"  ");
-        sb.append("open=\"false\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">");
-        sb.append("\n<fieldset>");
-        sb.append("\n<legend>");
-        sb.append(paramRequest.getLocaleString("configVM"));
-        sb.append("</legend>");
-        sb.append("\n<ul class=\"swbform-ul\">");
-
-        String strVision = "ty_vision";
-        sb.append("\n<li class=\"swbform-li\"><label for=\"");
-        sb.append(strVision);
-        sb.append("\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("letterColorV"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"");
-        sb.append(strVision);
-        sb.append("\" name=\"");
-        sb.append(strVision);
-        sb.append("\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(ty_vision);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        String strVision1 = "bg_vision";
-        sb.append("\n<li class=\"swbform-li\"><label for=\"");
-        sb.append(strVision1);
-        sb.append("\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("bgColorV"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"");
-        sb.append(strVision1);
-        sb.append("\" name=\"");
-        sb.append(strVision1);
-        sb.append("\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(bg_vision);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        String strMision = "ty_mision";
-        sb.append("\n<li class=\"swbform-li\"><label for=\"");
-        sb.append(strMision);
-        sb.append("\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("letterColorM"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"");
-        sb.append(strMision);
-        sb.append("\" name=\"");
-        sb.append(strMision);
-        sb.append("\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(ty_mision);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-
-        String strMision1 = "bg_mision";
-        sb.append("\n<li class=\"swbform-li\"><label for=\"");
-        sb.append(strMision1);
-        sb.append("\" class=\"swbform-label\">");
-        sb.append(paramRequest.getLocaleString("bgColorM"));
-        sb.append(": </label>");
-        sb.append("\n<input id=\"");
-        sb.append(strMision1);
-        sb.append("\" name=\"");
-        sb.append(strMision1);
-        sb.append("\" type=\"text\" ");
-        sb.append("value=\"");
-        sb.append(bg_mision);
-        sb.append("\" dojoType=\"dijit.form.ValidationTextBox\">");
-        sb.append("\n</li>");
-        sb.append("\n</ul>");
-
-        sb.append("\n</fieldset>");
-        sb.append("\n</div>");
-
-        sb.append("\n<fieldset>");
-        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" value=\"Submit\" >");
-        sb.append(paramRequest.getLocaleString("save"));
-        sb.append("</button>&nbsp;");
-        sb.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\" value=\"Reset\">");
-        sb.append(paramRequest.getLocaleString("cancel"));
-        sb.append("</button>");
-        sb.append("\n</fieldset>");
-
-        sb.append("\n</form>");
-        sb.append("\n</div>");
-        if ((request.getParameter("statusMsg")) != null
-                && (!request.getParameter("statusMsg").isEmpty())) {
-            sb.append("\n<script type=\"text/javascript\" language=\"JavaScript\">");
-            sb.append("\n   alert('");
-            sb.append(request.getParameter("statusMsg"));
-            sb.append("');");
-            sb.append("\n   window.location.href='");
-            sb.append(paramRequest.getRenderUrl().setAction("edit"));
-            sb.append("';");
-            sb.append("\n</script>");
-        }
-        out.println(sb.toString());
     }
 
     @Override
@@ -817,30 +313,18 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        Resource base = response.getResourceBase();
-        WebSite ws = response.getWebPage().getWebSite();
-        String id = base.getId();
-        if ("update".equals(action)) {
-            Enumeration enumAttri = request.getParameterNames();
-
-            Iterator<Perspective> itPers = Perspective.ClassMgr.listPerspectives(ws);
-            while (itPers.hasNext()) {
-                Perspective perspective = itPers.next();
-                String showTitlePerspective = "show_" + perspective.getTitle() + perspective.getId();
-                String viewPerspective = "perspective" + id + perspective.getId();
-                base.setData(showTitlePerspective, null);
-                base.setData(viewPerspective, null);
-            }
-            base.setData("margins", null);
-
-            while (enumAttri.hasMoreElements()) {
-                Object elem = enumAttri.nextElement();
-                String data = (String) request.getParameter(elem.toString());
-                base.setData(elem.toString(), data);
+        if(Action_UPDATE.equals(action)) {
+            Resource base = response.getResourceBase();
+            base.setAttribute("width", request.getParameter("width"));
+            base.setAttribute("height", request.getParameter("height"));
+            try {
+                base.updateAttributesToDB();
+                response.setAction(Action_UPDATE);
+            }catch(SWBException e) {
+                log.error(e);
+                response.setAction(SWBActionResponse.Action_EDIT);
             }
         }
-        response.setRenderParameter("statusMsg", "Actualización exitosa");
-        response.setAction(SWBResourceURL.Mode_ADMIN);
     }
 
     /**
@@ -882,57 +366,14 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
         urlBase = "#";
     }
-    public static final String HEADER_PREFIX = "head_";
-    public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
-    public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
-    public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
-    public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
-    public static final int HEADER_HEIGHT = 150; // altura del encabezado
-    public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
-    public static final int HEADER_2 = 18; // tamaño de fuente para misión, visión
-    public static final int HEADER_3 = 16; // tamaño de fuente para temas
-    public static final int HEADER_4 = 14; // tamaño de fuente para diferenciadores
-    public static final int HEADER_5 = 12; // tamaño de fuente para objetivos
-    public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int BOX_SPACING_LEFT = 15; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int BOX_SPACING_RIGHT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int BOX_SPACING_TOP = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int BOX_SPACING_BOTTOM = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
-    public static final int PADDING_TOP = 4; // Especifica el espacio libre arriba entre rectángulos para pintar las ligas
-    public static final int PADDING_LEFT = 2; // Especifica el espacio libre a la izquieerda entre rectángulos para pintar las ligas
-    public static final int PADDING_RIGHT = 2; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
-    public static final int PADDING_DOWN = 4; // Especifica el espacio libre a la derecha entre rectángulos para pintar las ligas
-    public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
-    public static final String XLNK_NS_URI = "http://www.w3.org/1999/xlink";
-    private int width, height;
-
-    public int getWidth() {
-        return width;
-    }
-
-    private void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    private void setHeight(int height) {
-        this.height = height;
-    }
-
-    public Document getDom(Document documentBSC) throws XPathExpressionException, NumberFormatException {
-//        Resource base = getResourceBase();
-//        final BSC scorecard = (BSC)base.getWebSite();
-//        setWidth(assertValue(base.getAttribute("width", "1024")));
-//        setHeight(assertValue(base.getAttribute("height", "1400")));
-        width = 1024;
-        height = 1400;
-        //final Period period = getPeriod(request);
-        //Document documentBSC = scorecard.getDom(period);
-
-        //Document documentBSC = scorecard.getDom();
+    
+    public Document getDom() throws XPathExpressionException, ClassCastException, NumberFormatException
+    {
+        Resource base = getResourceBase();
+        final BSC scorecard = (BSC)base.getWebSite();
+        int width = assertValue(base.getAttribute("width", "1024"));
+        int height = assertValue(base.getAttribute("height", "1400"));
+        Document documentBSC = scorecard.getDom();
         Element root = documentBSC.getDocumentElement();
         root.setAttribute("width", Integer.toString(width));
         root.setAttribute("height", Integer.toString(height));
@@ -1064,32 +505,22 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
 
 
-        // TODO imagen logo
+        // TODO
         // atributo href de los objetivos
 
         return documentBSC;
     }
-
-//    public String getSvg() throws XPathExpressionException
-//    {
-//        Document xmlBSC = getDom()
-//    }
-    public String getSvg(HttpServletRequest request, Document documentBSC) throws XPathExpressionException {
-        Resource base = getResourceBase();
+    
+    public String getSvg(HttpServletRequest request) throws XPathExpressionException {
         String id, txt, expression;
-
         int w, h, w_, h_;
         int x, y = 0, x_, y_;
         StringBuilder SVGjs = new StringBuilder();
-//        final String emapId = base.getWebSiteId();
-        final String emapId = "bgj001";
 
-        //Document documentBSC = getDom();
-        Element rootBSC = documentBSC.getDocumentElement();
-        width = assertValue(rootBSC.getAttribute("width"));
-        height = assertValue(rootBSC.getAttribute("height"));
-        width = 1024;
-        height = 1400;
+        Document map = getDom();
+        Element rootBSC = map.getDocumentElement();
+        int width = assertValue(rootBSC.getAttribute("width"));
+        int height = assertValue(rootBSC.getAttribute("height"));
 
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var width = " + width + ";").append("\n");
@@ -1098,7 +529,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         SVGjs.append(" var XLINK_ = '" + XLNK_NS_URI + "';").append("\n");
         SVGjs.append(" window.onload = function() {").append("\n");
         SVGjs.append(" var svg = document.createElementNS(SVG_,'svg'); ").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'id','" + emapId + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'id','" + getResourceBase().getWebSiteId() + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'width','" + width + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'height','" + height + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0," + width + "," + height + "');").append("\n");
@@ -1142,7 +573,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         // Encabezado
         XPath xPath = XPathFactory.newInstance().newXPath();
         expression = "/bsc/header";
-        Node node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
+        Node node = (Node) xPath.compile(expression).evaluate(map, XPathConstants.NODE);
         if (node != null && node instanceof Element) {
             NamedNodeMap attrs = node.getAttributes();
             id = attrs.getNamedItem("id").getNodeValue();
@@ -1161,7 +592,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
             // título mapa
             expression = "/bsc/header/title";
-            txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+            txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
             SVGjs.append(" txt = createText('" + txt + "'," + (x_ + w_ / 2) + "," + y_ + "," + HEADER_1 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -1194,7 +625,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
             // logo
             expression = "/bsc/header/logo";
-            node = (Node) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODE);
+            node = (Node) xPath.compile(expression).evaluate(map, XPathConstants.NODE);
             if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
                 if (attrs.getNamedItem("src").getNodeValue().isEmpty()) {
@@ -1216,7 +647,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
             y_ = y_ + vPadding(HEADER_2);
             h_ = h_ - vPadding(HEADER_2);
             expression = "/bsc/header/mission";
-            txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+            txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
             SVGjs.append(" txt = createText('" + txt + "'," + x_ + "," + y_ + ",14,'Verdana');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
             SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + h_ + "," + x_ + "," + y_ + ");").append("\n");
@@ -1225,7 +656,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
             // contenido Vision
             expression = "/bsc/header/vision";
-            txt = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+            txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
             SVGjs.append(" txt = createText('" + txt + "'," + (x_ + 2 * w_) + "," + y_ + ",14,'Verdana');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
             SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + h_ + "," + (x_ + 2 * w_) + "," + y_ + ");").append("\n");
@@ -1242,7 +673,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         StringBuilder info;
         // lista de perspectivas
         expression = "/bsc/perspective";
-        NodeList nlPersp = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+        NodeList nlPersp = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
         for (int j = 0; j < nlPersp.getLength(); j++) {
             node = nlPersp.item(j);
             if (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
@@ -1253,7 +684,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                 // título de la perspectiva
                 expression = "/bsc/perspective[@id='" + pid + "']/title";
-                perspectiveName = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+                perspectiveName = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
 
                 SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
                 SVGjs.append(" g.setAttributeNS(null,'id','" + pid + "');").append("\n");
@@ -1263,7 +694,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                 // diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='" + pid + "']/diffgroup[1]/diff";
-                NodeList nlDiffs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                NodeList nlDiffs = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                 boolean hasDifferentiators = nlDiffs.getLength() > 0;
                 if (hasDifferentiators) {
                     SVGjs.append(" y_ += " + BOX_SPACING + ";").append("\n");
@@ -1294,7 +725,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                     SVGjs.append(" y__ = y_ + " + BOX_SPACING + ";").append("\n");
                 }
                 expression = "/bsc/perspective[@id='" + pid + "']/themes/theme";
-                NodeList nlThms = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                NodeList nlThms = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                 for (int l = 0; l < nlThms.getLength(); l++) {
                     Node nodeT = nlThms.item(l);
                     if (nodeT != null && nodeT.getNodeType() == Node.ELEMENT_NODE) {
@@ -1314,7 +745,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                         // rectángulo tema
                         if (!isHidden) {
                             expression = "/bsc/perspective[@id='" + pid + "']/themes/theme[@id='" + tid + "']/title";
-                            title = (String) xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING);
+                            title = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
                             SVGjs.append(" txt = createText('" + title + "'," + x_ + ",y__," + HEADER_3 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
                             SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + x_ + ");").append("\n");
@@ -1325,7 +756,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                         // relaciones causa-efecto con este tema
                         expression = "//theme[@id='" + tid + "']/rel";
-                        NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
 //                        SVGjs.append(" console.log('el tema "+tid+" ');");
 //                        SVGjs.append(" console.log('tiene "+nlRels.getLength()+" relaciones ');");
                         for (int n = 0; n < nlRels.getLength(); n++) {
@@ -1373,7 +804,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                         }
 
                         expression = "//theme[@id='" + tid + "']/obj";
-                        NodeList nlObjs = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                        NodeList nlObjs = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                         for (int m = 0; m < nlObjs.getLength(); m++) {
                             Node nodeO = nlObjs.item(m);
                             if (nodeO != null && nodeO.getNodeType() == Node.ELEMENT_NODE) {
@@ -1386,16 +817,16 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                                 info = new StringBuilder();
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/prefix";
-                                info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                                info.append(xPath.compile(expression).evaluate(map, XPathConstants.STRING));
                                 info.append(" ");
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/title";
-                                info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                                info.append(xPath.compile(expression).evaluate(map, XPathConstants.STRING));
                                 info.append(" ");
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/sponsor";
-                                info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                                info.append(xPath.compile(expression).evaluate(map, XPathConstants.STRING));
                                 info.append(" ");
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/frequency";
-                                info.append(xPath.compile(expression).evaluate(documentBSC, XPathConstants.STRING));
+                                info.append(xPath.compile(expression).evaluate(map, XPathConstants.STRING));
 
                                 // rectángulo objetivo
                                 SVGjs.append(" lnk = createLink('" + href + "');").append("\n");
@@ -1413,7 +844,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                                 //relaciones causa-efecto con este objetivo
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/rel";
-                                nlRels = (NodeList) xPath.compile(expression).evaluate(documentBSC, XPathConstants.NODESET);
+                                nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                                 for (int n = 0; n < nlRels.getLength(); n++) {
                                     Node nodeR = nlRels.item(n);
                                     if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
@@ -1747,14 +1178,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
     private int topPadding(int value) {
         return value + PADDING_TOP;
-    }
-
-    private int bottomPadding(int value) {
-        return value + PADDING_TOP;
-    }
-
-    private int hPadding(int value) {
-        return value + PADDING_LEFT + PADDING_RIGHT;
     }
 
     /**

@@ -15,13 +15,15 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
@@ -36,10 +38,12 @@ import org.w3c.dom.NodeList;
  * @author carlos.ramos
  */
 public class RisksMap extends GenericResource {
-    private int width, height;
+    private static final Logger log = SWBUtils.getLogger(RisksMap.class);
+//    private int width, height;
     
     public static final String Mode_PNGImage = "png";
     public static final String Mode_PDFDocument = "pdf";
+    public static final String Action_UPDATE = "update";
     
     public static final String WORD_SPACING = "14 14 14 14 14 14 14 14 14 14"; // dx para los ejes de coordenadas, excluyendo el 0
     
@@ -69,13 +73,13 @@ public class RisksMap extends GenericResource {
     public static final String SVG_NS_URI = "http://www.w3.org/2000/svg";
     public static final String XLNK_NS_URI = "http://www.w3.org/1999/xlink";
     
-    @Override
-    public void setResourceBase(Resource base) throws SWBResourceException
-    {
-        super.setResourceBase(base);
-        this.width = assertValue(base.getAttribute("width","1050"));
-        this.height = assertValue(base.getAttribute("height","800"));
-    }
+//    @Override
+//    public void setResourceBase(Resource base) throws SWBResourceException
+//    {
+//        super.setResourceBase(base);
+//        this.width = assertValue(base.getAttribute("width","1050"));
+//        this.height = assertValue(base.getAttribute("height","800"));
+//    }
     
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -113,19 +117,13 @@ public class RisksMap extends GenericResource {
         if(webSite instanceof BSC)
         {
             PrintWriter out = response.getWriter();
-            BSC model = (BSC)webSite;
-            Document dom = model.getDom();
-            Document map = null;
+            String SVGjs;
             try {
-                map = getDom(dom);
-            }catch(XPathExpressionException xpathe) {
-                System.out.println("XPath con problemas... "+xpathe);
-            }
-            String SVGjs = null;
-            try {
-                 SVGjs = getSvg(request, map);
+                 SVGjs = getSvg();
             }catch(XPathExpressionException xpe) {
                 System.out.println(xpe.toString());
+                out.println(xpe.getMessage());
+                return;
             }
             out.println(SVGjs);
             
@@ -158,8 +156,6 @@ public class RisksMap extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+"_riskmap.png\"");
-        
-        
         if(webSite instanceof BSC) {
             final String data = request.getParameter("data");
             Document svg = SWBUtils.XML.xmlToDom(data);
@@ -182,12 +178,10 @@ public class RisksMap extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\""+webSite.getTitle()+"_riskmap.pdf\"");
-        
         if(webSite instanceof BSC) {
             final String data = request.getParameter("data");
             Document svg = SWBUtils.XML.xmlToDom(data);
             PDFTranscoder t = new PDFTranscoder();
-            //t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
             TranscoderInput input = new TranscoderInput(svg);
             TranscoderOutput output = new TranscoderOutput(response.getOutputStream());
             try {
@@ -219,17 +213,1089 @@ public class RisksMap extends GenericResource {
         }
     }
     
-    public Document getDom(Document documentBSC) throws XPathExpressionException, NumberFormatException
+    /**
+     * Permite capturar y almacenar la informaci&oacute;n para configurar un
+     * mapa estrat&eacute;gico
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta generada a la petici&oacute;n recibida
+     * @param paramRequest un objeto de la plataforma de SWB con datos
+     * adicionales de la petici&oacute;n
+     * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
+     * con los recursos necesarios para atender la petici&oacute;n
+     * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
+     * problema con la generaci&oacute;n o escritura de la respuesta
+     */
+    @Override
+    public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        Resource base=getResourceBase();
+        PrintWriter out = response.getWriter();
+
+        String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
+        if(SWBParamRequest.Action_ADD.equals(action) || SWBParamRequest.Action_EDIT.equals(action))
+        {
+            StringBuilder htm = new StringBuilder();
+            final String path = SWBPortal.getWebWorkPath()+base.getWorkPath()+"/";
+            SWBResourceURL url = paramRequest.getActionUrl().setAction(Action_UPDATE);
+            htm.append("<script type=\"text/javascript\">\n");
+            htm.append("  dojo.require('dijit.layout.ContentPane');\n");
+            htm.append("  dojo.require('dijit.form.Form');\n");
+            htm.append("  dojo.require('dijit.form.TextBox');\n");
+            htm.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            htm.append("  dojo.require('dijit.form.RadioButton');\n");
+            htm.append("  dojo.require('dijit.form.Button');\n");
+
+            htm.append("  function setColor(domId, color) {\n");
+            htm.append("     var col=dijit.byId(domId);\n");
+            htm.append("     col.setValue(color);\n");
+            htm.append("     dojo.style(dijit.byId(domId).domNode,'background',color);\n");
+            htm.append("    var num=parseInt(\"FFFFFF\", 16)-parseInt(color.substring(1), 16);\n");
+            htm.append("    var hex=num.toString(16);\n");
+            htm.append("    while (hex.length < 6) {\n");
+            htm.append("      hex = \"0\" + hex;\n");
+            htm.append("    }\n");
+            htm.append("    col.style.color='#'+hex;\n");
+            htm.append("  }\n");
+
+            htm.append("  dojo.addOnLoad(function(){\n");
+            htm.append("    setColor('quadrant1Color','"+base.getAttribute("quadrant1Color","#2E2EFE")+"');\n");
+            htm.append("    setColor('quadrant2Color','"+base.getAttribute("quadrant2Color","#FE2E2E")+"');\n");
+            htm.append("    setColor('quadrant3Color','"+base.getAttribute("quadrant3Color","#2EFE64")+"');\n");
+            htm.append("    setColor('quadrant4Color','"+base.getAttribute("quadrant4Color","#F7FE2E")+"');\n");
+            htm.append("  });\n");
+            htm.append("</script>\n");
+
+
+
+            htm.append("<div class=\"swbform\">\n");
+            htm.append("<form id=\"frmPromo\" dojoType=\"dijit.form.Form\" method=\"post\" action=\""+url+"\">\n");
+            htm.append("<div title=\"Configuración del estilo\" open=\"true\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">\n");
+            htm.append("<fieldset>\n");
+            htm.append("    <legend>Estilo</legend>\n");
+            htm.append("    <ul class=\"swbform-ul\">\n");
+
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen (pixeles)</label>\n");
+            htm.append("          <input type=\"text\" id=\"width\" name=\"width\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("width","1050")+"\" maxlength=\"4\" />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen (pixeles)</label>\n");
+            htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","800")+"\" maxlength=\"4\" />\n");
+            htm.append("        </li>\n");
+
+            // cuadrante 1
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"quadrant1Color\" class=\"swbform-label\">Color del cuadrante I (hexadecimal)</label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant1Color\" name=\"quadrant1Color\" value=\""+base.getAttribute("quadrant1Color","#000000")+"\" onblur=\"setColor('quadrant1Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label class=\"swbform-label\"></label>\n");
+            htm.append("          <img src=\"/swbadmin/images/colorgrid.gif\" width=\"292\" height=\"196\" border=\"0\" alt=\"RGB color mixer\" usemap=\"#gridmap1\" ismap=\"ismap\">\n");
+            htm.append("          <map name=\"gridmap1\">\n");
+            htm.append("<!--- Row 1 --->\n");
+            htm.append("<area coords=\"2,2,18,18\" onclick=\"setColor('quadrant1Color','#330000')\">\n");
+            htm.append("<area coords=\"18,2,34,18\" onclick=\"setColor('quadrant1Color','#333300')\">\n");
+            htm.append("<area coords=\"34,2,50,18\" onclick=\"setColor('quadrant1Color','#336600')\">\n");
+            htm.append("<area coords=\"50,2,66,18\" onclick=\"setColor('quadrant1Color','#339900')\">\n");
+            htm.append("<area coords=\"66,2,82,18\" onclick=\"setColor('quadrant1Color','#33CC00')\">\n");
+            htm.append("<area coords=\"82,2,98,18\" onclick=\"setColor('quadrant1Color','#33FF00')\">\n");
+            htm.append("<area coords=\"98,2,114,18\" onclick=\"setColor('quadrant1Color','#66FF00')\">\n");
+            htm.append("<area coords=\"114,2,130,18\" onclick=\"setColor('quadrant1Color','#66CC00')\">\n");
+            htm.append("<area coords=\"130,2,146,18\" onclick=\"setColor('quadrant1Color','#669900')\">\n");
+            htm.append("<area coords=\"146,2,162,18\" onclick=\"setColor('quadrant1Color','#666600')\">\n");
+            htm.append("<area coords=\"162,2,178,18\" onclick=\"setColor('quadrant1Color','#663300')\">\n");
+            htm.append("<area coords=\"178,2,194,18\" onclick=\"setColor('quadrant1Color','#660000')\">\n");
+            htm.append("<area coords=\"194,2,210,18\" onclick=\"setColor('quadrant1Color','#FF0000')\">\n");
+            htm.append("<area coords=\"210,2,226,18\" onclick=\"setColor('quadrant1Color','#FF3300')\">\n");
+            htm.append("<area coords=\"226,2,242,18\" onclick=\"setColor('quadrant1Color','#FF6600')\">\n");
+            htm.append("<area coords=\"242,2,258,18\" onclick=\"setColor('quadrant1Color','#FF9900')\">\n");
+            htm.append("<area coords=\"258,2,274,18\" onclick=\"setColor('quadrant1Color','#FFCC00')\">\n");
+            htm.append("<area coords=\"274,2,290,18\" onclick=\"setColor('quadrant1Color','#FFFF00')\">\n");
+            htm.append("<!--- Row 2 --->\n");
+            htm.append("<area coords=\"2,18,18,34\" onclick=\"setColor('quadrant1Color','#330033')\">\n");
+            htm.append("<area coords=\"18,18,34,34\" onclick=\"setColor('quadrant1Color','#333333')\">\n");
+            htm.append("<area coords=\"34,18,50,34\" onclick=\"setColor('quadrant1Color','#336633')\">\n");
+            htm.append("<area coords=\"50,18,66,34\" onclick=\"setColor('quadrant1Color','#339933')\">\n");
+            htm.append("<area coords=\"66,18,82,34\" onclick=\"setColor('quadrant1Color','#33CC33')\">\n");
+            htm.append("<area coords=\"82,18,98,34\" onclick=\"setColor('quadrant1Color','#33FF33')\">\n");
+            htm.append("<area coords=\"98,18,114,34\" onclick=\"setColor('quadrant1Color','#66FF33')\">\n");
+            htm.append("<area coords=\"114,18,130,34\" onclick=\"setColor('quadrant1Color','#66CC33')\">\n");
+            htm.append("<area coords=\"130,18,146,34\" onclick=\"setColor('quadrant1Color','#669933')\">\n");
+            htm.append("<area coords=\"146,18,162,34\" onclick=\"setColor('quadrant1Color','#666633')\">\n");
+            htm.append("<area coords=\"162,18,178,34\" onclick=\"setColor('quadrant1Color','#663333')\">\n");
+            htm.append("<area coords=\"178,18,194,34\" onclick=\"setColor('quadrant1Color','#660033')\">\n");
+            htm.append("<area coords=\"194,18,210,34\" onclick=\"setColor('quadrant1Color','#FF0033')\">\n");
+            htm.append("<area coords=\"210,18,226,34\" onclick=\"setColor('quadrant1Color','#FF3333')\">\n");
+            htm.append("<area coords=\"226,18,242,34\" onclick=\"setColor('quadrant1Color','#FF6633')\">\n");
+            htm.append("<area coords=\"242,18,258,34\" onclick=\"setColor('quadrant1Color','#FF9933')\">\n");
+            htm.append("<area coords=\"258,18,274,34\" onclick=\"setColor('quadrant1Color','#FFCC33')\">\n");
+            htm.append("<area coords=\"274,18,290,34\" onclick=\"setColor('quadrant1Color','#FFFF33')\">\n");
+            htm.append("<!--- Row 3 --->\n");
+            htm.append("<area coords=\"2,34,18,50\" onclick=\"setColor('quadrant1Color','#330066')\">\n");
+            htm.append("<area coords=\"18,34,34,50\" onclick=\"setColor('quadrant1Color','#333366')\">\n");
+            htm.append("<area coords=\"34,34,50,50\" onclick=\"setColor('quadrant1Color','#336666')\">\n");
+            htm.append("<area coords=\"50,34,66,50\" onclick=\"setColor('quadrant1Color','#339966')\">\n");
+            htm.append("<area coords=\"66,34,82,50\" onclick=\"setColor('quadrant1Color','#33CC66')\">\n");
+            htm.append("<area coords=\"82,34,98,50\" onclick=\"setColor('quadrant1Color','#33FF66')\">\n");
+            htm.append("<area coords=\"98,34,114,50\" onclick=\"setColor('quadrant1Color','#66FF66')\">\n");
+            htm.append("<area coords=\"114,34,130,50\" onclick=\"setColor('quadrant1Color','#66CC66')\">\n");
+            htm.append("<area coords=\"130,34,146,50\" onclick=\"setColor('quadrant1Color','#669966')\">\n");
+            htm.append("<area coords=\"146,34,162,50\" onclick=\"setColor('quadrant1Color','#666666')\">\n");
+            htm.append("<area coords=\"162,34,178,50\" onclick=\"setColor('quadrant1Color','#663366')\">\n");
+            htm.append("<area coords=\"178,34,194,50\" onclick=\"setColor('quadrant1Color','#660066')\">\n");
+            htm.append("<area coords=\"194,34,210,50\" onclick=\"setColor('quadrant1Color','#FF0066')\">\n");
+            htm.append("<area coords=\"210,34,226,50\" onclick=\"setColor('quadrant1Color','#FF3366')\">\n");
+            htm.append("<area coords=\"226,34,242,50\" onclick=\"setColor('quadrant1Color','#FF6666')\">\n");
+            htm.append("<area coords=\"242,34,258,50\" onclick=\"setColor('quadrant1Color','#FF9966')\">\n");
+            htm.append("<area coords=\"258,34,274,50\" onclick=\"setColor('quadrant1Color','#FFCC66')\">\n");
+            htm.append("<area coords=\"274,34,290,50\" onclick=\"setColor('quadrant1Color','#FFFF66')\">\n");
+            htm.append("<!--- Row 4 --->\n");
+            htm.append("<area coords=\"2,50,18,66\" onclick=\"setColor('quadrant1Color','#330099')\">\n");
+            htm.append("<area coords=\"18,50,34,66\" onclick=\"setColor('quadrant1Color','#333399')\">\n");
+            htm.append("<area coords=\"34,50,50,66\" onclick=\"setColor('quadrant1Color','#336699')\">\n");
+            htm.append("<area coords=\"50,50,66,66\" onclick=\"setColor('quadrant1Color','#339999')\">\n");
+            htm.append("<area coords=\"66,50,82,66\" onclick=\"setColor('quadrant1Color','#33CC99')\">\n");
+            htm.append("<area coords=\"82,50,98,66\" onclick=\"setColor('quadrant1Color','#33FF99')\">\n");
+            htm.append("<area coords=\"98,50,114,66\" onclick=\"setColor('quadrant1Color','#66FF99')\">\n");
+            htm.append("<area coords=\"114,50,130,66\" onclick=\"setColor('quadrant1Color','#66CC99')\">\n");
+            htm.append("<area coords=\"130,50,146,66\" onclick=\"setColor('quadrant1Color','#669999')\">\n");
+            htm.append("<area coords=\"146,50,162,66\" onclick=\"setColor('quadrant1Color','#666699')\">\n");
+            htm.append("<area coords=\"162,50,178,66\" onclick=\"setColor('quadrant1Color','#663399')\">\n");
+            htm.append("<area coords=\"178,50,194,66\" onclick=\"setColor('quadrant1Color','#660099')\">\n");
+            htm.append("<area coords=\"194,50,210,66\" onclick=\"setColor('quadrant1Color','#FF0099')\">\n");
+            htm.append("<area coords=\"210,50,226,66\" onclick=\"setColor('quadrant1Color','#FF3399')\">\n");
+            htm.append("<area coords=\"226,50,242,66\" onclick=\"setColor('quadrant1Color','#FF6699')\">\n");
+            htm.append("<area coords=\"242,50,258,66\" onclick=\"setColor('quadrant1Color','#FF9999')\">\n");
+            htm.append("<area coords=\"258,50,274,66\" onclick=\"setColor('quadrant1Color','#FFCC99')\">\n");
+            htm.append("<area coords=\"274,50,290,66\" onclick=\"setColor('quadrant1Color','#FFFF99')\">\n");
+            htm.append("<!--- Row 5 --->\n");
+            htm.append("<area coords=\"2,66,18,82\" onclick=\"setColor('quadrant1Color','#3300CC')\">\n");
+            htm.append("<area coords=\"18,66,34,82\" onclick=\"setColor('quadrant1Color','#3333CC')\">\n");
+            htm.append("<area coords=\"34,66,50,82\" onclick=\"setColor('quadrant1Color','#3366CC')\">\n");
+            htm.append("<area coords=\"50,66,66,82\" onclick=\"setColor('quadrant1Color','#3399CC')\">\n");
+            htm.append("<area coords=\"66,66,82,82\" onclick=\"setColor('quadrant1Color','#33CCCC')\">\n");
+            htm.append("<area coords=\"82,66,98,82\" onclick=\"setColor('quadrant1Color','#33FFCC')\">\n");
+            htm.append("<area coords=\"98,66,114,82\" onclick=\"setColor('quadrant1Color','#66FFCC')\">\n");
+            htm.append("<area coords=\"114,66,130,82\" onclick=\"setColor('quadrant1Color','#66CCCC')\">\n");
+            htm.append("<area coords=\"130,66,146,82\" onclick=\"setColor('quadrant1Color','#6699CC')\">\n");
+            htm.append("<area coords=\"146,66,162,82\" onclick=\"setColor('quadrant1Color','#6666CC')\">\n");
+            htm.append("<area coords=\"162,66,178,82\" onclick=\"setColor('quadrant1Color','#6633CC')\">\n");
+            htm.append("<area coords=\"178,66,194,82\" onclick=\"setColor('quadrant1Color','#6600CC')\">\n");
+            htm.append("<area coords=\"194,66,210,82\" onclick=\"setColor('quadrant1Color','#FF00CC')\">\n");
+            htm.append("<area coords=\"210,66,226,82\" onclick=\"setColor('quadrant1Color','#FF33CC')\">\n");
+            htm.append("<area coords=\"226,66,242,82\" onclick=\"setColor('quadrant1Color','#FF66CC')\">\n");
+            htm.append("<area coords=\"242,66,258,82\" onclick=\"setColor('quadrant1Color','#FF99CC')\">\n");
+            htm.append("<area coords=\"258,66,274,82\" onclick=\"setColor('quadrant1Color','#FFCCCC')\">\n");
+            htm.append("<area coords=\"274,66,290,82\" onclick=\"setColor('quadrant1Color','#FFFFCC')\">\n");
+            htm.append("<!--- Row 6 --->\n");
+            htm.append("<area coords=\"2,82,18,98\" onclick=\"setColor('quadrant1Color','#3300FF')\">\n");
+            htm.append("<area coords=\"18,82,34,98\" onclick=\"setColor('quadrant1Color','#3333FF')\">\n");
+            htm.append("<area coords=\"34,82,50,98\" onclick=\"setColor('quadrant1Color','#3366FF')\">\n");
+            htm.append("<area coords=\"50,82,66,98\" onclick=\"setColor('quadrant1Color','#3399FF')\">\n");
+            htm.append("<area coords=\"66,82,82,98\" onclick=\"setColor('quadrant1Color','#33CCFF')\">\n");
+            htm.append("<area coords=\"82,82,98,98\" onclick=\"setColor('quadrant1Color','#33FFFF')\">\n");
+            htm.append("<area coords=\"98,82,114,98\" onclick=\"setColor('quadrant1Color','#66FFFF')\">\n");
+            htm.append("<area coords=\"114,82,130,98\" onclick=\"setColor('quadrant1Color','#66CCFF')\">\n");
+            htm.append("<area coords=\"130,82,146,98\" onclick=\"setColor('quadrant1Color','#6699FF')\">\n");
+            htm.append("<area coords=\"146,82,162,98\" onclick=\"setColor('quadrant1Color','#6666FF')\">\n");
+            htm.append("<area coords=\"162,82,178,98\" onclick=\"setColor('quadrant1Color','#6633FF')\">\n");
+            htm.append("<area coords=\"178,82,194,98\" onclick=\"setColor('quadrant1Color','#6600FF')\">\n");
+            htm.append("<area coords=\"194,82,210,98\" onclick=\"setColor('quadrant1Color','#FF00FF')\">\n");
+            htm.append("<area coords=\"210,82,226,98\" onclick=\"setColor('quadrant1Color','#FF33FF')\">\n");
+            htm.append("<area coords=\"226,82,242,98\" onclick=\"setColor('quadrant1Color','#FF66FF')\">\n");
+            htm.append("<area coords=\"242,82,258,98\" onclick=\"setColor('quadrant1Color','#FF99FF')\">\n");
+            htm.append("<area coords=\"258,82,274,98\" onclick=\"setColor('quadrant1Color','#FFCCFF')\">\n");
+            htm.append("<area coords=\"274,82,290,98\" onclick=\"setColor('quadrant1Color','#FFFFFF')\">\n");
+            htm.append("<!--- Row 7 --->\n");
+            htm.append("<area coords=\"2,98,18,114\" onclick=\"setColor('quadrant1Color','#0000FF')\">\n");
+            htm.append("<area coords=\"18,98,34,114\" onclick=\"setColor('quadrant1Color','#0033FF')\">\n");
+            htm.append("<area coords=\"34,98,50,114\" onclick=\"setColor('quadrant1Color','#0066FF')\">\n");
+            htm.append("<area coords=\"50,98,66,114\" onclick=\"setColor('quadrant1Color','#0099FF')\">\n");
+            htm.append("<area coords=\"66,98,82,114\" onclick=\"setColor('quadrant1Color','#00CCFF')\">\n");
+            htm.append("<area coords=\"82,98,98,114\" onclick=\"setColor('quadrant1Color','#00FFFF')\">\n");
+            htm.append("<area coords=\"98,98,114,114\" onclick=\"setColor('quadrant1Color','#99FFFF')\">\n");
+            htm.append("<area coords=\"114,98,130,114\" onclick=\"setColor('quadrant1Color','#99CCFF')\">\n");
+            htm.append("<area coords=\"130,98,146,114\" onclick=\"setColor('quadrant1Color','#9999FF')\">\n");
+            htm.append("<area coords=\"146,98,162,114\" onclick=\"setColor('quadrant1Color','#9966FF')\">\n");
+            htm.append("<area coords=\"162,98,178,114\" onclick=\"setColor('quadrant1Color','#9933FF')\">\n");
+            htm.append("<area coords=\"178,98,194,114\" onclick=\"setColor('quadrant1Color','#9900FF')\">\n");
+            htm.append("<area coords=\"194,98,210,114\" onclick=\"setColor('quadrant1Color','#CC00FF')\">\n");
+            htm.append("<area coords=\"210,98,226,114\" onclick=\"setColor('quadrant1Color','#CC33FF')\">\n");
+            htm.append("<area coords=\"226,98,242,114\" onclick=\"setColor('quadrant1Color','#CC66FF')\">\n");
+            htm.append("<area coords=\"242,98,258,114\" onclick=\"setColor('quadrant1Color','#CC99FF')\">\n");
+            htm.append("<area coords=\"258,98,274,114\" onclick=\"setColor('quadrant1Color','#CCCCFF')\">\n");
+            htm.append("<area coords=\"274,98,290,114\" onclick=\"setColor('quadrant1Color','#CCFFFF')\">\n");
+            htm.append("<!--- Row 8 --->\n");
+            htm.append("<area coords=\"2,114,18,130\" onclick=\"setColor('quadrant1Color','#0000CC')\">\n");
+            htm.append("<area coords=\"18,114,34,130\" onclick=\"setColor('quadrant1Color','#0033CC')\">\n");
+            htm.append("<area coords=\"34,114,50,130\" onclick=\"setColor('quadrant1Color','#0066CC')\">\n");
+            htm.append("<area coords=\"50,114,66,130\" onclick=\"setColor('quadrant1Color','#0099CC')\">\n");
+            htm.append("<area coords=\"66,114,82,130\" onclick=\"setColor('quadrant1Color','#00CCCC')\">\n");
+            htm.append("<area coords=\"82,114,98,130\" onclick=\"setColor('quadrant1Color','#00FFCC')\">\n");
+            htm.append("<area coords=\"98,114,114,130\" onclick=\"setColor('quadrant1Color','#99FFCC')\">\n");
+            htm.append("<area coords=\"114,114,130,130\" onclick=\"setColor('quadrant1Color','#99CCCC')\">\n");
+            htm.append("<area coords=\"130,114,146,130\" onclick=\"setColor('quadrant1Color','#9999CC')\">\n");
+            htm.append("<area coords=\"146,114,162,130\" onclick=\"setColor('quadrant1Color','#9966CC')\">\n");
+            htm.append("<area coords=\"162,114,178,130\" onclick=\"setColor('quadrant1Color','#9933CC')\">\n");
+            htm.append("<area coords=\"178,114,194,130\" onclick=\"setColor('quadrant1Color','#9900CC')\">\n");
+            htm.append("<area coords=\"194,114,210,130\" onclick=\"setColor('quadrant1Color','#CC00CC')\">\n");
+            htm.append("<area coords=\"210,114,226,130\" onclick=\"setColor('quadrant1Color','#CC33CC')\">\n");
+            htm.append("<area coords=\"226,114,242,130\" onclick=\"setColor('quadrant1Color','#CC66CC')\">\n");
+            htm.append("<area coords=\"242,114,258,130\" onclick=\"setColor('quadrant1Color','#CC99CC')\">\n");
+            htm.append("<area coords=\"258,114,274,130\" onclick=\"setColor('quadrant1Color','#CCCCCC')\">\n");
+            htm.append("<area coords=\"274,114,290,130\" onclick=\"setColor('quadrant1Color','#CCFFCC')\">\n");
+            htm.append("<!--- Row 9 --->\n");
+            htm.append("<area coords=\"2,130,18,146\" onclick=\"setColor('quadrant1Color','#000099')\">\n");
+            htm.append("<area coords=\"18,130,34,146\" onclick=\"setColor('quadrant1Color','#003399')\">\n");
+            htm.append("<area coords=\"34,130,50,146\" onclick=\"setColor('quadrant1Color','#006699')\">\n");
+            htm.append("<area coords=\"50,130,66,146\" onclick=\"setColor('quadrant1Color','#009999')\">\n");
+            htm.append("<area coords=\"66,130,82,146\" onclick=\"setColor('quadrant1Color','#00CC99')\">\n");
+            htm.append("<area coords=\"82,130,98,146\" onclick=\"setColor('quadrant1Color','#00FF99')\">\n");
+            htm.append("<area coords=\"98,130,114,146\" onclick=\"setColor('quadrant1Color','#99FF99')\">\n");
+            htm.append("<area coords=\"114,130,130,146\" onclick=\"setColor('quadrant1Color','#99CC99')\">\n");
+            htm.append("<area coords=\"130,130,146,146\" onclick=\"setColor('quadrant1Color','#999999')\">\n");
+            htm.append("<area coords=\"146,130,162,146\" onclick=\"setColor('quadrant1Color','#996699')\">\n");
+            htm.append("<area coords=\"162,130,178,146\" onclick=\"setColor('quadrant1Color','#993399')\">\n");
+            htm.append("<area coords=\"178,130,194,146\" onclick=\"setColor('quadrant1Color','#990099')\">\n");
+            htm.append("<area coords=\"194,130,210,146\" onclick=\"setColor('quadrant1Color','#CC0099')\">\n");
+            htm.append("<area coords=\"210,130,226,146\" onclick=\"setColor('quadrant1Color','#CC3399')\">\n");
+            htm.append("<area coords=\"226,130,242,146\" onclick=\"setColor('quadrant1Color','#CC6699')\">\n");
+            htm.append("<area coords=\"242,130,258,146\" onclick=\"setColor('quadrant1Color','#CC9999')\">\n");
+            htm.append("<area coords=\"258,130,274,146\" onclick=\"setColor('quadrant1Color','#CCCC99')\">\n");
+            htm.append("<area coords=\"274,130,290,146\" onclick=\"setColor('quadrant1Color','#CCFF99')\">\n");
+            htm.append("<!--- Row 10 --->\n");
+            htm.append("<area coords=\"2,146,18,162\" onclick=\"setColor('quadrant1Color','#000066')\">\n");
+            htm.append("<area coords=\"18,146,34,162\" onclick=\"setColor('quadrant1Color','#003366')\">\n");
+            htm.append("<area coords=\"34,146,50,162\" onclick=\"setColor('quadrant1Color','#006666')\">\n");
+            htm.append("<area coords=\"50,146,66,162\" onclick=\"setColor('quadrant1Color','#009966')\">\n");
+            htm.append("<area coords=\"66,146,82,162\" onclick=\"setColor('quadrant1Color','#00CC66')\">\n");
+            htm.append("<area coords=\"82,146,98,162\" onclick=\"setColor('quadrant1Color','#00FF66')\">\n");
+            htm.append("<area coords=\"98,146,114,162\" onclick=\"setColor('quadrant1Color','#99FF66')\">\n");
+            htm.append("<area coords=\"114,146,130,162\" onclick=\"setColor('quadrant1Color','#99CC66')\">\n");
+            htm.append("<area coords=\"130,146,146,162\" onclick=\"setColor('quadrant1Color','#999966')\">\n");
+            htm.append("<area coords=\"146,146,162,162\" onclick=\"setColor('quadrant1Color','#996666')\">\n");
+            htm.append("<area coords=\"162,146,178,162\" onclick=\"setColor('quadrant1Color','#993366')\">\n");
+            htm.append("<area coords=\"178,146,194,162\" onclick=\"setColor('quadrant1Color','#990066')\">\n");
+            htm.append("<area coords=\"194,146,210,162\" onclick=\"setColor('quadrant1Color','#CC0066')\">\n");
+            htm.append("<area coords=\"210,146,226,162\" onclick=\"setColor('quadrant1Color','#CC3366')\">\n");
+            htm.append("<area coords=\"226,146,242,162\" onclick=\"setColor('quadrant1Color','#CC6666')\">\n");
+            htm.append("<area coords=\"242,146,258,162\" onclick=\"setColor('quadrant1Color','#CC9966')\">\n");
+            htm.append("<area coords=\"258,146,274,162\" onclick=\"setColor('quadrant1Color','#CCCC66')\">\n");
+            htm.append("<area coords=\"274,146,290,162\" onclick=\"setColor('quadrant1Color','#CCFF66')\">\n");
+            htm.append("<!--- Row 11 --->\n");
+            htm.append("<area coords=\"2,162,18,178\" onclick=\"setColor('quadrant1Color','#000033')\">\n");
+            htm.append("<area coords=\"18,162,34,178\" onclick=\"setColor('quadrant1Color','#003333')\">\n");
+            htm.append("<area coords=\"34,162,50,178\" onclick=\"setColor('quadrant1Color','#006633')\">\n");
+            htm.append("<area coords=\"50,162,66,178\" onclick=\"setColor('quadrant1Color','#009933')\">\n");
+            htm.append("<area coords=\"66,162,82,178\" onclick=\"setColor('quadrant1Color','#00CC33')\">\n");
+            htm.append("<area coords=\"82,162,98,178\" onclick=\"setColor('quadrant1Color','#00FF33')\">\n");
+            htm.append("<area coords=\"98,162,114,178\" onclick=\"setColor('quadrant1Color','#99FF33')\">\n");
+            htm.append("<area coords=\"114,162,130,178\" onclick=\"setColor('quadrant1Color','#99CC33')\">\n");
+            htm.append("<area coords=\"130,162,146,178\" onclick=\"setColor('quadrant1Color','#999933')\">\n");
+            htm.append("<area coords=\"146,162,162,178\" onclick=\"setColor('quadrant1Color','#996633')\">\n");
+            htm.append("<area coords=\"162,162,178,178\" onclick=\"setColor('quadrant1Color','#993333')\">\n");
+            htm.append("<area coords=\"178,162,194,178\" onclick=\"setColor('quadrant1Color','#990033')\">\n");
+            htm.append("<area coords=\"194,162,210,178\" onclick=\"setColor('quadrant1Color','#CC0033')\">\n");
+            htm.append("<area coords=\"210,162,226,178\" onclick=\"setColor('quadrant1Color','#CC3333')\">\n");
+            htm.append("<area coords=\"226,162,242,178\" onclick=\"setColor('quadrant1Color','#CC6633')\">\n");
+            htm.append("<area coords=\"242,162,258,178\" onclick=\"setColor('quadrant1Color','#CC9933')\">\n");
+            htm.append("<area coords=\"258,162,274,178\" onclick=\"setColor('quadrant1Color','#CCCC33')\">\n");
+            htm.append("<area coords=\"274,162,290,178\" onclick=\"setColor('quadrant1Color','#CCFF33')\">\n");
+            htm.append("<!--- Row 12 --->\n");
+            htm.append("<area coords=\"2,178,18,194\" onclick=\"setColor('quadrant1Color','#000000')\">\n");
+            htm.append("<area coords=\"18,178,34,194\" onclick=\"setColor('quadrant1Color','#003300')\">\n");
+            htm.append("<area coords=\"34,178,50,194\" onclick=\"setColor('quadrant1Color','#006600')\">\n");
+            htm.append("<area coords=\"50,178,66,194\" onclick=\"setColor('quadrant1Color','#009900')\">\n");
+            htm.append("<area coords=\"66,178,82,194\" onclick=\"setColor('quadrant1Color','#00CC00')\">\n");
+            htm.append("<area coords=\"82,178,98,194\" onclick=\"setColor('quadrant1Color','#00FF00')\">\n");
+            htm.append("<area coords=\"98,178,114,194\" onclick=\"setColor('quadrant1Color','#99FF00')\">\n");
+            htm.append("<area coords=\"114,178,130,194\" onclick=\"setColor('quadrant1Color','#99CC00')\">\n");
+            htm.append("<area coords=\"130,178,146,194\" onclick=\"setColor('quadrant1Color','#999900')\">\n");
+            htm.append("<area coords=\"146,178,162,194\" onclick=\"setColor('quadrant1Color','#996600')\">\n");
+            htm.append("<area coords=\"162,178,178,194\" onclick=\"setColor('quadrant1Color','#993300')\">\n");
+            htm.append("<area coords=\"178,178,194,194\" onclick=\"setColor('quadrant1Color','#990000')\">\n");
+            htm.append("<area coords=\"194,178,210,194\" onclick=\"setColor('quadrant1Color','#CC0000')\">\n");
+            htm.append("<area coords=\"210,178,226,194\" onclick=\"setColor('quadrant1Color','#CC3300')\">\n");
+            htm.append("<area coords=\"226,178,242,194\" onclick=\"setColor('quadrant1Color','#CC6600')\">\n");
+            htm.append("<area coords=\"242,178,258,194\" onclick=\"setColor('quadrant1Color','#CC9900')\">\n");
+            htm.append("<area coords=\"258,178,274,194\" onclick=\"setColor('quadrant1Color','#CCCC00')\">\n");
+            htm.append("<area coords=\"274,178,290,194\" onclick=\"setColor('quadrant1Color','#CCFF00')\">\n");
+            htm.append("</map>\n");
+            htm.append("</li>\n");
+
+            // cuadrante 2
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"quadrant2Color\" class=\"swbform-label\">Color del cuadrante II (hexadecimal)</label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant2Color\" name=\"quadrant2Color\" value=\""+base.getAttribute("quadrant2Color","#000000")+"\" onblur=\"setColor('quadrant2Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label class=\"swbform-label\"></label>\n");
+            htm.append("          <img src=\"/swbadmin/images/colorgrid.gif\" width=\"292\" height=\"196\" border=\"0\" alt=\"RGB color mixer\" usemap=\"#gridmap2\" ismap=\"ismap\">\n");
+            htm.append("          <map name=\"gridmap2\">\n");
+            htm.append("<!--- Row 1 --->\n");
+            htm.append("<area coords=\"2,2,18,18\" onclick=\"setColor('quadrant2Color','#330000')\">\n");
+            htm.append("<area coords=\"18,2,34,18\" onclick=\"setColor('quadrant2Color','#333300')\">\n");
+            htm.append("<area coords=\"34,2,50,18\" onclick=\"setColor('quadrant2Color','#336600')\">\n");
+            htm.append("<area coords=\"50,2,66,18\" onclick=\"setColor('quadrant2Color','#339900')\">\n");
+            htm.append("<area coords=\"66,2,82,18\" onclick=\"setColor('quadrant2Color','#33CC00')\">\n");
+            htm.append("<area coords=\"82,2,98,18\" onclick=\"setColor('quadrant2Color','#33FF00')\">\n");
+            htm.append("<area coords=\"98,2,114,18\" onclick=\"setColor('quadrant2Color','#66FF00')\">\n");
+            htm.append("<area coords=\"114,2,130,18\" onclick=\"setColor('quadrant2Color','#66CC00')\">\n");
+            htm.append("<area coords=\"130,2,146,18\" onclick=\"setColor('quadrant2Color','#669900')\">\n");
+            htm.append("<area coords=\"146,2,162,18\" onclick=\"setColor('quadrant2Color','#666600')\">\n");
+            htm.append("<area coords=\"162,2,178,18\" onclick=\"setColor('quadrant2Color','#663300')\">\n");
+            htm.append("<area coords=\"178,2,194,18\" onclick=\"setColor('quadrant2Color','#660000')\">\n");
+            htm.append("<area coords=\"194,2,210,18\" onclick=\"setColor('quadrant2Color','#FF0000')\">\n");
+            htm.append("<area coords=\"210,2,226,18\" onclick=\"setColor('quadrant2Color','#FF3300')\">\n");
+            htm.append("<area coords=\"226,2,242,18\" onclick=\"setColor('quadrant2Color','#FF6600')\">\n");
+            htm.append("<area coords=\"242,2,258,18\" onclick=\"setColor('quadrant2Color','#FF9900')\">\n");
+            htm.append("<area coords=\"258,2,274,18\" onclick=\"setColor('quadrant2Color','#FFCC00')\">\n");
+            htm.append("<area coords=\"274,2,290,18\" onclick=\"setColor('quadrant2Color','#FFFF00')\">\n");
+            htm.append("<!--- Row 2 --->\n");
+            htm.append("<area coords=\"2,18,18,34\" onclick=\"setColor('quadrant2Color','#330033')\">\n");
+            htm.append("<area coords=\"18,18,34,34\" onclick=\"setColor('quadrant2Color','#333333')\">\n");
+            htm.append("<area coords=\"34,18,50,34\" onclick=\"setColor('quadrant2Color','#336633')\">\n");
+            htm.append("<area coords=\"50,18,66,34\" onclick=\"setColor('quadrant2Color','#339933')\">\n");
+            htm.append("<area coords=\"66,18,82,34\" onclick=\"setColor('quadrant2Color','#33CC33')\">\n");
+            htm.append("<area coords=\"82,18,98,34\" onclick=\"setColor('quadrant2Color','#33FF33')\">\n");
+            htm.append("<area coords=\"98,18,114,34\" onclick=\"setColor('quadrant2Color','#66FF33')\">\n");
+            htm.append("<area coords=\"114,18,130,34\" onclick=\"setColor('quadrant2Color','#66CC33')\">\n");
+            htm.append("<area coords=\"130,18,146,34\" onclick=\"setColor('quadrant2Color','#669933')\">\n");
+            htm.append("<area coords=\"146,18,162,34\" onclick=\"setColor('quadrant2Color','#666633')\">\n");
+            htm.append("<area coords=\"162,18,178,34\" onclick=\"setColor('quadrant2Color','#663333')\">\n");
+            htm.append("<area coords=\"178,18,194,34\" onclick=\"setColor('quadrant2Color','#660033')\">\n");
+            htm.append("<area coords=\"194,18,210,34\" onclick=\"setColor('quadrant2Color','#FF0033')\">\n");
+            htm.append("<area coords=\"210,18,226,34\" onclick=\"setColor('quadrant2Color','#FF3333')\">\n");
+            htm.append("<area coords=\"226,18,242,34\" onclick=\"setColor('quadrant2Color','#FF6633')\">\n");
+            htm.append("<area coords=\"242,18,258,34\" onclick=\"setColor('quadrant2Color','#FF9933')\">\n");
+            htm.append("<area coords=\"258,18,274,34\" onclick=\"setColor('quadrant2Color','#FFCC33')\">\n");
+            htm.append("<area coords=\"274,18,290,34\" onclick=\"setColor('quadrant2Color','#FFFF33')\">\n");
+            htm.append("<!--- Row 3 --->\n");
+            htm.append("<area coords=\"2,34,18,50\" onclick=\"setColor('quadrant2Color','#330066')\">\n");
+            htm.append("<area coords=\"18,34,34,50\" onclick=\"setColor('quadrant2Color','#333366')\">\n");
+            htm.append("<area coords=\"34,34,50,50\" onclick=\"setColor('quadrant2Color','#336666')\">\n");
+            htm.append("<area coords=\"50,34,66,50\" onclick=\"setColor('quadrant2Color','#339966')\">\n");
+            htm.append("<area coords=\"66,34,82,50\" onclick=\"setColor('quadrant2Color','#33CC66')\">\n");
+            htm.append("<area coords=\"82,34,98,50\" onclick=\"setColor('quadrant2Color','#33FF66')\">\n");
+            htm.append("<area coords=\"98,34,114,50\" onclick=\"setColor('quadrant2Color','#66FF66')\">\n");
+            htm.append("<area coords=\"114,34,130,50\" onclick=\"setColor('quadrant2Color','#66CC66')\">\n");
+            htm.append("<area coords=\"130,34,146,50\" onclick=\"setColor('quadrant2Color','#669966')\">\n");
+            htm.append("<area coords=\"146,34,162,50\" onclick=\"setColor('quadrant2Color','#666666')\">\n");
+            htm.append("<area coords=\"162,34,178,50\" onclick=\"setColor('quadrant2Color','#663366')\">\n");
+            htm.append("<area coords=\"178,34,194,50\" onclick=\"setColor('quadrant2Color','#660066')\">\n");
+            htm.append("<area coords=\"194,34,210,50\" onclick=\"setColor('quadrant2Color','#FF0066')\">\n");
+            htm.append("<area coords=\"210,34,226,50\" onclick=\"setColor('quadrant2Color','#FF3366')\">\n");
+            htm.append("<area coords=\"226,34,242,50\" onclick=\"setColor('quadrant2Color','#FF6666')\">\n");
+            htm.append("<area coords=\"242,34,258,50\" onclick=\"setColor('quadrant2Color','#FF9966')\">\n");
+            htm.append("<area coords=\"258,34,274,50\" onclick=\"setColor('quadrant2Color','#FFCC66')\">\n");
+            htm.append("<area coords=\"274,34,290,50\" onclick=\"setColor('quadrant2Color','#FFFF66')\">\n");
+            htm.append("<!--- Row 4 --->\n");
+            htm.append("<area coords=\"2,50,18,66\" onclick=\"setColor('quadrant2Color','#330099')\">\n");
+            htm.append("<area coords=\"18,50,34,66\" onclick=\"setColor('quadrant2Color','#333399')\">\n");
+            htm.append("<area coords=\"34,50,50,66\" onclick=\"setColor('quadrant2Color','#336699')\">\n");
+            htm.append("<area coords=\"50,50,66,66\" onclick=\"setColor('quadrant2Color','#339999')\">\n");
+            htm.append("<area coords=\"66,50,82,66\" onclick=\"setColor('quadrant2Color','#33CC99')\">\n");
+            htm.append("<area coords=\"82,50,98,66\" onclick=\"setColor('quadrant2Color','#33FF99')\">\n");
+            htm.append("<area coords=\"98,50,114,66\" onclick=\"setColor('quadrant2Color','#66FF99')\">\n");
+            htm.append("<area coords=\"114,50,130,66\" onclick=\"setColor('quadrant2Color','#66CC99')\">\n");
+            htm.append("<area coords=\"130,50,146,66\" onclick=\"setColor('quadrant2Color','#669999')\">\n");
+            htm.append("<area coords=\"146,50,162,66\" onclick=\"setColor('quadrant2Color','#666699')\">\n");
+            htm.append("<area coords=\"162,50,178,66\" onclick=\"setColor('quadrant2Color','#663399')\">\n");
+            htm.append("<area coords=\"178,50,194,66\" onclick=\"setColor('quadrant2Color','#660099')\">\n");
+            htm.append("<area coords=\"194,50,210,66\" onclick=\"setColor('quadrant2Color','#FF0099')\">\n");
+            htm.append("<area coords=\"210,50,226,66\" onclick=\"setColor('quadrant2Color','#FF3399')\">\n");
+            htm.append("<area coords=\"226,50,242,66\" onclick=\"setColor('quadrant2Color','#FF6699')\">\n");
+            htm.append("<area coords=\"242,50,258,66\" onclick=\"setColor('quadrant2Color','#FF9999')\">\n");
+            htm.append("<area coords=\"258,50,274,66\" onclick=\"setColor('quadrant2Color','#FFCC99')\">\n");
+            htm.append("<area coords=\"274,50,290,66\" onclick=\"setColor('quadrant2Color','#FFFF99')\">\n");
+            htm.append("<!--- Row 5 --->\n");
+            htm.append("<area coords=\"2,66,18,82\" onclick=\"setColor('quadrant2Color','#3300CC')\">\n");
+            htm.append("<area coords=\"18,66,34,82\" onclick=\"setColor('quadrant2Color','#3333CC')\">\n");
+            htm.append("<area coords=\"34,66,50,82\" onclick=\"setColor('quadrant2Color','#3366CC')\">\n");
+            htm.append("<area coords=\"50,66,66,82\" onclick=\"setColor('quadrant2Color','#3399CC')\">\n");
+            htm.append("<area coords=\"66,66,82,82\" onclick=\"setColor('quadrant2Color','#33CCCC')\">\n");
+            htm.append("<area coords=\"82,66,98,82\" onclick=\"setColor('quadrant2Color','#33FFCC')\">\n");
+            htm.append("<area coords=\"98,66,114,82\" onclick=\"setColor('quadrant2Color','#66FFCC')\">\n");
+            htm.append("<area coords=\"114,66,130,82\" onclick=\"setColor('quadrant2Color','#66CCCC')\">\n");
+            htm.append("<area coords=\"130,66,146,82\" onclick=\"setColor('quadrant2Color','#6699CC')\">\n");
+            htm.append("<area coords=\"146,66,162,82\" onclick=\"setColor('quadrant2Color','#6666CC')\">\n");
+            htm.append("<area coords=\"162,66,178,82\" onclick=\"setColor('quadrant2Color','#6633CC')\">\n");
+            htm.append("<area coords=\"178,66,194,82\" onclick=\"setColor('quadrant2Color','#6600CC')\">\n");
+            htm.append("<area coords=\"194,66,210,82\" onclick=\"setColor('quadrant2Color','#FF00CC')\">\n");
+            htm.append("<area coords=\"210,66,226,82\" onclick=\"setColor('quadrant2Color','#FF33CC')\">\n");
+            htm.append("<area coords=\"226,66,242,82\" onclick=\"setColor('quadrant2Color','#FF66CC')\">\n");
+            htm.append("<area coords=\"242,66,258,82\" onclick=\"setColor('quadrant2Color','#FF99CC')\">\n");
+            htm.append("<area coords=\"258,66,274,82\" onclick=\"setColor('quadrant2Color','#FFCCCC')\">\n");
+            htm.append("<area coords=\"274,66,290,82\" onclick=\"setColor('quadrant2Color','#FFFFCC')\">\n");
+            htm.append("<!--- Row 6 --->\n");
+            htm.append("<area coords=\"2,82,18,98\" onclick=\"setColor('quadrant2Color','#3300FF')\">\n");
+            htm.append("<area coords=\"18,82,34,98\" onclick=\"setColor('quadrant2Color','#3333FF')\">\n");
+            htm.append("<area coords=\"34,82,50,98\" onclick=\"setColor('quadrant2Color','#3366FF')\">\n");
+            htm.append("<area coords=\"50,82,66,98\" onclick=\"setColor('quadrant2Color','#3399FF')\">\n");
+            htm.append("<area coords=\"66,82,82,98\" onclick=\"setColor('quadrant2Color','#33CCFF')\">\n");
+            htm.append("<area coords=\"82,82,98,98\" onclick=\"setColor('quadrant2Color','#33FFFF')\">\n");
+            htm.append("<area coords=\"98,82,114,98\" onclick=\"setColor('quadrant2Color','#66FFFF')\">\n");
+            htm.append("<area coords=\"114,82,130,98\" onclick=\"setColor('quadrant2Color','#66CCFF')\">\n");
+            htm.append("<area coords=\"130,82,146,98\" onclick=\"setColor('quadrant2Color','#6699FF')\">\n");
+            htm.append("<area coords=\"146,82,162,98\" onclick=\"setColor('quadrant2Color','#6666FF')\">\n");
+            htm.append("<area coords=\"162,82,178,98\" onclick=\"setColor('quadrant2Color','#6633FF')\">\n");
+            htm.append("<area coords=\"178,82,194,98\" onclick=\"setColor('quadrant2Color','#6600FF')\">\n");
+            htm.append("<area coords=\"194,82,210,98\" onclick=\"setColor('quadrant2Color','#FF00FF')\">\n");
+            htm.append("<area coords=\"210,82,226,98\" onclick=\"setColor('quadrant2Color','#FF33FF')\">\n");
+            htm.append("<area coords=\"226,82,242,98\" onclick=\"setColor('quadrant2Color','#FF66FF')\">\n");
+            htm.append("<area coords=\"242,82,258,98\" onclick=\"setColor('quadrant2Color','#FF99FF')\">\n");
+            htm.append("<area coords=\"258,82,274,98\" onclick=\"setColor('quadrant2Color','#FFCCFF')\">\n");
+            htm.append("<area coords=\"274,82,290,98\" onclick=\"setColor('quadrant2Color','#FFFFFF')\">\n");
+            htm.append("<!--- Row 7 --->\n");
+            htm.append("<area coords=\"2,98,18,114\" onclick=\"setColor('quadrant2Color','#0000FF')\">\n");
+            htm.append("<area coords=\"18,98,34,114\" onclick=\"setColor('quadrant2Color','#0033FF')\">\n");
+            htm.append("<area coords=\"34,98,50,114\" onclick=\"setColor('quadrant2Color','#0066FF')\">\n");
+            htm.append("<area coords=\"50,98,66,114\" onclick=\"setColor('quadrant2Color','#0099FF')\">\n");
+            htm.append("<area coords=\"66,98,82,114\" onclick=\"setColor('quadrant2Color','#00CCFF')\">\n");
+            htm.append("<area coords=\"82,98,98,114\" onclick=\"setColor('quadrant2Color','#00FFFF')\">\n");
+            htm.append("<area coords=\"98,98,114,114\" onclick=\"setColor('quadrant2Color','#99FFFF')\">\n");
+            htm.append("<area coords=\"114,98,130,114\" onclick=\"setColor('quadrant2Color','#99CCFF')\">\n");
+            htm.append("<area coords=\"130,98,146,114\" onclick=\"setColor('quadrant2Color','#9999FF')\">\n");
+            htm.append("<area coords=\"146,98,162,114\" onclick=\"setColor('quadrant2Color','#9966FF')\">\n");
+            htm.append("<area coords=\"162,98,178,114\" onclick=\"setColor('quadrant2Color','#9933FF')\">\n");
+            htm.append("<area coords=\"178,98,194,114\" onclick=\"setColor('quadrant2Color','#9900FF')\">\n");
+            htm.append("<area coords=\"194,98,210,114\" onclick=\"setColor('quadrant2Color','#CC00FF')\">\n");
+            htm.append("<area coords=\"210,98,226,114\" onclick=\"setColor('quadrant2Color','#CC33FF')\">\n");
+            htm.append("<area coords=\"226,98,242,114\" onclick=\"setColor('quadrant2Color','#CC66FF')\">\n");
+            htm.append("<area coords=\"242,98,258,114\" onclick=\"setColor('quadrant2Color','#CC99FF')\">\n");
+            htm.append("<area coords=\"258,98,274,114\" onclick=\"setColor('quadrant2Color','#CCCCFF')\">\n");
+            htm.append("<area coords=\"274,98,290,114\" onclick=\"setColor('quadrant2Color','#CCFFFF')\">\n");
+            htm.append("<!--- Row 8 --->\n");
+            htm.append("<area coords=\"2,114,18,130\" onclick=\"setColor('quadrant2Color','#0000CC')\">\n");
+            htm.append("<area coords=\"18,114,34,130\" onclick=\"setColor('quadrant2Color','#0033CC')\">\n");
+            htm.append("<area coords=\"34,114,50,130\" onclick=\"setColor('quadrant2Color','#0066CC')\">\n");
+            htm.append("<area coords=\"50,114,66,130\" onclick=\"setColor('quadrant2Color','#0099CC')\">\n");
+            htm.append("<area coords=\"66,114,82,130\" onclick=\"setColor('quadrant2Color','#00CCCC')\">\n");
+            htm.append("<area coords=\"82,114,98,130\" onclick=\"setColor('quadrant2Color','#00FFCC')\">\n");
+            htm.append("<area coords=\"98,114,114,130\" onclick=\"setColor('quadrant2Color','#99FFCC')\">\n");
+            htm.append("<area coords=\"114,114,130,130\" onclick=\"setColor('quadrant2Color','#99CCCC')\">\n");
+            htm.append("<area coords=\"130,114,146,130\" onclick=\"setColor('quadrant2Color','#9999CC')\">\n");
+            htm.append("<area coords=\"146,114,162,130\" onclick=\"setColor('quadrant2Color','#9966CC')\">\n");
+            htm.append("<area coords=\"162,114,178,130\" onclick=\"setColor('quadrant2Color','#9933CC')\">\n");
+            htm.append("<area coords=\"178,114,194,130\" onclick=\"setColor('quadrant2Color','#9900CC')\">\n");
+            htm.append("<area coords=\"194,114,210,130\" onclick=\"setColor('quadrant2Color','#CC00CC')\">\n");
+            htm.append("<area coords=\"210,114,226,130\" onclick=\"setColor('quadrant2Color','#CC33CC')\">\n");
+            htm.append("<area coords=\"226,114,242,130\" onclick=\"setColor('quadrant2Color','#CC66CC')\">\n");
+            htm.append("<area coords=\"242,114,258,130\" onclick=\"setColor('quadrant2Color','#CC99CC')\">\n");
+            htm.append("<area coords=\"258,114,274,130\" onclick=\"setColor('quadrant2Color','#CCCCCC')\">\n");
+            htm.append("<area coords=\"274,114,290,130\" onclick=\"setColor('quadrant2Color','#CCFFCC')\">\n");
+            htm.append("<!--- Row 9 --->\n");
+            htm.append("<area coords=\"2,130,18,146\" onclick=\"setColor('quadrant2Color','#000099')\">\n");
+            htm.append("<area coords=\"18,130,34,146\" onclick=\"setColor('quadrant2Color','#003399')\">\n");
+            htm.append("<area coords=\"34,130,50,146\" onclick=\"setColor('quadrant2Color','#006699')\">\n");
+            htm.append("<area coords=\"50,130,66,146\" onclick=\"setColor('quadrant2Color','#009999')\">\n");
+            htm.append("<area coords=\"66,130,82,146\" onclick=\"setColor('quadrant2Color','#00CC99')\">\n");
+            htm.append("<area coords=\"82,130,98,146\" onclick=\"setColor('quadrant2Color','#00FF99')\">\n");
+            htm.append("<area coords=\"98,130,114,146\" onclick=\"setColor('quadrant2Color','#99FF99')\">\n");
+            htm.append("<area coords=\"114,130,130,146\" onclick=\"setColor('quadrant2Color','#99CC99')\">\n");
+            htm.append("<area coords=\"130,130,146,146\" onclick=\"setColor('quadrant2Color','#999999')\">\n");
+            htm.append("<area coords=\"146,130,162,146\" onclick=\"setColor('quadrant2Color','#996699')\">\n");
+            htm.append("<area coords=\"162,130,178,146\" onclick=\"setColor('quadrant2Color','#993399')\">\n");
+            htm.append("<area coords=\"178,130,194,146\" onclick=\"setColor('quadrant2Color','#990099')\">\n");
+            htm.append("<area coords=\"194,130,210,146\" onclick=\"setColor('quadrant2Color','#CC0099')\">\n");
+            htm.append("<area coords=\"210,130,226,146\" onclick=\"setColor('quadrant2Color','#CC3399')\">\n");
+            htm.append("<area coords=\"226,130,242,146\" onclick=\"setColor('quadrant2Color','#CC6699')\">\n");
+            htm.append("<area coords=\"242,130,258,146\" onclick=\"setColor('quadrant2Color','#CC9999')\">\n");
+            htm.append("<area coords=\"258,130,274,146\" onclick=\"setColor('quadrant2Color','#CCCC99')\">\n");
+            htm.append("<area coords=\"274,130,290,146\" onclick=\"setColor('quadrant2Color','#CCFF99')\">\n");
+            htm.append("<!--- Row 10 --->\n");
+            htm.append("<area coords=\"2,146,18,162\" onclick=\"setColor('quadrant2Color','#000066')\">\n");
+            htm.append("<area coords=\"18,146,34,162\" onclick=\"setColor('quadrant2Color','#003366')\">\n");
+            htm.append("<area coords=\"34,146,50,162\" onclick=\"setColor('quadrant2Color','#006666')\">\n");
+            htm.append("<area coords=\"50,146,66,162\" onclick=\"setColor('quadrant2Color','#009966')\">\n");
+            htm.append("<area coords=\"66,146,82,162\" onclick=\"setColor('quadrant2Color','#00CC66')\">\n");
+            htm.append("<area coords=\"82,146,98,162\" onclick=\"setColor('quadrant2Color','#00FF66')\">\n");
+            htm.append("<area coords=\"98,146,114,162\" onclick=\"setColor('quadrant2Color','#99FF66')\">\n");
+            htm.append("<area coords=\"114,146,130,162\" onclick=\"setColor('quadrant2Color','#99CC66')\">\n");
+            htm.append("<area coords=\"130,146,146,162\" onclick=\"setColor('quadrant2Color','#999966')\">\n");
+            htm.append("<area coords=\"146,146,162,162\" onclick=\"setColor('quadrant2Color','#996666')\">\n");
+            htm.append("<area coords=\"162,146,178,162\" onclick=\"setColor('quadrant2Color','#993366')\">\n");
+            htm.append("<area coords=\"178,146,194,162\" onclick=\"setColor('quadrant2Color','#990066')\">\n");
+            htm.append("<area coords=\"194,146,210,162\" onclick=\"setColor('quadrant2Color','#CC0066')\">\n");
+            htm.append("<area coords=\"210,146,226,162\" onclick=\"setColor('quadrant2Color','#CC3366')\">\n");
+            htm.append("<area coords=\"226,146,242,162\" onclick=\"setColor('quadrant2Color','#CC6666')\">\n");
+            htm.append("<area coords=\"242,146,258,162\" onclick=\"setColor('quadrant2Color','#CC9966')\">\n");
+            htm.append("<area coords=\"258,146,274,162\" onclick=\"setColor('quadrant2Color','#CCCC66')\">\n");
+            htm.append("<area coords=\"274,146,290,162\" onclick=\"setColor('quadrant2Color','#CCFF66')\">\n");
+            htm.append("<!--- Row 11 --->\n");
+            htm.append("<area coords=\"2,162,18,178\" onclick=\"setColor('quadrant2Color','#000033')\">\n");
+            htm.append("<area coords=\"18,162,34,178\" onclick=\"setColor('quadrant2Color','#003333')\">\n");
+            htm.append("<area coords=\"34,162,50,178\" onclick=\"setColor('quadrant2Color','#006633')\">\n");
+            htm.append("<area coords=\"50,162,66,178\" onclick=\"setColor('quadrant2Color','#009933')\">\n");
+            htm.append("<area coords=\"66,162,82,178\" onclick=\"setColor('quadrant2Color','#00CC33')\">\n");
+            htm.append("<area coords=\"82,162,98,178\" onclick=\"setColor('quadrant2Color','#00FF33')\">\n");
+            htm.append("<area coords=\"98,162,114,178\" onclick=\"setColor('quadrant2Color','#99FF33')\">\n");
+            htm.append("<area coords=\"114,162,130,178\" onclick=\"setColor('quadrant2Color','#99CC33')\">\n");
+            htm.append("<area coords=\"130,162,146,178\" onclick=\"setColor('quadrant2Color','#999933')\">\n");
+            htm.append("<area coords=\"146,162,162,178\" onclick=\"setColor('quadrant2Color','#996633')\">\n");
+            htm.append("<area coords=\"162,162,178,178\" onclick=\"setColor('quadrant2Color','#993333')\">\n");
+            htm.append("<area coords=\"178,162,194,178\" onclick=\"setColor('quadrant2Color','#990033')\">\n");
+            htm.append("<area coords=\"194,162,210,178\" onclick=\"setColor('quadrant2Color','#CC0033')\">\n");
+            htm.append("<area coords=\"210,162,226,178\" onclick=\"setColor('quadrant2Color','#CC3333')\">\n");
+            htm.append("<area coords=\"226,162,242,178\" onclick=\"setColor('quadrant2Color','#CC6633')\">\n");
+            htm.append("<area coords=\"242,162,258,178\" onclick=\"setColor('quadrant2Color','#CC9933')\">\n");
+            htm.append("<area coords=\"258,162,274,178\" onclick=\"setColor('quadrant2Color','#CCCC33')\">\n");
+            htm.append("<area coords=\"274,162,290,178\" onclick=\"setColor('quadrant2Color','#CCFF33')\">\n");
+            htm.append("<!--- Row 12 --->\n");
+            htm.append("<area coords=\"2,178,18,194\" onclick=\"setColor('quadrant2Color','#000000')\">\n");
+            htm.append("<area coords=\"18,178,34,194\" onclick=\"setColor('quadrant2Color','#003300')\">\n");
+            htm.append("<area coords=\"34,178,50,194\" onclick=\"setColor('quadrant2Color','#006600')\">\n");
+            htm.append("<area coords=\"50,178,66,194\" onclick=\"setColor('quadrant2Color','#009900')\">\n");
+            htm.append("<area coords=\"66,178,82,194\" onclick=\"setColor('quadrant2Color','#00CC00')\">\n");
+            htm.append("<area coords=\"82,178,98,194\" onclick=\"setColor('quadrant2Color','#00FF00')\">\n");
+            htm.append("<area coords=\"98,178,114,194\" onclick=\"setColor('quadrant2Color','#99FF00')\">\n");
+            htm.append("<area coords=\"114,178,130,194\" onclick=\"setColor('quadrant2Color','#99CC00')\">\n");
+            htm.append("<area coords=\"130,178,146,194\" onclick=\"setColor('quadrant2Color','#999900')\">\n");
+            htm.append("<area coords=\"146,178,162,194\" onclick=\"setColor('quadrant2Color','#996600')\">\n");
+            htm.append("<area coords=\"162,178,178,194\" onclick=\"setColor('quadrant2Color','#993300')\">\n");
+            htm.append("<area coords=\"178,178,194,194\" onclick=\"setColor('quadrant2Color','#990000')\">\n");
+            htm.append("<area coords=\"194,178,210,194\" onclick=\"setColor('quadrant2Color','#CC0000')\">\n");
+            htm.append("<area coords=\"210,178,226,194\" onclick=\"setColor('quadrant2Color','#CC3300')\">\n");
+            htm.append("<area coords=\"226,178,242,194\" onclick=\"setColor('quadrant2Color','#CC6600')\">\n");
+            htm.append("<area coords=\"242,178,258,194\" onclick=\"setColor('quadrant2Color','#CC9900')\">\n");
+            htm.append("<area coords=\"258,178,274,194\" onclick=\"setColor('quadrant2Color','#CCCC00')\">\n");
+            htm.append("<area coords=\"274,178,290,194\" onclick=\"setColor('quadrant2Color','#CCFF00')\">\n");
+            htm.append("</map>\n");
+            htm.append("</li>\n");
+
+            // cuadrante 3
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"quadrant3Color\" class=\"swbform-label\">Color del cuadrante III (hexadecimal)</label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant3Color\" name=\"quadrant3Color\" value=\""+base.getAttribute("quadrant3Color","#000000")+"\" onblur=\"setColor('quadrant3Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label class=\"swbform-label\"></label>\n");
+            htm.append("          <img src=\"/swbadmin/images/colorgrid.gif\" width=\"292\" height=\"196\" border=\"0\" alt=\"RGB color mixer\" usemap=\"#gridmap3\" ismap=\"ismap\">\n");
+            htm.append("          <map name=\"gridmap3\">\n");
+            htm.append("<!--- Row 1 --->\n");
+            htm.append("<area coords=\"2,2,18,18\" onclick=\"setColor('quadrant3Color','#330000')\">\n");
+            htm.append("<area coords=\"18,2,34,18\" onclick=\"setColor('quadrant3Color','#333300')\">\n");
+            htm.append("<area coords=\"34,2,50,18\" onclick=\"setColor('quadrant3Color','#336600')\">\n");
+            htm.append("<area coords=\"50,2,66,18\" onclick=\"setColor('quadrant3Color','#339900')\">\n");
+            htm.append("<area coords=\"66,2,82,18\" onclick=\"setColor('quadrant3Color','#33CC00')\">\n");
+            htm.append("<area coords=\"82,2,98,18\" onclick=\"setColor('quadrant3Color','#33FF00')\">\n");
+            htm.append("<area coords=\"98,2,114,18\" onclick=\"setColor('quadrant3Color','#66FF00')\">\n");
+            htm.append("<area coords=\"114,2,130,18\" onclick=\"setColor('quadrant3Color','#66CC00')\">\n");
+            htm.append("<area coords=\"130,2,146,18\" onclick=\"setColor('quadrant3Color','#669900')\">\n");
+            htm.append("<area coords=\"146,2,162,18\" onclick=\"setColor('quadrant3Color','#666600')\">\n");
+            htm.append("<area coords=\"162,2,178,18\" onclick=\"setColor('quadrant3Color','#663300')\">\n");
+            htm.append("<area coords=\"178,2,194,18\" onclick=\"setColor('quadrant3Color','#660000')\">\n");
+            htm.append("<area coords=\"194,2,210,18\" onclick=\"setColor('quadrant3Color','#FF0000')\">\n");
+            htm.append("<area coords=\"210,2,226,18\" onclick=\"setColor('quadrant3Color','#FF3300')\">\n");
+            htm.append("<area coords=\"226,2,242,18\" onclick=\"setColor('quadrant3Color','#FF6600')\">\n");
+            htm.append("<area coords=\"242,2,258,18\" onclick=\"setColor('quadrant3Color','#FF9900')\">\n");
+            htm.append("<area coords=\"258,2,274,18\" onclick=\"setColor('quadrant3Color','#FFCC00')\">\n");
+            htm.append("<area coords=\"274,2,290,18\" onclick=\"setColor('quadrant3Color','#FFFF00')\">\n");
+            htm.append("<!--- Row 2 --->\n");
+            htm.append("<area coords=\"2,18,18,34\" onclick=\"setColor('quadrant3Color','#330033')\">\n");
+            htm.append("<area coords=\"18,18,34,34\" onclick=\"setColor('quadrant3Color','#333333')\">\n");
+            htm.append("<area coords=\"34,18,50,34\" onclick=\"setColor('quadrant3Color','#336633')\">\n");
+            htm.append("<area coords=\"50,18,66,34\" onclick=\"setColor('quadrant3Color','#339933')\">\n");
+            htm.append("<area coords=\"66,18,82,34\" onclick=\"setColor('quadrant3Color','#33CC33')\">\n");
+            htm.append("<area coords=\"82,18,98,34\" onclick=\"setColor('quadrant3Color','#33FF33')\">\n");
+            htm.append("<area coords=\"98,18,114,34\" onclick=\"setColor('quadrant3Color','#66FF33')\">\n");
+            htm.append("<area coords=\"114,18,130,34\" onclick=\"setColor('quadrant3Color','#66CC33')\">\n");
+            htm.append("<area coords=\"130,18,146,34\" onclick=\"setColor('quadrant3Color','#669933')\">\n");
+            htm.append("<area coords=\"146,18,162,34\" onclick=\"setColor('quadrant3Color','#666633')\">\n");
+            htm.append("<area coords=\"162,18,178,34\" onclick=\"setColor('quadrant3Color','#663333')\">\n");
+            htm.append("<area coords=\"178,18,194,34\" onclick=\"setColor('quadrant3Color','#660033')\">\n");
+            htm.append("<area coords=\"194,18,210,34\" onclick=\"setColor('quadrant3Color','#FF0033')\">\n");
+            htm.append("<area coords=\"210,18,226,34\" onclick=\"setColor('quadrant3Color','#FF3333')\">\n");
+            htm.append("<area coords=\"226,18,242,34\" onclick=\"setColor('quadrant3Color','#FF6633')\">\n");
+            htm.append("<area coords=\"242,18,258,34\" onclick=\"setColor('quadrant3Color','#FF9933')\">\n");
+            htm.append("<area coords=\"258,18,274,34\" onclick=\"setColor('quadrant3Color','#FFCC33')\">\n");
+            htm.append("<area coords=\"274,18,290,34\" onclick=\"setColor('quadrant3Color','#FFFF33')\">\n");
+            htm.append("<!--- Row 3 --->\n");
+            htm.append("<area coords=\"2,34,18,50\" onclick=\"setColor('quadrant3Color','#330066')\">\n");
+            htm.append("<area coords=\"18,34,34,50\" onclick=\"setColor('quadrant3Color','#333366')\">\n");
+            htm.append("<area coords=\"34,34,50,50\" onclick=\"setColor('quadrant3Color','#336666')\">\n");
+            htm.append("<area coords=\"50,34,66,50\" onclick=\"setColor('quadrant3Color','#339966')\">\n");
+            htm.append("<area coords=\"66,34,82,50\" onclick=\"setColor('quadrant3Color','#33CC66')\">\n");
+            htm.append("<area coords=\"82,34,98,50\" onclick=\"setColor('quadrant3Color','#33FF66')\">\n");
+            htm.append("<area coords=\"98,34,114,50\" onclick=\"setColor('quadrant3Color','#66FF66')\">\n");
+            htm.append("<area coords=\"114,34,130,50\" onclick=\"setColor('quadrant3Color','#66CC66')\">\n");
+            htm.append("<area coords=\"130,34,146,50\" onclick=\"setColor('quadrant3Color','#669966')\">\n");
+            htm.append("<area coords=\"146,34,162,50\" onclick=\"setColor('quadrant3Color','#666666')\">\n");
+            htm.append("<area coords=\"162,34,178,50\" onclick=\"setColor('quadrant3Color','#663366')\">\n");
+            htm.append("<area coords=\"178,34,194,50\" onclick=\"setColor('quadrant3Color','#660066')\">\n");
+            htm.append("<area coords=\"194,34,210,50\" onclick=\"setColor('quadrant3Color','#FF0066')\">\n");
+            htm.append("<area coords=\"210,34,226,50\" onclick=\"setColor('quadrant3Color','#FF3366')\">\n");
+            htm.append("<area coords=\"226,34,242,50\" onclick=\"setColor('quadrant3Color','#FF6666')\">\n");
+            htm.append("<area coords=\"242,34,258,50\" onclick=\"setColor('quadrant3Color','#FF9966')\">\n");
+            htm.append("<area coords=\"258,34,274,50\" onclick=\"setColor('quadrant3Color','#FFCC66')\">\n");
+            htm.append("<area coords=\"274,34,290,50\" onclick=\"setColor('quadrant3Color','#FFFF66')\">\n");
+            htm.append("<!--- Row 4 --->\n");
+            htm.append("<area coords=\"2,50,18,66\" onclick=\"setColor('quadrant3Color','#330099')\">\n");
+            htm.append("<area coords=\"18,50,34,66\" onclick=\"setColor('quadrant3Color','#333399')\">\n");
+            htm.append("<area coords=\"34,50,50,66\" onclick=\"setColor('quadrant3Color','#336699')\">\n");
+            htm.append("<area coords=\"50,50,66,66\" onclick=\"setColor('quadrant3Color','#339999')\">\n");
+            htm.append("<area coords=\"66,50,82,66\" onclick=\"setColor('quadrant3Color','#33CC99')\">\n");
+            htm.append("<area coords=\"82,50,98,66\" onclick=\"setColor('quadrant3Color','#33FF99')\">\n");
+            htm.append("<area coords=\"98,50,114,66\" onclick=\"setColor('quadrant3Color','#66FF99')\">\n");
+            htm.append("<area coords=\"114,50,130,66\" onclick=\"setColor('quadrant3Color','#66CC99')\">\n");
+            htm.append("<area coords=\"130,50,146,66\" onclick=\"setColor('quadrant3Color','#669999')\">\n");
+            htm.append("<area coords=\"146,50,162,66\" onclick=\"setColor('quadrant3Color','#666699')\">\n");
+            htm.append("<area coords=\"162,50,178,66\" onclick=\"setColor('quadrant3Color','#663399')\">\n");
+            htm.append("<area coords=\"178,50,194,66\" onclick=\"setColor('quadrant3Color','#660099')\">\n");
+            htm.append("<area coords=\"194,50,210,66\" onclick=\"setColor('quadrant3Color','#FF0099')\">\n");
+            htm.append("<area coords=\"210,50,226,66\" onclick=\"setColor('quadrant3Color','#FF3399')\">\n");
+            htm.append("<area coords=\"226,50,242,66\" onclick=\"setColor('quadrant3Color','#FF6699')\">\n");
+            htm.append("<area coords=\"242,50,258,66\" onclick=\"setColor('quadrant3Color','#FF9999')\">\n");
+            htm.append("<area coords=\"258,50,274,66\" onclick=\"setColor('quadrant3Color','#FFCC99')\">\n");
+            htm.append("<area coords=\"274,50,290,66\" onclick=\"setColor('quadrant3Color','#FFFF99')\">\n");
+            htm.append("<!--- Row 5 --->\n");
+            htm.append("<area coords=\"2,66,18,82\" onclick=\"setColor('quadrant3Color','#3300CC')\">\n");
+            htm.append("<area coords=\"18,66,34,82\" onclick=\"setColor('quadrant3Color','#3333CC')\">\n");
+            htm.append("<area coords=\"34,66,50,82\" onclick=\"setColor('quadrant3Color','#3366CC')\">\n");
+            htm.append("<area coords=\"50,66,66,82\" onclick=\"setColor('quadrant3Color','#3399CC')\">\n");
+            htm.append("<area coords=\"66,66,82,82\" onclick=\"setColor('quadrant3Color','#33CCCC')\">\n");
+            htm.append("<area coords=\"82,66,98,82\" onclick=\"setColor('quadrant3Color','#33FFCC')\">\n");
+            htm.append("<area coords=\"98,66,114,82\" onclick=\"setColor('quadrant3Color','#66FFCC')\">\n");
+            htm.append("<area coords=\"114,66,130,82\" onclick=\"setColor('quadrant3Color','#66CCCC')\">\n");
+            htm.append("<area coords=\"130,66,146,82\" onclick=\"setColor('quadrant3Color','#6699CC')\">\n");
+            htm.append("<area coords=\"146,66,162,82\" onclick=\"setColor('quadrant3Color','#6666CC')\">\n");
+            htm.append("<area coords=\"162,66,178,82\" onclick=\"setColor('quadrant3Color','#6633CC')\">\n");
+            htm.append("<area coords=\"178,66,194,82\" onclick=\"setColor('quadrant3Color','#6600CC')\">\n");
+            htm.append("<area coords=\"194,66,210,82\" onclick=\"setColor('quadrant3Color','#FF00CC')\">\n");
+            htm.append("<area coords=\"210,66,226,82\" onclick=\"setColor('quadrant3Color','#FF33CC')\">\n");
+            htm.append("<area coords=\"226,66,242,82\" onclick=\"setColor('quadrant3Color','#FF66CC')\">\n");
+            htm.append("<area coords=\"242,66,258,82\" onclick=\"setColor('quadrant3Color','#FF99CC')\">\n");
+            htm.append("<area coords=\"258,66,274,82\" onclick=\"setColor('quadrant3Color','#FFCCCC')\">\n");
+            htm.append("<area coords=\"274,66,290,82\" onclick=\"setColor('quadrant3Color','#FFFFCC')\">\n");
+            htm.append("<!--- Row 6 --->\n");
+            htm.append("<area coords=\"2,82,18,98\" onclick=\"setColor('quadrant3Color','#3300FF')\">\n");
+            htm.append("<area coords=\"18,82,34,98\" onclick=\"setColor('quadrant3Color','#3333FF')\">\n");
+            htm.append("<area coords=\"34,82,50,98\" onclick=\"setColor('quadrant3Color','#3366FF')\">\n");
+            htm.append("<area coords=\"50,82,66,98\" onclick=\"setColor('quadrant3Color','#3399FF')\">\n");
+            htm.append("<area coords=\"66,82,82,98\" onclick=\"setColor('quadrant3Color','#33CCFF')\">\n");
+            htm.append("<area coords=\"82,82,98,98\" onclick=\"setColor('quadrant3Color','#33FFFF')\">\n");
+            htm.append("<area coords=\"98,82,114,98\" onclick=\"setColor('quadrant3Color','#66FFFF')\">\n");
+            htm.append("<area coords=\"114,82,130,98\" onclick=\"setColor('quadrant3Color','#66CCFF')\">\n");
+            htm.append("<area coords=\"130,82,146,98\" onclick=\"setColor('quadrant3Color','#6699FF')\">\n");
+            htm.append("<area coords=\"146,82,162,98\" onclick=\"setColor('quadrant3Color','#6666FF')\">\n");
+            htm.append("<area coords=\"162,82,178,98\" onclick=\"setColor('quadrant3Color','#6633FF')\">\n");
+            htm.append("<area coords=\"178,82,194,98\" onclick=\"setColor('quadrant3Color','#6600FF')\">\n");
+            htm.append("<area coords=\"194,82,210,98\" onclick=\"setColor('quadrant3Color','#FF00FF')\">\n");
+            htm.append("<area coords=\"210,82,226,98\" onclick=\"setColor('quadrant3Color','#FF33FF')\">\n");
+            htm.append("<area coords=\"226,82,242,98\" onclick=\"setColor('quadrant3Color','#FF66FF')\">\n");
+            htm.append("<area coords=\"242,82,258,98\" onclick=\"setColor('quadrant3Color','#FF99FF')\">\n");
+            htm.append("<area coords=\"258,82,274,98\" onclick=\"setColor('quadrant3Color','#FFCCFF')\">\n");
+            htm.append("<area coords=\"274,82,290,98\" onclick=\"setColor('quadrant3Color','#FFFFFF')\">\n");
+            htm.append("<!--- Row 7 --->\n");
+            htm.append("<area coords=\"2,98,18,114\" onclick=\"setColor('quadrant3Color','#0000FF')\">\n");
+            htm.append("<area coords=\"18,98,34,114\" onclick=\"setColor('quadrant3Color','#0033FF')\">\n");
+            htm.append("<area coords=\"34,98,50,114\" onclick=\"setColor('quadrant3Color','#0066FF')\">\n");
+            htm.append("<area coords=\"50,98,66,114\" onclick=\"setColor('quadrant3Color','#0099FF')\">\n");
+            htm.append("<area coords=\"66,98,82,114\" onclick=\"setColor('quadrant3Color','#00CCFF')\">\n");
+            htm.append("<area coords=\"82,98,98,114\" onclick=\"setColor('quadrant3Color','#00FFFF')\">\n");
+            htm.append("<area coords=\"98,98,114,114\" onclick=\"setColor('quadrant3Color','#99FFFF')\">\n");
+            htm.append("<area coords=\"114,98,130,114\" onclick=\"setColor('quadrant3Color','#99CCFF')\">\n");
+            htm.append("<area coords=\"130,98,146,114\" onclick=\"setColor('quadrant3Color','#9999FF')\">\n");
+            htm.append("<area coords=\"146,98,162,114\" onclick=\"setColor('quadrant3Color','#9966FF')\">\n");
+            htm.append("<area coords=\"162,98,178,114\" onclick=\"setColor('quadrant3Color','#9933FF')\">\n");
+            htm.append("<area coords=\"178,98,194,114\" onclick=\"setColor('quadrant3Color','#9900FF')\">\n");
+            htm.append("<area coords=\"194,98,210,114\" onclick=\"setColor('quadrant3Color','#CC00FF')\">\n");
+            htm.append("<area coords=\"210,98,226,114\" onclick=\"setColor('quadrant3Color','#CC33FF')\">\n");
+            htm.append("<area coords=\"226,98,242,114\" onclick=\"setColor('quadrant3Color','#CC66FF')\">\n");
+            htm.append("<area coords=\"242,98,258,114\" onclick=\"setColor('quadrant3Color','#CC99FF')\">\n");
+            htm.append("<area coords=\"258,98,274,114\" onclick=\"setColor('quadrant3Color','#CCCCFF')\">\n");
+            htm.append("<area coords=\"274,98,290,114\" onclick=\"setColor('quadrant3Color','#CCFFFF')\">\n");
+            htm.append("<!--- Row 8 --->\n");
+            htm.append("<area coords=\"2,114,18,130\" onclick=\"setColor('quadrant3Color','#0000CC')\">\n");
+            htm.append("<area coords=\"18,114,34,130\" onclick=\"setColor('quadrant3Color','#0033CC')\">\n");
+            htm.append("<area coords=\"34,114,50,130\" onclick=\"setColor('quadrant3Color','#0066CC')\">\n");
+            htm.append("<area coords=\"50,114,66,130\" onclick=\"setColor('quadrant3Color','#0099CC')\">\n");
+            htm.append("<area coords=\"66,114,82,130\" onclick=\"setColor('quadrant3Color','#00CCCC')\">\n");
+            htm.append("<area coords=\"82,114,98,130\" onclick=\"setColor('quadrant3Color','#00FFCC')\">\n");
+            htm.append("<area coords=\"98,114,114,130\" onclick=\"setColor('quadrant3Color','#99FFCC')\">\n");
+            htm.append("<area coords=\"114,114,130,130\" onclick=\"setColor('quadrant3Color','#99CCCC')\">\n");
+            htm.append("<area coords=\"130,114,146,130\" onclick=\"setColor('quadrant3Color','#9999CC')\">\n");
+            htm.append("<area coords=\"146,114,162,130\" onclick=\"setColor('quadrant3Color','#9966CC')\">\n");
+            htm.append("<area coords=\"162,114,178,130\" onclick=\"setColor('quadrant3Color','#9933CC')\">\n");
+            htm.append("<area coords=\"178,114,194,130\" onclick=\"setColor('quadrant3Color','#9900CC')\">\n");
+            htm.append("<area coords=\"194,114,210,130\" onclick=\"setColor('quadrant3Color','#CC00CC')\">\n");
+            htm.append("<area coords=\"210,114,226,130\" onclick=\"setColor('quadrant3Color','#CC33CC')\">\n");
+            htm.append("<area coords=\"226,114,242,130\" onclick=\"setColor('quadrant3Color','#CC66CC')\">\n");
+            htm.append("<area coords=\"242,114,258,130\" onclick=\"setColor('quadrant3Color','#CC99CC')\">\n");
+            htm.append("<area coords=\"258,114,274,130\" onclick=\"setColor('quadrant3Color','#CCCCCC')\">\n");
+            htm.append("<area coords=\"274,114,290,130\" onclick=\"setColor('quadrant3Color','#CCFFCC')\">\n");
+            htm.append("<!--- Row 9 --->\n");
+            htm.append("<area coords=\"2,130,18,146\" onclick=\"setColor('quadrant3Color','#000099')\">\n");
+            htm.append("<area coords=\"18,130,34,146\" onclick=\"setColor('quadrant3Color','#003399')\">\n");
+            htm.append("<area coords=\"34,130,50,146\" onclick=\"setColor('quadrant3Color','#006699')\">\n");
+            htm.append("<area coords=\"50,130,66,146\" onclick=\"setColor('quadrant3Color','#009999')\">\n");
+            htm.append("<area coords=\"66,130,82,146\" onclick=\"setColor('quadrant3Color','#00CC99')\">\n");
+            htm.append("<area coords=\"82,130,98,146\" onclick=\"setColor('quadrant3Color','#00FF99')\">\n");
+            htm.append("<area coords=\"98,130,114,146\" onclick=\"setColor('quadrant3Color','#99FF99')\">\n");
+            htm.append("<area coords=\"114,130,130,146\" onclick=\"setColor('quadrant3Color','#99CC99')\">\n");
+            htm.append("<area coords=\"130,130,146,146\" onclick=\"setColor('quadrant3Color','#999999')\">\n");
+            htm.append("<area coords=\"146,130,162,146\" onclick=\"setColor('quadrant3Color','#996699')\">\n");
+            htm.append("<area coords=\"162,130,178,146\" onclick=\"setColor('quadrant3Color','#993399')\">\n");
+            htm.append("<area coords=\"178,130,194,146\" onclick=\"setColor('quadrant3Color','#990099')\">\n");
+            htm.append("<area coords=\"194,130,210,146\" onclick=\"setColor('quadrant3Color','#CC0099')\">\n");
+            htm.append("<area coords=\"210,130,226,146\" onclick=\"setColor('quadrant3Color','#CC3399')\">\n");
+            htm.append("<area coords=\"226,130,242,146\" onclick=\"setColor('quadrant3Color','#CC6699')\">\n");
+            htm.append("<area coords=\"242,130,258,146\" onclick=\"setColor('quadrant3Color','#CC9999')\">\n");
+            htm.append("<area coords=\"258,130,274,146\" onclick=\"setColor('quadrant3Color','#CCCC99')\">\n");
+            htm.append("<area coords=\"274,130,290,146\" onclick=\"setColor('quadrant3Color','#CCFF99')\">\n");
+            htm.append("<!--- Row 10 --->\n");
+            htm.append("<area coords=\"2,146,18,162\" onclick=\"setColor('quadrant3Color','#000066')\">\n");
+            htm.append("<area coords=\"18,146,34,162\" onclick=\"setColor('quadrant3Color','#003366')\">\n");
+            htm.append("<area coords=\"34,146,50,162\" onclick=\"setColor('quadrant3Color','#006666')\">\n");
+            htm.append("<area coords=\"50,146,66,162\" onclick=\"setColor('quadrant3Color','#009966')\">\n");
+            htm.append("<area coords=\"66,146,82,162\" onclick=\"setColor('quadrant3Color','#00CC66')\">\n");
+            htm.append("<area coords=\"82,146,98,162\" onclick=\"setColor('quadrant3Color','#00FF66')\">\n");
+            htm.append("<area coords=\"98,146,114,162\" onclick=\"setColor('quadrant3Color','#99FF66')\">\n");
+            htm.append("<area coords=\"114,146,130,162\" onclick=\"setColor('quadrant3Color','#99CC66')\">\n");
+            htm.append("<area coords=\"130,146,146,162\" onclick=\"setColor('quadrant3Color','#999966')\">\n");
+            htm.append("<area coords=\"146,146,162,162\" onclick=\"setColor('quadrant3Color','#996666')\">\n");
+            htm.append("<area coords=\"162,146,178,162\" onclick=\"setColor('quadrant3Color','#993366')\">\n");
+            htm.append("<area coords=\"178,146,194,162\" onclick=\"setColor('quadrant3Color','#990066')\">\n");
+            htm.append("<area coords=\"194,146,210,162\" onclick=\"setColor('quadrant3Color','#CC0066')\">\n");
+            htm.append("<area coords=\"210,146,226,162\" onclick=\"setColor('quadrant3Color','#CC3366')\">\n");
+            htm.append("<area coords=\"226,146,242,162\" onclick=\"setColor('quadrant3Color','#CC6666')\">\n");
+            htm.append("<area coords=\"242,146,258,162\" onclick=\"setColor('quadrant3Color','#CC9966')\">\n");
+            htm.append("<area coords=\"258,146,274,162\" onclick=\"setColor('quadrant3Color','#CCCC66')\">\n");
+            htm.append("<area coords=\"274,146,290,162\" onclick=\"setColor('quadrant3Color','#CCFF66')\">\n");
+            htm.append("<!--- Row 11 --->\n");
+            htm.append("<area coords=\"2,162,18,178\" onclick=\"setColor('quadrant3Color','#000033')\">\n");
+            htm.append("<area coords=\"18,162,34,178\" onclick=\"setColor('quadrant3Color','#003333')\">\n");
+            htm.append("<area coords=\"34,162,50,178\" onclick=\"setColor('quadrant3Color','#006633')\">\n");
+            htm.append("<area coords=\"50,162,66,178\" onclick=\"setColor('quadrant3Color','#009933')\">\n");
+            htm.append("<area coords=\"66,162,82,178\" onclick=\"setColor('quadrant3Color','#00CC33')\">\n");
+            htm.append("<area coords=\"82,162,98,178\" onclick=\"setColor('quadrant3Color','#00FF33')\">\n");
+            htm.append("<area coords=\"98,162,114,178\" onclick=\"setColor('quadrant3Color','#99FF33')\">\n");
+            htm.append("<area coords=\"114,162,130,178\" onclick=\"setColor('quadrant3Color','#99CC33')\">\n");
+            htm.append("<area coords=\"130,162,146,178\" onclick=\"setColor('quadrant3Color','#999933')\">\n");
+            htm.append("<area coords=\"146,162,162,178\" onclick=\"setColor('quadrant3Color','#996633')\">\n");
+            htm.append("<area coords=\"162,162,178,178\" onclick=\"setColor('quadrant3Color','#993333')\">\n");
+            htm.append("<area coords=\"178,162,194,178\" onclick=\"setColor('quadrant3Color','#990033')\">\n");
+            htm.append("<area coords=\"194,162,210,178\" onclick=\"setColor('quadrant3Color','#CC0033')\">\n");
+            htm.append("<area coords=\"210,162,226,178\" onclick=\"setColor('quadrant3Color','#CC3333')\">\n");
+            htm.append("<area coords=\"226,162,242,178\" onclick=\"setColor('quadrant3Color','#CC6633')\">\n");
+            htm.append("<area coords=\"242,162,258,178\" onclick=\"setColor('quadrant3Color','#CC9933')\">\n");
+            htm.append("<area coords=\"258,162,274,178\" onclick=\"setColor('quadrant3Color','#CCCC33')\">\n");
+            htm.append("<area coords=\"274,162,290,178\" onclick=\"setColor('quadrant3Color','#CCFF33')\">\n");
+            htm.append("<!--- Row 12 --->\n");
+            htm.append("<area coords=\"2,178,18,194\" onclick=\"setColor('quadrant3Color','#000000')\">\n");
+            htm.append("<area coords=\"18,178,34,194\" onclick=\"setColor('quadrant3Color','#003300')\">\n");
+            htm.append("<area coords=\"34,178,50,194\" onclick=\"setColor('quadrant3Color','#006600')\">\n");
+            htm.append("<area coords=\"50,178,66,194\" onclick=\"setColor('quadrant3Color','#009900')\">\n");
+            htm.append("<area coords=\"66,178,82,194\" onclick=\"setColor('quadrant3Color','#00CC00')\">\n");
+            htm.append("<area coords=\"82,178,98,194\" onclick=\"setColor('quadrant3Color','#00FF00')\">\n");
+            htm.append("<area coords=\"98,178,114,194\" onclick=\"setColor('quadrant3Color','#99FF00')\">\n");
+            htm.append("<area coords=\"114,178,130,194\" onclick=\"setColor('quadrant3Color','#99CC00')\">\n");
+            htm.append("<area coords=\"130,178,146,194\" onclick=\"setColor('quadrant3Color','#999900')\">\n");
+            htm.append("<area coords=\"146,178,162,194\" onclick=\"setColor('quadrant3Color','#996600')\">\n");
+            htm.append("<area coords=\"162,178,178,194\" onclick=\"setColor('quadrant3Color','#993300')\">\n");
+            htm.append("<area coords=\"178,178,194,194\" onclick=\"setColor('quadrant3Color','#990000')\">\n");
+            htm.append("<area coords=\"194,178,210,194\" onclick=\"setColor('quadrant3Color','#CC0000')\">\n");
+            htm.append("<area coords=\"210,178,226,194\" onclick=\"setColor('quadrant3Color','#CC3300')\">\n");
+            htm.append("<area coords=\"226,178,242,194\" onclick=\"setColor('quadrant3Color','#CC6600')\">\n");
+            htm.append("<area coords=\"242,178,258,194\" onclick=\"setColor('quadrant3Color','#CC9900')\">\n");
+            htm.append("<area coords=\"258,178,274,194\" onclick=\"setColor('quadrant3Color','#CCCC00')\">\n");
+            htm.append("<area coords=\"274,178,290,194\" onclick=\"setColor('quadrant3Color','#CCFF00')\">\n");
+            htm.append("</map>\n");
+            htm.append("</li>\n");
+
+            // cuadrante 4
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"quadrant4Color\" class=\"swbform-label\">Color del cuadrante IV (hexadecimal)</label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant4Color\" name=\"quadrant4Color\" value=\""+base.getAttribute("quadrant4Color","#000000")+"\" onblur=\"setColor('quadrant4Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("        </li>\n");
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label class=\"swbform-label\"></label>\n");
+            htm.append("          <img src=\"/swbadmin/images/colorgrid.gif\" width=\"292\" height=\"196\" border=\"0\" alt=\"RGB color mixer\" usemap=\"#gridmap4\" ismap=\"ismap\">\n");
+            htm.append("          <map name=\"gridmap4\">\n");
+            htm.append("<!--- Row 1 --->\n");
+            htm.append("<area coords=\"2,2,18,18\" onclick=\"setColor('quadrant4Color','#330000')\">\n");
+            htm.append("<area coords=\"18,2,34,18\" onclick=\"setColor('quadrant4Color','#333300')\">\n");
+            htm.append("<area coords=\"34,2,50,18\" onclick=\"setColor('quadrant4Color','#336600')\">\n");
+            htm.append("<area coords=\"50,2,66,18\" onclick=\"setColor('quadrant4Color','#339900')\">\n");
+            htm.append("<area coords=\"66,2,82,18\" onclick=\"setColor('quadrant4Color','#33CC00')\">\n");
+            htm.append("<area coords=\"82,2,98,18\" onclick=\"setColor('quadrant4Color','#33FF00')\">\n");
+            htm.append("<area coords=\"98,2,114,18\" onclick=\"setColor('quadrant4Color','#66FF00')\">\n");
+            htm.append("<area coords=\"114,2,130,18\" onclick=\"setColor('quadrant4Color','#66CC00')\">\n");
+            htm.append("<area coords=\"130,2,146,18\" onclick=\"setColor('quadrant4Color','#669900')\">\n");
+            htm.append("<area coords=\"146,2,162,18\" onclick=\"setColor('quadrant4Color','#666600')\">\n");
+            htm.append("<area coords=\"162,2,178,18\" onclick=\"setColor('quadrant4Color','#663300')\">\n");
+            htm.append("<area coords=\"178,2,194,18\" onclick=\"setColor('quadrant4Color','#660000')\">\n");
+            htm.append("<area coords=\"194,2,210,18\" onclick=\"setColor('quadrant4Color','#FF0000')\">\n");
+            htm.append("<area coords=\"210,2,226,18\" onclick=\"setColor('quadrant4Color','#FF3300')\">\n");
+            htm.append("<area coords=\"226,2,242,18\" onclick=\"setColor('quadrant4Color','#FF6600')\">\n");
+            htm.append("<area coords=\"242,2,258,18\" onclick=\"setColor('quadrant4Color','#FF9900')\">\n");
+            htm.append("<area coords=\"258,2,274,18\" onclick=\"setColor('quadrant4Color','#FFCC00')\">\n");
+            htm.append("<area coords=\"274,2,290,18\" onclick=\"setColor('quadrant4Color','#FFFF00')\">\n");
+            htm.append("<!--- Row 2 --->\n");
+            htm.append("<area coords=\"2,18,18,34\" onclick=\"setColor('quadrant4Color','#330033')\">\n");
+            htm.append("<area coords=\"18,18,34,34\" onclick=\"setColor('quadrant4Color','#333333')\">\n");
+            htm.append("<area coords=\"34,18,50,34\" onclick=\"setColor('quadrant4Color','#336633')\">\n");
+            htm.append("<area coords=\"50,18,66,34\" onclick=\"setColor('quadrant4Color','#339933')\">\n");
+            htm.append("<area coords=\"66,18,82,34\" onclick=\"setColor('quadrant4Color','#33CC33')\">\n");
+            htm.append("<area coords=\"82,18,98,34\" onclick=\"setColor('quadrant4Color','#33FF33')\">\n");
+            htm.append("<area coords=\"98,18,114,34\" onclick=\"setColor('quadrant4Color','#66FF33')\">\n");
+            htm.append("<area coords=\"114,18,130,34\" onclick=\"setColor('quadrant4Color','#66CC33')\">\n");
+            htm.append("<area coords=\"130,18,146,34\" onclick=\"setColor('quadrant4Color','#669933')\">\n");
+            htm.append("<area coords=\"146,18,162,34\" onclick=\"setColor('quadrant4Color','#666633')\">\n");
+            htm.append("<area coords=\"162,18,178,34\" onclick=\"setColor('quadrant4Color','#663333')\">\n");
+            htm.append("<area coords=\"178,18,194,34\" onclick=\"setColor('quadrant4Color','#660033')\">\n");
+            htm.append("<area coords=\"194,18,210,34\" onclick=\"setColor('quadrant4Color','#FF0033')\">\n");
+            htm.append("<area coords=\"210,18,226,34\" onclick=\"setColor('quadrant4Color','#FF3333')\">\n");
+            htm.append("<area coords=\"226,18,242,34\" onclick=\"setColor('quadrant4Color','#FF6633')\">\n");
+            htm.append("<area coords=\"242,18,258,34\" onclick=\"setColor('quadrant4Color','#FF9933')\">\n");
+            htm.append("<area coords=\"258,18,274,34\" onclick=\"setColor('quadrant4Color','#FFCC33')\">\n");
+            htm.append("<area coords=\"274,18,290,34\" onclick=\"setColor('quadrant4Color','#FFFF33')\">\n");
+            htm.append("<!--- Row 3 --->\n");
+            htm.append("<area coords=\"2,34,18,50\" onclick=\"setColor('quadrant4Color','#330066')\">\n");
+            htm.append("<area coords=\"18,34,34,50\" onclick=\"setColor('quadrant4Color','#333366')\">\n");
+            htm.append("<area coords=\"34,34,50,50\" onclick=\"setColor('quadrant4Color','#336666')\">\n");
+            htm.append("<area coords=\"50,34,66,50\" onclick=\"setColor('quadrant4Color','#339966')\">\n");
+            htm.append("<area coords=\"66,34,82,50\" onclick=\"setColor('quadrant4Color','#33CC66')\">\n");
+            htm.append("<area coords=\"82,34,98,50\" onclick=\"setColor('quadrant4Color','#33FF66')\">\n");
+            htm.append("<area coords=\"98,34,114,50\" onclick=\"setColor('quadrant4Color','#66FF66')\">\n");
+            htm.append("<area coords=\"114,34,130,50\" onclick=\"setColor('quadrant4Color','#66CC66')\">\n");
+            htm.append("<area coords=\"130,34,146,50\" onclick=\"setColor('quadrant4Color','#669966')\">\n");
+            htm.append("<area coords=\"146,34,162,50\" onclick=\"setColor('quadrant4Color','#666666')\">\n");
+            htm.append("<area coords=\"162,34,178,50\" onclick=\"setColor('quadrant4Color','#663366')\">\n");
+            htm.append("<area coords=\"178,34,194,50\" onclick=\"setColor('quadrant4Color','#660066')\">\n");
+            htm.append("<area coords=\"194,34,210,50\" onclick=\"setColor('quadrant4Color','#FF0066')\">\n");
+            htm.append("<area coords=\"210,34,226,50\" onclick=\"setColor('quadrant4Color','#FF3366')\">\n");
+            htm.append("<area coords=\"226,34,242,50\" onclick=\"setColor('quadrant4Color','#FF6666')\">\n");
+            htm.append("<area coords=\"242,34,258,50\" onclick=\"setColor('quadrant4Color','#FF9966')\">\n");
+            htm.append("<area coords=\"258,34,274,50\" onclick=\"setColor('quadrant4Color','#FFCC66')\">\n");
+            htm.append("<area coords=\"274,34,290,50\" onclick=\"setColor('quadrant4Color','#FFFF66')\">\n");
+            htm.append("<!--- Row 4 --->\n");
+            htm.append("<area coords=\"2,50,18,66\" onclick=\"setColor('quadrant4Color','#330099')\">\n");
+            htm.append("<area coords=\"18,50,34,66\" onclick=\"setColor('quadrant4Color','#333399')\">\n");
+            htm.append("<area coords=\"34,50,50,66\" onclick=\"setColor('quadrant4Color','#336699')\">\n");
+            htm.append("<area coords=\"50,50,66,66\" onclick=\"setColor('quadrant4Color','#339999')\">\n");
+            htm.append("<area coords=\"66,50,82,66\" onclick=\"setColor('quadrant4Color','#33CC99')\">\n");
+            htm.append("<area coords=\"82,50,98,66\" onclick=\"setColor('quadrant4Color','#33FF99')\">\n");
+            htm.append("<area coords=\"98,50,114,66\" onclick=\"setColor('quadrant4Color','#66FF99')\">\n");
+            htm.append("<area coords=\"114,50,130,66\" onclick=\"setColor('quadrant4Color','#66CC99')\">\n");
+            htm.append("<area coords=\"130,50,146,66\" onclick=\"setColor('quadrant4Color','#669999')\">\n");
+            htm.append("<area coords=\"146,50,162,66\" onclick=\"setColor('quadrant4Color','#666699')\">\n");
+            htm.append("<area coords=\"162,50,178,66\" onclick=\"setColor('quadrant4Color','#663399')\">\n");
+            htm.append("<area coords=\"178,50,194,66\" onclick=\"setColor('quadrant4Color','#660099')\">\n");
+            htm.append("<area coords=\"194,50,210,66\" onclick=\"setColor('quadrant4Color','#FF0099')\">\n");
+            htm.append("<area coords=\"210,50,226,66\" onclick=\"setColor('quadrant4Color','#FF3399')\">\n");
+            htm.append("<area coords=\"226,50,242,66\" onclick=\"setColor('quadrant4Color','#FF6699')\">\n");
+            htm.append("<area coords=\"242,50,258,66\" onclick=\"setColor('quadrant4Color','#FF9999')\">\n");
+            htm.append("<area coords=\"258,50,274,66\" onclick=\"setColor('quadrant4Color','#FFCC99')\">\n");
+            htm.append("<area coords=\"274,50,290,66\" onclick=\"setColor('quadrant4Color','#FFFF99')\">\n");
+            htm.append("<!--- Row 5 --->\n");
+            htm.append("<area coords=\"2,66,18,82\" onclick=\"setColor('quadrant4Color','#3300CC')\">\n");
+            htm.append("<area coords=\"18,66,34,82\" onclick=\"setColor('quadrant4Color','#3333CC')\">\n");
+            htm.append("<area coords=\"34,66,50,82\" onclick=\"setColor('quadrant4Color','#3366CC')\">\n");
+            htm.append("<area coords=\"50,66,66,82\" onclick=\"setColor('quadrant4Color','#3399CC')\">\n");
+            htm.append("<area coords=\"66,66,82,82\" onclick=\"setColor('quadrant4Color','#33CCCC')\">\n");
+            htm.append("<area coords=\"82,66,98,82\" onclick=\"setColor('quadrant4Color','#33FFCC')\">\n");
+            htm.append("<area coords=\"98,66,114,82\" onclick=\"setColor('quadrant4Color','#66FFCC')\">\n");
+            htm.append("<area coords=\"114,66,130,82\" onclick=\"setColor('quadrant4Color','#66CCCC')\">\n");
+            htm.append("<area coords=\"130,66,146,82\" onclick=\"setColor('quadrant4Color','#6699CC')\">\n");
+            htm.append("<area coords=\"146,66,162,82\" onclick=\"setColor('quadrant4Color','#6666CC')\">\n");
+            htm.append("<area coords=\"162,66,178,82\" onclick=\"setColor('quadrant4Color','#6633CC')\">\n");
+            htm.append("<area coords=\"178,66,194,82\" onclick=\"setColor('quadrant4Color','#6600CC')\">\n");
+            htm.append("<area coords=\"194,66,210,82\" onclick=\"setColor('quadrant4Color','#FF00CC')\">\n");
+            htm.append("<area coords=\"210,66,226,82\" onclick=\"setColor('quadrant4Color','#FF33CC')\">\n");
+            htm.append("<area coords=\"226,66,242,82\" onclick=\"setColor('quadrant4Color','#FF66CC')\">\n");
+            htm.append("<area coords=\"242,66,258,82\" onclick=\"setColor('quadrant4Color','#FF99CC')\">\n");
+            htm.append("<area coords=\"258,66,274,82\" onclick=\"setColor('quadrant4Color','#FFCCCC')\">\n");
+            htm.append("<area coords=\"274,66,290,82\" onclick=\"setColor('quadrant4Color','#FFFFCC')\">\n");
+            htm.append("<!--- Row 6 --->\n");
+            htm.append("<area coords=\"2,82,18,98\" onclick=\"setColor('quadrant4Color','#3300FF')\">\n");
+            htm.append("<area coords=\"18,82,34,98\" onclick=\"setColor('quadrant4Color','#3333FF')\">\n");
+            htm.append("<area coords=\"34,82,50,98\" onclick=\"setColor('quadrant4Color','#3366FF')\">\n");
+            htm.append("<area coords=\"50,82,66,98\" onclick=\"setColor('quadrant4Color','#3399FF')\">\n");
+            htm.append("<area coords=\"66,82,82,98\" onclick=\"setColor('quadrant4Color','#33CCFF')\">\n");
+            htm.append("<area coords=\"82,82,98,98\" onclick=\"setColor('quadrant4Color','#33FFFF')\">\n");
+            htm.append("<area coords=\"98,82,114,98\" onclick=\"setColor('quadrant4Color','#66FFFF')\">\n");
+            htm.append("<area coords=\"114,82,130,98\" onclick=\"setColor('quadrant4Color','#66CCFF')\">\n");
+            htm.append("<area coords=\"130,82,146,98\" onclick=\"setColor('quadrant4Color','#6699FF')\">\n");
+            htm.append("<area coords=\"146,82,162,98\" onclick=\"setColor('quadrant4Color','#6666FF')\">\n");
+            htm.append("<area coords=\"162,82,178,98\" onclick=\"setColor('quadrant4Color','#6633FF')\">\n");
+            htm.append("<area coords=\"178,82,194,98\" onclick=\"setColor('quadrant4Color','#6600FF')\">\n");
+            htm.append("<area coords=\"194,82,210,98\" onclick=\"setColor('quadrant4Color','#FF00FF')\">\n");
+            htm.append("<area coords=\"210,82,226,98\" onclick=\"setColor('quadrant4Color','#FF33FF')\">\n");
+            htm.append("<area coords=\"226,82,242,98\" onclick=\"setColor('quadrant4Color','#FF66FF')\">\n");
+            htm.append("<area coords=\"242,82,258,98\" onclick=\"setColor('quadrant4Color','#FF99FF')\">\n");
+            htm.append("<area coords=\"258,82,274,98\" onclick=\"setColor('quadrant4Color','#FFCCFF')\">\n");
+            htm.append("<area coords=\"274,82,290,98\" onclick=\"setColor('quadrant4Color','#FFFFFF')\">\n");
+            htm.append("<!--- Row 7 --->\n");
+            htm.append("<area coords=\"2,98,18,114\" onclick=\"setColor('quadrant4Color','#0000FF')\">\n");
+            htm.append("<area coords=\"18,98,34,114\" onclick=\"setColor('quadrant4Color','#0033FF')\">\n");
+            htm.append("<area coords=\"34,98,50,114\" onclick=\"setColor('quadrant4Color','#0066FF')\">\n");
+            htm.append("<area coords=\"50,98,66,114\" onclick=\"setColor('quadrant4Color','#0099FF')\">\n");
+            htm.append("<area coords=\"66,98,82,114\" onclick=\"setColor('quadrant4Color','#00CCFF')\">\n");
+            htm.append("<area coords=\"82,98,98,114\" onclick=\"setColor('quadrant4Color','#00FFFF')\">\n");
+            htm.append("<area coords=\"98,98,114,114\" onclick=\"setColor('quadrant4Color','#99FFFF')\">\n");
+            htm.append("<area coords=\"114,98,130,114\" onclick=\"setColor('quadrant4Color','#99CCFF')\">\n");
+            htm.append("<area coords=\"130,98,146,114\" onclick=\"setColor('quadrant4Color','#9999FF')\">\n");
+            htm.append("<area coords=\"146,98,162,114\" onclick=\"setColor('quadrant4Color','#9966FF')\">\n");
+            htm.append("<area coords=\"162,98,178,114\" onclick=\"setColor('quadrant4Color','#9933FF')\">\n");
+            htm.append("<area coords=\"178,98,194,114\" onclick=\"setColor('quadrant4Color','#9900FF')\">\n");
+            htm.append("<area coords=\"194,98,210,114\" onclick=\"setColor('quadrant4Color','#CC00FF')\">\n");
+            htm.append("<area coords=\"210,98,226,114\" onclick=\"setColor('quadrant4Color','#CC33FF')\">\n");
+            htm.append("<area coords=\"226,98,242,114\" onclick=\"setColor('quadrant4Color','#CC66FF')\">\n");
+            htm.append("<area coords=\"242,98,258,114\" onclick=\"setColor('quadrant4Color','#CC99FF')\">\n");
+            htm.append("<area coords=\"258,98,274,114\" onclick=\"setColor('quadrant4Color','#CCCCFF')\">\n");
+            htm.append("<area coords=\"274,98,290,114\" onclick=\"setColor('quadrant4Color','#CCFFFF')\">\n");
+            htm.append("<!--- Row 8 --->\n");
+            htm.append("<area coords=\"2,114,18,130\" onclick=\"setColor('quadrant4Color','#0000CC')\">\n");
+            htm.append("<area coords=\"18,114,34,130\" onclick=\"setColor('quadrant4Color','#0033CC')\">\n");
+            htm.append("<area coords=\"34,114,50,130\" onclick=\"setColor('quadrant4Color','#0066CC')\">\n");
+            htm.append("<area coords=\"50,114,66,130\" onclick=\"setColor('quadrant4Color','#0099CC')\">\n");
+            htm.append("<area coords=\"66,114,82,130\" onclick=\"setColor('quadrant4Color','#00CCCC')\">\n");
+            htm.append("<area coords=\"82,114,98,130\" onclick=\"setColor('quadrant4Color','#00FFCC')\">\n");
+            htm.append("<area coords=\"98,114,114,130\" onclick=\"setColor('quadrant4Color','#99FFCC')\">\n");
+            htm.append("<area coords=\"114,114,130,130\" onclick=\"setColor('quadrant4Color','#99CCCC')\">\n");
+            htm.append("<area coords=\"130,114,146,130\" onclick=\"setColor('quadrant4Color','#9999CC')\">\n");
+            htm.append("<area coords=\"146,114,162,130\" onclick=\"setColor('quadrant4Color','#9966CC')\">\n");
+            htm.append("<area coords=\"162,114,178,130\" onclick=\"setColor('quadrant4Color','#9933CC')\">\n");
+            htm.append("<area coords=\"178,114,194,130\" onclick=\"setColor('quadrant4Color','#9900CC')\">\n");
+            htm.append("<area coords=\"194,114,210,130\" onclick=\"setColor('quadrant4Color','#CC00CC')\">\n");
+            htm.append("<area coords=\"210,114,226,130\" onclick=\"setColor('quadrant4Color','#CC33CC')\">\n");
+            htm.append("<area coords=\"226,114,242,130\" onclick=\"setColor('quadrant4Color','#CC66CC')\">\n");
+            htm.append("<area coords=\"242,114,258,130\" onclick=\"setColor('quadrant4Color','#CC99CC')\">\n");
+            htm.append("<area coords=\"258,114,274,130\" onclick=\"setColor('quadrant4Color','#CCCCCC')\">\n");
+            htm.append("<area coords=\"274,114,290,130\" onclick=\"setColor('quadrant4Color','#CCFFCC')\">\n");
+            htm.append("<!--- Row 9 --->\n");
+            htm.append("<area coords=\"2,130,18,146\" onclick=\"setColor('quadrant4Color','#000099')\">\n");
+            htm.append("<area coords=\"18,130,34,146\" onclick=\"setColor('quadrant4Color','#003399')\">\n");
+            htm.append("<area coords=\"34,130,50,146\" onclick=\"setColor('quadrant4Color','#006699')\">\n");
+            htm.append("<area coords=\"50,130,66,146\" onclick=\"setColor('quadrant4Color','#009999')\">\n");
+            htm.append("<area coords=\"66,130,82,146\" onclick=\"setColor('quadrant4Color','#00CC99')\">\n");
+            htm.append("<area coords=\"82,130,98,146\" onclick=\"setColor('quadrant4Color','#00FF99')\">\n");
+            htm.append("<area coords=\"98,130,114,146\" onclick=\"setColor('quadrant4Color','#99FF99')\">\n");
+            htm.append("<area coords=\"114,130,130,146\" onclick=\"setColor('quadrant4Color','#99CC99')\">\n");
+            htm.append("<area coords=\"130,130,146,146\" onclick=\"setColor('quadrant4Color','#999999')\">\n");
+            htm.append("<area coords=\"146,130,162,146\" onclick=\"setColor('quadrant4Color','#996699')\">\n");
+            htm.append("<area coords=\"162,130,178,146\" onclick=\"setColor('quadrant4Color','#993399')\">\n");
+            htm.append("<area coords=\"178,130,194,146\" onclick=\"setColor('quadrant4Color','#990099')\">\n");
+            htm.append("<area coords=\"194,130,210,146\" onclick=\"setColor('quadrant4Color','#CC0099')\">\n");
+            htm.append("<area coords=\"210,130,226,146\" onclick=\"setColor('quadrant4Color','#CC3399')\">\n");
+            htm.append("<area coords=\"226,130,242,146\" onclick=\"setColor('quadrant4Color','#CC6699')\">\n");
+            htm.append("<area coords=\"242,130,258,146\" onclick=\"setColor('quadrant4Color','#CC9999')\">\n");
+            htm.append("<area coords=\"258,130,274,146\" onclick=\"setColor('quadrant4Color','#CCCC99')\">\n");
+            htm.append("<area coords=\"274,130,290,146\" onclick=\"setColor('quadrant4Color','#CCFF99')\">\n");
+            htm.append("<!--- Row 10 --->\n");
+            htm.append("<area coords=\"2,146,18,162\" onclick=\"setColor('quadrant4Color','#000066')\">\n");
+            htm.append("<area coords=\"18,146,34,162\" onclick=\"setColor('quadrant4Color','#003366')\">\n");
+            htm.append("<area coords=\"34,146,50,162\" onclick=\"setColor('quadrant4Color','#006666')\">\n");
+            htm.append("<area coords=\"50,146,66,162\" onclick=\"setColor('quadrant4Color','#009966')\">\n");
+            htm.append("<area coords=\"66,146,82,162\" onclick=\"setColor('quadrant4Color','#00CC66')\">\n");
+            htm.append("<area coords=\"82,146,98,162\" onclick=\"setColor('quadrant4Color','#00FF66')\">\n");
+            htm.append("<area coords=\"98,146,114,162\" onclick=\"setColor('quadrant4Color','#99FF66')\">\n");
+            htm.append("<area coords=\"114,146,130,162\" onclick=\"setColor('quadrant4Color','#99CC66')\">\n");
+            htm.append("<area coords=\"130,146,146,162\" onclick=\"setColor('quadrant4Color','#999966')\">\n");
+            htm.append("<area coords=\"146,146,162,162\" onclick=\"setColor('quadrant4Color','#996666')\">\n");
+            htm.append("<area coords=\"162,146,178,162\" onclick=\"setColor('quadrant4Color','#993366')\">\n");
+            htm.append("<area coords=\"178,146,194,162\" onclick=\"setColor('quadrant4Color','#990066')\">\n");
+            htm.append("<area coords=\"194,146,210,162\" onclick=\"setColor('quadrant4Color','#CC0066')\">\n");
+            htm.append("<area coords=\"210,146,226,162\" onclick=\"setColor('quadrant4Color','#CC3366')\">\n");
+            htm.append("<area coords=\"226,146,242,162\" onclick=\"setColor('quadrant4Color','#CC6666')\">\n");
+            htm.append("<area coords=\"242,146,258,162\" onclick=\"setColor('quadrant4Color','#CC9966')\">\n");
+            htm.append("<area coords=\"258,146,274,162\" onclick=\"setColor('quadrant4Color','#CCCC66')\">\n");
+            htm.append("<area coords=\"274,146,290,162\" onclick=\"setColor('quadrant4Color','#CCFF66')\">\n");
+            htm.append("<!--- Row 11 --->\n");
+            htm.append("<area coords=\"2,162,18,178\" onclick=\"setColor('quadrant4Color','#000033')\">\n");
+            htm.append("<area coords=\"18,162,34,178\" onclick=\"setColor('quadrant4Color','#003333')\">\n");
+            htm.append("<area coords=\"34,162,50,178\" onclick=\"setColor('quadrant4Color','#006633')\">\n");
+            htm.append("<area coords=\"50,162,66,178\" onclick=\"setColor('quadrant4Color','#009933')\">\n");
+            htm.append("<area coords=\"66,162,82,178\" onclick=\"setColor('quadrant4Color','#00CC33')\">\n");
+            htm.append("<area coords=\"82,162,98,178\" onclick=\"setColor('quadrant4Color','#00FF33')\">\n");
+            htm.append("<area coords=\"98,162,114,178\" onclick=\"setColor('quadrant4Color','#99FF33')\">\n");
+            htm.append("<area coords=\"114,162,130,178\" onclick=\"setColor('quadrant4Color','#99CC33')\">\n");
+            htm.append("<area coords=\"130,162,146,178\" onclick=\"setColor('quadrant4Color','#999933')\">\n");
+            htm.append("<area coords=\"146,162,162,178\" onclick=\"setColor('quadrant4Color','#996633')\">\n");
+            htm.append("<area coords=\"162,162,178,178\" onclick=\"setColor('quadrant4Color','#993333')\">\n");
+            htm.append("<area coords=\"178,162,194,178\" onclick=\"setColor('quadrant4Color','#990033')\">\n");
+            htm.append("<area coords=\"194,162,210,178\" onclick=\"setColor('quadrant4Color','#CC0033')\">\n");
+            htm.append("<area coords=\"210,162,226,178\" onclick=\"setColor('quadrant4Color','#CC3333')\">\n");
+            htm.append("<area coords=\"226,162,242,178\" onclick=\"setColor('quadrant4Color','#CC6633')\">\n");
+            htm.append("<area coords=\"242,162,258,178\" onclick=\"setColor('quadrant4Color','#CC9933')\">\n");
+            htm.append("<area coords=\"258,162,274,178\" onclick=\"setColor('quadrant4Color','#CCCC33')\">\n");
+            htm.append("<area coords=\"274,162,290,178\" onclick=\"setColor('quadrant4Color','#CCFF33')\">\n");
+            htm.append("<!--- Row 12 --->\n");
+            htm.append("<area coords=\"2,178,18,194\" onclick=\"setColor('quadrant4Color','#000000')\">\n");
+            htm.append("<area coords=\"18,178,34,194\" onclick=\"setColor('quadrant4Color','#003300')\">\n");
+            htm.append("<area coords=\"34,178,50,194\" onclick=\"setColor('quadrant4Color','#006600')\">\n");
+            htm.append("<area coords=\"50,178,66,194\" onclick=\"setColor('quadrant4Color','#009900')\">\n");
+            htm.append("<area coords=\"66,178,82,194\" onclick=\"setColor('quadrant4Color','#00CC00')\">\n");
+            htm.append("<area coords=\"82,178,98,194\" onclick=\"setColor('quadrant4Color','#00FF00')\">\n");
+            htm.append("<area coords=\"98,178,114,194\" onclick=\"setColor('quadrant4Color','#99FF00')\">\n");
+            htm.append("<area coords=\"114,178,130,194\" onclick=\"setColor('quadrant4Color','#99CC00')\">\n");
+            htm.append("<area coords=\"130,178,146,194\" onclick=\"setColor('quadrant4Color','#999900')\">\n");
+            htm.append("<area coords=\"146,178,162,194\" onclick=\"setColor('quadrant4Color','#996600')\">\n");
+            htm.append("<area coords=\"162,178,178,194\" onclick=\"setColor('quadrant4Color','#993300')\">\n");
+            htm.append("<area coords=\"178,178,194,194\" onclick=\"setColor('quadrant4Color','#990000')\">\n");
+            htm.append("<area coords=\"194,178,210,194\" onclick=\"setColor('quadrant4Color','#CC0000')\">\n");
+            htm.append("<area coords=\"210,178,226,194\" onclick=\"setColor('quadrant4Color','#CC3300')\">\n");
+            htm.append("<area coords=\"226,178,242,194\" onclick=\"setColor('quadrant4Color','#CC6600')\">\n");
+            htm.append("<area coords=\"242,178,258,194\" onclick=\"setColor('quadrant4Color','#CC9900')\">\n");
+            htm.append("<area coords=\"258,178,274,194\" onclick=\"setColor('quadrant4Color','#CCCC00')\">\n");
+            htm.append("<area coords=\"274,178,290,194\" onclick=\"setColor('quadrant4Color','#CCFF00')\">\n");
+            htm.append("</map>\n");
+            htm.append("</li>\n");
+            htm.append("</ul>\n");
+            htm.append("</fieldset>\n");
+            htm.append("</div>\n");
+
+            htm.append("<fieldset>\n");
+            htm.append("   <legend></legend>\n");
+            htm.append("   <ul class=\"swbform-ul\">\n");
+            htm.append("      <li>\n");
+            htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\" onclick=\"return isValid()\">Guardar</button>\n");
+            htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
+            htm.append("      </li>\n");
+            htm.append("   </ul>\n");
+            htm.append("</fieldset>\n");
+            htm.append("</form>\n");
+            htm.append("</div>\n");        
+            out.print(htm.toString());
+        }
+        else if(Action_UPDATE.equals(action))
+        {
+            out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
+            out.println("   alert('Se actualizó exitosamente el recurso con identificador "+base.getId()+"');");
+            out.println("   window.location.href='"+paramRequest.getRenderUrl().setAction(SWBParamRequest.Action_EDIT)+"';");
+            out.println("</script>");
+        }
+    }
+
+    @Override
+    public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        String action = response.getAction();
+        if(Action_UPDATE.equals(action)) {
+            Resource base = response.getResourceBase();
+            base.setAttribute("width", request.getParameter("width"));
+            base.setAttribute("height", request.getParameter("height"));
+            base.setAttribute("quadrant1Color", request.getParameter("quadrant1Color"));
+            base.setAttribute("quadrant2Color", request.getParameter("quadrant2Color"));
+            base.setAttribute("quadrant3Color", request.getParameter("quadrant3Color"));
+            base.setAttribute("quadrant4Color", request.getParameter("quadrant4Color"));
+            try {
+                base.updateAttributesToDB();
+                response.setAction(Action_UPDATE);
+            }catch(SWBException e) {
+                log.error(e);
+                response.setAction(SWBActionResponse.Action_EDIT);
+            }
+        }
+    }
+    
+    public Document getDom() throws XPathExpressionException, NumberFormatException
     {
-//        Resource base = getResourceBase();
-//        final BSC scorecard = (BSC)base.getWebSite();
-//        Document documentBSC = scorecard.getDom();
-//        setWidth(assertValue(base.getAttribute("width", "1024")));
-//        setHeight(assertValue(base.getAttribute("height", "1400")));
-        int width = 1050;
-        int height = 800;
-        //final Period period = getPeriod(request);
-        //Document documentBSC = scorecard.getDom(period);
+        Resource base = getResourceBase();
+        final BSC scorecard = (BSC)base.getWebSite();
+        int width = assertValue(base.getAttribute("width", "1050"));
+        int height = assertValue(base.getAttribute("height", "800"));
+        Document documentBSC = scorecard.getDom();
         Element bsc = documentBSC.getDocumentElement();
         
         Document map = SWBUtils.XML.getNewDocument();
@@ -297,14 +1363,22 @@ public class RisksMap extends GenericResource {
         return map;
     }
     
-    public String getSvg(HttpServletRequest request, Document map) throws XPathExpressionException, NumberFormatException
+    public String getSvg() throws XPathExpressionException, NumberFormatException
     {
+        Resource base = getResourceBase();
         final int width, height;
         int x, y=BOX_SPACING_TOP, w, h;
         Node node;
         NamedNodeMap attrs;
         String expression;
         String txt;
+        
+        Document map;
+        try {
+            map = getDom();
+        }catch(XPathExpressionException xpathe) {
+            return xpathe.getMessage();
+        }
         
         Element root = map.getDocumentElement();
         XPath xPath = XPathFactory.newInstance().newXPath();        
@@ -420,13 +1494,13 @@ public class RisksMap extends GenericResource {
         // Fin def eje de coordenadas
         
         // Cuadrantes
-        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_)+","+y_+",0,0,'blue',1,'blue',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_)+","+y_+",0,0,'"+base.getAttribute("quadrant1Color")+"',1,'"+base.getAttribute("quadrant1Color")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'red',1,'red',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'"+base.getAttribute("quadrant2Color")+"',1,'"+base.getAttribute("quadrant2Color")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_)+","+(y_+h_+1)+",0,0,'green',1,'green',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant3Color")+"',1,'"+base.getAttribute("quadrant3Color")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+(y_+h_+1)+",0,0,'yellow',1,'yellow',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant4Color")+"',1,'"+base.getAttribute("quadrant4Color")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
         // abscisas (valores de impacto)
@@ -497,7 +1571,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
         SVGjs.append(" var w = Math.round(rect.width.baseVal.value);").append("\n");
         SVGjs.append(" x = x + w + "+MARGEN_LEFT+";").append("\n");
-        
         
         // Listado de riesgos
         x_ = 0;
@@ -613,7 +1686,6 @@ public class RisksMap extends GenericResource {
                 SVGjs.append(" }").append("\n");
             }
         }
-        
         
         // Tooltip
         SVGjs.append("").append("\n");
@@ -887,33 +1959,5 @@ public class RisksMap extends GenericResource {
         }
         return val;
     }
-    
-    public int getWidth() {
-        return width;
-    }
-    private void setWidth(int width) {
-        this.width = width;
-    }
-    public int getHeight() {
-        return height;
-    }
-    private void setHeight(int height) {
-        this.height = height;
-    }
-    
-    private int vPadding(int value) {
-        return value+PADDING_TOP+PADDING_DOWN;
-    }
-    
-    private int topPadding(int value) {
-        return value+PADDING_TOP;
-    }
-    
-    private int bottomPadding(int value) {
-        return value+PADDING_TOP;
-    }
-    
-    private int hPadding(int value) {
-        return value+PADDING_LEFT+PADDING_RIGHT;
-    }    
+      
 }
