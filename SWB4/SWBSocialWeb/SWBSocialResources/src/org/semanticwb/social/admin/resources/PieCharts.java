@@ -58,6 +58,8 @@ import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.*;
 import java.util.Iterator;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.semanticwb.SWBPortal;
@@ -426,7 +428,7 @@ public class PieCharts extends GenericResource {
             String title = titleR;
 
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            XSSFWorkbook wb = new XSSFWorkbook();
 
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
@@ -518,7 +520,8 @@ public class PieCharts extends GenericResource {
                 }
                 // createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? paramRequest.getLocaleString("message") : postIn instanceof PhotoIn ? paramRequest.getLocaleString("photo") : postIn instanceof VideoIn ? paramRequest.getLocaleString("video") : "---");
                 createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? "Mensaje" : postIn instanceof PhotoIn ? "Foto" : postIn instanceof VideoIn ? "Video" : "---");
-                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostInSocialNetwork().getDisplayTitle(lang));
+               
+                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostInSocialNetwork() == null  ? "---" : postIn.getPostInSocialNetwork().getDisplayTitle(lang));
 
 
                 if (postIn.getSocialTopic() != null) {
@@ -604,14 +607,14 @@ public class PieCharts extends GenericResource {
         }
     }
 
-    public static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        XSSFFont cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -626,14 +629,14 @@ public class PieCharts extends GenericResource {
 
     }
 
-    public static void createHead(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createHead(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        XSSFFont cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
