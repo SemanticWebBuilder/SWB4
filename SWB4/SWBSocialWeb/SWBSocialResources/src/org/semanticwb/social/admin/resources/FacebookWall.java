@@ -583,8 +583,14 @@ public class FacebookWall extends GenericResource {
                             postIn.setPi_createdInSocialNet(new Date());
                         }else{
                             postIn.setPi_createdInSocialNet(postTime);
-                        }                        
-                        postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postData.getString("id"));
+                        }
+                        String postId = "";
+                        if(postData.getString("id").contains("_")){
+                            postId = postData.getString("id").split("_")[1];
+                        }else{
+                            postId = postData.getString("id");
+                        }
+                        postIn.setMsg_url("https://www.facebook.com/" + postData.getJSONObject("from").getString("id") + "/posts/" + postId);
                         postIn.setPostInSocialNetworkUser(socialNetUser);
                         Calendar calendario = Calendar.getInstance();
                         postIn.setPi_created(calendario.getTime());
