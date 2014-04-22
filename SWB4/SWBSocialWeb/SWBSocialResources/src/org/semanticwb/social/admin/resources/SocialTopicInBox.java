@@ -2484,7 +2484,7 @@ public class SocialTopicInBox extends GenericResource {
    
    
    private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, SocialTopic socialTopic, 
-           boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
+        boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter(); 
         User user = paramRequest.getUser();
         String lang = user.getLanguage();

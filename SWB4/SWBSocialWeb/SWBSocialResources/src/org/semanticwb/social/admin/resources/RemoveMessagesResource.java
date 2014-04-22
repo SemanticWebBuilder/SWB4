@@ -83,12 +83,8 @@ public class RemoveMessagesResource extends GenericResource {
                 out.println("<div id=\"msj-eliminar\">");
                 out.println("<p>Mensajes del stream: <strong>"+stream.getDisplayTitle(user.getLanguage()) +"</strong></p>");
                 
-                System.out.println("Mensajes 1 George:"+itPostIn.hasNext());
-
                 long lPostIns=Collections.sizeOf(itPostIn); 
                 
-                System.out.println("Mensajes 2 George:"+lPostIns);
-
                 if(lPostIns>0L){ 
                     out.println("<div class=\"bloque bloque1\">");
                     out.println("<p class=\"bloqtit\">Todos</p>");
