@@ -1831,8 +1831,8 @@
                         if(language != null){
 
                 %>
-                <input id="bcn<%=language.getTitle()%>" type="radio" name="language" value="<%=reemplazar(language.getTitle())%>">
-                <label for="bcn<%=language.getTitle()%>"><%=language.getTitle()%></label>
+                <input id="bcn<%=language.getDisplayTitle(lang)%>" type="radio" name="language" value="<%=reemplazar(language.getDisplayTitle(lang))%>">
+                <label for="bcn<%=language.getDisplayTitle(lang)%>"><%=language.getDisplayTitle(lang)%></label>
                 <%
                                }
                     }
