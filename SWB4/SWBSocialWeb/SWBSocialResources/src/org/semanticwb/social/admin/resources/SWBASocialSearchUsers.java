@@ -69,7 +69,7 @@ public class SWBASocialSearchUsers extends GenericResource
         url.setMode("roles");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         ret.append("<input type=\"hidden\" name=\"userRepository\" value=\""+SWBContext.getAdminWebSite().getUserRepository().getId()+"\">");
-        /*
+        //Jorge
         ret.append("    <tr><td width=\"200px\">"+paramRequest.getLocaleString("UsrRep")+"</td>\n");
         ret.append("    <td><select dojoType=\"dijit.form.FilteringSelect\" autocomplete=\"false\" name=\"userRepository\" id=\"userRepository\" >\n");
         while (itur.hasNext())
@@ -88,7 +88,7 @@ public class SWBASocialSearchUsers extends GenericResource
         ret.append("    lpan.attr('href', '" + url + "?userRepository='+suri);\n");
         ret.append("    lpan.refresh();\n");
         ret.append("</script> \n");
-        * */
+        //Fin Jorge
 
         ret.append("    </select>\n");
         ret.append("    </td></tr>\n");
