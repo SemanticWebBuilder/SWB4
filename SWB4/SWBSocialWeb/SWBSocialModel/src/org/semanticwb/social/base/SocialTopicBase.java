@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Catalogo de temas de un modelo (Marca) 
    */
-public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.social.SocialPFlowRefable
+public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.Tagable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialPFlowRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
 {
    /**
    * Catalogo de temas de un modelo (Marca)
@@ -64,6 +64,12 @@ public abstract class SocialTopicBase extends org.semanticwb.model.SWBClass impl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialTopic>(it, true);
+        }
+
+        public static org.semanticwb.social.SocialTopic createSocialTopic(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.SocialTopic

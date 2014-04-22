@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que hereda de swb:WebSite. Es un tipo de website Social. De esta manera se puede contar con todos los elementos en el arbol de navegación en la administración, y otros elementos utiles para Social Site (Marca). 
    */
-public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.Trashable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.Activeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Localeable
 {
    /**
    * Número de Días antes de que se refresque información del usuario en las redes sociales
@@ -514,6 +514,12 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     {
         return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(id,this);
     }
+
+    public org.semanticwb.social.SocialTopic createSocialTopic()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialTopic);
+        return org.semanticwb.social.SocialTopic.ClassMgr.createSocialTopic(String.valueOf(id),this);
+    } 
 
     public void removeSocialTopic(String id)
     {
