@@ -3,6 +3,8 @@ package org.semanticwb.bsc.formelement;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.accessory.Differentiator;
+import org.semanticwb.bsc.accessory.DifferentiatorGroup;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Indicator;
@@ -97,6 +99,22 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
                     continue;
                 }
                 if(ordinal == t.getIndex())
+                {
+                    throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+                }
+            }
+        }
+        else if(genObj instanceof Differentiator)
+        {
+            Differentiator dif = (Differentiator)genObj;
+            DifferentiatorGroup parent = dif.getDifferentiatorGroup();
+            GenericIterator<Differentiator> it = parent.listDifferentiators();
+            while(it.hasNext()) {
+                Differentiator d = it.next();
+                if( dif.equals(d) ) {
+                    continue;
+                }
+                if(ordinal == d.getIndex())
                 {
                     throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
                 }
