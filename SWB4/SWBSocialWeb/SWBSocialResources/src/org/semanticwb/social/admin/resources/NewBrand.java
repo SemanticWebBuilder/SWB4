@@ -25,6 +25,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.repository.Workspace;
 import org.semanticwb.social.SocialTopic;
+import org.semanticwb.social.SocialSite;
 
 /**
  *
@@ -34,6 +35,30 @@ public class NewBrand extends GenericResource {
 
     /** The log. */
     private static Logger log = SWBUtils.getLogger(NewBrand.class);
+    
+    private String getValidSocialSiteID(String name, int cont){
+        SocialSite socialSite=null;
+        try{
+            if(cont==0){
+                socialSite=SocialSite.ClassMgr.getSocialSite(name);
+            }else{
+                socialSite=SocialSite.ClassMgr.getSocialSite(name+cont);
+            }
+            if(socialSite!=null) {
+                cont=cont+1;
+                return getValidSocialSiteID(name, cont);
+            }else{
+                if(cont==0){
+                    return name;
+                }else{
+                    return name+cont;
+                }
+            }
+        }catch(Exception e){
+            log.error(e);
+        }
+        return null;
+    }
 
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#doView(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, org.semanticwb.portal.api.SWBParamRequest)
@@ -47,10 +72,16 @@ public class NewBrand extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl();
             if (action != null && action.trim().equals("step2")) {
                 String title = request.getParameter("wstitle");
-                String id = request.getParameter("wsid");
+                //String id = request.getParameter("wsid");
                 String usrRep = request.getParameter("wsrepository");
                 //String wstype = request.getParameter("wstype");
 
+                String id=null;
+                synchronized (this) {
+                    id=getValidSocialSiteID(SWBUtils.TEXT.replaceSpecialCharacters(title, true), 0);
+                }
+                if(id==null) return;
+                
                 WebSite site = null;
                 String ns="http://www." + id + ".swb#";
                 
@@ -104,6 +135,8 @@ public class NewBrand extends GenericResource {
                     //TODO: undeleted repository
                     //workspace.setUn
                     site.addSubModel(workspace);
+                    site.setActive(true);
+                    
                     workspace.getSemanticObject().getModel().setTraceable(true);
                     
                     
@@ -822,6 +855,7 @@ public class NewBrand extends GenericResource {
             out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" >");
             out.println("</td>");
             out.println("</tr>");
+            /*
             out.println("<tr><td align=\"right\">");
             out.println(paramRequest.getLocaleString("msgwsID")+" <em>*</em>");
             out.println("</td>");
@@ -829,6 +863,7 @@ public class NewBrand extends GenericResource {
             out.println("<input type=\"text\" id=\"swb_create_id\" name=\"wsid\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Identificador.\" isValid=\"return canCreateSemanticObject(this.textbox.value);\" invalidMessage=\"Identificador invalido.\" trim=\"true\" >");
             out.println("</td>");
             out.println("</tr>");
+            * */
             out.println("<input type=\"hidden\" name=\"wsrepository\" value=\"uradm\"/>"); 
             
             /*
