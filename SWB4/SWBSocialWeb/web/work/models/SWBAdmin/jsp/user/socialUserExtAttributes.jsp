@@ -58,7 +58,7 @@
     //boolean isAble2RemoveMsg = false, isAble2RespondMsg = false, isAble2ReValueMsg = false, isAble2ReTopicMsg=false;
     SWBResourceURL acc_url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setAction(SWBResourceURL.Action_EDIT);    
 %>
-    Holass--<%=userAttrStr%>:<%=user.getFullName()%>
+    <%=userAttrStr%>:<b><%=user.getFullName()%></b>
     <br/><br/><br/><br/>
     <form id="form_<%=user.getId()%>" dojoType="dijit.form.Form" class="swbform" action="<%=acc_url%>" method="post" onsubmit="submitForm('form_<%=user.getId()%>'); return false;"> 
     <input type="hidden" name="scls" value="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
