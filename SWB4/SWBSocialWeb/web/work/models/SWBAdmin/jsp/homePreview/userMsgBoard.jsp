@@ -266,7 +266,7 @@
         <div class="msj-cont msj-prior">
             <%            }
             %>
-            <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"><span>Eliminar</span></a>
+            <a class="msj-eliminar" href="<%=paramRequest.getActionUrl().setAction("remMsg").setParameter("msgUri", um.getURI())%>"  onclick="return confirm('¿Seguro que desea eliminar este mensaje?')"><span>Eliminar</span></a>
             <!--<a class="" href="<%//=paramRequest.getRenderUrl().setAction("viewMsg").setParameter("msgUri", userMsg.getURI())%>"><span>Ver</span></a>-->
             <p><em><%=hoursS%>  -  <%=u.getName()%></em></p>
             <p><%=um.getUsrMsg()%></p>  
