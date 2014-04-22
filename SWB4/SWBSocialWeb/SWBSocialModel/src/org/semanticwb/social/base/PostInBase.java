@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
 {
    /**
    * Veces que ha sido re-enviado o compartido el post

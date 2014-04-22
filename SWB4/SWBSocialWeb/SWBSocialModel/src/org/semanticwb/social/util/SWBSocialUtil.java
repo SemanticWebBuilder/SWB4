@@ -24,6 +24,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javaQuery.j2ee.tinyURL;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.validator.routines.UrlValidator;
@@ -2513,6 +2515,14 @@ public class SWBSocialUtil {
     
     public static class Util{
         
+        
+        
+    public static boolean validateRegExp(String textSource, String regExp) {
+        Pattern p = Pattern.compile(regExp);//regular expression
+        Matcher m = p.matcher(textSource); // the text source
+        return m.find();
+    }
+        
     /*
      * Codificación de un número a base 64
      */ 
@@ -2874,6 +2884,7 @@ public class SWBSocialUtil {
             Iterator<ModelProperty> itModelProps = model.listModelProperties();
             while (itModelProps.hasNext()) {
                 ModelProperty modelProp = itModelProps.next();
+                System.out.println("NULOOO???/modelProp:"+modelProp+",propertyID:"+propertyID+",model:"+model);
                 if (modelProp.getId().equals(propertyID)) {
                     return modelProp.getValue();
                 }
