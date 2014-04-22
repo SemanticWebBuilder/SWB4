@@ -1,5 +1,6 @@
 package org.semanticwb.bsc.element;
 
+import com.hp.hpl.jena.rdf.model.Property;
 import java.util.Collections;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.model.GenericIterator;
@@ -9,6 +10,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import static org.semanticwb.bsc.base.SeasonableBase.bsc_hasPeriod;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
@@ -17,8 +19,9 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import static org.semanticwb.bsc.element.Indicator.*;
+import org.semanticwb.platform.SemanticProperty;
 
-public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase 
+public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase implements Comparable<Objective>
 {
     static
     {
@@ -32,6 +35,43 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
 //System.out.println("action="+action);
 //            }
 //        });
+        
+        /*bsc_hasPeriod.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+System.out.println("\nObjetivo bsc_hasPeriod notify....");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+System.out.println("action="+action);
+                if("REMOVE".equalsIgnoreCase(action)) {
+System.out.println("Removing...");
+                    Iterator<SemanticObject> it = obj.listObjectProperties(bsc_hasPeriod);
+                    while(it.hasNext()) {
+                        SemanticObject so = it.next();
+                        System.out.println("semantic obj="+so.getId()+","+so);
+                    }
+                    
+                    
+                    SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+                    Objective objective = (Objective)obj.createGenericInstance();
+                    Iterator<Indicator> indicators = Indicator.ClassMgr.listIndicatorByObjective(objective, model);
+                    Indicator ind;
+                    while(indicators.hasNext()) {
+                        ind = indicators.next();
+                    }
+                }
+                else if("ADD".equalsIgnoreCase(action))
+                {
+System.out.println("Adding...");
+                    Iterator<SemanticObject> it = obj.listObjectProperties(bsc_hasPeriod);
+                    while(it.hasNext()) {
+                        SemanticObject so = it.next();
+                        System.out.println("semantic obj="+so.getId()+","+so);
+                    }
+                }
+            }
+        });*/
         
         
         bsc_hasIndicator.registerObserver(new SemanticObserver() {
@@ -286,13 +326,31 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
                                                     });
         return validIndicators;
     }
+
+    @Override
+    public void removePeriod(Period value) {
+        super.removePeriod(value);
+        GenericIterator<Indicator> gi = listIndicators();
+        while(gi.hasNext()) {
+            gi.next().removePeriod(value);
+        }
+    }
+
+    @Override
+    public void removeAllPeriod() {
+        super.removeAllPeriod();
+        GenericIterator<Indicator> gi = listIndicators();
+        while(gi.hasNext()) {
+            gi.next().removeAllPeriod();
+        }
+    }
     
     @Override
     public void removeState(State value) {
         // Eliminar en cascada el estado de los indicadores del objetivo
-        Iterator<Indicator> indicators = listIndicators();
-        while(indicators.hasNext()) {
-            indicators.next().removeState(value);
+        GenericIterator<Indicator> gi = listIndicators();
+        while(gi.hasNext()) {
+            gi.next().removeState(value);
         }
         super.removeState(value);
     }
@@ -301,11 +359,22 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase
     public void removeAllState()
     {
         // Eliminar en cascada los estados asignados a los indicadores del objetivo
-        Iterator<Indicator> indicators = listIndicators();
-        while(indicators.hasNext()) {
-            indicators.next().removeAllState();
+        GenericIterator<Indicator> gi = listIndicators();
+        while(gi.hasNext()) {
+            gi.next().removeAllState();
         }
         super.removeAllState();
     }
-
+    
+    @Override
+    public int compareTo(Objective anotherObjective)
+    {
+        int compare = getIndex()>anotherObjective.getIndex()?1:-1;
+        return compare;
+    }
+    
+    @Override
+    public boolean isValid() {
+        return super.isValid() && getTheme().isValid() && getTheme().getPerspective().isValid();
+    }
 }
