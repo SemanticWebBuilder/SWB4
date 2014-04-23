@@ -4,11 +4,13 @@ import com.arthurdo.parser.HtmlException;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.lowagie.text.DocumentException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
 import org.semanticwb.bsc.utils.PropertiesComparator;
+import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
@@ -44,16 +47,17 @@ import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
  * Administra instancias disponibles de tipo {@code DetailView} cuya propiedad
@@ -75,6 +79,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * este recurso
      */
     private static final String TEMPLATE_FILENAME = "/templateContent.html";
+    /**
+     * Representa el nombre del modo que se encarga de exportar la vista a PDF
+     */
+    private static final String Mode_PDF = "exportPDF";
 
     /**
      * Genera una instancia de este recurso
@@ -875,6 +883,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             doEditTemplate(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("getPropertiesInfo")) {
             doGetPropertiesInfo(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals(Mode_PDF)) {
+            doExportPDF(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -1103,7 +1113,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (periodId == null) {
             periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
         }
-
         //Revisa configuracion del recurso
         if (workClassSC == null) {
             messageType = "workClassNotConfigured";
@@ -1551,34 +1560,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder toReturn = new StringBuilder();
-        String surl = "";
-        Resource base2 = null;
+        Resource base2 = getResource();
         String icon = "";
-        WebSite ws = paramRequest.getWebPage().getWebSite();
-        String nameClass = getWorkClass().transformToSemanticClass().getClassName();
-        Iterator<Resource> itp = ws.listResources();
-        while (itp.hasNext()) {
-            Resource resource = itp.next();
-            String itemType = resource.getData(PDFExportable.bsc_itemType);
-            String view = resource.getData(PDFExportable.viewType);
-            if ((view != null && view.equals(PDFExportable.VIEW_Detail))
-                    && (itemType != null && itemType.equals(nameClass))) {
-                if (resource.isActive()) {
-                    base2 = resource;
-                    break;
-                }
-            }
-        }
-
-        if (base2 != null) {
-            Iterator<Resourceable> res = base2.listResourceables();
-            while (res.hasNext()) {
-                Resourceable re = res.next();
-                if (re instanceof WebPage) {
-                    surl = ((WebPage) re).getUrl();
-                    break;
-                }
-            }
+        String suri = request.getParameter("suri");
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        if (base2 != null && semObj != null) {
+            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(),
+                    SWBResourceURL.UrlType_RENDER);
+            url.setParameter("suri", semObj.getURI());
+            url.setMode(Mode_PDF);
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
+            String surl = url.toString();
 
             String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
             String image = "pdfOnline.jpg";
@@ -1598,5 +1590,365 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             icon = toReturn.toString();
         }
         return icon;
+    }
+
+    /**
+     * Ejecutar&aacute; la exportaci&oacute;n a PDF del elemento actual.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    public void doExportPDF(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/pdf; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        String title = "No Defined";
+        if (request.getParameter("suri") != null) {
+            String suri = request.getParameter("suri");
+            SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+            if (semObj != null) {
+                GenericObject obj = semObj.createGenericInstance();
+
+                if (obj != null && obj instanceof Descriptiveable) {
+                    Descriptiveable descrip = (Descriptiveable) obj;
+                    title = descrip.getTitle();
+                }
+            }
+        }
+        response.setHeader("Content-Disposition", "attachment; filename=\""
+                + title + ".pdf\"");
+        StringBuilder sb = getHtml(request, paramRequest);
+        if (sb != null && sb.length() > 0) {
+            OutputStream os = response.getOutputStream();
+            try {
+                ITextRenderer renderer = new ITextRenderer();
+                String sbStr = replaceHtml(sb);
+                renderer.setDocumentFromString(sbStr);
+                renderer.layout();
+                renderer.createPDF(os);
+                renderer.finishPDF();
+            } catch (DocumentException ex) {
+                log.error("Error in: " + ex);
+            } catch (Exception ex) {
+                log.error("Check that your style sheet corresponding to the CSS 2.1 specification: "
+                        + ex);
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException e) { /*ignore*/ }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reemplaza c&oacute;digo HTML por acentos, esto es para la estructura XML
+     * requerida.
+     *
+     * @param sb el objeto String al cu&aacute; ser&aacute; reemplazados los
+     * car&aacutecteres.
+     * @return el objeto String modificado
+     */
+    private String replaceHtml(StringBuilder sb) {
+        String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uuml;", "Ü");
+        return sbStr;
+    }
+
+    /**
+     * Se encarga de obtener los links de la plantilla de la p&aacute;gina
+     * actual
+     *
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * links hacia los CSS respectivos.
+     * @throws FileNotFoundException Archivo no ubicado
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
+            throws FileNotFoundException, IOException {
+        Template template = paramRequest.getWebPage().getTemplateRef().getTemplate();
+        String filePath = SWBPortal.getWorkPath()
+                + template.getWorkPath() + "/" + template.getActualVersion().getVersionNumber() + "/"
+                + template.getFileName(template.getActualVersion().getVersionNumber());
+        FileReader reader = null;
+        StringBuilder view = new StringBuilder(256);
+        reader = new FileReader(filePath);
+
+        String port = "";
+        if (request.getServerPort() != 80) {
+            port = ":" + request.getServerPort();
+        }
+        String baserequest = request.getScheme() + "://" + request.getServerName() 
+                + port;
+
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
+        HtmlTag tag = new HtmlTag();
+        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            int ttype = tok.getTokenType();
+
+            if (ttype == HtmlStreamTokenizer.TT_TAG) {
+                try {
+                    tok.parseTag(tok.getStringValue(), tag);
+                } catch (HtmlException htmle) {
+                    DetailViewManager.log.error("Al parsear la plantilla , "
+                            + filePath, htmle);
+                }
+                if (tag.getTagString().toLowerCase().equals("link")) {
+                    String tagTxt = tag.toString();
+                    if (tagTxt.contains("type=\"text/css\"")) {
+                        if (!tagTxt.contains("/>")) {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
+                        }
+                        if (!tagTxt.contains("{webpath}")) {
+                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
+                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6), 
+                                    tagTxt.length());
+                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
+                        } else {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
+                        }
+                        view.append(tagTxt);
+                    }
+                }
+            }
+        }
+        return view.toString();
+    }
+
+    /**
+     * Obtiene el HTML que se utilizar&aacute; en la exportaci&oacute;n.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * datos a exportar
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     * @return la liga
+     */
+    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+        StringBuilder output = new StringBuilder(256);
+        String message = validateInput(request, paramRequest);
+        output.append("<html>");
+        output.append("<head>");
+        output.append(getLinks(paramRequest, request));
+        output.append("</head>");
+        output.append("<body>");
+        output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
+
+        if (message == null) {
+            FileReader reader = retrieveTemplate();
+            String suri = request.getParameter("suri");
+            SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+            //Declarar variable para el per&iacte;odo, obteniendo el valor del request
+            String modelName = paramRequest.getWebPage().getWebSiteId();
+            String periodId = request.getSession().getAttribute(modelName) != null
+                    ? (String) request.getSession().getAttribute(modelName)
+                    : null;
+            //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
+            if (periodId == null) {
+                periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
+                if (periodId != null) {
+                    request.getSession(true).setAttribute(modelName, periodId);
+                }
+            }
+            Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
+            PeriodStatus periodStatus = null;
+
+
+            //Si el semObj es hijo de PeriodStatusAssignable se debe:
+            GenericObject generic = semObj.createGenericInstance();
+            if (generic != null && generic instanceof Objective) {
+                Objective objective = (Objective) generic;
+                periodStatus = objective.getPeriodStatus(period);
+            } else if (generic != null && generic instanceof Indicator) {
+                Indicator indicator = (Indicator) generic;
+                Measure measure = indicator != null && indicator.getStar() != null
+                        ? indicator.getStar().getMeasure(period) : null;
+                if (measure != null && measure.getEvaluation() != null) {
+                    periodStatus = measure.getEvaluation();
+                }
+            }
+
+            //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
+            // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
+            //    - Se pide el listado de objetos PeriodStatus asociado al semObj
+            //    - Se recorre uno por uno los PeriodStatus relacionados
+            //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
+            //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
+            //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
+            output.append("<h2");
+            output.append(" class=\"");
+            if (periodStatus != null && periodStatus.getStatus() != null
+                    && periodStatus.getStatus().getIconClass() != null) {
+                output.append(periodStatus.getStatus().getIconClass());
+            } else {
+                output.append("indefinido");
+            }
+            output.append("\"");
+            output.append(">");
+            output.append(semObj.getDisplayName());
+            output.append("</h2>\n");
+
+            if (reader != null) {
+                output.append(generateDisplayPDF(request, paramRequest, reader, semObj));
+            } else {
+                output.append(paramRequest.getLocaleString("fileNotRead"));
+            }
+        } else { //Si la información de entrada no es válida
+            output.append(paramRequest.getLocaleString(message));
+        }
+
+        output.append("</div>\n");
+        output.append("</body>");
+        output.append("</html>");
+        return output;
+    }
+
+    /**
+     * Interpreta el contenido de la plantilla de la vista detalle asignada como
+     * contenido, sustituyendo los tags que representan las propiedades de los
+     * objetos, por los despliegues de valores de esas propiedades. Utilizada en
+     * la exportación a PDF
+     *
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param paramRequest un objeto de la plataforma de SWB con datos
+     * adicionales de la petici&oacute;n
+     * @param template el contenido de la vista detalle asignada como contenido
+     * @param elementBSC representa el objeto del cual se desea extraer la
+     * informaci&oacute;n
+     * @return un {@code String} que representa el contenido de la plantilla de
+     * la vista detalle correspondiente con el despliegue de los valores de las
+     * propiedades configuradas.
+     * @throws IOException en caso de que se presente alg&uacute;n problema en
+     * el parseo del contenido de la plantilla
+     */
+    private String generateDisplayPDF(HttpServletRequest request, SWBParamRequest paramRequest,
+            FileReader template, SemanticObject elementBSC) throws IOException {
+        StringBuilder view = new StringBuilder(512);
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
+        HtmlTag tag = new HtmlTag();
+        String lang = paramRequest.getUser().getLanguage();
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction("updateProp");
+        url.setParameter("suri", request.getParameter("suri"));
+        request.setAttribute("urlRequest", url.toString());
+
+        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            int ttype = tok.getTokenType();
+            if (ttype == HtmlStreamTokenizer.TT_TAG) {
+                try {
+                    tok.parseTag(tok.getStringValue(), tag);
+                } catch (HtmlException htmle) {
+                    DetailViewManager.log.error("Al parsear plantilla vista detalle, "
+                            + this.getActiveDetailView().getId(), htmle);
+                    view = new StringBuilder(16);
+                }
+                if (!tag.getTagString().toLowerCase().equals("img")) {
+                    view.append(tag.toString());
+                } else if (tag.getTagString().toLowerCase().equals("img") && !tag.hasParam("tagProp")) {
+                    view.append(tag.toString());
+                } else if (tag.getTagString().toLowerCase().equals("img") && tag.hasParam("tagProp")) {
+                    String propUri = tag.getParam("tagProp");
+                    if (propUri != null) {
+                        view.append(renderPropertyValuePDF(request, elementBSC, propUri, lang));
+                    }
+                }
+            } else if (ttype == HtmlStreamTokenizer.TT_TEXT) {
+                view.append(tok.getStringValue());
+            }
+            view.append("\n");
+        }
+        return (view.toString());
+    }
+
+    /**
+     * Devuelve el despliegue correspondiente al valor de la propiedad
+     * especificada, del objeto indicado. La vista que requiere traerse debe ser
+     * c&oacute;digo html sin javascript, por lo que se pide el despliegue de la
+     * forma en su modo VIEW
+     *
+     * @param request petici&oacute;n HTTP realizada por el cliente
+     * @param elementBSC representa el objeto del cual se desea extraer la
+     * informaci&oacute;n
+     * @param propUri representa la uri de la propiedad semantica de la que se
+     * desea obtener su valor
+     * @param lang representa el lenguaje en que se desea mostrar el valor de la
+     * propiedad indicada
+     * @return el despliegue del valor almacenado para la propiedad indicada
+     */
+    private String renderPropertyValuePDF(HttpServletRequest request, SemanticObject elementBSC,
+            String propUri, String lang) {
+        String ret = null;
+        SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
+        SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
+
+        //Codigo para obtener el displayElement
+        Statement st = semProp.getRDFProperty().getProperty(
+                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+        if (st != null) {
+            //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
+            SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
+            if (soDisplayElement != null) {
+                SemanticObject formElement = soDisplayElement.getObjectProperty(
+                        org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
+                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                if (formElement != null) {
+                    FormElement fe = (FormElement) formElement.createGenericInstance();
+                    if (fe != null) {
+                        if (formMgr.getSemanticObject() != null) {
+                            fe.setModel(formMgr.getSemanticObject().getModel());
+                        }
+                        ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
+                                SWBFormMgr.TYPE_XHTML,
+                                SWBFormMgr.MODE_VIEW,
+                                lang);
+                    }
+                }
+            }
+        }
+        if (ret == null) {
+            FormElement formElement = formMgr.getFormElement(semProp);
+            if (formElement != null) {
+                ret = formElement.renderElement(request, elementBSC, semProp, semProp.getName(),
+                        SWBFormMgr.TYPE_XHTML, SWBFormMgr.MODE_VIEW, lang);
+            }
+        }
+        return ret != null ? ret : "";
     }
 }
