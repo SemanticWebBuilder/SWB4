@@ -78,7 +78,7 @@ public class InitiativeRiskManager extends GenericResource {
         SemanticObject semObj = ont.getSemanticObject(suri);
         Risk risk = (Risk) semObj.createGenericInstance();
         if (risk != null) {
-            //createInstances(risk, risk.getBSC());
+           // createInstances(risk, risk.getBSC());
             Iterator<Initiative> it = risk.listInitiativeRisks();
 
             toReturn.append("<script type=\"text/javascript\">");
@@ -93,18 +93,18 @@ public class InitiativeRiskManager extends GenericResource {
             toReturn.append("<thead>");
             toReturn.append("<tr>");
             toReturn.append("<th></th>");
-            toReturn.append("<th>"
-                    + paramRequest.getLocaleString("lbl_title")
-                    + "</th>");
-            toReturn.append("<th>"
-                    + paramRequest.getLocaleString("lbl_description")
-                    + "</th>");
-            toReturn.append("<th>"
-                    + paramRequest.getLocaleString("lbl_created")
-                    + "</th>");
-            toReturn.append("<th>"
-                    + paramRequest.getLocaleString("lbl_updated")
-                    + "</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_title"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_description"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_created"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_updated"));
+            toReturn.append("</th>");
             toReturn.append("</tr>");
             toReturn.append("</thead>");
 
@@ -122,13 +122,13 @@ public class InitiativeRiskManager extends GenericResource {
                     urlDelete.setAction(Action_DELETE);
                     toReturn.append("<tr>");
                     toReturn.append("<td>");
-                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('"
-                            + paramRequest.getLocaleString("lbl_msgDelete")
-                            + "'))submitUrl('"
-                            + urlDelete
-                            + "',this.domNode);reloadTab('"
-                            + risk.getURI()
-                            + "');return false;\">");
+                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('");
+                    toReturn.append(paramRequest.getLocaleString("lbl_msgDelete"));
+                    toReturn.append("'))submitUrl('");
+                    toReturn.append(urlDelete);
+                    toReturn.append("',this.domNode);reloadTab('");
+                    toReturn.append(risk.getURI());
+                    toReturn.append("');return false;\">");
                     toReturn.append("\n<img src=\"");
                     toReturn.append(SWBPlatform.getContextPath());
                     toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
@@ -138,38 +138,38 @@ public class InitiativeRiskManager extends GenericResource {
 
                     toReturn.append("</td>");
                     toReturn.append("<td>");
-                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('"
-                            + initiative.getURI()
-                            + "','");
-                    toReturn.append(SWBPlatform.getContextPath()
-                            + "/swbadmin/jsp/objectTab.jsp"
-                            + "','"
-                            + initiative.getTitle());
-                    toReturn.append("');return false;\" >"
-                            + (initiative.getTitle(lang) == null
+                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('");
+                    toReturn.append(initiative.getURI());
+                    toReturn.append("','");
+                    toReturn.append(SWBPlatform.getContextPath());
+                    toReturn.append("/swbadmin/jsp/objectTab.jsp");
+                    toReturn.append("','");
+                    toReturn.append(initiative.getTitle());
+                    toReturn.append("');return false;\" >");
+                    toReturn.append((initiative.getTitle(lang) == null
                             ? (initiative.getTitle() == null
                             ? paramRequest.getLocaleString("lbl_undefined")
                             : initiative.getTitle().replaceAll("'", ""))
-                            : initiative.getTitle(lang).replaceAll("'", ""))
-                            + "</a>");
+                            : initiative.getTitle(lang).replaceAll("'", "")));
+                    toReturn.append("</a>");
                     toReturn.append("</td>");
-                    toReturn.append("<td>"
-                            + (initiative.getDescription(lang) == null
+                    toReturn.append("<td>");
+                    toReturn.append((initiative.getDescription(lang) == null
                             ? (initiative.getDescription() == null
                             ? paramRequest.getLocaleString("lbl_undefined")
                             : initiative.getDescription())
-                            : initiative.getDescription(lang))
-                            + "</td>");
-                    toReturn.append("<td>"
-                            + (initiative.getCreated() == null ? ""
+                            : initiative.getDescription(lang)));
+                    toReturn.append("</td>");
+                    toReturn.append("<td>");
+                    toReturn.append((initiative.getCreated() == null ? ""
                             : SWBUtils.TEXT.getStrDate(initiative.getCreated(),
-                            "es", "dd/mm/yyyy"))
-                            + "</td>");
-                    toReturn.append("<td>"
-                            + (initiative.getUpdated() == null ? ""
+                            "es", "dd/mm/yyyy")));
+                    toReturn.append("</td>");
+                    toReturn.append("<td>");
+                    toReturn.append((initiative.getUpdated() == null ? ""
                             : SWBUtils.TEXT.getStrDate(initiative.getCreated(),
-                            "es", "dd/mm/yyyy"))
-                            + "</td>");
+                            "es", "dd/mm/yyyy")));
+                    toReturn.append("</td>");
                     toReturn.append("</tr>");
                 }
             }
@@ -234,7 +234,7 @@ public class InitiativeRiskManager extends GenericResource {
         }
     }
 
-    private void createInstances(Risk risk, WebSite ws) {
+    /*private void createInstances(Risk risk, WebSite ws) {
         Initiative initiative = Initiative.ClassMgr.createInitiative(ws);
         initiative.setTitle("Acción 1");
         initiative.setDescription("Descripción de Acción 1");
@@ -242,5 +242,5 @@ public class InitiativeRiskManager extends GenericResource {
         initiative.setCreated(new Date());
         initiative.setUpdated(new Date());
         risk.addInitiativeRisk(initiative);
-    }
+    }*/
 }
