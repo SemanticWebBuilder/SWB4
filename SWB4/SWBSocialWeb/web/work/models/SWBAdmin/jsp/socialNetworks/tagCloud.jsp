@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.social.PunctuationSign"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.TreeSet"%>
 <%@page import="java.util.Set"%>
@@ -65,99 +66,7 @@
         int min=1 , max=Integer.MAX_VALUE;
         return rand.nextInt(max - min + 1) + min;
     }
-
-    /**
-     * Sort by created.
-     * 
-     * @param it the it
-     * @param ascendente the ascendente
-     * @return the iterator
-     */
-    public static Iterator sortByCreated(Iterator it, boolean ascendente) {
-        return sortByCreatedSet(it, ascendente).iterator();
-    }
-
-    /**
-     * Sort by created set.
-     * 
-     * @param it the it
-     * @param ascendente the ascendente
-     * @return the sets the
-     */
-    public static Set sortByCreatedSet(Iterator it, boolean ascendente) {
-        TreeSet set = null;
-        if(it==null)
-        {
-            return null;
-        }
-        if (ascendente) {
-            set = new TreeSet(new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    Date d1 = null;
-                    Date d2 = null;
-                    if(o1 instanceof PostIn)
-                    {
-                        d1 = ((PostIn)o1).getPi_created();
-                        d2 = ((PostIn)o2).getPi_created();
-                    }
-                    
-                    if(d1==null && d2!=null)
-                    {
-                        return -1;
-                    }
-                    if(d1!=null && d2==null)
-                    {
-                        return 1;
-                    }
-                    if(d1==null && d2==null)
-                    {
-                        return -1;
-                    }
-                    else
-                    {                    
-                        int ret = d1.getTime()>d2.getTime()? 1 : -1;
-                        return ret;
-                    }
-                }
-            });
-        } else {
-            set = new TreeSet(new Comparator() {
-                public int compare(Object o1, Object o2) {
-                    Date d1 = null;
-                    Date d2 = null;
-                    if(o1 instanceof PostIn)
-                    {
-                        d1 = ((PostIn)o1).getPi_created();
-                        d2 = ((PostIn)o2).getPi_created();
-                    }
-                    if(d1==null && d2!=null)
-                    {
-                        return -1;
-                    }
-                    if(d1!=null && d2==null)
-                    {
-                        return 1;
-                    }
-                    if(d1==null && d2==null)
-                    {
-                        return -1;
-                    }
-                    else
-                    {
-                        int ret = d1.getTime()>d2.getTime()? -1 : 1;
-                        return ret;
-                    }
-                    
-                }
-            });
-        }
-
-        while (it.hasNext()) {
-            set.add(it.next());
-        }
-
-        return set;
-    }
+    
 %>
 
 <%
@@ -169,7 +78,8 @@
     SocialTopic socialT = null;
     Iterator <PostIn> itPostIns = null;//The posts
     //long noOfPosts = 0L;
-    
+    long startTime = System.currentTimeMillis();
+
     try{
     if(suri != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -177,13 +87,13 @@
             //System.out.println("is stream");
             stream = (Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();//The posts
-            itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
+            //itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
             //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
         }else if(semObj.createGenericInstance() instanceof SocialTopic){//Tag Cloud for social topic
             //System.out.println("is social topic");
             socialT = (SocialTopic)semObj.getGenericInstance();
             itPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite());//The posts
-            itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
+            //itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
             //SWBUtils.Collections.sizeOf(PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite()));//Number of recovered posts
         }else{
             return;
@@ -207,7 +117,7 @@
 
     Map<String, Integer> cloudTags = new TreeMap<String,Integer>();//Tree to save the words
 
-    SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();    
+    //SocialAdmin socialAdminSite=(SocialAdmin)SWBContext.getAdminWebSite();    
     
     //itPostIns=stream.listPostInStreamInvs();//The posts
     //itPostIns = SWBComparator.sortByCreatedSet(itPostIns, false).iterator();
@@ -230,36 +140,15 @@
         }*/
         PostIn postIn = itPostIns.next();
         
-        if(noTopic != null && noTopic.equals("true")){
+        if(noTopic != null && noTopic.equals("true")){//When the tag cloud is called from tab "Mensajes Recibidos sin Tema"
             if(postIn.getSocialTopic() != null){//Don't process posts with Social topics
                 continue;
             }
-        }
-        /*
-        if(postIn.getTags() != null){//If post has tags
-            String[] tags=postIn.getTags().split("\\s+");//Dividir valores
-            for(int i=0;i<tags.length;i++)
-            {
-               String word=tags[i]; 
-               if(!Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word))
-               {
-                    if(!isInteger(word))
-                    {
-                        Integer frequency = cloudTags.get(word);
-                        if(frequency == null){//New word
-                            cloudTags.put(word, 1);
-                        }else if(frequency > 0){//Repeated word
-                            cloudTags.put(word, ++frequency);
-                        }
-                    }
-               }
-            }
-        }
-        */
+        }                
         if(postIn.getMsg_Text()!=null)
         {//If post has message
             String msg=null;
-            msg=postIn.getMsg_Text().toLowerCase(); 
+            msg=postIn.getMsg_Text().toLowerCase();            
             String lang=null;
             Language postInLang=postIn.getMsg_lang(); 
             if(postInLang!=null) lang=postInLang.getId(); 
@@ -269,14 +158,19 @@
                 {
                     msg = SWBSocialUtil.Strings.removePrepositions(msg); 
                 }   
-                msg = Jsoup.clean(msg, Whitelist.simpleText());
+                //msg = Jsoup.clean(msg, Whitelist.simpleText());
                 msg = SWBSocialResUtil.Util.replaceSpecialCharactersAndHtmlCodes(msg, false);
-                msg = SWBSocialUtil.Strings.removePuntualSigns(msg, socialAdminSite);
+                msg = Jsoup.clean(msg, Whitelist.simpleText());
+                msg = SWBSocialUtil.Strings.removePuntualSigns(msg, SWBContext.getGlobalWebSite());
+                
 
                 String[] mgsWords=msg.split("\\s+");  //Dividir valores
-                for(int i=0;i<mgsWords.length;i++)
+                for(int i = 0; i < mgsWords.length ; i++)
                 {
-                    String word=mgsWords[i];
+                    String word = mgsWords[i];
+                    if(word.length() <= 2 ){//If is a short word (rt, fw, the, etc)
+                        continue;
+                    }
                     boolean isStopWord=true;
                     if(lang.equals("es") && !Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word)){
                         isStopWord=false;
@@ -295,9 +189,7 @@
                 }
            }
        }
-    }
-    
-    //System.out.println("POSTS READ:"+ posts);
+    }    
 %>
 <div id="<%=suri%>/<%=randomId%>/CanvasContainer" align="center">
 	<canvas width="500" height="500" id="<%=suri%>/<%=randomId%>/Canvas">
@@ -322,14 +214,16 @@ try{
             if(tag.getKey().toString().isEmpty()){
                 continue;
             }
+            //System.out.println("-->" + tag.getKey());
             if(i==1){//The word at the top is the most frequent, so it must have 100                
-                out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>"); 
+                //out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>"); 
+                out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>"); 
             }else{
                 if(lastValue.equals(tag.getValue())){//If several words have the same frequency, use the same mappingValue
-                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>");
+                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                 }else{//If current word is different from the word before, use a lower value
                     mappingValue--;
-                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>");
+                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
                 }
             }
             lastValue = (Integer)tag.getValue();
@@ -342,8 +236,8 @@ try{
         e.printStackTrace(); 
     }
     
-    //long estimatedTime = System.currentTimeMillis() - startTime;    
-    //System.out.println("Elapsed time of processing:"  +  estimatedTime);
+    long estimatedTime = System.currentTimeMillis() - startTime;    
+    System.out.println("Elapsed time of processing:"  +  estimatedTime);
 %>
     </ul>
 </div>
