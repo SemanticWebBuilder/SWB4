@@ -21,7 +21,7 @@ import org.semanticwb.portal.SWBFormMgr;
 /**
  * Form Element que presentará la vista para administrar archivos adjuntos
  * (Creación, Edición y Eliminación)
- * 
+ *
  * @author Martha Elvia Jim&eacute;nez Salgado
  * @version %I%, %G%
  * @since 1.0
@@ -72,7 +72,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         StringBuilder toReturn = new StringBuilder();
         String modeTmp = request.getParameter("modeTmp");
 
-        if (modeTmp == null || (modeTmp != null && Mode_VIEW.equals(modeTmp))) {
+        if (modeTmp == null && mode.equals(SWBFormMgr.MODE_VIEW)) {
+            toReturn.append(renderModeView(request, obj, prop, propName, type, mode, lang));
+        } else if (modeTmp == null || (modeTmp != null && Mode_VIEW.equals(modeTmp))) {
             toReturn.append(renderElementView(request, obj, prop, propName, type, mode, lang));
         } else if (Mode_ADD.equals(modeTmp)) {
             toReturn.append(renderElementAdd(request, obj, prop, propName, type, mode, lang));
@@ -590,39 +592,39 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
 
                 toReturn.append("\n<td>");
 //                if (user.equals(attachment.getCreator())) {
-                    toReturn.append("\n<a href=\"#\" onclick=\"showDialog('");
-                    toReturn.append(urlEdit.setContentType("text/html; charset=UTF-8"));
-                    toReturn.append("', '");
-                    toReturn.append(Attachment.sclass.getDisplayName(lang));
-                    toReturn.append("');\">");
-                    toReturn.append("\n<img src=\"");
-                    toReturn.append(SWBPlatform.getContextPath());
-                    toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
-                    toReturn.append(getLocaleString("edit", lang));
-                    toReturn.append("\"/>");
-                    toReturn.append("\n</a>");
+                toReturn.append("\n<a href=\"#\" onclick=\"showDialog('");
+                toReturn.append(urlEdit.setContentType("text/html; charset=UTF-8"));
+                toReturn.append("', '");
+                toReturn.append(Attachment.sclass.getDisplayName(lang));
+                toReturn.append("');\">");
+                toReturn.append("\n<img src=\"");
+                toReturn.append(SWBPlatform.getContextPath());
+                toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
+                toReturn.append(getLocaleString("edit", lang));
+                toReturn.append("\"/>");
+                toReturn.append("\n</a>");
 //                }
                 toReturn.append("\n</td>");
 
                 toReturn.append("\n<td>");
 //                if (user.equals(attachment.getCreator())) {
-                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
-                    toReturn.append("¿");
-                    toReturn.append(getLocaleString("alertDeleteElement", lang));
-                    toReturn.append(" \\'");
-                    toReturn.append(attachment.getTitle());
-                    toReturn.append("\\' ?\')){ ");
-                    toReturn.append("processUrl('");
-                    toReturn.append(urlRemove);
-                    toReturn.append("',null); ");
-                    toReturn.append("} else { return false;}");
-                    toReturn.append("\">");
-                    toReturn.append("\n<img src=\"");
-                    toReturn.append(SWBPlatform.getContextPath());
-                    toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
-                    toReturn.append(getLocaleString("delete", lang));
-                    toReturn.append("\"/>");
-                    toReturn.append("\n</a>");
+                toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
+                toReturn.append("¿");
+                toReturn.append(getLocaleString("alertDeleteElement", lang));
+                toReturn.append(" \\'");
+                toReturn.append(attachment.getTitle());
+                toReturn.append("\\' ?\')){ ");
+                toReturn.append("processUrl('");
+                toReturn.append(urlRemove);
+                toReturn.append("',null); ");
+                toReturn.append("} else { return false;}");
+                toReturn.append("\">");
+                toReturn.append("\n<img src=\"");
+                toReturn.append(SWBPlatform.getContextPath());
+                toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
+                toReturn.append(getLocaleString("delete", lang));
+                toReturn.append("\"/>");
+                toReturn.append("\n</a>");
 //                }
                 toReturn.append("\n</td>");
 
@@ -630,6 +632,60 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             }
         }
         toReturn.append("\n</table>");
+        return toReturn.toString();
+    }
+
+    public String renderModeView(HttpServletRequest request, SemanticObject obj,
+            SemanticProperty prop, String propName, String type, String mode, String lang) {
+        StringBuilder toReturn = new StringBuilder();
+        String suri = (String) request.getParameter("suri");
+//        String usrWithGrants = (String) request.getAttribute("usrWithGrants") == null
+//                ? (String) request.getParameter("usrWithGrants")
+//                : (String) request.getAttribute("usrWithGrants");
+        if (suri != null) {
+            SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
+            Attachmentable element = null;
+            if (semObj != null && semObj.createGenericInstance() instanceof Attachmentable) {
+                element = (Attachmentable) semObj.createGenericInstance();
+                Iterator<Attachment> itAttachments = element.listAttachmentses();
+                toReturn.append("\n<table width=\"98%\">");
+                itAttachments = SWBComparator.sortByCreated(itAttachments, false);
+
+                while (itAttachments.hasNext()) {
+                    Attachment attachment = itAttachments.next();
+                    toReturn.append("\n<tr>");
+                    toReturn.append("\n<td>");
+                    toReturn.append("\n<div>");
+                    toReturn.append(attachment.getTitle() == null ? "" : attachment.getTitle());
+                    toReturn.append("\n</div>");
+                    toReturn.append("\n</td>");
+
+                    toReturn.append("\n<td>");
+                    toReturn.append(attachment.getCreated() == null ? ""
+                            : SWBUtils.TEXT.getStrDate(attachment.getCreated(), "es", "dd/mm/yyyy"));
+                    toReturn.append("\n</td>");
+                    /*if ("true".equals(usrWithGrants)) {
+                        toReturn.append("\n<td>");
+                        toReturn.append("\n<img src=\"");
+                        toReturn.append(SWBPlatform.getContextPath());
+                        toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
+                        toReturn.append(getLocaleString("edit", lang));
+                        toReturn.append("\"/>");
+                        toReturn.append("\n</td>");
+
+                        toReturn.append("\n<td>");
+                        toReturn.append("\n<img src=\"");
+                        toReturn.append(SWBPlatform.getContextPath());
+                        toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
+                        toReturn.append(getLocaleString("delete", lang));
+                        toReturn.append("\"/>");
+                        toReturn.append("\n</td>");
+                    }*/
+                    toReturn.append("</tr>");
+                }
+                toReturn.append("\n</table>");
+            }
+        }
         return toReturn.toString();
     }
 }
