@@ -647,7 +647,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             if (aListExternalPost.size() > 0) {
                                 new Classifier(aListExternalPost, stream, this, true);
                             }
-                            if (cont == Facebook.QUERYLIMIT) {
+                            //if (cont == Facebook.QUERYLIMIT) {
+                            if (cont > 0) {
                                 isThereMoreMsgs = true;  //Esto indica la posibilidad de que en una consulta siguiente, se obtengan más mensajes
                             } else if (cont == 0) {
                                 isResponseEmpty = true;
