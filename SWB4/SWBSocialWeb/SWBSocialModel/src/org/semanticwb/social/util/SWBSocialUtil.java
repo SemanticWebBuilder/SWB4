@@ -331,7 +331,7 @@ public class SWBSocialUtil {
                 //[ID DEL PAIS, [ID DEL ESTADO, POLIGONO DEL ESTADO]]
                 statesPolygons.put(country, countryPolygons);
 
-                System.out.println("TOTAL read points:" + totalLines + " FOR:" + country.getTitle());
+                //System.out.println("TOTAL read points:" + totalLines + " FOR:" + country.getTitle());
                 //long endTime = System.currentTimeMillis();
                 //System.out.println("Reading points took" + (endTime - startTime) + " milliseconds");
             }catch(IOException ioe){
@@ -372,6 +372,7 @@ public class SWBSocialUtil {
     public static void loadPrepositions()
     {
         //Lenguaje Español
+        aPrepositions=new ArrayList();
         Iterator<Prepositions> itPreps=Prepositions.ClassMgr.listPrepositionses(CONFIG_WEBSITE);
         while(itPreps.hasNext())
         {
@@ -539,20 +540,24 @@ public class SWBSocialUtil {
         {
             boolean firstTime=true;
             String text2Return="";
-            StringTokenizer st = new StringTokenizer(text);
-            while (st.hasMoreTokens())
+            //StringTokenizer st = new StringTokenizer(text);
+            //while (st.hasMoreTokens())
+            String[] mgsWords=text.split("\\s+");            
+            for(int i=0;i<mgsWords.length;i++)
             {
-                String word2Find=st.nextToken();
+                //String word2Find=st.nextToken().trim().toLowerCase();
+                String word2Find=mgsWords[i].toLowerCase().trim();
                 if(aPrepositions.contains(word2Find)) //Elimino preposiciones
                 {
                     continue;
-                }
-                if(firstTime)
-                {
-                    text2Return+=word2Find;
-                    firstTime=false;
-                }else{
-                    text2Return+=" "+word2Find;
+                }else {
+                    if(firstTime)
+                    {
+                        text2Return+=word2Find;
+                        firstTime=false;
+                    }else{
+                        text2Return+=" "+word2Find;
+                    }
                 }
             }
             return text2Return;
@@ -893,7 +898,6 @@ public class SWBSocialUtil {
             while(itTopics.hasNext())
             {
                 org.semanticwb.social.SocialTopic socialTopic=itTopics.next(); 
-                System.out.println("socialTopic TENIDO:"+socialTopic);
                 if(socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado 
                 {
                     String sTags=socialTopic.getTags();
@@ -950,7 +954,6 @@ public class SWBSocialUtil {
                 org.semanticwb.social.SocialTopic socialTopic=itSocialTopics.next();
                 if(!socialTopic.listStreams2ApplyInvs().hasNext() &&  socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
                 {
-                    System.out.println("socialTopic NO TENIDO:"+socialTopic);
                     String sTags=socialTopic.getTags();
                     boolean existWord=false;
                     if(sTags!=null && sTags.length()>0)
@@ -1149,7 +1152,7 @@ public class SWBSocialUtil {
             float promIntensityValue=0;     
             if(lang!=null && lang.equals("es"))
             {    
-               System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
+                //System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
                 int wordsCont=0;
                 //Normalizo
                 //System.out.println("ANALISIS-0:"+externalString2Clasify);
@@ -1266,7 +1269,7 @@ public class SWBSocialUtil {
                 }
             }else if(lang!=null && lang.equals("en"))
             {
-                System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
+                //System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
                 String[] words = text.split("\\s+"); 
                 double totalScore = 0, averageScore;
                 for(String word : words) {                    
@@ -1280,7 +1283,7 @@ public class SWBSocialUtil {
                 }
                 averageScore = totalScore;
 
-                System.out.println("averageScore:"+averageScore);
+                //System.out.println("averageScore:"+averageScore);
 
                 if(averageScore>=0.75){
                     //return "Strong positive";
@@ -2597,7 +2600,7 @@ public class SWBSocialUtil {
                 for (Map.Entry<CountryState, double[][]> entryState : statesPolygons.get(country).entrySet()) {
                     if(pnpoly(entryState.getValue(), lat, lng)){
                         long endTime = System.currentTimeMillis(); 
-                        System.out.println("Post: " +lat+","+lng+" is in:" + entryState.getKey().getTitle() + " Time:" + (endTime-startTime) +"ms");
+                        //System.out.println("Post: " +lat+","+lng+" is in:" + entryState.getKey().getTitle() + " Time:" + (endTime-startTime) +"ms");
                          return entryState.getKey();
                      }            
                 }
@@ -2884,7 +2887,7 @@ public class SWBSocialUtil {
             Iterator<ModelProperty> itModelProps = model.listModelProperties();
             while (itModelProps.hasNext()) {
                 ModelProperty modelProp = itModelProps.next();
-                System.out.println("NULOOO???/modelProp:"+modelProp+",propertyID:"+propertyID+",model:"+model);
+                //System.out.println("NULOOO???/modelProp:"+modelProp+",propertyID:"+propertyID+",model:"+model);
                 if (modelProp.getId().equals(propertyID)) {
                     return modelProp.getValue();
                 }
