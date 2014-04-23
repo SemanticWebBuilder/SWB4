@@ -6,15 +6,18 @@ package org.semanticwb.bsc.admin.resources.behavior;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.tracing.MitigationAction;
 import org.semanticwb.bsc.tracing.Risk;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -26,21 +29,21 @@ import org.semanticwb.portal.api.SWBResourceURL;
 /**
  * Permite visualizar, editar y eliminar Acciones de Mitigación de un Riesgo en
  * especifico
+ *
  * @author martha.jimenez
  * @version %I%, %G%
  * @since 1.0
  */
 public class MitigationActionManager extends GenericResource {
 
-    public static org.semanticwb.platform.SemanticProperty bsc_hasMitigationAction 
-            = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary()
+    public static org.semanticwb.platform.SemanticProperty bsc_hasMitigationAction = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary()
             .getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasMitigationAction");
     public static final String Action_DELETE = "delete";
 
     /**
      * M&eacute;todo que se encarga de presentar la vista para visualizar,
      * editar o eliminar una acci&oacute;n de mitigaci&oacute;n en un Riesgo.
-     * 
+     *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
@@ -50,8 +53,8 @@ public class MitigationActionManager extends GenericResource {
      * @throws IOException Excepti&oacute;n de IO
      */
     @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, 
-    SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doView(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
         response.setHeader("Cache-Control", "no-cache");
@@ -74,6 +77,7 @@ public class MitigationActionManager extends GenericResource {
         SemanticObject semObj = ont.getSemanticObject(suri);
         Risk risk = (Risk) semObj.createGenericInstance();
         if (risk != null) {
+            //createInstances(risk, risk.getBSC());
             Iterator<MitigationAction> it = risk.listMitigationActions();
 
             toReturn.append("<script type=\"text/javascript\">");
@@ -88,28 +92,28 @@ public class MitigationActionManager extends GenericResource {
             toReturn.append("<thead>");
             toReturn.append("<tr>");
             toReturn.append("<th></th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_title") 
-                    + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_description") 
-                    + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_created") 
-                    + "</th>");
-            toReturn.append("<th>" 
-                    + paramRequest.getLocaleString("lbl_updated") 
-                    + "</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_title"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_description"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_created"));
+            toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_updated"));
+            toReturn.append("</th>");
             toReturn.append("</tr>");
             toReturn.append("</thead>");
-
+            
             while (it.hasNext()) {
                 MitigationAction mitAction = it.next();
                 SWBResourceURL urlDelete = paramRequest.getActionUrl();
 
-                if (mitAction != null && ((mitAction.isValid() && user.haveAccess(mitAction)) 
-                        || (!mitAction.isActive() && 
-                        semObj.hasObjectProperty(bsc_hasMitigationAction, mitAction.getSemanticObject()) 
+                if (mitAction != null && ((mitAction.isValid() && user.haveAccess(mitAction))
+                        || (!mitAction.isActive()
+                        && semObj.hasObjectProperty(bsc_hasMitigationAction, mitAction.getSemanticObject())
                         && user.haveAccess(mitAction)))) {
                     urlDelete.setParameter("suri", suri);
                     urlDelete.setParameter("reloadTab", "true");
@@ -117,13 +121,13 @@ public class MitigationActionManager extends GenericResource {
                     urlDelete.setAction(Action_DELETE);
                     toReturn.append("<tr>");
                     toReturn.append("<td>");
-                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('" 
-                            + paramRequest.getLocaleString("lbl_msgDelete") 
-                            + "'))submitUrl('" 
-                            + urlDelete 
-                            + "',this.domNode);reloadTab('"
-                            +risk.getURI()
-                            +"');return false;\">");
+                    toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('");
+                    toReturn.append(paramRequest.getLocaleString("lbl_msgDelete"));
+                    toReturn.append("'))submitUrl('");
+                    toReturn.append(urlDelete);
+                    toReturn.append("',this.domNode);reloadTab('");
+                    toReturn.append(risk.getURI());
+                    toReturn.append("');return false;\">");
                     toReturn.append("\n<img src=\"");
                     toReturn.append(SWBPlatform.getContextPath());
                     toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
@@ -133,38 +137,38 @@ public class MitigationActionManager extends GenericResource {
 
                     toReturn.append("</td>");
                     toReturn.append("<td>");
-                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('" 
-                            + mitAction.getURI() 
-                            + "','");
-                    toReturn.append(SWBPlatform.getContextPath() 
-                            + "/swbadmin/jsp/objectTab.jsp" 
-                            + "','" 
-                            + mitAction.getTitle());
-                    toReturn.append("');return false;\" >"
-                            + (mitAction.getTitle(lang) == null ? 
-                            (mitAction.getTitle() == null ? 
-                            paramRequest.getLocaleString("lbl_undefined") : 
-                            mitAction.getTitle().replaceAll("'", "")) : 
-                            mitAction.getTitle(lang).replaceAll("'", "")) 
-                            + "</a>");
+                    toReturn.append("<a href=\"#\" onclick=\"addNewTab('");
+                    toReturn.append(mitAction.getURI());
+                    toReturn.append("','");
+                    toReturn.append(SWBPlatform.getContextPath());
+                    toReturn.append("/swbadmin/jsp/objectTab.jsp");
+                    toReturn.append("','");
+                    toReturn.append(mitAction.getTitle());
+                    toReturn.append("');return false;\" >");
+                    toReturn.append((mitAction.getTitle(lang) == null
+                            ? (mitAction.getTitle() == null
+                            ? paramRequest.getLocaleString("lbl_undefined")
+                            : mitAction.getTitle().replaceAll("'", ""))
+                            : mitAction.getTitle(lang).replaceAll("'", "")));
+                    toReturn.append("</a>");
                     toReturn.append("</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getDescription(lang) == null 
-                            ? (mitAction.getDescription() == null 
-                            ? paramRequest.getLocaleString("lbl_undefined") 
-                            : mitAction.getDescription()) : 
-                            mitAction.getDescription(lang)) 
-                            + "</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getCreated() == null ? "" : 
-                            SWBUtils.TEXT.getStrDate(mitAction.getCreated(), 
-                            "es", "dd/mm/yyyy")) 
-                            + "</td>");
-                    toReturn.append("<td>" 
-                            + (mitAction.getUpdated() == null ? "" 
-                            : SWBUtils.TEXT.getStrDate(mitAction.getCreated(), 
-                            "es", "dd/mm/yyyy")) 
-                            + "</td>");
+                    toReturn.append("<td>");
+                    toReturn.append((mitAction.getDescription(lang) == null
+                            ? (mitAction.getDescription() == null
+                            ? paramRequest.getLocaleString("lbl_undefined")
+                            : mitAction.getDescription())
+                            : mitAction.getDescription(lang)));
+                    toReturn.append("</td>");
+                    toReturn.append("<td>");
+                    toReturn.append((mitAction.getCreated() == null ? ""
+                            : SWBUtils.TEXT.getStrDate(mitAction.getCreated(),
+                            "es", "dd/mm/yyyy")));
+                    toReturn.append("</td>");
+                    toReturn.append("<td>");
+                    toReturn.append((mitAction.getUpdated() == null ? ""
+                            : SWBUtils.TEXT.getStrDate(mitAction.getCreated(),
+                            "es", "dd/mm/yyyy")));
+                    toReturn.append("</td>");
                     toReturn.append("</tr>");
                 }
             }
@@ -172,16 +176,16 @@ public class MitigationActionManager extends GenericResource {
             toReturn.append("</fieldset>\n");
             toReturn.append("</div>");
 
-            if (request.getParameter("statmsg") != null && 
-                    !request.getParameter("statmsg").isEmpty()) {
+            if (request.getParameter("statmsg") != null
+                    && !request.getParameter("statmsg").isEmpty()) {
                 toReturn.append("<div dojoType=\"dojox.layout.ContentPane\">");
                 toReturn.append("<script type=\"dojo/method\">");
-                toReturn.append("showStatus('" + request.getParameter("statmsg")); 
+                toReturn.append("showStatus('" + request.getParameter("statmsg"));
                 toReturn.append("');\n");
                 toReturn.append("</script>\n");
                 toReturn.append("</div>");
             }
-            
+
         } else {
             toReturn.append("objeto semántico no ubicado");
         }
@@ -189,10 +193,10 @@ public class MitigationActionManager extends GenericResource {
     }
 
     /**
-     * 
+     *
      * M&eacute;todo que se encarga de persistir la informaci&oacute;n de forma
-     * segura de la administraci&oacute;n de acciones de mitigaci&oacute;n de
-     * un Riesgo
+     * segura de la administraci&oacute;n de acciones de mitigaci&oacute;n de un
+     * Riesgo
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Objeto con el cual se acceden a los objetos de SWB
@@ -201,7 +205,7 @@ public class MitigationActionManager extends GenericResource {
      * @throws IOException Excepti&oacute;n de IO
      */
     @Override
-    public void processAction(HttpServletRequest request, SWBActionResponse response) 
+    public void processAction(HttpServletRequest request, SWBActionResponse response)
             throws SWBResourceException, IOException {
         final String action = response.getAction();
         final String suri = request.getParameter("suri");
@@ -229,5 +233,13 @@ public class MitigationActionManager extends GenericResource {
         }
     }
 
-
+    /*private void createInstances(Risk risk, WebSite ws) {
+        MitigationAction action = MitigationAction.ClassMgr.createMitigationAction(ws);
+        action.setTitle("Acción 1");
+        action.setDescription("Descripción de Acción 1");
+        action.setActive(true);
+        action.setCreated(new Date());
+        action.setUpdated(new Date());
+        risk.addMitigationAction(action);
+    }*/
 }
