@@ -161,26 +161,26 @@
 %>
 
 <%
-    System.out.println("suri in tagsCloud:" + request.getParameter("suri"));
+    //System.out.println("suri in tagsCloud:" + request.getParameter("suri"));
     String suri = request.getParameter("suri");
     String noTopic = request.getParameter("noTopic");
-    System.out.println("noTopic:" + noTopic);
+    //System.out.println("noTopic:" + noTopic);
     Stream stream = null;
     SocialTopic socialT = null;
     Iterator <PostIn> itPostIns = null;//The posts
-    long noOfPosts = 0L;
+    //long noOfPosts = 0L;
     
     try{
     if(suri != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
         if(semObj.createGenericInstance() instanceof Stream){//Tag Cloud for stream
-            System.out.println("is stream");
+            //System.out.println("is stream");
             stream = (Stream)semObj.getGenericInstance();
             itPostIns=stream.listPostInStreamInvs();//The posts
             itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
             //SWBUtils.Collections.sizeOf(stream.listPostInStreamInvs());//Number of recovered posts
         }else if(semObj.createGenericInstance() instanceof SocialTopic){//Tag Cloud for social topic
-            System.out.println("is social topic");
+            //System.out.println("is social topic");
             socialT = (SocialTopic)semObj.getGenericInstance();
             itPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialT, socialT.getSocialSite());//The posts
             itPostIns = sortByCreatedSet(itPostIns, true).iterator();//Newer first
@@ -192,7 +192,7 @@
         return;
     }
     }catch(Exception e){
-        System.out.println("\n\n\n*******************");
+        //System.out.println("\n\n\n*******************");
         e.printStackTrace();
     }
     
@@ -216,13 +216,13 @@
         
     //int posts = 0;
     int randomId = randomId();
-    long startTime = System.currentTimeMillis();
+    //long startTime = System.currentTimeMillis();
 
     //int percent = (int)(noOfPosts*0.6);//Only process 60% of stream
     //System.out.println("Size of sample: " + percent);
     while(itPostIns.hasNext()){        
         if(cloudTags.size() >= 4000){
-            System.out.println("Too large Word List");
+            //System.out.println("Too large Word List");
             break;        
         }/*else if( posts > percent){
             System.out.println("Has reached the %");
@@ -235,7 +235,7 @@
                 continue;
             }
         }
-        
+        /*
         if(postIn.getTags() != null){//If post has tags
             String[] tags=postIn.getTags().split("\\s+");//Dividir valores
             for(int i=0;i<tags.length;i++)
@@ -255,16 +255,17 @@
                }
             }
         }
-        
+        */
         if(postIn.getMsg_Text()!=null)
         {//If post has message
-            String msg=postIn.getMsg_Text().toLowerCase();
+            String msg=null;
+            msg=postIn.getMsg_Text().toLowerCase(); 
             String lang=null;
             Language postInLang=postIn.getMsg_lang(); 
             if(postInLang!=null) lang=postInLang.getId(); 
             if(lang!=null)
             {
-                if(lang.equals("es"))
+                //if(lang.equals("es"))
                 {
                     msg = SWBSocialUtil.Strings.removePrepositions(msg); 
                 }   
@@ -322,13 +323,13 @@ try{
                 continue;
             }
             if(i==1){//The word at the top is the most frequent, so it must have 100                
-                out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
+                out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>"); 
             }else{
                 if(lastValue.equals(tag.getValue())){//If several words have the same frequency, use the same mappingValue
-                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
+                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>");
                 }else{//If current word is different from the word before, use a lower value
                     mappingValue--;
-                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + tag.getKey() + "</a></li>");
+                    out.println("<li><a href=\"#\" title=\"" + mappingValue + "\" data-weight=\"" + mappingValue +"\" onclick=\"submitUrl('" + renderURL.setParameter("search", (String)tag.getKey()) + "',this); return false;\">" + SWBUtils.TEXT.replaceSpecialCharacters((String)tag.getKey(), false) + "</a></li>");
                 }
             }
             lastValue = (Integer)tag.getValue();
@@ -338,11 +339,11 @@ try{
             }
         }
     }catch(Exception e){
-        System.out.println("Error normalizing the frequencies :" + e);
+        e.printStackTrace(); 
     }
     
-    long estimatedTime = System.currentTimeMillis() - startTime;    
-    System.out.println("Elapsed time of processing:"  +  estimatedTime);
+    //long estimatedTime = System.currentTimeMillis() - startTime;    
+    //System.out.println("Elapsed time of processing:"  +  estimatedTime);
 %>
     </ul>
 </div>
