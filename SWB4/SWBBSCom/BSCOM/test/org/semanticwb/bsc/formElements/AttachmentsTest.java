@@ -4,13 +4,11 @@
  */
 package org.semanticwb.bsc.formElements;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.formelement.AttachmentElement;
 import org.semanticwb.model.FormElement;
@@ -40,7 +38,7 @@ public class AttachmentsTest {
     @BeforeClass
     public static void setUpClass() throws Exception {
         SWBPlatform plat = SWBPlatform.createInstance();
-        plat.setPersistenceType(SWBPlatform.PRESIST_TYPE_SWBTRIPLESTOREEXT);
+        plat.setPersistenceType(SWBPlatform.PRESIST_TYPE_SWBTRIPLESTORE);
         SWBPlatform.getSemanticMgr().initializeDB();
 
         SWBPlatform.getSemanticMgr().addBaseOntology("C:/Desarrollos5/SWB4/SWBBSCom/build/web/WEB-INF/owl/swb.owl");
@@ -64,7 +62,7 @@ public class AttachmentsTest {
         //request = new SWBRequest();
     }
 
-    // @Test
+     @Test
     public void toRenderViewTest() {
         if (BSC.ClassMgr.hasBSC(modelId)) {
             BSC model = BSC.ClassMgr.getBSC(modelId);
