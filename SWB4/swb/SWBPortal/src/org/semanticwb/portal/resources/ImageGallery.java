@@ -141,7 +141,8 @@ public class ImageGallery extends GenericResource {
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
-        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width","220")), Integer.parseInt(base.getAttribute("height","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), base.getAttribute("title",""), ip);
+        String lang = paramRequest.getUser().getLanguage();
+        String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width","220")), Integer.parseInt(base.getAttribute("height","220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause","2500")), Integer.parseInt(base.getAttribute("fadetime","500")), Boolean.parseBoolean(base.getAttribute("title"))?(base.getTitle(lang)==null?base.getDisplayTitle(lang):base.getTitle(lang)):"", ip);
         out.print(script);
         out.flush();
     }
@@ -328,7 +329,6 @@ public class ImageGallery extends GenericResource {
                 int width = Integer.parseInt(base.getAttribute("width"));
                 String filenameAttr, removeChk;
                 do {
-                //for(int j=0; j<15; j++) {
                     filenameAttr = "imggallery_" + base.getId() + "_" + i;
                     removeChk = "remove_" + base.getId() + "_" + i;
                     value = null!=fup.getValue(removeChk) && !"".equals(fup.getValue(removeChk).trim()) ? fup.getValue(removeChk).trim() : "0";
@@ -363,7 +363,6 @@ public class ImageGallery extends GenericResource {
                         }
                     }
                     i++;
-                //}
                 } while(value!=null || base.getAttribute(filenameAttr)!=null);
 
                 base.updateAttributesToDB();
@@ -402,13 +401,14 @@ public class ImageGallery extends GenericResource {
             SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN);
             url.setAction("update");
 
-            htm.append("<script type=\"text/javascript\">");
+            htm.append("<script type=\"text/javascript\">\n");
             htm.append("  dojo.require('dijit.layout.ContentPane');\n");
             htm.append("  dojo.require('dijit.form.Form');\n");
+            htm.append("  dojo.require(\"dijit.form.CheckBox\");\n");
             htm.append("  dojo.require('dijit.form.TextBox');\n");
             htm.append("  dojo.require(\"dijit.form.NumberTextBox\");");
             htm.append("  dojo.require(\"dijit.form.Button\");");
-            htm.append("</script>");
+            htm.append("</script>\n");
 
             htm.append("\n<div class=\"swbform\"> ");
             htm.append("\n<form id=\"frmIG_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
@@ -437,33 +437,41 @@ htm.append("\n</fieldset> ");*/
             htm.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
 
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"title\" class=\"swbform-label\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_showtitle")+"</label>");
+            htm.append("\n</td>");
+            //htm.append("<label for=\"imgWidth\" class=\"swbform-label\">"+    +"</label>");
             htm.append("\n<td>");
-            htm.append("\n<input type=\"text\" dojoType=\"dijit.form.TextBox\" size=\"100\" name=\"title\" ");
-            htm.append("\n value=\"" + base.getAttribute("title", "").trim().replaceAll("\"", "&#34;") + "\" />");
+            htm.append("<input id=\"title\" dojotype=\"dijit.form.CheckBox\" name=\"title\" ").append(Boolean.parseBoolean(base.getAttribute("title"))?"checked=\"checked\"":"").append(" value=\"true\" type=\"checkbox\" />");
             htm.append("\n</td> ");
             htm.append("\n</tr>");
             
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"autoplay\" class=\"swbform-label\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay")+"</label>");
+            htm.append("\n</td>");
             htm.append("\n<td>");
-            htm.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
-            if ("true".equalsIgnoreCase(base.getAttribute("autoplay", "false"))) {
-                htm.append("\n checked=\"checked\"");
-            }
-            htm.append("\n/>");
+            htm.append("\n<input id=\"autoplay\" dojotype=\"dijit.form.CheckBox\" name=\"autoplay\" ").append(Boolean.parseBoolean(base.getAttribute("autoplay"))?"checked=\"checked\"":"").append(" value=\"true\" type=\"checkbox\" />");
             htm.append("\n</td>");
             htm.append("\n</tr>");
             
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Miliseconds")+")</i></td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"pause\" class=\"swbform-label\">");
+            htm.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Milliseconds")+")");
+            htm.append("</label>");
+            htm.append("\n</td>");
             htm.append("\n<td>");
             htm.append("\n<input id=\"pause\" name=\"pause\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("pause", "2500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
             htm.append("\n</td>");
             htm.append("\n</tr>");
             
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Miliseconds")+")</i></td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"fadetime\" class=\"swbform-label\">");
+            htm.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Milliseconds")+")");
+            htm.append("</label>");
+            htm.append("\n</td>");
             htm.append("\n<td>");
             htm.append("\n<input id=\"fadetime\" name=\"fadetime\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fadetime", "500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
             htm.append("\n</td>");
@@ -471,7 +479,11 @@ htm.append("\n</fieldset> ");*/
 
             String width = base.getAttribute("width", "220");
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_width") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")</i></td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"width\" class=\"swbform-label\">");
+            htm.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_width") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")");
+            htm.append("</label>");
+            htm.append("\n</td>");
             htm.append("\n<td>");
             htm.append("\n<input id=\"width\" name=\"width\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+width+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
             htm.append("\n</td>");
@@ -479,7 +491,11 @@ htm.append("\n</fieldset> ");*/
 
             String height = base.getAttribute("height", "150");
             htm.append("\n<tr>");
-            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_height") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")</i></td>");
+            htm.append("\n<td width=\"200\" align=\"right\">");
+            htm.append("<label for=\"height\" class=\"swbform-label\">");
+            htm.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_height") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")");
+            htm.append("</label>");
+            htm.append("\n</td>");
             htm.append("\n<td>");
             htm.append("\n<input id=\"height\" name=\"height\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+height+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
             htm.append("\n</td>");
@@ -496,18 +512,18 @@ htm.append("\n</fieldset> ");*/
 htm.append("\n  <tr bgcolor=\"#E1EAF7\"> ");
 htm.append("\n    <td align=\"center\" colspan=\"4\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</td> ");
 htm.append("\n    <td align=\"center\">");
-htm.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
-htm.append("\n    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
+htm.append("\n    <input type=\"button\" value=\""+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_btnAdd")+"\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
+htm.append("\n    <input type=\"button\" value=\""+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_btnCancel")+"\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
 htm.append("\n    </td>");
 htm.append("\n  </tr> ");
 
 
             htm.append("\n  <tr bgcolor=\"#769CCB\"> ");
             htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th> ");
-            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">Editar</th> ");
-            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">Eliminar</th> ");
-            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Archivo</th> ");
-            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Imagen</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colEdit")+"</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colRemove")+"</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colFile")+"</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colImage")+"</th> ");
             htm.append("\n  </tr> ");
             htm.append("\n</table> ");
             htm.append("\n</div> ");
