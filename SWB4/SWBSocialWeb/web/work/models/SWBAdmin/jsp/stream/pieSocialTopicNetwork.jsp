@@ -135,6 +135,8 @@
                 } else {
                     nombre = p.getSocialNetwork().getTitle();
                 }*/
+                
+                if(p.getSocialNetwork() != null){
                 total++;
                 if (p.getPostSentimentalType() == 0) {
                     neutrals++;
@@ -143,6 +145,7 @@
                 } else if (p.getPostSentimentalType() == 2) {
                     negatives++;
                 }
+                               }
             }
             positivesGlobal = positivesGlobal + positives;
             negativesGlobal = negativesGlobal + negatives;
