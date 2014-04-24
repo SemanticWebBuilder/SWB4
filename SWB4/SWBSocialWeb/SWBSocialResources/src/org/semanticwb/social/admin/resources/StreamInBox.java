@@ -4,7 +4,6 @@
  */
 package org.semanticwb.social.admin.resources;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -60,14 +59,19 @@ import org.semanticwb.social.Kloutable;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.social.Facebook;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.Twitter;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
+
 /**
  *
  * @author jorge.jimenez
@@ -146,50 +150,49 @@ public class StreamInBox extends GenericResource {
             } catch (Exception e) {
                 log.error(e);
             }
-        }else if(mode.equals(Mode_UPDATEPOSTIN)){
+        } else if (mode.equals(Mode_UPDATEPOSTIN)) {
             response.setContentType("text/html; charset=ISO-8859-1");
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            PrintWriter out= response.getWriter();
+            PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");
             out.println("   hideDialog(); ");
-            if(request.getParameter("statusMsg") != null){
+            if (request.getParameter("statusMsg") != null) {
                 out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             }
             out.println("</script>");
             SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
             PostIn postIn = (PostIn) semObj.createGenericInstance();
-            User user=paramRequest.getUser();
-             //Manejo de permisos
-            SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-            boolean userCanRemoveMsg=false;
-            boolean userCanRetopicMsg=false;
-            boolean userCanRevalueMsg=false;
-            boolean userCanRespondMsg=false;
-            if(socialUserExtAttr!=null)
-            {
-                userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-                userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-                userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-                userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+            User user = paramRequest.getUser();
+            //Manejo de permisos
+            SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            boolean userCanRemoveMsg = false;
+            boolean userCanRetopicMsg = false;
+            boolean userCanRevalueMsg = false;
+            boolean userCanRespondMsg = false;
+            if (socialUserExtAttr != null) {
+                userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
+                userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
+                userCanRevalueMsg = socialUserExtAttr.isUserCanReValueMsg();
+                userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
             }
             //boolean userCandoEveryThing=false;
             //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
-            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+            UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
-                    
+
             Stream stream = postIn.getPostInStream();
             printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
-        }else if(mode.equals(Mode_DELETEPOSTIN)){
+        } else if (mode.equals(Mode_DELETEPOSTIN)) {
             PrintWriter out = response.getWriter();
-            out.println("<script type=\"javascript\">");            
+            out.println("<script type=\"javascript\">");
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             out.println("   var trId=document.getElementById('" + request.getParameter("postUri") + "/stIn');");
-            out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){}");            
-            out.println("</script>");            
-        }else if(mode.equals(Mode_REDIRECTTOMODE)){
-            PrintWriter out = response.getWriter();            
-            String statusMsg =request.getParameter("statusMsg");
+            out.println("   try{trId.parentNode.removeChild(trId);}catch(noe){}");
+            out.println("</script>");
+        } else if (mode.equals(Mode_REDIRECTTOMODE)) {
+            PrintWriter out = response.getWriter();
+            String statusMsg = request.getParameter("statusMsg");
             String postUri = request.getParameter("postUri");
             String suri = request.getParameter("suri");
             SWBResourceURL renderUrl = paramRequest.getRenderUrl().setMode(Mode_UPDATEPOSTIN).setParameter("statusMsg", statusMsg).setParameter("suri", suri).setParameter("postUri", postUri).setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -197,13 +200,13 @@ public class StreamInBox extends GenericResource {
             out.println("   postSocialPostInHtml('" + renderUrl + "', '" + postUri + "/stIn');");
             out.println("</script>");
 
-        }else if(mode.equals(Mode_EMPTYRESPONSE)){
+        } else if (mode.equals(Mode_EMPTYRESPONSE)) {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"javascript\">");
             out.println("   hideDialog();");
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             out.println("</script>");
-        }else {
+        } else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -241,7 +244,7 @@ public class StreamInBox extends GenericResource {
      */
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        User user=paramRequest.getUser();
+        User user = paramRequest.getUser();
         //String lang = paramRequest.getUser().getLanguage();
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
@@ -257,32 +260,31 @@ public class StreamInBox extends GenericResource {
 
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        
+
         //System.out.println("stream:"+stream.getURI());
 
         PrintWriter out = response.getWriter();
-        
-         //Manejo de permisos
-        SocialUserExtAttributes socialUserExtAttr=SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        boolean userCanRemoveMsg=false;
-        boolean userCanRetopicMsg=false;
-        boolean userCanRevalueMsg=false;
-        boolean userCanRespondMsg=false;
-        if(socialUserExtAttr!=null)
-        {
-            userCanRemoveMsg=socialUserExtAttr.isUserCanRemoveMsg();
-            userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-            userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-            userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
+
+        //Manejo de permisos
+        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        boolean userCanRemoveMsg = false;
+        boolean userCanRetopicMsg = false;
+        boolean userCanRevalueMsg = false;
+        boolean userCanRespondMsg = false;
+        if (socialUserExtAttr != null) {
+            userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
+            userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
+            userCanRevalueMsg = socialUserExtAttr.isUserCanReValueMsg();
+            userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
         }
         //boolean userCandoEveryThing=false;
-        
+
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
-        UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+        UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
         //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
-        
+
         if (request.getParameter("leyendReconfirm") != null) {
-            
+
             //Remove
             SWBResourceURL urlrConfirm = paramRequest.getActionUrl();
             urlrConfirm.setParameter("suri", id);
@@ -294,7 +296,7 @@ public class StreamInBox extends GenericResource {
             out.println("</script>");
             return;
         }
-        
+
         if (request.getParameter("dialog") != null && request.getParameter("dialog").equals("close")) {
             out.println("<script type=\"javascript\">");
             out.println(" hideDialog(); ");
@@ -353,7 +355,7 @@ public class StreamInBox extends GenericResource {
         String orderBy = request.getParameter("orderBy");
 
         out.println("<div class=\"swbform\">");
-        
+
         int nPage;
         try {
             nPage = Integer.parseInt(request.getParameter("page"));
@@ -361,28 +363,28 @@ public class StreamInBox extends GenericResource {
             nPage = 1;
         }
         //System.out.println("nPage a Filtros:"+nPage);
-        
+
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
-        
+
         out.println("<fieldset class=\"barra\">");
-        out.println("<div class=\"barra\">"); 
-        
+        out.println("<div class=\"barra\">");
+
         long nRec = ((Long) hmapResult.get("countResult")).longValue();
         //Set<PostIn> setso = ((Set) hmapResult.get("itResult"));
         NumberFormat nf2 = NumberFormat.getInstance(Locale.US);
-        
+
         SWBResourceURL urlRefresh = paramRequest.getRenderUrl();
         urlRefresh.setParameter("suri", id);
-        out.println("<a class=\"countersBar\" href=\"#\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">"+nf2.format(nRec)+" mensajes</a>");
-        
-       
+        out.println("<a class=\"countersBar\" href=\"#\" title=\"Refrescar Tab\" onclick=\"submitUrl('" + urlRefresh.setMode(SWBResourceURL.Action_EDIT) + "',this); return false;\">" + nf2.format(nRec) + " mensajes</a>");
+
+
         if (page == null) {
             page = "1";
         }
-        
-        
-        
+
+
+
         //out.println("<span  class=\"spanFormat\">");
         //out.println("<form id=\"" + id + "/importCurrentPage\" name=\"" + id + "/importCurrentPage\" method=\"post\" action=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" >");
         //out.println("<div align=\"right\">");
@@ -390,55 +392,54 @@ public class StreamInBox extends GenericResource {
         //out.println("</div>");
         //out.println("</form>");
         //out.println("</span>");
-        out.println("<a href=\""+urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy)+"\" class=\"excel\">"+paramRequest.getLocaleString("importCurrentPage")+"</a>");
+        out.println("<a href=\"" + urls.setMode("exportExcel").setParameter("pages", page).setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("orderBy", orderBy) + "\" class=\"excel\">" + paramRequest.getLocaleString("importCurrentPage") + "</a>");
 
         /*
-        out.println("<span  class=\"spanFormat\">");
-        out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
-        out.println("<div align=\"right\">");
-        out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
-        out.println("</div>");
-        out.println("</form>");
-        out.println("</span>");
-        * */
-        out.println("<a href=\""+urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy)+"\" class=\"excelall\">"+paramRequest.getLocaleString("importAll")+"</a>");
-        
-        
+         out.println("<span  class=\"spanFormat\">");
+         out.println("<form id=\"" + id + "/importAll\" name=\"" + id + "/importAll\" method=\"post\" action=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" >");
+         out.println("<div align=\"right\">");
+         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("importAll") + "</button>"); //
+         out.println("</div>");
+         out.println("</form>");
+         out.println("</span>");
+         * */
+        out.println("<a href=\"" + urls.setMode("exportExcel").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("pages", "0").setParameter("orderBy", orderBy) + "\" class=\"excelall\">" + paramRequest.getLocaleString("importAll") + "</a>");
+
+
         //Advance re-Classify by topic
-        if(userCanRetopicMsg)
-        {
+        if (userCanRetopicMsg) {
             //out.println("<span  class=\"spanFormat\">");
             SWBResourceURL ReClassbyTopicUrl = paramRequest.getRenderUrl();
             ReClassbyTopicUrl.setParameter("streamid", id);
             ReClassbyTopicUrl.setMode(Mode_ADVANCE_RECLASSIFYbyTOPIC);
             //out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\">" + paramRequest.getLocaleString("reClassifybyTopic") + "</button>");
             //out.println("</span>");
-            out.println("<a href=\"#\" onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\" class=\"reclasif\">"+paramRequest.getLocaleString("reClassifybyTopic")+"</a>");
+            out.println("<a href=\"#\" onclick=\"showDialog('" + ReClassbyTopicUrl + "','" + paramRequest.getLocaleString("reClassifybyTopic") + "'); return false;\" class=\"reclasif\">" + paramRequest.getLocaleString("reClassifybyTopic") + "</a>");
         }
-        
+
         SWBResourceURL tagUrl = paramRequest.getRenderUrl();
         tagUrl.setParameter("suri", id);
         tagUrl.setMode(Mode_showTags);
         //out.println("<span  class=\"spanFormat\">");
         //out.println("<button dojoType='dijit.form.Button'  onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\">" + paramRequest.getLocaleString("btnCloud") + "</button>");
         //out.println("</span>");
-        out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">"+paramRequest.getLocaleString("btnCloud")+"</a>");
-        
+        out.println("<a href=\"#\" onclick=\"showDialog('" + tagUrl + "','" + paramRequest.getLocaleString("tagLabel") + "'); return false;\" class=\"btnCloud\">" + paramRequest.getLocaleString("btnCloud") + "</a>");
+
         //out.println("<span  class=\"spanFormat\">");
         out.println("<form id=\"" + id + "/fsearchwp\" name=\"" + id + "/fsearchwp\" method=\"post\" action=\"" + urls.setMode(SWBResourceURL.Mode_EDIT) + "\" onsubmit=\"submitForm('" + id + "/fsearchwp');return false;\">");
         out.println("<div align=\"right\">");
         out.println("<input type=\"hidden\" name=\"suri\" value=\"" + id + "\">");
         out.println("<input type=\"hidden\" name=\"noSaveSess\" value=\"1\">");
-        out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\" placeholder=\""+paramRequest.getLocaleString("searchPost")+"\">");
+        out.println("<input type=\"text\" name=\"search\" id=\"" + id + "_searchwp\" value=\"" + searchWord + "\" placeholder=\"" + paramRequest.getLocaleString("searchPost") + "\">");
         out.println("<button dojoType=\"dijit.form.Button\" type=\"submit\">" + paramRequest.getLocaleString("btnSearch") + "</button>"); //
         out.println("</div>");
         out.println("</form>");
         //out.println("</span>");
-        
+
         out.println("</div>");
         out.println("</fieldset>");
-        
-        
+
+
         out.println("<fieldset>");
 
         out.println("<table class=\"tabla1\" >");
@@ -803,33 +804,35 @@ public class StreamInBox extends GenericResource {
 
         out.println("</thead>");
         out.println("<tbody>");
-        
+
         //Revisa si el sitio indica que se revise el Klout, por defecto si lo hace.
         /*
-        boolean checkKlout=false; 
-        try{
-            checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
-        }catch(Exception ignored)
-        {
-            checkKlout=false;
-        }*/
+         boolean checkKlout=false; 
+         try{
+         checkKlout=Boolean.parseBoolean(SWBSocialUtil.Util.getModelPropertyValue(wsite, "checkKlout"));
+         }catch(Exception ignored)
+         {
+         checkKlout=false;
+         }*/
 
         //Iterator<PostIn> itposts = setso.iterator();
-        
+
         //System.out.append("nRec-George29:"+nRec);
-        
-        Iterator<PostIn> itposts = (Iterator)hmapResult.get("itResult"); 
-        while (itposts!=null && itposts.hasNext()) {
+
+        Iterator<PostIn> itposts = (Iterator) hmapResult.get("itResult");
+        while (itposts != null && itposts.hasNext()) {
             PostIn postIn = itposts.next();
-            
+
             //System.out.append("StreamInBox/postIn:"+postIn));
-            String sClass="";
-            if(postIn.isIsPrioritary()) sClass="class=\"msj-cont msj-prior\"";
-            
-            out.println("<tr id=\"" + postIn.getURI() + "/stIn\" "+sClass+">");
+            String sClass = "";
+            if (postIn.isIsPrioritary()) {
+                sClass = "class=\"msj-cont msj-prior\"";
+            }
+
+            out.println("<tr id=\"" + postIn.getURI() + "/stIn\" " + sClass + ">");
             printPostIn(postIn, paramRequest, response, stream, userCanRemoveMsg, userCanRetopicMsg, userCanRevalueMsg, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp));
             out.println("</tr>");
-            
+
         }
 
         out.println("</tbody>");
@@ -837,19 +840,18 @@ public class StreamInBox extends GenericResource {
         out.println("</fieldset>");
 
         if (nRec > 0) {
-            int totalPages=1;
-            if(nRec>RECPERPAGE)
-            {
-                totalPages=Double.valueOf(nRec/20).intValue();
-                if((nRec % RECPERPAGE)>0){
-                    totalPages=Double.valueOf(nRec/20).intValue()+1;
+            int totalPages = 1;
+            if (nRec > RECPERPAGE) {
+                totalPages = Double.valueOf(nRec / 20).intValue();
+                if ((nRec % RECPERPAGE) > 0) {
+                    totalPages = Double.valueOf(nRec / 20).intValue() + 1;
                 }
             }
             //System.out.println("StreamInBox/totalPages:"+totalPages);
-            
+
             out.println("<div id=\"page\">");
-            out.println("<div id=\"pagSumary\">"+paramRequest.getLocaleString("page")+":"+nPage+" "+paramRequest.getLocaleString("of") +" "+totalPages+"</div>");
-            
+            out.println("<div id=\"pagSumary\">" + paramRequest.getLocaleString("page") + ":" + nPage + " " + paramRequest.getLocaleString("of") + " " + totalPages + "</div>");
+
             SWBResourceURL pageURL = paramRequest.getRenderUrl();
             //pageURL.setParameter("page", "" + (countPage));
             pageURL.setParameter("suri", id);
@@ -859,30 +861,30 @@ public class StreamInBox extends GenericResource {
                 pageURL.setParameter("orderBy", request.getParameter("orderBy"));
             }
             /*
-            for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
-                SWBResourceURL pageURL = paramRequest.getRenderUrl();
-                pageURL.setParameter("page", "" + (countPage));
-                pageURL.setParameter("suri", id);
-                pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
-                pageURL.setParameter("swbSocialUser", swbSocialUser);
-                if (request.getParameter("orderBy") != null) {
-                    pageURL.setParameter("orderBy", request.getParameter("orderBy"));
-                }
-                if (countPage != nPage) {
-                    out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">" + countPage + "</a> ");
-                } else {
-                    out.println(countPage + " ");
-                }
-            }*/
+             for (int countPage = 1; countPage < (Math.ceil((double) nRec / (double) RECPERPAGE) + 1); countPage++) {
+             SWBResourceURL pageURL = paramRequest.getRenderUrl();
+             pageURL.setParameter("page", "" + (countPage));
+             pageURL.setParameter("suri", id);
+             pageURL.setParameter("search", (searchWord.trim().length() > 0 ? searchWord : ""));
+             pageURL.setParameter("swbSocialUser", swbSocialUser);
+             if (request.getParameter("orderBy") != null) {
+             pageURL.setParameter("orderBy", request.getParameter("orderBy"));
+             }
+             if (countPage != nPage) {
+             out.println("<a href=\"#\" onclick=\"submitUrl('" + pageURL + "',this); return false;\">" + countPage + "</a> ");
+             } else {
+             out.println(countPage + " ");
+             }
+             }*/
             //out.println("</div>");
-            
-             //ipage=Pagina actual, osea nPage
+
+            //ipage=Pagina actual, osea nPage
             //snpages=No. de Paginas maximas que quiero que aparezcan, tengo un 15 en content
             //stxtant= Texto para "Anterior"
             //stxtsig=Texto para siguiente
             //stfont=Algun font, pero yo creo que hay que poner en lugar de td una div (como esta ahorita arriba) y con un class
             //position=Posición en (arriba, abajo, ambos), esto no aplicaría para este uso
-            
+
             //out.println(SWBSocialUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, paramRequest.getLocaleString("pageBefore"), paramRequest.getLocaleString("pageNext"), pageURL));
             out.println(SWBSocialResUtil.Util.getContentByPage(totalPages, nPage, PAGES2VIEW, pageURL));
             out.println("</div>");
@@ -944,7 +946,7 @@ public class StreamInBox extends GenericResource {
             }
         }
     }
-    
+
     /*
      * Reclasificación avanzada por SocialTopic
      */
@@ -962,8 +964,6 @@ public class StreamInBox extends GenericResource {
             }
         }
     }
-    
-    
 
     /*
      * Reevalua un PostIn en cuanto a sentimiento e intensidad
@@ -1108,12 +1108,23 @@ public class StreamInBox extends GenericResource {
     public void createExcel(Iterator<PostIn> setso, SWBParamRequest paramRequest, int page, HttpServletResponse response, Stream stream) {
         try {
             // Defino el Libro de Excel
-           // Iterator v = setso.iterator();
+            // Iterator v = setso.iterator();
             String title = stream.getTitle();
+            List list = IteratorUtils.toList(setso);
+            Iterator<PostIn> setso1 = list.iterator();
+            long size = list.size();
+            long limite = 65535;
 
 
-            HSSFWorkbook wb = new HSSFWorkbook();
 
+            Workbook wb = null;
+            if (size <= limite) {
+
+                wb = new HSSFWorkbook();
+            } else if (size > limite) {
+
+                wb = new XSSFWorkbook();
+            }
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
 
@@ -1155,27 +1166,27 @@ public class StreamInBox extends GenericResource {
             int i = 3;
 
 
-            while (setso!= null && setso.hasNext()) {
+            while (setso != null && setso.hasNext()) {
                 PostIn postIn = (PostIn) setso.next();
 
                 Row troww = sheet.createRow((short) i);
 
                 if (postIn.getMsg_Text() != null) {
-                     if (postIn.getMsg_Text().length() > 2000) {
-                         createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getMsg_Text().substring(0,2000));
-                        
+                    if (postIn.getMsg_Text().length() > 2000) {
+                        createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getMsg_Text().substring(0, 2000));
+
                     } else {
                         createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getMsg_Text());
-                    }                   
+                    }
 
                 } /*else if (postIn.getDescription() != null) {
-                    if (postIn.getDescription().length() > 200) {
-                        createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getDescription().substring(0, 200));
+                 if (postIn.getDescription().length() > 200) {
+                 createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getDescription().substring(0, 200));
 
-                    } else {
-                        createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getDescription());
-                    }
-                } */else if (postIn.getTags() != null) {
+                 } else {
+                 createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getDescription());
+                 }
+                 } */ else if (postIn.getTags() != null) {
                     if (postIn.getTags().length() > 200) {
                         createCell(cellStyle, wb, troww, 0, CellStyle.ALIGN_LEFT, CellStyle.VERTICAL_CENTER, postIn.getTags().substring(0, 200));
 
@@ -1193,9 +1204,9 @@ public class StreamInBox extends GenericResource {
                 if (postIn.getSocialTopic() != null) {
                     createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getSocialTopic().getDisplayTitle(lang));
                 } else {
-                    createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---" );
+                    createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                 }
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang) );
+                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
 
                 String path = "";
 
@@ -1261,7 +1272,11 @@ public class StreamInBox extends GenericResource {
             OutputStream ou = response.getOutputStream();
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
+            if (size <= limite) {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
+            } else {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
+            }
             response.setContentType("application/octet-stream");
             wb.write(ou);
             ou.close();
@@ -1271,14 +1286,14 @@ public class StreamInBox extends GenericResource {
         }
     }
 
-    public static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -1293,14 +1308,14 @@ public class StreamInBox extends GenericResource {
 
     }
 
-    public static void createHead(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createHead(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -1348,13 +1363,13 @@ public class StreamInBox extends GenericResource {
         cell.setCellStyle(cellStyle);
 
     }
-    
+
     /*
      * processAction
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        User user=response.getUser();
+        User user = response.getUser();
         String action = response.getAction();
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
@@ -1369,12 +1384,11 @@ public class StreamInBox extends GenericResource {
                         SocialTopic socialTopic = (SocialTopic) semObjSocialTopic.createGenericInstance();
                         post.setSocialTopic(socialTopic);
                         //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
-                            Iterator<PostOut> itPostOuts=post.listpostOutResponseInvs();
-                            while(itPostOuts.hasNext())
-                            {
-                                PostOut postOut=itPostOuts.next();
-                                postOut.setSocialTopic(socialTopic);
-                            }
+                        Iterator<PostOut> itPostOuts = post.listpostOutResponseInvs();
+                        while (itPostOuts.hasNext()) {
+                            PostOut postOut = itPostOuts.next();
+                            postOut.setSocialTopic(socialTopic);
+                        }
                         //
                     }
                 }
@@ -1390,7 +1404,7 @@ public class StreamInBox extends GenericResource {
             try {
                 String inputTextValue = request.getParameter("fw");
 
-                if (inputTextValue != null && inputTextValue.trim().length()>0) {
+                if (inputTextValue != null && inputTextValue.trim().length() > 0) {
                     //System.out.println("Text Completo:"+inputTextValue);
                     inputTextValue = SWBSocialUtil.Strings.removePrepositions(inputTextValue);
                     //System.out.println("Text Sin Prepo:"+inputTextValue);
@@ -1458,7 +1472,7 @@ public class StreamInBox extends GenericResource {
                 response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
                 response.setMode(Mode_DELETEPOSTIN);
             }
-            
+
             //after removing the message I should go to a mode to return a javascript and 
         } else if ("removeConfirm".equals(action)) {
             String sval = request.getParameter("sval");
@@ -1491,10 +1505,10 @@ public class StreamInBox extends GenericResource {
                         j++;
                     }
                 }
-                
+
                 ArrayList aSocialNets = new ArrayList();//Social nets where the post will be published
                 String[] socialUris = socialUri.split("\\|");  //Dividir valores
-                if( j > 0 && wsite != null){
+                if (j > 0 && wsite != null) {
                     for (int i = 0; i < socialUris.length; i++) {
                         String tmp_socialUri = socialUris[i];
                         SemanticObject semObject = SemanticObject.createSemanticObject(tmp_socialUri, wsite.getSemanticModel());
@@ -1505,7 +1519,7 @@ public class StreamInBox extends GenericResource {
                     }
                 }
                 ///
-                
+
                 ///old code to post to one single net
                 ///SocialNetwork socialNet = (SocialNetwork) SemanticObject.getSemanticObject(request.getParameter("socialNetUri")).createGenericInstance();
                 ///ArrayList aSocialNets = new ArrayList();
@@ -1538,106 +1552,95 @@ public class StreamInBox extends GenericResource {
                 response.setRenderParameter("postUri", postIn.getURI());
                 response.setMode(Mode_REDIRECTTOMODE);
             }
-        }else if(action.equals("AdvReClassbyTopic"))
-        {
+        } else if (action.equals("AdvReClassbyTopic")) {
             //System.out.println("StreamInBox/processAction/action-1:"+action);
-            String streamUri=request.getParameter("stream");
-            if(streamUri!=null && request.getParameter("advClassChoose")!=null)
-            {
-                SemanticObject semOnj=SemanticObject.getSemanticObject(request.getParameter("stream"));
-                Stream stream=(Stream)semOnj.getGenericInstance(); 
-                HashMap hMap=new HashMap();
-                if(request.getParameter("advClassChoose").equals("WithOut"))    //Reclasifica los PostIn que no tienen SocialTopic asignado, esto en el stream especifico
+            String streamUri = request.getParameter("stream");
+            if (streamUri != null && request.getParameter("advClassChoose") != null) {
+                SemanticObject semOnj = SemanticObject.getSemanticObject(request.getParameter("stream"));
+                Stream stream = (Stream) semOnj.getGenericInstance();
+                HashMap hMap = new HashMap();
+                if (request.getParameter("advClassChoose").equals("WithOut")) //Reclasifica los PostIn que no tienen SocialTopic asignado, esto en el stream especifico
                 {
-                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
-                    while(itPostIns.hasNext())
-                    {
-                        PostIn postIn=itPostIns.next();
-                        if(postIn.getSocialTopic()==null)
-                        {
-                            SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream,postIn, postIn.getMsg_Text(), false);
-                            if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                    Iterator<PostIn> itPostIns = stream.listPostInStreamInvs();
+                    while (itPostIns.hasNext()) {
+                        PostIn postIn = itPostIns.next();
+                        if (postIn.getSocialTopic() == null) {
+                            SocialTopic socialTopic = SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, postIn, postIn.getMsg_Text(), false);
+                            if (socialTopic != null) //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                             {
                                 //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
-                                Iterator<PostOut> itPostOuts=postIn.listpostOutResponseInvs();
-                                while(itPostOuts.hasNext())
-                                {
-                                    PostOut postOut=itPostOuts.next();
+                                Iterator<PostOut> itPostOuts = postIn.listpostOutResponseInvs();
+                                while (itPostOuts.hasNext()) {
+                                    PostOut postOut = itPostOuts.next();
                                     postOut.setSocialTopic(socialTopic);
                                 }
                                 //
-                                if(!hMap.containsKey(socialTopic.getURI()))
-                                {
+                                if (!hMap.containsKey(socialTopic.getURI())) {
                                     hMap.put(socialTopic.getURI(), 1);
-                                }else{
-                                    int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                                } else {
+                                    int number = ((Integer) hMap.get(socialTopic.getURI())).intValue();
                                     hMap.remove(socialTopic.getURI());
-                                    number+=number;
+                                    number += number;
                                     hMap.put(socialTopic.getURI(), number);
                                 }
                             }
                         }
                     }
-                }else if(request.getParameter("advClassChoose").equals("All"))  //ReClasifica todos los PostIn del stream
+                } else if (request.getParameter("advClassChoose").equals("All")) //ReClasifica todos los PostIn del stream
                 {
-                    Iterator<PostIn> itPostIns=stream.listPostInStreamInvs();
-                    while(itPostIns.hasNext())
-                    {
-                        PostIn postIn=itPostIns.next();
-                        SocialTopic socialTopic=SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, postIn, postIn.getMsg_Text(), false);
-                        if(socialTopic!=null)   //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
+                    Iterator<PostIn> itPostIns = stream.listPostInStreamInvs();
+                    while (itPostIns.hasNext()) {
+                        PostIn postIn = itPostIns.next();
+                        SocialTopic socialTopic = SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, postIn, postIn.getMsg_Text(), false);
+                        if (socialTopic != null) //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                         {
                             //Cambiamos de tema a los PostOut asociados al PostIn que acabamos de reclasificar
-                                Iterator<PostOut> itPostOuts=postIn.listpostOutResponseInvs();
-                                while(itPostOuts.hasNext())
-                                {
-                                    PostOut postOut=itPostOuts.next();
-                                    postOut.setSocialTopic(socialTopic);
-                                }
+                            Iterator<PostOut> itPostOuts = postIn.listpostOutResponseInvs();
+                            while (itPostOuts.hasNext()) {
+                                PostOut postOut = itPostOuts.next();
+                                postOut.setSocialTopic(socialTopic);
+                            }
                             //
                             //Tomamos todos los SocialTopics a los que se les asignaron PostIns para despues enviar correo a todos los 
                             //usuarios de los grupos pertenecientes a los mismos.
-                            if(!hMap.containsKey(socialTopic.getURI()))
-                            {
+                            if (!hMap.containsKey(socialTopic.getURI())) {
                                 hMap.put(socialTopic.getURI(), 1);
-                            }else{
-                                int number=((Integer)hMap.get(socialTopic.getURI())).intValue();
+                            } else {
+                                int number = ((Integer) hMap.get(socialTopic.getURI())).intValue();
                                 hMap.remove(socialTopic.getURI());
-                                number+=number;
+                                number += number;
                                 hMap.put(socialTopic.getURI(), number);
                             }
                         }
                     }
                 }
                 //Envio de email a los usuarios que tienen ahora nuevos postIn en su tema
-                if(!hMap.isEmpty())
-                {
-                    
-                    Iterator<String> itSocialTopicsPostIns=hMap.keySet().iterator();
-                    while(itSocialTopicsPostIns.hasNext())
-                    {
-                        String strKey=itSocialTopicsPostIns.next();
-                        SemanticObject semObj=SemanticObject.getSemanticObject(strKey);
-                        SocialTopic socialTopic=(SocialTopic)semObj.getGenericInstance();
-                        sendEmailtoSocialTopicUsers(socialTopic, ((Integer)hMap.get(strKey)).intValue(), stream, user);
+                if (!hMap.isEmpty()) {
+
+                    Iterator<String> itSocialTopicsPostIns = hMap.keySet().iterator();
+                    while (itSocialTopicsPostIns.hasNext()) {
+                        String strKey = itSocialTopicsPostIns.next();
+                        SemanticObject semObj = SemanticObject.getSemanticObject(strKey);
+                        SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+                        sendEmailtoSocialTopicUsers(socialTopic, ((Integer) hMap.get(strKey)).intValue(), stream, user);
                     }
                 }
-                
+
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("reloadTap", "1");
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInReclassified"));
                 response.setRenderParameter("suri", stream.getURI());
-            }else if(streamUri!=null){
+            } else if (streamUri != null) {
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
-                response.setRenderParameter("reloadTap","1");
+                response.setRenderParameter("reloadTap", "1");
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgPostInNotReclassified"));
                 response.setRenderParameter("suri", streamUri);
             }
         }
     }
-    
+
     /*
      * Method which sends an email to the SocialTopic users that comes by a parameter
      * @param socialTopic SocialTopic to review and see which are the users in the groups belongint to it
@@ -1645,184 +1648,169 @@ public class StreamInBox extends GenericResource {
      * @param stream Stream whose messages were changed (Re-Classified by topic)
      * @param userAdmin User that made the action
      */
-    private void sendEmailtoSocialTopicUsers(SocialTopic socialTopic, int postInsNumber, Stream stream, User userAdmin)
-    {
-        WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-        Iterator<User> itSocialTopicUsers=SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
-        while(itSocialTopicUsers.hasNext()) 
-        {
-            User user=itSocialTopicUsers.next();
-            if(user.getEmail()!=null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()))
-            {
-                String sBody="Hola "+user.getFullName()+",<br><br><br>";
-                sBody+="Le comunicamos que existen <b>"+postInsNumber+"</b> mensajes en la bandeja de entrada del tema:<b>\""+socialTopic.getTitle()+"\"</b>, al cual usted se encuentra subscrito.<br><br><br>";
-                sBody+="Lo anterior debido a una reclasificación de mensajes ocurrida en el Stream:<b>\""+stream.getTitle()+"\"</b>, de la marca:<b>\""+wsite.getTitle()+"\"</b><br><br><br>";
-                sBody+="Realizada por el usuario:<b>"+userAdmin.getFullName()+"</b><br><br><br>";
-                sBody+="Sin mas por el momento, le envio un cordial saludo</b><br><br><br>";
-                sBody+="Atte. <b>SWBSocial</b>";
-                try
-                {
-                     SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevos Mensajes de Entra en Tema:"+socialTopic.getTitle()+"-Reclasificación", sBody);
-                }catch(SocketException so)
-                {
+    private void sendEmailtoSocialTopicUsers(SocialTopic socialTopic, int postInsNumber, Stream stream, User userAdmin) {
+        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        Iterator<User> itSocialTopicUsers = SWBSocialUtil.SocialTopic.getUsersbySocialTopic(socialTopic).iterator();
+        while (itSocialTopicUsers.hasNext()) {
+            User user = itSocialTopicUsers.next();
+            if (user.getEmail() != null && SWBUtils.EMAIL.isValidEmailAddress(user.getEmail())) {
+                String sBody = "Hola " + user.getFullName() + ",<br><br><br>";
+                sBody += "Le comunicamos que existen <b>" + postInsNumber + "</b> mensajes en la bandeja de entrada del tema:<b>\"" + socialTopic.getTitle() + "\"</b>, al cual usted se encuentra subscrito.<br><br><br>";
+                sBody += "Lo anterior debido a una reclasificación de mensajes ocurrida en el Stream:<b>\"" + stream.getTitle() + "\"</b>, de la marca:<b>\"" + wsite.getTitle() + "\"</b><br><br><br>";
+                sBody += "Realizada por el usuario:<b>" + userAdmin.getFullName() + "</b><br><br><br>";
+                sBody += "Sin mas por el momento, le envio un cordial saludo</b><br><br><br>";
+                sBody += "Atte. <b>SWBSocial</b>";
+                try {
+                    SWBUtils.EMAIL.sendBGEmail(user.getEmail(), "Nuevos Mensajes de Entra en Tema:" + socialTopic.getTitle() + "-Reclasificación", sBody);
+                } catch (SocketException so) {
                     log.error(so);
                 }
             }
         }
     }
-    
+
     //////////////////////////////FILTROS///////////////////////////////////////////
-    
     /*
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-       //.out.println("Stream---K carajos...:"+stream.getURI()+",orderByJInBox:"+request.getParameter("orderBy")+",page:"+nPage);
+        //.out.println("Stream---K carajos...:"+stream.getURI()+",orderByJInBox:"+request.getParameter("orderBy")+",page:"+nPage);
         //System.out.println("stream k Llega a Filtros--George08/11/2013:"+nPage);
         //System.out.println("filtros/searchWord:"+searchWord);
         //Set<PostIn> setso = new TreeSet();
-        long streamPostIns=0L;
-        String sQuery=null;
+        long streamPostIns = 0L;
+        String sQuery = null;
         ArrayList<PostIn> aListFilter = new ArrayList();
         HashMap hampResult = new HashMap();
         Iterator<PostIn> itposts = null;
         if (swbSocialUser != null) {
             SocialNetworkUser socialNetUser = SocialNetworkUser.ClassMgr.getSocialNetworkUser(swbSocialUser, wsite);
-            streamPostIns=Integer.parseInt(getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream, socialNetUser));
-            if(streamPostIns>0)
-            {
-                sQuery=getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, socialNetUser);
-                aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
+            streamPostIns = Integer.parseInt(getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream, socialNetUser));
+            if (streamPostIns > 0) {
+                sQuery = getAllPostInbyNetUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, socialNetUser);
+                aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
             }
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-                //System.out.println("nPageJ:"+nPage+",searchWord:"+searchWord+",nPage:"+nPage);
-                if (nPage != 0) 
-                {
-                    if (searchWord != null && searchWord.trim().length()>0) {
-                        streamPostIns=Integer.parseInt(getPostInStreambyWord_Query(0, 0, true, stream, searchWord.trim()));
-                        if(streamPostIns>0)
-                        {
-                            sQuery=getPostInStreambyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, searchWord.trim()); 
-                            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
-                        }else{  //Buscar sobre los nombres de los usuarios
-                            streamPostIns=Integer.parseInt(getPostInStreambyUser_Query(0, 0, true, stream, searchWord.trim()));
-                            if(streamPostIns>0)
-                            {
-                                sQuery=getPostInStreambyUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, searchWord.trim()); 
-                                aListFilter=SWBSocial.executeQueryArray(sQuery, wsite); 
-                            }
-                        }
-                    }else if(request.getParameter("orderBy")!=null)
-                    {
-                        streamPostIns=Integer.parseInt(getAllPostInStream_Query(stream));
-                        if(streamPostIns>0)
-                        {
-                            if(request.getParameter("orderBy").equals("PostTypeUp"))    //Tipo de Mensaje Up
-                            {
-                                sQuery=getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            }else if(request.getParameter("orderBy").equals("PostTypeDown"))    //Tipo de Mensaje Down
-                            {
-                                sQuery=getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            }else if (request.getParameter("orderBy").equals("networkUp")) {
-                                sQuery=getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("networkDown")) {
-                                sQuery=getPostInNet_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("topicUp")) {
-                                //streamPostIns=Integer.parseInt(getPostInTopic_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInTopic_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("topicDown")) {
-                                //streamPostIns=Integer.parseInt(getPostInTopic_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInTopic_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("cretedUp")) {
-                                sQuery=getPostInCreated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("cretedDown")) {
-                                sQuery=getPostInCreated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("sentimentUp")) {
-                                sQuery=getPostInSentimentalType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("sentimentDown")) {
-                                sQuery=getPostInSentimentalType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("intensityUp")) {
-                                sQuery=getPostInIntensityType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("intensityDown")) {
-                                sQuery=getPostInIntensityType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("emoticonUp")) {
-                                //streamPostIns=Integer.parseInt(getPostInEmotType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInEmotType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("emoticonDown")) {
-                                //streamPostIns=Integer.parseInt(getPostInEmotType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInEmotType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("userUp")) {
-                                sQuery=getPostInUserName_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("userDown")) {
-                                sQuery=getPostInUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("followersUp")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("followersDown")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("repliesUp")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                                //System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
-                            } else if (request.getParameter("orderBy").equals("repliesDown")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                                //System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
-                            } else if (request.getParameter("orderBy").equals("friendsUp")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("friendsDown")) {
-                                 //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                 sQuery=getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("kloutUp")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("kloutDown")) {
-                                //streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("placeUp")) {
-                                //streamPostIns=Integer.parseInt(getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("placeDown")) {
-                                //streamPostIns=Integer.parseInt(getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
-                                sQuery=getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("prioritaryUp")) {
-                                sQuery=getPostInPriority_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            } else if (request.getParameter("orderBy").equals("prioritaryDown")) {
-                                sQuery=getPostInPriority_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            }
-                        }
-                        //Termina Armado de Query
-                        //System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
-                        if(sQuery!=null)
-                        {
-                            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
-                        }
-                    }else{  //Todos, sin filtros
-                        streamPostIns=Integer.parseInt(getAllPostInStream_Query(stream));
-                        //System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
-                        if(streamPostIns>0)
-                        {
-                            sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
-                            aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
+            //System.out.println("nPageJ:"+nPage+",searchWord:"+searchWord+",nPage:"+nPage);
+            if (nPage != 0) {
+                if (searchWord != null && searchWord.trim().length() > 0) {
+                    streamPostIns = Integer.parseInt(getPostInStreambyWord_Query(0, 0, true, stream, searchWord.trim()));
+                    if (streamPostIns > 0) {
+                        sQuery = getPostInStreambyWord_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, searchWord.trim());
+                        aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
+                    } else {  //Buscar sobre los nombres de los usuarios
+                        streamPostIns = Integer.parseInt(getPostInStreambyUser_Query(0, 0, true, stream, searchWord.trim()));
+                        if (streamPostIns > 0) {
+                            sQuery = getPostInStreambyUser_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream, searchWord.trim());
+                            aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
                         }
                     }
-                } else { //Todos, sin filtros. Opción que entra para exportación a Excel
-                    streamPostIns=Integer.parseInt(getAllPostInStream_Query(stream));
-                    if(streamPostIns>0)
-                    {
-                        sQuery=getAllPostInStream_Query(0L, streamPostIns, false, stream); 
-                        aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
+                } else if (request.getParameter("orderBy") != null) {
+                    streamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
+                    if (streamPostIns > 0) {
+                        if (request.getParameter("orderBy").equals("PostTypeUp")) //Tipo de Mensaje Up
+                        {
+                            sQuery = getPostInType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("PostTypeDown")) //Tipo de Mensaje Down
+                        {
+                            sQuery = getPostInType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("networkUp")) {
+                            sQuery = getPostInNet_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("networkDown")) {
+                            sQuery = getPostInNet_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("topicUp")) {
+                            //streamPostIns=Integer.parseInt(getPostInTopic_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInTopic_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("topicDown")) {
+                            //streamPostIns=Integer.parseInt(getPostInTopic_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInTopic_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("cretedUp")) {
+                            sQuery = getPostInCreated_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("cretedDown")) {
+                            sQuery = getPostInCreated_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("sentimentUp")) {
+                            sQuery = getPostInSentimentalType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("sentimentDown")) {
+                            sQuery = getPostInSentimentalType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("intensityUp")) {
+                            sQuery = getPostInIntensityType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("intensityDown")) {
+                            sQuery = getPostInIntensityType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("emoticonUp")) {
+                            //streamPostIns=Integer.parseInt(getPostInEmotType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInEmotType_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("emoticonDown")) {
+                            //streamPostIns=Integer.parseInt(getPostInEmotType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInEmotType_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("userUp")) {
+                            sQuery = getPostInUserName_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("userDown")) {
+                            sQuery = getPostInUserName_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("followersUp")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyFollowers_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("followersDown")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyFollowers_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("repliesUp")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                            //System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
+                        } else if (request.getParameter("orderBy").equals("repliesDown")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                            //System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
+                        } else if (request.getParameter("orderBy").equals("friendsUp")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("friendsDown")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyFriends_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("kloutUp")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyKlout_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("kloutDown")) {
+                            //streamPostIns=Integer.parseInt(getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getAllPostInbyKlout_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("placeUp")) {
+                            //streamPostIns=Integer.parseInt(getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInPlace_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("placeDown")) {
+                            //streamPostIns=Integer.parseInt(getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
+                            sQuery = getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("prioritaryUp")) {
+                            sQuery = getPostInPriority_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        } else if (request.getParameter("orderBy").equals("prioritaryDown")) {
+                            sQuery = getPostInPriority_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        }
+                    }
+                    //Termina Armado de Query
+                    //System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
+                    if (sQuery != null) {
+                        aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
+                    }
+                } else {  //Todos, sin filtros
+                    streamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
+                    //System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
+                    if (streamPostIns > 0) {
+                        sQuery = getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
+                        aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
                     }
                 }
+            } else { //Todos, sin filtros. Opción que entra para exportación a Excel
+                streamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
+                if (streamPostIns > 0) {
+                    sQuery = getAllPostInStream_Query(0L, streamPostIns, false, stream);
+                    aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
+                }
+            }
             //System.out.println("streamPostIns-Antes de:"+streamPostIns);
             /*
-            if(streamPostIns==0L)
-            {
-                streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
-            }*/
+             if(streamPostIns==0L)
+             {
+             streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
+             }*/
             //System.out.println("StreamPostIns InBoxJJ:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
@@ -1833,875 +1821,781 @@ public class StreamInBox extends GenericResource {
             //System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }/*else{
-            System.out.println("******ENTRA A HACER TOSDOSSSSS******");
-            streamPostIns=Long.parseLong(getAllPostInStream_Query(0, 0, true, stream));
-            sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
-            aListFilter=executeQueryArray(sQuery, wsite);
-            itposts = aListFilter.iterator();
-            hampResult.put("countResult", Long.valueOf(streamPostIns));
-        }*/
+         System.out.println("******ENTRA A HACER TOSDOSSSSS******");
+         streamPostIns=Long.parseLong(getAllPostInStream_Query(0, 0, true, stream));
+         sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
+         aListFilter=executeQueryArray(sQuery, wsite);
+         itposts = aListFilter.iterator();
+         hampResult.put("countResult", Long.valueOf(streamPostIns));
+         }*/
         hampResult.put("itResult", itposts);
-        
+
         return hampResult;
     }
-    
+
     //////////////SPARQL FILTERS//////////////////////
     /*
      * Metodo que obtiene todos los PostIns
      */
-    private String getAllPostInStream_Query(Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-            //query+="select count(*)\n";    
-            query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  }\n";
-           //System.out.println("query:"+query);
-            WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-            query=SWBSocial.executeQuery(query, wsite);
+    private String getAllPostInStream_Query(Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        //query+="select count(*)\n";    
+        query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  }\n";
+        //System.out.println("query:"+query);
+        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        query = SWBSocial.executeQuery(query, wsite);
         return query;
     }
-    
-    
+
     /*
      * gets all PostIn in a Stream
      */
-    private String getAllPostInStream_Query(long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";    
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreatedInSN. \n" +
-           "  }\n";
+    private String getAllPostInStream_Query(long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";    
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-           if(!isCount)
-           {
-                query+="ORDER BY desc(?postInCreatedInSN) \n";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreatedInSN. \n"
+                + "  }\n";
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               //System.out.println("Query Count:"+query);
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-           //System.out.println("query:"+query);
+        if (!isCount) {
+            query += "ORDER BY desc(?postInCreatedInSN) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            //System.out.println("Query Count:"+query);
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        //System.out.println("query:"+query);
         return query;
     }
-    
-    private String getPostInStreambyWord_Query(long offset, long limit, boolean isCount, Stream stream, String word)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";    
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:msg_Text ?msgText. \n" +       
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  FILTER regex(?msgText, \""+word+"\", \"i\"). " + 
-           "  }\n";
 
-           if(!isCount)
-           {
-                query+="ORDER BY desc(?postInCreated) \n";
+    private String getPostInStreambyWord_Query(long offset, long limit, boolean isCount, Stream stream, String word) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";    
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:msg_Text ?msgText. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  FILTER regex(?msgText, \"" + word + "\", \"i\"). "
+                + "  }\n";
+
+        if (!isCount) {
+            query += "ORDER BY desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
     }
-    
-    
-    private String getPostInStreambyUser_Query(long offset, long limit, boolean isCount, Stream stream, String word)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";    
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" +      
-           "  ?postInSocialNetUsr social:snu_name ?userName. \n" + 
-           "  FILTER regex(?userName, \""+word+"\", \"i\"). \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
 
-           if(!isCount)
-           {
-                query+="ORDER BY desc(?postInCreated) \n";
+    private String getPostInStreambyUser_Query(long offset, long limit, boolean isCount, Stream stream, String word) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";    
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n"
+                + "  ?postInSocialNetUsr social:snu_name ?userName. \n"
+                + "  FILTER regex(?userName, \"" + word + "\", \"i\"). \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            query += "ORDER BY desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
-    }      
-            
-    
+    }
+
     /*
      * gets all PostIn by specific SocialNetUser
      */
-    private String getAllPostInbyShared_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
-           "   OPTIONAL { " + "\n" +
-           "        ?postUri social:postShared ?postShared. " + "\n" +
-           "   } "  + "\n" +
-           "  }\n";
+    private String getAllPostInbyShared_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-           if(!isCount)
-           {
-            if(orderType==null || orderType.equalsIgnoreCase("up"))
-            {
-                query+="ORDER BY asc(?postShared) ";
-            }else
-            {
-                query+="ORDER BY desc(?postShared) ";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "   OPTIONAL { " + "\n"
+                + "        ?postUri social:postShared ?postShared. " + "\n"
+                + "   } " + "\n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postShared) ";
+            } else {
+                query += "ORDER BY desc(?postShared) ";
             }
-            query+="desc(?postInCreated)";
-           
-            query+="OFFSET "+offset +"\n";
-            if(limit>0)
-            {
-              query+="LIMIT "+limit;   
+            query += "desc(?postInCreated)";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
             }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
     }
-    
-    
-    
-     /*
-     * gets all PostIn by specific SocialNetUser
-     */
-    private String getAllPostInbyFollowers_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
-           "   OPTIONAL { " + "\n" +
-           "        ?postInSocialNetUsr social:followers ?userFollowers. " + "\n" +
-           "   } "  + "\n" +
-           "  }\n";
 
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?userFollowers) ";
-                }else
-                {
-                    query+="ORDER BY desc(?userFollowers) ";
-                }
-                query+="desc(?postInCreated)";
-
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;
-    }            
-    
-    
     /*
      * gets all PostIn by specific SocialNetUser
      */
-    private String getAllPostInbyFriends_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
-           "   OPTIONAL { " + "\n" +
-           "        ?postInSocialNetUsr social:friends ?userFriends. " + "\n" +
-           "   } "  + "\n" +
-           "  }\n";
+    private String getAllPostInbyFollowers_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?userFriends) ";
-                }else
-                {
-                    query+="ORDER BY desc(?userFriends) ";
-                }
-                //query+="desc(?postInCreated)";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "   OPTIONAL { " + "\n"
+                + "        ?postInSocialNetUsr social:followers ?userFollowers. " + "\n"
+                + "   } " + "\n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?userFollowers) ";
+            } else {
+                query += "ORDER BY desc(?userFollowers) ";
+            }
+            query += "desc(?postInCreated)";
 
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
-    }    
-    
-    
+    }
+
     /*
      * gets all PostIn by specific SocialNetUser
      */
-    private String getAllPostInbyKlout_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
-           "   OPTIONAL { " + "\n" +
-           "        ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n" +
-           "   } "  + "\n" +
-           "  }\n";
+    private String getAllPostInbyFriends_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?userKlout) ";
-                }else
-                {
-                    query+="ORDER BY desc(?userKlout) ";
-                }
-                //query+="desc(?postInCreated)";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "   OPTIONAL { " + "\n"
+                + "        ?postInSocialNetUsr social:friends ?userFriends. " + "\n"
+                + "   } " + "\n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?userFriends) ";
+            } else {
+                query += "ORDER BY desc(?userFriends) ";
+            }
+            //query+="desc(?postInCreated)";
 
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-                
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
-    }    
-            
-            
+    }
+
     /*
      * gets all PostIn by specific SocialNetUser
      */
-    private String getAllPostInbyNetUser_Query(long offset, long limit, boolean isCount, Stream stream, SocialNetworkUser socialNetUser)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser <"+socialNetUser.getURI()+">." +"\n" +
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" +
-           "  }\n";
+    private String getAllPostInbyKlout_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-           if(!isCount)
-           {
-                query+="ORDER BY desc(?postInCreated) \n";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser ?postInSocialNetUsr. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "   OPTIONAL { " + "\n"
+                + "        ?postInSocialNetUsr social:snu_klout ?userKlout. " + "\n"
+                + "   } " + "\n"
+                + "  }\n";
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?userKlout) ";
+            } else {
+                query += "ORDER BY desc(?userKlout) ";
+            }
+            //query+="desc(?postInCreated)";
+
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
     }
-    
-    
-    private String getPostInType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena 
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_type ?postInType. \n" +
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
 
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postInType) ";
-                }else
-                {
-                    query+="ORDER BY desc(?postInType) ";
-                }
-                query+="desc(?postInCreated) \n";
+    /*
+     * gets all PostIn by specific SocialNetUser
+     */
+    private String getAllPostInbyNetUser_Query(long offset, long limit, boolean isCount, Stream stream, SocialNetworkUser socialNetUser) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser <" + socialNetUser.getURI() + ">." + "\n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "  }\n";
+
+        if (!isCount) {
+            query += "ORDER BY desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
         return query;
     }
-    
-    
-    private String getPostInNet_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           {
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetwork ?postInSocialNet. \n" +
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +        
-           "  }\n";
 
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postInSocialNet) ";
-                }else
-                {
-                    query+="ORDER BY desc(?postInSocialNet) ";
-                }
-                query+="desc(?postInCreated) \n";
+    private String getPostInType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena 
+        } else {
+            query += "select *\n";
+        }
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-          
-    private String getPostInTopic_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "OPTIONAL { \n" +
-                "?postUri social:socialTopic ?socialTopic." + "\n" + 
-           "         }" +
-           "  }\n";
-           
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?socialTopic) ";
-                }else
-                {
-                    query+="ORDER BY desc(?socialTopic) ";
-                }
-                query+="desc(?postInCreated) \n";
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_type ?postInType. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
 
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-        
-    }
-    
-    private String getPostInCreated_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n" + 
-           "  }\n";
-
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postInCreated) \n";
-                }else
-                {
-                    query+="ORDER BY desc(?postInCreated) \n";
-                }
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           System.out.println("En getPostInCreated_Query:"+query);
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-        
-    }
-    
-    private String getPostInSentimentalType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postSentimentalType ?postSentimentalType." + "\n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
-
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postSentimentalType) ";
-                }else
-                {
-                    query+="ORDER BY desc(?postSentimentalType) ";
-                }
-                query+="desc(?postInCreated) \n";
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-    
-    private String getPostInIntensityType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postIntesityType ?postIntensityType." + "\n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
-
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postIntensityType) ";
-                }else
-                {
-                    query+="ORDER BY desc(?postIntensityType) ";
-                }
-                query+="desc(?postInCreated) \n";
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-    
-    private String getPostInEmotType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  OPTIONAL { \n" +
-           "  ?postUri social:postSentimentalEmoticonType ?feelingEmot." + "\n" + 
-           "     }" +
-           "  }\n";
-           
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?feelingEmot) ";
-                }else
-                {
-                    query+="ORDER BY desc(?feelingEmot) ";
-                }
-                query+="desc(?postInCreated) \n";
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-    
-    private String getPostInUserName_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:postInSocialNetworkUser ?postInuserNetwork." + "\n" + 
-           "  ?postInuserNetwork social:snu_name ?userName." + "\n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
-
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?userName) ";
-                }else
-                {
-                    query+="ORDER BY desc(?userName) ";
-                }
-                query+="desc(?postInCreated) \n";
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           System.out.println("query-User:"+query);
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-    
-    private String getPostInPlace_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  OPTIONAL { \n" +
-           "  ?postUri social:postPlace ?postInPlace." + "\n" + 
-           "     }" +
-           "  }\n";
-           
-           if(!isCount)
-           {
-                if(orderType==null || orderType.equalsIgnoreCase("up"))
-                {
-                    query+="ORDER BY asc(?postInPlace) ";
-                }else
-                {
-                    query+="ORDER BY desc(?postInPlace) ";
-                }
-                query+="desc(?postInCreated) \n";
-
-                query+="OFFSET "+offset +"\n";
-                if(limit>0)
-                {
-                  query+="LIMIT "+limit;   
-                }
-           }
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
-    }
-            
-    
-   private String getPostInPriority_Query(String orderType, long offset, long limit, boolean isCount, Stream stream)
-    {
-        String query=
-           "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-           "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>" +
-           "\n";
-           if(isCount)
-           { 
-               //query+="select count(*)\n";
-               query+="select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
-           }else query+="select *\n";
-           
-           query+=
-           "where {\n" +
-           "  ?postUri social:postInStream <"+ stream.getURI()+">. \n" + 
-           "  ?postUri social:isPrioritary ?isPriority." + "\n" + 
-           "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n" +
-           "  }\n";
-
-           if(!isCount)
-           {
-            if(orderType==null || orderType.equalsIgnoreCase("up"))
-            {
-                query+="ORDER BY asc(?isPriority) ";
-            }else
-            {
-                query+="ORDER BY desc(?isPriority) ";
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postInType) ";
+            } else {
+                query += "ORDER BY desc(?postInType) ";
             }
-            query+="desc(?postInCreated) \n";
+            query += "desc(?postInCreated) \n";
 
-            query+="OFFSET "+offset +"\n";
-            if(limit>0)
-            {
-              query+="LIMIT "+limit;   
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
             }
-           }
-           System.out.println("getPostInPriority_Query/query:"+query);
-           if(isCount)
-           {
-               WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-               query=SWBSocial.executeQuery(query, wsite);
-           }
-        return query;   
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
     }
-   
-   private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, Stream stream, 
-        boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRevalueMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter(); 
+
+    private String getPostInNet_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetwork ?postInSocialNet. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postInSocialNet) ";
+            } else {
+                query += "ORDER BY desc(?postInSocialNet) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInTopic_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "OPTIONAL { \n"
+                + "?postUri social:socialTopic ?socialTopic." + "\n"
+                + "         }"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?socialTopic) ";
+            } else {
+                query += "ORDER BY desc(?socialTopic) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+
+    }
+
+    private String getPostInCreated_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated." + "\n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postInCreated) \n";
+            } else {
+                query += "ORDER BY desc(?postInCreated) \n";
+            }
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        System.out.println("En getPostInCreated_Query:" + query);
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+
+    }
+
+    private String getPostInSentimentalType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postSentimentalType ?postSentimentalType." + "\n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postSentimentalType) ";
+            } else {
+                query += "ORDER BY desc(?postSentimentalType) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInIntensityType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postIntesityType ?postIntensityType." + "\n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postIntensityType) ";
+            } else {
+                query += "ORDER BY desc(?postIntensityType) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInEmotType_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  OPTIONAL { \n"
+                + "  ?postUri social:postSentimentalEmoticonType ?feelingEmot." + "\n"
+                + "     }"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?feelingEmot) ";
+            } else {
+                query += "ORDER BY desc(?feelingEmot) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInUserName_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:postInSocialNetworkUser ?postInuserNetwork." + "\n"
+                + "  ?postInuserNetwork social:snu_name ?userName." + "\n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?userName) ";
+            } else {
+                query += "ORDER BY desc(?userName) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        System.out.println("query-User:" + query);
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInPlace_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  OPTIONAL { \n"
+                + "  ?postUri social:postPlace ?postInPlace." + "\n"
+                + "     }"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?postInPlace) ";
+            } else {
+                query += "ORDER BY desc(?postInPlace) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private String getPostInPriority_Query(String orderType, long offset, long limit, boolean isCount, Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        if (isCount) {
+            //query+="select count(*)\n";
+            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        } else {
+            query += "select *\n";
+        }
+
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  ?postUri social:isPrioritary ?isPriority." + "\n"
+                + "  ?postUri social:pi_createdInSocialNet ?postInCreated. \n"
+                + "  }\n";
+
+        if (!isCount) {
+            if (orderType == null || orderType.equalsIgnoreCase("up")) {
+                query += "ORDER BY asc(?isPriority) ";
+            } else {
+                query += "ORDER BY desc(?isPriority) ";
+            }
+            query += "desc(?postInCreated) \n";
+
+            query += "OFFSET " + offset + "\n";
+            if (limit > 0) {
+                query += "LIMIT " + limit;
+            }
+        }
+        System.out.println("getPostInPriority_Query/query:" + query);
+        if (isCount) {
+            WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+            query = SWBSocial.executeQuery(query, wsite);
+        }
+        return query;
+    }
+
+    private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, Stream stream,
+            boolean userCanRemoveMsg, boolean userCanRetopicMsg, boolean userCanRevalueMsg, boolean userCanRespondMsg, boolean userCandoEveryThing) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
-       
-        int streamKloutValue=stream.getStream_KloutValue();
-            
+
+        int streamKloutValue = stream.getStream_KloutValue();
+
 
         //Show Actions
         out.println("<td class=\"accion\">");
 
         //Remove
-        SWBResourceURL urlr = paramRequest.getActionUrl();        
+        SWBResourceURL urlr = paramRequest.getActionUrl();
         urlr.setParameter("suri", stream.getURI());
         urlr.setParameter("sval", postIn.getURI());
         urlr.setAction("remove");
@@ -2709,41 +2603,37 @@ public class StreamInBox extends GenericResource {
         String text = SWBUtils.TEXT.scape4Script(postIn.getMsg_Text());
 
         text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
-  
-        if(userCanRemoveMsg || userCandoEveryThing)
-        {
+
+        if (userCanRemoveMsg || userCandoEveryThing) {
             out.println("<div id=\"inStream" + postIn.getId() + "\">");
             out.println("</div>");
-            
+
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("remove") + "\" class=\"eliminar\" onclick=\"if(confirm('" + paramRequest.getLocaleString("confirm_remove") + ": "
-            + text + "?'))" + "{ postSocialPostInHtml('" + urlr + "','inStream" + postIn.getId() + "'); } else { return false;}\"></a>");            
+                    + text + "?'))" + "{ postSocialPostInHtml('" + urlr + "','inStream" + postIn.getId() + "'); } else { return false;}\"></a>");
         }
 
-        
+
         SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode(Mode_PREVIEW).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
         out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("previewdocument") + "\" class=\"ver\" onclick=\"showDialog('" + urlPrev + "','" + paramRequest.getLocaleString("previewdocument")
                 + "'); return false;\"></a>");
-        if(postIn.getMsg_url() != null && !postIn.getMsg_url().isEmpty()){
+        if (postIn.getMsg_url() != null && !postIn.getMsg_url().isEmpty()) {
             out.println("<a class=\"verWWW\" href=\"" + postIn.getMsg_url() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\"></a>");
         }
-        if(userCanRetopicMsg || userCandoEveryThing)
-        {
+        if (userCanRetopicMsg || userCandoEveryThing) {
             //ReClasifyByTpic
             SWBResourceURL urlreClasifybyTopic = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYTOPIC).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI()).setParameter("fromStream", "/stIn");
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reclasifyByTopic") + "\" class=\"retema\" onclick=\"showDialog('" + urlreClasifybyTopic + "','"
                     + paramRequest.getLocaleString("reclasifyByTopic") + "'); return false;\"></a>");
         }
 
-        if(userCanRevalueMsg || userCandoEveryThing)
-        {
+        if (userCanRevalueMsg || userCandoEveryThing) {
             //ReClasyfyBySentiment & Intensity
             SWBResourceURL urlrev = paramRequest.getRenderUrl().setMode(Mode_RECLASSBYSENTIMENT).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
             out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("reeval") + "\" class=\"reevaluar\" onclick=\"showDialog('" + urlrev + "','" + paramRequest.getLocaleString("reeval")
                     + "'); return false;\"></a>");
         }
 
-        if(userCanRespondMsg || userCandoEveryThing)
-        {
+        if (userCanRespondMsg || userCandoEveryThing) {
             //Respond
             if (postIn.getSocialTopic() != null) {
                 SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -2751,20 +2641,20 @@ public class StreamInBox extends GenericResource {
                         + "'); return false;\"></a>");
             }
         }
-        
+
         /*if(postIn.getPostInSocialNetwork() instanceof Facebook){
-            String postId = "";
-            if(postIn.getSocialNetMsgId().contains("_")){
-                postId = postIn.getSocialNetMsgId().split("_")[1];
-            }else{
-                postId = postIn.getSocialNetMsgId();
-            }
-            out.println("<a href=\"" + "https://www.facebook.com/" + postIn.getPostInSocialNetworkUser().getSnu_id() + "/posts/" + postId + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
-        }else if(postIn.getPostInSocialNetwork() instanceof Youtube){
-            out.println("<a href=\"" + "https://www.youtube.com/watch?v=" + postIn.getSocialNetMsgId() +"&feature=youtube_gdata"  + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
-        }else if(postIn.getPostInSocialNetwork() instanceof Twitter){
-            out.println("<a href=\"" + "https://twitter.com/" + postIn.getPostInSocialNetworkUser().getSnu_name() + "/status/" + postIn.getSocialNetMsgId() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
-        }*/
+         String postId = "";
+         if(postIn.getSocialNetMsgId().contains("_")){
+         postId = postIn.getSocialNetMsgId().split("_")[1];
+         }else{
+         postId = postIn.getSocialNetMsgId();
+         }
+         out.println("<a href=\"" + "https://www.facebook.com/" + postIn.getPostInSocialNetworkUser().getSnu_id() + "/posts/" + postId + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+         }else if(postIn.getPostInSocialNetwork() instanceof Youtube){
+         out.println("<a href=\"" + "https://www.youtube.com/watch?v=" + postIn.getSocialNetMsgId() +"&feature=youtube_gdata"  + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+         }else if(postIn.getPostInSocialNetwork() instanceof Twitter){
+         out.println("<a href=\"" + "https://twitter.com/" + postIn.getPostInSocialNetworkUser().getSnu_name() + "/status/" + postIn.getSocialNetMsgId() + "\" target=\"_blank\" title=\"" + "Ver en linea" + "\">" + "www" + "</a>");
+         }*/
         //Respuestas que posee un PostIn
         if (postIn.listpostOutResponseInvs().hasNext()) {
             SWBResourceURL urlresponses = paramRequest.getRenderUrl().setMode(Mode_RESPONSES).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
@@ -2780,19 +2670,19 @@ public class StreamInBox extends GenericResource {
             if (postIn.getMsg_Text().length() > 200) {
                 String msg2Show = postIn.getMsg_Text().substring(0, 200);
                 msg2Show = SWBSocialResUtil.Util.createHttpLink(msg2Show);
-                out.println(msg2Show);                
+                out.println(msg2Show);
             } else {
                 out.println(postIn.getMsg_Text());
             }
         } /*else if (postIn.getDescription() != null) {
-            if (postIn.getDescription().length() > 200) {
-                out.println(postIn.getDescription().substring(0, 200));
-            } else {
-                out.println(postIn.getDescription());
-            }
-        } */else if (postIn.getTags() != null) {
+         if (postIn.getDescription().length() > 200) {
+         out.println(postIn.getDescription().substring(0, 200));
+         } else {
+         out.println(postIn.getDescription());
+         }
+         } */ else if (postIn.getTags() != null) {
             if (postIn.getTags().length() > 200) {
-                    out.println(postIn.getTags().substring(0, 200));
+                out.println(postIn.getTags().substring(0, 200));
             } else {
                 out.println(postIn.getTags());
             }
@@ -2812,9 +2702,9 @@ public class StreamInBox extends GenericResource {
         //SocialNetwork
         out.println("<td>");
         out.println(postIn.getPostInSocialNetwork().getDisplayTitle(lang));
-        if(postIn.getPostInSocialNetwork() instanceof Youtube){
+        if (postIn.getPostInSocialNetwork() instanceof Youtube) {
             out.println("</br><img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
-        }else{
+        } else {
             out.println("</br><img class=\"swbIcon" + postIn.getPostInSocialNetwork().getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
         }
         out.println("</td>");
@@ -2833,10 +2723,9 @@ public class StreamInBox extends GenericResource {
         out.println("<td>");
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
         SimpleDateFormat df = new SimpleDateFormat();
-        if(postIn.getPi_createdInSocialNet()!=null)
-        {
+        if (postIn.getPi_createdInSocialNet() != null) {
             out.println("<span title=\"" + df.format(postIn.getPi_createdInSocialNet()) + "\">" + SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang) + "</span>");
-        }else{
+        } else {
             out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
         }
         out.println("</td>");
@@ -2879,7 +2768,7 @@ public class StreamInBox extends GenericResource {
         //User
         out.println("<td>");
         SWBResourceURL urlshowUsrHistory = paramRequest.getRenderUrl().setMode(Mode_ShowUsrHistory).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("suri", stream.getURI());
-        out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));        
+        out.println(postIn.getPostInSocialNetworkUser() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbSocialUser", postIn.getPostInSocialNetworkUser().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postIn.getPostInSocialNetworkUser().getSnu_name() + "</a>" : paramRequest.getLocaleString("withoutUser"));
         out.println("</td>");
 
         //Followers
@@ -2896,43 +2785,44 @@ public class StreamInBox extends GenericResource {
         //Retrieving user Klout data
         //Klout
         out.println("<td align=\"center\">");
-        int userKloutScore=0;
-        SocialNetworkUser socialNetUser=postIn.getPostInSocialNetworkUser();
-        if(socialNetUser!=null)
-        {
+        int userKloutScore = 0;
+        SocialNetworkUser socialNetUser = postIn.getPostInSocialNetworkUser();
+        if (socialNetUser != null) {
             //System.out.println("checkKlout--J:"+checkKlout);
             //Looking for user klout
-            if(postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout()<streamKloutValue)
-            {
+            if (postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout() < streamKloutValue) {
                 //System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
-                HashMap userKloutDat=SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
-                userKloutScore=((Integer)userKloutDat.get("userKloutScore")).intValue();
+                HashMap userKloutDat = SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
+                userKloutScore = ((Integer) userKloutDat.get("userKloutScore")).intValue();
                 socialNetUser.setSnu_klout(userKloutScore);
-                if(streamKloutValue==0) out.println("---");
-                else if(userKloutScore<streamKloutValue) //El klout del postIn es menor al del stream, talvez cuando entro el postIn el stream tenía definido un valor de filtro de klout menor al de este momento.
+                if (streamKloutValue == 0) {
+                    out.println("---");
+                } else if (userKloutScore < streamKloutValue) //El klout del postIn es menor al del stream, talvez cuando entro el postIn el stream tenía definido un valor de filtro de klout menor al de este momento.
                 {
-                    out.println("<font color=\"#FF6600\"><div class=\"klout\">"+userKloutScore+"</div></font>");
-                }else{
-                    out.println("<div class=\"klout\">"+userKloutScore+"</div>"); 
+                    out.println("<font color=\"#FF6600\"><div class=\"klout\">" + userKloutScore + "</div></font>");
+                } else {
+                    out.println("<div class=\"klout\">" + userKloutScore + "</div>");
                 }
                 //System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
-            }else{
-                if(streamKloutValue==0) out.println("---");
-                else out.println("<div class=\"klout\">"+socialNetUser.getSnu_klout()+"</div>");
+            } else {
+                if (streamKloutValue == 0) {
+                    out.println("---");
+                } else {
+                    out.println("<div class=\"klout\">" + socialNetUser.getSnu_klout() + "</div>");
+                }
             }
-        }
-        else{
+        } else {
             out.println(paramRequest.getLocaleString("withoutUser"));
         }
 
         //Place
         out.println("<td>");
-        out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());        
+        out.println(postIn.getPostPlace() == null ? "---" : postIn.getPostPlace());
         out.println("</td>");
 
         //Priority
         out.println("<td align=\"center\">");
         out.println(postIn.isIsPrioritary() ? "SI" : "NO");
         out.println("</td>");
-   }
+    }
 }
