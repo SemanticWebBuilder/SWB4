@@ -395,24 +395,34 @@ public class ImageGallery extends GenericResource {
      * @param paramRequest the param request
      * @return the form
      */
-    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) {
-        StringBuffer ret=new StringBuffer();
+    private String getForm(javax.servlet.http.HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException {
+        StringBuilder htm=new StringBuilder();
         Resource base=getResourceBase();
-        try {
-            SWBResourceURL url = paramRequest.getRenderUrl().setMode(paramRequest.Mode_ADMIN);
+//        try {
+            SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBParamRequest.Mode_ADMIN);
             url.setAction("update");
 
-            ret.append("<script type=\"text/javascript\">");
-            ret.append("  dojo.require(\"dijit.form.NumberTextBox\");");
-            ret.append("  dojo.require(\"dijit.form.Button\");");
-            ret.append("</script>");
+            htm.append("<script type=\"text/javascript\">");
+            
+            htm.append("  dojo.require('dijit.layout.ContentPane');\n");
+            htm.append("  dojo.require('dijit.form.Form');\n");
+            htm.append("  dojo.require('dijit.form.TextBox');\n");
+            //htm.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            //htm.append("  dojo.require('dijit.form.RadioButton');\n");
+            //htm.append("  dojo.require('dijit.form.Button');\n");
+            
+            
+            
+            htm.append("  dojo.require(\"dijit.form.NumberTextBox\");");
+            htm.append("  dojo.require(\"dijit.form.Button\");");
+            htm.append("</script>");
 
-            ret.append("\n<div class=\"swbform\"> ");
-            ret.append("\n<form id=\"frmIG_"+base.getId()+"\" name=\"frmIG_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
+            htm.append("\n<div class=\"swbform\"> ");
+            htm.append("\n<form id=\"frmIG_"+base.getId()+"\" method=\"post\" enctype=\"multipart/form-data\" action=\""+ url.toString()+"\"> ");
 
 
-/*ret.append("\n<fieldset> ");
-ret.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
+/*htm.append("\n<fieldset> ");
+htm.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
 String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
 si = new StyleInner(getResourceBase());
 String script = null;
@@ -425,108 +435,99 @@ try {
 }catch(Exception e) {
     log.error("Error en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
 }
-ret.append(script);
-ret.append("\n</fieldset> ");*/
+htm.append(script);
+htm.append("\n</fieldset> ");*/
 
 
-            ret.append("\n<fieldset> ");
-            ret.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_legendData")+"</legend>");
-            ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
+            htm.append("\n<fieldset> ");
+            htm.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_legendData")+"</legend>");
+            htm.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
 
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input type=\"text\" size=\"50\" maxlength=\"50\" name=\"title\" ");
-            ret.append("\n value=\"" + base.getAttribute("title", "").trim().replaceAll("\"", "&#34;") + "\" />");
-            ret.append("\n</td> ");
-            ret.append("\n</tr>");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_title") + "</td>");
+            htm.append("\n<td>");
+            htm.append("\n<input type=\"text\" dojoType=\"dijit.form.TextBox\" size=\"100\" name=\"title\" ");
+            htm.append("\n value=\"" + base.getAttribute("title", "").trim().replaceAll("\"", "&#34;") + "\" />");
+            htm.append("\n</td> ");
+            htm.append("\n</tr>");
             
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_autoplay") + "</td>");
+            htm.append("\n<td>");
+            htm.append("\n<input type=\"checkbox\" value=\"true\" name=\"autoplay\" ");
             if ("true".equalsIgnoreCase(base.getAttribute("autoplay", "false"))) {
-                ret.append("\n checked=\"checked\"");
+                htm.append("\n checked=\"checked\"");
             }
-            ret.append("\n/>");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
+            htm.append("\n/>");
+            htm.append("\n</td>");
+            htm.append("\n</tr>");
             
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input id=\"pause\" name=\"pause\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("pause", "2500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_pause") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Miliseconds")+")</i></td>");
+            htm.append("\n<td>");
+            htm.append("\n<input id=\"pause\" name=\"pause\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("pause", "2500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
+            htm.append("\n</td>");
+            htm.append("\n</tr>");
             
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input id=\"fadetime\" name=\"fadetime\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fadetime", "500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_fadetime") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Miliseconds")+")</i></td>");
+            htm.append("\n<td>");
+            htm.append("\n<input id=\"fadetime\" name=\"fadetime\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+base.getAttribute("fadetime", "500")+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1,max:9999, pattern:'####'}\" />");
+            htm.append("\n</td>");
+            htm.append("\n</tr>");
 
             String width = base.getAttribute("width", "220");
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_width") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input id=\"width\" name=\"width\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+width+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_width") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")</i></td>");
+            htm.append("\n<td>");
+            htm.append("\n<input id=\"width\" name=\"width\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+width+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
+            htm.append("\n</td>");
+            htm.append("\n</tr>");
 
             String height = base.getAttribute("height", "150");
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_height") + "</td>");
-            ret.append("\n<td>");
-            ret.append("\n<input id=\"height\" name=\"height\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+height+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
-            ret.append("\n</td>");
-            ret.append("\n</tr>");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_height") + "&nbsp;<i>("+paramRequest.getLocaleString("lbl_Pixels")+")</i></td>");
+            htm.append("\n<td>");
+            htm.append("\n<input id=\"height\" name=\"height\" type=\"text\" dojoType=\"dijit.form.NumberTextBox\" value=\""+height+"\" invalidMessage=\""+paramRequest.getLocaleString("invmsg_ImageGallery_doAdmin")+"\" size=\"5\" maxlength=\"4\" constraints=\"{min:1, pattern:'####'}\" />");
+            htm.append("\n</td>");
+            htm.append("\n</tr>");
             
-            ret.append("\n<tr>");
-            ret.append("\n<td width=\"200\" align=\"right\">* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;(<i>bmp, jpg, jpeg, gif, png</i>)</td>");
-            ret.append("\n<td>");
-            ret.append("\n<div id=\"igcontainer_"+base.getId()+"\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\"> ");
-//            ret.append("\n<table width=\"99%\" border=\"0\" align=\"center\"> ");
-//            ret.append("\n<tr> ");
-//            ret.append("\n<td width=\"200\" align=\"right\"><span>" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</span></td> ");
-//            ret.append("\n<td align=\"right\"></td> ");
-//            ret.append("\n<td align=\"right\"> ");
-//            ret.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
-//            ret.append("\n    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
-//            ret.append("\n</tr> ");
-//            ret.append("\n</table> ");
-            ret.append("\n<div id=\"iggrid_"+base.getId()+"\" style=\"width:600px;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF\"> ");
-            ret.append("\n  <table id=\"igtbl_"+base.getId()+"\" width=\"99%\" cellspacing=\"1\" bgcolor=\"#769CCB\" align=\"center\"> ");
+            htm.append("\n<tr>");
+            htm.append("\n<td width=\"200\" align=\"right\">* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;<i>(bmp, jpg, jpeg, gif, png)</i></td>");
+            htm.append("\n<td>");
+            htm.append("\n<div id=\"igcontainer_"+base.getId()+"\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\"> ");
+            htm.append("\n<div id=\"iggrid_"+base.getId()+"\" style=\"width:600px;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF\"> ");
+            htm.append("\n  <table id=\"igtbl_"+base.getId()+"\" width=\"99%\" cellspacing=\"1\" bgcolor=\"#769CCB\" align=\"center\"> ");
 
 
-ret.append("\n  <tr bgcolor=\"#E1EAF7\"> ");
-ret.append("\n    <td align=\"center\" colspan=\"4\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</td> ");
-ret.append("\n    <td align=\"center\">");
-ret.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
-ret.append("\n    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
-ret.append("\n    </td>");
-ret.append("\n  </tr> ");
+htm.append("\n  <tr bgcolor=\"#E1EAF7\"> ");
+htm.append("\n    <td align=\"center\" colspan=\"4\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_imggrid") + "</td> ");
+htm.append("\n    <td align=\"center\">");
+htm.append("\n    <input type=\"button\" value=\"Agregar\" onclick=\"addRowToTable('igtbl_"+base.getId()+"');\" />&nbsp;  ");
+htm.append("\n    <input type=\"button\" value=\"Cancelar\" onclick=\"removeRowFromTable('igtbl_"+base.getId()+"');\"/></td> ");
+htm.append("\n    </td>");
+htm.append("\n  </tr> ");
 
 
-            ret.append("\n  <tr bgcolor=\"#769CCB\"> ");
-            ret.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th> ");
-            ret.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">Editar</th> ");
-            ret.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">Eliminar</th> ");
-            ret.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Archivo</th> ");
-            ret.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Imagen</th> ");
-            ret.append("\n  </tr> ");
-            ret.append("\n</table> ");
-            ret.append("\n</div> ");
-            ret.append("\n</div> ");
-            ret.append("\n</td>  ");
-            ret.append("\n</tr>  ");
+            htm.append("\n  <tr bgcolor=\"#769CCB\"> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">Editar</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">Eliminar</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Archivo</th> ");
+            htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">Imagen</th> ");
+            htm.append("\n  </tr> ");
+            htm.append("\n</table> ");
+            htm.append("\n</div> ");
+            htm.append("\n</div> ");
+            htm.append("\n</td>  ");
+            htm.append("\n</tr>  ");
 
-            ret.append("\n<tr><td colspan=\"2\" height=\"10\"></td></tr>");
-            ret.append("\n</table> ");
-            ret.append("\n</fieldset> ");
+            htm.append("\n<tr><td colspan=\"2\" height=\"10\"></td></tr>");
+            htm.append("\n</table> ");
+            htm.append("\n</fieldset> ");
 
-//            ret.append("\n<fieldset> ");
-//            ret.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
+//            htm.append("\n<fieldset> ");
+//            htm.append("\n<legend>"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_LaF")+"</legend>");
 //            String cssResPath = "/"+SWBUtils.TEXT.replaceAll(getClass().getName(), ".", "/")+".css";
 //            si = new StyleInner(getResourceBase());
 //            String script = null;
@@ -539,113 +540,113 @@ ret.append("\n  </tr> ");
 //            }catch(Exception e) {
 //                log.error("Error en el recurso: "+base.getId() +"-"+ base.getTitle(), e);
 //            }
-//            ret.append(script);
-//            ret.append("\n</fieldset> ");
+//            htm.append(script);
+//            htm.append("\n</fieldset> ");
 
-            ret.append("\n<fieldset> ");
-            ret.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
-            ret.append("\n <tr><td>");
-            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida())return true; else return false; \">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_submit")+"</button>&nbsp;");
-            ret.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_reset")+"</button>");
-            ret.append("\n </td></tr>");
-            ret.append("\n</table> ");
-            ret.append("\n</fieldset> ");
+            htm.append("\n<fieldset> ");
+            htm.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"0\"> ");
+            htm.append("\n <tr><td>");
+            htm.append("\n <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"submitImgGal\" value=\"Submit\" onclick=\"if(jsValida())return true; else return false; \">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_submit")+"</button>&nbsp;");
+            htm.append("\n <button dojoType=\"dijit.form.Button\" type=\"reset\">"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_reset")+"</button>");
+            htm.append("\n </td></tr>");
+            htm.append("\n</table> ");
+            htm.append("\n</fieldset> ");
 
-            ret.append("\n</form>  ");
-            ret.append("\n* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
-            ret.append("\n</div>  ");
+            htm.append("\n</form>  ");
+            htm.append("\n* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_required"));
+            htm.append("\n</div>  ");
 
-            ret.append("\n<script type=\"text/javascript\"> ");
-            ret.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
-            ret.append("\n    var tbl = document.getElementById(tblId); ");
-            ret.append("\n    var lastRow = tbl.rows.length; ");
-            ret.append("\n    var iteration = lastRow-1; // descontar el renglon de titulo ");
-            ret.append("\n    var row = tbl.insertRow(lastRow); ");
-            ret.append("\n    row.style.backgroundColor = '#F4F4DD'; ");
-            ret.append("\n ");
-            ret.append("\n    // celda folio ");
-            ret.append("\n    var folioCell = row.insertCell(0); ");
-            ret.append("\n    folioCell.style.textAlign = 'right'; ");
-            ret.append("\n    var folioTextNode = document.createTextNode(iteration); ");
-            ret.append("\n    folioCell.appendChild(folioTextNode); ");
-            ret.append("\n ");
-            ret.append("\n    // cell check edit ");
-            ret.append("\n    var editCheckCell = row.insertCell(1); ");
-            ret.append("\n    editCheckCell.style.textAlign = 'center'; ");
-            ret.append("\n    var editCheckInput = document.createElement('input'); ");
-            ret.append("\n    editCheckInput.type = 'checkbox'; ");
-            ret.append("\n    if(cellSufix) { ");
-            ret.append("\n        editCheckInput.name = 'edit_'+cellSufix; ");
-            ret.append("\n        editCheckInput.id = 'edit_'+cellSufix; ");
-            ret.append("\n    }else { ");
-            ret.append("\n        editCheckInput.name = 'edit_"+base.getId()+"_'+iteration; ");
-            ret.append("\n        editCheckInput.id = 'edit_"+base.getId()+"_'+iteration; ");
-            ret.append("\n    }");
-            ret.append("\n    editCheckInput.alt = '"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_altEdit")+"'; ");
-            ret.append("\n    editCheckInput.disabled = true; ");
-            ret.append("\n    editCheckInput.onclick = function(){ ");
-            ret.append("\n        if(editCheckInput.checked) { ");
-            ret.append("\n            row.cells[row.cells.length-1].innerHTML = '<input type=\"file\" id=\"imggallery_"+base.getId()+"_'+iteration+'\" name=\"imggallery_"+base.getId()+"_'+iteration+'\" size=\"40\" />'; ");
-            ret.append("\n            editCheckInput.checked = false; ");
-            ret.append("\n            editCheckInput.disabled = true; ");
-            ret.append("\n        } ");
-            ret.append("\n    }; ");
-            ret.append("\n    editCheckCell.appendChild(editCheckInput); ");
-            ret.append("\n ");
-            ret.append("\n    // cell check remove ");
-            ret.append("\n    var removeCheckCell = row.insertCell(2); ");
-            ret.append("\n    removeCheckCell.style.textAlign = 'center'; ");
-            ret.append("\n    var removeCheckInput = document.createElement('input'); ");
-            ret.append("\n    removeCheckInput.type = 'checkbox'; ");
-            ret.append("\n    if(cellSufix) { ");
-            ret.append("\n        removeCheckInput.name = 'remove_'+cellSufix; ");
-            ret.append("\n        removeCheckInput.id = 'remove_'+cellSufix; ");
-            ret.append("\n    }else { ");
-            ret.append("\n        removeCheckInput.name = 'remove_"+base.getId()+"_'+iteration; ");
-            ret.append("\n        removeCheckInput.id = 'remove_"+base.getId()+"_'+iteration; ");
-            ret.append("\n    }");
-            ret.append("\n    removeCheckInput.alt = '"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_altRemove")+"'; ");
-            ret.append("\n    if(filename && img) { ");
-            ret.append("\n        removeCheckInput.disabled = false; ");
-            ret.append("\n    }else { ");
-            ret.append("\n        removeCheckInput.disabled = true; ");
-            ret.append("\n    } ");
-            ret.append("\n    removeCheckInput.value = '1'; ");
-            ret.append("\n    removeCheckCell.appendChild(removeCheckInput); ");
-            ret.append("\n ");
-            ret.append("\n    // celda nombre de archivo ");
-            ret.append("\n    var filenameCell = row.insertCell(3); ");
-            ret.append("\n    if(filename) { ");
-            ret.append("\n        var fnTxt = document.createTextNode(filename); ");
-            ret.append("\n        filenameCell.appendChild(fnTxt); ");
-            ret.append("\n    } ");
-            ret.append("\n    filenameCell.style.textAlign = 'left'; ");
-            ret.append("\n ");
-            ret.append("\n    var imgCell = row.insertCell(4); ");
-            ret.append("\n    if(img) { ");
-            ret.append("\n        imgCell.style.textAlign = 'center'; ");
-            ret.append("\n        imgCell.innerHTML = img; ");
-            ret.append("\n            editCheckInput.disabled = false; ");
-            ret.append("\n    }else { ");
-            ret.append("\n        // file uploader ");
-            ret.append("\n        imgCell.style.textAlign = 'right'; ");
-            ret.append("\n        var fileInput = document.createElement('input'); ");
-            ret.append("\n        fileInput.type = 'file'; ");
-            ret.append("\n        fileInput.name = 'imggallery_"+base.getId()+"_'+iteration; ");
-            ret.append("\n        fileInput.id = 'imggallery_"+base.getId()+"_'+iteration; ");
-            ret.append("\n        fileInput.size = 40; ");
-            ret.append("\n        imgCell.appendChild(fileInput); ");
-            ret.append("\n    } ");
-            ret.append("\n} ");
+            htm.append("\n<script type=\"text/javascript\"> ");
+            htm.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
+            htm.append("\n    var tbl = document.getElementById(tblId); ");
+            htm.append("\n    var lastRow = tbl.rows.length; ");
+            htm.append("\n    var iteration = lastRow-1; // descontar el renglon de titulo ");
+            htm.append("\n    var row = tbl.insertRow(lastRow); ");
+            htm.append("\n    row.style.backgroundColor = '#F4F4DD'; ");
+            htm.append("\n ");
+            htm.append("\n    // celda folio ");
+            htm.append("\n    var folioCell = row.insertCell(0); ");
+            htm.append("\n    folioCell.style.textAlign = 'right'; ");
+            htm.append("\n    var folioTextNode = document.createTextNode(iteration); ");
+            htm.append("\n    folioCell.appendChild(folioTextNode); ");
+            htm.append("\n ");
+            htm.append("\n    // cell check edit ");
+            htm.append("\n    var editCheckCell = row.insertCell(1); ");
+            htm.append("\n    editCheckCell.style.textAlign = 'center'; ");
+            htm.append("\n    var editCheckInput = document.createElement('input'); ");
+            htm.append("\n    editCheckInput.type = 'checkbox'; ");
+            htm.append("\n    if(cellSufix) { ");
+            htm.append("\n        editCheckInput.name = 'edit_'+cellSufix; ");
+            htm.append("\n        editCheckInput.id = 'edit_'+cellSufix; ");
+            htm.append("\n    }else { ");
+            htm.append("\n        editCheckInput.name = 'edit_"+base.getId()+"_'+iteration; ");
+            htm.append("\n        editCheckInput.id = 'edit_"+base.getId()+"_'+iteration; ");
+            htm.append("\n    }");
+            htm.append("\n    editCheckInput.alt = '"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_altEdit")+"'; ");
+            htm.append("\n    editCheckInput.disabled = true; ");
+            htm.append("\n    editCheckInput.onclick = function(){ ");
+            htm.append("\n        if(editCheckInput.checked) { ");
+            htm.append("\n            row.cells[row.cells.length-1].innerHTML = '<input type=\"file\" id=\"imggallery_"+base.getId()+"_'+iteration+'\" name=\"imggallery_"+base.getId()+"_'+iteration+'\" size=\"40\" />'; ");
+            htm.append("\n            editCheckInput.checked = false; ");
+            htm.append("\n            editCheckInput.disabled = true; ");
+            htm.append("\n        } ");
+            htm.append("\n    }; ");
+            htm.append("\n    editCheckCell.appendChild(editCheckInput); ");
+            htm.append("\n ");
+            htm.append("\n    // cell check remove ");
+            htm.append("\n    var removeCheckCell = row.insertCell(2); ");
+            htm.append("\n    removeCheckCell.style.textAlign = 'center'; ");
+            htm.append("\n    var removeCheckInput = document.createElement('input'); ");
+            htm.append("\n    removeCheckInput.type = 'checkbox'; ");
+            htm.append("\n    if(cellSufix) { ");
+            htm.append("\n        removeCheckInput.name = 'remove_'+cellSufix; ");
+            htm.append("\n        removeCheckInput.id = 'remove_'+cellSufix; ");
+            htm.append("\n    }else { ");
+            htm.append("\n        removeCheckInput.name = 'remove_"+base.getId()+"_'+iteration; ");
+            htm.append("\n        removeCheckInput.id = 'remove_"+base.getId()+"_'+iteration; ");
+            htm.append("\n    }");
+            htm.append("\n    removeCheckInput.alt = '"+paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_altRemove")+"'; ");
+            htm.append("\n    if(filename && img) { ");
+            htm.append("\n        removeCheckInput.disabled = false; ");
+            htm.append("\n    }else { ");
+            htm.append("\n        removeCheckInput.disabled = true; ");
+            htm.append("\n    } ");
+            htm.append("\n    removeCheckInput.value = '1'; ");
+            htm.append("\n    removeCheckCell.appendChild(removeCheckInput); ");
+            htm.append("\n ");
+            htm.append("\n    // celda nombre de archivo ");
+            htm.append("\n    var filenameCell = row.insertCell(3); ");
+            htm.append("\n    if(filename) { ");
+            htm.append("\n        var fnTxt = document.createTextNode(filename); ");
+            htm.append("\n        filenameCell.appendChild(fnTxt); ");
+            htm.append("\n    } ");
+            htm.append("\n    filenameCell.style.textAlign = 'left'; ");
+            htm.append("\n ");
+            htm.append("\n    var imgCell = row.insertCell(4); ");
+            htm.append("\n    if(img) { ");
+            htm.append("\n        imgCell.style.textAlign = 'center'; ");
+            htm.append("\n        imgCell.innerHTML = img; ");
+            htm.append("\n            editCheckInput.disabled = false; ");
+            htm.append("\n    }else { ");
+            htm.append("\n        // file uploader ");
+            htm.append("\n        imgCell.style.textAlign = 'right'; ");
+            htm.append("\n        var fileInput = document.createElement('input'); ");
+            htm.append("\n        fileInput.type = 'file'; ");
+            htm.append("\n        fileInput.name = 'imggallery_"+base.getId()+"_'+iteration; ");
+            htm.append("\n        fileInput.id = 'imggallery_"+base.getId()+"_'+iteration; ");
+            htm.append("\n        fileInput.size = 40; ");
+            htm.append("\n        imgCell.appendChild(fileInput); ");
+            htm.append("\n    } ");
+            htm.append("\n} ");
 
-            ret.append("\n ");
-            ret.append("\nfunction removeRowFromTable(tblId) { ");
-            ret.append("    var tbl = document.getElementById(tblId); ");
-            ret.append("    var lastRow = tbl.rows.length; ");
-            ret.append("    if(lastRow >= 2) { ");
-            ret.append("        tbl.deleteRow(lastRow - 1); ");
-            ret.append("    } ");
-            ret.append("}\n");
+            htm.append("\n ");
+            htm.append("\nfunction removeRowFromTable(tblId) { ");
+            htm.append("    var tbl = document.getElementById(tblId); ");
+            htm.append("    var lastRow = tbl.rows.length; ");
+            htm.append("    if(lastRow >= 2) { ");
+            htm.append("        tbl.deleteRow(lastRow - 1); ");
+            htm.append("    } ");
+            htm.append("}\n");
 
 
             Iterator<String> it = base.getAttributeNames();
@@ -655,15 +656,15 @@ ret.append("\n  </tr> ");
                 if(attval!=null && attname.startsWith("imggallery_")) {
                     //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
                     String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" alt=\""+attname+"\" border=\"0\" />";
-                    ret.append("\naddRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(attname)+"', '"+img+"', '"+attname.substring(11)+"'); ");
+                    htm.append("\naddRowToTable('igtbl_"+base.getId()+"', '"+base.getAttribute(attname)+"', '"+img+"', '"+attname.substring(11)+"'); ");
                 }
             }
-            ret.append("\n</script>");
-            ret.append(getScript());
-        }catch(Exception e) {
-            log.error(e);
-        }
-        return ret.toString();
+            htm.append("\n</script>");
+            htm.append(getScript());
+//        }catch(Exception e) {
+//            log.error(e);
+//        }
+        return htm.toString();
     }
 
     /**
@@ -672,22 +673,22 @@ ret.append("\n  </tr> ");
      * @return the script
      */
     private String getScript() {
-        StringBuffer ret = new StringBuffer();
+        StringBuffer htm = new StringBuffer();
         try {
-            ret.append("\n<script type=\"text/javascript\">");
-            ret.append("function jsValida() {");
-            ret.append("    if(!isInt(dojo.byId('pause'))) return false;");
-            ret.append("    if(!isInt(dojo.byId('fadetime'))) return false;");
-            ret.append("    if(!isInt(dojo.byId('width'))) return false;");
-            ret.append("    if(!isInt(dojo.byId('height'))) return false;");
-            ret.append("    return true;");
-            ret.append("}");
-            ret.append(admResUtils.loadIsNumber(10));
-            ret.append("</script>\n");
+            htm.append("\n<script type=\"text/javascript\">");
+            htm.append("function jsValida() {");
+            htm.append("    if(!isInt(dojo.byId('pause'))) return false;");
+            htm.append("    if(!isInt(dojo.byId('fadetime'))) return false;");
+            htm.append("    if(!isInt(dojo.byId('width'))) return false;");
+            htm.append("    if(!isInt(dojo.byId('height'))) return false;");
+            htm.append("    return true;");
+            htm.append("}");
+            htm.append(admResUtils.loadIsNumber(10));
+            htm.append("</script>\n");
         }catch(Exception e) {
             log.error(e);
         }
-        return ret.toString();
+        return htm.toString();
     }
 
     /* (non-Javadoc)
