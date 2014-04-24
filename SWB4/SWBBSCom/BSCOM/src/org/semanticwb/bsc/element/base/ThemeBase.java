@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas. 
    */
-public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Sortable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Causal,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
+public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Causal,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Hiddenable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Sortable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableClass
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasObjective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasObjective");
@@ -27,26 +27,26 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator of org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemes(org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemes(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme>(it, true);
         }
        /**
        * Returns a list of org.semanticwb.bsc.element.Theme for all models
        * @return Iterator of org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemes()
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemes()
         {
             java.util.Iterator it=sclass.listInstances();
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme>(it, true);
         }
 
-        public static org.semanticwb.bsc.element.Theme createTheme(org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Theme createTheme(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.bsc.element.Theme.ClassMgr.createTheme(String.valueOf(id), model);
+            return org.semanticwb.bsc.Theme.ClassMgr.createTheme(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.bsc.element.Theme
@@ -54,9 +54,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @param model Model of the org.semanticwb.bsc.element.Theme
        * @return A org.semanticwb.bsc.element.Theme
        */
-        public static org.semanticwb.bsc.element.Theme getTheme(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Theme getTheme(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.element.Theme)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.Theme)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Create a org.semanticwb.bsc.element.Theme
@@ -64,9 +64,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @param model Model of the org.semanticwb.bsc.element.Theme
        * @return A org.semanticwb.bsc.element.Theme
        */
-        public static org.semanticwb.bsc.element.Theme createTheme(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Theme createTheme(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.element.Theme)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.Theme)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Remove a org.semanticwb.bsc.element.Theme
@@ -95,9 +95,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasObjective, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasObjective, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -106,9 +106,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByObjective(org.semanticwb.bsc.element.Objective value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByObjective(org.semanticwb.bsc.element.Objective value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasObjective,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasObjective,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -118,9 +118,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -129,9 +129,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -141,9 +141,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCausalTheme(org.semanticwb.bsc.element.Theme value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCausalTheme(org.semanticwb.bsc.Theme value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalTheme, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalTheme, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -152,9 +152,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCausalTheme(org.semanticwb.bsc.element.Theme value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCausalTheme(org.semanticwb.bsc.Theme value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalTheme,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalTheme,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -164,9 +164,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -175,9 +175,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByUserGroup(org.semanticwb.model.UserGroup value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByUserGroup(org.semanticwb.model.UserGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -187,9 +187,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCausalObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCausalObjective(org.semanticwb.bsc.element.Objective value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalObjective, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalObjective, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -198,32 +198,32 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCausalObjective(org.semanticwb.bsc.element.Objective value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCausalObjective(org.semanticwb.bsc.element.Objective value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalObjective,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalObjective,value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Theme with a determined Perspective
-       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.Perspective
        * @param model Model of the org.semanticwb.bsc.element.Theme
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByPerspective(org.semanticwb.bsc.element.Perspective value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByPerspective(org.semanticwb.bsc.Perspective value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Theme with a determined Perspective
-       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.Perspective
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByPerspective(org.semanticwb.bsc.element.Perspective value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByPerspective(org.semanticwb.bsc.Perspective value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -233,9 +233,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -244,9 +244,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -256,9 +256,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -267,9 +267,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByRole(org.semanticwb.model.Role value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByRole(org.semanticwb.model.Role value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -279,9 +279,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -290,9 +290,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
        * @return Iterator with all the org.semanticwb.bsc.element.Theme
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Theme> listThemeByRuleRef(org.semanticwb.model.RuleRef value)
+        public static java.util.Iterator<org.semanticwb.bsc.Theme> listThemeByRuleRef(org.semanticwb.model.RuleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -380,9 +380,9 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Theme
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> listCausalThemes()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> listCausalThemes()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme>(getSemanticObject().listObjectProperties(bsc_hasCausalTheme));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme>(getSemanticObject().listObjectProperties(bsc_hasCausalTheme));
     }
 
    /**
@@ -390,7 +390,7 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * @param value org.semanticwb.bsc.element.Theme to verify
    * @return true if the org.semanticwb.bsc.element.Theme exists, false otherwise
    */
-    public boolean hasCausalTheme(org.semanticwb.bsc.element.Theme value)
+    public boolean hasCausalTheme(org.semanticwb.bsc.Theme value)
     {
         boolean ret=false;
         if(value!=null)
@@ -404,7 +404,7 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * @param value org.semanticwb.bsc.element.Theme to add
    */
 
-    public void addCausalTheme(org.semanticwb.bsc.element.Theme value)
+    public void addCausalTheme(org.semanticwb.bsc.Theme value)
     {
         getSemanticObject().addObjectProperty(bsc_hasCausalTheme, value.getSemanticObject());
     }
@@ -421,7 +421,7 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * @param value org.semanticwb.bsc.element.Theme to remove
    */
 
-    public void removeCausalTheme(org.semanticwb.bsc.element.Theme value)
+    public void removeCausalTheme(org.semanticwb.bsc.Theme value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasCausalTheme,value.getSemanticObject());
     }
@@ -430,13 +430,13 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * Gets the CausalTheme
    * @return a org.semanticwb.bsc.element.Theme
    */
-    public org.semanticwb.bsc.element.Theme getCausalTheme()
+    public org.semanticwb.bsc.Theme getCausalTheme()
     {
-         org.semanticwb.bsc.element.Theme ret=null;
+         org.semanticwb.bsc.Theme ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasCausalTheme);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.Theme)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Theme)obj.createGenericInstance();
          }
          return ret;
     }
@@ -528,7 +528,7 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
    * @param value Perspective to set
    */
 
-    public void setPerspective(org.semanticwb.bsc.element.Perspective value)
+    public void setPerspective(org.semanticwb.bsc.Perspective value)
     {
         if(value!=null)
         {
@@ -549,15 +549,15 @@ public abstract class ThemeBase extends org.semanticwb.bsc.element.BSCElement im
 
    /**
    * Gets the Perspective
-   * @return a org.semanticwb.bsc.element.Perspective
+   * @return a org.semanticwb.bsc.Perspective
    */
-    public org.semanticwb.bsc.element.Perspective getPerspective()
+    public org.semanticwb.bsc.Perspective getPerspective()
     {
-         org.semanticwb.bsc.element.Perspective ret=null;
+         org.semanticwb.bsc.Perspective ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_perspectiveInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Perspective)obj.createGenericInstance();
          }
          return ret;
     }
