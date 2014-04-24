@@ -1166,7 +1166,7 @@ public class StreamInBox extends GenericResource {
             int i = 3;
 
 
-            while (setso != null && setso.hasNext()) {
+            while (setso1 != null && setso1.hasNext()) {
                 PostIn postIn = (PostIn) setso.next();
 
                 Row troww = sheet.createRow((short) i);
