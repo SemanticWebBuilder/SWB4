@@ -38,9 +38,11 @@ public class MultiSelect extends org.semanticwb.bsc.formelement.base.MultiSelect
         if (mode == null) {
             mode = "view";
         }
+        String pdf = request.getAttribute("pdf") == null ? "" : 
+                request.getAttribute("pdf").toString();
         if (mode.equals("edit") || mode.equals("create")) {
             toReturn = super.renderElement(request, obj, prop, propName, type, mode, lang);
-        } else if (mode.equals("view")) {
+        } else if (mode.equals("view") || mode.equals("inlineEdit")) {
             boolean showLink = false;
             StringBuilder viewString = new StringBuilder(128);
             SemanticClass rangeClass = prop.getRangeClass();
@@ -65,7 +67,7 @@ public class MultiSelect extends org.semanticwb.bsc.formelement.base.MultiSelect
                         }
                     }
                     viewString.append("  <li>");
-                    if (showLink) {
+                    if (showLink && pdf.equals("")) {
                         viewString.append("<a href=\"");
                         viewString.append(rangeClass.getName());
                         viewString.append("?suri=");
@@ -73,7 +75,7 @@ public class MultiSelect extends org.semanticwb.bsc.formelement.base.MultiSelect
                         viewString.append("\" >");
                     }
                     viewString.append(semanticObject.getDisplayName(lang));
-                    if (showLink) {
+                    if (showLink && pdf.equals("")) {
                         viewString.append("</a>");
                     }
                     viewString.append("</li>");
