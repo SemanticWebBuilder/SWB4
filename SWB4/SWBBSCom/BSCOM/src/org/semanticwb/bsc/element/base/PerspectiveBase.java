@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Sortable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
+public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Help,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable
 {
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.
@@ -31,26 +31,26 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator of org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectives(org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectives(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective>(it, true);
         }
        /**
        * Returns a list of org.semanticwb.bsc.element.Perspective for all models
        * @return Iterator of org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectives()
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectives()
         {
             java.util.Iterator it=sclass.listInstances();
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective>(it, true);
         }
 
-        public static org.semanticwb.bsc.element.Perspective createPerspective(org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Perspective createPerspective(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.bsc.element.Perspective.ClassMgr.createPerspective(String.valueOf(id), model);
+            return org.semanticwb.bsc.Perspective.ClassMgr.createPerspective(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.bsc.element.Perspective
@@ -58,9 +58,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @param model Model of the org.semanticwb.bsc.element.Perspective
        * @return A org.semanticwb.bsc.element.Perspective
        */
-        public static org.semanticwb.bsc.element.Perspective getPerspective(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Perspective getPerspective(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.element.Perspective)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.Perspective)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Create a org.semanticwb.bsc.element.Perspective
@@ -68,9 +68,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @param model Model of the org.semanticwb.bsc.element.Perspective
        * @return A org.semanticwb.bsc.element.Perspective
        */
-        public static org.semanticwb.bsc.element.Perspective createPerspective(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.Perspective createPerspective(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.element.Perspective)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.Perspective)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Remove a org.semanticwb.bsc.element.Perspective
@@ -99,9 +99,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -110,9 +110,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -122,9 +122,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByDifferentiatorGroup(org.semanticwb.bsc.accessory.DifferentiatorGroup value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByDifferentiatorGroup(org.semanticwb.bsc.accessory.DifferentiatorGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDifferentiatorGroup, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDifferentiatorGroup, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -133,9 +133,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByDifferentiatorGroup(org.semanticwb.bsc.accessory.DifferentiatorGroup value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByDifferentiatorGroup(org.semanticwb.bsc.accessory.DifferentiatorGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDifferentiatorGroup,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDifferentiatorGroup,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -145,9 +145,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -156,9 +156,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByUserGroup(org.semanticwb.model.UserGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -168,9 +168,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.element.Perspective value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.Perspective value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -179,9 +179,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByCausalPerspective(org.semanticwb.bsc.Perspective value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasCausalPerspective,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -191,9 +191,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -202,9 +202,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -214,9 +214,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -225,9 +225,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByRole(org.semanticwb.model.Role value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -237,9 +237,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -248,9 +248,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByRuleRef(org.semanticwb.model.RuleRef value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRuleRef,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -260,9 +260,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByTheme(org.semanticwb.bsc.element.Theme value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByTheme(org.semanticwb.bsc.element.Theme value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasTheme, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasTheme, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -271,9 +271,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
        * @return Iterator with all the org.semanticwb.bsc.element.Perspective
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectiveByTheme(org.semanticwb.bsc.element.Theme value)
+        public static java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectiveByTheme(org.semanticwb.bsc.element.Theme value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasTheme,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasTheme,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -399,9 +399,9 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
    * @return A GenericIterator with all the org.semanticwb.bsc.element.Perspective
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective> listCausalPerspectives()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective> listCausalPerspectives()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Perspective>(getSemanticObject().listObjectProperties(bsc_hasCausalPerspective));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Perspective>(getSemanticObject().listObjectProperties(bsc_hasCausalPerspective));
     }
 
    /**
@@ -409,7 +409,7 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
    * @param value org.semanticwb.bsc.element.Perspective to verify
    * @return true if the org.semanticwb.bsc.element.Perspective exists, false otherwise
    */
-    public boolean hasCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    public boolean hasCausalPerspective(org.semanticwb.bsc.Perspective value)
     {
         boolean ret=false;
         if(value!=null)
@@ -423,7 +423,7 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
    * @param value org.semanticwb.bsc.element.Perspective to add
    */
 
-    public void addCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    public void addCausalPerspective(org.semanticwb.bsc.Perspective value)
     {
         getSemanticObject().addObjectProperty(bsc_hasCausalPerspective, value.getSemanticObject());
     }
@@ -440,7 +440,7 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
    * @param value org.semanticwb.bsc.element.Perspective to remove
    */
 
-    public void removeCausalPerspective(org.semanticwb.bsc.element.Perspective value)
+    public void removeCausalPerspective(org.semanticwb.bsc.Perspective value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasCausalPerspective,value.getSemanticObject());
     }
@@ -449,13 +449,13 @@ public abstract class PerspectiveBase extends org.semanticwb.bsc.element.BSCElem
    * Gets the CausalPerspective
    * @return a org.semanticwb.bsc.element.Perspective
    */
-    public org.semanticwb.bsc.element.Perspective getCausalPerspective()
+    public org.semanticwb.bsc.Perspective getCausalPerspective()
     {
-         org.semanticwb.bsc.element.Perspective ret=null;
+         org.semanticwb.bsc.Perspective ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasCausalPerspective);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Perspective)obj.createGenericInstance();
          }
          return ret;
     }
