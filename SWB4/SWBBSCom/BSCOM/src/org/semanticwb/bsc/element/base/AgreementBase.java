@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableNode
 {
    /**
    * Define el número de un acuerdo, tiene las siguientes características: Título del scorecard+ "-S" + número de sesión a 2 dígitos+ "-" + consecutivo del acuerdo por sesión a 2 dígitos + año actual a 2 dígitos
@@ -350,6 +350,26 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
     public void setCommitmentDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_commitmentDate, value);
+    }
+
+/**
+* Gets the Prefix property
+* @return String with the Prefix
+*/
+    public String getPrefix()
+    {
+        //Override this method in Agreement object
+        return getSemanticObject().getProperty(bsc_prefix,false);
+    }
+
+/**
+* Sets the Prefix property
+* @param value long with the Prefix
+*/
+    public void setPrefix(String value)
+    {
+        //Override this method in Agreement object
+        getSemanticObject().setProperty(bsc_prefix, value,false);
     }
 
 /**
