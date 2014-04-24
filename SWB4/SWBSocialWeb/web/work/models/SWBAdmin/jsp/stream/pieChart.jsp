@@ -213,7 +213,7 @@
     <div id="pieSentimientos">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("sentimentProm", lang)%>: <%=title%></h1>
-            <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a href="<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("type", "").setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div>    
         <div id="pieChart">
         </div>
@@ -305,9 +305,11 @@
                 .enter().append("g")
                 .attr("class", "arc")
                 .on("click", function(d) {
+                    if(confirm('¿Desea exportar a excel?')){
                     var filter =d.data.label; 
                     var url = "<%=urlRender.setMode("exportExcel").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter;
                     document.location.href = url;
+                    }
                 })
                 .on("mouseover", function(d, i) {
                     d3.select(gl[0][i]).style("visibility","visible"); 
@@ -424,7 +426,7 @@
     <div id="pieRedes">
         <div class="grafTit">
             <h1>Redes Sociales</h1>
-            <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
         </div>
         <div id="pieNetworkSocial">
         </div>    
@@ -451,6 +453,7 @@
                 <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafFacebook" value="<%=sN.getTitle()%>" >
                 <label title="FaceBook" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                 <div id="<%=sN.getTitle()%>"></div>
+            </div>
 
                 <%
 
@@ -460,7 +463,7 @@
                     <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafTwitter" value="<%=sN.getTitle()%>" > 
                     <label title="Twitter" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                     <div id="<%=sN.getTitle()%>"></div>
-
+                </div>
                     <%
                     } else if (sN instanceof Youtube) {
                     %>
@@ -468,15 +471,15 @@
                         <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafYoutube" value="<%=sN.getTitle()%>" > 
                         <label title="YouTube" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                         <div id="<%=sN.getTitle()%>"></div>
-
+                            </div>
                         <%
                             }
                         %>
-                    </div>
+                
                     <%
                         }
                     %>
-                </div>
+           
                 <div class="clear"></div>
             </div>
 
@@ -610,9 +613,13 @@
                     .enter().append("g")
                     .attr("class", "arc")
                     .on("click", function(d) {
+                                            if(confirm('¿Desea exportar a excel?')){
+
                         var filter = d.data.label; 
+                        alert(filter);
                         var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
+                        }
                     })
                     .on("mouseover", function(d, i) {
                         d3.select(gl[0][i]).style("visibility","visible"); 
@@ -663,10 +670,10 @@
                             xArrayRedes.push(data[i].label3);                                            
 
                         }  
-                        
-                        if(xArray.length!=1){                      
-
+                     //   if(xArray.length!=1){                      
+                            console.log("entro");
                             for (var x = data.length-1; x < data.length; x++) {  
+                                console.log("data");
                                 var to;
                                 var to;
                                 to = data[x].valor;
@@ -714,7 +721,7 @@
                         
                             }
                         
-                        }      
+                        //}      
                     }
                                
                     cont++;
