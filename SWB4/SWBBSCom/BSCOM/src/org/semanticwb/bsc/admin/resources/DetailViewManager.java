@@ -34,7 +34,6 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.formelement.DateElement;
 import org.semanticwb.bsc.formelement.TextAreaElement;
-import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.utils.DetailView;
@@ -43,14 +42,12 @@ import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -1934,6 +1931,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
                         }
+                        request.setAttribute("pdf", "true");
                         ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
                                 SWBFormMgr.TYPE_XHTML,
                                 SWBFormMgr.MODE_VIEW,
