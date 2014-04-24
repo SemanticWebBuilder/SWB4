@@ -19,7 +19,7 @@ public class BSCOMCodeGenerator {
         String base=SWBUtils.getApplicationPath();
         SWBPlatform.createInstance();
         //SWBPlatform.getSemanticMgr().initializeDB();
-        SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/SWB4/swb/build/web/WEB-INF/owl/swb.owl");
+        SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/SWB4/swb/web/WEB-INF/owl/swb.owl");
         SWBPlatform.getSemanticMgr().addBaseOntology("C:/Users/carlos.ramos/desarrollo/SWB4/SWBBSCom/BSCOM/src/bscom.owl");
         SWBPlatform.getSemanticMgr().loadBaseVocabulary();
         //SWBPlatform.getSemanticMgr().loadDBModels();
