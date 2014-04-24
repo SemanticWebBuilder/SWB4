@@ -58,6 +58,9 @@ import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.social.*;
 import java.util.Iterator;
+import java.util.List;
+import org.apache.commons.collections4.IteratorUtils;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.semanticwb.SWBUtils;
@@ -428,7 +431,21 @@ public class PieCharts extends GenericResource {
             String title = titleR;
 
 
-            XSSFWorkbook wb = new XSSFWorkbook();
+            List list = IteratorUtils.toList(setso);
+            Iterator<PostIn> setso1 = list.iterator();
+            long size = SWBUtils.Collections.sizeOf(list.iterator());
+            long limite = 65535;
+
+
+
+            Workbook wb = null;
+            if (size <= limite) {
+
+                wb = new HSSFWorkbook();
+            } else if (size > limite) {
+
+                wb = new XSSFWorkbook();
+            }
 
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
@@ -472,10 +489,10 @@ public class PieCharts extends GenericResource {
             Iterator listIterator = null;
 
 
-            while (setso.hasNext()) {
+            while (setso1.hasNext()) {
                 //Map.Entry pairs = (Map.Entry) setso.next();
                 // System.out.println("pairs" + pairs);
-                PostIn postIn = (PostIn) setso.next();
+                PostIn postIn = (PostIn) setso1.next();
 
                 //   ArrayList lista = (ArrayList) pairs.getValue();
                 // System.out.println("lista size" + lista.size());
@@ -597,8 +614,11 @@ public class PieCharts extends GenericResource {
             OutputStream ou = response.getOutputStream();
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
-            response.setContentType("application/octet-stream");
+   if (size <= limite) {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
+            } else {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
+            }            response.setContentType("application/octet-stream");
             wb.write(ou);
             ou.close();
 
@@ -607,14 +627,14 @@ public class PieCharts extends GenericResource {
         }
     }
 
-    public static void createTituloCell(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        XSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -629,14 +649,14 @@ public class PieCharts extends GenericResource {
 
     }
 
-    public static void createHead(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createHead(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        XSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
