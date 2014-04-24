@@ -12,11 +12,13 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -25,9 +27,11 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -2151,7 +2155,21 @@ public class StreamInBoxNoTopic extends GenericResource {
             String title = stream.getTitle();
 
 
-            HSSFWorkbook wb = new HSSFWorkbook();
+            List list = IteratorUtils.toList(setso);
+             Iterator<PostIn> setso1 = list.iterator();
+           long size = SWBUtils.Collections.sizeOf(list.iterator());
+           long limite = 65535;
+           
+
+
+            Workbook wb = null ;
+            if(size <= limite){
+
+            wb = new HSSFWorkbook();
+            }else if(size > limite){
+
+            wb =  new XSSFWorkbook();
+            }
 
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
@@ -2194,10 +2212,10 @@ public class StreamInBoxNoTopic extends GenericResource {
             int i = 3;
 
 
-            while (setso!= null && setso.hasNext()) {
-                PostIn postIn = (PostIn) setso.next();
+            while (setso1.hasNext()) {
+                PostIn postIn = (PostIn) setso1.next();
 
-                Row troww = sheet.createRow((short) i);
+                Row troww = sheet.createRow(i);
 
                 if (postIn.getMsg_Text() != null) {
                      if (postIn.getMsg_Text().length() > 2000) {
@@ -2300,8 +2318,12 @@ public class StreamInBoxNoTopic extends GenericResource {
             OutputStream ou = response.getOutputStream();
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
+             if(size <= limite){
             response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
-            response.setContentType("application/octet-stream");
+            }else{
+            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
+            }        
+             response.setContentType("application/octet-stream");
             wb.write(ou);
             ou.close();
 
@@ -2310,14 +2332,13 @@ public class StreamInBoxNoTopic extends GenericResource {
         }
     }
 
-    public static void createTituloCell(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
-
+    public static void createTituloCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -2332,14 +2353,13 @@ public class StreamInBoxNoTopic extends GenericResource {
 
     }
 
-    public static void createHead(HSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
-
+    public static void createHead(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        HSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -2367,7 +2387,6 @@ public class StreamInBoxNoTopic extends GenericResource {
 
     public static void createCell(CellStyle cellStyle, Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
-
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
 
@@ -2385,7 +2404,6 @@ public class StreamInBoxNoTopic extends GenericResource {
 
 
         cell.setCellStyle(cellStyle);
-
     }
     
     private void printPostIn(PostIn postIn, SWBParamRequest paramRequest, HttpServletResponse response, Stream stream, 
