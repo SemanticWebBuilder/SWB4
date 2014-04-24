@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.collections4.IteratorUtils;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -33,6 +35,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -266,11 +269,11 @@ public class PieChart extends GenericResource {
             SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
             itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         }
-
+        
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
             if (postIn != null && postIn.getPostInSocialNetwork() != null) {
-                if (filterGeneral.equals("all") || postIn.getPostInSocialNetwork().getTitle().equals(filterGeneral)) {
+                if ( filter.equals(postIn.getPostInSocialNetwork().getTitle()) ) {
                     totalArray.add(postIn);
                     if (postIn.getPostSentimentalType() == 0) {
                         neutrals++;
@@ -304,10 +307,24 @@ public class PieChart extends GenericResource {
         try {
             // Defino el Libro de Excel
             // Iterator v = setso.iterator();
-            String title = t;;
+            String title = t;
 
 
-            XSSFWorkbook wb = new XSSFWorkbook();
+            List list = IteratorUtils.toList(setso);
+            Iterator<PostIn> setso1 = list.iterator();
+          //  long size = SWBUtils.Collections.sizeOf(list.iterator());
+            long limite = 65535;
+
+
+
+            Workbook wb = null;
+            if (list.size() <= limite) {
+
+                wb = new HSSFWorkbook();
+            } else if (list.size()  > limite) {
+
+                wb = new XSSFWorkbook();
+            }
 
             // Creo la Hoja en Excel
             Sheet sheet = wb.createSheet("Mensajes " + title);
@@ -350,9 +367,9 @@ public class PieChart extends GenericResource {
             int i = 3;
 
 
-            while (setso != null && setso.hasNext()) {
+            while (setso1.hasNext()) {
 
-                PostIn postIn = (PostIn) setso.next();
+                PostIn postIn = (PostIn) setso1.next();
 
                 Row troww = sheet.createRow(i);
 
@@ -383,10 +400,10 @@ public class PieChart extends GenericResource {
 
                 }
                 createCell(cellStyle, wb, troww, 1, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn instanceof MessageIn ? SWBSocialResUtil.Util.getStringFromGenericLocale("message", lang) : postIn instanceof PhotoIn ? SWBSocialResUtil.Util.getStringFromGenericLocale("photo", lang) : postIn instanceof VideoIn ? SWBSocialResUtil.Util.getStringFromGenericLocale("video", lang) : "---");
-                if(postIn.getPostInSocialNetwork() != null){
-                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostInSocialNetwork().getDisplayTitle(lang));
-                }else{
-                createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
+                if (postIn.getPostInSocialNetwork() != null) {
+                    createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, postIn.getPostInSocialNetwork().getDisplayTitle(lang));
+                } else {
+                    createCell(cellStyle, wb, troww, 2, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                 }
 
                 if (postIn.getSocialTopic() != null) {
@@ -461,7 +478,11 @@ public class PieChart extends GenericResource {
             OutputStream ou = response.getOutputStream();
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
+            if (list.size() <= limite) {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xls\";");
+            } else {
+                response.setHeader("Content-Disposition", "attachment; filename=\"Mensajes.xlsx\";");
+            }
             response.setContentType("application/octet-stream");
             wb.write(ou);
             ou.close();
@@ -471,14 +492,14 @@ public class PieChart extends GenericResource {
         }
     }
 
-    public static void createTituloCell(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createTituloCell(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        XSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -493,14 +514,14 @@ public class PieChart extends GenericResource {
 
     }
 
-    public static void createHead(XSSFWorkbook wb, Row row, int column, short halign, short valign, String strContenido) {
+    public static void createHead(Workbook wb, Row row, int column, short halign, short valign, String strContenido) {
 
 
         CreationHelper ch = wb.getCreationHelper();
         Cell cell = row.createCell(column);
         cell.setCellValue(ch.createRichTextString(strContenido));
 
-        XSSFFont cellFont = wb.createFont();
+        Font cellFont = wb.createFont();
         cellFont.setFontHeightInPoints((short) 11);
         cellFont.setFontName(HSSFFont.FONT_ARIAL);
         cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
@@ -592,7 +613,7 @@ public class PieChart extends GenericResource {
                         totalArray.add(postIn);
                     }
                 } else if (!selectedAnio.equals("") && !selectMonth2.equals("") && !selectDay.equals("")) {
-                    if (year == Integer.parseInt(selectedAnio) && month == Integer.parseInt(selectMonth2)+1 && day == Integer.parseInt(selectDay)) {
+                    if (year == Integer.parseInt(selectedAnio) && month == Integer.parseInt(selectMonth2) + 1 && day == Integer.parseInt(selectDay)) {
                         totalArray.add(postIn);
                     }
                 }
