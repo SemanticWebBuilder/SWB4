@@ -403,16 +403,9 @@ public class ImageGallery extends GenericResource {
             url.setAction("update");
 
             htm.append("<script type=\"text/javascript\">");
-            
             htm.append("  dojo.require('dijit.layout.ContentPane');\n");
             htm.append("  dojo.require('dijit.form.Form');\n");
             htm.append("  dojo.require('dijit.form.TextBox');\n");
-            //htm.append("  dojo.require('dijit.form.ValidationTextBox');\n");
-            //htm.append("  dojo.require('dijit.form.RadioButton');\n");
-            //htm.append("  dojo.require('dijit.form.Button');\n");
-            
-            
-            
             htm.append("  dojo.require(\"dijit.form.NumberTextBox\");");
             htm.append("  dojo.require(\"dijit.form.Button\");");
             htm.append("</script>");
