@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.bsc.MitigationActionAssignable,org.semanticwb.model.Traceable,org.semanticwb.bsc.MitigationInitiativeAssignable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
+public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.bsc.MitigationInitiativeAssignable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Activeable,org.semanticwb.bsc.MitigationActionAssignable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
 {
    /**
    * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.
@@ -99,26 +99,26 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator of org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRisks(org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRisks(org.semanticwb.model.SWBModel model)
         {
             java.util.Iterator it=model.getSemanticObject().getModel().listInstancesOfClass(sclass);
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk>(it, true);
         }
        /**
        * Returns a list of org.semanticwb.bsc.tracing.Risk for all models
        * @return Iterator of org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRisks()
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRisks()
         {
             java.util.Iterator it=sclass.listInstances();
-            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk>(it, true);
+            return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk>(it, true);
         }
 
-        public static org.semanticwb.bsc.tracing.Risk createRisk(org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.element.Risk createRisk(org.semanticwb.model.SWBModel model)
         {
             long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(String.valueOf(id), model);
+            return org.semanticwb.bsc.element.Risk.ClassMgr.createRisk(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.bsc.tracing.Risk
@@ -126,9 +126,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @param model Model of the org.semanticwb.bsc.tracing.Risk
        * @return A org.semanticwb.bsc.tracing.Risk
        */
-        public static org.semanticwb.bsc.tracing.Risk getRisk(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.element.Risk getRisk(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.tracing.Risk)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.element.Risk)model.getSemanticObject().getModel().getGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Create a org.semanticwb.bsc.tracing.Risk
@@ -136,9 +136,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @param model Model of the org.semanticwb.bsc.tracing.Risk
        * @return A org.semanticwb.bsc.tracing.Risk
        */
-        public static org.semanticwb.bsc.tracing.Risk createRisk(String id, org.semanticwb.model.SWBModel model)
+        public static org.semanticwb.bsc.element.Risk createRisk(String id, org.semanticwb.model.SWBModel model)
         {
-            return (org.semanticwb.bsc.tracing.Risk)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
+            return (org.semanticwb.bsc.element.Risk)model.getSemanticObject().getModel().createGenericObject(model.getSemanticObject().getModel().getObjectUri(id,sclass),sclass);
         }
        /**
        * Remove a org.semanticwb.bsc.tracing.Risk
@@ -167,9 +167,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -178,9 +178,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -190,9 +190,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -201,9 +201,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByModifiedBy(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -213,9 +213,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -224,9 +224,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -236,9 +236,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByUserGroup(org.semanticwb.model.UserGroup value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -247,9 +247,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByUserGroup(org.semanticwb.model.UserGroup value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByUserGroup(org.semanticwb.model.UserGroup value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -259,9 +259,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByElementInstanceRelated(org.semanticwb.bsc.element.BSCElement value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByElementInstanceRelated(org.semanticwb.bsc.element.BSCElement value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_elementInstanceRelated, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_elementInstanceRelated, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -270,9 +270,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByElementInstanceRelated(org.semanticwb.bsc.element.BSCElement value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByElementInstanceRelated(org.semanticwb.bsc.element.BSCElement value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_elementInstanceRelated,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_elementInstanceRelated,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -282,9 +282,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByRiskResponsible(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByRiskResponsible(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_riskResponsible, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_riskResponsible, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -293,9 +293,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByRiskResponsible(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByRiskResponsible(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_riskResponsible,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_riskResponsible,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -305,9 +305,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -316,9 +316,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByCreator(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByCreator(org.semanticwb.model.User value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -328,9 +328,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByRole(org.semanticwb.model.Role value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -339,9 +339,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByRole(org.semanticwb.model.Role value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByRole(org.semanticwb.model.Role value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasRole,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -351,9 +351,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByMitigationAction(org.semanticwb.bsc.tracing.MitigationAction value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByMitigationAction(org.semanticwb.bsc.tracing.MitigationAction value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMitigationAction, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMitigationAction, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -362,9 +362,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByMitigationAction(org.semanticwb.bsc.tracing.MitigationAction value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByMitigationAction(org.semanticwb.bsc.tracing.MitigationAction value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMitigationAction,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasMitigationAction,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -374,9 +374,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByFactor(org.semanticwb.bsc.tracing.Factor value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByFactor(org.semanticwb.bsc.tracing.Factor value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactor, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactor, value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -385,9 +385,9 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
        * @return Iterator with all the org.semanticwb.bsc.tracing.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRiskByFactor(org.semanticwb.bsc.tracing.Factor value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByFactor(org.semanticwb.bsc.tracing.Factor value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactor,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactor,value.getSemanticObject(),sclass));
             return it;
         }
     }
@@ -500,20 +500,20 @@ public abstract class RiskBase extends org.semanticwb.bsc.tracing.BSCTracing imp
 
 /**
 * Gets the YearRisk property
-* @return String with the YearRisk
+* @return int with the YearRisk
 */
-    public String getYearRisk()
+    public int getYearRisk()
     {
-        return getSemanticObject().getProperty(bsc_yearRisk);
+        return getSemanticObject().getIntProperty(bsc_yearRisk);
     }
 
 /**
 * Sets the YearRisk property
 * @param value long with the YearRisk
 */
-    public void setYearRisk(String value)
+    public void setYearRisk(int value)
     {
-        getSemanticObject().setProperty(bsc_yearRisk, value);
+        getSemanticObject().setIntProperty(bsc_yearRisk, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.element.Initiative
