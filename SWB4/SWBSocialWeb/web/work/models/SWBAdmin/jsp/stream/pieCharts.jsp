@@ -142,7 +142,7 @@
     <div id="pieGenderParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("gender", lang)%></h1>
-            <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefGender" href="<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"  onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div>
         <div id="pieGender">
         </div>
@@ -277,9 +277,11 @@
                 .enter().append("g")
                 .attr("class", "arc")
                 .on("click", function(d) {
-                    var filter = d.data.label; 
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label; 
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                    }
                 })
                 .on("mouseover", function(d, i) {
                     d3.select(gl[0][i]).style("visibility","visible"); 
@@ -412,7 +414,7 @@
     <div id="pieEducationParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)%></h1>                
-            <a id="hrefEducation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefEducation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
         </div>
         <div id="pieEducation" >
         </div>
@@ -555,9 +557,11 @@
                 .enter().append("g")
                 .attr("class", "arc")
                 .on("click", function(d) {
-                    var filter = d.data.label;            
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;            
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                    }
                 })                        
                 .on("mouseover", function(d, i) {
                     d3.select(gl[0][i]).style("visibility","visible"); 
@@ -693,7 +697,7 @@
     <div  id="pieRelationParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("statusRelation", lang)%></h1>
-            <a id="hrefRelation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefRelation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
         </div> 
         <div id="pieRelationShipStatus">
         </div>        
@@ -846,9 +850,11 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;            
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;            
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                    }
                 })     
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
@@ -976,7 +982,7 @@
     <div id="lifeStageParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
-            <a  id="hrefLife" href="<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a  id="hrefLife" href="<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div> 
         <div id="profileLifeStage">      
         </div>
@@ -1148,9 +1154,11 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;            
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;            
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                    }
                 })  
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
@@ -1287,7 +1295,7 @@
     <div id="profileGeoLocationParent">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%> México</h1>
-            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "MX")%>" class="excel">Exportar excel</a>
+            <a id="hrefGeo" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "MX")%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
         </div> 
         <div id="profileGeoLocation">
         </div>     
@@ -1440,16 +1448,19 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;  
-                    var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
-                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+                    
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;  
+                        var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+                        var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 
-                    for (var i=0; i<acentos.length; i++) {
-                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        for (var i=0; i<acentos.length; i++) {
+                            filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        }
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "MX").setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                        //document.hrefGeo.href = url;
                     }
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("country", "MX").setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
-                    //document.hrefGeo.href = url;
                 }) 
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
@@ -1553,7 +1564,7 @@
     <div id="profileGeoLocationParentEU">
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("location", lang)%> Estados Unidos</h1>
-            <a id="hrefGeoEU" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "US")%>" class="excel">Exportar excel</a>
+            <a id="hrefGeoEU" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang).setParameter("country", "US")%>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div> 
         <div id="profileGeoLocationEU">
         </div>     
@@ -1704,11 +1715,11 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;  
-                    
-
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;  
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geoLocation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
+                    }
                 }) 
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
@@ -1811,7 +1822,7 @@
     <div id="profileLanguageParent">
         <div class="grafTit">
             <h1> Lenguajes </h1>
-            <a id="hrefLanguage" href="<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefLanguage" href="<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div> 
         <div id="profileLanguage">
         </div>     
@@ -1828,13 +1839,13 @@
                     Iterator languagei = Language.ClassMgr.listLanguages(SWBSocialUtil.getConfigWebSite());
                     while (languagei.hasNext()) {
                         Language language = (Language) languagei.next();
-                        if(language != null){
+                        if (language != null) {
 
                 %>
                 <input id="bcn<%=language.getDisplayTitle(lang)%>" type="radio" name="language" value="<%=reemplazar(language.getDisplayTitle(lang))%>">
                 <label for="bcn<%=language.getDisplayTitle(lang)%>"><%=language.getDisplayTitle(lang)%></label>
                 <%
-                               }
+                        }
                     }
                 %>
             </div>
@@ -1965,16 +1976,18 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;  
-                    var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
-                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;  
+                        var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+                        var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 
-                    for (var i=0; i<acentos.length; i++) {
-                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        for (var i=0; i<acentos.length; i++) {
+                            filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        }
+
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
                     }
-
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "languages").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
                 }) 
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
@@ -2081,7 +2094,7 @@
     <div id="profileCountryParent">
         <div class="grafTit">
             <h1> Global </h1>
-            <a id="hrefCountry" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefCountry" href="<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"  onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div> 
         <div id="profileCountry">
         </div>     
@@ -2100,12 +2113,12 @@
                     Iterator<Country> country = Country.ClassMgr.listCountries(ss);
                     while (country.hasNext()) {
                         Country co = country.next();
-                        if(co != null){
+                        if (co != null) {
                 %>
                 <input id="bcn<%=co.getId()%>" type="radio" name="country" value="<%=reemplazar(co.getTitle())%>">
                 <label for="bcn<%=co.getId()%>"><%=co.getTitle()%></label>
                 <%
-                               }
+                        }
                     }
                 %>
             </div>
@@ -2236,16 +2249,18 @@
                     });
                 })
                 .on("click", function(d) {
-                    var filter = d.data.label;  
-                    var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
-                    var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+                    if(confirm('¿Desea exportar a excel?')){
+                        var filter = d.data.label;  
+                        var acentos = "ÃÀÁÄÂÈÉËÊÌÍÏÎÒÓÖÔÙÚÜÛãàáäâèéëêìíïîòóöôùúüûÑñÇç";
+                        var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
 
-                    for (var i=0; i<acentos.length; i++) {
-                        filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        for (var i=0; i<acentos.length; i++) {
+                            filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        }
+
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        document.location.href = url;
                     }
-
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "geolocationCountry").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
-                    document.location.href = url;
                 }) 
                 .on("mousemove", function(d, i) {
                     d3.select(tooltips[0][i])
