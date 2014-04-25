@@ -109,10 +109,14 @@ public class UserMsgBoard extends GenericResource{
             }else if(action.equals("remMsg")) {
                 if(request.getParameter("msgUri")!=null)
                 {
-                    SemanticObject semObj=SemanticObject.getSemanticObject(request.getParameter("msgUri"));
+                    System.out.println("msgUri:"+request.getParameter("msgUri"));
+                    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("msgUri"));
                     if(semObj!=null)
                     {
+                        UserMessage userMsg=(UserMessage)semObj.createGenericInstance(); 
+                        System.out.println("UsrMsg Msg:"+userMsg.getUsrMsg());
                         semObj.remove();
+                        System.out.println("semObj:"+semObj+",Ha sido eliminado...");
                     }
                 }
                 response.setRenderParameter("statusMsg", "Mensaje Eliminado");
