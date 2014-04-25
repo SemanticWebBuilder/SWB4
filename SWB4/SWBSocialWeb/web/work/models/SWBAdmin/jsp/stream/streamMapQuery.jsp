@@ -24,11 +24,12 @@
 
 <%
 try{
-    String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBContext.getAdminWebSite(), "GoogleMapsApiKey");
+    //String apiKey=SWBSocialUtil.Util.getModelPropertyValue(SWBSocialUtil.getConfigWebSite(), "GoogleMapsApiKey");
+    /*
     if(apiKey==null){
         out.println("Error:No se puede mostrar el mapa debido a que la llave de Google Maps no esta configurada(GoogleMapsApiKey), contactese con su administrador");
         return; 
-    }
+    }*/
     String suri=request.getParameter("suri");
     //System.out.println("suri:"+suri);
     if(suri==null) {
@@ -96,8 +97,9 @@ try{
     <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
     <title>SWBSocial Sentiment Analysis Map</title>
     <!--AIzaSyA_8bWaWXaKlJV2XgZt-RYwRAsp6S0J7iw-->
+    <!--src="http://maps.googleapis.com/maps/api/js?sensor=false"+apiKey>  -->
     <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?sensor=false"+apiKey>  
+            src="http://maps.googleapis.com/maps/api/js?sensor=false">
     </script>
     <script type="text/javascript">
       document.write('<script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/markermanager.js"><' + '/script>');

@@ -34,8 +34,8 @@
 
 <%
     if (action.equals("editMsg")) {
-        SemanticObject senObj = SemanticObject.getSemanticObject(request.getParameter("msgUri"));
-        UserMessage userMsg = (UserMessage) senObj.getGenericInstance();
+        SemanticObject senObj = SemanticObject.createSemanticObject(request.getParameter("msgUri")); 
+        UserMessage userMsg = (UserMessage) senObj.createGenericInstance(); 
         SWBFormMgr messageFormMgr = new SWBFormMgr(senObj, null, SWBFormMgr.MODE_EDIT);
         messageFormMgr.setType(SWBFormMgr.TYPE_DOJO);
         messageFormMgr.setFilterRequired(false);
@@ -97,8 +97,8 @@
 <%
 } else if (action.equals("viewMsg")) {
     if (request.getParameter("msgUri") != null) {
-        SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("msgUri"));
-        UserMessage userMsg = (UserMessage) semObj.getGenericInstance();
+        SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("msgUri"));
+        UserMessage userMsg = (UserMessage) semObj.createGenericInstance(); 
 %>
 <p>Mensaje de:<%=userMsg.getFromUser().getFullName()%></p>
 <p>Mensaje:<%=userMsg.getUsrMsg()%></p>
@@ -176,7 +176,7 @@
 </div>
 <%
 } else if (action.equals("sendNew")) {
-    SWBFormMgr messageFormMgr = new SWBFormMgr(UserMessage.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);
+    SWBFormMgr messageFormMgr = new SWBFormMgr(UserMessage.sclass.getSemanticObject(), null, SWBFormMgr.MODE_CREATE);  
     messageFormMgr.setType(SWBFormMgr.TYPE_DOJO);
     messageFormMgr.setFilterRequired(false);
     String lang = "";
