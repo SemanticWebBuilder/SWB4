@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.InitiativeAssignable;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.model.GenericIterator;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.portal.api.GenericResource;
@@ -59,7 +59,6 @@ public class InitiativeManager extends GenericResource {
         {
             BSC bsc = (BSC)semObj.getModel().getModelObject().getGenericInstance();
             SWBResourceURL urlAdd;
-            Iterator<Initiative> itInit = bsc.listInitiatives();
                 
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
@@ -80,11 +79,12 @@ public class InitiativeManager extends GenericResource {
             out.println("<th>" + paramRequest.getLocaleString("lbl_relate") + "</th>");
             out.println("</tr>");
             out.println("</thead>");
-
+            
+            Iterator<Initiative> itInit = bsc.listInitiatives();
             while (itInit.hasNext()) {                    
                 Initiative initiative = itInit.next();
 
-                if (  (initiative.isValid() && user.haveAccess(initiative)) || (!initiative.isActive() && semObj.hasObjectProperty(Objective.bsc_hasInitiative, initiative.getSemanticObject()) && user.haveAccess(initiative))  ) {
+                if (  (initiative.isValid() && user.haveAccess(initiative)) || (!initiative.isActive() && semObj.hasObjectProperty(InitiativeAssignable.bsc_hasInitiative, initiative.getSemanticObject()) && user.haveAccess(initiative))  ) {
                     urlAdd = paramRequest.getActionUrl();
                     urlAdd.setParameter("suri", suri);
                     urlAdd.setParameter("sval", initiative.getId());
@@ -106,7 +106,7 @@ public class InitiativeManager extends GenericResource {
                     out.println("<td>");
                     out.println("<input type=\"checkbox\" name=\"initiative\" ");
                     out.println("onchange=\"submitUrl('" + urlAdd + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" ");
-                    out.println(" dojoType=\"dijit.form.CheckBox\" value=\"" + initiative.getId() + "\" " + (semObj.hasObjectProperty(Objective.bsc_hasInitiative, initiative.getSemanticObject())?"checked=\"checked\"":"") + " /></td>");
+                    out.println(" dojoType=\"dijit.form.CheckBox\" value=\"" + initiative.getId() + "\" " + (semObj.hasObjectProperty(InitiativeAssignable.bsc_hasInitiative, initiative.getSemanticObject())?"checked=\"checked\"":"") + " /></td>");
                     out.println("</td>");
                     out.println("</tr>");
                 }
@@ -162,16 +162,16 @@ public class InitiativeManager extends GenericResource {
             return;
         }
         
-        Objective obj = (Objective) semObj.getGenericInstance();
-        BSC bsc = obj.getBSC();
-
+        BSC model = (BSC)semObj.getModel().getModelObject().getGenericInstance();
+        InitiativeAssignable obj = (InitiativeAssignable) semObj.getGenericInstance();
+        
         if(Action_UPDT_ACTIVE.equalsIgnoreCase(action)) {
             final String initiativeId = request.getParameter("sval");
             if(initiativeId!=null)
             {
                 Initiative initiative = null;
-                if(Initiative.ClassMgr.hasInitiative(initiativeId, bsc)) {
-                    initiative = Initiative.ClassMgr.getInitiative(initiativeId, bsc);
+                if(Initiative.ClassMgr.hasInitiative(initiativeId, model)) {
+                    initiative = Initiative.ClassMgr.getInitiative(initiativeId, model);
                     if(obj.hasInitiative(initiative)) {
                         obj.removeInitiative(initiative);
                         response.setRenderParameter("statmsg", response.getLocaleString("msgDeallocatedInitiative"));
@@ -188,7 +188,7 @@ public class InitiativeManager extends GenericResource {
                 response.setRenderParameter("statmsg", "Objeto semantico no ubicado.");
             }
         }else if(Action_ACTIVE_ALL.equalsIgnoreCase(action)) {
-            Iterator<Initiative> initiatives = bsc.listValidInitiative().iterator();
+            Iterator<Initiative> initiatives = model.listValidInitiative().iterator();
             if(initiatives.hasNext()) {
                 obj.removeAllInitiative();
                 while(initiatives.hasNext()) {
