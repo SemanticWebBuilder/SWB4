@@ -15,10 +15,14 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
+import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -66,21 +70,21 @@ public class ExportScoreCard extends GenericResource {
                             hasIndicator = true;
                             indicator = indic.getTitle();
                             if (count == 0) {
-                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                             } else {
-                                lista.add(new ParamsScoreCard("", "", "", indicator, scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                lista.add(new ParamsScoreCard("", "", "", indicator, scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                             }
                             count++;
                         }
                     }
                     if (hasIndicator == false) {
-                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", scoreCard,"", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                     }
                 }
             }
 
             if (exp == 0) {
-                lista.add(new ParamsScoreCard("", "", "","", scoreCard,"No existen objetivos válidos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                lista.add(new ParamsScoreCard("", "", "", "", scoreCard, "No existen objetivos válidos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
             }
             try {
                 JasperTemplates jasperTemplate = JasperTemplates.SCORECARD;
@@ -104,24 +108,29 @@ public class ExportScoreCard extends GenericResource {
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         //super.doView(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
-        PrintWriter out = response.getWriter();
-        StringBuilder liga = new StringBuilder(128);
+        /*PrintWriter out = response.getWriter();
+         StringBuilder liga = new StringBuilder(128);
 
+         SWBResourceURL url = paramRequest.getRenderUrl();
+         url.setCallMethod(SWBResourceURL.Call_DIRECT);
+         url.setMode("export");
+         liga.append("<table height=\"200px\"><tr><td>H</td></tr></table>");
+         liga.append("<a href=\"");
+         liga.append(url);
+         liga.append("\" target=\"_new\">Exportar AQUI</a>");
+         out.write(liga.toString());*/
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode("export");
-        liga.append("<table height=\"200px\"><tr><td>H</td></tr></table>");
-        liga.append("<a href=\"");
-        liga.append(url);
-        liga.append("\" target=\"_new\">Exportar AQUI</a>");
-        out.write(liga.toString());
-
+        response.sendRedirect(url.toString());
     }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         //Evaluar el mode
-        if (paramRequest.getMode().equalsIgnoreCase("export")) {
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+            doViewStrategy(request, response, paramRequest);
+        } else if (paramRequest.getMode().equalsIgnoreCase("export")) {
             doExport(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
@@ -139,5 +148,40 @@ public class ExportScoreCard extends GenericResource {
         }
         //}
         return period;
+    }
+
+    /**
+     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que 
+     * exporta un Scorecard.
+     * 
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con la liga
+     * y el icono correspondiente al elemento a exportar.
+     * @throws SWBResourceException SWBResourceException Excepti&oacute;n
+     * utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        Resource base = paramRequest.getResourceBase();
+        String surl = paramRequest.getWebPage().getUrl();
+        Iterator<Resourceable> res = base.listResourceables();
+        while (res.hasNext()) {
+            Resourceable re = res.next();
+            if (re instanceof WebPage) {
+                surl = ((WebPage) re).getUrl();
+                break;
+            }
+        }
+        String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+        String image = "iconelim.png";
+        String alt = base.getAttribute("alt", "image");
+        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
+        out.println("<img src=\"" + webWorkPath + image + "\" alt=\"" + alt + "\" class=\"toolbar-img\" />");
+        out.println("</a>");
     }
 }
