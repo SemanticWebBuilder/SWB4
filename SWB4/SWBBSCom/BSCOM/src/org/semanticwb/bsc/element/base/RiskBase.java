@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.bsc.MitigationActionAssignable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.bsc.MitigationInitiativeAssignable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.FilterableNode
 {
    /**
    * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.
@@ -207,26 +207,26 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined InitiativeRisk
-       * @param value InitiativeRisk of the type org.semanticwb.bsc.element.Initiative
+       * Gets all org.semanticwb.bsc.element.Risk with a determined Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
        * @param model Model of the org.semanticwb.bsc.element.Risk
        * @return Iterator with all the org.semanticwb.bsc.element.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiative(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined InitiativeRisk
-       * @param value InitiativeRisk of the type org.semanticwb.bsc.element.Initiative
+       * Gets all org.semanticwb.bsc.element.Risk with a determined Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
        * @return Iterator with all the org.semanticwb.bsc.element.Risk
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiative(org.semanticwb.bsc.element.Initiative value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeRisk,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -520,6 +520,71 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     {
         getSemanticObject().setIntProperty(bsc_finAssessmentLikelihood, value);
     }
+   /**
+   * Gets all the org.semanticwb.bsc.element.Initiative
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.Initiative
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> listInitiatives()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative>(getSemanticObject().listObjectProperties(bsc_hasInitiative));
+    }
+
+   /**
+   * Gets true if has a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to verify
+   * @return true if the org.semanticwb.bsc.element.Initiative exists, false otherwise
+   */
+    public boolean hasInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasInitiative,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to add
+   */
+
+    public void addInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasInitiative, value.getSemanticObject());
+    }
+   /**
+   * Removes all the Initiative
+   */
+
+    public void removeAllInitiative()
+    {
+        getSemanticObject().removeProperty(bsc_hasInitiative);
+    }
+   /**
+   * Removes a Initiative
+   * @param value org.semanticwb.bsc.element.Initiative to remove
+   */
+
+    public void removeInitiative(org.semanticwb.bsc.element.Initiative value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasInitiative,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the Initiative
+   * @return a org.semanticwb.bsc.element.Initiative
+   */
+    public org.semanticwb.bsc.element.Initiative getInitiative()
+    {
+         org.semanticwb.bsc.element.Initiative ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasInitiative);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.element.Initiative)obj.createGenericInstance();
+         }
+         return ret;
+    }
 
 /**
 * Gets the YearRisk property
@@ -537,71 +602,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     public void setYearRisk(int value)
     {
         getSemanticObject().setIntProperty(bsc_yearRisk, value);
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.element.Initiative
-   * @return A GenericIterator with all the org.semanticwb.bsc.element.Initiative
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative> listInitiativeRisks()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Initiative>(getSemanticObject().listObjectProperties(bsc_hasInitiativeRisk));
-    }
-
-   /**
-   * Gets true if has a InitiativeRisk
-   * @param value org.semanticwb.bsc.element.Initiative to verify
-   * @return true if the org.semanticwb.bsc.element.Initiative exists, false otherwise
-   */
-    public boolean hasInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasInitiativeRisk,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a InitiativeRisk
-   * @param value org.semanticwb.bsc.element.Initiative to add
-   */
-
-    public void addInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasInitiativeRisk, value.getSemanticObject());
-    }
-   /**
-   * Removes all the InitiativeRisk
-   */
-
-    public void removeAllInitiativeRisk()
-    {
-        getSemanticObject().removeProperty(bsc_hasInitiativeRisk);
-    }
-   /**
-   * Removes a InitiativeRisk
-   * @param value org.semanticwb.bsc.element.Initiative to remove
-   */
-
-    public void removeInitiativeRisk(org.semanticwb.bsc.element.Initiative value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasInitiativeRisk,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the InitiativeRisk
-   * @return a org.semanticwb.bsc.element.Initiative
-   */
-    public org.semanticwb.bsc.element.Initiative getInitiativeRisk()
-    {
-         org.semanticwb.bsc.element.Initiative ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasInitiativeRisk);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.element.Initiative)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**

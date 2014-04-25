@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad. 
    */
-public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Schedule,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Updateable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable
+public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Schedule,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Updateable
 {
    /**
    * Porcentaje de avance a reportar
@@ -351,23 +351,23 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
         }
        /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined Risk
-       * @param value Risk of the type org.semanticwb.bsc.tracing.Risk
+       * @param value Risk of the type org.semanticwb.bsc.element.Risk
        * @param model Model of the org.semanticwb.bsc.element.Deliverable
        * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRisk(org.semanticwb.bsc.tracing.Risk value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRisk(org.semanticwb.bsc.element.Risk value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasRisk, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined Risk
-       * @param value Risk of the type org.semanticwb.bsc.tracing.Risk
+       * @param value Risk of the type org.semanticwb.bsc.element.Risk
        * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRisk(org.semanticwb.bsc.tracing.Risk value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByRisk(org.semanticwb.bsc.element.Risk value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasRisk,value.getSemanticObject(),sclass));
             return it;
@@ -749,21 +749,21 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
          return ret;
     }
    /**
-   * Gets all the org.semanticwb.bsc.tracing.Risk
-   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Risk
+   * Gets all the org.semanticwb.bsc.element.Risk
+   * @return A GenericIterator with all the org.semanticwb.bsc.element.Risk
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> listRisks()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> listRisks()
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk>(getSemanticObject().listObjectProperties(bsc_hasRisk));
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk>(getSemanticObject().listObjectProperties(bsc_hasRisk));
     }
 
    /**
    * Gets true if has a Risk
-   * @param value org.semanticwb.bsc.tracing.Risk to verify
-   * @return true if the org.semanticwb.bsc.tracing.Risk exists, false otherwise
+   * @param value org.semanticwb.bsc.element.Risk to verify
+   * @return true if the org.semanticwb.bsc.element.Risk exists, false otherwise
    */
-    public boolean hasRisk(org.semanticwb.bsc.tracing.Risk value)
+    public boolean hasRisk(org.semanticwb.bsc.element.Risk value)
     {
         boolean ret=false;
         if(value!=null)
@@ -774,10 +774,10 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
     }
    /**
    * Adds a Risk
-   * @param value org.semanticwb.bsc.tracing.Risk to add
+   * @param value org.semanticwb.bsc.element.Risk to add
    */
 
-    public void addRisk(org.semanticwb.bsc.tracing.Risk value)
+    public void addRisk(org.semanticwb.bsc.element.Risk value)
     {
         getSemanticObject().addObjectProperty(bsc_hasRisk, value.getSemanticObject());
     }
@@ -791,25 +791,25 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
     }
    /**
    * Removes a Risk
-   * @param value org.semanticwb.bsc.tracing.Risk to remove
+   * @param value org.semanticwb.bsc.element.Risk to remove
    */
 
-    public void removeRisk(org.semanticwb.bsc.tracing.Risk value)
+    public void removeRisk(org.semanticwb.bsc.element.Risk value)
     {
         getSemanticObject().removeObjectProperty(bsc_hasRisk,value.getSemanticObject());
     }
 
    /**
    * Gets the Risk
-   * @return a org.semanticwb.bsc.tracing.Risk
+   * @return a org.semanticwb.bsc.element.Risk
    */
-    public org.semanticwb.bsc.tracing.Risk getRisk()
+    public org.semanticwb.bsc.element.Risk getRisk()
     {
-         org.semanticwb.bsc.tracing.Risk ret=null;
+         org.semanticwb.bsc.element.Risk ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasRisk);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.tracing.Risk)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.element.Risk)obj.createGenericInstance();
          }
          return ret;
     }
