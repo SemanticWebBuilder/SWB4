@@ -1278,10 +1278,10 @@
     </swb:displayProperty>
     <rdfs:range>
       <swb:Class rdf:ID="Determinant">
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Determinante que definen si un control es suficiente o insuficiente para un Riesgo</rdfs:comment>
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc.tracing</swb:classCodePackage>
+        >org.semanticwb.bsc.accessory</swb:classCodePackage>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Determinante que define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.</rdfs:comment>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
