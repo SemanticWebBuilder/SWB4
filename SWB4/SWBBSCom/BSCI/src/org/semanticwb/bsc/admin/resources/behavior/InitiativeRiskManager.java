@@ -77,7 +77,7 @@ public class InitiativeRiskManager extends GenericResource {
         Risk risk = (Risk) semObj.createGenericInstance();
         if (risk != null) {
            // createInstances(risk, risk.getBSC());
-            Iterator<Initiative> it = risk.listInitiativeRisks();
+            Iterator<Initiative> it = risk.listInitiatives();
 
             toReturn.append("<script type=\"text/javascript\">");
             toReturn.append("  dojo.require('dojo.parser');");
@@ -223,7 +223,7 @@ public class InitiativeRiskManager extends GenericResource {
                 if (Initiative.ClassMgr.hasInitiative(mitInitiativeId, bsc)) {
                     initiative = Initiative.ClassMgr.
                             getInitiative(mitInitiativeId, bsc);
-                    risk.removeInitiativeRisk(initiative);
+                    risk.removeInitiative(initiative);
                     initiative.remove();
                     response.setRenderParameter("statmsg", response
                             .getLocaleString("msgDeleteSuccessful"));
@@ -232,6 +232,8 @@ public class InitiativeRiskManager extends GenericResource {
         }
     }
 
+    
+    
     /*private void createInstances(Risk risk, WebSite ws) {
         Initiative initiative = Initiative.ClassMgr.createInitiative(ws);
         initiative.setTitle("Acción 1");
