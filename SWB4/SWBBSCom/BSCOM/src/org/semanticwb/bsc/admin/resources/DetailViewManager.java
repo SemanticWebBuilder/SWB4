@@ -1,5 +1,7 @@
 package org.semanticwb.bsc.admin.resources;
 
+import org.semanticwb.bsc.Theme;
+import org.semanticwb.bsc.Perspective;
 import com.arthurdo.parser.HtmlException;
 import com.arthurdo.parser.HtmlStreamTokenizer;
 import com.arthurdo.parser.HtmlTag;
