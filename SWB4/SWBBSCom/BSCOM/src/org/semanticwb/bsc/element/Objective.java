@@ -1,6 +1,5 @@
 package org.semanticwb.bsc.element;
 
-import com.hp.hpl.jena.rdf.model.Property;
 import java.util.Collections;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.model.GenericIterator;
@@ -10,7 +9,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import static org.semanticwb.bsc.base.SeasonableBase.bsc_hasPeriod;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
@@ -19,7 +17,6 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import static org.semanticwb.bsc.element.Indicator.*;
-import org.semanticwb.platform.SemanticProperty;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase implements Comparable<Objective>
 {
