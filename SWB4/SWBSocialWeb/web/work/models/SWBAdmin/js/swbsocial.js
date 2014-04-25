@@ -844,10 +844,53 @@ function validateVideo(id, formId){
     
     return true;
 }
+/** Splits a string into words, kees spaces inside text*/
+function splitString(string) {        
+    var words = string.split('');
+    var finalW = [];//arreglo final
+    //console.log(words);
+   
+    var singleWord = "";
+    for (var i = 0, l = words.length; i < l; i++) {
+        if(words[i] != " "){
+            singleWord += words[i];
+            if(i+1 === l){//si es el elemento final entonces agregarlo
+                finalW.push(singleWord);
+            }
+        }else{//si es un espacio
+            if(singleWord.length > 0){//Si habia una cadena concatenada
+                finalW.push(singleWord);//se agrega
+                if(i < l){//si hay mas caracteres se agrega un espacio
+                    finalW.push(" ");
+                }
+                singleWord = "";//se limpia la cadena que concatena
+            }else{//si es un espacio en blanco
+                finalW.push(words[i]);
+            }
+        }
+    }
+    return finalW;
+}
 
 
 function count(id, idText){
-    document.getElementById(idText).value=document.getElementById(id).value.length;
+    //document.getElementById(idText).value=document.getElementById(id).value.length;
+    var string = document.getElementById(id).value;
+    var words = splitString(string);
+    //console.log('words:' + words);
+    var totalWords = 0;
+    for (var i = 0, l = words.length; i < l; i++) {
+        ///if (words[i].match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi)) {
+        if(words[i].match(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/)){
+            //console.info('Elemento encontrado:->' + words[i] + "<-");
+            totalWords = totalWords + 19;
+        } else {
+            totalWords = totalWords + words[i].length;
+            //console.info('No aplica para:+>' + words[i] + "<+");
+        }
+    }
+    document.getElementById(idText).value=totalWords;
+    //console.log("TOTAL WORDS:" + totalWords);
 }
 
 function submitFormPostIn(formid, postUri)
