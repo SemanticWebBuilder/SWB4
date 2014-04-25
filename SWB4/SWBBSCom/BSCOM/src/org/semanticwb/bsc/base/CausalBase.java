@@ -23,14 +23,14 @@ public interface CausalBase extends org.semanticwb.model.GenericObject
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Causal=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Causal");
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Theme> listCausalThemes();
-    public boolean hasCausalTheme(org.semanticwb.bsc.element.Theme value);
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.Theme> listCausalThemes();
+    public boolean hasCausalTheme(org.semanticwb.bsc.Theme value);
 
    /**
    * Adds the CausalTheme
-   * @param value An instance of org.semanticwb.bsc.element.Theme
+   * @param value An instance of org.semanticwb.bsc.Theme
    */
-    public void addCausalTheme(org.semanticwb.bsc.element.Theme value);
+    public void addCausalTheme(org.semanticwb.bsc.Theme value);
 
    /**
    * Remove all the values for the property CausalTheme
@@ -39,15 +39,15 @@ public interface CausalBase extends org.semanticwb.model.GenericObject
 
    /**
    * Remove a value from the property CausalTheme
-   * @param value An instance of org.semanticwb.bsc.element.Theme
+   * @param value An instance of org.semanticwb.bsc.Theme
    */
-    public void removeCausalTheme(org.semanticwb.bsc.element.Theme value);
+    public void removeCausalTheme(org.semanticwb.bsc.Theme value);
 
 /**
 * Gets the CausalTheme
-* @return a instance of org.semanticwb.bsc.element.Theme
+* @return a instance of org.semanticwb.bsc.Theme
 */
-    public org.semanticwb.bsc.element.Theme getCausalTheme();
+    public org.semanticwb.bsc.Theme getCausalTheme();
 
     public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> listCausalObjectives();
     public boolean hasCausalObjective(org.semanticwb.bsc.element.Objective value);

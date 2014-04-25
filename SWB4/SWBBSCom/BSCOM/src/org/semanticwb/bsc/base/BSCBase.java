@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.bsc.Help,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -845,34 +845,34 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.tracing.PeriodStatus.ClassMgr.hasPeriodStatus(id, this);
     }
 
-    public org.semanticwb.bsc.element.Perspective getPerspective(String id)
+    public org.semanticwb.bsc.Perspective getPerspective(String id)
     {
-        return org.semanticwb.bsc.element.Perspective.ClassMgr.getPerspective(id, this);
+        return org.semanticwb.bsc.Perspective.ClassMgr.getPerspective(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.element.Perspective> listPerspectives()
+    public java.util.Iterator<org.semanticwb.bsc.Perspective> listPerspectives()
     {
-        return org.semanticwb.bsc.element.Perspective.ClassMgr.listPerspectives(this);
+        return org.semanticwb.bsc.Perspective.ClassMgr.listPerspectives(this);
     }
 
-    public org.semanticwb.bsc.element.Perspective createPerspective(String id)
+    public org.semanticwb.bsc.Perspective createPerspective(String id)
     {
-        return org.semanticwb.bsc.element.Perspective.ClassMgr.createPerspective(id,this);
+        return org.semanticwb.bsc.Perspective.ClassMgr.createPerspective(id,this);
     }
 
-    public org.semanticwb.bsc.element.Perspective createPerspective()
+    public org.semanticwb.bsc.Perspective createPerspective()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Perspective);
-        return org.semanticwb.bsc.element.Perspective.ClassMgr.createPerspective(String.valueOf(id),this);
+        return org.semanticwb.bsc.Perspective.ClassMgr.createPerspective(String.valueOf(id),this);
     } 
 
     public void removePerspective(String id)
     {
-        org.semanticwb.bsc.element.Perspective.ClassMgr.removePerspective(id, this);
+        org.semanticwb.bsc.Perspective.ClassMgr.removePerspective(id, this);
     }
     public boolean hasPerspective(String id)
     {
-        return org.semanticwb.bsc.element.Perspective.ClassMgr.hasPerspective(id, this);
+        return org.semanticwb.bsc.Perspective.ClassMgr.hasPerspective(id, this);
     }
 
     public org.semanticwb.model.ResourceSubType getResourceSubType(String id)
@@ -1103,34 +1103,34 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.model.Resource.ClassMgr.hasResource(id, this);
     }
 
-    public org.semanticwb.bsc.tracing.Risk getRisk(String id)
+    public org.semanticwb.bsc.element.Risk getRisk(String id)
     {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.getRisk(id, this);
+        return org.semanticwb.bsc.element.Risk.ClassMgr.getRisk(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Risk> listRisks()
+    public java.util.Iterator<org.semanticwb.bsc.element.Risk> listRisks()
     {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.listRisks(this);
+        return org.semanticwb.bsc.element.Risk.ClassMgr.listRisks(this);
     }
 
-    public org.semanticwb.bsc.tracing.Risk createRisk(String id)
+    public org.semanticwb.bsc.element.Risk createRisk(String id)
     {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(id,this);
+        return org.semanticwb.bsc.element.Risk.ClassMgr.createRisk(id,this);
     }
 
-    public org.semanticwb.bsc.tracing.Risk createRisk()
+    public org.semanticwb.bsc.element.Risk createRisk()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Risk);
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.createRisk(String.valueOf(id),this);
+        return org.semanticwb.bsc.element.Risk.ClassMgr.createRisk(String.valueOf(id),this);
     } 
 
     public void removeRisk(String id)
     {
-        org.semanticwb.bsc.tracing.Risk.ClassMgr.removeRisk(id, this);
+        org.semanticwb.bsc.element.Risk.ClassMgr.removeRisk(id, this);
     }
     public boolean hasRisk(String id)
     {
-        return org.semanticwb.bsc.tracing.Risk.ClassMgr.hasRisk(id, this);
+        return org.semanticwb.bsc.element.Risk.ClassMgr.hasRisk(id, this);
     }
 
     public org.semanticwb.bsc.tracing.Meeting getMeeting(String id)
@@ -1193,34 +1193,34 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
         return org.semanticwb.bsc.element.Initiative.ClassMgr.hasInitiative(id, this);
     }
 
-    public org.semanticwb.bsc.tracing.Agreement getAgreement(String id)
+    public org.semanticwb.bsc.element.Agreement getAgreement(String id)
     {
-        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.getAgreement(id, this);
+        return org.semanticwb.bsc.element.Agreement.ClassMgr.getAgreement(id, this);
     }
 
-    public java.util.Iterator<org.semanticwb.bsc.tracing.Agreement> listAgreements()
+    public java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreements()
     {
-        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.listAgreements(this);
+        return org.semanticwb.bsc.element.Agreement.ClassMgr.listAgreements(this);
     }
 
-    public org.semanticwb.bsc.tracing.Agreement createAgreement(String id)
+    public org.semanticwb.bsc.element.Agreement createAgreement(String id)
     {
-        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.createAgreement(id,this);
+        return org.semanticwb.bsc.element.Agreement.ClassMgr.createAgreement(id,this);
     }
 
-    public org.semanticwb.bsc.tracing.Agreement createAgreement()
+    public org.semanticwb.bsc.element.Agreement createAgreement()
     {
         long id=getSemanticObject().getModel().getCounter(bsc_Agreement);
-        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.createAgreement(String.valueOf(id),this);
+        return org.semanticwb.bsc.element.Agreement.ClassMgr.createAgreement(String.valueOf(id),this);
     } 
 
     public void removeAgreement(String id)
     {
-        org.semanticwb.bsc.tracing.Agreement.ClassMgr.removeAgreement(id, this);
+        org.semanticwb.bsc.element.Agreement.ClassMgr.removeAgreement(id, this);
     }
     public boolean hasAgreement(String id)
     {
-        return org.semanticwb.bsc.tracing.Agreement.ClassMgr.hasAgreement(id, this);
+        return org.semanticwb.bsc.element.Agreement.ClassMgr.hasAgreement(id, this);
     }
 
     public org.semanticwb.model.Rule getRule(String id)
