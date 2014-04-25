@@ -825,7 +825,7 @@ public class SWBImportWebSite extends GenericResource {
             out.println(paramRequest.getLocaleString("msgwsTitle")+" <em>*</em>");
             out.println("</td>");
             out.append("<td>");
-            out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"Captura Titulo.\" invalidMessage=\"Titulo es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" maxlength=\"40\" />");
+            out.println("<input type=\"text\" name=\"wstitle\" dojoType=\"dijit.form.ValidationTextBox\" required=\"true\" promptMessage=\"El título del tablero  no debe superar los 40 caracteres\" invalidMessage=\"Título es requerido.\" onkeyup=\"dojo.byId('swb_create_id').value=replaceChars4Id(this.textbox.value);dijit.byId('swb_create_id').validate()\" trim=\"true\" maxlength=\"40\" />");
             out.println("</td>");
             out.append("</tr>");
             out.append("<tr><td align=\"right\">");
