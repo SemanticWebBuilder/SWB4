@@ -10,18 +10,11 @@ import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.bsc.tracing.MitigationAction;
-import org.semanticwb.bsc.tracing.Risk;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
-import org.semanticwb.model.WebPage;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.portal.SWBResourceMgr;
-import org.semanticwb.portal.api.SWBParamRequest;
-import org.semanticwb.portal.api.SWBParamRequestImp;
-import org.semanticwb.portal.api.SWBResource;
-import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.lib.SWBRequest;
 
 /**
