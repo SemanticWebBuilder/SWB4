@@ -10,7 +10,7 @@ import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.Perspective;
-import org.semanticwb.bsc.element.Theme;
+import org.semanticwb.bsc.Theme;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericIterator;
