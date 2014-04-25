@@ -4,7 +4,7 @@ package org.semanticwb.bsc.utils.base;
    /**
    * Contiene la estructura de datos necesaria para representar una vista detalle de cualquiera de los elementos del BSC (objetivos, indicadores o iniciativas) 
    */
-public abstract class DetailViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.utils.ViewTypeConfigurable,org.semanticwb.model.Traceable
+public abstract class DetailViewBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.bsc.utils.ViewTypeConfigurable
 {
    /**
    * Representa la ruta en filesystem del archivo en que se almacena la configuración de la vista detalle.
