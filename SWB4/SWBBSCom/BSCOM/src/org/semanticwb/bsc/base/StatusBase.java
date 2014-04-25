@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.base;
 
    /**
-   * Cualquier elemento BSC al que se le puedan asignar estados de semaforización 
+   * Define que puede tener  estados de semaforización asignados 
    */
 public interface StatusBase extends org.semanticwb.model.GenericObject
 {
@@ -11,7 +11,7 @@ public interface StatusBase extends org.semanticwb.model.GenericObject
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasState=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasState");
    /**
-   * Cualquier elemento BSC al que se le puedan asignar estados de semaforización 
+   * Define que puede tener  estados de semaforización asignados 
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Status");
 
