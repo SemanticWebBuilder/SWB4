@@ -70,14 +70,6 @@
     >Para generar el contenido de las vistas resumen y detalle</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
-  <owl:Class rdf:ID="DojoFileUploadBSC">
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.formelement</swb:classCodePackage>
-    <rdfs:label xml:lang="es">Cargador de Imagenes con Dojo</rdfs:label>
-    <rdfs:label xml:lang="en">Dojo Image Uploader</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
-  </owl:Class>
   <owl:Class rdf:ID="ViewConfigurable">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -85,6 +77,14 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Mantiene las propiedades en común de los diferentes tipos de recursos para las vistas (resumen y detalle) de información del BSC.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+  </owl:Class>
+  <owl:Class rdf:ID="DojoFileUploadBSC">
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc.formelement</swb:classCodePackage>
+    <rdfs:label xml:lang="es">Cargador de Imagenes con Dojo</rdfs:label>
+    <rdfs:label xml:lang="en">Dojo Image Uploader</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#FileUpload"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
   <owl:Class rdf:about="#BSCElement">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
@@ -324,6 +324,9 @@
     >Persiste los atributos de un indicador</rdfs:comment>
     <rdfs:label xml:lang="en">Indicator</rdfs:label>
     <rdfs:subClassOf>
+      <owl:Class rdf:ID="InitiativeAssignable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom>
@@ -390,7 +393,7 @@
   </owl:Class>
   <owl:Class rdf:about="#Status">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cualquier elemento BSC al que se le puedan asignar estados de semaforización</rdfs:comment>
+    >Define que puede tener  estados de semaforización asignados</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
@@ -440,12 +443,20 @@
     >Determinante que definen si un control es suficiente o insuficiente para un Riesgo</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
+  <owl:Class rdf:ID="ActionAssignable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc</swb:classCodePackage>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define que puede tener acciones asignadas</rdfs:comment>
+  </owl:Class>
   <owl:Class rdf:about="#Attachmentable">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define que puede tener archivos adjuntos</rdfs:comment>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc</swb:classCodePackage>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cualquier elemento BSC al que se le puedan agregar archivos</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="EmailLog">
@@ -457,6 +468,14 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Contiene la bitácora de correos enviados desde la aplicación</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#InitiativeAssignable">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define que puede tener iniciativas asignadas</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc</swb:classCodePackage>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="DetailViewManager">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBSemanticResource"/>
@@ -1062,31 +1081,13 @@
     </swb:displayObject>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdfs:subClassOf>
-      <swb:Interface rdf:ID="MitigationInitiativeAssignable">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc</swb:classCodePackage>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Definira si una Iniciativa de Mitigación puede ser asignable</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Help"/>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:subClassOf rdf:resource="#InitiativeAssignable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
-    <rdfs:subClassOf>
-      <swb:Interface rdf:ID="MitigationActionAssignable">
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc</swb:classCodePackage>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Definira si una acción de mitigación puede ser asignable</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#ActionAssignable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
@@ -1205,7 +1206,7 @@
     <rdfs:domain rdf:resource="#Indicator"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasMitigationAction">
-    <rdfs:domain rdf:resource="#MitigationActionAssignable"/>
+    <rdfs:domain rdf:resource="#ActionAssignable"/>
     <rdfs:range rdf:resource="#MitigationAction"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
@@ -1421,10 +1422,6 @@
     </rdfs:range>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Persiste los archivos adjuntos de un acuerdo</rdfs:comment>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="hasInitiativeRisk">
-    <rdfs:domain rdf:resource="#MitigationInitiativeAssignable"/>
-    <rdfs:range rdf:resource="#Initiative"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="activeDetailView">
     <rdfs:domain rdf:resource="#DetailViewManager"/>
@@ -2000,7 +1997,7 @@
     <rdfs:domain rdf:resource="#Measure"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasInitiative">
-    <owl:inverseOf rdf:resource="#objInitiativeInv"/>
+    <rdfs:domain rdf:resource="#InitiativeAssignable"/>
     <bsc:displayElement>
       <swbxf:DisplayProperty rdf:ID="dpbsc_hasInitiative">
         <swbxf:formElement rdf:resource="#selectMultiple"/>
@@ -2010,7 +2007,7 @@
     </bsc:displayElement>
     <rdfs:label xml:lang="en">Initiatives</rdfs:label>
     <rdfs:label xml:lang="es">Iniciativas</rdfs:label>
-    <rdfs:domain rdf:resource="#Objective"/>
+    <owl:inverseOf rdf:resource="#objInitiativeInv"/>
     <rdfs:range rdf:resource="#Initiative"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:removeDependency>
