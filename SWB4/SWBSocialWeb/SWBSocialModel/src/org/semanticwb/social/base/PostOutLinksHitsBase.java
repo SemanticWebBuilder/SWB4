@@ -4,12 +4,20 @@ package org.semanticwb.social.base;
    /**
    * Clase que guarda la relación de los links que se encuentran en el texto de un PostOuts y los hits (clicks) que tienen por parte de los usuarios en las redes sociales a las cuales se envío (dicho PostOut). 
    */
-public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
+public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass 
 {
    /**
    * Short Url definida para el link enviado a la cuenta de red social y en el PostOut dados.
    */
     public static final org.semanticwb.platform.SemanticProperty social_pol_code=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pol_code");
+   /**
+   * Clase en la que se guardan las ips de los usuarios que le dan click en una liga de un postOut, talvez despues estas ips se pueda inferir su localización y mostrar en un mapa de google.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostOutLinksHitsIp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostOutLinksHitsIp");
+   /**
+   * Un link en una red social puede tener muchas instancias de PostOutLinksHitsIP. Cuando se elimina un objeto de tipo PostOutLinksHits, se eliminan todos los objetos postOutLinkHitsIp asociados. Se crea un objeto PostOutLinksHitsIp por cada usuario en alguna red social que le den click a una liga de un post publicado desde SWBSocial, pueden ser muchas estas instancias, por lo cual evaluar si no se utiliza mucho despues quitar esta funcionalidad. También ver si no se quita, si le puedo agregar mas campos como el usuario en la red social que dio click, etc, para ello tendría que hayar una forma de que la red social me envíe el usuario que dio click en la liga.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_hasUserIp=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasUserIp");
    /**
    * Url a la cual se va a redirigir a los usuarios que den click en la liga corta generada para la red social definida en cada instancia de esta clase.
    */
@@ -113,26 +121,26 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
             return (getPostOutLinksHits(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.social.PostOutLinksHits with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined UserIp
+       * @param value UserIp of the type org.semanticwb.social.PostOutLinksHitsIp
        * @param model Model of the org.semanticwb.social.PostOutLinksHits
        * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByUserIp(org.semanticwb.social.PostOutLinksHitsIp value,org.semanticwb.model.SWBModel model)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasUserIp, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.PostOutLinksHits with a determined ModifiedBy
-       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * Gets all org.semanticwb.social.PostOutLinksHits with a determined UserIp
+       * @param value UserIp of the type org.semanticwb.social.PostOutLinksHitsIp
        * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
        */
 
-        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByModifiedBy(org.semanticwb.model.User value)
+        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByUserIp(org.semanticwb.social.PostOutLinksHitsIp value)
         {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasUserIp,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -156,29 +164,6 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
         public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByPostOut(org.semanticwb.social.PostOut value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postOut,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOutLinksHits with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @param model Model of the org.semanticwb.social.PostOutLinksHits
-       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.PostOutLinksHits with a determined Creator
-       * @param value Creator of the type org.semanticwb.model.User
-       * @return Iterator with all the org.semanticwb.social.PostOutLinksHits
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.PostOutLinksHits> listPostOutLinksHitsByCreator(org.semanticwb.model.User value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHits> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -219,44 +204,6 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
     {
         super(base);
     }
-   /**
-   * Sets the value for the property ModifiedBy
-   * @param value ModifiedBy to set
-   */
-
-    public void setModifiedBy(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
-        }else
-        {
-            removeModifiedBy();
-        }
-    }
-   /**
-   * Remove the value for ModifiedBy property
-   */
-
-    public void removeModifiedBy()
-    {
-        getSemanticObject().removeProperty(swb_modifiedBy);
-    }
-
-   /**
-   * Gets the ModifiedBy
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getModifiedBy()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
-         }
-         return ret;
-    }
 
 /**
 * Gets the Pol_code property
@@ -275,41 +222,70 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
     {
         getSemanticObject().setProperty(social_pol_code, value);
     }
+   /**
+   * Gets all the org.semanticwb.social.PostOutLinksHitsIp
+   * @return A GenericIterator with all the org.semanticwb.social.PostOutLinksHitsIp
+   */
 
-/**
-* Gets the Created property
-* @return java.util.Date with the Created
-*/
-    public java.util.Date getCreated()
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHitsIp> listUserIps()
     {
-        return getSemanticObject().getDateProperty(swb_created);
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostOutLinksHitsIp>(getSemanticObject().listObjectProperties(social_hasUserIp));
     }
 
-/**
-* Sets the Created property
-* @param value long with the Created
-*/
-    public void setCreated(java.util.Date value)
+   /**
+   * Gets true if has a UserIp
+   * @param value org.semanticwb.social.PostOutLinksHitsIp to verify
+   * @return true if the org.semanticwb.social.PostOutLinksHitsIp exists, false otherwise
+   */
+    public boolean hasUserIp(org.semanticwb.social.PostOutLinksHitsIp value)
     {
-        getSemanticObject().setDateProperty(swb_created, value);
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasUserIp,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a UserIp
+   * @param value org.semanticwb.social.PostOutLinksHitsIp to add
+   */
+
+    public void addUserIp(org.semanticwb.social.PostOutLinksHitsIp value)
+    {
+        getSemanticObject().addObjectProperty(social_hasUserIp, value.getSemanticObject());
+    }
+   /**
+   * Removes all the UserIp
+   */
+
+    public void removeAllUserIp()
+    {
+        getSemanticObject().removeProperty(social_hasUserIp);
+    }
+   /**
+   * Removes a UserIp
+   * @param value org.semanticwb.social.PostOutLinksHitsIp to remove
+   */
+
+    public void removeUserIp(org.semanticwb.social.PostOutLinksHitsIp value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasUserIp,value.getSemanticObject());
     }
 
-/**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
+   /**
+   * Gets the UserIp
+   * @return a org.semanticwb.social.PostOutLinksHitsIp
+   */
+    public org.semanticwb.social.PostOutLinksHitsIp getUserIp()
     {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
+         org.semanticwb.social.PostOutLinksHitsIp ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasUserIp);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostOutLinksHitsIp)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -364,44 +340,6 @@ public abstract class PostOutLinksHitsBase extends org.semanticwb.model.SWBClass
          if(obj!=null)
          {
              ret=(org.semanticwb.social.PostOut)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Creator
-   * @param value Creator to set
-   */
-
-    public void setCreator(org.semanticwb.model.User value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
-        }else
-        {
-            removeCreator();
-        }
-    }
-   /**
-   * Remove the value for Creator property
-   */
-
-    public void removeCreator()
-    {
-        getSemanticObject().removeProperty(swb_creator);
-    }
-
-   /**
-   * Gets the Creator
-   * @return a org.semanticwb.model.User
-   */
-    public org.semanticwb.model.User getCreator()
-    {
-         org.semanticwb.model.User ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
     }
