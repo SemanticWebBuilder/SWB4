@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard. 
    */
-public abstract class DifferentiatorGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Undeleteable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
+public abstract class DifferentiatorGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Perspective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Perspective");
     public static final org.semanticwb.platform.SemanticProperty bsc_perspectiveOfDiffGroupInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#perspectiveOfDiffGroupInv");
@@ -116,23 +116,23 @@ public abstract class DifferentiatorGroupBase extends org.semanticwb.bsc.accesso
         }
        /**
        * Gets all org.semanticwb.bsc.accessory.DifferentiatorGroup with a determined Perspective
-       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.Perspective
        * @param model Model of the org.semanticwb.bsc.accessory.DifferentiatorGroup
        * @return Iterator with all the org.semanticwb.bsc.accessory.DifferentiatorGroup
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> listDifferentiatorGroupByPerspective(org.semanticwb.bsc.element.Perspective value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> listDifferentiatorGroupByPerspective(org.semanticwb.bsc.Perspective value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveOfDiffGroupInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.accessory.DifferentiatorGroup with a determined Perspective
-       * @param value Perspective of the type org.semanticwb.bsc.element.Perspective
+       * @param value Perspective of the type org.semanticwb.bsc.Perspective
        * @return Iterator with all the org.semanticwb.bsc.accessory.DifferentiatorGroup
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> listDifferentiatorGroupByPerspective(org.semanticwb.bsc.element.Perspective value)
+        public static java.util.Iterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> listDifferentiatorGroupByPerspective(org.semanticwb.bsc.Perspective value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.DifferentiatorGroup> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_perspectiveOfDiffGroupInv,value.getSemanticObject(),sclass));
             return it;
@@ -249,7 +249,7 @@ public abstract class DifferentiatorGroupBase extends org.semanticwb.bsc.accesso
    * @param value Perspective to set
    */
 
-    public void setPerspective(org.semanticwb.bsc.element.Perspective value)
+    public void setPerspective(org.semanticwb.bsc.Perspective value)
     {
         if(value!=null)
         {
@@ -270,15 +270,15 @@ public abstract class DifferentiatorGroupBase extends org.semanticwb.bsc.accesso
 
    /**
    * Gets the Perspective
-   * @return a org.semanticwb.bsc.element.Perspective
+   * @return a org.semanticwb.bsc.Perspective
    */
-    public org.semanticwb.bsc.element.Perspective getPerspective()
+    public org.semanticwb.bsc.Perspective getPerspective()
     {
-         org.semanticwb.bsc.element.Perspective ret=null;
+         org.semanticwb.bsc.Perspective ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_perspectiveOfDiffGroupInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.Perspective)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.Perspective)obj.createGenericInstance();
          }
          return ret;
     }
