@@ -11,15 +11,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.ContactWork;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.Resourceable;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
@@ -268,7 +270,9 @@ public class UserProfile extends GenericAdmResource {
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
 
-        if (paramRequest.getMode().equalsIgnoreCase("add")) {
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+            doViewStrategy(request, response, paramRequest);
+        } else if (paramRequest.getMode().equalsIgnoreCase("add")) {
             final User user = SWBContext.getSessionUser();
             SemanticObject obj = user.getSemanticObject();
             uploadPhoto(request, obj, response, paramRequest);
@@ -473,5 +477,50 @@ public class UserProfile extends GenericAdmResource {
                 }
             }
         }
+    }
+
+    /**
+     *  
+     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que 
+     * muestra la informaci&oacute;n del usuario.
+     * 
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con la liga
+     * y el icono correspondiente al elemento a exportar.
+     * @throws SWBResourceException SWBResourceException Excepti&oacute;n
+     * utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+        Resource base = paramRequest.getResourceBase();
+        String surl = paramRequest.getWebPage().getUrl();
+        Iterator<Resourceable> res = base.listResourceables();
+        while (res.hasNext()) {
+            Resourceable re = res.next();
+            if (re instanceof WebPage) {
+                surl = ((WebPage) re).getUrl();
+                break;
+            }
+        }
+        String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+        String image = "iconelim.png";
+        String alt = base.getAttribute("alt", "image");
+        out.println("<span class=\"span-toolbar\">");
+        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
+        out.println("<img src=\"" + webWorkPath + image + "\" alt=\"" + alt + "\" class=\"toolbar-img\" />");
+        out.println("</a>");
+        out.println("</span>");
+
+        User user = paramRequest.getUser();
+        out.println("<span class=\"span-toolbar\">");
+        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
+        out.println(user.getFullName());
+        out.println("</a>");
+        out.println("</span>");
     }
 }
