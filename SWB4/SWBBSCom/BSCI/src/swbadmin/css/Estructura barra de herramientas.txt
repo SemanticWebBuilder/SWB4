@@ -1,0 +1,41 @@
+       <div class="barraHerramientas">
+	   
+         <div width="10%" style="float:left">
+             <a href="{topic@getUrl}/../home" >
+			    <!--Icono página Home-->
+                <img src="{webpath}/swbadmin/icons/iconelim.png" border="0" alt="" />
+             </a>
+         </div>
+		 
+         <div style="float:left">
+             <!--RESOURCE TYPE="ExportScoreCard"/-->
+             <!--Recurso Exportar Scorecard-->
+         </div>
+		 
+         <div style="float:left">
+             <!--RESOURCE TYPE="ResourceExportPDF"/-->
+             <!--Recurso Exportar PDF(vistas resumen, detalle, mapa estratégico)-->
+         </div>
+		 
+         <div style="float:left">
+             <!--Recurso Enviar correo Electrónico-->
+         </div>
+		 
+         <div style="float:left">
+             <!--RESOURCE TYPE="UserProfile"/-->
+             <!--Recurso Perfil de usuario-->
+         </div>
+		 
+         <div style="float:left" id="usr">
+            <!--RESOURCE TYPE="Login"/-->
+ 		    <!--Recurso Desloguear usuario-->
+         </div>
+		 
+         <div width="10%" style="float:left">
+             <a href="{topic@getUrl}/../help" >
+			    <!--Icono página Ayuda-->
+                <img src="{webpath}/swbadmin/icons/iconelim.png" border="0" alt="" />
+             </a>
+         </div>
+		 
+         </div>
