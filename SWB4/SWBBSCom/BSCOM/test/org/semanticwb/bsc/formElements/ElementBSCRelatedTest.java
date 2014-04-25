@@ -9,7 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.tracing.Risk;
+import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
