@@ -224,6 +224,10 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
             return;
         }
 
+        if (video.getMsg_Text() != null && video.getMsg_Text().trim().length() > 1) {            
+            String messageText = this.shortMsgText(video);
+            video.setMsg_Text(messageText);
+        }
         String base = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         String boundary = "";
         for (int i = 0; i < 8; i++) {
@@ -1254,7 +1258,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         System.out.println("Posting comment to a video");
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {            
             if(message.getPostInSource()!=null && message.getPostInSource().getSocialNetMsgId()!=null){
-                String messageText = this.shortMsgText(message);                
+                String messageText = this.shortMsgText(message);
+                message.setMsg_Text(messageText);
                 System.out.println("Youtube Making comment:...:" + message.getPostInSource().getPostInSocialNetworkUser().getSnu_name());                
                 String videoId = message.getPostInSource().getSocialNetMsgId();
                 //String comment = message.getMsg_Text();
