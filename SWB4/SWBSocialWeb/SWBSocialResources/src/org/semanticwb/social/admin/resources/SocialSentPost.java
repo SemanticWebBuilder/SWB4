@@ -193,7 +193,9 @@ public class SocialSentPost extends GenericResource {
             doShowMsgComments(request, response, paramRequest);
         } else if (Mode_LinksHits.equals(mode)) {
             doShowLinksHits(request, response, paramRequest);
-        } else if (Mode_RecoverComments.equals(mode)) {
+        }else if("linkHitsData".equals(mode)){
+            doShowLinksHitsData(request, response, paramRequest);
+        }else if (Mode_RecoverComments.equals(mode)) {
             doShowRecoveredComments(request, response, paramRequest);
         } else if (Mode_AllComments.equals(mode)) {
             doGetAllComments(request, response, paramRequest);
@@ -980,7 +982,7 @@ public class SocialSentPost extends GenericResource {
             {
                 SWBResourceURL postOutLinksHits = paramRequest.getRenderUrl().setMode(Mode_LinksHits).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgLinksHits") + "\" class=\"msgLinksHits\" onclick=\"showDialog('" + postOutLinksHits + "','" + paramRequest.getLocaleString("msgLinksHits")
-                        + "'); return false;\"></a>");
+                        + "'); return false;\">LinksHits</a>");
             }
 
             out.println("</td>");
@@ -3376,7 +3378,7 @@ public class SocialSentPost extends GenericResource {
      * Shows the Hits of a PostOut Link
      */
     private void doShowLinksHits(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
-        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOutLinksHist.jsp";
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOutLinksHits.jsp";
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -3384,6 +3386,28 @@ public class SocialSentPost extends GenericResource {
         if (dis != null) {
             try {
                 request.setAttribute("postOut", request.getParameter("postUri"));
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception e) {
+                log.error(e);
+                e.printStackTrace(System.out);
+            }
+        }
+    }
+    
+    
+    /*
+     * Shows the Hits of a PostOut Link
+     */
+    private void doShowLinksHitsData(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) {
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/review/showPostOutLinksHitsData.jsp";
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        RequestDispatcher dis = request.getRequestDispatcher(myPath);
+        if (dis != null) {
+            try {
+                request.setAttribute("uri", request.getParameter("uri"));
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             } catch (Exception e) {
