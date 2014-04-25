@@ -4,10 +4,11 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo 
    */
-public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
+public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_determinantValueInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#determinantValueInv");
    /**
-   * Determinante que definen si un control es suficiente o insuficiente para un Riesgo
+   * Determinante que define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Determinant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Determinant");
    /**
@@ -167,23 +168,23 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
         }
        /**
        * Gets all org.semanticwb.bsc.tracing.DeterminantValue with a determined Determinant
-       * @param value Determinant of the type org.semanticwb.bsc.tracing.Determinant
+       * @param value Determinant of the type org.semanticwb.bsc.accessory.Determinant
        * @param model Model of the org.semanticwb.bsc.tracing.DeterminantValue
        * @return Iterator with all the org.semanticwb.bsc.tracing.DeterminantValue
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByDeterminant(org.semanticwb.bsc.tracing.Determinant value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByDeterminant(org.semanticwb.bsc.accessory.Determinant value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_determinant, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.tracing.DeterminantValue with a determined Determinant
-       * @param value Determinant of the type org.semanticwb.bsc.tracing.Determinant
+       * @param value Determinant of the type org.semanticwb.bsc.accessory.Determinant
        * @return Iterator with all the org.semanticwb.bsc.tracing.DeterminantValue
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByDeterminant(org.semanticwb.bsc.tracing.Determinant value)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByDeterminant(org.semanticwb.bsc.accessory.Determinant value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_determinant,value.getSemanticObject(),sclass));
             return it;
@@ -231,7 +232,7 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
    * @param value Determinant to set
    */
 
-    public void setDeterminant(org.semanticwb.bsc.tracing.Determinant value)
+    public void setDeterminant(org.semanticwb.bsc.accessory.Determinant value)
     {
         if(value!=null)
         {
@@ -252,15 +253,15 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
 
    /**
    * Gets the Determinant
-   * @return a org.semanticwb.bsc.tracing.Determinant
+   * @return a org.semanticwb.bsc.accessory.Determinant
    */
-    public org.semanticwb.bsc.tracing.Determinant getDeterminant()
+    public org.semanticwb.bsc.accessory.Determinant getDeterminant()
     {
-         org.semanticwb.bsc.tracing.Determinant ret=null;
+         org.semanticwb.bsc.accessory.Determinant ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_determinant);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.tracing.Determinant)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.accessory.Determinant)obj.createGenericInstance();
          }
          return ret;
     }
