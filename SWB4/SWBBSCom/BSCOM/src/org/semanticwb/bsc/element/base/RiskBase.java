@@ -4,13 +4,8 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.FilterableNode
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Activeable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Traceable
 {
-   /**
-   * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.
-   */
-    public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
-    public static final org.semanticwb.platform.SemanticProperty bsc_deliverableInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#deliverableInv");
    /**
    * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
    */
@@ -159,29 +154,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
         public static boolean hasRisk(String id, org.semanticwb.model.SWBModel model)
         {
             return (getRisk(id, model)!=null);
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined DeliverableInv
-       * @param value DeliverableInv of the type org.semanticwb.bsc.element.Deliverable
-       * @param model Model of the org.semanticwb.bsc.element.Risk
-       * @return Iterator with all the org.semanticwb.bsc.element.Risk
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined DeliverableInv
-       * @param value DeliverableInv of the type org.semanticwb.bsc.element.Deliverable
-       * @return Iterator with all the org.semanticwb.bsc.element.Risk
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_deliverableInv,value.getSemanticObject(),sclass));
-            return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Risk with a determined ModifiedBy
@@ -427,44 +399,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     public RiskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Sets the value for the property DeliverableInv
-   * @param value DeliverableInv to set
-   */
-
-    public void setDeliverableInv(org.semanticwb.bsc.element.Deliverable value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(bsc_deliverableInv, value.getSemanticObject());
-        }else
-        {
-            removeDeliverableInv();
-        }
-    }
-   /**
-   * Remove the value for DeliverableInv property
-   */
-
-    public void removeDeliverableInv()
-    {
-        getSemanticObject().removeProperty(bsc_deliverableInv);
-    }
-
-   /**
-   * Gets the DeliverableInv
-   * @return a org.semanticwb.bsc.element.Deliverable
-   */
-    public org.semanticwb.bsc.element.Deliverable getDeliverableInv()
-    {
-         org.semanticwb.bsc.element.Deliverable ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_deliverableInv);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.element.Deliverable)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
