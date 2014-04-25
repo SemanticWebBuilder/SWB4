@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Clase que define un factor de riesgo. 
    */
-public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable
+public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente.
@@ -126,24 +126,24 @@ public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing i
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.tracing.Factor with a determined FactorInv
-       * @param value FactorInv of the type org.semanticwb.bsc.tracing.Risk
+       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Risk
+       * @param value Risk of the type org.semanticwb.bsc.element.Risk
        * @param model Model of the org.semanticwb.bsc.tracing.Factor
        * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByFactorInv(org.semanticwb.bsc.tracing.Risk value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByRisk(org.semanticwb.bsc.element.Risk value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactorInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.tracing.Factor with a determined FactorInv
-       * @param value FactorInv of the type org.semanticwb.bsc.tracing.Risk
+       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Risk
+       * @param value Risk of the type org.semanticwb.bsc.element.Risk
        * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByFactorInv(org.semanticwb.bsc.tracing.Risk value)
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByRisk(org.semanticwb.bsc.element.Risk value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasFactorInv,value.getSemanticObject(),sclass));
             return it;
@@ -172,29 +172,6 @@ public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing i
             return it;
         }
        /**
-       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Control
-       * @param value Control of the type org.semanticwb.bsc.tracing.Control
-       * @param model Model of the org.semanticwb.bsc.tracing.Factor
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByControl(org.semanticwb.bsc.tracing.Control value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControl, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Control
-       * @param value Control of the type org.semanticwb.bsc.tracing.Control
-       * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByControl(org.semanticwb.bsc.tracing.Control value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControl,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.bsc.tracing.Factor with a determined Creator
        * @param value Creator of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.tracing.Factor
@@ -215,6 +192,29 @@ public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing i
         public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByCreator(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Control
+       * @param value Control of the type org.semanticwb.bsc.tracing.Control
+       * @param model Model of the org.semanticwb.bsc.tracing.Factor
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByControl(org.semanticwb.bsc.tracing.Control value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControl, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Factor with a determined Control
+       * @param value Control of the type org.semanticwb.bsc.tracing.Control
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Factor
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Factor> listFactorByControl(org.semanticwb.bsc.tracing.Control value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Factor> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasControl,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -256,41 +256,40 @@ public abstract class FactorBase extends org.semanticwb.bsc.tracing.BSCTracing i
         super(base);
     }
    /**
-   * Gets all the org.semanticwb.bsc.tracing.Risk
-   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.Risk
+   * Sets the value for the property Risk
+   * @param value Risk to set
    */
 
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk> listFactorInvs()
+    public void setRisk(org.semanticwb.bsc.element.Risk value)
     {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Risk>(getSemanticObject().listObjectProperties(bsc_hasFactorInv));
-    }
-
-   /**
-   * Gets true if has a FactorInv
-   * @param value org.semanticwb.bsc.tracing.Risk to verify
-   * @return true if the org.semanticwb.bsc.tracing.Risk exists, false otherwise
-   */
-    public boolean hasFactorInv(org.semanticwb.bsc.tracing.Risk value)
-    {
-        boolean ret=false;
         if(value!=null)
         {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasFactorInv,value.getSemanticObject());
+            getSemanticObject().setObjectProperty(bsc_hasFactorInv, value.getSemanticObject());
+        }else
+        {
+            removeRisk();
         }
-        return ret;
+    }
+   /**
+   * Remove the value for Risk property
+   */
+
+    public void removeRisk()
+    {
+        getSemanticObject().removeProperty(bsc_hasFactorInv);
     }
 
    /**
-   * Gets the FactorInv
-   * @return a org.semanticwb.bsc.tracing.Risk
+   * Gets the Risk
+   * @return a org.semanticwb.bsc.element.Risk
    */
-    public org.semanticwb.bsc.tracing.Risk getFactorInv()
+    public org.semanticwb.bsc.element.Risk getRisk()
     {
-         org.semanticwb.bsc.tracing.Risk ret=null;
+         org.semanticwb.bsc.element.Risk ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasFactorInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.tracing.Risk)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.element.Risk)obj.createGenericInstance();
          }
          return ret;
     }

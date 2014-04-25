@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Las acciones darán especial atención a los casos en que el o los controles se hayan determinado Deficientes o Inexistentes, y por tanto el Riesgo NO este Controlado Suficientemente. 
    */
-public abstract class MitigationActionBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
+public abstract class MitigationActionBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_progressPercentage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#progressPercentage");
     public static final org.semanticwb.platform.SemanticProperty bsc_progressDescription=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#progressDescription");

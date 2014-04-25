@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Gestiona la información de un control en un Riesgo. 
    */
-public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Recognizable
+public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
    /**
    * Es de solo lectura en la administración y es la clasificación del Control
