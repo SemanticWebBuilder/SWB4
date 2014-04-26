@@ -274,7 +274,7 @@ System.out.println("Adding...");
     }
 
     @Override
-    public Indicator getIndicator() {
+    public synchronized Indicator getIndicator() {
         Iterator<Indicator> it = SWBComparator.sortByCreated(listIndicators(), false);
         return it.hasNext()?it.next():null;
     }
