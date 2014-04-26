@@ -22,10 +22,10 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
             {
-System.out.println("\nFactor bsc_hasControl notify....");
-System.out.println("obj="+obj);
-System.out.println("prop="+prop);
-System.out.println("action="+action);
+//System.out.println("\nFactor bsc_hasControl notify....");
+//System.out.println("obj="+obj);
+//System.out.println("prop="+prop);
+//System.out.println("action="+action);
 
                 if("ADD".equalsIgnoreCase(action))
                 {
