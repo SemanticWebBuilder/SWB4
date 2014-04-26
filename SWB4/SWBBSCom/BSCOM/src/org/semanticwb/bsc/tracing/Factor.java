@@ -4,15 +4,64 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Risk;
+import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBModel;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 
 /**
  * Clase que define un factor de riesgo.
  */
 public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
+    
+    static
+    {
+        Factor.bsc_hasControl.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+System.out.println("\nFactor bsc_hasControl notify....");
+System.out.println("obj="+obj);
+System.out.println("prop="+prop);
+System.out.println("action="+action);
+
+                if("ADD".equalsIgnoreCase(action))
+                {
+                    SWBModel model = (SWBModel)obj.getModel().getModelObject().getGenericInstance();
+                    Iterator<Determinant> determinants = Determinant.ClassMgr.listDeterminants(model);
+                    
+                    Factor factor = (Factor)obj.createGenericInstance();
+                    Control control = factor.getLastControl();
+                    if(control!=null) {
+                        while(determinants.hasNext()) {
+                            Determinant d = determinants.next();
+                            if(!d.isValid()) {
+                                continue;
+                            }
+                            DeterminantValue dv = DeterminantValue.ClassMgr.createDeterminantValue(model);
+                            dv.setDeterminant(d);
+                            control.addDeterminantValue(dv);
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     public Factor(org.semanticwb.platform.SemanticObject base) {
         super(base);
+    }
+    
+    public Control getLastControl() {
+        return getControl();
+    }
+
+    @Override
+    public synchronized Control getControl() {
+        Iterator<Control> it = SWBComparator.sortByCreated(listControls(), false);
+        return it.hasNext()?it.next():null;
     }
 
     /**
