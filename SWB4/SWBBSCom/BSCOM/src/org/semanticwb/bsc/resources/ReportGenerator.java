@@ -1083,24 +1083,27 @@ public class ReportGenerator extends GenericResource {
         if (element instanceof Objective) {
             Objective obj = (Objective) element;
             for (String type : relatedTypes) {
-                if (type.endsWith(Indicator.bsc_Indicator.getName())) {
+                if (type.endsWith(Indicator.bsc_Indicator.getName()) ||
+                        type.endsWith(Initiative.bsc_Initiative.getName()) ||
+                        type.endsWith(Deliverable.bsc_Deliverable.getName())) {
                     Iterator<Indicator> it = obj.listIndicators();
                     while (it != null && it.hasNext()) {
-                        additional.add(it.next().getSemanticObject());
-                    }
-                } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
-                    Iterator<Initiative> it = obj.listInitiatives();
-                    while (it != null && it.hasNext()) {
-                        additional.add(it.next().getSemanticObject());
-                    }
-                } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
-                    //se obtiene el entregable, a partir de la iniciativa
-                    Iterator<Initiative> it = obj.listInitiatives();
-                    while (it != null && it.hasNext()) {
-                        Initiative ini = it.next();
-                        Iterator<Deliverable> itDeli = ini.listDeliverables();
-                        while (itDeli != null && itDeli.hasNext()) {
-                            additional.add(itDeli.next().getSemanticObject());
+                        Indicator indi = it.next();
+                        if (type.endsWith(Indicator.bsc_Indicator.getName())) {
+                            additional.add(indi.getSemanticObject());
+                        } else { //si se pidieron las iniciativas o entregables
+                            Iterator<Initiative> itInitiatives = indi.listInitiatives();
+                            while (itInitiatives != null && itInitiatives.hasNext()) {
+                                Initiative initiative = itInitiatives.next();
+                                if (type.endsWith(Initiative.bsc_Initiative.getName())) {
+                                    additional.add(initiative.getSemanticObject());
+                                } else {//si se pidieron los entregables
+                                    Iterator<Deliverable> itDeliverables = initiative.listDeliverables();
+                                    while (itDeliverables != null && itDeliverables.hasNext()) {
+                                        additional.add(itDeliverables.next().getSemanticObject());
+                                    }
+                                }
+                            }
                         }
                     }
                 }
