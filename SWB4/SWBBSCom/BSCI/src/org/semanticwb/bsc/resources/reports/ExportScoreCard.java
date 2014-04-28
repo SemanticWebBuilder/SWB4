@@ -178,8 +178,8 @@ public class ExportScoreCard extends GenericResource {
             }
         }
         String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-        String image = "iconelim.png";
-        String alt = base.getAttribute("alt", "image");
+        String image = "exportScoreCard.png";
+        String alt = paramRequest.getLocaleString("alt");
         out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
         out.println("<img src=\"" + webWorkPath + image + "\" alt=\"" + alt + "\" class=\"toolbar-img\" />");
         out.println("</a>");
