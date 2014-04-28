@@ -1045,12 +1045,21 @@ public class ReportGenerator extends GenericResource {
                             mustBeAdded = true;
                         }
                     } else if (inTurn instanceof Initiative) {
-                        if (((Initiative) inTurn).getObjectiveInitiative().getSponsor().equals(criteria.getSponsor())) {
-                            mustBeAdded = true;
+                        if (((Initiative) inTurn).getInitiativeAssignable() != null &&
+                                ((Initiative) inTurn).getInitiativeAssignable() instanceof Indicator) {
+                            Indicator indi = (Indicator) ((Initiative) inTurn).getInitiativeAssignable();
+                            if (indi.getObjective().getSponsor().equals(criteria.getSponsor())) {
+                                mustBeAdded = true;
+                            }
                         }
                     } else if (inTurn instanceof Deliverable) {
-                        if (((Deliverable) inTurn).getInitiative().getObjectiveInitiative().getSponsor().equals(criteria.getSponsor())) {
-                            mustBeAdded = true;
+                        Deliverable deli = (Deliverable) inTurn;
+                        if (deli.getInitiative() != null && deli.getInitiative().getInitiativeAssignable() != null &&
+                                deli.getInitiative().getInitiativeAssignable() instanceof Indicator) {
+                            Indicator indi = (Indicator) deli.getInitiative().getInitiativeAssignable();
+                            if (indi.getObjective().getSponsor().equals(criteria.getSponsor())) {
+                                mustBeAdded = true;
+                            }
                         }
                     }
                 }
@@ -1114,18 +1123,33 @@ public class ReportGenerator extends GenericResource {
                 if (type.endsWith(Objective.bsc_Objective.getName())) {
                     additional.add(indi.getObjective().getSemanticObject());
                 } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
-                    //No se consideran relaciones indirectas entre iniciativas e indicadores 
+                    //Se obtiene el listado de iniciativas
+                    Iterator<Initiative> it = indi.listInitiatives();
+                    while (it != null && it.hasNext()) {
+                        additional.add(it.next().getSemanticObject());
+                    }
                 } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
-                    //No se consideran relaciones indirectas entre entregables e indicadores 
+                    //Se obtiene el listado de iniciativas
+                    Iterator<Initiative> it = indi.listInitiatives();
+                    while (it != null && it.hasNext()) {
+                        Initiative ini = it.next();
+                        //Se obtiene el listado de entregables de cada iniciativa
+                        Iterator<Deliverable> itDeli = ini.listDeliverables();
+                        while (itDeli != null && itDeli.hasNext()) {
+                            additional.add(itDeli.next().getSemanticObject());
+                        }
+                    }
                 }
             }
         } else if (element instanceof Initiative) {
             Initiative ini = (Initiative) element;
             for (String type : relatedTypes) {
-                if (type.endsWith(Objective.bsc_Objective.getName())) {
-                    additional.add(ini.getObjectiveInitiative().getSemanticObject());
-                } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
-                    //No se consideran relaciones indirectas entre iniciativas e indicadores
+                if (type.endsWith(Objective.bsc_Objective.getName()) &&
+                        ini.getInitiativeAssignable() != null && ini.getInitiativeAssignable() instanceof Indicator) {
+                    additional.add(((Indicator) ini.getInitiativeAssignable()).getObjective().getSemanticObject());
+                } else if (type.endsWith(Indicator.bsc_Indicator.getName()) &&
+                        ini.getInitiativeAssignable() != null && ini.getInitiativeAssignable() instanceof Indicator) {
+                    additional.add(((Indicator) ini.getInitiativeAssignable()).getSemanticObject());
                 } else if (type.endsWith(Deliverable.bsc_Deliverable.getName())) {
                     Iterator<Deliverable> it = ini.listDeliverables();
                     while (it != null && it.hasNext()) {
@@ -1136,12 +1160,18 @@ public class ReportGenerator extends GenericResource {
         } else if (element instanceof Deliverable) {
             Deliverable deli = (Deliverable) element;
             for (String type : relatedTypes) {
-                if (type.endsWith(Objective.bsc_Objective.getName())) {
+                if (type.endsWith(Objective.bsc_Objective.getName()) &&
+                        deli.getInitiative().getInitiativeAssignable() != null &&
+                        deli.getInitiative().getInitiativeAssignable() instanceof Indicator) {
                     //se obtiene el objetivo del entregable a partir de la iniciativa
-                    additional.add(deli.getInitiative().getObjectiveInitiative().getSemanticObject());
-                } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
-                    //No se consideran relaciones indirectas entre entregables e indicadores 
-                } else if (type.endsWith(Initiative.bsc_Initiative.getName())) {
+                    Indicator indi = (Indicator) deli.getInitiative().getInitiativeAssignable();
+                    additional.add(indi.getObjective().getSemanticObject());
+                } else if (type.endsWith(Indicator.bsc_Indicator.getName()) &&
+                        deli.getInitiative().getInitiativeAssignable() != null &&
+                        deli.getInitiative().getInitiativeAssignable() instanceof Indicator) {
+                    //se obtiene el indicador a partir de la iniciativa
+                    additional.add(((Indicator) deli.getInitiative().getInitiativeAssignable()).getSemanticObject());
+                } else if (type.endsWith(Initiative.bsc_Initiative.getName()) && deli.getInitiative() != null) {
                     additional.add(deli.getInitiative().getSemanticObject());
                 }
             }
