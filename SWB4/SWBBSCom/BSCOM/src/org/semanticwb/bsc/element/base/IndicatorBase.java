@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Updateable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableClass,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Status,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Status,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Serializable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
