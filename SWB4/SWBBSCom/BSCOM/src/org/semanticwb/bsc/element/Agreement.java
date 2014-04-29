@@ -14,41 +14,54 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
         super(base);
     }
 
+    /**
+     * Obtiene el valor de la propiedad agreementNumber. Si el valor es {@code null}, se genera el valor
+     * sugerido con la siguiente estructura: T&iacute;tulo del scorecard + "-" + Tipo de sesi&ooacute;n (RAE o NOA)
+     * + n&uacute;mero de sesi&oacute;n a 2 d&iacute;gitos+ "-" + consecutivo del acuerdo por sesi&oacute;n a 2 d&iacute;gitos +
+     * "-" + a&ntilde;o actual a 2 d&iacute;gitos
+     * El valor sugerido es editable.
+     * @return 
+     */
     @Override
     public String getAgreementNumber() {
-        System.out.println("Entra al metodo \n");
         String agreementNumber = super.getAgreementNumber();
         
         if (agreementNumber == null) {
             Agreement agreement = (Agreement) getSemanticObject().createGenericInstance();
             Meeting meeting = agreement.getMeeting();
             if (meeting != null) {
-                /*
-                int meetingId = Integer.getInteger(meeting.getId()).intValue();
-                int agreementId = Integer.getInteger(this.getId()).intValue();
+                int meetingId = 0;
+                int agreementId = 0;
+                String meetingType = "";
+                try {
+                    if (meeting.getId() != null) {
+                        meetingId = Integer.parseInt(meeting.getId());
+                    }
+                    if (agreement.getId() != null) {
+                        agreementId = Integer.parseInt(agreement.getId());
+                    }
+                    meetingType = meeting.getMeetingType() != null
+                                ? meeting.getMeetingType().toUpperCase() : "";
+                } catch (NumberFormatException nfe) {
+                    System.err.println("Error al formar numero de acuerdo con id: " +
+                            agreement.getId() + ", " + nfe.getCause());
+                }
                 java.util.GregorianCalendar systemDate = new java.util.GregorianCalendar();
                 int anio = systemDate.get(GregorianCalendar.YEAR) % 100;
                 agreementNumber = agreement.getBSC().getTitle() + "-" +
-                        meeting.getMeetingType() != null ? meeting.getMeetingType().toUpperCase() : "" +
+                         meetingType +
                         (meetingId > 9 ? "" : "0") + meetingId + "-" +
-                        (agreementId > 9 ? "" : "0") + agreementId + anio;
-                        */
-                agreementNumber = "InfotecPEMPP-001-NOE-01-14";
-                this.setAgreementNumber(agreementNumber);
-            } else {
-                System.out.println("Meeting es nula");
+                        (agreementId > 9 ? "" : "0") + agreementId + "-" + anio;
+                setAgreementNumber(agreementNumber);
             }
         }
-        System.out.println("AgreementNumber: " + agreementNumber);
-        try {
-            throw new Exception("Por el numero de acuerdo");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
         return agreementNumber;
     }
 
+    /**
+     * Almacena el valor recibido como valor de la propiedad agreementNumber.
+     * @param value valor a almacenar
+     */
     @Override
     public void setAgreementNumber(String value) {
         super.setAgreementNumber(value);
