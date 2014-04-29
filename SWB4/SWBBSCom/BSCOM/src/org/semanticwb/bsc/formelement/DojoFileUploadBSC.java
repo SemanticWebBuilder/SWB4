@@ -180,9 +180,11 @@ public class DojoFileUploadBSC extends org.semanticwb.bsc.formelement.base.DojoF
                             buffer.append(name);
                             buffer.append("</a>\n");
                         } else {
+                            if(request.getAttribute("UserProfile") == null){ // No viene del recurso Perfil de Usuario
                             buffer.append("<span class=\"archive\">Actual: ");
                             buffer.append(name);
                             buffer.append("</span>");
+                            }
                         }
                     } else {
                         buffer.append("&nbsp;<a href=\"");
