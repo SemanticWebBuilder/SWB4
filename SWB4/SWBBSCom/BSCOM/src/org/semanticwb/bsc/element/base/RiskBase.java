@@ -4,16 +4,8 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Help,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.ActionAssignable
 {
-   /**
-   * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_selectingAlignment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#selectingAlignment");
-   /**
-   * Define mediante una descripción la selección de alineación
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_selectingAlignmentDescr=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#selectingAlignmentDescr");
    /**
    * La escala de valor deberá relacionar con los factores de riesgos señalados. Los riesgos deben evaluarse en una escala de valor del 1 al 10
    */
@@ -399,42 +391,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     public RiskBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-
-/**
-* Gets the SelectingAlignment property
-* @return String with the SelectingAlignment
-*/
-    public String getSelectingAlignment()
-    {
-        return getSemanticObject().getProperty(bsc_selectingAlignment);
-    }
-
-/**
-* Sets the SelectingAlignment property
-* @param value long with the SelectingAlignment
-*/
-    public void setSelectingAlignment(String value)
-    {
-        getSemanticObject().setProperty(bsc_selectingAlignment, value);
-    }
-
-/**
-* Gets the SelectingAlignmentDescr property
-* @return String with the SelectingAlignmentDescr
-*/
-    public String getSelectingAlignmentDescr()
-    {
-        return getSemanticObject().getProperty(bsc_selectingAlignmentDescr);
-    }
-
-/**
-* Sets the SelectingAlignmentDescr property
-* @param value long with the SelectingAlignmentDescr
-*/
-    public void setSelectingAlignmentDescr(String value)
-    {
-        getSemanticObject().setProperty(bsc_selectingAlignmentDescr, value);
     }
 
 /**
