@@ -58,7 +58,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
-    public static final int MARGEN_BOTTOM = 20; // Especifica el margen inferior del rectángulo de una perspectiva
+    public static final int MARGEN_BOTTOM = 30; // Especifica el margen inferior del rectángulo de una perspectiva
     public static final int HEADER_HEIGHT = 150; // altura del encabezado
     public static final int HEADER_1 = 24; // tamaño de fuente para título del mapa
     public static final int HEADER_2 = 18; // tamaño de fuente para misión, visión
@@ -435,7 +435,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                     for (int k = 0; k < nlDiffsCount; k++) {
                         Node noded = nlDiffs.item(k);
                         Element d = (Element) noded;
-                        d.setAttribute("width", Integer.toString(dw - PADDING_RIGHT));
+                        d.setAttribute("width", Integer.toString(dw - BOX_SPACING_RIGHT));
                         d.setAttribute("x", Integer.toString(px + k * dw + PADDING_RIGHT));
                     }
                 }
@@ -573,7 +573,8 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         XPath xPath = XPathFactory.newInstance().newXPath();
         expression = "/bsc/header";
         Node node = (Node) xPath.compile(expression).evaluate(map, XPathConstants.NODE);
-        if (node != null && node instanceof Element) {
+        if (node != null && node instanceof Element)
+        {
             NamedNodeMap attrs = node.getAttributes();
             id = attrs.getNamedItem("id").getNodeValue();
             w = assertValue(attrs.getNamedItem("width").getNodeValue());
@@ -704,12 +705,13 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                             String did = attrs.getNamedItem("id").getNodeValue();
                             w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                             x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
-                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "'," + x_ + ",y_," + HEADER_4 + ",'Verdana');").append("\n");
+                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "'," + (x_+BOX_SPACING_RIGHT) + ",y_+"+(HEADER_4+PADDING_DOWN)+"," + HEADER_4 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
-                            SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + topPadding(HEADER_4) + "," + x_ + ",y_);").append("\n");
+                            //SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + topPadding(HEADER_4) + "," + x_ + ",y_);").append("\n");
+                            SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + (x_+BOX_SPACING_RIGHT) + ");").append("\n");
                             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
                             SVGjs.append(" framingRect(rect,'" + did + "'," + w_ + ",rect.height.baseVal.value," + x_ + ",y_);").append("\n");
-                            SVGjs.append(" rect.y.baseVal.value = y_-" + HEADER_4 + ";").append("\n");
+                            //SVGjs.append(" rect.y.baseVal.value = y_+" + HEADER_4 + ";").append("\n");
                             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         }
                     }
@@ -890,8 +892,8 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 // caja de la perspectiva
                 SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
                 SVGjs.append(" rect.setAttributeNS(null,'id','" + pid + "_rct');").append("\n");
-                SVGjs.append(" if(rect.height.baseVal.value<120) {").append("\n");
-                SVGjs.append("   rect.height.baseVal.value = 120;").append("\n");
+                SVGjs.append(" if(rect.height.baseVal.value<150) {").append("\n");
+                SVGjs.append("   rect.height.baseVal.value = 150;").append("\n");
                 SVGjs.append(" }").append("\n");
                 SVGjs.append(" var h_ = Math.round(rect.height.baseVal.value);").append("\n");
                 SVGjs.append(" rect.height.baseVal.value = h_;").append("\n");
