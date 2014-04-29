@@ -890,8 +890,8 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 // caja de la perspectiva
                 SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
                 SVGjs.append(" rect.setAttributeNS(null,'id','" + pid + "_rct');").append("\n");
-                SVGjs.append(" if(rect.height.baseVal.value<150) {").append("\n");
-                SVGjs.append("   rect.height.baseVal.value = 150;").append("\n");
+                SVGjs.append(" if(rect.height.baseVal.value<120) {").append("\n");
+                SVGjs.append("   rect.height.baseVal.value = 120;").append("\n");
                 SVGjs.append(" }").append("\n");
                 SVGjs.append(" var h_ = Math.round(rect.height.baseVal.value);").append("\n");
                 SVGjs.append(" rect.height.baseVal.value = h_;").append("\n");
@@ -902,7 +902,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 SVGjs.append(" rect.setAttributeNS(null, 'stroke-opacity','1');").append("\n");
                 SVGjs.append(" g.insertBefore(rect,g.firstChild);").append("\n");
                 // título de la perspectiva
-                SVGjs.append(" txt = createText('" + perspectiveName + "',(" + px + "+h_/2),(h_-" + BOX_SPACING_RIGHT + ")," + HEADER_3 + ",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('" + perspectiveName + "',(" + px + "+h_/3),(h_-" + BOX_SPACING_RIGHT + ")," + HEADER_3 + ",'Verdana');").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'textLength',rect.height.baseVal.value);").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'lengthAdjust','spacingAndGlyphs');").append("\n");
                 SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270," + px + ",'+h_+')');").append("\n");
