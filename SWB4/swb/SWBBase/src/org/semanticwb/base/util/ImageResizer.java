@@ -258,6 +258,22 @@ public class ImageResizer
         return scaledBI;
     }
 
+    
+    public static void crop(File origFile, int maxWidth, int maxHeight, File destfile, String type) throws IOException
+    {
+        BufferedImage bi = ImageIO.read(origFile);
+        int originalHeight=bi.getHeight();
+        int originalWidth=bi.getWidth();
+        if(maxHeight>originalHeight)
+        {
+            maxHeight=originalHeight;
+        }
+        if(maxWidth>originalWidth)
+        {
+            maxWidth=originalWidth;
+        }
+        ImageIO.write(createCropCopy(bi, maxWidth, maxHeight), type, destfile);
+    }
     /**
      * Resize crop.
      * 
@@ -368,6 +384,10 @@ public class ImageResizer
         return scaledBI;
     }
 
+    private static BufferedImage createCropCopy(BufferedImage originalImage, int topWidth, int topHeight)
+    {        
+        return originalImage.getSubimage(0,0, topWidth, topHeight);
+    }
     /**
      * Creates the resized crop copy.
      * 
