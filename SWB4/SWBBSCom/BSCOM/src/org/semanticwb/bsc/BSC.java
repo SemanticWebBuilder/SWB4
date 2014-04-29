@@ -235,11 +235,15 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                         eobj.appendChild(e);
                         //sponsor
                         e = doc.createElement("sponsor");
-                        e.appendChild(doc.createTextNode(o.getSponsor().getFullName()));
+                        e.appendChild(doc.createTextNode(o.getSponsor()==null?"Desconocido":o.getSponsor().getFullName()));
                         eobj.appendChild(e);
                         //frequency
                         e = doc.createElement("frequency");
-                        e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                        if(o.getPeriodicity()==null) {
+                            e.appendChild(doc.createTextNode("Desconocido"));
+                        }else {
+                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                        }
                         eobj.appendChild(e);
                         
                         //relaciones objetivo - tema
