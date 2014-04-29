@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable
 {
    /**
    * Define el número de un acuerdo, tiene las siguientes características: Título del scorecard+ "-S" + número de sesión a 2 dígitos+ "-" + consecutivo del acuerdo por sesión a 2 dígitos + año actual a 2 dígitos
@@ -332,7 +332,8 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
 */
     public String getAgreementNumber()
     {
-        return getSemanticObject().getProperty(bsc_agreementNumber);
+        //Override this method in Agreement object
+        return getSemanticObject().getProperty(bsc_agreementNumber,false);
     }
 
 /**
@@ -341,7 +342,8 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
 */
     public void setAgreementNumber(String value)
     {
-        getSemanticObject().setProperty(bsc_agreementNumber, value);
+        //Override this method in Agreement object
+        getSemanticObject().setProperty(bsc_agreementNumber, value,false);
     }
 
 /**
