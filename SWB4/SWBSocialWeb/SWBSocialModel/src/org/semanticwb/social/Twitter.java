@@ -88,7 +88,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             String messageText = this.shortMsgText(message);
-            message.setMsg_Text(messageText);
+            //message.setMsg_Text(messageText);
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             try {
                 twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
@@ -150,7 +150,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         //System.out.println("Inside post photo TWITTER");
         if (photo != null) {
             String messageText = this.shortMsgText(photo);
-            photo.setMsg_Text(messageText);
+            //photo.setMsg_Text(messageText);
             String photoToPublish="";
             String additionalPhotos="";
             int photoNumber = 0;
