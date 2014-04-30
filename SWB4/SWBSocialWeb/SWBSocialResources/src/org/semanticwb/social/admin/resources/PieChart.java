@@ -15,9 +15,11 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,7 @@ import org.json.JSONException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -53,6 +56,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.MessageIn;
 import org.semanticwb.social.PhotoIn;
 import org.semanticwb.social.PostIn;
+import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialTopic;
 import org.semanticwb.social.Stream;
@@ -215,6 +219,8 @@ public class PieChart extends GenericResource {
             setso = getSocialNetwork(suri, lang, filterGeneral, filter);
         } else if (type.equals("graphBar")) {
             setso = getGraphBar(request, suri, lang, filterGeneral, filter);
+        } else if (type.equals("graphBarByHour")) {
+            setso = getGraphBarByHour(request);
         } else {
             setso = getListSentiment(suri, lang, filter);
 
@@ -443,8 +449,9 @@ public class PieChart extends GenericResource {
                 } else {
                     createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                 }
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
-
+                SimpleDateFormat df = new SimpleDateFormat();
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_created(), lang));
+                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, df.format(postIn.getPi_createdInSocialNet()));
                 String path = "";
 
                 if (postIn.getPostSentimentalType() == 0) {
@@ -653,5 +660,106 @@ public class PieChart extends GenericResource {
         }
         i = totalArray.iterator();
         return i;
+    }
+    
+    private Iterator<PostIn> getGraphBarByHour(HttpServletRequest request) {
+        String suri = request.getParameter("suri");
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        ArrayList tmpArray = new ArrayList();
+        ArrayList finalArray = new ArrayList();
+        Iterator it = null;
+
+        String selectedYear = request.getParameter("selectedYear") == null ? "" : request.getParameter("selectedYear");
+        String selectedMonth = request.getParameter("selectedMonth") == null ? "" : request.getParameter("selectedMonth");
+        String selectedDay = request.getParameter("selectedDay") == null ? "" : request.getParameter("selectedDay");
+        String selectedHourTmp = request.getParameter("selectedHour") == null ? "" : request.getParameter("selectedHour");
+        //System.out.println("SELECTED HOUR:" + selectedHourTmp);
+        int selectedHour = Integer.parseInt(selectedHourTmp);
+        String fullDate = "";
+        
+        fullDate += selectedYear + "-" + (selectedMonth.length() == 1 ? "0" + selectedMonth : selectedMonth) +
+                 "-" + (selectedDay.length() == 1 ? "0" + selectedDay : selectedDay);        
+
+        if (semObj.getGenericInstance() instanceof Stream) {
+            Stream stream = (Stream) semObj.getGenericInstance();
+            tmpArray = getPostInByStreamAndDay(stream, fullDate);            
+        } else if (semObj.getGenericInstance() instanceof SocialTopic) {
+            SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+            tmpArray = getPostInBySocialTopicAndDay(socialTopic, fullDate);
+        }
+
+        for(int i = 0; i < tmpArray.size(); i++){
+            SemanticObject sobj =(SemanticObject) tmpArray.get(i);
+            PostIn postIn = (PostIn)sobj.createGenericInstance();
+            Calendar calendario = GregorianCalendar.getInstance();
+            calendario.setTime(postIn.getPi_createdInSocialNet());
+            int hourOfDay = calendario.get(Calendar.HOUR_OF_DAY);
+            
+            if(hourOfDay == selectedHour){
+                finalArray.add(postIn);
+            }
+        }        
+        it = finalArray.iterator();
+        return it;
+    }
+    
+    /**
+    * 
+    * @param stream
+    * @param a date in the format yyyy-mm-dd
+    * @return the posts created some day.
+    */
+   public static ArrayList getPostInByStreamAndDay(org.semanticwb.social.Stream stream, String date)
+   {
+       //System.out.println("entrando por los datos!");
+       if(date == null || date.isEmpty()){
+           return null;
+       }
+       String query=
+          "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+          "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>\n" +
+          "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+          "\n";
+
+          query+="select ?semObj" +"\n";
+          query+=
+          "where {\n" +
+          " ?semObj social:postInStream <"+ stream.getURI()+">. \n" + 
+          " ?semObj social:pi_createdInSocialNet ?postInCreated. \n" +
+          " FILTER regex(?postInCreated, \"" + date + "\", \"i\") \n" +
+          "  }\n";
+
+          WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+          return SWBSocial.executeQueryArraySemObj(query, wsite);
+    }
+   
+   /**
+    * 
+    * @param socialTopic
+    * @param a date in the format yyyy-mm-dd
+    * @return the posts created some day.
+    */
+   public static ArrayList getPostInBySocialTopicAndDay(org.semanticwb.social.SocialTopic socialTopic, String date)
+   {
+       //System.out.println("entrando por los datos!");
+       if(date == null || date.isEmpty()){
+           return null;
+       }
+       String query=
+          "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+          "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>\n" +
+          "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
+          "\n";
+
+          query+="select ?semObj" +"\n";
+          query+=
+          "where {\n" +
+          " ?semObj social:socialTopic <"+ socialTopic.getURI()+">. \n" + 
+          " ?semObj social:pi_createdInSocialNet ?postInCreated. \n" +
+          " FILTER regex(?postInCreated, \"" + date + "\", \"i\") \n" +
+          "  }\n";
+
+          WebSite wsite=WebSite.ClassMgr.getWebSite(socialTopic.getSemanticObject().getModel().getName());
+          return SWBSocial.executeQueryArraySemObj(query, wsite);
     }
 }
