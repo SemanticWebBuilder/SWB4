@@ -38,6 +38,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -173,13 +174,18 @@ public class DocumentationResource extends GenericAdmResource {
 
     void doViewDocumentation(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException {
         response.setContentType("text/html; charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String suri = request.getParameter("suri") != null ? request.getParameter("suri") : "";
-        ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
-        try {
-            org.w3c.dom.Document dom = getDom(request.getParameter("suri"), response, paramRequest);
-            String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
-            //Lo comentado es para xsl
+        String path = "/swbadmin/jsp/process/documentation/viewDocumentation.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(path);
+        request.setAttribute("paramRequest", paramRequest);
+        request.setAttribute("suri", request.getParameter("suri"));
+        rd.include(request, response);
+//        PrintWriter out = response.getWriter();
+//        String suri = request.getParameter("suri") != null ? request.getParameter("suri") : "";
+//        ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
+//        try {
+//            org.w3c.dom.Document dom = getDom(request.getParameter("suri"), response, paramRequest);
+//            String basePath = SWBPortal.getWorkPath() + "/models/" + paramRequest.getWebPage().getWebSiteId() + "/Resource/" + pe.getTitle() + "/";
+//            //Lo comentado es para xsl
 //            File folder = new File(basePath);
 //            if (!folder.exists()) {
 //                folder.mkdirs();
@@ -192,22 +198,20 @@ public class DocumentationResource extends GenericAdmResource {
 //            fout.write(dom.getTextContent().getBytes());
 //            fout.flush();
 //            fout.close();
-
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            Result output = new StreamResult(new File(basePath + pe.getTitle() + ".xml"));
-            Source input = new DOMSource(dom);
-            transformer.transform(input, output);
-
-
-            if (dom != null) {
-                String tlpPath = "/swbadmin/jsp/process/documentation/testTemplate.xsl";
-
-                tpl = SWBUtils.XML.loadTemplateXSLT(new FileInputStream(SWBUtils.getApplicationPath() + tlpPath));
-                out.print(SWBUtils.XML.transformDom(tpl, dom));
-            }
-        } catch (Exception e) {
-            log.error(e);
-        }
+//
+//            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//            Result output = new StreamResult(new File(basePath + pe.getTitle() + ".xml"));
+//            Source input = new DOMSource(dom);
+//            transformer.transform(input, output);
+//            if (dom != null) {
+//                String tlpPath = "/swbadmin/jsp/process/documentation/testTemplate.xsl";
+//
+//                tpl = SWBUtils.XML.loadTemplateXSLT(new FileInputStream(SWBUtils.getApplicationPath() + tlpPath));
+//                out.print(SWBUtils.XML.transformDom(tpl, dom));
+//            }
+//        } catch (Exception e) {
+//            log.error(e);
+//        }
     }
 
     void doExportDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ServletException, DocumentException, Exception {
@@ -358,7 +362,6 @@ public class DocumentationResource extends GenericAdmResource {
     }
 
     public static void createModel(String suri, String basePath) throws FileNotFoundException, IOException {
-//        System.out.println("entre createModel: " + suri);
         ProcessElement pe = (ProcessElement) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(suri);
         String html = "";
         html += "<link href=\"css/bootstrap/bootstrap.css\" rel=\"stylesheet\">\n"
