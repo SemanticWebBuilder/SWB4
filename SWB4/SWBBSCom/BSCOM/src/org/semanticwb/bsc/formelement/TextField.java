@@ -48,6 +48,7 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
             GenericObject genObject = obj.createGenericInstance();
             if (genObject instanceof Objective || genObject instanceof Indicator ||
                     genObject instanceof Initiative || genObject instanceof Deliverable || genObject instanceof Agreement) {
+                if(request.getAttribute("pdf") == null){
                 showLink = true;
                 viewString.append("<a href=\"");
                 if (websiteId != null && request.getRequestURI().contains(websiteId)) {
@@ -61,6 +62,8 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
                 viewString.append("?suri=");
                 viewString.append(obj.getEncodedURI());
                 viewString.append("\" >");
+                }
+                
             }
             viewString.append(obj.getProperty(prop));
             if (showLink) {
