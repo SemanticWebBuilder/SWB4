@@ -196,7 +196,13 @@
 
 
             }
-
+            int maxFrequencyValue = 0;
+            for (int i = 0; i < dias.length; i++) {//Obtiene el dia con el mayor numero de posts
+                int sum = dias[i][1] + dias[i][2] + dias[i][3];
+                if(sum > maxFrequencyValue){
+                    maxFrequencyValue = sum;
+                }
+            }
 
             int d = 1;
             for (int idx = 0; idx < dias.length; idx++) {
@@ -219,9 +225,8 @@
                     node1.put("negatives", negatives_s);
                     node1.put("post", elem);
                     node1.put("chartclass", "possClass");
-                    node1.put("x", days);
-                    double totalPost = (.50) * (nPostIn);
-                    node1.put("totalPost", nPostIn + totalPost);
+                    node1.put("x", days);                    
+                    node1.put("totalPost", maxFrequencyValue + (maxFrequencyValue*.3));
                     node1.put("typeX", "Dias");
                     node.put(node1);
                     d++;
