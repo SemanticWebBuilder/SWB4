@@ -231,7 +231,7 @@
                     
                 })
                 .attr("x", function(d) { return x(d.month);})
-                .attr("width", x.rangeBand() )
+                .attr("width", x.rangeBand() - 5)
                 .attr("y", function(d) {return y(d.post);})
                 .attr("height", function(d) {return height - y(d.post);}) 
                 .on('mouseover', tip.show)

@@ -18,41 +18,10 @@
 <%@page import="org.json.*"%>
 <%@page import="java.util.*"%> 
 <%@page import="java.util.Calendar"%> 
+<%@page import="static org.semanticwb.social.admin.resources.PieChart.*"%>
 
 <%!
-
-    /**
-    * 
-    * @param stream
-    * @param a date in the format yyyy-mm-dd
-    * @return the posts created some day.
-    */
-   public static ArrayList getPostInByStreamAndDay(org.semanticwb.social.Stream stream, String date)
-   {
-       System.out.println("entrando por los datos!");
-       if(date == null || date.isEmpty()){
-           return null;
-       }
-       String query=
-          "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-          "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>\n" +
-          "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" +
-          "\n";
-
-          query+="select ?semObj" +"\n";
-          query+=
-          "where {\n" +
-          " ?semObj social:postInStream <"+ stream.getURI()+">. \n" + 
-          " ?semObj social:pi_createdInSocialNet ?postInCreated. \n" +
-          " FILTER regex(?postInCreated, \"" + date + "\", \"i\") \n" +
-          "  }\n";
-
-          WebSite wsite=WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
-          return SWBSocial.executeQueryArraySemObj(query, wsite);
-    }
-        
     JSONArray getObject(SemanticObject semObj, String lang, HttpServletRequest request) throws Exception {
-        Iterator<PostIn> itObjPostIns = null;
         String fullDate = "";
         ArrayList aListFilter = new ArrayList();
         String selectedAnio = request.getParameter("selectedAnio") == null ? "" : request.getParameter("selectedAnio");
@@ -69,11 +38,9 @@
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
             aListFilter = getPostInByStreamAndDay(stream, fullDate);            
-
         } else if (semObj.getGenericInstance() instanceof SocialTopic) {
-            //aListFilter = getPostInByStreamAndDay(stream, date);
-            //SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
-            //itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+            SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+            aListFilter = getPostInBySocialTopicAndDay(socialTopic, fullDate);
         }
 
         
@@ -87,11 +54,10 @@
 
         JSONArray node = new JSONArray();
 
-        int nPostIn = 0;
-        // Get the number of days in that month 
-        int days = 24;
+        
+        int days = 24;// Get the number of hours in a day
         int neutrals_ = 0, positives_ = 0, negatives_ = 0;
-        int[][] dias = new int[days][7];
+        int[][] dias = new int[days][4];
             
         for(int i = 0; i < aListFilter.size(); i++){
             SemanticObject sobj =(SemanticObject) aListFilter.get(i);
@@ -107,59 +73,60 @@
             if (postIn.getPi_createdInSocialNet() != null) {
                 date = postIn.getPi_createdInSocialNet();
             }
-            nPostIn++;
 
             calendario.setTime(date);
 
-            int year = calendario.get(Calendar.YEAR);
-            int comMonth = calendario.get(Calendar.MONTH);
+            //int year = calendario.get(Calendar.YEAR);
+            //int comMonth = calendario.get(Calendar.MONTH);
             int hourIndex = calendario.get(Calendar.HOUR_OF_DAY);
 
             dias[hourIndex][0] += 1;
             dias[hourIndex][1] += neutrals_;
             dias[hourIndex][2] += negatives_;
             dias[hourIndex][3] += positives_;
-            dias[hourIndex][4] = comMonth;
-            dias[hourIndex][5] = year;
-            dias[hourIndex][6] = calendario.get(Calendar.DAY_OF_MONTH);
+            //dias[hourIndex][4] = comMonth;
+            //dias[hourIndex][5] = year;
+            //dias[hourIndex][6] = calendario.get(Calendar.DAY_OF_MONTH);
 
             neutrals_ = 0;
             negatives_ = 0;
             positives_ = 0;
         }
-
-
+        int max = 0;
+        for (int i = 0; i < dias.length; i++) {//Obtiene la hora con el mayor numero de posts
+            int suma = dias[i][1] + dias[i][2] + dias[i][3];
+            if(suma > max){
+                max = suma;
+            }
+        }        
         int d = 1;
         for (int idx = 0; idx < dias.length; idx++) {
             if (d <= days) {
-                Object elem = dias[idx][0];
+                int totalPosts = dias[idx][0];
                 int neutrals_s = dias[idx][1];
                 int negatives_s = dias[idx][2];
                 int positives_s = dias[idx][3];
-                int mes = dias[idx][4];
-                int year = dias[idx][5];
-                int dia = dias[idx][6];
+                int mes = Integer.parseInt(selectedMes);
+                int year = Integer.parseInt(selectedAnio);
+                int dia = Integer.parseInt(selectedDia);
 
                 JSONObject node1 = new JSONObject();
                 node1.put("day", dia);
-                node1.put("month", (idx + 1));
-                node1.put("month2", mes);
+                node1.put("hourOfDay", idx);
+                node1.put("month", mes);
                 node1.put("year", year);
                 node1.put("neutrals", neutrals_s);
                 node1.put("positives", positives_s);
                 node1.put("negatives", negatives_s);
-                node1.put("post", elem);
+                node1.put("post", totalPosts);
                 node1.put("chartclass", "possClass");
                 node1.put("x", days);
-                double totalPost = (.50) * (nPostIn);
-                node1.put("totalPost", nPostIn + totalPost);
+                node1.put("totalPost", max + (max*.3));//Dar un margen para mostrar el tooltip
                 node1.put("typeX", "Horas");
                 node.put(node1);
                 d++;
             }
-        }
-
-        System.out.println("THE NODE:" + node);
+        }        
         return node;
 
     }
@@ -167,16 +134,7 @@
 
 %>
 
-<%    
-
-    System.out.println("graficando......");
-    System.out.println("objUri" + request.getParameter("objUri"));
-    System.out.println("data:" + request.getParameter("getGraphData"));
-    
-    String selectedAnio1 = request.getParameter("selectedAnio");
-    String selectedMes1 = request.getParameter("selectedMes");
-    String selectedDia1 = request.getParameter("selectedDia");
-    System.out.println("params:" + " " + selectedAnio1 + "-" + selectedMes1 + "-" + selectedDia1 +"-");
+<%
     if (request.getParameter("objUri") != null && request.getParameter("getGraphData") != null) {        
         SemanticObject semObj = SemanticObject.createSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
@@ -191,7 +149,7 @@
         return;
     }
     SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-    System.out.println(semObj);
+    //System.out.println(semObj);
     if (semObj == null) {
         return;
     }
@@ -343,7 +301,7 @@
                 var negatives; 
                 
                 for (i = 0; i < data[1].x; i++) {               
-                    xArray.push(data[i].month)                    
+                    xArray.push(data[i].hourOfDay)                    
                     y.domain([0,data[i].totalPost]);               
                     typeX =  data[i].typeX;
                    
@@ -397,14 +355,14 @@
                     }        
                     
                 })
-                .attr("x", function(d) { return x(d.month);})
-                .attr("width", x.rangeBand() )
+                .attr("x", function(d) { return x(d.hourOfDay);})
+                .attr("width", x.rangeBand() -5 )
                 .attr("y", function(d) {return y(d.post);})
                 .attr("height", function(d) {return height - y(d.post);}) 
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide)
                 .on("click", function(d) {                   
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "graphBar").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri)%>&selectedAnio="+d.year+"&selectMes="+d.month+"&selectAnio="+d.year+"&selectDay="+d.day+"&selectMonth2="+d.month2;
+                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "graphBarByHour").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri)%>&selectedYear="+d.year+"&selectedMonth="+d.month+"&selectedDay="+d.day+"&selectedHour="+d.hourOfDay;
                     document.location.href = url;
                 }) 
    
