@@ -110,7 +110,7 @@
         if (positives == 0 && negatives == 0 && neutrals == 0) {
             //System.out.println("Entra a ObSentData TODOS 0");
             JSONObject node3 = new JSONObject();
-            node3.put("label", "Neutros");
+            node3.put("label", "Sin datos");
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");

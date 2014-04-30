@@ -916,8 +916,11 @@
     </div>         
 
 
-    <div id="showgraphBar" dojoType="dijit.layout.ContentPane" title="Preguntas" selected="true">
+    <div id="showgraphBar" dojoType="dijit.layout.ContentPane">
     </div>
+
+    <div id="postInByHour" dojoType="dijit.layout.ContentPane">
+    </div> 
 </div>
 
 

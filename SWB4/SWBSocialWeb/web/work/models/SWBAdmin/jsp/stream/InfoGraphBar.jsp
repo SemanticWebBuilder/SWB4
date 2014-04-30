@@ -77,8 +77,8 @@
                     } else if (postIn.getPostSentimentalType() == 2) {
                         negatives++;
                     }
-                    if (postIn.getPi_created() != null) {
-                        date = postIn.getPi_created();
+                    if (postIn.getPi_createdInSocialNet() != null) {
+                        date = postIn.getPi_createdInSocialNet();
                     }
                     nPostIn++;
 
@@ -166,8 +166,8 @@
                     } else if (postIn.getPostSentimentalType() == 2) {
                         negatives_++;
                     }
-                    if (postIn.getPi_created() != null) {
-                        date = postIn.getPi_created();
+                    if (postIn.getPi_createdInSocialNet() != null) {
+                        date = postIn.getPi_createdInSocialNet();
                     }
                     nPostIn++;
                 }
