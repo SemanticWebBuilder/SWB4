@@ -237,8 +237,14 @@
                 .on('mouseover', tip.show)
                 .on('mouseout', tip.hide)
                 .on("click", function(d) {
-                    var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "graphBar").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri)%>&selectedAnio="+d.year+"&selectMes="+d.month+"&selectAnio="+d.year+"&selectDay="+d.day+"&selectMonth2="+d.month2;
-                    document.location.href = url;
+                    <%if (request.getParameter("selectMes") != null && !request.getParameter("selectMes").trim().isEmpty()){                        
+                    %>                        
+                        var urlParams = '&selectedAnio='+d.year+'&selectedMes='+<%=request.getParameter("selectMes")%>+'&selectedDia='+d.day;
+                        parent.postHtml('<%=urlRender.setMode("showBarByDay")%>?suri=<%=URLEncoder.encode(suri)%>' + urlParams, 'postInByHour');
+                    <%}else{%>
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "graphBar").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri)%>&selectedAnio="+d.year+"&selectMes="+d.month+"&selectAnio="+d.year+"&selectDay="+d.day+"&selectMonth2="+d.month2;
+                        document.location.href = url;
+                    <%}%>
                 }) 
    
             });
