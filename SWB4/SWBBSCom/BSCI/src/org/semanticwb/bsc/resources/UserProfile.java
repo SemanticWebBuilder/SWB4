@@ -27,6 +27,7 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.GenericAdmResource;
+import org.semanticwb.portal.api.GenericSemResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
@@ -41,6 +42,7 @@ public class UserProfile extends GenericAdmResource {
 
     private final String Mode_CHANGEPASSWORD = "changePassword";
     private final String Action_CHANGEPASSWORD = "savePassword";
+    private static org.semanticwb.Logger log = SWBUtils.getLogger(GenericSemResource.class);
 
     /**
      * Genera el despliegue la actualización del perfil de usuario.
@@ -64,6 +66,11 @@ public class UserProfile extends GenericAdmResource {
         StringBuilder toReturn = new StringBuilder();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
+        
+        if(!user.isSigned()){
+             UserProfile.log.error("El usuario no esta logueado."); 
+            return;
+        }
 
         String img = "";
         ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
