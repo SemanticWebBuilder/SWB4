@@ -1054,7 +1054,6 @@
         
     %>
         var strJSON = '<%=pr.getData()%>';
-        console.log('json : ' + strJSON);
         Modeler.loadProcess(strJSON);
         var obj = Modeler.getGraphElementByURI(null, '<%=sp.getURI()%>');
         ToolKit.setLayer(obj.subLayer);

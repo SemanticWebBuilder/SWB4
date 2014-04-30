@@ -160,7 +160,7 @@
                         Documentation doc = null;
                         while (iterator.hasNext()) {
                             ge = iterator.next();
-                            ge.removeAllDocumentation();
+                            //ge.removeAllDocumentation();
                             if (ge instanceof Lane) {
                                 lane.add(ge);
                             }
