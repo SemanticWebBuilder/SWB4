@@ -97,6 +97,8 @@ public class PieChart extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (paramRequest.getMode().equals("InfographBar")) {
             doPreview(request, response, paramRequest);
+        } else if(paramRequest.getMode().equals("showBarByDay")){
+            showBarByDay(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("showGraphBar") || paramRequest.getMode().equals("anioMes")) {
             showGraphBar(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("exportExcel")) {
@@ -142,7 +144,7 @@ public class PieChart extends GenericResource {
                 log.error(ex);
             }
         }
-    }
+    }    
 
     public void doEditGraph(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
@@ -154,7 +156,37 @@ public class PieChart extends GenericResource {
 
 
     }
+    
+    private void showBarByDay(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws IOException, SWBResourceException {
 
+        if (request.getParameter("doViewGraph") == null) {
+            doEditGraphByDay(request, response, paramRequest);
+            return;
+        }
+
+        final String myPath = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/stream/postInByHour.jsp";
+        RequestDispatcher dis = request.getRequestDispatcher(myPath);
+        if (dis != null) {
+            try {
+                request.setAttribute("suri", request.getParameter("suri"));
+                request.setAttribute("paramRequest", paramRequest);
+                dis.include(request, response);
+            } catch (Exception ex) {
+                log.error(ex);
+            }
+        }
+    }
+
+    public void doEditGraphByDay(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        PrintWriter out = response.getWriter();
+
+        String selectedAnio =request.getParameter("selectedAnio") == null ? "" : request.getParameter("selectedAnio");
+        String selectedMes = request.getParameter("selectedMes") == null ? "" : request.getParameter("selectedMes");
+        String selectedDia = request.getParameter("selectedDia") == null ? "" : request.getParameter("selectedDia");
+        out.println("<iframe  id=\"inneriframe1\" src=\"" + paramRequest.getRenderUrl().setMode("showBarByDay").setParameter("doViewGraph", "1").setParameter("suri", request.getParameter("suri")).setParameter("selectedAnio", selectedAnio).setParameter("selectedMes", selectedMes).setParameter("selectedDia", selectedDia) + "\"  frameborder=\"0\" width=\"100%\"   marginheight=\"0\" marginwidth=\"0\"  scrolling=\"no\"></iframe>"); //frameborder=\"0\" style=\"overflow:hidden;overflow-x:hidden;overflow-y:hidden;height:100%;width:100%;position:absolute;top:0px;left:0px;right:0px;bottom:0px\" height=\"100%\" width=\"100%\" ></iframe> ");
+
+
+    }
     private void doGenerateReport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws JSONException, IOException, com.hp.hpl.jena.sparql.lib.org.json.JSONException {
         //HashMap hmapResult = filtros(swbSocialUser, webSite, searchWord, request, stream, page);
         String suri = request.getParameter("suri");
