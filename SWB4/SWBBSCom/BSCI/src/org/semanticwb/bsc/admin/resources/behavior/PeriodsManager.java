@@ -7,9 +7,11 @@ package org.semanticwb.bsc.admin.resources.behavior;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
@@ -254,13 +256,30 @@ public class PeriodsManager extends GenericResource {
             if(periodId!=null)
             {
                 if(Period.ClassMgr.hasPeriod(periodId, model)) {
-                    Seasonable seasonable = (Seasonable) semObj.getGenericInstance();                    
+                    Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
                     Period period = Period.ClassMgr.getPeriod(periodId, model);
                     if(seasonable.hasPeriod(period)) {
                         seasonable.removePeriod(period);
+                        if(!period.listSeasonables().hasNext())
+                        {
+                            period.setUndeleteable(false);
+                            Iterator<Period> it = period.getBSC().listPeriods();
+                            boolean periodRelated = false;
+                            while(it.hasNext() && !periodRelated) {
+                                Period aux = it.next();
+                                periodRelated = periodRelated || aux.listSeasonables().hasNext();
+                                if(!periodRelated) {
+                                    aux.setUndeleteable(false);
+                                }
+                            }
+                            if(!periodRelated) {
+                                 period.setUndeleteable(false);
+                            }
+                        }
                         response.setRenderParameter("statmsg", response.getLocaleString("msgDeallocatedPeriod"));
                     }else {
                         seasonable.addPeriod(period);
+                        period.setUndeleteable(true);
                         response.setRenderParameter("statmsg", response.getLocaleString("msgAssignedPeriod"));
                     }
                 }else {
@@ -274,26 +293,55 @@ public class PeriodsManager extends GenericResource {
         }
         else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
         {
-            Iterator<Period> itPeriods = null;
+            Iterator<Period> it = null;
             GenericObject genericObject = semObj.getGenericInstance();
             if (genericObject instanceof Indicator) {
                 Indicator indicator = (Indicator)genericObject;
-                itPeriods = indicator.getObjective().listValidPeriods().iterator();
+                it = indicator.getObjective().listValidPeriods().iterator();
             }else if(genericObject instanceof Objective || genericObject instanceof Initiative) {
-                itPeriods = model.listValidPeriods().iterator();
+                it = model.listValidPeriods().iterator();
             }
-            if(itPeriods!=null) {
-                Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
-                seasonable.removeAllPeriod();
-                while(itPeriods.hasNext()) {
-                    seasonable.addPeriod(itPeriods.next());
+            List<Period> periods = SWBUtils.Collections.copyIterator(it);
+            
+            Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
+            seasonable.removeAllPeriod();
+            for(Period period : periods) {
+                if(!period.listSeasonables().hasNext()) {
+                    period.setUndeleteable(false);
                 }
+            }            
+            for(Period period : periods) {
+                seasonable.addPeriod(period);
+                period.setUndeleteable(true);
             }
+            response.setRenderParameter("statmsg", response.getLocaleString("msgAssignedAllPeriods"));
         }
         else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
         {
             Seasonable seasonable = (Seasonable) semObj.getGenericInstance();
             seasonable.removeAllPeriod();
+            
+            BSC bsc = null;
+            GenericObject genericObject = semObj.getGenericInstance();
+            if(genericObject instanceof Indicator) {
+                bsc = ((Indicator)genericObject).getBSC();
+            }else if(genericObject instanceof Objective) {
+                bsc = ((Objective)genericObject).getBSC();
+            }
+            if(bsc!=null) {
+                Iterator<Period> it = bsc.listPeriods();
+                if(!it.hasNext())
+                {
+                    boolean periodRelated;
+                    while(it.hasNext()) {
+                        Period aux = it.next();
+                        periodRelated = aux.listSeasonables().hasNext();
+                        if(!periodRelated) {
+                            aux.setUndeleteable(false);
+                        }
+                    }
+                }
+            }
         }
     }
 
