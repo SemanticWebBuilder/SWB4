@@ -21,7 +21,7 @@
 <%
     String action = paramRequest.getAction();
     User user = paramRequest.getUser();
-    WebSite wsite = paramRequest.getWebPage().getWebSite();
+    //WebSite wsite = paramRequest.getWebPage().getWebSite();
 %>
 
 <p>
@@ -110,7 +110,7 @@
 %>
 <div id="msj-panel">          
     <%
-        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByFromUser(user, wsite);
+        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByFromUser(user, SWBSocialUtil.getConfigWebSite()); 
         HashMap hashBydate = new HashMap();
         //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
@@ -225,7 +225,7 @@
 <div id="msj-panel">
 
     <%
-        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, wsite);
+        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, SWBSocialUtil.getConfigWebSite()); 
         HashMap hashBydate = new HashMap();
         //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
