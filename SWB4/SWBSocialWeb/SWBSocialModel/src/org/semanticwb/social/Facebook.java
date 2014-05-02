@@ -96,7 +96,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 i++;
             }
         }
-        System.out.println("PARSED STRING:"  + parsedString);
+        ///System.out.println("------>PARSED STRING:"  + parsedString);
         return parsedString;
     }
 
@@ -123,7 +123,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         int queriesNumber = phrasesInStream.split(",").length * 2;//int queriesNumber = phrasesInStream.split("\\|").length * 2;
         HashMap<String, String>[] queriesArray = new HashMap[queriesNumber];
-
+        boolean firstSearch = true;
+        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        if (socialStreamSerch != null) {
+            ///System.out.println("socialStreamSerch:" + socialStreamSerch);
+            ///System.out.println("socialStreamSerch ----:" + socialStreamSerch.getNextDatetoSearch());
+            if(socialStreamSerch.getNextDatetoSearch() != null){
+                firstSearch = false;
+            }
+        }
+        ///System.out.println("PRIMERA BUSQUEDA:" + firstSearch);
         try {
             //Como Facebook proporciona los datos de un conjunto definido de 
             //mensajes a la vez, se necesita pedir esta información por bloques
@@ -140,7 +149,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
 
                     //Se analiza la respuesta de Facebook y se extraen los datos de los mensajes
-                    canGetMoreResults = parseResponse(fbResponse, stream, queriesArray, iterations++);
+                    canGetMoreResults = parseResponse(fbResponse, stream, queriesArray, iterations++, firstSearch);
                 }
 
                 if (!stream.isActive()) {//If the stream has been disabled stop listening
@@ -148,10 +157,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
 
             } while (canGetMoreResults);
-
+            ///System.out.println("\n\n\n\n\n\n\n " + "ALMACENANDO LIMITES!!!!!");
             //Almacena los nuevos limites para las busquedas posteriores en Facebook
             storeSearchLimits(queriesArray, stream);
-
+            ///System.out.println("" + "ALMACENANDO LIMITES!!!!!");
         } catch (JSONException jsone) {
             log.error("JSON al usar queries construidos", jsone);
             jsone.printStackTrace();
@@ -203,11 +212,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * como los url's devueltos por FB para las siguientes consultas
      */
     private void storeSearchLimits(HashMap<String, String>[] queriesArray, Stream stream) {
-
+        ///System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{{{{{GUARDANDO LIMITES!!!!}}}}}}}}}}}}}}}}}}");
         StringBuilder limits = new StringBuilder(64);
         try {
             for (int i = 0; i < queriesArray.length; i++) {
-
+                ///System.out.println("query:.----->" + queriesArray[i]);
                 /*String newQuery = queriesArray[i].containsKey("nextQuery")
                  ? queriesArray[i].get("nextQuery") : "";*/
                 String newQuery = queriesArray[i].containsKey("previousQuery")
@@ -286,17 +295,17 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
 
                         for (int j = 0; j < newLimits.length; j++) {
-                            //System.out.println("\t\tnew-->" + newLimits[j] + "<--");
+                            ///System.out.println("\t\tnew-->" + newLimits[j] + "<--");
                         }
-                        //System.out.println("\n");
+                        ///System.out.println("\n");
                         for (int j = 0; j < oldLimits.length; j++) {
-                            //System.out.println("\t\told-->" + oldLimits[j] + "<--");
+                            ///System.out.println("\t\told-->" + oldLimits[j] + "<--");
                         }
-                        //System.out.println("\n");
+                        ///System.out.println("\n");
                         for (int j = 0; j < phrasesArray.length; j++) {
-                            //System.out.println("\t\tstream-->" + phrasesArray[j] + "<--");
+                            ///System.out.println("\t\tstream-->" + phrasesArray[j] + "<--");
                         }
-                        //System.out.println("\n");
+                        ///System.out.println("\n");
                         for (int i = 0; i < phrasesArray.length; i++) {//Iterate the phrases in stream                            
                             //LA REFERENCIA SON LAS FRASES EN EL STREAM COMO TAL!!!
                             //para cada palabra buscarla en los nuevos limites
@@ -312,25 +321,25 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             for (int j = 0; j < newLimits.length; j++) {
                                 if (!newLimits[j].isEmpty()) {
                                     String newLimit = newLimits[j].substring(newLimits[j].indexOf("_") + 1, newLimits[j].lastIndexOf("="));
-                                    //System.out.println("NEW-" + newLimit + "-vs-" + wordInStream);
+                                    ///System.out.println("NEW-" + newLimit + "-vs-" + wordInStream);
                                     if (wordInStream.equals(newLimit)) {//Se encontro en los limites nuevos
                                         finalLimits += newLimits[j] + ":";
                                         foundInNewLimits = true;
-                                        //System.out.println("FOUND IN NEW LIMITS:" + newLimits[j]);
+                                        ///System.out.println("FOUND IN NEW LIMITS:" + newLimits[j]);
                                         break;
                                     }
                                 }
                             }
 
                             if (foundInNewLimits == false) {//Se va a buscar en los datos almacenados en el nextdatetosearch
-                                //System.out.println("NO ENCONTRADO EN LOS LIMITES NUEVOS:" + wordInStream);
+                                ///System.out.println("NO ENCONTRADO EN LOS LIMITES NUEVOS:" + wordInStream);
                                 for (int j = 0; j < oldLimits.length; j++) {
                                     if (!oldLimits[j].isEmpty()) {
                                         String oldLimit = oldLimits[j].substring(oldLimits[j].indexOf("_") + 1, oldLimits[j].lastIndexOf("="));
-                                        //System.out.println("old-" + oldLimit + "-vs-" + wordInStream);
+                                        ///System.out.println("old-" + oldLimit + "-vs-" + wordInStream);
                                         if (wordInStream.equals(oldLimit)) {
                                             finalLimits += oldLimits[j] + ":";
-                                            //System.out.println("FOUND IN OLD STORED LIMITS:" + oldLimits[j]);
+                                            ///System.out.println("FOUND IN OLD STORED LIMITS:" + oldLimits[j]);
                                             break;
                                         }
                                     }
@@ -342,14 +351,14 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                         if (finalLimits.length() > 1) {
                             finalLimits = finalLimits.substring(0, finalLimits.length() - 1);
                         }
-                        //System.out.println("SAVING DATA:" + finalLimits);
+                        ///System.out.println("SAVING DATA:" + finalLimits);
                         socialStreamSerch.setNextDatetoSearch(finalLimits);
                     } else {
-                        //System.out.println("\n\n\nSAVING DATA fOR FIRST TIME!!!:" + limits.toString());
+                        ///System.out.println("\n\n\nSAVING DATA fOR FIRST TIME!!!:" + limits.toString());
                         socialStreamSerch.setNextDatetoSearch(limits.toString());
                     }
                 }
-                //System.out.println("SAVING DATA:" + limits);
+                ///System.out.println("SAVING DATA:" + limits);
             }
         } catch (Exception e) {
             log.error("Al formar URL de siguiente consulta a ejecutar en Facebook", e);
@@ -378,7 +387,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 //Se obtienen los limites desde los cuales se haran consultas en Facebook
                 SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
                 if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null && !"".equals(socialStreamSerch.getNextDatetoSearch())) {
-                    System.out.println("PACONE:" + socialStreamSerch.getNextDatetoSearch() + "");
+                    //System.out.println("PACONE:" + socialStreamSerch.getNextDatetoSearch() + "");
                     String[] phraseElements = socialStreamSerch.getNextDatetoSearch().split(":");
                     for (int i = 0; i < phraseElements.length; i++) {
                         String[] pair = phraseElements[i].split("=");
@@ -415,6 +424,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     //Para la primera ejecucion de este proceso se crean las url de las consultas publicas
                     publicQuery = "search?q=" + phrase[i] + "&type=post&limit="
                             + Facebook.QUERYLIMIT + (untilPublic != null ? "&since=" + untilPublic : "") + "&fields=id,from,to,message,story,picture,caption,link,object_id,application,source,name,description,properties,type,status_type,created_time,updated_time,likes.summary(true),place,icon";
+                    ///System.out.println("public Query!:::::::::::::" + publicQuery);
                     // Y las url de las consultas privadas
                     wallQuery = "me/feed?q=" + phrase[i] + "&type=post&limit="
                             + Facebook.QUERYLIMIT + (untilPrivate != null ? "&since=" + untilPrivate : "") + "&fields=id,from,to,message,story,picture,caption,link,object_id,application,source,name,description,properties,type,status_type,created_time,updated_time,likes.summary(true),place,icon";
@@ -470,7 +480,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
      * petici&oacute;n, lo que indica que se tiene que realizar otra
      * iteraci&oacute;n
      */
-    private boolean parseResponse(String response, Stream stream, HashMap<String, String>[] queriesArray, int iterations) {
+    private boolean parseResponse(String response, Stream stream, HashMap<String, String>[] queriesArray, int iterations, boolean firstSearch) {
         //System.out.println("Entrando a *******parseResponse*****************");
         boolean isThereMoreMsgs = false;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
@@ -569,7 +579,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                                     validLocation = false;
                                                 }
                                                 if (validLocation) {
-                                                    System.out.println("THE LOCATION:" + postsData.getJSONObject(k).getJSONObject("place"));
+                                                    ///System.out.println("THE LOCATION:" + postsData.getJSONObject(k).getJSONObject("place"));
                                                     String country = "";
 
                                                     external.setLatitude(postsData.getJSONObject(k).getJSONObject("place").getJSONObject("location").getDouble("latitude"));
@@ -644,6 +654,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 aListExternalPost.add(external);
                             }
                             //Si el ArrayList tiene tamaño mayor a 0, entonces es que existen mensajes para enviar al clasificador
+                            ///System.out.println("ITERACIÓN:" + iterations + "\n\n\n\n.-.-.-.-.-.-.-.-Recibidos:" + aListExternalPost.size());                            
                             if (aListExternalPost.size() > 0) {
                                 new Classifier(aListExternalPost, stream, this, true);
                             }
@@ -659,9 +670,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             String previousPage = null;
                             if (dataOnBody.has("paging")) {
                                 nextPage = dataOnBody.getJSONObject("paging").getString("next");
-                                if (iterations == 0) {
-                                    previousPage = dataOnBody.getJSONObject("paging").getString("previous");
-                                }
+                                //if (iterations == 0 && firstSearch) {
+                                previousPage = dataOnBody.getJSONObject("paging").getString("previous");
+                                
+                                //Cuando se este trabajando con el previous no tendría que hacerse en la iteracion cero
+                                //sino que en la ultima iteracion
                             } else if (isResponseEmpty) {
                                 //si la busqueda no tuvo resultados, se repetira para la proxima ejecucion
                                 nextPage = queriesArray[j].get("relative_url");
@@ -669,11 +682,22 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     nextPage = Facebook.FACEBOOKGRAPH + nextPage;
                                 }
                             }
-
-                            queriesArray[j].put("nextQuery", nextPage);
-                            if (iterations == 0 && previousPage != null) {//Only the first time saves previousPage
-                                //System.out.println("\t guardando previousPage:" + previousPage);
-                                queriesArray[j].put("previousQuery", previousPage);
+                            if(firstSearch){
+                                queriesArray[j].put("nextQuery", nextPage);
+                                ///System.out.println("FIRST<--------------------------");
+                            }else{
+                                queriesArray[j].put("nextQuery", previousPage);
+                                ///System.out.println("NOT THE FIRST<--------------------------");
+                            }
+                            if ((iterations == 0 && previousPage != null) || firstSearch == false ) {//Only the first time saves previousPage
+                                
+                                ///System.out.println("\t guardando previousPage:" + previousPage);
+                                if(previousPage != null){
+                                    ///System.out.println("GUARDADO:" + previousPage);
+                                    queriesArray[j].put("previousQuery", previousPage);
+                                }else{
+                                    ///System.out.println("ES NULL!!!!!!!");
+                                }
                             }
                             queriesArray[j].put("msgCounted", Integer.toString(cont));
                         }
@@ -728,11 +752,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //TODO:REVISAR COMO HACER UN POST A ALGUNO O VARIOS USUARIOS
         try {
             if (message.getPostInSource() != null && message.getPostInSource().getSocialNetMsgId() != null) {//is a response
-                System.out.println("1ST OPTION: RESPONDING TO SOMEONE:" + message.getPostInSource().getSocialNetMsgId());
+                ///System.out.println("1ST OPTION: RESPONDING TO SOMEONE:" + message.getPostInSource().getSocialNetMsgId());
                 facebookResponse = postRequest(params, "https://graph.facebook.com/" + message.getPostInSource().getSocialNetMsgId() + "/comments",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
             } else {//is a single post to my wall
-                System.out.println("2ND OPTION: MAKING SINGLE POST");
+                ///System.out.println("2ND OPTION: MAKING SINGLE POST");
                 facebookResponse = postRequest(params, url,
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95",
                         "POST");
@@ -2120,6 +2144,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (response == null) {
             response = "";
         }
+        WebPage wp;
+        
         return response;
     }
+    
 }
