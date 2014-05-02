@@ -319,8 +319,8 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     public Document getDom(final Period period)
     {
         User user = SWBContext.getSessionUser();
-        final String lang = user.getLanguage()==null?"es":SWBContext.getSessionUser().getLanguage();
-        //final SWBModel model = (SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance();
+        //final String lang = user.getLanguage()==null?"es":user.getLanguage();
+        final String lang = "es";
         Document  doc = SWBUtils.XML.getNewDocument();
         
         Element eroot = doc.createElement("bsc");
@@ -414,6 +414,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                     
                     //objetivos por tema
                     State state;
+                    String color;
                     List<Objective> objectives = t.listValidObjectives();
                     Collections.sort(objectives);
                     for(Objective o:objectives) {
@@ -421,11 +422,11 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                             continue;
                         }
                         state = o.getState(period);
-                        String statusIconClass = state==null?"indefinido":state.getIconClass();
+                        color = state==null?"#0000ff":(state.getColorHex()==null?"#FE2EF7":state.getColorHex());
                         Element eobj = doc.createElement("obj");
                         eobj.setAttribute("id", o.getURI());
                         eobj.setAttribute("orden", Integer.toString(o.getIndex()));
-                        eobj.setAttribute("status", statusIconClass);
+                        eobj.setAttribute("status", color);
                         etheme.appendChild(eobj);
                         //prefix
                         e = doc.createElement("prefix");
