@@ -22,55 +22,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
 {
     static
     {
-//        bsc_hasState.registerObserver(new SemanticObserver() {
-//            @Override
-//            public void notify(SemanticObject obj, Object prop, String lang, String action)
-//            {
-//System.out.println("\nObjective hasState notify....");
-//System.out.println("obj="+obj);
-//System.out.println("prop="+prop);
-//System.out.println("action="+action);
-//            }
-//        });
-        
-        /*bsc_hasPeriod.registerObserver(new SemanticObserver() {
-            @Override
-            public void notify(SemanticObject obj, Object prop, String lang, String action)
-            {
-System.out.println("\nObjetivo bsc_hasPeriod notify....");
-System.out.println("obj="+obj);
-System.out.println("prop="+prop);
-System.out.println("action="+action);
-                if("REMOVE".equalsIgnoreCase(action)) {
-System.out.println("Removing...");
-                    Iterator<SemanticObject> it = obj.listObjectProperties(bsc_hasPeriod);
-                    while(it.hasNext()) {
-                        SemanticObject so = it.next();
-                        System.out.println("semantic obj="+so.getId()+","+so);
-                    }
-                    
-                    
-                    SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
-                    Objective objective = (Objective)obj.createGenericInstance();
-                    Iterator<Indicator> indicators = Indicator.ClassMgr.listIndicatorByObjective(objective, model);
-                    Indicator ind;
-                    while(indicators.hasNext()) {
-                        ind = indicators.next();
-                    }
-                }
-                else if("ADD".equalsIgnoreCase(action))
-                {
-System.out.println("Adding...");
-                    Iterator<SemanticObject> it = obj.listObjectProperties(bsc_hasPeriod);
-                    while(it.hasNext()) {
-                        SemanticObject so = it.next();
-                        System.out.println("semantic obj="+so.getId()+","+so);
-                    }
-                }
-            }
-        });*/
-        
-        
         bsc_hasIndicator.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
@@ -165,7 +116,7 @@ System.out.println("Adding...");
     
     public boolean updateAppraisal(Period period) {
         boolean res = Boolean.FALSE;
-        State status = null;
+        State status;
         PeriodStatus appraisal = getPeriodStatus(period);
         if(appraisal==null) {
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
@@ -183,8 +134,6 @@ System.out.println("Adding...");
             if(star==null || star.getMeasure(period)==null || star.getMeasure(period).getEvaluation().getStatus()==null) {
                 continue;
             }
-            //if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
-            //if( status.compareTo(star.getMeasure(period).getEvaluation().getStatus())>0 ) {
             if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
                 res = Boolean.TRUE;
