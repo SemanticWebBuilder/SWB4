@@ -112,14 +112,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         WebSite webSite = base.getWebSite();
         if (webSite instanceof BSC) {
             PrintWriter out = response.getWriter();
-            BSC model = (BSC) webSite;
-//            Document dom = model.getDom();
-//            Document map = null;
-//            try {
-//                map = getDom(dom);
-//            } catch (XPathExpressionException xpathe) {
-//                System.out.println("XPath con problemas... " + xpathe);
-//            }
             String SVGjs = null;
             try {
                 SVGjs = getSvg(request);
@@ -522,8 +514,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         StringBuilder SVGjs = new StringBuilder();
 
         final Period period = getPeriod(request);
-System.out.println("\n\nSVG....");
-System.out.println("period="+period);
         Document map = getDom(period);
         Element rootBSC = map.getDocumentElement();
         int width = assertValue(rootBSC.getAttribute("width"));
