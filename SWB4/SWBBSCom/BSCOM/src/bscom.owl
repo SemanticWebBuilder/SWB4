@@ -630,6 +630,12 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="Differentiator">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#DifferentiatorGroup"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.accessory</swb:classCodePackage>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -996,7 +1002,11 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Templates"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Model"/>
     <swb:hasClass rdf:resource="#MeasurementFrequency"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#WebSite"/>
+    <rdfs:subClassOf>
+      <rdf:Description rdf:about="http://www.semanticwebbuilder.org/swb4/ontology#WebSite">
+        <swb:hasHerarquicalNode rdf:resource="#hn_StatesGroups"/>
+      </rdf:Description>
+    </rdfs:subClassOf>
     <swb:hasHerarquicalNode>
       <swbxf:HerarquicalNode rdf:ID="hn_Initiatives">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1759,6 +1769,12 @@
     </owl:inverseOf>
     <rdfs:range>
       <swb:Class rdf:ID="State">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:allValuesFrom rdf:resource="#StateGroup"/>
+            <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
         <rdfs:subClassOf rdf:resource="#Machinable"/>
         <swb:displayObject>
           <swbxf:DisplayObject rdf:ID="do_State">
