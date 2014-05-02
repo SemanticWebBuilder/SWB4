@@ -33,7 +33,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 
 
 public class StatesManager extends GenericResource {
-    private Logger log = SWBUtils.getLogger(StatesManager.class);
+    private static final Logger log = SWBUtils.getLogger(StatesManager.class);
     private static final String formId = State.bsc_State.getClassName()+"/bhvr";
     
     public static final String Action_SELECT_GRP = "selgrp";
@@ -79,7 +79,7 @@ public class StatesManager extends GenericResource {
                 }
                 else
                 {
-                    WebSite model = SWBContext.getAdminWebSite();
+                    WebSite model = SWBContext.getGlobalWebSite();
                     final String sgId = request.getParameter("sg");
                     if(StateGroup.ClassMgr.hasStateGroup(sgId, model)) {
                         StateGroup stateGroup = StateGroup.ClassMgr.getStateGroup(sgId, model);                        
@@ -403,7 +403,7 @@ public class StatesManager extends GenericResource {
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-                WebSite model = SWBContext.getAdminWebSite();
+                WebSite model = SWBContext.getGlobalWebSite();
                 Iterator<StateGroup> groups = StateGroup.ClassMgr.listStateGroups(model);
                 while(groups.hasNext()) {
                     StateGroup stateGroup = groups.next();
@@ -474,7 +474,7 @@ public class StatesManager extends GenericResource {
         }
         
         
-        SWBModel model = SWBContext.getAdminWebSite();
+        SWBModel model = SWBContext.getGlobalWebSite();
         if(Action_UPDT_ACTIVE.equalsIgnoreCase(action))
         {
             Status status = (Status)semObj.getGenericInstance();
