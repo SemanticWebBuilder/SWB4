@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
@@ -56,8 +57,6 @@ public class SocialWebResource extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        SocialAdmin wsite=(SocialAdmin)SWBContext.getAdminWebSite();         
-        
         PrintWriter out = response.getWriter();
         User user = paramRequest.getUser();
         SocialNetwork socialNetwork;
@@ -67,40 +66,24 @@ public class SocialWebResource extends GenericAdmResource
             socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(objUri).getGenericInstance();
             boolean validConfiguration = false;
             if(socialNetwork instanceof Twitter){//for twitter nets
-                TwitterGC tw = wsite.getAdm_twittergc();
-                if(tw != null){
-                    validConfiguration = isValidConfiguration(socialNetwork, tw.getAppKey(), tw.getSecretKey());
-                }else{
-                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
-                }
+                    validConfiguration = isValidConfiguration(socialNetwork, SWBPortal.getEnv("swbsocial/twitterAppKey"), SWBPortal.getEnv("swbsocial/twitterSecretKey"));
             }else if(socialNetwork instanceof Facebook){//for facebook nets
-                FacebookGC fb = wsite.getAdm_facebookgc();
-                if(fb != null){
-                    validConfiguration = isValidConfiguration(socialNetwork, fb.getAppKey(), fb.getSecretKey());
-                }else{
-                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
-                }
+                    validConfiguration = isValidConfiguration(socialNetwork, SWBPortal.getEnv("swbsocial/facebookAppKey"), SWBPortal.getEnv("swbsocial/facebookSecretKey"));                
             }else if(socialNetwork instanceof Youtube){//for youtube nets
-                YoutubeGC yt = wsite.getAdm_youtubegc();
                 Youtube youtube = (Youtube)socialNetwork;
-                if(yt != null){
-                    validConfiguration = isValidConfiguration(socialNetwork, yt.getAppKey(), yt.getSecretKey());
-                    //Valid appkey and appsecret - validate
-                    if(youtube.getDeveloperKey() == null || youtube.getDeveloperKey().isEmpty()){
-                        if(yt.getDeveloperKey() == null || yt.getDeveloperKey().isEmpty()){
-                            validConfiguration = false;
-                        }else{
-                            youtube.setDeveloperKey(yt.getDeveloperKey());
-                        }
-                    }
-                }else{
-                    validConfiguration = isValidConfiguration(socialNetwork, null, null);
-                    if(youtube.getDeveloperKey() == null || youtube.getDeveloperKey().isEmpty()){
+                
+                validConfiguration = isValidConfiguration(socialNetwork, SWBPortal.getEnv("swbsocial/youtubeAppKey"), SWBPortal.getEnv("swbsocial/youtubeSecretKey"));
+                //Valid appkey and appsecret - validate
+                if(youtube.getDeveloperKey() == null || youtube.getDeveloperKey().isEmpty()){
+                    if(SWBPortal.getEnv("swbsocial/youtubeDeveloperKey") == null){
                         validConfiguration = false;
+                    }else{
+                        youtube.setDeveloperKey(SWBPortal.getEnv("swbsocial/youtubeDeveloperKey"));
                     }
                 }
+                
             }
-            
+
             if(validConfiguration == false ){
                  out.println("<div id=\"configuracion_redes\">");
                 out.println("<div id=\"autenticacion\">");
