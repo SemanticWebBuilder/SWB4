@@ -20,6 +20,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.UserMessage;
+import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
  *
@@ -56,7 +57,7 @@ public class UserMsgBoard extends GenericResource{
         String action=response.getAction();
         if(action!=null)
         {
-            WebSite wsite=response.getWebPage().getWebSite();
+            WebSite wsite=SWBSocialUtil.getConfigWebSite();
             if(action.equals("newUserMsg"))
             {
                 try
