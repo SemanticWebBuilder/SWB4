@@ -2,6 +2,7 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -343,17 +344,14 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         if (Period.ClassMgr.hasPeriod(pid, model)) {
             period = Period.ClassMgr.getPeriod(pid, model);
         }
-
-//        if (request.getSession(true).getAttribute(id) != null) {
-//            String pid = (String) request.getSession(true).getAttribute(id);
-//            if(Period.ClassMgr.hasPeriod(pid, ws)) {
-//                period = Period.ClassMgr.getPeriod(pid, ws);
-//            }
-//        } 
-//        if(period == null) {
-//            BSC bsc = (BSC) ws;
-//            period = bsc.listValidPeriods().iterator().next();
-//        }
+        
+        if(period == null) {
+            BSC scorecard = (BSC)model;
+            try {
+                period = scorecard.listPeriods().next();
+            }catch(NoSuchElementException nsee) {
+            }
+        }
         return period;
     }
     private String urlBase = null;
@@ -366,13 +364,20 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         urlBase = "#";
     }
     
-    public Document getDom() throws XPathExpressionException, ClassCastException, NumberFormatException
+    public Document getDom(final Period period) throws XPathExpressionException, ClassCastException, NumberFormatException
     {
         Resource base = getResourceBase();
         final BSC scorecard = (BSC)base.getWebSite();
         int width = assertValue(base.getAttribute("width", "1024"));
         int height = assertValue(base.getAttribute("height", "1400"));
-        Document documentBSC = scorecard.getDom();
+        
+        Document documentBSC;
+        if(period==null) {
+            documentBSC = scorecard.getDom();
+        }else {
+            documentBSC = scorecard.getDom(period);
+        }
+        
         Element root = documentBSC.getDocumentElement();
         root.setAttribute("width", Integer.toString(width));
         root.setAttribute("height", Integer.toString(height));
@@ -516,7 +521,10 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         int x, y = 0, x_, y_;
         StringBuilder SVGjs = new StringBuilder();
 
-        Document map = getDom();
+        final Period period = getPeriod(request);
+System.out.println("\n\nSVG....");
+System.out.println("period="+period);
+        Document map = getDom(period);
         Element rootBSC = map.getDocumentElement();
         int width = assertValue(rootBSC.getAttribute("width"));
         int height = assertValue(rootBSC.getAttribute("height"));
@@ -814,7 +822,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                 String href = attrs.getNamedItem("href").getNodeValue();
                                 w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
-                                txt = attrs.getNamedItem("status").getNodeValue();
+                                String color = attrs.getNamedItem("status").getNodeValue();
 
                                 info = new StringBuilder();
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/prefix";
@@ -840,7 +848,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
 //                                SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y='+rect.y.baseVal.value);").append("\n");
-                                SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'blue',1,'black',1,1);").append("\n");
+                                SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'"+color+"',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
 
                                 //relaciones causa-efecto con este objetivo
