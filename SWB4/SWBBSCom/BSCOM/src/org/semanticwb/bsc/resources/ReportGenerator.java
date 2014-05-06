@@ -80,7 +80,7 @@ public class ReportGenerator extends GenericResource {
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(256);
         SWBResourceURL url = paramRequest.getRenderUrl();
-        Role actualUserRole = SWBContext.getSessionUser().getRole();
+        Role actualUserRole = paramRequest.getUser().getRole();
         UserRepository repository = paramRequest.getWebPage().getWebSite().getUserRepository();
         url.setMode("report");
         
@@ -599,7 +599,7 @@ public class ReportGenerator extends GenericResource {
         List<Period> periods = SWBUtils.Collections.filterIterator(allPeriods, new GenericFilterRule<Period>() {
                 @Override
                 public boolean filter(Period s) {
-                    User user = SWBContext.getSessionUser();
+                    User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
                     return !s.isValid() || !user.haveAccess(s);
                 }
             });
