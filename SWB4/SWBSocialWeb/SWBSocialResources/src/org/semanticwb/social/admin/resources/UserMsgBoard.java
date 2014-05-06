@@ -57,6 +57,7 @@ public class UserMsgBoard extends GenericResource{
         String action=response.getAction();
         if(action!=null)
         {
+            //WebSite wsite=response.getWebPage().getWebSite();
             WebSite wsite=SWBSocialUtil.getConfigWebSite();
             if(action.equals("newUserMsg"))
             {
@@ -111,17 +112,17 @@ public class UserMsgBoard extends GenericResource{
                 if(request.getParameter("msgUri")!=null)
                 {
                     System.out.println("msgUri:"+request.getParameter("msgUri"));
-                    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("msgUri"));
+                    SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("msgUri")); 
                     if(semObj!=null)
                     {
                         UserMessage userMsg=(UserMessage)semObj.createGenericInstance(); 
-                        System.out.println("UsrMsg Msg:"+userMsg.getUsrMsg());
-                        semObj.remove();
-                        System.out.println("semObj:"+semObj+",Ha sido eliminado...");
+                        System.out.println("UsrMsg Msg mi estimado:"+userMsg.getUsrMsg());
+                        userMsg.remove();
+                        System.out.println("semObj:"+semObj+",Ha sido eliminado mi estimado...");
                     }
                 }
                 response.setRenderParameter("statusMsg", "Mensaje Eliminado");
-                response.setMode(SWBActionResponse.Mode_VIEW);
+                //response.setMode(SWBActionResponse.Mode_VIEW);
             }else if(action.equals("editUserMsg"))
             {
                 if(request.getParameter("msgUri")!=null && request.getParameter("fromUser")!=null && request.getParameter("usrMsg")!=null && 
