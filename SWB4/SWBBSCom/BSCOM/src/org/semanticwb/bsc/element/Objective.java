@@ -34,7 +34,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
                     Indicator indicator = objective.getIndicator();
                     if(!states.isEmpty() && indicator!=null)
                     {
-                        indicator.addAllStates(states);
+//                        indicator.addAllStates(states);
                         Series series;
                         for(int i=0; i<names.length; i++)
                         {
@@ -291,26 +291,26 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         }
     }
     
-    @Override
-    public void removeState(State value) {
-        // Eliminar en cascada el estado de los indicadores del objetivo
-        GenericIterator<Indicator> gi = listIndicators();
-        while(gi.hasNext()) {
-            gi.next().removeState(value);
-        }
-        super.removeState(value);
-    }
+//    @Override
+//    public void removeState(State value) {
+//        // Eliminar en cascada el estado de los indicadores del objetivo
+//        GenericIterator<Indicator> gi = listIndicators();
+//        while(gi.hasNext()) {
+//            gi.next().removeState(value);
+//        }
+//        super.removeState(value);
+//    }
     
-    @Override
-    public void removeAllState()
-    {
-        // Eliminar en cascada los estados asignados a los indicadores del objetivo
-        GenericIterator<Indicator> gi = listIndicators();
-        while(gi.hasNext()) {
-            gi.next().removeAllState();
-        }
-        super.removeAllState();
-    }
+//    @Override
+//    public void removeAllState()
+//    {
+//        // Eliminar en cascada los estados asignados a los indicadores del objetivo
+//        GenericIterator<Indicator> gi = listIndicators();
+//        while(gi.hasNext()) {
+//            gi.next().removeAllState();
+//        }
+//        super.removeAllState();
+//    }
     
     @Override
     public int compareTo(Objective anotherObjective)
