@@ -44,8 +44,7 @@ public class StateGroup extends org.semanticwb.bsc.accessory.base.StateGroupBase
         List<State> validStates = SWBUtils.Collections.filterIterator(super.listGroupedStateses(), new GenericFilterRule<State>() {
                                                                         @Override
                                                                         public boolean filter(State s) {
-                                                                            User user = SWBContext.getSessionUser();
-                                                                            return !s.isValid() || !user.haveAccess(s);
+                                                                            return !s.isValid();
                                                                         }            
                                                                     });
         return validStates;
