@@ -14,6 +14,7 @@ import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -31,7 +32,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(listInitiatives(), new GenericFilterRule<Initiative>() {
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getUserRepository().getId());
                                                                             return !s.isValid() || !user.haveAccess(s);
                                                                         }            
                                                                     });
@@ -84,7 +85,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                             if(p==null) {
                                                                                 return true;
                                                                             }
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getUserRepository().getId());
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
                                                                     });
@@ -98,7 +99,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                             if(p==null) {
                                                                                 return true;
                                                                             }
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getUserRepository().getId());
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
                                                                     });
@@ -112,7 +113,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                             if(r==null) {
                                                                                 return true;
                                                                             }
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getUserRepository().getId());
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
@@ -121,9 +122,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     
     public Document getDom()
     {
-        User user = SWBContext.getSessionUser();
-        final String lang = "lang";//user.getLanguage()==null?"es":SWBContext.getSessionUser().getLanguage();
-        //final SWBModel model = (SWBModel)getSemanticObject().getModel().getModelObject().createGenericInstance();
+        User user = SWBContext.getSessionUser(getUserRepository().getId());
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
+        
         Document  doc = SWBUtils.XML.getNewDocument();
         
         Element eroot = doc.createElement("bsc");
@@ -318,9 +319,8 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     
     public Document getDom(final Period period)
     {
-        User user = SWBContext.getSessionUser();
-        //final String lang = user.getLanguage()==null?"es":user.getLanguage();
-        final String lang = "es";
+        User user = SWBContext.getSessionUser(getUserRepository().getId());
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
         Document  doc = SWBUtils.XML.getNewDocument();
         
         Element eroot = doc.createElement("bsc");
@@ -438,11 +438,15 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                         eobj.appendChild(e);
                         //sponsor
                         e = doc.createElement("sponsor");
-                        e.appendChild(doc.createTextNode(o.getSponsor().getFullName()));
+                        e.appendChild(doc.createTextNode(o.getSponsor()==null?"Desconocido":o.getSponsor().getFullName()));
                         eobj.appendChild(e);
                         //frequency
                         e = doc.createElement("frequency");
-                        e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                        if(o.getPeriodicity()==null) {
+                            e.appendChild(doc.createTextNode("Desconocido"));
+                        }else {
+                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                        }
                         eobj.appendChild(e);
                         
                         //relaciones objetivo - tema
