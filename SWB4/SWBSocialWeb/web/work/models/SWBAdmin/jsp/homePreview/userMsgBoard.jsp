@@ -22,6 +22,7 @@
     String action = paramRequest.getAction();
     User user = paramRequest.getUser();
     //WebSite wsite = paramRequest.getWebPage().getWebSite();
+    WebSite wsite = SWBSocialUtil.getConfigWebSite(); 
 %>
 
 <p>
@@ -110,7 +111,7 @@
 %>
 <div id="msj-panel">          
     <%
-        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByFromUser(user, SWBSocialUtil.getConfigWebSite()); 
+        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByFromUser(user, wsite); 
         HashMap hashBydate = new HashMap();
         //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
@@ -225,7 +226,18 @@
 <div id="msj-panel">
 
     <%
-        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, SWBSocialUtil.getConfigWebSite()); 
+ try
+ {      /*     
+        Iterator<UserMessage> itUserMsgs=UserMessage.ClassMgr.listUserMessages(wsite);
+        while(itUserMsgs.hasNext())
+        {
+            UserMessage userMessage=itUserMsgs.next(); 
+            System.out.println("Va a Borrar:"+userMessage);
+            userMessage.remove(); 
+        }*/
+        System.out.println("user:"+user+",ConfigSite:"+wsite);
+        Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, wsite); 
+        System.out.println("itUserMsgJJ:"+itUserMsg); 
         HashMap hashBydate = new HashMap();
         //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
@@ -286,6 +298,7 @@
 
 </div>
 <%
+ }catch(Exception e){e.printStackTrace();}
     }
 
 %>
