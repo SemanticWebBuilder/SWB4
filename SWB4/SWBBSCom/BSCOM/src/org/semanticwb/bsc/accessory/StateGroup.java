@@ -40,7 +40,7 @@ public class StateGroup extends org.semanticwb.bsc.accessory.base.StateGroupBase
         super(base);
     }
     
-    public List<State> listValidStates() {
+    public List<State> listValidStates() { 
         List<State> validStates = SWBUtils.Collections.filterIterator(super.listGroupedStateses(), new GenericFilterRule<State>() {
                                                                         @Override
                                                                         public boolean filter(State s) {
