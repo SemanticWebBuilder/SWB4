@@ -29,7 +29,8 @@ import org.semanticwb.portal.api.SWBResourceException;
 public class PeriodSelector extends GenericResource {
     
     private Period getNearestPeriod(final List<Period> periods) {
-        User user = SWBContext.getSessionUser();
+        final User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
+        
         GregorianCalendar left;
         GregorianCalendar right;        
         GregorianCalendar current = new GregorianCalendar(TimeZone.getDefault(),
