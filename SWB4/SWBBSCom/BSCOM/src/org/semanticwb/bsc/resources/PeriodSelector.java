@@ -74,7 +74,7 @@ public class PeriodSelector extends GenericResource {
         List<Period> periods = SWBUtils.Collections.filterIterator(allPeriods, new GenericFilterRule<Period>() {
                 @Override
                 public boolean filter(Period s) {
-                    User user = SWBContext.getSessionUser();
+                    User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
                     return !s.isValid() || !user.haveAccess(s);
                 }
             });
