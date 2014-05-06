@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.TreeSet;
 import javax.servlet.http.*;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +33,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.ComponentExportable;
 import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
@@ -42,6 +45,7 @@ import org.semanticwb.bsc.utils.DetailView;
 import org.semanticwb.bsc.utils.PropertiesComparator;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormElement;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
@@ -56,6 +60,7 @@ import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.util.SWBPriorityComparator;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
@@ -1574,8 +1579,21 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
             String image = "pdfOnline.jpg";
             String alt = paramRequest.getLocaleString("alt");
-            toReturn.append("<a href=\"");
-            toReturn.append(surl);
+
+            toReturn.append("\n <script type=\"text/javascript\">");
+            toReturn.append("\n  function getFile() {");
+            toReturn.append("\n   var form = document.getElementById('frmDetail');");
+
+            toReturn.append("\n   var svg = document.getElementsByTagName('svg')[0];");
+            toReturn.append("\n   if(svg != null) {");
+            toReturn.append("\n      var svg_xml = (new XMLSerializer).serializeToString(svg);");
+            toReturn.append("\n      document.getElementById('image').value=svg_xml;");
+            toReturn.append("\n   }");
+            toReturn.append("\n   form.submit();");
+            toReturn.append("\n  };");
+            toReturn.append("\n </script>");
+
+            toReturn.append("<a href=\"javascript:getFile();");
             toReturn.append("\" class=\"export-stgy\" title=\"");
             toReturn.append(alt);
             toReturn.append("\" target=\"_blank\">");
@@ -1586,6 +1604,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             toReturn.append(alt);
             toReturn.append("\" class=\"toolbar-img\" />");
             toReturn.append("</a>");
+            toReturn.append("<form id=\"frmDetail\" name=\"frmDetail\"  method=\"post\" action=\"");
+            toReturn.append(surl);
+            toReturn.append("\">");
+            toReturn.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>");
+            toReturn.append("</form>");
             icon = toReturn.toString();
         }
         return icon;
@@ -1622,7 +1645,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
         response.setHeader("Content-Disposition", "attachment; filename=\""
                 + title + ".pdf\"");
-        StringBuilder sb = getHtml(request, paramRequest);
+        StringBuilder sb = getStructureHtml(request, paramRequest);
         if (sb != null && sb.length() > 0) {
             OutputStream os = response.getOutputStream();
             try {
@@ -1709,7 +1732,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (request.getServerPort() != 80) {
             port = ":" + request.getServerPort();
         }
-        String baserequest = request.getScheme() + "://" + request.getServerName() 
+        String baserequest = request.getScheme() + "://" + request.getServerName()
                 + port;
 
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
@@ -1732,7 +1755,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         }
                         if (!tagTxt.contains("{webpath}")) {
                             String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
-                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6), 
+                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
                                     tagTxt.length());
                             tagTxt = tmpTxt + baserequest + tmpTxtAux;
                         } else {
@@ -1747,26 +1770,66 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Obtiene el HTML que se utilizar&aacute; en la exportaci&oacute;n.
+     * Filtra los recursos de tipo ComponentExportable que ser&aacute;n utilizados 
+     * en la exportaci&oacute;n del PDF y obtiene su c&oacute;digo HTML.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @return el objeto String que representa el c&oacute;digo HTML con los
-     * datos a exportar
+     * datos a exportar(Vista detalle y componentes adicionales)
      * @throws SWBResourceException SWBResourceException SWBResourceException
      * Excepti&oacute;n utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
-     * @return la liga
      */
-    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
-        StringBuilder output = new StringBuilder(256);
-        String message = validateInput(request, paramRequest);
+    private StringBuilder getStructureHtml(HttpServletRequest request,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        StringBuilder output = new StringBuilder();
         output.append("<html>");
         output.append("<head>");
         output.append(getLinks(paramRequest, request));
         output.append("</head>");
         output.append("<body>");
+        output.append(getHtml(request, paramRequest));
+        GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
+        TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
+
+        while (it.hasNext()) {
+            Resource resourceIt = it.next();
+            SWBResource base = SWBPortal.getResourceMgr().getResource(resourceIt.getURI());
+            if (base != null) {
+                if (base instanceof ComponentExportable) {
+                    ret.add(base);
+                }
+            }
+        }
+        Iterator itRes = ret.iterator();
+        while (itRes.hasNext()) {
+            ComponentExportable compExpor = (ComponentExportable) itRes.next();
+            output.append("<br/><br/><br/>");
+            output.append(compExpor.doComponentExport(request, paramRequest));
+            output.append("");
+        }
+        output.append("</body>");
+        output.append("</html>");
+        return output;
+    }
+
+    /**
+     * Obtiene el HTML de los datos de la vista detalle que se utilizar&aacute; 
+     * en la exportaci&oacute;n.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * datos de la vista detalle a exportar
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+        StringBuilder output = new StringBuilder(256);
+        String message = validateInput(request, paramRequest);
         output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
 
         if (message == null) {
@@ -1833,8 +1896,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
 
         output.append("</div>\n");
-        output.append("</body>");
-        output.append("</html>");
         return output;
     }
 
