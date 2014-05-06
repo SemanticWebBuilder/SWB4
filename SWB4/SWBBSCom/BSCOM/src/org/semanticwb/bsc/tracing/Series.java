@@ -109,7 +109,7 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
         List<EvaluationRule> validRules = SWBUtils.Collections.filterIterator(listEvaluationRules(), new GenericFilterRule<EvaluationRule>() {
                                                                         @Override
                                                                         public boolean filter(EvaluationRule r) {
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getIndicator().getBSC().getUserRepository().getId());
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
