@@ -17,6 +17,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.ComponentExportable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.Indicator;
@@ -42,7 +43,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  *
  * @author carlos.ramos
  */
-public class DataTableResource extends GenericResource {
+public class DataTableResource extends GenericResource implements ComponentExportable{
     private static Logger log = SWBUtils.getLogger(DataTableResource.class);
 
     @Override
@@ -454,5 +455,108 @@ public class DataTableResource extends GenericResource {
         script.append("</script>\n");
         script.append("<span id=\"eb_" + objId + "\" class=\""+cssClass+"\">" + data + "</span>");
         return script.toString();
+    }
+
+    /**
+     * Genera el c&oacute;digo HTML de la tabla de datos usado en la 
+     * exportaci&oacute;n a PDF del componente
+     * 
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * datos a exportar(Tabla de datos de un indicador)
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     * 
+     */
+    @Override
+    public String doComponentExport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        StringBuilder sb = new StringBuilder();
+        User user = paramRequest.getUser();
+        final String suri = request.getParameter("suri");
+
+        if (suri == null) {
+            sb.append("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+        }
+        if (user != null && user.isSigned() && suri != null) {
+            final String lang = user.getLanguage();
+            SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+            SemanticObject sobj = ont.getSemanticObject(suri);
+            if (sobj != null && (sobj.getGenericInstance() instanceof Indicator)) {
+                Indicator indicator = (Indicator) sobj.getGenericInstance();
+                Series star = indicator.getStar();
+                if (star != null) {
+                    List<Series> serieses = indicator.listValidSerieses();
+                    Collections.sort(serieses);
+
+                    Iterator<Period> periods;
+                    try {
+                        periods = indicator.listMeasurablesPeriods();
+                    } catch (Exception e) {
+                        List<Period> lperiods = indicator.listValidPeriods();
+                        Collections.sort(lperiods);
+                        periods = lperiods.iterator();
+                    }
+                    sb.append("<table class=\"detail data-table\">");
+                    sb.append("<thead>");
+                    sb.append("<tr>");
+                    sb.append("<th>Periodo</th>");
+                    sb.append("<th>Estado</th>");
+                    for (Series series : serieses) {
+                        sb.append("<th>");
+                        sb.append((series.getTitle(lang) == null ? series.getTitle() 
+                                : series.getTitle(lang)));
+                        sb.append("</th>");
+                    }
+                    sb.append("</tr>");
+                    sb.append("</thead>");
+                    sb.append("<tbody>");
+                    while (periods.hasNext()) {
+                        Period period = periods.next();
+                        sb.append("<tr>");
+                        sb.append("<td>");
+                        sb.append(period.getTitle());
+                        sb.append("</td>");
+                        sb.append("<td>");
+                        if (star.getMeasure(period) != null) {
+                            State state = star.getMeasure(period).getEvaluation().
+                                    getStatus();
+                            if (state == null) {
+                                state = indicator.getMinimumState();
+                                star.getMeasure(period).getEvaluation().setStatus(state);
+                            }
+                            String title = state.getTitle(lang) == null ? state.getTitle() : 
+                                    state.getTitle(lang);
+                            sb.append("<span class=\"");
+                            sb.append((state.getIconClass() == null ? "state-undefined" : 
+                                    state.getIconClass()));
+                            sb.append("\">");
+                            sb.append(title);
+                            sb.append("</span>");
+                        } else {
+                            sb.append("--");
+                        }
+                        sb.append("</td>");
+                        for (Series series : serieses) {
+                            sb.append("<td>");
+                            String value = series.getMeasure(period) == null ? "--" : 
+                                    series.getFormatter().format(series.getMeasure(period).
+                                    getValue());
+                            sb.append(value);
+                            sb.append("</td>");
+                        }
+                        sb.append("</tr>");
+                    }
+                    sb.append("</tbody>");
+                    sb.append("</table>");
+                } else {
+                    sb.append("No hay STAR");
+                }
+            } else {
+                sb.append("No hay indicador");
+            }
+        }
+        return sb.toString();
     }
 }
