@@ -1487,7 +1487,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * grupo indicado, {@literal false} de lo contrario
      */
     private boolean userCanCollaborate(final UserGroup collaboration) {
-        final User user = SWBContext.getSessionUser();
+        final WebSite scorecard = (WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
         return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
     }
 
