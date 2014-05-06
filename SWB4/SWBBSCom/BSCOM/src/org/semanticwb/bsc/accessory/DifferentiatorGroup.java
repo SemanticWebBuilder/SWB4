@@ -25,7 +25,7 @@ public class DifferentiatorGroup extends org.semanticwb.bsc.accessory.base.Diffe
                                                                             if(diff==null) {
                                                                                 return true;
                                                                             }
-                                                                            User user = SWBContext.getSessionUser();
+                                                                            User user = SWBContext.getSessionUser(getPerspective().getBSC().getUserRepository().getId());
                                                                             return !diff.isValid() || !user.haveAccess(diff);
                                                                         }            
                                                                     });
