@@ -74,7 +74,12 @@
                                     <%=postOutLinksHit.getSocialNet().getDisplayTitle(user.getLanguage())%>
                                 </td>
                                 <td>
-                                    <a href="#" title="Mostrar" onclick="showDialog('<%=urlpostOutLinksHits.setParameter("uri", postOutLinksHit.getURI())%>','Datos de Hits de Link'); return false;"><%=postOutLinksHit.getPol_hits()%></a>
+                                    <%
+                                    if(postOutLinksHit.getPol_hits()>0){%>
+                                    <a href="#" title="Mostrar" onclick="showDialog('<%=urlpostOutLinksHits.setParameter("uri", postOutLinksHit.getURI())%>','Datos de Hits de Link'); return false;">
+                                    <%}%>
+                                        <%=postOutLinksHit.getPol_hits()%>
+                                    <%if(postOutLinksHit.getPol_hits()>0){%></a><%}%>
                                 </td>
                             </tr>
                             <%
