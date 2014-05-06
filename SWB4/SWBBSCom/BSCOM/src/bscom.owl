@@ -335,9 +335,6 @@
       <owl:Class rdf:about="#Updateable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Status"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
       <swb:Interface rdf:ID="Serializable">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Obtiene el número consecutivo utilizado en la asignación de la propiedad prefix de objetos de tipo Recognizable.</rdfs:comment>
@@ -395,7 +392,7 @@
     >Agrupa las propiedades en común de los diferentes tipos de vistas (vista y detalle) para los elementos del BSC.</rdfs:comment>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
-  <owl:Class rdf:about="#Status">
+  <owl:Class rdf:ID="Status">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Define que puede tener  estados de semaforización asignados</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
