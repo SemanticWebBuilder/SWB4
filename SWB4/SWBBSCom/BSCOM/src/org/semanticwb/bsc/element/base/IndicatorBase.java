@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Persiste los atributos de un indicador 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Status,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Serializable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Updateable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -189,29 +189,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByInitiative(org.semanticwb.bsc.element.Initiative value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @param model Model of the org.semanticwb.bsc.element.Indicator
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByState(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Indicator with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @return Iterator with all the org.semanticwb.bsc.element.Indicator
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Indicator> listIndicatorByState(org.semanticwb.bsc.accessory.State value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Indicator> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -609,71 +586,6 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.element.Initiative)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.accessory.State
-   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.State
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listStates()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasState));
-    }
-
-   /**
-   * Gets true if has a State
-   * @param value org.semanticwb.bsc.accessory.State to verify
-   * @return true if the org.semanticwb.bsc.accessory.State exists, false otherwise
-   */
-    public boolean hasState(org.semanticwb.bsc.accessory.State value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasState,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a State
-   * @param value org.semanticwb.bsc.accessory.State to add
-   */
-
-    public void addState(org.semanticwb.bsc.accessory.State value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasState, value.getSemanticObject());
-    }
-   /**
-   * Removes all the State
-   */
-
-    public void removeAllState()
-    {
-        getSemanticObject().removeProperty(bsc_hasState);
-    }
-   /**
-   * Removes a State
-   * @param value org.semanticwb.bsc.accessory.State to remove
-   */
-
-    public void removeState(org.semanticwb.bsc.accessory.State value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasState,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the State
-   * @return a org.semanticwb.bsc.accessory.State
-   */
-    public org.semanticwb.bsc.accessory.State getState()
-    {
-         org.semanticwb.bsc.accessory.State ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasState);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
          }
          return ret;
     }
