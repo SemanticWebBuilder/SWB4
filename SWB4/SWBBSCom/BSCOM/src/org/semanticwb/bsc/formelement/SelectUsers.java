@@ -3,18 +3,10 @@ package org.semanticwb.bsc.formelement;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
-import org.semanticwb.SWBPlatform;
-import org.semanticwb.bsc.ContactWork;
 import org.semanticwb.model.DisplayProperty;
-import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.Trashable;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
-import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticClass;
-import org.semanticwb.platform.SemanticModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -30,11 +22,7 @@ public class SelectUsers extends org.semanticwb.bsc.formelement.base.SelectUsers
     }
 
     @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {
-
-        User user = SWBContext.getSessionUser();
-
-        String uriClass = obj.getSemanticClass().getURI();
+    public String renderElement(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName, String type, String mode, String lang) {        String uriClass = obj.getSemanticClass().getURI();
         uriClass = uriClass.substring(0, uriClass.indexOf("#") + 1);
         org.semanticwb.platform.SemanticProperty bsc_area = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(uriClass + getAreaSelect());
 
