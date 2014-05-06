@@ -982,7 +982,7 @@ public class SocialSentPost extends GenericResource {
             {
                 SWBResourceURL postOutLinksHits = paramRequest.getRenderUrl().setMode(Mode_LinksHits).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
                 out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgLinksHits") + "\" class=\"msgLinksHits\" onclick=\"showDialog('" + postOutLinksHits + "','" + paramRequest.getLocaleString("msgLinksHits")
-                        + "'); return false;\">LinksHits</a>");
+                        + "'); return false;\"></a>");
             }
 
             out.println("</td>");
