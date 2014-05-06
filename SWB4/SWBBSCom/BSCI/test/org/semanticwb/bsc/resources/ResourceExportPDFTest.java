@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.PDFExportable;
-import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
