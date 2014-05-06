@@ -544,6 +544,25 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
+    /**
+     * Lista en HTML los archivos adjuntos.
+     * 
+     * @param itAttachments el iterador con los archivos adjuntos
+     * @param suri el objeto que contiene el formElement
+     * @param obj la propiedad asociada a este FormElement
+     * @param prop la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @param usrWithGrants define si existen permisos para editar o eliminar los
+     * archivos adjuntos.
+     * @return el objeto String que representa el c&oacute;digo HTML con el
+     * conjunto de archivos adjuntos.
+     */
     private String listAttachment(Iterator<Attachment> itAttachments, String suri,
             SemanticObject obj, SemanticProperty prop, String type, String mode, String lang,
             String usrWithGrants) {
@@ -635,6 +654,21 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
+    /**
+     * Genera la vista view del elemento de forma.
+     * 
+     * @param prop la propiedad asociada a este FormElement
+     * @param propName el nombre de la propiedad asociada a este FormElement
+     * @param type el tipo de despliegue a generar. Actualmente solo se acepta
+     * el valor {@code dojo}
+     * @param mode el modo en que se presentar&aacute; el despliegue del
+     * FormElement. Los modos soportados son:
+     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * @param lang el lenguaje utilizado en la generaci&oacute;n del
+     * c&oacute;digo HTML a regresar
+     * @return el objeto String que representa el c&oacute;digo HTML con la
+     * vista correspondiente al modo especificado para este elemento de forma.
+     */
     public String renderModeView(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
