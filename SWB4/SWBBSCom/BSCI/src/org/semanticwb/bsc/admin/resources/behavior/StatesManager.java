@@ -100,6 +100,7 @@ public class StatesManager extends GenericResource {
                         out.println("<th>"+paramRequest.getLocaleString("lblNext")+"</th>");
                         out.println("<th>"+paramRequest.getLocaleString("lblStateGroup")+"</th>");
                         out.println("<th>"+paramRequest.getLocaleString("lblActive")+"</th>");
+                        out.println("<th>"+paramRequest.getLocaleString("lblRelate")+"</th>");
                         out.println("</tr>");
                         out.println("</thead>");
                         out.println("<tbody>");
@@ -144,6 +145,13 @@ public class StatesManager extends GenericResource {
                             out.println(" <td>");
                             out.println((stateGroup.getTitle(lang)==null?(stateGroup.getTitle()==null?"Sin título":stateGroup.getTitle().replaceAll("'","")):stateGroup.getTitle(lang).replaceAll("'","")));
                             out.println(" </td>");
+                            
+                            // Activo?
+                            out.println(" <td align=\"center\">" + 
+                            (state.isActive()
+                             ? paramRequest.getLocaleString("lblYes")
+                             : paramRequest.getLocaleString("lblNot")) +
+                            "</td>");
 
                             // Asigna?
                             SWBResourceURL urlactv = paramRequest.getActionUrl();
@@ -224,9 +232,9 @@ public class StatesManager extends GenericResource {
                 String icon = SWBContext.UTILS.getIconClass(obj);
                 out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
             }
-            if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-                out.println("   closeTab('" + request.getParameter("closetab") + "');");
-            }
+//            if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+//                out.println("   closeTab('" + request.getParameter("closetab") + "');");
+//            }
             out.println("</script>");
 
             String action = paramRequest.getAction();
@@ -243,71 +251,82 @@ public class StatesManager extends GenericResource {
                 out.println("<th>"+paramRequest.getLocaleString("lblNext")+"</th>");
                 out.println("<th>"+paramRequest.getLocaleString("lblStateGroup")+"</th>");
                 out.println("<th>"+paramRequest.getLocaleString("lblActive")+"</th>");
+                out.println("<th>"+paramRequest.getLocaleString("lblRelate")+"</th>");
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
                 Status status = (Status)obj.getGenericInstance();
 //                if(status.getState()!=null)
 //                {
-                    List<State> lstates = null;
-                    if(status instanceof Indicator) {
-                        lstates = ((Indicator)status).getObjective().listValidStates();
-                    }else if( status instanceof Deliverable) {
-                    }else if(status instanceof Objective || status instanceof Initiative) {
-                        if(status.getState()!=null) {
-                            lstates = status.getState().getStateGroup().listValidStates();
-                        }
-                    }
+//                    List<State> lstates = null;
+//                    if(status instanceof Indicator) {
+//                        lstates = ((Indicator)status).getObjective().listValidStates();
+//                    }else if( status instanceof Deliverable) {
+//                    }else if(status instanceof Objective || status instanceof Initiative) {
+//                        if(status.getState()!=null) {
+//                            lstates = status.getState().getStateGroup().listValidStates();
+//                        }
+//                    }
+                Iterator<State> istates = status.listStates();
+                List<State> lstates = SWBUtils.Collections.copyIterator(istates);
                     
-                    if(lstates!=null && !lstates.isEmpty())
+                    if(!lstates.isEmpty())
                     {
                         Collections.sort(lstates);
                         Iterator<State> groupedStates = lstates.iterator();
-                        while(groupedStates.hasNext()) {
+                        while(groupedStates.hasNext()) {                            
                             State state = groupedStates.next();
-                            out.println("<tr>");
-                            out.println("");
-                            
-                            // Orden
-                            out.println(" <td>"+state.getOrden()+"</td>");
-                            
-                            // Estado
-                            out.println(" <td>");
-                            out.println("<a href=\"#\" onclick=\"addNewTab('" + state.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "</a>");
-                            out.println(" </td>");
-                            
-                            // Estado anterior
-                            if(state.getPrevius()==null) {
-                                out.println(" <td>Not set</td>");
-                            }else {
-                                State previus = (State)state.getPrevius();
+                            if(  (state.isValid() && user.haveAccess(state)) || (!state.isActive() && status.hasState(state) && user.haveAccess(state))  )
+                            {
+                                out.println("<tr>");
+                                // Orden
+                                out.println(" <td>"+state.getOrden()+"</td>");
+
+                                // Estado
                                 out.println(" <td>");
-                                out.println("<a href=\"#\" onclick=\"addNewTab('" + previus.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "</a>");
+                                out.println("<a href=\"#\" onclick=\"addNewTab('" + state.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (state.getTitle(lang)==null?(state.getTitle()==null?"Sin título":state.getTitle().replaceAll("'","")):state.getTitle(lang).replaceAll("'","")) + "</a>");
                                 out.println(" </td>");
-                            }
-                            
-                            // Estado siguiente
-                            if(state.getNext()==null) {
-                                out.println(" <td>Not set</td>");
-                            }else {
-                                State next = (State)state.getNext();
+
+                                // Estado anterior
+                                if(state.getPrevius()==null) {
+                                    out.println(" <td>Not set</td>");
+                                }else {
+                                    State previus = (State)state.getPrevius();
+                                    out.println(" <td>");
+                                    out.println("<a href=\"#\" onclick=\"addNewTab('" + previus.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (previus.getTitle(lang)==null?(previus.getTitle()==null?"Sin título":previus.getTitle().replaceAll("'","")):previus.getTitle(lang).replaceAll("'","")) + "</a>");
+                                    out.println(" </td>");
+                                }
+
+                                // Estado siguiente
+                                if(state.getNext()==null) {
+                                    out.println(" <td>Not set</td>");
+                                }else {
+                                    State next = (State)state.getNext();
+                                    out.println(" <td>");
+                                    out.println("<a href=\"#\" onclick=\"addNewTab('" + next.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "</a>");
+                                    out.println(" </td>");
+                                }
+
+                                // Grupo del estado
                                 out.println(" <td>");
-                                out.println("<a href=\"#\" onclick=\"addNewTab('" + next.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "');return false;\" >" + (next.getTitle(lang)==null?(next.getTitle()==null?"Sin título":next.getTitle().replaceAll("'","")):next.getTitle(lang).replaceAll("'","")) + "</a>");
+                                out.println((state.getStateGroup().getTitle(lang)==null?(state.getStateGroup().getTitle()==null?"Sin título":state.getStateGroup().getTitle().replaceAll("'","")):state.getStateGroup().getTitle(lang).replaceAll("'","")));
                                 out.println(" </td>");
+
+                                // Activo?
+                                out.println(" <td align=\"center\">" + 
+                                (state.isActive()
+                                 ? paramRequest.getLocaleString("lblYes")
+                                 : paramRequest.getLocaleString("lblNot")) +
+                                "</td>");
+
+                                // Asigna?
+                                SWBResourceURL urlactv = paramRequest.getActionUrl();
+                                urlactv.setParameter("suri", suri);
+                                urlactv.setParameter("sval", state.getId());
+                                urlactv.setAction(Action_UPDT_ACTIVE);
+                                out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\""+status.hasState(state) +"\" "+(status.hasState(state) ?"checked=\"checked\"":"")+" /></td>");
+                                out.println("</tr>");
                             }
-                            
-                            // Grupo del estado
-                            out.println(" <td>");
-                            out.println((state.getStateGroup().getTitle(lang)==null?(state.getStateGroup().getTitle()==null?"Sin título":state.getStateGroup().getTitle().replaceAll("'","")):state.getStateGroup().getTitle(lang).replaceAll("'","")));
-                            out.println(" </td>");
-                            
-                            // Asigna?
-                            SWBResourceURL urlactv = paramRequest.getActionUrl();
-                            urlactv.setParameter("suri", suri);
-                            urlactv.setParameter("sval", state.getId());
-                            urlactv.setAction(Action_UPDT_ACTIVE);
-                            out.println("   <td align=\"center\"><input type=\"checkbox\" name=\"act\" onchange=\"submitUrl('" + urlactv + "&'+this.attr('name')+'='+this.attr('value'),this.domNode)\" dojoType=\"dijit.form.CheckBox\" value=\""+status.hasState(state) +"\" "+(status.hasState(state) ?"checked=\"checked\"":"")+" /></td>");
-                            out.println("</tr>");
                         }
                     }
 //                }/////////////////////////////////////
