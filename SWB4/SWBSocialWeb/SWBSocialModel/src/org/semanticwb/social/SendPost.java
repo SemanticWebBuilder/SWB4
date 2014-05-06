@@ -45,7 +45,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                     break;
                 }
             }
-            //Termina revisión de si almenos una red social de las asociadas a la la acción es valida (No borrada y Activa)
+            //Termina revisión de si al menos una red social de las asociadas a la la acción es valida (No borrada y Activa)
             if(atLeastOneIsValid && wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
             {
                 

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Objeto que define un Sitio Web de Administración de SWBSocial 
    */
-public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Localeable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass
+public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Countryable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Traceable,org.semanticwb.model.Indexable
 {
    /**
    * Clase que concentra propiedades para configuración general de facebook., para mostrar en sitio admin.
