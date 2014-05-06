@@ -102,14 +102,16 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param propName el nombre de la propiedad asociada a este FormElement
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop,
-            String propName) {
-        String action = request.getParameter("_action");
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
+    {
+        final String action = request.getParameter("_action");
         String usrWithGrants = request.getParameter("usrWithGrants");
-        WebSite site = SWBContext.getWebSite(getModel().getName());
-        User user = SWBContext.getSessionUser();
+        
+        WebSite scorecard = (WebSite)obj.getModel().getModelObject().getGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        
         if (Action_ADD.equals(action)) {
-            SWBFormMgr mgr = new SWBFormMgr(Attachment.sclass, site.getSemanticObject(), null);
+            SWBFormMgr mgr = new SWBFormMgr(Attachment.sclass, scorecard.getSemanticObject(), null);
             String sref = request.getParameter("sref");
             SemanticObject semObjRef = SemanticObject.createSemanticObject(sref);
             Attachmentable attachmentable = null;
@@ -590,7 +592,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append(attachment.getCreated() == null ? ""
                     : SWBUtils.TEXT.getStrDate(attachment.getCreated(), "es", "dd/mm/yyyy"));
             toReturn.append("\n</td>");
-//            User user = SWBContext.getSessionUser();
+            
             if ("true".equals(usrWithGrants)) {
                 FormElementURL urlEdit = getRenderURL(obj, prop, type, mode, lang);
                 urlEdit.setParameter("modeTmp", Mode_EDIT);
