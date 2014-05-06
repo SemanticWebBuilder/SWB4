@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -54,6 +53,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -1378,7 +1378,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     private boolean userCanEdit() {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
-        final User user = SWBContext.getSessionUser();
+        
+        final WebSite scorecard = (WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
         if (user != null) {
             if (str_role != null) {
