@@ -4,13 +4,23 @@
  */
 package org.semanticwb.bsc.admin.resources.behavior;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.String;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
+import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.ComponentExportable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.element.Indicator;
@@ -20,30 +30,39 @@ import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
+import org.semanticwb.util.UploaderFileCacheUtils;
+import org.w3c.dom.Document;
 
 /**
- * Genera el c&oacute;digo HTML para presentar una gr&aacute;fica con los datos 
+ * Genera el c&oacute;digo HTML para presentar una gr&aacute;fica con los datos
  * de las series activas del indicador cuyo uri se recibe.
+ *
  * @author ana.garcias
  */
-public class GraphGeneration extends GenericResource {
+public class GraphGeneration extends GenericAdmResource implements ComponentExportable {
+
+    /**
+     * Realiza operaciones en la bitacora de eventos.
+     */
+    private static Logger log = SWBUtils.getLogger(GraphGeneration.class);
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
         //Colores a utilizar para cada serie
         String[] colors = {"#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
-                           "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
-                           "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
-                           "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
+            "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
+            "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
+            "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
         StringBuilder output = new StringBuilder(512);
 
         if (semanticObj != null) {
@@ -54,7 +73,7 @@ public class GraphGeneration extends GenericResource {
                 GenericIterator<Series> seriesIt = indicator.listSerieses();
                 List<Period> periodsList = new java.util.ArrayList<Period>();
                 StringBuilder usedColors = new StringBuilder(32);
-                
+
                 try {
                     measurablePeriods = indicator.listMeasurablesPeriods();
                     if (measurablePeriods == null || !measurablePeriods.hasNext()) {
@@ -90,7 +109,7 @@ public class GraphGeneration extends GenericResource {
                 output.append("         <input type=\"radio\" name=\"graphType\" id=\"hGraph\" value=\"1\" onclick=\"javascript:showGraph(this);\" checked=\"checked\"><label for=\"hGraph\">Horizontal</label>\n");
                 output.append("         <input type=\"radio\" name=\"graphType\" id=\"vGraph\" value=\"2\" onclick=\"javascript:showGraph(this);\"><label for=\"vGraph\">Vertical</label>\n");
                 output.append("       </div>\n");
-                output.append("       <svg></svg>\n");                      
+                output.append("       <svg></svg>\n");
                 output.append("   </div>\n");
                 output.append("<script type=\"text/javascript\">\n");
                 output.append("long_short_data = [\n");
@@ -120,12 +139,12 @@ public class GraphGeneration extends GenericResource {
                                 output.append("\" ,\n");
                             }
                             /*Lo mantengo por si al final la seleccion aleatoria de colores se decide eliminar
-                            short colorIndex = 0;
-                            if (seriesCount < colors.length) {
-                                colorIndex = seriesCount;
-                            } else {
-                                colorIndex = (short) (seriesCount % colors.length);
-                            }*/
+                             short colorIndex = 0;
+                             if (seriesCount < colors.length) {
+                             colorIndex = seriesCount;
+                             } else {
+                             colorIndex = (short) (seriesCount % colors.length);
+                             }*/
                             //Se selecciona el color de la serie de manera aleatoria
                             short colorIndex = (short) (Math.random() * colors.length);
                             boolean colorAssigned = false;
@@ -138,13 +157,13 @@ public class GraphGeneration extends GenericResource {
                                     colorIndex = (short) (Math.random() * colors.length);
                                 }
                             }
-                            
+
                             //Se coloca el color a utilizar para la serie
                             output.append("  color: '");
                             output.append(colors[colorIndex]);
                             output.append("',\n");
                             output.append("  values: [\n");
-                            
+
                             int periodsCount = 0;
                             //Recorre los periodos y valores de la serie para graficarlos
                             for (Period period : periodsList) {
@@ -191,7 +210,7 @@ public class GraphGeneration extends GenericResource {
                     out.flush();
                     out.close();
                 }
-                
+
                 //Se termina de armar el Javascript para la presentacion de la grafica
                 output.append("];\n");
                 output.append("var chart;\n");
@@ -243,5 +262,80 @@ public class GraphGeneration extends GenericResource {
                 out.println(output.toString());
             }
         }
+    }
+
+    /**
+     * Genera el c&oacute;digo HTML de la gr&aacute;fica (Tabla de datos de un
+     * indicador) usado en la exportaci&oacute;n a PDF del componente
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * datos a exportar(Gr&aacute;fica de la tabla de datos de un indicador)
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     *
+     */
+    @Override
+    public String doComponentExport(HttpServletRequest request, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
+        StringBuilder sb = new StringBuilder();
+        Resource base = this.getResourceBase();
+        String data = request.getParameter("image");
+        int dataIndexOf = data.indexOf("svg");
+        int lenght = data.length();
+        float width = base.getAttribute("width") != null
+                ? Float.parseFloat(base.getAttribute("width")) : 550;
+        float height = base.getAttribute("height") != null
+                ? Float.parseFloat(base.getAttribute("height")) : 250;
+
+        String data1 = data.substring(0, (dataIndexOf + 3));
+        String data2 = data.substring((dataIndexOf + 3), lenght);
+        data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" " + (data2);
+        data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
+        Document svg = SWBUtils.XML.xmlToDom(data);
+        try {
+            String destpath = SWBPlatform.getContextPath() + "/work/models/"
+                    + paramRequest.getWebPage().getWebSiteId()
+                    + "/graphics.jpg";
+            saveGraphics(svg, paramRequest.getWebPage().getWebSiteId(), width, height);
+
+            sb.append("<p><img src=\"");
+            sb.append(destpath);
+            sb.append("\" alt=\"graphics\"/></p>");
+        } catch (Exception ex) {
+            log.error("Error try save Image: " + ex);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Crea y almacena una imagen temporal con la gr&aacute;fica de un indicador
+     *
+     * @param document archivo XML con informaci&oacute;n de tipo SVG
+     * (Gr&aacute;fica)
+     * @param idWebSite id del ScoreCard
+     * @param width ancho de la imagen a generar
+     * @param height alto de la imagen a generar
+     * @throws Exception Excepti&oacute;n de IO
+     */
+    private void saveGraphics(Document document, String idWebSite, float width, float height)
+            throws Exception {
+        String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + idWebSite;
+        JPEGTranscoder t = new JPEGTranscoder();
+        t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+        t.addTranscodingHint(JPEGTranscoder.KEY_WIDTH, width);
+        t.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, height);
+
+        // Set the transcoder input and output.
+        TranscoderInput input = new TranscoderInput(document);
+        OutputStream ostream = new FileOutputStream(destpath + "/graphics.jpg");
+        TranscoderOutput output = new TranscoderOutput(ostream);
+
+        // Perform the transcoding.
+        t.transcode(input, output);
+        ostream.flush();
+        ostream.close();
     }
 }

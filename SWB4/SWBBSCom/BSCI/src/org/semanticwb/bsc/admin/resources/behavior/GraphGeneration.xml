@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" id="frmAdmRes" method="POST">
+            <fieldset legend="Configurar dimensiones para PDF">
+                <input type="text" id="width"  name="width" label="Ancho de la imagen (px)" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho Inválido" promptMessage="Ancho de la imagen. Ejemplo:350 " />
+                <input type="text" id="height" name="height" label="Altura de la imagen (px)" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura Inválida" promptMessage="Altura de la imagen. Ejemplo: 350" />
+            </fieldset>
+    <fieldset>
+        <input type="submit" name="btnSave" value="Guardar"/>
+        <input type="reset"  name="btnReset" value="Restablecer" />
+    </fieldset>
+    </form>
+</admresource>
