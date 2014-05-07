@@ -46,7 +46,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                 }
             }
             //Termina revisión de si al menos una red social de las asociadas a la la acción es valida (No borrada y Activa)
-            if(atLeastOneIsValid && wsite!=null && (sendPost.getMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
+            if(atLeastOneIsValid && wsite!=null && (sendPost.getActionMsg_Text()!=null || sendPost.listPhotos().hasNext() || sendPost.getVideo()!=null))
             {
                 
                 if(sendPost.getVideo()!=null)   //Envía Video
@@ -61,9 +61,9 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         SWBUtils.IO.copy(videoSource,videoTarget, false, null, null);
                         
                         video.setVideo(sendPost.getVideo());
-                        if(sendPost.getMsg_Text()!=null)
+                        if(sendPost.getActionMsg_Text()!=null)
                         {
-                            video.setMsg_Text(sendPost.getMsg_Text());
+                            video.setMsg_Text(sendPost.getActionMsg_Text());
                         }
                         
                         //Se agrega postIn fuente del nuevo postOut
@@ -124,9 +124,9 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                        
                         }
                         
-                        if(sendPost.getMsg_Text()!=null)
+                        if(sendPost.getActionMsg_Text()!=null)
                         {
-                            photo.setMsg_Text(sendPost.getMsg_Text());
+                            photo.setMsg_Text(sendPost.getActionMsg_Text());
                         }
                         
                         //Se agrega postIn fuente del nuevo postOut
@@ -158,12 +158,12 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                     {
                         log.error(e);
                     }
-                }else if(sendPost.getMsg_Text()!=null) //Envía Mensaje
+                }else if(sendPost.getActionMsg_Text()!=null) //Envía Mensaje
                 {
                     try
                     {
                         Message message=Message.ClassMgr.createMessage(wsite);
-                        message.setMsg_Text(sendPost.getMsg_Text());
+                        message.setMsg_Text(sendPost.getActionMsg_Text());
                         
                         
                         //Agrego datos del postIn al postOut, para su correcta creación y clasificación
