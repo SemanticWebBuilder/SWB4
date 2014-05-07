@@ -60,6 +60,9 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !t.isValid() || !user.haveAccess(t);
                                                                         }            
                                                                     });
@@ -74,6 +77,9 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !diffgroup.isValid() || !user.haveAccess(diffgroup);
                                                                         }            
                                                                     });
