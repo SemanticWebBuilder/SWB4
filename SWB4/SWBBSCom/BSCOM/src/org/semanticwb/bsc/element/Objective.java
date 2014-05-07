@@ -245,6 +245,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
                                                                 return true;
                                                             }
                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                            if(user==null) {
+                                                                user = SWBContext.getAdminUser();
+                                                            }
                                                             return !s.isValid() || !user.haveAccess(s);
                                                         }            
                                                     });
@@ -256,6 +259,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
                                                         @Override
                                                         public boolean filter(Period s) {
                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                            if(user==null) {
+                                                                user = SWBContext.getAdminUser();
+                                                            }
                                                             return !s.isValid() || !user.haveAccess(s);
                                                         }            
                                                     });
@@ -267,6 +273,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
                                                         @Override
                                                         public boolean filter(Indicator s) {
                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                            if(user==null) {
+                                                                user = SWBContext.getAdminUser();
+                                                            }
                                                             return !s.isValid() || !user.haveAccess(s);
                                                         }            
                                                     });
