@@ -100,7 +100,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 String urlLocalPost = "";
                 Iterator<String> files = message.listFiles();
                 if(files.hasNext()){//If at least one file found
-                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                     urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
                 }                
@@ -169,7 +169,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //System.out.println("No Photos FOUND");
                 return;
             }else if (photoNumber > 1){
-                String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                 additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                 additionalPhotos = SWBSocialUtil.Util.shortSingleUrl(additionalPhotos);
                 //System.out.println("Path form multiple photos:" + additionalPhotos);
@@ -946,7 +946,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         String msgText = postOut.getMsg_Text();
         WebSite admin = SWBContext.getAdminWebSite();
         WebPage linksRedirector  = admin.getWebPage("linksredirector");
-        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
         
         Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
         while(savedLinks.hasNext()){

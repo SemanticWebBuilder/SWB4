@@ -1267,7 +1267,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 String urlLocalPost = "";
                 Iterator<String> files = message.listFiles();
                 if(files.hasNext()){//If at least one file found
-                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                     urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
                     messageText += " " + urlLocalPost;
@@ -1701,7 +1701,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         String msgText = postOut.getMsg_Text();
         WebSite admin = SWBContext.getAdminWebSite();
         WebPage linksRedirector  = admin.getWebPage("linksredirector");
-        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
         
         Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
         while(savedLinks.hasNext()){
