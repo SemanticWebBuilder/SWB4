@@ -16,6 +16,7 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -254,6 +255,9 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
                                                                         @Override
                                                                         public boolean filter(Series s) {
                                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !s.isValid() || !user.haveAccess(s);
                                                                         }            
                                                                     });
@@ -265,6 +269,9 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
                                                                         @Override
                                                                         public boolean filter(Period p) {
                                                                             User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
                                                                     });
@@ -273,24 +280,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     
     public List<State> listValidStates() {
         return getObjective().listValidStates();
-//        List<State> validStates = SWBUtils.Collections.filterIterator(listStates(), new GenericFilterRule<State>() {
-//                                                                        @Override
-//                                                                        public boolean filter(State s) {
-//                                                                            if(s==null) {
-//                                                                                return true;
-//                                                                            }
-//                                                                            User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
-//                                                                            return !s.isValid() || !user.haveAccess(s);
-//                                                                        }            
-//                                                                    });
-//        return validStates;
     }
-    
-//    public void addAllStates(List<State> c) {
-//        for(State s:c) {
-//            addState(s);
-//        }
-//    }
     
     /**
      * Recupera el período más próximo de medición en base a la fecha actual. 
@@ -303,34 +293,4 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-//    @Override
-//    public void removeState(State value) {
-//        // Eliminar en cascada las reglas de evaluación de cada serie asociadas al estado
-//        Iterator<Series> serieses = listSerieses();
-//        while(serieses.hasNext()) {
-//            Series s = serieses.next();
-//            Iterator<EvaluationRule> rules = s.listEvaluationRules();
-//            while(rules.hasNext()) {
-//                EvaluationRule rule = rules.next();
-//                if(rule.getAppraisal().equals(value)) {
-//                    s.removeEvaluationRule(rule);
-//                }
-//            }
-//        }
-//        super.removeState(value);
-//
-//    }
-    
-//    @Override
-//    public void removeAllState()
-//    {
-//        // Eliminar en cascada las reglas de evaluación de cada serie asociados a dichos estados
-//        Iterator<Series> serieses = listSerieses();
-//        while(serieses.hasNext()) {
-//            serieses.next().removeAllEvaluationRule();
-//        }
-//        super.removeAllState();
-//    }
-    
 }
