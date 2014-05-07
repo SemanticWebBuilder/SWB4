@@ -3,10 +3,7 @@ package org.semanticwb.bsc.accessory;
 import java.util.List;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
-import org.semanticwb.bsc.accessory.base.StateGroupBase;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
-import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
