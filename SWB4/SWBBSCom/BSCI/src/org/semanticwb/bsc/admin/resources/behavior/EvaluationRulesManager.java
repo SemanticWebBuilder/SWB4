@@ -104,9 +104,9 @@ public class EvaluationRulesManager extends GenericAdmResource {
             String icon = SWBContext.UTILS.getIconClass(obj);
             out.println("setTabTitle('" + obj.getURI() + "','" + obj.getDisplayName(user.getLanguage()) + "','" + icon + "');");
         }
-        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
-            out.println("   closeTab('" + request.getParameter("closetab") + "');");
-        }
+//        if (request.getParameter("closetab") != null && request.getParameter("closetab").trim().length() > 0) {
+//            out.println("   closeTab('" + request.getParameter("closetab") + "');");
+//        }
         out.println("</script>");
         
         
@@ -133,7 +133,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             
             series = (Series)obj.getGenericInstance();
             final Indicator indicator = series.getIndicator();
-            BSC bsc = series.getIndicator().getObjective().getTheme().getPerspective().getBSC();
+            BSC bsc = indicator.getBSC();
 
             // Obtener la lista de operaciones válidas
             List<Operation> operations = SWBUtils.Collections.filterIterator(Operation.ClassMgr.listOperations(bsc),
@@ -154,7 +154,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             // una regla ya está en el conjunto no se agrega de nuevo 
             HashSet<State> configuredStates = new HashSet<State>();            
             Iterator<EvaluationRule> rules = series.listEvaluationRules();
-            List lrules = SWBUtils.Collections.copyIterator(rules);
+            List<EvaluationRule> lrules = SWBUtils.Collections.copyIterator(rules);
             Collections.sort(lrules);
             Collections.reverse(lrules);
             rules = lrules.iterator();
@@ -371,15 +371,14 @@ public class EvaluationRulesManager extends GenericAdmResource {
                     rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
                     rule.setTitle(rule.getId());
                     rule.setTitle(rule.getId(), user.getLanguage());
-                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                    if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getGlobalWebSite())) {
+                        State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getGlobalWebSite());
                         rule.setAppraisal(state);
                         series.addEvaluationRule(rule);
                     }
                 }else {
                     rule = (EvaluationRule)objRule.getGenericInstance();
                 }
-//                Operation oper = Operation.ClassMgr.getOperation(operId, model);
                 rule.setOperationId(operId);
                 response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOperatorOk"));
             }else {
@@ -402,8 +401,8 @@ public class EvaluationRulesManager extends GenericAdmResource {
                         rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
                         rule.setTitle(rule.getId());
                         rule.setTitle(rule.getId(), user.getLanguage());
-                        if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-                            State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                        if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getGlobalWebSite())) {
+                            State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getGlobalWebSite());
                             rule.setAppraisal(state);
                             series.addEvaluationRule(rule);
                         }
@@ -433,8 +432,8 @@ public class EvaluationRulesManager extends GenericAdmResource {
                 rule = EvaluationRule.ClassMgr.createEvaluationRule(model);
                 rule.setTitle(rule.getId());
                 rule.setTitle(rule.getId(), user.getLanguage());
-                if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getAdminWebSite())) {
-                    State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getAdminWebSite());
+                if(State.ClassMgr.hasState(request.getParameter("stateId"), SWBContext.getGlobalWebSite())) {
+                    State state = State.ClassMgr.getState(request.getParameter("stateId"), SWBContext.getGlobalWebSite());
                     rule.setAppraisal(state);
                     series.addEvaluationRule(rule);
                 }
@@ -451,63 +450,49 @@ public class EvaluationRulesManager extends GenericAdmResource {
         else if(Action_UPDT_ACTIVE.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-//            if(objSeries!=null && objRule!=null) {
-                EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
-                Series series = (Series)objSeries.getGenericInstance();
-                if(series.hasEvaluationRule(rule)) {
-                    rule.setActive(!rule.isActive());                    
-                    response.setRenderParameter("statmsg", (rule.isActive()?response.getLocaleString("msgUpdtActiveOk"):response.getLocaleString("msgUpdtDeactiveOk")));
-                }else {
-                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
-                }
-//            }else {
-//                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-//            }
+            EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
+            Series series = (Series)objSeries.getGenericInstance();
+            if(series.hasEvaluationRule(rule)) {
+                rule.setActive(!rule.isActive());                    
+                response.setRenderParameter("statmsg", (rule.isActive()?response.getLocaleString("msgUpdtActiveOk"):response.getLocaleString("msgUpdtDeactiveOk")));
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
+            }
         }
         else if(Action_ACTIVE_ALL.equalsIgnoreCase(action))
         {
-//            if(objSeries!=null) {
-                Series series = (Series)objSeries.getGenericInstance();                
-                Iterator<EvaluationRule> rules = series.listEvaluationRules();
-                while(rules.hasNext()) {
-                    rules.next().setActive(Boolean.TRUE);
-                }
-                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllActiveOk"));
-//            }
+            Series series = (Series)objSeries.getGenericInstance();
+            Iterator<EvaluationRule> rules = series.listEvaluationRules();
+            while(rules.hasNext()) {
+                rules.next().setActive(Boolean.TRUE);
+            }
+            response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllActiveOk"));
         }
         else if(Action_DEACTIVE_ALL.equalsIgnoreCase(action))
         {
-//            if(objSeries!=null) {
-                Series series = (Series)objSeries.getGenericInstance();                
-                Iterator<EvaluationRule> rules = series.listEvaluationRules();
-                while(rules.hasNext()) {
-                    rules.next().setActive(Boolean.FALSE);
-                }
-                response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllDeactiveOk"));
-//            }
+            Series series = (Series)objSeries.getGenericInstance();                
+            Iterator<EvaluationRule> rules = series.listEvaluationRules();
+            while(rules.hasNext()) {
+                rules.next().setActive(Boolean.FALSE);
+            }
+            response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtAllDeactiveOk"));
         }
         else if(SWBResourceURL.Action_REMOVE.equalsIgnoreCase(action))
         {
             SemanticObject objRule = ont.getSemanticObject(request.getParameter("sval"));
-//            if(objSeries!=null && objRule!=null) {
-                EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
-                Series series = (Series)objSeries.getGenericInstance();
-                if(series.hasEvaluationRule(rule)) {
-                    series.removeEvaluationRule(rule);
-                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveOk"));
-                }else {
-                    response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
-                }
-//            }else {
-//                response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-//            }
+            EvaluationRule rule = (EvaluationRule)objRule.getGenericInstance();
+            Series series = (Series)objSeries.getGenericInstance();
+            if(series.hasEvaluationRule(rule)) {
+                series.removeEvaluationRule(rule);
+                response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveOk"));
+            }else {
+                response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
+            }
         }
         else if(Action_DELETE_ALL.equalsIgnoreCase(action))
         {
-//            if(objSeries!=null) {
-                Series series = (Series)objSeries.getGenericInstance();                
-                series.removeAllEvaluationRule();
-//            }
+            Series series = (Series)objSeries.getGenericInstance();                
+            series.removeAllEvaluationRule();
         }
     }
 }
