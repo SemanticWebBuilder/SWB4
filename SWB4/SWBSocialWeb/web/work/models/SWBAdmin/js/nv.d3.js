@@ -4932,10 +4932,11 @@ nv.models.indentedTree = function() {
                 });
             }
           });
-      /*seriesEnter.append('circle')
+      
+      seriesEnter.append('circle')
           .style('stroke-width', 2)
           .attr('class','nv-legend-symbol')
-          .attr('r', 5);*/
+          .attr('r', 5);      
       seriesEnter.append('text')
           .attr('text-anchor', 'start')
           .attr('class','nv-legend-text')
@@ -5420,10 +5421,10 @@ nv.models.lineChart = function() {
     , tooltips = true
     , tooltip = function(key, x, y, e, graph, positive, negative, neutrals) {
         return '<h3>' + key + '</h3>' +
-			   '<p>' + x + ' horas:' + + (positive+negative+neutrals) +   '</p>' +
-               'Positivos:<font color="#04B431">'  + positive + '</font><br>' +
-			   'Negativos:<font color="red">'  + negative + '</font><br>' +
-			   'Neutros:<font color="#D8D8D8">'  + neutrals + '</font><br>'
+			   '<p><b>' + x + ' horas: ' + (positive+negative+neutrals) +   ' mensajes</b></p>' +
+               'Positivos:<font color="#04B431"><b>'  + positive + '</b></font><br>' +
+			   'Negativos:<font color="red"><b>'  + negative + '</b></font><br>' +
+			   'Neutros:<font color="#989898"><b>'  + neutrals + '</b></font><br>'
       }
     , x
     , y
@@ -5702,9 +5703,10 @@ nv.models.lineChart = function() {
           lines.clearHighlights();
       });
 	  
-	  lines.dispatch.on("elementClick",function(e) {
+      /*lines.dispatch.on("elementClick",function(e) {
 		alert(e.toSource());
-      });
+      });*/
+      
 
       dispatch.on('tooltipShow', function(e) {
         if (tooltips) showTooltip(e, that.parentNode);
