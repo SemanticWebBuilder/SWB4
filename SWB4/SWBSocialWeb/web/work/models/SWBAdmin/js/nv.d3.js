@@ -5456,9 +5456,9 @@ nv.models.lineChart = function() {
         top = e.pos[1] + ( offsetElement.offsetTop || 0),
         x = xAxis.tickFormat()(lines.x()(e.point, e.pointIndex)),
         y = yAxis.tickFormat()(lines.y()(e.point, e.pointIndex)),
-		pos = e.series.positivos[e.pointIndex].y,
-		neg = e.series.negativos[e.pointIndex].y,
-		neu = e.series.neutros[e.pointIndex].y
+        pos = e.series.positivos[e.pointIndex].y,
+        neg = e.series.negativos[e.pointIndex].y,
+        neu = e.series.neutros[e.pointIndex].y,
         content = tooltip(e.series.key, x, y, e, chart, pos, neg, neu);		
     nv.tooltip.show([left, top], content, null, null, offsetElement);
   };
