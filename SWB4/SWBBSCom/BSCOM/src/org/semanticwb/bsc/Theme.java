@@ -33,6 +33,9 @@ public class Theme extends org.semanticwb.bsc.base.ThemeBase implements Comparab
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getPerspective().getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !o.isValid() || !user.haveAccess(o);
                                                                         }            
                                                                     });
