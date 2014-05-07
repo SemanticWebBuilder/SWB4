@@ -92,7 +92,7 @@ public class PeriodsManager extends GenericResource {
             final String data = semObj.getSemanticClass().getName() + semObj.getId();
 
             //Colocar encabezado del listado con las columnas del mismo
-            out.println("<div class=\"swbform\">"); //class=\"swbform\"
+            out.println("<div class=\"swbform\">");
             out.println(" <fieldset>");
             out.println("  <table width=\"98%\">"); 
             out.println("   <thead>");
