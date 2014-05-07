@@ -140,7 +140,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
                                     new GenericFilterRule<Operation>(){
                                         @Override
                                         public boolean filter(Operation o) {
-                                            User user = SWBContext.getSessionUser();
+                                            User user = SWBContext.getAdminUser();
                                             return !o.isValid() || !user.haveAccess(o);
                                         } 
                                     });
@@ -246,8 +246,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
             } //while
             
             
-            //List<State> validSates = indicator.listValidStates();
-            List<State> validStates = indicator.getObjective().listValidStates();
+            List<State> validStates = indicator.listValidStates();
             Collections.sort(validStates);
             Collections.reverse(validStates);
             if(!validStates.isEmpty())
