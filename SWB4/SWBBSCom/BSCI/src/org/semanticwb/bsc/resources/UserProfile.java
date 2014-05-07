@@ -60,7 +60,7 @@ public class UserProfile extends GenericAdmResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        final User user = SWBContext.getSessionUser();
+        final User user = paramRequest.getUser();
         final String lang = user.getLanguage();
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
@@ -250,7 +250,7 @@ public class UserProfile extends GenericAdmResource {
     }
 
     public void uploadPhoto(HttpServletRequest request, SemanticObject obj, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        final User user = SWBContext.getSessionUser();
+        final User user = paramRequest.getUser();
         SWBFormMgr mgr = new SWBFormMgr(User.sclass, user.getSemanticObject(), null);
         try {
             mgr.processForm(request);
@@ -280,7 +280,7 @@ public class UserProfile extends GenericAdmResource {
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             doViewStrategy(request, response, paramRequest);
         } else if (paramRequest.getMode().equalsIgnoreCase("add")) {
-            final User user = SWBContext.getSessionUser();
+            final User user = paramRequest.getUser();
             SemanticObject obj = user.getSemanticObject();
             uploadPhoto(request, obj, response, paramRequest);
         } else if (Mode_CHANGEPASSWORD.equals(mode)) {
