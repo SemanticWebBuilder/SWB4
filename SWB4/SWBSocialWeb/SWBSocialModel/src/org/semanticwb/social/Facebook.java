@@ -728,7 +728,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         String messageText = this.shortMsgText(message);
         Iterator<String> files = message.listFiles();
         if (files.hasNext()) {//If at least one file found
-            String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+            String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
             urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
             urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
         }
@@ -845,7 +845,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 log.error("No photo(s) found!");
                 return;
             } else if (photoNumber > 1) {
-                String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                 urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                 urlLocalPost = SWBSocialUtil.Util.shortUrl(urlLocalPost);
             }
@@ -865,7 +865,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                 //if it's a response to a post and a photo is included don't upload the photo, only the url to the local site
                 if (photo.getPostInSource() != null && photo.getPostInSource().getSocialNetMsgId() != null) {
-                    String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+                    String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                     urlLocalPost = SWBSocialUtil.Util.shortUrl(urlLocalPost);
 
@@ -957,7 +957,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";
         JSONObject jsonResponse = null;
         //String urlLocalPost = "http://localhost:8080/swbadmin/jsp/social/postViewFiles.jsp?uri=" + video.getEncodedURI();
-        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
         String urlLocalPost = absolutePath + "/swbadmin/jsp/social/ViewPostFiles?uri=" + video.getEncodedURI() + "&neturi=" + this.getEncodedURI();
         urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
 
@@ -1999,7 +1999,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         String msgText = postOut.getMsg_Text();
         WebSite admin = SWBContext.getAdminWebSite();
         WebPage linksRedirector = admin.getWebPage("linksredirector");
-        String absolutePath = SWBPortal.getEnv("wb/absolutePath") == null ? "" : SWBPortal.getEnv("wb/absolutePath");
+        String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
 
         Iterator<PostOutLinksHits> savedLinks = PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, socialSite);
         while (savedLinks.hasNext()) {
