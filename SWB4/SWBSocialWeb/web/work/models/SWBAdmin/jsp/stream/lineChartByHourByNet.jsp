@@ -1,16 +1,25 @@
 <%-- 
-    Document   : lineChartByHour
-    Created on : 2/05/2014, 07:01:56 PM
+    Document   : lineChartByHourByNet
+    Created on : 6/05/2014, 05:38:53 PM
     Author     : francisco.jimenez
 --%>
 
-<%@page import="java.util.Calendar"%>
-<%@page import="org.json.JSONArray"%>
-<%@page import="org.semanticwb.social.SocialTopic"%>
-<%@page import="org.semanticwb.social.Stream"%>
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
+<%@page import="org.semanticwb.SWBPlatform"%>
+<%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
-<%@page import="org.semanticwb.social.PostIn"%>
+<%@page import="org.semanticwb.social.*"%>
 <%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.SWBUtils"%>
+<%@page import="org.semanticwb.model.*"%>
+<%@page import="org.semanticwb.SWBPortal"%> 
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
+<%@page import="org.semanticwb.portal.api.*"%>
+<%@page import="org.json.*"%>
+<%@page import="java.util.*"%> 
+<%@page import="java.util.Calendar"%> 
+<%@page import="static org.semanticwb.social.admin.resources.PieChart.*"%>
+
 <%@page contentType="text/html" pageEncoding="x-iso-8859-11"%>
 <!DOCTYPE html>
 
@@ -19,24 +28,35 @@
     if(suri == null)return;
     SemanticObject semObj = SemanticObject.createSemanticObject(suri);
     if(semObj == null)return;
-    String title = "";
-    Iterator<PostIn> itObjPostIns = null;    
+    
+    Iterator<PostIn> itObjPostIns = null;
+    HashMap<SocialNetwork,Integer > networks = new HashMap<SocialNetwork,Integer>();
     if (semObj.getGenericInstance() instanceof Stream) {
         Stream stream = (Stream) semObj.getGenericInstance();
         itObjPostIns = stream.listPostInStreamInvs();
-        title = stream.getTitle();
+        ArrayList nets = SWBSocialUtil.sparql.getStreamSocialNetworks(stream);
+        for(int i = 0; i < nets.size(); i++){
+            SocialNetwork snet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+            networks.put(snet, i);
+            //System.out.println("RED SOCIAL:" + snet);
+        }
+        //if(1==1)return;
     } else if (semObj.getGenericInstance() instanceof SocialTopic) {
         SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
         itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
-        title = socialTopic.getTitle();
-    }    
+    }
+    
+    
     if (itObjPostIns == null) {
         JSONArray node = new JSONArray();
         //return node;
     }    
     java.util.Date date = null;
     Calendar calendario = Calendar.getInstance();
-    int dataArray[][] = new int[24][3];//positive, negative, neutrals
+    int netsNumber = networks.size();
+    if(netsNumber == 0)return;
+    String title[] = new String[netsNumber];
+    int dataArray[][][] = new int[netsNumber][24][3];//positive, negative, neutrals
     int totalPosts = 0;
     while(itObjPostIns.hasNext()){     
         PostIn postIn = itObjPostIns.next();
@@ -49,17 +69,20 @@
         }else{
             continue;
         }
-
+        int socialNet = networks.get(postIn.getPostInSocialNetwork());
+        //System.out.println("---------:"  + socialNet);
         int hourOfDay = calendario.get(Calendar.HOUR_OF_DAY);
         if (postIn.getPostSentimentalType() == 0) {//neutrals
-            dataArray[hourOfDay][2]++;
+            dataArray[socialNet][hourOfDay][2]++;
         } else if (postIn.getPostSentimentalType() == 1) {//positives
-            dataArray[hourOfDay][0]++;
+            dataArray[socialNet][hourOfDay][0]++;
         } else if (postIn.getPostSentimentalType() == 2) {//negatives
-            dataArray[hourOfDay][1]++;
+            dataArray[socialNet][hourOfDay][1]++;
         }
+        title[socialNet] = postIn.getPostInSocialNetwork().getTitle();
         totalPosts++;        
-    }    
+    }
+
 %>
 
 <meta charset="utf-8">
@@ -80,7 +103,7 @@ svg {
 }
 
 #chart1 svg {
-  height: 500px;
+  height: 430px;
   min-width: 200px;
   min-height: 100px;
 /*
@@ -99,13 +122,21 @@ svg {
 <body class='with-3d-shadow with-transitions'>
 
 <div id="chart1" >
-  <svg style="height: 500px;"></svg>
+  <svg style="height: 430px;"></svg>
 </div>
 
 <script src="../../js/d3.v3.js"></script>
 <script src="../../js/nv.d3.js"></script>
 
 <script>
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs, and may do more in the future... it's NOT required
 var chart;
 
@@ -144,29 +175,37 @@ nv.addGraph(function() {
 });
 
 function getChartData() {
-  var total = [];
-  var positives =[];
-  var negatives =[];
-  var neutrals =[];
+  <%
+  for (int i=0; i < dataArray.length; i++){%>
+    var total<%=i%> = [];
+    var positives<%=i%> =[];
+    var negatives<%=i%> =[];
+    var neutrals<%=i%> =[];
+  <%}%>  
   
-       <% for (int i=0; i < dataArray.length; i++) { %>
-        positives.push({x:<%=i%>, y: <%= dataArray[i][0] %>});
-        negatives.push({x:<%=i%>, y: <%= dataArray[i][1] %>});
-        neutrals.push({x:<%=i%>, y: <%= dataArray[i][2] %>});
-        total.push({x:<%=i%>, y: <%= dataArray[i][0] + dataArray[i][1] +dataArray[i][2] %>});        
-        <% } %>
+       <% for (int i=0; i < dataArray.length; i++) { 
+           for(int j=0; j < dataArray[i].length; j++){%>
+        positives<%=i%>.push({x:<%=i%>, y: <%= dataArray[i][j][0] %>});
+        negatives<%=i%>.push({x:<%=i%>, y: <%= dataArray[i][j][1] %>});
+        neutrals<%=i%>.push({x:<%=i%>, y: <%= dataArray[i][j][2] %>});
+        total<%=i%>.push({x:<%=i%>, y: <%= dataArray[i][j][0] + dataArray[i][j][1] +dataArray[i][j][2] %>});
+        <% }} %>
 	
   
 
   return [
+    <%for (int i = 0; i < dataArray.length; i++){%>
     {
-      values: total,
-      positivos: positives,
-      negativos: negatives,
-      neutros: neutrals,
-      key: "Datos de <%=title%>",
-      color: "#FF6600"
+      values: total<%=i%>,
+      positivos: positives<%=i%>,
+      negativos: negatives<%=i%>,
+      neutros: neutrals<%=i%>,
+      key: "<%=title[i]%>",
+      color: getRandomColor()
     }
+    <%if(i < dataArray.length-1)
+        out.println(",");
+    }%>
   ];
 }
 

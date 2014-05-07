@@ -920,7 +920,10 @@
     </div>
 
     <div id="postInByHour" dojoType="dijit.layout.ContentPane">
-    </div> 
+    </div>
+
+    <iframe src="/work/models/SWBAdmin/jsp/stream/lineChartByHour.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
+    <iframe src="/work/models/SWBAdmin/jsp/stream/lineChartByHourByNet.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
 </div>
 
 
