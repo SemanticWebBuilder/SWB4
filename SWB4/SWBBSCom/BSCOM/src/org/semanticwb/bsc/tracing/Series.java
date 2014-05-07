@@ -110,6 +110,9 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
                                                                         @Override
                                                                         public boolean filter(EvaluationRule r) {
                                                                             User user = SWBContext.getSessionUser(getIndicator().getBSC().getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
