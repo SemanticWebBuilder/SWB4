@@ -399,7 +399,7 @@ public class DataTableResource extends GenericResource implements ComponentExpor
     private boolean userCanEdit() {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
-        final User user = SWBContext.getSessionUser();
+        final User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
         
         if(user!=null && str_role!=null)
         {
