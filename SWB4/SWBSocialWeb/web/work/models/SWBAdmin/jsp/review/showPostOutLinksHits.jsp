@@ -75,7 +75,7 @@
                                 </td>
                                 <td>
                                     <%
-                                    if(postOutLinksHit.getPol_hits()>0){%>
+                                    if(postOutLinksHit.getPol_hits()>0 && SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true")){%>
                                     <a href="#" title="Mostrar" onclick="showDialog('<%=urlpostOutLinksHits.setParameter("uri", postOutLinksHit.getURI())%>','Datos de Hits de Link'); return false;">
                                     <%}%>
                                         <%=postOutLinksHit.getPol_hits()%>
