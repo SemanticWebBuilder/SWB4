@@ -434,7 +434,7 @@ public class UserProfile extends GenericAdmResource {
         String action = response.getAction();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
-        User user = SWBContext.getSessionUser();
+        User user = SWBContext.getSessionUser(wsite.getUserRepository().getId());
         ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
         if (cw == null) {
             cw = ContactWork.ClassMgr.createContactWork(user.getId(), wsite);
