@@ -33,6 +33,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !s.isValid() || !user.haveAccess(s);
                                                                         }            
                                                                     });
@@ -86,6 +89,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
                                                                     });
@@ -100,6 +106,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !p.isValid() || !user.haveAccess(p);
                                                                         }            
                                                                     });
@@ -114,6 +123,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                                                                                 return true;
                                                                             }
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
+                                                                            if(user==null) {
+                                                                                user = SWBContext.getAdminUser();
+                                                                            }
                                                                             return !r.isValid() || !user.haveAccess(r);
                                                                         }            
                                                                     });
@@ -123,6 +135,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     public Document getDom()
     {
         User user = SWBContext.getSessionUser(getUserRepository().getId());
+        if(user==null) {
+            user = SWBContext.getAdminUser();
+        }
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         
         Document  doc = SWBUtils.XML.getNewDocument();
@@ -320,6 +335,9 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     public Document getDom(final Period period)
     {
         User user = SWBContext.getSessionUser(getUserRepository().getId());
+        if(user==null) {
+            user = SWBContext.getAdminUser();
+        }
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         Document  doc = SWBUtils.XML.getNewDocument();
         
