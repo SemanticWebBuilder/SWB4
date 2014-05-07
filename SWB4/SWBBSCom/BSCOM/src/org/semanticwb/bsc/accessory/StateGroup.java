@@ -23,8 +23,8 @@ public class StateGroup extends org.semanticwb.bsc.accessory.base.StateGroupBase
                     undefined.setTitle("No definido");
                     undefined.setTitle("No definido", lang);
                     undefined.setDescription("No aplica mediciones", lang);
-                    //undefined.setIconClass("undefined");
-                    //undefined.setIcon("holamundo");
+                    undefined.setColorHex("#848484");
+                    //undefined.setIconClass("indefinido");
                     StateGroup sg = (StateGroup)obj.createGenericInstance();
                     sg.addGroupedStates(undefined);
                 }
