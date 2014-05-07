@@ -34,7 +34,19 @@ public class GanttChart extends GenericResource {
     /** Realiza operaciones en la bitacora de eventos. */
     private static final Logger log = SWBUtils.getLogger(GanttChart.class);
     
-    
+    /**
+     * Genera el c&oacute;digo HTML necesario para la presentaci&oacute;n de la gr&aacute;fica de Gantt
+     * que se puede trazar con las fechas de una {@code Initiative} y de sus elementos {@code Deliverable} asociados
+     * @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     *         m&eacute;todo. Como la extracci&oacute;n de valores para
+     *         par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     *         petici&oacute;n/respuesta.
+     */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
