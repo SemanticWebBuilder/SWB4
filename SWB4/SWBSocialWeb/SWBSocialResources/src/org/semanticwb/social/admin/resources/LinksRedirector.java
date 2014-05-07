@@ -10,6 +10,7 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -56,8 +57,11 @@ public class LinksRedirector extends GenericResource {
                             //pero por otro lado puede ser un buen dato, despues revisar si la red social me puede enviar el user de la red social
                             //y yo pueda extraer sus datos, esto sería mas valioso, pero no lo tengo por el momento.
                             //Por el momento con la ip de los usuarios podría saber su ubicación y talvez ubicarlos en un mapa de google maps. (No esta por el mpmento)
-                            PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
-                            postOutHitIp.setUserIP(request.getRemoteAddr());
+                            if(SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true"))
+                            {
+                                PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
+                                postOutHitIp.setUserIP(request.getRemoteAddr());
+                            }
                             
                             PrintWriter out=response.getWriter(); 
                             System.out.println("Entra a LinksRedirector/doView/REDIRECT A:"+link.getTargetUrl());
