@@ -5613,7 +5613,7 @@ nv.models.lineChart = function() {
       if (showXAxis) {
         xAxis
           .scale(x)
-          .ticks( availableWidth / 100 )
+          .ticks( availableWidth / 30 )
           .tickSize(-availableHeight, 0);
 
         g.select('.nv-x.nv-axis')
