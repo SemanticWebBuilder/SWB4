@@ -772,8 +772,8 @@
                         <select name="<%=Video.social_category.getName()%>">
                             <option value="">Selecciona...</option>
                             <%
-                                SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
-                                Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(model);
+                                //SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
+                                Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(SWBContext.getGlobalWebSite());
                                 while (itYtube.hasNext()) {
                                     YouTubeCategory socialCategory = (YouTubeCategory) itYtube.next();
                             %>
