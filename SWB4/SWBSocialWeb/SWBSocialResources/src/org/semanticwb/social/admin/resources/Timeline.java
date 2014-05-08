@@ -29,6 +29,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -653,12 +654,17 @@ public class Timeline extends GenericResource{
             try {
                 Status originalStatus =  twitter.showStatus(originalId);//get the original tweet                
                 org.semanticwb.model.User user = paramRequest.getUser();
-                SocialUserExtAttributes socialUserExtAttr = null;
+                
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-                if(user.isSigned()){
-                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-                }
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp), paramRequest);
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
+                }                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                
+                updateStatusInformation(originalStatus, renderURL, objUri, out, userCanRespondMsg,user.hasUserGroup(userSuperAdminGrp), paramRequest);
                 
                 actionURL.setAction(action);
 //                StringBuilder output = new StringBuilder();
@@ -699,7 +705,14 @@ public class Timeline extends GenericResource{
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp), paramRequest);
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
+                }                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                updateStatusInformation(originalStatus, renderURL, objUri, out, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp), paramRequest);
                 
                 actionURL.setAction("undoRT");
                 /* updates only the DOM of the 'Retweet' message to change it for 'Undo retweet' and change URL also*/
@@ -731,7 +744,14 @@ public class Timeline extends GenericResource{
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp), paramRequest);
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
+                }                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                updateStatusInformation(originalStatus, renderURL, objUri, out, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp), paramRequest);
                 
                 actionURL.setAction("doRT");
                 /* updates only the DOM of the 'Undo Retweet' message to change it for 'Retweet' and change URL also*/
@@ -887,16 +907,22 @@ public class Timeline extends GenericResource{
                 if(tweetsListener.getHomeStatusSize() > 0){
                     tweetsListener.setProcessing(true);
                     int i;
-                    org.semanticwb.model.User user = paramRequest.getUser();
-                    SocialUserExtAttributes socialUserExtAttr = null;
-                    if(user.isSigned()){
-                        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-                    }
+                    
                     //Probablemente es innecesario dado que al ser mensajes nuevos, no han sido clasificados.
                     SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                     SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                     String postURI = null;
                     UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+                    org.semanticwb.model.User user = paramRequest.getUser();
+                    HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                    Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                    while (list.hasNext()) {
+                        SemanticProperty sp = list.next();
+                        mapa.put(sp.getName(),sp);
+                    }
+                    boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+                    boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                    boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
                     for(i = tweetsListener.getHomeStatusSize() - 1 ; i >= 0 ; i-- ){//Most recent status first                        
                          try{
                             postURI = null;
@@ -905,7 +931,7 @@ public class Timeline extends GenericResource{
                                 postURI = post.getURI();
                             }                                                               
                              //--doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getHomeStatus(i).getId(), twitter));
-                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, postURI, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
+                             doPrintTweet(request, response, paramRequest, tweetsListener.getHomeStatus(i), twitter, out, null,HOME_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                          }catch(Exception te){
                             log.error("Error when printing tweet:" , te);
                          }
@@ -926,10 +952,15 @@ public class Timeline extends GenericResource{
                    tweetsListener.setProcessing(true);
                    int i;
                    org.semanticwb.model.User user = paramRequest.getUser();
-                   SocialUserExtAttributes socialUserExtAttr = null;
-                   if(user.isSigned()){
-                       socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                   HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                   Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                   while (list.hasNext()) {
+                       SemanticProperty sp = list.next();
+                       mapa.put(sp.getName(),sp);
                    }
+                   boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+                   boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                   boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
                    SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                    SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                    String postURI = null;
@@ -942,7 +973,7 @@ public class Timeline extends GenericResource{
                                postURI = post.getURI();
                            }
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getFavoritesStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getFavoritesStatus(i), twitter, response.getWriter(), null, FAVORITES_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                        }catch(Exception te){
                            log.error("Error when printing favorite:" , te);
                        }
@@ -962,10 +993,15 @@ public class Timeline extends GenericResource{
                    tweetsListener.setProcessing(true);
                    int i;
                    org.semanticwb.model.User user = paramRequest.getUser();
-                   SocialUserExtAttributes socialUserExtAttr = null;
-                   if(user.isSigned()){
-                       socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-                   }
+                    HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                    Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                    while (list.hasNext()) {
+                        SemanticProperty sp = list.next();
+                        mapa.put(sp.getName(),sp);
+                    }
+                    boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+                    boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                    boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
                    
                    SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
                    SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
@@ -980,7 +1016,8 @@ public class Timeline extends GenericResource{
                                postURI = post.getURI();
                            }
                            //--doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), recoverConversations(tweetsListener.getMentionsStatus(i).getId(), twitter));
-                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                           
+                           doPrintTweet(request, response, paramRequest, tweetsListener.getMentionsStatus(i), twitter, response.getWriter(), null,MENTIONS_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                        }catch(Exception te){
                            log.error("Error when printing tweet:" , te);
                        }
@@ -1124,7 +1161,14 @@ public class Timeline extends GenericResource{
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp) , paramRequest);
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
+                }                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                updateStatusInformation(originalStatus, renderURL, objUri, out, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp) , paramRequest);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   try{");
@@ -1150,7 +1194,14 @@ public class Timeline extends GenericResource{
                     socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
                 }
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
-                updateStatusInformation(originalStatus, renderURL, objUri, out, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp), paramRequest);
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
+                }                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                updateStatusInformation(originalStatus, renderURL, objUri, out, userCanRespondMsg, user.hasUserGroup(userSuperAdminGrp), paramRequest);
                 out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 out.println("<script type=\"dojo/method\">");
                 out.println("   showError('No fue posible procesar la solicitud');");
@@ -1333,10 +1384,15 @@ public class Timeline extends GenericResource{
             }
             int i = 0;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             String postURI = null;
@@ -1350,7 +1406,7 @@ public class Timeline extends GenericResource{
                 }                                
 
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null, HOME_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 i++;
             }
 
@@ -1394,10 +1450,15 @@ public class Timeline extends GenericResource{
             }
             int i = 0;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             String postURI = null;
@@ -1411,7 +1472,7 @@ public class Timeline extends GenericResource{
                 }
 
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),null,MENTIONS_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 i++;
             }
 
@@ -1454,10 +1515,15 @@ public class Timeline extends GenericResource{
             }
             int i = 0;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             SocialNetwork  socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             String postURI = null;
@@ -1470,7 +1536,7 @@ public class Timeline extends GenericResource{
                     postURI = post.getURI();
                 }
                 //--doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(),recoverConversations(maxTweetID, twitter));
-                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                doPrintTweet(request, response, paramRequest, status, twitter,response.getWriter(), null, FAVORITES_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 i++;
             }
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
@@ -1541,7 +1607,7 @@ public class Timeline extends GenericResource{
      * @throws IOException 
      */
     public static void doPrintTweet(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest, Status status, 
-            twitter4j.Twitter twitter, java.io.Writer writer, List<Status> conversations, String tabSuffix, String postURI, SocialUserExtAttributes socialUserExtAttr, boolean userCanDoEverything) throws SWBResourceException, IOException {
+            twitter4j.Twitter twitter, java.io.Writer writer, List<Status> conversations, String tabSuffix, String postURI, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) throws SWBResourceException, IOException {
         String objUri = request.getParameter("suri");        
         SWBResourceURL actionURL = paramRequest.getActionUrl();
         SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -1606,18 +1672,18 @@ public class Timeline extends GenericResource{
                 String statusText = status.getText();
                 if(status.isRetweet()){// Remove 'RT @username: ' and show only the text when is a RT
                     statusText = statusText.substring(statusText.indexOf(":") + 2);
-                }                                
+                }
                 statusText = lookForEntities(statusText, renderURL, status.getURLEntities(), status.getMediaEntities(), status.getHashtagEntities(), status.getUserMentionEntities()); 
                 writer.write(        statusText);
                 writer.write("</p>");
                 writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
-                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");                
-                updateStatusInformation(status, renderURL, objUri, writer,socialUserExtAttr, userCanDoEverything, paramRequest);                
-                writer.write("   </span>");                
+                writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() +  status.getId() + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
+                updateStatusInformation(status, renderURL, objUri, writer, userCanRespondMsg, userCanDoEverything, paramRequest);                
+                writer.write("   </span>");                                
                 
                 writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                if((socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()) || userCanDoEverything){
+                if(userCanRetopicMsg || userCanDoEverything){
                     if(postURI != null){//If post already exists
                         SWBResourceURL clasifybyTopic = renderURL.setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("id", status.getId()+"").setParameter("postUri", postURI).setParameter("currentTab", tabSuffix);
                         writer.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
@@ -1647,7 +1713,7 @@ public class Timeline extends GenericResource{
                 updateStatusRT(status, renderURL, actionURL, objUri, writer, twitter.getId(), tabSuffix, semTwitter, paramRequest);
                 writer.write("   </span>");
                 
-                if(status.getUser().getId() == twitter.getId()){
+                if(status.getUser().getId() == twitter.getId() && userCanRemoveMsg){
                     writer.write("   <span class=\"inline\" id=\"" + semTwitter.getId() + status.getId() + "REMOVE" + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                     writer.write("      <a title=\"" + "Eliminar tweet" +"\" href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + "¿Deseas eliminar el mensaje?" + "')){try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("deleteTweet").setParameter("id", status.getId()+"").setParameter("currentTab", tabSuffix).setParameter("suri", objUri) + "','" + semTwitter.getId() + status.getId() + "REMOVE" + tabSuffix + "');} return false;\"></a>");
                     writer.write("   </span>");
@@ -1919,7 +1985,7 @@ public class Timeline extends GenericResource{
      * @param out
      * @param currentUser 
      */
-    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, SocialUserExtAttributes socialUserExtAttr, boolean userCanDoEverything, SWBParamRequest paramRequest){
+    public static void updateStatusInformation(Status originalStatus, SWBResourceURL renderURL, String objUri, java.io.Writer out, boolean userCanRespondMsg, boolean userCanDoEverything, SWBParamRequest paramRequest){
         try{
             long retweets = originalStatus.getRetweetCount();
             String times = paramRequest.getLocaleString("times");
@@ -1928,7 +1994,7 @@ public class Timeline extends GenericResource{
             }
             out.write("<em title=\"" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "\">&nbsp;</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " " + times + " </strong>");
             
-            if((socialUserExtAttr != null && socialUserExtAttr.isUserCanRespondMsg()) || userCanDoEverything){
+            if(userCanRespondMsg || userCanDoEverything){
             out.write("<a href=\"#\" title=\"Responder\" class=\"answ\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
                     originalStatus.getUser().getScreenName()).setParameter("suri", objUri) +
                     "','Responder a @"  + originalStatus.getUser().getScreenName() + "');return false;\"></a> ");

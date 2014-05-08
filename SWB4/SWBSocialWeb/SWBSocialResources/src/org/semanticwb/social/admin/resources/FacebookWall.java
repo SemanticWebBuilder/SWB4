@@ -51,6 +51,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.Message;
@@ -63,7 +64,6 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
-import org.semanticwb.social.SocialUserExtAttributes;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
@@ -1560,16 +1560,21 @@ public class FacebookWall extends GenericResource {
             //System.out.println("ARREGLO DE DATOS:" + postsData.length());
 
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if (user.isSigned()) {
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //user.hasUserGroup(userSuperAdminGrp)
             for (int k = 0; k < postsData.length(); k++) {
                 cont++;
                 //System.out.println("\n\nPost de FACEBOOOK*********: " + postsData.getJSONObject(k));
-                doPrintPost(out, postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
+                doPrintPost(out, postsData.getJSONObject(k), request, paramRequest, tabSuffix, facebook, model, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
             }
             if (phraseResp.has("paging")) {
                 JSONObject pagingData = phraseResp.getJSONObject("paging");
@@ -1674,13 +1679,18 @@ public class FacebookWall extends GenericResource {
                     }
                 }
                 org.semanticwb.model.User user = paramRequest.getUser();
-                SocialUserExtAttributes socialUserExtAttr = null;
-                if (user.isSigned()) {
-                    socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+                HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+                Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+                while (list.hasNext()) {
+                    SemanticProperty sp = list.next();
+                    mapa.put(sp.getName(),sp);
                 }
+                boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+                boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+                boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
                 UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
                 //user.hasUserGroup(userSuperAdminGrp)
-                createdTime = printPicture(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
+                createdTime = printPicture(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
 
                 //Only include the param in session when the page loads the first time and when 
                 if (includeSinceParam && k == 0) {//Only save the most recent picture id(the first), then use this id to ask if new pictures available
@@ -1715,10 +1725,15 @@ public class FacebookWall extends GenericResource {
             JSONArray userData = null;
             JSONArray pageData = null;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if (user.isSigned()) {
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //user.hasUserGroup(userSuperAdminGrp)
             for (int i = 0; i < phraseResp.getJSONArray("data").length(); i++) {
@@ -1772,7 +1787,7 @@ public class FacebookWall extends GenericResource {
                     }
                 }
 
-                String createdTimeTmp = doPrintVideo(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, socialUserExtAttr, user.hasUserGroup(userSuperAdminGrp));
+                String createdTimeTmp = doPrintVideo(out, postsData.getJSONObject(k), postComments, profileID, request, paramRequest, PICTURES_TAB, facebook, model, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 if (createdTimeTmp != null) {
                     createdTime = createdTimeTmp;
                 }
@@ -1911,7 +1926,7 @@ public class FacebookWall extends GenericResource {
         return jsonObject;
     }
 
-    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, SocialUserExtAttributes socialUserExtAttr, boolean userCanDoEveryting) {
+    public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEveryting, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -2365,7 +2380,7 @@ public class FacebookWall extends GenericResource {
             if (actions != null && actions.length() > 0) {//Available actions for the post
                 for (int i = 0; i < actions.length(); i++) {
                     if (actions.getJSONObject(i).getString("name").equals("Comment")) {//I can comment
-                        if(socialUserExtAttr.isUserCanRespondMsg() || userCanDoEveryting){
+                        if(userCanRespondMsg || userCanDoEveryting){
                             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                             writer.write(" <a class=\"answ\" href=\"#\" title=\"Responder\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("id")) + "','Responder a " + postsData.getJSONObject("from").getString("name") + "');return false;\"></a>  ");
                             writer.write("   </span>");
@@ -2378,10 +2393,10 @@ public class FacebookWall extends GenericResource {
                         }
 
                         ///////////////////////If I can post I can Classify it to answer it later
-                        if(socialUserExtAttr.isUserCanReTopicMsg() || userCanDoEveryting){
+                        if(userCanRetopicMsg || userCanDoEveryting){
                             PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("id"));
                             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-                            if (socialUserExtAttr.isUserCanReTopicMsg() || userCanDoEveryting) {
+                            if (userCanRetopicMsg || userCanDoEveryting) {
                                 if (post != null) {
                                     String socialT = "";
                                     if (post.getSocialTopic() != null) {
@@ -2415,7 +2430,7 @@ public class FacebookWall extends GenericResource {
                 }
                 String postUser = String.valueOf(postsData.getJSONObject("from").getLong("id"));
                                                 
-                if(postUser.equals(facebook.getFacebookUserId())){
+                if(postUser.equals(facebook.getFacebookUserId()) && userCanRemoveMsg){
                     writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + "REMOVE" + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                     writer.write("      <a title=\"" + "Eliminar Mensaje" +"\" href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + "¿Deseas eliminar el mensaje?" + "')){try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("deleteMessage").setParameter("id", postsData.getString("id")+"").setParameter("currentTab", tabSuffix).setParameter("suri", request.getParameter("suri")) + "','" + facebook.getId() + postsData.getString("id") + "REMOVE" + tabSuffix + "');} return false;\"></a>");
                     writer.write("   </span>");
@@ -2430,8 +2445,8 @@ public class FacebookWall extends GenericResource {
         }
     }
 
-    public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, SocialUserExtAttributes socialUserExtAtt, boolean userCanDoEverything) {
-        String createdTime = "";
+    public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
+      String createdTime = "";
 
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
@@ -2605,13 +2620,13 @@ public class FacebookWall extends GenericResource {
                 JSONObject comments = postsData.getJSONObject("comment_info");
 
                 if (comments.getBoolean("can_comment")) {
-                    if(socialUserExtAtt.isUserCanRespondMsg() || userCanDoEverything){
+                    if(userCanRespondMsg || userCanDoEverything){
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a class=\"answ\" title=\"Responder\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("post_id")) + "','Responder a " + profileData.getString("name") + "');return false;\"></a>  ");
                         writer.write("   </span>");
                     }
 
-                    if(socialUserExtAtt.isUserCanReTopicMsg() || userCanDoEverything){
+                    if(userCanRetopicMsg || userCanDoEverything){
                         ///////////////////////If I can post I can Classify it to answer it later
                         PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
@@ -2646,7 +2661,7 @@ public class FacebookWall extends GenericResource {
             
             String postUser = String.valueOf(id);
                                                 
-            if(postUser.equals(facebook.getFacebookUserId())){
+            if(postUser.equals(facebook.getFacebookUserId()) && userCanRemoveMsg){
                 writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + "REMOVE" + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                 writer.write("      <a title=\"" + "Eliminar Mensaje" +"\" href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + "¿Deseas eliminar el mensaje?" + "')){try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("deleteMessage").setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix).setParameter("suri", request.getParameter("suri")) + "','" + facebook.getId() + postsData.getString("post_id") + "REMOVE" + tabSuffix + "');} return false;\"></a>");
                 writer.write("   </span>");
@@ -2659,7 +2674,7 @@ public class FacebookWall extends GenericResource {
         return createdTime;
     }
 
-    public static String doPrintVideo(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, SocialUserExtAttributes socialUserExtAttr, boolean userCanDoEverything) {
+    public static String doPrintVideo(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespongMsg, boolean userCanRemoveMsg) {
         String createdTime = "";
         try {
             if (postsData.getInt("type") != 128) {//Only print published videos
@@ -2816,13 +2831,13 @@ public class FacebookWall extends GenericResource {
                 JSONObject comments = postsData.getJSONObject("comment_info");
 
                 if (comments.getBoolean("can_comment")) {
-                    if(socialUserExtAttr.isUserCanRespondMsg() || userCanDoEverything){
+                    if(userCanRespongMsg || userCanDoEverything){
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + REPLY + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write(" <a class=\"answ\" href=\"#\" title=\"Responder\" onclick=\"showDialog('" + renderURL.setMode("replyPost").setParameter("postID", postsData.getString("post_id")) + "','Responder a " + profileData.getString("name") + "');return false;\"></a>  ");
                         writer.write("   </span>");
                     }
                     
-                    if(socialUserExtAttr.isUserCanReTopicMsg() || userCanDoEverything){
+                    if(userCanRetopicMsg || userCanDoEverything){
                         PostIn post = PostIn.getPostInbySocialMsgId(model, postsData.getString("post_id"));
                         writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + TOPIC + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                         //System.out.println("POST:" + post);
@@ -2855,7 +2870,7 @@ public class FacebookWall extends GenericResource {
             }
             String postUser = String.valueOf(id);
             //System.out.println(facebook.getFacebookUserId() + " --- " + postUser);
-            if(postUser.equals(facebook.getFacebookUserId())){
+            if(postUser.equals(facebook.getFacebookUserId()) && userCanRemoveMsg){
                 writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + "REMOVE" + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
                 writer.write("      <a title=\"" + "Eliminar Mensaje" +"\" href=\"#\" class=\"eliminarYoutube\" onclick=\"if(confirm('" + "¿Deseas eliminar el mensaje?" + "')){try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("deleteMessage").setParameter("id", postsData.getString("post_id")).setParameter("currentTab", tabSuffix).setParameter("suri", request.getParameter("suri")) + "','" + facebook.getId() + postsData.getString("post_id") + "REMOVE" + tabSuffix + "');} return false;\"></a>");
                 writer.write("   </span>");
