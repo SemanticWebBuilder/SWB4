@@ -141,7 +141,7 @@ public class CreatePost extends GenericResource {
                     //SWBSocialUtil.PostOutUtil.publishPost(postOut, request, response);
                     System.out.println("Se publicaJ-1");
                     SWBSocialUtil.PostOutUtil.sendNewPost(null, socialTopic, spflow, aSocialNets, wsite, toPost, request, response);
-                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postCreated"),"utf8"));
+                    response.setRenderParameter("statusMsg", SWBUtils.TEXT.encode(response.getLocaleLogString("postCreated"),"iso8859-1"));
                     response.setMode(SWBResourceURL.Mode_VIEW);
                  }else {    //Enviar a statusBar que no se publicó el mensaje en ninguna red social.
                     response.setMode(SWBResourceURL.Mode_VIEW);
