@@ -61,14 +61,12 @@ import org.semanticwb.social.SocialUserExtAttributes;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.semanticwb.model.UserGroup;
-import org.semanticwb.social.Facebook;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.social.SWBSocial;
-import org.semanticwb.social.Twitter;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 
@@ -266,7 +264,11 @@ public class StreamInBox extends GenericResource {
         PrintWriter out = response.getWriter();
 
         //Manejo de permisos
+        /*
         SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        System.out.println("socialUserExtAttr--1:"+socialUserExtAttr);
+        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        System.out.println("socialUserExtAttr--2:"+socialUserExtAttr);
         boolean userCanRemoveMsg = false;
         boolean userCanRetopicMsg = false;
         boolean userCanRevalueMsg = false;
@@ -278,6 +280,21 @@ public class StreamInBox extends GenericResource {
             userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
         }
         //boolean userCandoEveryThing=false;
+        * */
+        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+        while (list.hasNext()) {
+            SemanticProperty sp = list.next();
+            mapa.put(sp.getName(),sp);
+        }
+        boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();
+        boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
+        boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
+        boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+        System.out.println("userCanRetopicMsg:"+userCanRetopicMsg);
+        System.out.println("userCanRevalueMsg:"+userCanRevalueMsg);
+        System.out.println("userCanRemoveMsg:"+userCanRemoveMsg);
+        System.out.println("userCanRespondMsg:"+userCanRespondMsg);
 
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
