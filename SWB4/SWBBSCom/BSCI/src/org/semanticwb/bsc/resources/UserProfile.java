@@ -136,8 +136,8 @@ public class UserProfile extends GenericAdmResource {
 
         toReturn.append("<div id=\"data\">");
         toReturn.append("<p><strong><font size=\"13\">" + user.getFullName() + "</font></strong></p>");
-        if (base.getAttribute("canChangePassword") != null
-                && "true".equals(base.getAttribute("canChangePassword"))) {
+        boolean canChangePw = Boolean.parseBoolean(base.getAttribute("canChangePassword","false"));
+        if (canChangePw) {
             StringBuilder toReturn1 = new StringBuilder();
             StringBuilder toReturn2 = new StringBuilder();
             SWBResourceURL urlChangePass = paramRequest.getRenderUrl().setMode(Mode_CHANGEPASSWORD);
