@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticClass"%>
@@ -147,8 +148,8 @@
         <div align="left">
             <select name="category">
                 <%
-                        SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
-                        Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(model);
+                        //SWBModel model = WebSite.ClassMgr.getWebSite(paramRequest.getWebPage().getWebSiteId());
+                        Iterator<YouTubeCategory> itYtube = YouTubeCategory.ClassMgr.listYouTubeCategories(SWBContext.getGlobalWebSite());
                         while (itYtube.hasNext()) {
                             YouTubeCategory socialCategory = (YouTubeCategory) itYtube.next();
                 %>
