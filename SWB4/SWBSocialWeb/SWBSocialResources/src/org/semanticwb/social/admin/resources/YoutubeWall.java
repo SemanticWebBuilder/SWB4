@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,6 +43,7 @@ import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -55,7 +57,7 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialTopic;
-import org.semanticwb.social.SocialUserExtAttributes;
+
 import org.semanticwb.social.Video;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
@@ -1198,7 +1200,7 @@ public class YoutubeWall extends GenericResource{
     }
      
      public static void doPrintVideo(HttpServletRequest request, HttpServletResponse response, 
-             SWBParamRequest paramRequest, java.io.Writer out, String postURI, SocialUserExtAttributes socialUserExtAttr, JSONObject video, boolean userCanDoEverything) throws SWBResourceException, IOException {
+             SWBParamRequest paramRequest, java.io.Writer out, String postURI, JSONObject video, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) throws SWBResourceException, IOException {
         //out.write("VIDEO:" + video);
         HashMap<String, String> paramsComments = new HashMap<String, String>(3);
         paramsComments.put("v", "2");
@@ -1357,7 +1359,7 @@ public class YoutubeWall extends GenericResource{
                 out.write("</strong>");
                 out.write("</span>");
                 
-                if(socialUserExtAttr.isUserCanRespondMsg() || userCanDoEverything){
+                if(userCanRespondMsg || userCanDoEverything){
                     out.write("   <span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     out.write(" <a class=\"answ\" href=\"#\" title=\"Comentar\" onclick=\"showDialog('" + paramRequest.getRenderUrl().setMode("commentVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','Comment to " + video.getString("title") + "');return false;\"></a>  ");                    
                     out.write("   </span>");
@@ -1369,9 +1371,9 @@ public class YoutubeWall extends GenericResource{
                     postURI = post.getURI();
                 }
                 
-                if(socialUserExtAttr.isUserCanReTopicMsg() || userCanDoEverything){
+                if(userCanRetopicMsg || userCanDoEverything){
                     out.write("   <span class=\"inline\" id=\"" + semanticYoutube.getId() + video.getString("id") + TOPIC  + "\" dojoType=\"dojox.layout.ContentPane\">");
-                    if(socialUserExtAttr != null && socialUserExtAttr.isUserCanReTopicMsg()){
+                    if(userCanRetopicMsg || userCanDoEverything){
                         if(postURI != null){//If post already exists
                             SWBResourceURL clasifybyTopic = paramRequest.getRenderUrl().setMode("doReclassifyTopic").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("postUri", postURI).setParameter("suri", objUri);
                             out.write("<a href=\"#\" class=\"clasifica\" title=\"" + paramRequest.getLocaleString("reclassify") + "\" onclick=\"showDialog('" + clasifybyTopic + "','"
@@ -1391,14 +1393,14 @@ public class YoutubeWall extends GenericResource{
                 out.write("<a href=\"#\" class=\"like\" title=\"" + paramRequest.getLocaleString("like") + "\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + paramRequest.getActionUrl().setAction("doLike").setParameter("suri", objUri).setParameter("action", "like").setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() +  video.getString("id") + INFORMATION + "'); return false;\"></a>");
                 out.write("   </span>");
 
-                if(socialUserExtAttr.isUserCanReTopicMsg() || socialUserExtAttr.isUserCanRemoveMsg() || userCanDoEverything){
+                if(userCanRetopicMsg || userCanRemoveMsg || userCanDoEverything){
                     out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/edit" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     SWBResourceURL editVideo = paramRequest.getRenderUrl().setMode("editVideo").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("videoId", video.getString("id")).setParameter("suri", objUri);
                     out.write("<a href=\"#\" class=\"editarYoutube\" title=\"" + paramRequest.getLocaleString("edit") + "\" onclick=\"showDialog('" + editVideo + "','"
                         + paramRequest.getLocaleString("edit") +"'); return false;\"></a>");
                     out.write("   </span>");
                 }
-                if(socialUserExtAttr.isUserCanRemoveMsg() || userCanDoEverything){
+                if(userCanRemoveMsg || userCanDoEverything){
                     out.write("   <span id=\"" + semanticYoutube.getId() + video.getString("id") +  "/delete" + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                     out.write("<a href=\"#\" class=\"eliminarYoutube\" title=\"" + paramRequest.getLocaleString("deleteVideo") +"\"onclick=\"if(confirm('" + paramRequest.getLocaleString("confirmDelete") + "')){ postSocialHtml('" + paramRequest.getActionUrl().setAction("doDeleteVideo").setParameter("suri", objUri).setParameter("videoId", video.getString("id")) + "','" + semanticYoutube.getId() + "/" +  video.getString("id") + "');} return false;\"></a>");
                     out.write("   </span>");
@@ -1511,10 +1513,15 @@ public class YoutubeWall extends GenericResource{
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());                
             String postURI = null;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
 
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");                            
             //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
@@ -1522,7 +1529,7 @@ public class YoutubeWall extends GenericResource{
             
             if(videosArray != null){
                 for(int i = 0; i < videosArray.length(); i++ ){
-                    doPrintVideo(request, response, paramRequest, out, postURI, socialUserExtAttr, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp));
+                    doPrintVideo(request, response, paramRequest, out, postURI, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                     totalVideos++;
                 }
                 //System.out.println("Videos recibidos:" + totalVideos);
