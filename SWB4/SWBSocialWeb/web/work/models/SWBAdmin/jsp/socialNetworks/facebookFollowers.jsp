@@ -125,7 +125,7 @@
 
             <%
 
-                if (usrFollow.has("paging")) {
+                if (usrFollow.has("paging") && usrFollow.getJSONObject("paging").has("next")) {
                     nextpageFollow = usrFollow.getJSONObject("paging").getString("next");
                     int position = nextpageFollow.indexOf("after");
                     String nextpageFollowSend = nextpageFollow.substring(position + 6, nextpageFollow.length());
