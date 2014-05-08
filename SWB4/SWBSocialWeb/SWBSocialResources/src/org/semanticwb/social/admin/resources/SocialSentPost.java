@@ -768,21 +768,18 @@ public class SocialSentPost extends GenericResource {
 
         //Manejo de permisos
         User user = paramRequest.getUser();
-        boolean userCanRemoveMsg = false;
         /*
          boolean userCanRetopicMsg=false;
          boolean userCanRevalueMsg=false;
          boolean userCanRespondMsg=false;
          * */
-        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        if (socialUserExtAttr != null) {
-            userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
-            /*
-             userCanRetopicMsg=socialUserExtAttr.isUserCanReTopicMsg();
-             userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
-             userCanRespondMsg=socialUserExtAttr.isUserCanRespondMsg();
-             * */
+         HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+        while (list.hasNext()) {
+            SemanticProperty sp = list.next();
+            mapa.put(sp.getName(),sp);
         }
+        boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
 
@@ -1852,7 +1849,7 @@ public class SocialSentPost extends GenericResource {
 
         String action = response.getAction();
         User user = response.getUser();
-        //System.out.println("SocialSentPost/processAction-1:" + action);
+        System.out.println("SocialSentPost/processAction-1:" + action);
         try {
             if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
                 try {
@@ -1929,46 +1926,48 @@ public class SocialSentPost extends GenericResource {
                     log.error(e.getMessage());
                     e.printStackTrace();
                 }
-
-
-                ///////////////////////////////
-                //response.setRenderParameter("statmsg", response.getLocaleString("statmsg1"));
-                //response.setMode(response.Mode_EDIT);
-                //response.setRenderParameter("act", "");
+                
                 response.setMode("postSent");
             } else if ("remove".equals(action)) //suri, prop
             {
                 String sval = request.getParameter("sval");
-                //System.out.println("SocialSentPost-REMOVEj1:"+sval);
+                System.out.println("SocialSentPost-REMOVEj1:"+sval);
                 SemanticObject so = SemanticObject.createSemanticObject(sval);
 
                 PostOut postOut = (PostOut) so.getGenericInstance();
 
-                //System.out.println("SocialSentPost-REMOVEj2:"+postOut);
+                System.out.println("SocialSentPost-REMOVEj2:"+postOut);
 
                 int cont = 0;
-                int cont2 = 0;
+                //int cont2 = 0;
                 String removedFrom = response.getLocaleString("removedFrom");
                 boolean canRemove = false;
                 Iterator<PostOutNet> itpostOuts = postOut.listPostOutNetInvs();
+                if(!itpostOuts.hasNext()) canRemove=true;
                 while (itpostOuts.hasNext()) {
-                    cont2 = cont2++;
+                    //cont2++;
                     PostOutNet postOutNet = itpostOuts.next();
+                    System.out.println("PostOutNet a Eliminar con msg:"+postOutNet);
                     if (postOutNet.getStatus() == 1) //Esta publicado el PostOutNet
                     {
                         SocialNetwork socialNet = postOutNet.getSocialNetwork();
+                        System.out.println("PostOutNet a Eliminar en socialNet:"+socialNet);
                         if (socialNet.removePostOutfromSocialNet(postOut, socialNet)) {
                             cont++;
                             postOutNet.remove();
-                            if (cont2 == 1) {
+                            System.out.println("PostOutNet ELIMINADO");
+                            if (cont == 1) {
                                 canRemove = true;
-                            } else if (cont2 > 1) {
+                            } else if (cont > 1) {
                                 canRemove = canRemove && true;
-                            }
-                            if (cont > 1) {
                                 removedFrom += ",";
                             }
+                            /*
+                            if (cont > 1) {
+                                removedFrom += ",";
+                            }*/
                             removedFrom += " " + socialNet.getDisplayTitle(user.getLanguage());
+                            System.out.println("PostOutNet ELIMINADO/removedFrom:"+removedFrom);
                         } else {
                             canRemove = false;
                         }
@@ -1976,19 +1975,18 @@ public class SocialSentPost extends GenericResource {
                         canRemove = false;
                     }
                 }
-
-                if (canRemove) {
-                    postOut.remove();
-                }
+                System.out.println("canRemove:"+canRemove+",removedFrom:"+removedFrom);
                 response.setMode(SWBActionResponse.Mode_EDIT);
                 response.setRenderParameter("dialog", "close");
                 response.setRenderParameter("suri", request.getParameter("suri"));
-                if (cont > 0) {
-                    response.setRenderParameter("statmsg", removedFrom);
-                } else {
-                    response.setRenderParameter("statmsg", response.getLocaleString("msgNotRemoved"));
+                if (canRemove) {
+                    postOut.remove();
+                    System.out.println("Elimino PostOut George");
+                    response.setRenderParameter("statusMsg", removedFrom);
+                }else{
+                    response.setRenderParameter("statusMsg", response.getLocaleString("msgNotRemoved"));
                 }
-
+               
             } else if ("send2flow".equals(action)) {
                 String id = request.getParameter("suri");
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();

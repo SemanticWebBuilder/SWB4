@@ -45,6 +45,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -154,15 +155,16 @@ public class SocialTopicInBox extends GenericResource {
             PostIn postIn = (PostIn) semObj.createGenericInstance();
             User user = paramRequest.getUser();
             //Manejo de permisos
-            SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-            boolean userCanRemoveMsg = false;
-            boolean userCanRetopicMsg = false;
-            boolean userCanRespondMsg = false;
-            if (socialUserExtAttr != null) {
-                userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
-                userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
-                userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
+             HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();
+           // boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
             //boolean userCandoEveryThing=false;
             //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
             UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
