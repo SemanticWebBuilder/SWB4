@@ -263,24 +263,6 @@ public class StreamInBox extends GenericResource {
 
         PrintWriter out = response.getWriter();
 
-        //Manejo de permisos
-        /*
-        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        System.out.println("socialUserExtAttr--1:"+socialUserExtAttr);
-        socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
-        System.out.println("socialUserExtAttr--2:"+socialUserExtAttr);
-        boolean userCanRemoveMsg = false;
-        boolean userCanRetopicMsg = false;
-        boolean userCanRevalueMsg = false;
-        boolean userCanRespondMsg = false;
-        if (socialUserExtAttr != null) {
-            userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
-            userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
-            userCanRevalueMsg = socialUserExtAttr.isUserCanReValueMsg();
-            userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
-        }
-        //boolean userCandoEveryThing=false;
-        * */
         HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
         Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
         while (list.hasNext()) {
@@ -291,10 +273,7 @@ public class StreamInBox extends GenericResource {
         boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
         boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
         boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
-        System.out.println("userCanRetopicMsg:"+userCanRetopicMsg);
-        System.out.println("userCanRevalueMsg:"+userCanRevalueMsg);
-        System.out.println("userCanRemoveMsg:"+userCanRemoveMsg);
-        System.out.println("userCanRespondMsg:"+userCanRespondMsg);
+       
 
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
