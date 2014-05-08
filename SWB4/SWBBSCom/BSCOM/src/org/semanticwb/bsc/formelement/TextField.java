@@ -7,6 +7,7 @@ import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -33,7 +34,8 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         
         String toReturn = null;
-        String websiteId = (String) request.getAttribute("websiteId");
+        String websiteId = ((SWBModel) obj.getModel().getModelObject().getGenericInstance()).getId();
+        //(String) request.getAttribute("websiteId"); se cambio por la linea anterior
         
         if (mode == null) {
             mode = "view";

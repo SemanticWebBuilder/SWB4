@@ -531,7 +531,8 @@ public class ReportGenerator extends GenericResource {
         int itemsCount = 0;
         int titleIndex = -1;
         
-        request.setAttribute("websiteId", paramRequest.getWebPage().getWebSiteId());
+        //Comentada para que en formelement.TextField se obtenga el Id desde el objeto semantico
+        //request.setAttribute("websiteId", paramRequest.getWebPage().getWebSiteId());
         
         output.append("<table border=\"1\">\n");
         output.append("  <tr>\n");
