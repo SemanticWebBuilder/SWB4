@@ -4,6 +4,8 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.social.PostIn"%>
 <%@page import="org.semanticwb.model.SWBModel"%>
@@ -58,10 +60,15 @@
             paging.count(20);//Gets a number of tweets of timeline. Max value is 200           
             int i = 0;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
             String postURI = null;
@@ -73,7 +80,7 @@
                 if(post != null){
                     postURI = post.getURI();
                 }
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,MENTIONS_TAB, null,user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 i++;
             }
             //System.out.println("Total Mentions:" + i);

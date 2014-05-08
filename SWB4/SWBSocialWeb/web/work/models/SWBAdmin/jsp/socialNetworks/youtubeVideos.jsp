@@ -4,6 +4,8 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.w3c.dom.Document"%>
 <%@page import="org.xml.sax.InputSource"%>
@@ -93,10 +95,15 @@
         SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
         String postURI = null;
         org.semanticwb.model.User user = paramRequest.getUser();
-        SocialUserExtAttributes socialUserExtAttr = null;
-        if(user.isSigned()){
-            socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+        while (list.hasNext()) {
+            SemanticProperty sp = list.next();
+            mapa.put(sp.getName(),sp);
         }
+        boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+        boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+        boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
 
         UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");                            
         //THE INFO OF THE USER SHOULD BE DISPLAYED AT TOP
@@ -104,7 +111,7 @@
         if(videosArray != null){
             for(int i = 0; i < videosArray.length(); i++ ){
                 totalVideos++;
-                doPrintVideo(request, response, paramRequest, out, postURI, socialUserExtAttr, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp));
+                doPrintVideo(request, response, paramRequest, out, postURI, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
             }
             
             if(totalVideos >= 25){

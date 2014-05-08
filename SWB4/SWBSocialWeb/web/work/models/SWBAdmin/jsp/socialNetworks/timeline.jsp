@@ -3,6 +3,8 @@
     Created on : 21/03/2013, 01:55:45 PM
     Author     : francisco.jimenez
 --%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
 <%@page import="org.semanticwb.model.UserGroup"%>
 <%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
 <%@page import="org.semanticwb.model.SWBContext"%>
@@ -83,11 +85,15 @@
             out.println("<div dojoType=\"dojox.layout.ContentPane\">");//style=\"background-color: #909090;\"
             String postURI = null;
             org.semanticwb.model.User user = paramRequest.getUser();
-            SocialUserExtAttributes socialUserExtAttr = null;
-            if(user.isSigned()){                
-                socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
             }
-            
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
             UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //user.hasUserGroup(userSuperAdminGrp)
             for (Status status : twitterBean.getHomeTimeline(paging)){
@@ -98,7 +104,7 @@
                     postURI = post.getURI();
                 }
                 
-                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, socialUserExtAttr,user.hasUserGroup(userSuperAdminGrp));
+                doPrintTweet(request, response, paramRequest, status, twitterBean, out, null,HOME_TAB, postURI, user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                 i++;
             }
             
