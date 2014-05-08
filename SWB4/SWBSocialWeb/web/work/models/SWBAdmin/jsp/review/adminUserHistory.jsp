@@ -44,7 +44,7 @@
     if (userPhoto == null) {
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";
     } else {
-        userPhoto = SWBPortal.getWebWorkPath() + userCreator.getWorkPath() + "/" + User.swb_usrPhoto.getName() + "_" + userCreator.getId() + "_" + userPhoto;
+        userPhoto = SWBPortal.getWebWorkPath() + userCreator.getWorkPath() + "/" + userPhoto;
     }
 
 %>
