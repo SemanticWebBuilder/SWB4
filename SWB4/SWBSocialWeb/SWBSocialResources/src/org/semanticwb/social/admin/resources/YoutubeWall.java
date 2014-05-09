@@ -967,11 +967,11 @@ public class YoutubeWall extends GenericResource{
         
         if((videoId == null || videoId.trim().isEmpty()) || (title == null || title.trim().isEmpty()) ||
                 (objUri == null || objUri.trim().isEmpty()) || (description == null || description.trim().isEmpty())
-                || (category == null || category.trim().isEmpty()) || (keywords == null || keywords.trim().isEmpty())){
-            log.error("Problem updating video information");
+                || (category == null || category.trim().isEmpty())){
+            log.error("Problem updating video information, missing fields.");
             return;
         }
-        
+        if(keywords == null || keywords.trim().isEmpty()){keywords = "";}
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
         if(!semanticYoutube.validateToken()){
