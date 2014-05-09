@@ -616,7 +616,7 @@
                                             if(confirm('¿Desea exportar a excel?')){
 
                         var filter = d.data.label; 
-                        alert(filter);
+                        //alert(filter);
                         var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
                         }
