@@ -19,8 +19,8 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 
 /**
- * Form Element que presentará la vista para administrar archivos adjuntos
- * (Creación, Edición y Eliminación)
+ * Form Element que presentar&aacute; la vista para administrar archivos
+ * adjuntos (Creaci&oacute;n, Edici&oacute;n y Eliminaci&oacute;n)
  *
  * @author Martha Elvia Jim&eacute;nez Salgado
  * @version %I%, %G%
@@ -28,27 +28,52 @@ import org.semanticwb.portal.SWBFormMgr;
  */
 public class AttachmentElement extends org.semanticwb.bsc.formelement.base.AttachmentElementBase {
 
+    /**
+     * Realiza operaciones en la bitacora de eventos.
+     */
     private static Logger log = SWBUtils.getLogger(AttachmentElement.class);
+    /**
+     * La constante Mode_VIEW.
+     */
     private static final String Mode_VIEW = "view";
+    /**
+     * La constante Mode_EDIT.
+     */
     private static final String Mode_EDIT = "edit";
+    /**
+     * La constante Mode_ADD.
+     */
     private static final String Mode_ADD = "add";
+    /**
+     * La constante Mode_RELOAD.
+     */
     private static final String Mode_RELOAD = "reload";
+    /**
+     * La constante Action_ADD.
+     */
     private static final String Action_ADD = "aAdd";
+    /**
+     * La constante Action_EDIT.
+     */
     private static final String Action_EDIT = "aEdit";
+    /**
+     * La constante Action_REMOVE.
+     */
     private static final String Action_REMOVE = "aDelete";
 
+    /**
+     * Crea instancias de esta clase a partir de un objeto sem&aacute;ntico
+     *
+     * @param base el objeto sem&aacute;ntico a utilizar para crear la nueva
+     * instancia
+     */
     public AttachmentElement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
 
-    @Override
-    public String renderElement(HttpServletRequest request, SemanticObject obj,
-            SemanticProperty prop, String type, String mode, String lang) {
-        return super.renderElement(request, obj, prop, type, mode, lang);
-    }
 
     /**
-     * Genera el código HTML para representar la administración de los Archivos
+     * Genera el c&oacute;digo HTML para representar la administraci&oacute;n de los Archivos
      * adjuntos de los elementos del BSC.
      *
      * @param request la petici&oacute;n HTTP hecha por el cliente
@@ -86,30 +111,24 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         return toReturn.toString();
     }
 
-    @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop) {
-        super.process(request, obj, prop);
-    }
-
     /**
-     * Procesa la información enviada por el elemento de forma, para almacenarla
+     * Procesa la informaci&oacute;n enviada por el elemento de forma, para almacenarla
      * en la propiedad del objeto indicado.
      *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
      * @param propName el nombre de la propiedad asociada a este FormElement
      */
     @Override
-    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName)
-    {
+    public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         final String action = request.getParameter("_action");
         String usrWithGrants = request.getParameter("usrWithGrants");
-        
-        WebSite scorecard = (WebSite)obj.getModel().getModelObject().getGenericInstance();
+
+        WebSite scorecard = (WebSite) obj.getModel().getModelObject().getGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
-        
+
         if (Action_ADD.equals(action)) {
             SWBFormMgr mgr = new SWBFormMgr(Attachment.sclass, scorecard.getSemanticObject(), null);
             String sref = request.getParameter("sref");
@@ -156,9 +175,10 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     * Genera el código HTML para representar la edición de un archivo adjunto.
+     * Genera el c&oacute;digo HTML para representar la edici&oacute;n de un archivo 
+     * adjunto.
      *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
@@ -250,9 +270,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
 
     /**
      * Presenta la vista de los archivos adjuntos asociados al elemento BSC,
-     * aquí se getiona los permisos para los usuarios
+     * aqu&iacute; se getiona los permisos para los usuarios
      *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
@@ -464,10 +484,10 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     * Genera el código HTML para representar la vista para agregar un nuevo
+     * Genera el c&oacute;digo HTML para representar la vista para agregar un nuevo
      * archivo adjunto
      *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
@@ -510,8 +530,10 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     *
-     * @param request la petici&oacute; HTTP hecha por el cliente
+     * Vista utilizada para recargar la vista despu&eacute;s de ejecutar una 
+     * acci&oacute;n, tal como Agregar, Editar o Eliminar
+     * 
+     * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
      * @param prop la propiedad asociada a este FormElement
@@ -592,7 +614,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append(attachment.getCreated() == null ? ""
                     : SWBUtils.TEXT.getStrDate(attachment.getCreated(), "es", "dd/mm/yyyy"));
             toReturn.append("\n</td>");
-            
+
             if ("true".equals(usrWithGrants)) {
                 FormElementURL urlEdit = getRenderURL(obj, prop, type, mode, lang);
                 urlEdit.setParameter("modeTmp", Mode_EDIT);
@@ -659,6 +681,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     /**
      * Genera la vista view del elemento de forma.
      * 
+     * @param request la petici&oacute;n HTTP hecha por el cliente
+     * @param obj el objeto a quien pertenece la propiedad asociada a este
+     * FormElement
      * @param prop la propiedad asociada a este FormElement
      * @param propName el nombre de la propiedad asociada a este FormElement
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
@@ -701,22 +726,22 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                             : SWBUtils.TEXT.getStrDate(attachment.getCreated(), "es", "dd/mm/yyyy"));
                     toReturn.append("\n</td>");
                     /*if ("true".equals(usrWithGrants)) {
-                        toReturn.append("\n<td>");
-                        toReturn.append("\n<img src=\"");
-                        toReturn.append(SWBPlatform.getContextPath());
-                        toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
-                        toReturn.append(getLocaleString("edit", lang));
-                        toReturn.append("\"/>");
-                        toReturn.append("\n</td>");
+                     toReturn.append("\n<td>");
+                     toReturn.append("\n<img src=\"");
+                     toReturn.append(SWBPlatform.getContextPath());
+                     toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
+                     toReturn.append(getLocaleString("edit", lang));
+                     toReturn.append("\"/>");
+                     toReturn.append("\n</td>");
 
-                        toReturn.append("\n<td>");
-                        toReturn.append("\n<img src=\"");
-                        toReturn.append(SWBPlatform.getContextPath());
-                        toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
-                        toReturn.append(getLocaleString("delete", lang));
-                        toReturn.append("\"/>");
-                        toReturn.append("\n</td>");
-                    }*/
+                     toReturn.append("\n<td>");
+                     toReturn.append("\n<img src=\"");
+                     toReturn.append(SWBPlatform.getContextPath());
+                     toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
+                     toReturn.append(getLocaleString("delete", lang));
+                     toReturn.append("\"/>");
+                     toReturn.append("\n</td>");
+                     }*/
                     toReturn.append("</tr>");
                 }
                 toReturn.append("\n</table>");
