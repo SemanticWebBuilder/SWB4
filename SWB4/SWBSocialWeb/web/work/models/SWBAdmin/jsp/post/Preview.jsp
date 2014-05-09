@@ -28,7 +28,7 @@
     Language l = (Language) SemanticObject.createSemanticObject(suri).createGenericInstance();
     String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
     StringBuilder address = new StringBuilder(128);
-    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto());
+    address.append("http://").append(request.getServerName()).append(":").append(request.getServerPort()).append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(swb.getSocialwpPhoto());
 
     SWBResourceURL urlAction = paramRequest.getActionUrl();
     urlAction.setParameter("toPost", "photo");
@@ -44,7 +44,7 @@
         <br><br>
         <%=description%>
         <br><br>
-        <img width="300" height="300" src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=SocialWebPage.social_socialwpPhoto.getName()%>_<%=swb.getId()%>_<%=sphoto%>">
+        <img width="300" height="300" src="<%=SWBPortal.getWebWorkPath()%><%=swb.getWorkPath()%>/<%=sphoto%>">
         <br><br>
         <a href="<%=address%>"><%=address%></a>
         <br><br><br><br>
