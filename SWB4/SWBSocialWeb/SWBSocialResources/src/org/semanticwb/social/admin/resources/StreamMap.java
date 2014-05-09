@@ -63,7 +63,7 @@ public class StreamMap extends GenericResource{
         
         out.println("<div class=\"divMap\">");
         //out.println("<div class=\"swbform\">");
-        out.println("<form type=\"dijit.form.Form\" id=\"showMap_"+semObj.getId()+"\" action=\"" +  paramRequest.getRenderUrl().setParameter("suri", suri) + "\" method=\"post\" onsubmit=\"submitForm('showMap_" + semObj.getId() + "'); return false;\">");            
+        out.println("<form type=\"dijit.form.Form\" id=\"showMap_"+semObj.getURI()+"\" action=\"" +  paramRequest.getRenderUrl().setParameter("suri", suri) + "\" method=\"post\" onsubmit=\"submitForm('showMap_" + semObj.getURI() + "'); return false;\">");            
         /*
         out.println("<table width=\"100%\" border=\"0px\">");            
         out.println("   <tr>");
@@ -153,7 +153,7 @@ public class StreamMap extends GenericResource{
        out.println("</select>");
        out.println("</label>");
         
-       out.println("<label><div>Desde el día:</div><input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getId()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
+       out.println("<label><div>Desde el día:</div><input type=\"text\" name=\"mapSinceDate\" id=\"mapSinceDate"+semObj.getURI()+"\"  dojoType=\"dijit.form.DateTextBox\" hasDownArrow=\"true\" value=\""+date+"\" class=\"txtfld-calendar\"/></label>");
         
         ArrayList aNetsSelected=new ArrayList();
         String[] paramNet=request.getParameterValues("networks");
@@ -216,7 +216,7 @@ public class StreamMap extends GenericResource{
         {
             //System.out.println("mapSinceDate k LLega a Clase:"+request.getParameter("mapSinceDate"));
             out.println("<div class=\"swbSocialMapIframe\">");
-            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")).setParameter("showGeoProfile", request.getParameter("showGeoProfile")) +"\"></iframe> ");
+            out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getURI(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")).setParameter("showGeoProfile", request.getParameter("showGeoProfile")) +"\"></iframe> ");
             out.println("</div>");
         }
     }
