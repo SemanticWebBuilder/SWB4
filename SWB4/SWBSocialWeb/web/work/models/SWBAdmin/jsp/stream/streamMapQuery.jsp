@@ -59,9 +59,9 @@ try{
     Date date = null;
     String showSinceDate=DEFECT_DATE;  //Día en que estaba desarrollando esto. Nunca los post de los usuarios van a ser antes de esta fecha, ya que no se  ha liberado el producto aún
     //System.out.println("showSinceDate/1:"+showSinceDate+",param:"+request.getParameter("mapSinceDate"+semObj.getId()));  
-    if(request.getParameter("mapSinceDate"+semObj.getId())!=null && request.getParameter("mapSinceDate"+semObj.getId()).trim().length()>0)
+    if(request.getParameter("mapSinceDate"+semObj.getId())!=null && request.getParameter("mapSinceDate"+semObj.getModel().getName() + semObj.getId()).trim().length()>0)
     {
-        showSinceDate=request.getParameter("mapSinceDate"+semObj.getId())+"T00:00:00Z";
+        showSinceDate=request.getParameter("mapSinceDate"+semObj.getModel().getName() + semObj.getId())+"T00:00:00Z";        
     }
     //System.out.println("showSinceDate:"+showSinceDate);
     String showGeoProfile="off";
