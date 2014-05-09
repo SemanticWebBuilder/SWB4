@@ -101,13 +101,15 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
                     ret.append(" constraints=\"" + getConstraints() + "\"");
                 }
                 
-                if(getDateId()!=null) ret.append(" id=\"" + getDateId() + obj.getId() + "\"");
-               
+                final String sufix = "_"+obj.getURI();
+                if(getDateId()!=null) {
+                    ret.append(" id=\"" + getDateId() + sufix + "\"");
+                }               
                 if (getDateOnChange() != null) {
                     String attributeValue = getDateOnChange();
                     ret.append(" onchange=\"");
                     ret.append((attributeValue.indexOf("{replaceId}") != -1 
-                                ? attributeValue.replace("{replaceId}", obj.getId())
+                                ? attributeValue.replace("{replaceId}", sufix)
                                 : attributeValue));
                     ret.append("\"");
                 }
