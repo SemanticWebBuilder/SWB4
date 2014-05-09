@@ -53,7 +53,6 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Youtube;
-import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
 
 // TODO: Auto-generated Javadoc
