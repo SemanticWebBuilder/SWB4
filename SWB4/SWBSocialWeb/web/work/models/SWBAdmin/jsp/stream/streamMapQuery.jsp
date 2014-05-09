@@ -120,7 +120,7 @@ try{
         center: new google.maps.LatLng(25, -99),
         mapTypeId: google.maps.MapTypeId.HYBRID
       };
-      map = new google.maps.Map(document.getElementById('map'), myOptions);
+      map = new google.maps.Map(document.getElementById('map<%=suri%>'), myOptions);
 
       showMarkers();
             
@@ -430,7 +430,7 @@ try{
   </head>
 
     <body onload="setupMap()">
-    <div id="map" style="margin: 5px auto; width: 100%; height: 100%"></div>
+    <div id="map<%=suri%>" style="margin: 5px auto; width: 100%; height: 100%"></div>
     <div style="text-align: center; font-size: large;">
       SWBSocial Sentiment Analysis Map
     </div>
