@@ -1,7 +1,10 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Status,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Updateable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable
+   /**
+   * Define las características de una Iniciativa 
+   */
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.DeliverableAssignable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Status,org.semanticwb.model.Referensable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_totalInvestment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#totalInvestment");
     public static final org.semanticwb.platform.SemanticProperty bsc_businessCase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#businessCase");
@@ -11,14 +14,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
    */
     public static final org.semanticwb.platform.SemanticClass bsc_InitiativeAssignable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#InitiativeAssignable");
     public static final org.semanticwb.platform.SemanticProperty bsc_initiativeAssignableInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#initiativeAssignableInv");
-   /**
-   * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.
-   */
-    public static final org.semanticwb.platform.SemanticClass bsc_Deliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Deliverable");
-   /**
-   * Lista de los entregables asociados a la iniciativa
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_hasDeliverable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDeliverable");
     public static final org.semanticwb.platform.SemanticProperty bsc_estimatedStart=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#estimatedStart");
     public static final org.semanticwb.platform.SemanticProperty bsc_estimatedEnd=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#estimatedEnd");
    /**
@@ -27,6 +22,9 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty bsc_initiativeFacilitator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#initiativeFacilitator");
     public static final org.semanticwb.platform.SemanticProperty bsc_investmentAmount=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#investmentAmount");
+   /**
+   * Define las características de una Iniciativa
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
    /**
    * The semantic class that represents the currentObject
