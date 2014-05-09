@@ -403,7 +403,7 @@ public class StreamInBox extends GenericResource {
 
 
         //Advance re-Classify by topic
-        if (userCanRetopicMsg) {
+        if (userCanRetopicMsg  || user.hasUserGroup(userSuperAdminGrp)) {
             //out.println("<span  class=\"spanFormat\">");
             SWBResourceURL ReClassbyTopicUrl = paramRequest.getRenderUrl();
             ReClassbyTopicUrl.setParameter("streamid", id);
