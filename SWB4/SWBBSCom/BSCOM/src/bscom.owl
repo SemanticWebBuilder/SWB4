@@ -99,16 +99,6 @@
     >org.semanticwb.bsc.formelement</swb:classCodePackage>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
-  <owl:Class rdf:ID="Format">
-    <rdfs:subClassOf rdf:resource="#Catalog"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Countryable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc.catalogs</swb:classCodePackage>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-  </owl:Class>
   <owl:Class rdf:about="#BSCElement">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
@@ -128,6 +118,8 @@
     >true</swb:autogenId>
   </owl:Class>
   <owl:Class rdf:ID="Comment">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define las características de un Comentario.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Catalog"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.catalogs</swb:classCodePackage>
@@ -284,11 +276,21 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Agreement">
+    <rdfs:label xml:lang="es">Acuerdo</rdfs:label>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Meeting"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Define las características de un Acuerdo.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:label xml:lang="en">Agreement</rdfs:label>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Agreement">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -301,14 +303,6 @@
     </swb:displayObject>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="Meeting"/>
-        </owl:allValuesFrom>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
   <owl:Class rdf:ID="Indicator">
@@ -413,8 +407,6 @@
         </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste los atributos de un indicador</rdfs:comment>
     <rdfs:subClassOf>
       <owl:Class rdf:about="#Committable"/>
     </rdfs:subClassOf>
@@ -435,6 +427,8 @@
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define las características de un Indicador.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Undeleteable"/>
   </owl:Class>
   <owl:Class rdf:ID="SummaryViewManager">
@@ -555,6 +549,8 @@
     <rdfs:subClassOf rdf:resource="#Attachmentable"/>
     <rdfs:label xml:lang="es">Iniciativa</rdfs:label>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define las características de una Iniciativa</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Updateable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -806,6 +802,10 @@
           <swbxf:HerarquicalNode rdf:ID="hn_StatesGroups">
             <swbxf:heClass>
               <swb:Class rdf:ID="StateGroup">
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Agrupa uno más estados.</rdfs:comment>
+                <rdfs:label xml:lang="en">States group</rdfs:label>
+                <rdfs:label xml:lang="es">Grupo de estados</rdfs:label>
                 <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
                 >org.semanticwb.bsc.accessory</swb:classCodePackage>
                 <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
@@ -904,6 +904,8 @@
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom>
           <swb:Class rdf:ID="DifferentiatorGroup">
+            <rdfs:label xml:lang="en">Differentiator group</rdfs:label>
+            <rdfs:label xml:lang="es">Grupo de diferenciadores</rdfs:label>
             <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
             <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.</rdfs:comment>
@@ -944,14 +946,6 @@
     >true</swb:autogenId>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
-  <owl:Class rdf:about="#Recognizable">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-    <rdfs:label xml:lang="es">Identificable</rdfs:label>
-    <rdfs:label xml:lang="en">Recognizable</rdfs:label>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Cualquier elemento BSC que se pueda identificar mediante un prefijo</rdfs:comment>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
-  </owl:Class>
   <owl:Class rdf:about="#Risk">
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable"/>
     <swb:displayObject>
@@ -981,7 +975,9 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf rdf:resource="#Recognizable"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Recognizable"/>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -999,8 +995,11 @@
     </rdfs:subClassOf>
   </owl:Class>
   <owl:Class rdf:ID="State">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.</rdfs:comment>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:label xml:lang="en">State</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
     <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1013,16 +1012,27 @@
         >swbstrgyIconState</swb:iconClass>
       </swbxf:DisplayObject>
     </swb:displayObject>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#Machinable"/>
+    <rdfs:label xml:lang="es">Estado</rdfs:label>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
         <owl:allValuesFrom rdf:resource="#StateGroup"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Recognizable">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+    <rdfs:label xml:lang="es">Identificable</rdfs:label>
+    <rdfs:label xml:lang="en">Recognizable</rdfs:label>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Cualquier elemento BSC que se pueda identificar mediante un prefijo</rdfs:comment>
+    <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#Objective">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define las características de un Objetivo estratégico.</rdfs:comment>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
@@ -1143,6 +1153,10 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:about="#Operation">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Las operaciones aritméticas, intervienen en la definición de reglas de evaluación de las mediciones y determinar su estado.</rdfs:comment>
+    <rdfs:label xml:lang="en">Operation</rdfs:label>
+    <rdfs:label xml:lang="es">Operador</rdfs:label>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.catalogs</swb:classCodePackage>
     <rdfs:subClassOf rdf:resource="#Catalog"/>
@@ -1301,10 +1315,12 @@
     </swb:displayProperty>
     <rdfs:range>
       <swb:Class rdf:ID="Determinant">
+        <rdfs:label xml:lang="en">Determinant</rdfs:label>
+        <rdfs:label xml:lang="es">Determinante</rdfs:label>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Un determinante define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.</rdfs:comment>
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.bsc.accessory</swb:classCodePackage>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Determinante que define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.</rdfs:comment>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
@@ -1376,7 +1392,22 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="format">
     <rdfs:domain rdf:resource="#Series"/>
-    <rdfs:range rdf:resource="#Format"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="Format">
+        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >org.semanticwb.bsc.catalogs</swb:classCodePackage>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Localeable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Countryable"/>
+        <rdfs:label xml:lang="es">Formato</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Catalog"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Un formato define un patrón para formatear mediciones. Tal como dólares, pesos, porcentaje, etc.</rdfs:comment>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+        <rdfs:label xml:lang="en">Format</rdfs:label>
+      </swb:Class>
+    </rdfs:range>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_format">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2095,7 +2126,6 @@
     <rdfs:domain rdf:resource="#DifferentiatorGroup"/>
     <rdfs:range>
       <swb:Class rdf:ID="Differentiator">
-        <rdfs:subClassOf rdf:resource="#Sortable"/>
         <rdfs:subClassOf rdf:resource="#BSCAccessory"/>
         <swb:displayObject>
           <swbxf:DisplayObject rdf:ID="do_Differentiator">
@@ -2109,18 +2139,21 @@
             <rdfs:label xml:lang="en">Differentiator</rdfs:label>
           </swbxf:DisplayObject>
         </swb:displayObject>
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >true</swb:autogenId>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Un Differentiator se dibuja en el mapa estratégico del scorecard. Los Differentiator unicamente sirvan para alojar etiquetas de differenciadores dentro de un mapa estratégico</rdfs:comment>
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.bsc.accessory</swb:classCodePackage>
+        <rdfs:label xml:lang="en">Differentiator</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Sortable"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Un Differentiator se dibuja en el mapa estratégico del scorecard. Los Differentiator unicamente sirvan para alojar etiquetas de differenciadores dentro de un mapa estratégico.</rdfs:comment>
+        <rdfs:label xml:lang="es">Diferenciador</rdfs:label>
         <rdfs:subClassOf>
           <owl:Restriction>
             <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
             <owl:allValuesFrom rdf:resource="#DifferentiatorGroup"/>
           </owl:Restriction>
         </rdfs:subClassOf>
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
       </swb:Class>
     </rdfs:range>
@@ -3812,6 +3845,8 @@
     >bsc</swb:prefix>
   </swb:CodePackage>
   <swb:Class rdf:ID="Priority">
+    <rdfs:label xml:lang="en">Priority</rdfs:label>
+    <rdfs:label xml:lang="es">Prioridad</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Catalog"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
