@@ -330,6 +330,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     
     @Override
     public boolean isValid() {
-        return super.isValid() && getTheme().isValid() && getTheme().getPerspective().isValid();
+        return super.isValid() && getTheme().isValid();
     }
 }
