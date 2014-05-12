@@ -4,8 +4,16 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Gestiona la información de un control en un Riesgo. 
    */
-public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
+public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_DeterminantValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#DeterminantValue");
+   /**
+   * Persiste los valores específicos de los determinantes para un riesgo
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasDeterminantValue=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasDeterminantValue");
    /**
    * Es de solo lectura en la administración y es la clasificación del Control
    */
@@ -121,6 +129,29 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.tracing.Control with a determined DeterminantValue
+       * @param value DeterminantValue of the type org.semanticwb.bsc.tracing.DeterminantValue
+       * @param model Model of the org.semanticwb.bsc.tracing.Control
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Control
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Control> listControlByDeterminantValue(org.semanticwb.bsc.tracing.DeterminantValue value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Control> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDeterminantValue, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.Control with a determined DeterminantValue
+       * @param value DeterminantValue of the type org.semanticwb.bsc.tracing.DeterminantValue
+       * @return Iterator with all the org.semanticwb.bsc.tracing.Control
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.Control> listControlByDeterminantValue(org.semanticwb.bsc.tracing.DeterminantValue value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.Control> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasDeterminantValue,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.tracing.Control with a determined UserGroup
        * @param value UserGroup of the type org.semanticwb.model.UserGroup
        * @param model Model of the org.semanticwb.bsc.tracing.Control
@@ -226,6 +257,71 @@ public abstract class ControlBase extends org.semanticwb.bsc.tracing.BSCTracing 
     public ControlBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.tracing.DeterminantValue
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.DeterminantValue
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValues()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue>(getSemanticObject().listObjectProperties(bsc_hasDeterminantValue));
+    }
+
+   /**
+   * Gets true if has a DeterminantValue
+   * @param value org.semanticwb.bsc.tracing.DeterminantValue to verify
+   * @return true if the org.semanticwb.bsc.tracing.DeterminantValue exists, false otherwise
+   */
+    public boolean hasDeterminantValue(org.semanticwb.bsc.tracing.DeterminantValue value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasDeterminantValue,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a DeterminantValue
+   * @param value org.semanticwb.bsc.tracing.DeterminantValue to add
+   */
+
+    public void addDeterminantValue(org.semanticwb.bsc.tracing.DeterminantValue value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasDeterminantValue, value.getSemanticObject());
+    }
+   /**
+   * Removes all the DeterminantValue
+   */
+
+    public void removeAllDeterminantValue()
+    {
+        getSemanticObject().removeProperty(bsc_hasDeterminantValue);
+    }
+   /**
+   * Removes a DeterminantValue
+   * @param value org.semanticwb.bsc.tracing.DeterminantValue to remove
+   */
+
+    public void removeDeterminantValue(org.semanticwb.bsc.tracing.DeterminantValue value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasDeterminantValue,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the DeterminantValue
+   * @return a org.semanticwb.bsc.tracing.DeterminantValue
+   */
+    public org.semanticwb.bsc.tracing.DeterminantValue getDeterminantValue()
+    {
+         org.semanticwb.bsc.tracing.DeterminantValue ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasDeterminantValue);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.DeterminantValue)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
