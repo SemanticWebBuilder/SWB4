@@ -4,8 +4,12 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo 
    */
-public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
+public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Gestiona la información de un control en un Riesgo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Control=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Control");
     public static final org.semanticwb.platform.SemanticProperty bsc_determinantValueInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#determinantValueInv");
    /**
    * Determinante que define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.
@@ -121,6 +125,29 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.tracing.DeterminantValue with a determined Risk
+       * @param value Risk of the type org.semanticwb.bsc.tracing.Control
+       * @param model Model of the org.semanticwb.bsc.tracing.DeterminantValue
+       * @return Iterator with all the org.semanticwb.bsc.tracing.DeterminantValue
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByRisk(org.semanticwb.bsc.tracing.Control value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_determinantValueInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.tracing.DeterminantValue with a determined Risk
+       * @param value Risk of the type org.semanticwb.bsc.tracing.Control
+       * @return Iterator with all the org.semanticwb.bsc.tracing.DeterminantValue
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.tracing.DeterminantValue> listDeterminantValueByRisk(org.semanticwb.bsc.tracing.Control value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.DeterminantValue> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_determinantValueInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.tracing.DeterminantValue with a determined UserGroup
        * @param value UserGroup of the type org.semanticwb.model.UserGroup
        * @param model Model of the org.semanticwb.bsc.tracing.DeterminantValue
@@ -226,6 +253,44 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
     public DeterminantValueBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property Risk
+   * @param value Risk to set
+   */
+
+    public void setRisk(org.semanticwb.bsc.tracing.Control value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_determinantValueInv, value.getSemanticObject());
+        }else
+        {
+            removeRisk();
+        }
+    }
+   /**
+   * Remove the value for Risk property
+   */
+
+    public void removeRisk()
+    {
+        getSemanticObject().removeProperty(bsc_determinantValueInv);
+    }
+
+   /**
+   * Gets the Risk
+   * @return a org.semanticwb.bsc.tracing.Control
+   */
+    public org.semanticwb.bsc.tracing.Control getRisk()
+    {
+         org.semanticwb.bsc.tracing.Control ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_determinantValueInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.Control)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property Determinant
