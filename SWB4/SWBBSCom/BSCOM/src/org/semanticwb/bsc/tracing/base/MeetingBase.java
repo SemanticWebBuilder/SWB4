@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA 
    */
-public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
+public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Persiste información de dos dígitos. El número de sesiones se reinicia con el número de año actual.
