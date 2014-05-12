@@ -88,7 +88,15 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
                 quadrant = 4;
             }
         } else {
-            
+            if (this.getFinAssessmentImpactLevel() > 5 && this.getFinAssessmentLikelihood() > 5) {
+                quadrant = 1;
+            } else if (this.getFinAssessmentImpactLevel() < 6 && this.getFinAssessmentLikelihood() > 5) {
+                quadrant = 2;
+            } else if (this.getFinAssessmentImpactLevel() > 5 && this.getFinAssessmentLikelihood() < 6) {
+                quadrant = 3;
+            } else if (this.getFinAssessmentImpactLevel() < 6 && this.getFinAssessmentLikelihood() < 6) {
+                quadrant = 4;
+            }
         }
         return quadrant;
     }
