@@ -53,6 +53,7 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
@@ -778,8 +779,25 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (indicator.getChampion() != null) {
                     collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
                 }
+            } else if (generic != null && generic instanceof Initiative) {
+                Initiative initiative = (Initiative) generic;
+                if (initiative.getInitiativeFacilitator() != null) {
+                    collaboration = initiative.getInitiativeFacilitator().getUserRepository().getUserGroup("Facilitator");
+                } else {
+                    collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("Facilitator");
+                    //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
+                }
+                
+            } else if (generic != null && generic instanceof Deliverable) {
+                Deliverable deliverable = (Deliverable) generic;
+                if (deliverable.getResponsible() != null) {
+                    collaboration = deliverable.getResponsible().getUserRepository().getUserGroup("responsable");
+                } else {
+                    collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("responsable");
+                    //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
+                }
+                
             }
-
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
@@ -1316,12 +1334,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
-                            || (userCanCollaborate(collaboration) && isEditable(formElement))) {
+                            || (userCanCollaborate(collaboration) && isEditable(formElement))
+                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() 
+                            && isEditable(formElement))|| (elementBSC.createGenericInstance() instanceof Deliverable 
+                            && userCanEdit() && isEditable(formElement))) {
                         applyInlineEdit = true;
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
                     }
-
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
@@ -1723,9 +1743,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
             throws FileNotFoundException, IOException {
-        Template template = paramRequest.getWebPage().getTemplateRef().getTemplate();
-        String filePath = SWBPortal.getWorkPath()
-                + template.getWorkPath() + "/" + template.getActualVersion().getVersionNumber() + "/"
+        User user = paramRequest.getUser();
+        WebPage wp = paramRequest.getWebPage();
+
+        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
+        String filePath = template.getWorkPath() + "/" + 
+                template.getActualVersion().getVersionNumber() + "/"
                 + template.getFileName(template.getActualVersion().getVersionNumber());
         FileReader reader = null;
         StringBuilder view = new StringBuilder(256);
@@ -1773,8 +1796,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Filtra los recursos de tipo ComponentExportable que ser&aacute;n utilizados 
-     * en la exportaci&oacute;n del PDF y obtiene su c&oacute;digo HTML.
+     * Filtra los recursos de tipo ComponentExportable que ser&aacute;n
+     * utilizados en la exportaci&oacute;n del PDF y obtiene su c&oacute;digo
+     * HTML.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
@@ -1818,7 +1842,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Obtiene el HTML de los datos de la vista detalle que se utilizar&aacute; 
+     * Obtiene el HTML de los datos de la vista detalle que se utilizar&aacute;
      * en la exportaci&oacute;n.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
