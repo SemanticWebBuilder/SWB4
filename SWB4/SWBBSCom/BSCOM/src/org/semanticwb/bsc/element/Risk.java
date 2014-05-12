@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.semanticwb.bsc.tracing.Control;
+import org.semanticwb.bsc.tracing.Factor;
 import org.semanticwb.platform.SemanticObject;
 
 public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
@@ -66,7 +68,13 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
         return consecutive;
     }
     
-    public short calculateQuadrant(boolean initial) {
+    /**
+     * Calcula el cuadrante del mapa de riesgos en que aparecer&aacute; el riesgo en base a los valores del nivel de impacto
+     * y la probabilidad, tanto para la evaluaci&oacute;n inicial como para la final
+     * @param initial indica si el cuadrante a calcular es de la evaluaci&oacute;n inicial {@code true}, o de la final {@code false}
+     * @return el n&uacute;mero del cuadrante en el mapa de riesgos en que aparecer&aacute; este riesgo
+     */
+    public synchronized short calculateQuadrant(boolean initial) {
         
         short quadrant = 0;
         if (initial) {
@@ -83,5 +91,34 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
             
         }
         return quadrant;
+    }
+    
+    /**
+     * Calcula si el riesgo es controlado suficientemente en base a la determinaci&oacute;n de todos los controles relacionados.
+     * @return {@literal SI} en caso de que la determinaci&oacute;n de todos los controles relacionados sea suficiente, {@literal NO} en caso contrario
+     */
+    public synchronized String calculateControled() {
+        
+        String controled = "SI";
+        
+        Iterator<Factor> factorIt = this.listFactors();
+        while (factorIt != null && factorIt.hasNext()) {
+            Factor factor = factorIt.next();
+            Iterator<Control> controlIt = factor.listControls();
+            if (controlIt != null && controlIt.hasNext()) {
+                while (controlIt.hasNext()) {
+                    Control control = controlIt.next();
+                    if (control.getDeterminingControl().equalsIgnoreCase("no")) {
+                        controled = "NO";
+                        break;
+                    }
+                }
+            } else {
+                controled = "NO";
+                break;
+            }
+        }
+        
+        return controled;
     }
 }
