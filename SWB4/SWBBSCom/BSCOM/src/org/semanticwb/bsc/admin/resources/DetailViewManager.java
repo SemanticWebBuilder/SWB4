@@ -84,10 +84,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * este recurso
      */
     private static final String TEMPLATE_FILENAME = "/templateContent.html";
-    /**
-     * Representa el nombre del modo que se encarga de exportar la vista a PDF
-     */
-    private static final String Mode_PDF = "exportPDF";
+
 
     /**
      * Genera una instancia de este recurso
@@ -905,7 +902,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             doEditTemplate(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("getPropertiesInfo")) {
             doGetPropertiesInfo(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals(Mode_PDF)) {
+        } else if (paramRequest.getMode().equals(Mode_PDFDocument)) {
             doExportPDF(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
@@ -1595,7 +1592,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(),
                     SWBResourceURL.UrlType_RENDER);
             url.setParameter("suri", semObj.getURI());
-            url.setMode(Mode_PDF);
+            url.setMode(Mode_PDFDocument);
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
             String surl = url.toString();
 
