@@ -120,4 +120,14 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
         }
         return consecutive;
     }
+    
+    /**
+     * Indica si el factor est&aacute; asociado a controles o no.
+     * @return {@literal true} si el factor tiene controles asociados a &eacute;l, {@literal false} de lo contrario
+     */
+    public boolean isControlRelated() {
+        
+        boolean withControls = this.getControl() != null ? true : false;
+        return withControls;
+    }
 }
