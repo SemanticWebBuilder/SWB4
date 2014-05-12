@@ -4,6 +4,7 @@
  */
 package org.semanticwb.bsc.resources;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.ImageResizer;
 import org.semanticwb.bsc.ContactWork;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.Resource;
@@ -73,6 +75,7 @@ public class UserProfile extends GenericAdmResource {
         }
 
         String img = "";
+        request.setAttribute("UserProfile", true);
         ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
         if (cw == null) {
             cw = ContactWork.ClassMgr.createContactWork(user.getId(), wsite);
@@ -80,7 +83,10 @@ public class UserProfile extends GenericAdmResource {
         if (user.getPhoto() == null) {
             img = SWBPortal.getWebWorkPath() + "/models/" + wsite.getId() + "/css/images/user.jpg";
         } else {
-            img = SWBPortal.getWebWorkPath() + "/models/" + user.getUserRepository().getId() + "/swb_User/" + user.getId() + "/" + user.getPhoto();
+            String path = "/models/" + user.getUserRepository().getId() + "/swb_User/" + user.getId() + "/" + user.getPhoto();
+            img = SWBPortal.getWebWorkPath() + path;
+            File file = new File(SWBPortal.getWorkPath() + path);
+            ImageResizer.shrinkTo(file, 205, 205, file, "png");
         }
         //////FormMgr para FOTO/////////////////////////////////////////////////////////////
         SWBFormMgr formMgrPhoto = new SWBFormMgr(user.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
@@ -109,11 +115,10 @@ public class UserProfile extends GenericAdmResource {
 
         //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////////////
         toReturn.append("<div id=\"frmUser\">");
-        toReturn.append("<table height=\"200px\"><tr><td>HOLA</td></tr></table>");
         toReturn.append("<form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n");
         toReturn.append(formMgrPhoto.getFormHiddens());
         toReturn.append("<div id=\"Photo\" class=\"foto\">");
-        toReturn.append("<p><img width=\"205px\" height=\"205px\" src=\"" + img + "\" alt=\"\" /></p>");
+        toReturn.append("<p><img src=\"" + img + "\" /></p>");
         Iterator<SemanticProperty> itUser = SWBComparator.sortSortableObject(formMgrPhoto.getProperties().iterator());
         while (itUser.hasNext()) {
             SemanticProperty prop1 = itUser.next();
