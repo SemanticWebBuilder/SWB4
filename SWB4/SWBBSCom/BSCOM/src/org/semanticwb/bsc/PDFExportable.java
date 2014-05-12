@@ -6,11 +6,6 @@ package org.semanticwb.bsc;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.bsc.element.Agreement;
-import org.semanticwb.bsc.element.Deliverable;
-import org.semanticwb.bsc.element.Indicator;
-import org.semanticwb.bsc.element.Initiative;
-import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -32,46 +27,9 @@ public interface PDFExportable {
      */
     public static final String viewType = "viewType";
     /**
-     * The Constant PDF_Initiative.
-     */
-    public static final String PDF_Initiative = Initiative.class.
-            getCanonicalName();
-    /**
-     * The Constant PDF_Indicator.
-     */
-    public static final String PDF_Indicator = Indicator.class.
-            getCanonicalName();
-    /**
-     * The Constant PDF_Objective.
-     */
-    public static final String PDF_Objective = Objective.class.
-            getCanonicalName();
-    /**
-     * The Constant PDF_Deliverable.
-     */
-    public static final String PDF_Deliverable = Deliverable.class.
-            getCanonicalName();
-    /**
-     * The Constant PDF_Agreement.
-     */
-    public static final String PDF_Agreement = Agreement.class.
-            getCanonicalName();
-    /**
      * The Constant PDF_StrategyMap.
      */
     public static final String PDF_StrategyMap = "detailStrategyMap";
-    /**
-     * The Constant PDF_ReportGenerator.
-     */
-    public static final String PDF_ReportGenerator = "reportGenerator";
-    /**
-     * The Constant PDF_RiskBoard.
-     */
-    public static final String PDF_RiskBoard = "riskBoard";
-    /**
-     * The Constant PDF_RiskMap.
-     */
-    public static final String PDF_RiskMap = "riskMap";
     /**
      * The Constant VIEW_Summary.
      */
@@ -79,7 +37,11 @@ public interface PDFExportable {
     /**
      * The Constant VIEW_Detail.
      */
-    public static final String VIEW_Detail = "2";
+    public static final String VIEW_Detail = "2";    
+    /**
+     * The Constant Mode_PDFDocument.
+     */
+    public static final String Mode_PDFDocument = "pdf";
 
     /**
      * Interface que permite obtener la url para redireccionar al recurso que
