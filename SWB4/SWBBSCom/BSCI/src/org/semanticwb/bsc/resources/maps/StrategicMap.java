@@ -52,7 +52,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     private static final Logger log = SWBUtils.getLogger(StrategicMap.class);
 
     public static final String Mode_PNGImage = "png";
-    public static final String Mode_PDFDocument = "pdf";
     public static final String Action_UPDATE = "update";
     
     public static final String HEADER_PREFIX = "head_";
