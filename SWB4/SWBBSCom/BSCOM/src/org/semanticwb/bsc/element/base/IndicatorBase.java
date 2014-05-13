@@ -2,9 +2,9 @@ package org.semanticwb.bsc.element.base;
 
 
    /**
-   * Persiste los atributos de un indicador 
+   * Define las características de un Indicador. 
    */
-public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Updateable
+public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Committable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.InitiativeAssignable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -18,6 +18,9 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    * Persiste la unidad de medida de un indicador
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_unitMesure=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#unitMesure");
+   /**
+   * Define las características de un Objetivo estratégico.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
     public static final org.semanticwb.platform.SemanticProperty bsc_objectiveInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#objectiveInv");
    /**
@@ -45,7 +48,7 @@ public abstract class IndicatorBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_formula=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#formula");
    /**
-   * Persiste los atributos de un indicador
+   * Define las características de un Indicador.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
    /**
