@@ -440,6 +440,8 @@ public class SWBVirtualHostFilter implements Filter
      */
     public void destroy()
     {
+        System.out.println("Stopping SWB...");
+        SWBPlatform.getSemanticMgr().close();
     }
 
     /**
