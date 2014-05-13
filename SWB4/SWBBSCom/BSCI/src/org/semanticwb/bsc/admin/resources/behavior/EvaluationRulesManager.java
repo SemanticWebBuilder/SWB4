@@ -63,9 +63,16 @@ public class EvaluationRulesManager extends GenericAdmResource {
         final String suri=request.getParameter("suri");
         if(suri==null) {
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            response.flushBuffer();
             return;
-        }       
-        doEdit(request, response, paramRequest);
+        }
+        try {
+            doEdit(request, response, paramRequest);
+        }catch(ClassCastException cce) {
+            response.getWriter().println("No se detect&oacute ninguna serie de medici&oacuten!");
+        }finally {
+            response.flushBuffer();
+        }
     }
 
     @Override
