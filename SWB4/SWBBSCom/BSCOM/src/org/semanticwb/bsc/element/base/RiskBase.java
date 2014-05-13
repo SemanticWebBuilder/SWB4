@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Traceable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.bsc.Help,org.semanticwb.model.Filterable,org.semanticwb.bsc.Status,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.Filterable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Traceable
 {
    /**
    * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
@@ -199,29 +199,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
         public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByInitiative(org.semanticwb.bsc.element.Initiative value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiative,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @param model Model of the org.semanticwb.bsc.element.Risk
-       * @return Iterator with all the org.semanticwb.bsc.element.Risk
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByState(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.bsc.element.Risk with a determined State
-       * @param value State of the type org.semanticwb.bsc.accessory.State
-       * @return Iterator with all the org.semanticwb.bsc.element.Risk
-       */
-
-        public static java.util.Iterator<org.semanticwb.bsc.element.Risk> listRiskByState(org.semanticwb.bsc.accessory.State value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Risk> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasState,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -559,71 +536,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     public void setYearRisk(int value)
     {
         getSemanticObject().setIntProperty(bsc_yearRisk, value);
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.accessory.State
-   * @return A GenericIterator with all the org.semanticwb.bsc.accessory.State
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State> listStates()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.accessory.State>(getSemanticObject().listObjectProperties(bsc_hasState));
-    }
-
-   /**
-   * Gets true if has a State
-   * @param value org.semanticwb.bsc.accessory.State to verify
-   * @return true if the org.semanticwb.bsc.accessory.State exists, false otherwise
-   */
-    public boolean hasState(org.semanticwb.bsc.accessory.State value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasState,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a State
-   * @param value org.semanticwb.bsc.accessory.State to add
-   */
-
-    public void addState(org.semanticwb.bsc.accessory.State value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasState, value.getSemanticObject());
-    }
-   /**
-   * Removes all the State
-   */
-
-    public void removeAllState()
-    {
-        getSemanticObject().removeProperty(bsc_hasState);
-    }
-   /**
-   * Removes a State
-   * @param value org.semanticwb.bsc.accessory.State to remove
-   */
-
-    public void removeState(org.semanticwb.bsc.accessory.State value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasState,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the State
-   * @return a org.semanticwb.bsc.accessory.State
-   */
-    public org.semanticwb.bsc.accessory.State getState()
-    {
-         org.semanticwb.bsc.accessory.State ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasState);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
-         }
-         return ret;
     }
 
 /**
