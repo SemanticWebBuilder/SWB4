@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad. 
    */
-public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Updateable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable
+public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Updateable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Schedule,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help
 {
    /**
    * Porcentaje de avance a reportar
@@ -14,8 +14,14 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
    * Ruta del archivo físico asociado
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_filePath=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#filePath");
-    public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
+   /**
+   * Define que puede tener entregables
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_DeliverableAssignable=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#DeliverableAssignable");
     public static final org.semanticwb.platform.SemanticProperty bsc_initiativeInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#initiativeInv");
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
    * Estatus asignado por el usuario
@@ -182,23 +188,23 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
         }
        /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined Initiative
-       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.DeliverableAssignable
        * @param model Model of the org.semanticwb.bsc.element.Deliverable
        * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiative(org.semanticwb.bsc.element.Initiative value,org.semanticwb.model.SWBModel model)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiative(org.semanticwb.bsc.DeliverableAssignable value,org.semanticwb.model.SWBModel model)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_initiativeInv, value.getSemanticObject(),sclass));
             return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined Initiative
-       * @param value Initiative of the type org.semanticwb.bsc.element.Initiative
+       * @param value Initiative of the type org.semanticwb.bsc.DeliverableAssignable
        * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
        */
 
-        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiative(org.semanticwb.bsc.element.Initiative value)
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiative(org.semanticwb.bsc.DeliverableAssignable value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_initiativeInv,value.getSemanticObject(),sclass));
             return it;
@@ -498,7 +504,7 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
    * @param value Initiative to set
    */
 
-    public void setInitiative(org.semanticwb.bsc.element.Initiative value)
+    public void setInitiative(org.semanticwb.bsc.DeliverableAssignable value)
     {
         if(value!=null)
         {
@@ -519,15 +525,15 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
 
    /**
    * Gets the Initiative
-   * @return a org.semanticwb.bsc.element.Initiative
+   * @return a org.semanticwb.bsc.DeliverableAssignable
    */
-    public org.semanticwb.bsc.element.Initiative getInitiative()
+    public org.semanticwb.bsc.DeliverableAssignable getInitiative()
     {
-         org.semanticwb.bsc.element.Initiative ret=null;
+         org.semanticwb.bsc.DeliverableAssignable ret=null;
          org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_initiativeInv);
          if(obj!=null)
          {
-             ret=(org.semanticwb.bsc.element.Initiative)obj.createGenericInstance();
+             ret=(org.semanticwb.bsc.DeliverableAssignable)obj.createGenericInstance();
          }
          return ret;
     }
