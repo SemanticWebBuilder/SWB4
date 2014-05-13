@@ -299,7 +299,7 @@ public class ElementBSCRelated extends org.semanticwb.bsc.formelement.base.Eleme
                     }
                 }
             } else if (mode.equals("view")) {
-                if (value != null || !value.equals("none")) {
+                if (value != null && !value.equals("none")) {
                     StringTokenizer st = new StringTokenizer(selectValues, "|");
                     while (st.hasMoreTokens()) {
                         String tok = st.nextToken();
