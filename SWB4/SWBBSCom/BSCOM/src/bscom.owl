@@ -1717,7 +1717,7 @@
     >Define el responsable de un riesgo</rdfs:comment>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_riskResponsible">
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneUserRepWithBlank"/>
+        <swbxf:formElement rdf:resource="#responsables"/>
         <rdfs:label xml:lang="es">Responsable</rdfs:label>
         <rdfs:label xml:lang="en">Responsible</rdfs:label>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
