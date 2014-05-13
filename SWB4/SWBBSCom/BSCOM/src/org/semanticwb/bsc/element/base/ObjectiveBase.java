@@ -1,10 +1,13 @@
 package org.semanticwb.bsc.element.base;
 
 
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Roleable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Causal,org.semanticwb.bsc.Status,org.semanticwb.bsc.Preference,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Traceable
+   /**
+   * Define las características de un Objetivo estratégico. 
+   */
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Causal,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Preference,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
 {
    /**
-   * Persiste los atributos de un indicador
+   * Define las características de un Indicador.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasIndicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasIndicator");
@@ -13,6 +16,9 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
     public static final org.semanticwb.platform.SemanticProperty bsc_themeInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#themeInv");
+   /**
+   * Define las características de un Objetivo estratégico.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * Especifica el objetivo al cual está alineado el objetivo en cuestión, o sea el objetivo padre
