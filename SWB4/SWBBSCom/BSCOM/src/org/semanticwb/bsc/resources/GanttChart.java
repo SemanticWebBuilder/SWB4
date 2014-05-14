@@ -4,53 +4,73 @@
  */
 package org.semanticwb.bsc.resources;
 
-
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.batik.transcoder.TranscoderException;
+import org.apache.batik.transcoder.TranscoderInput;
+import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.JPEGTranscoder;
+import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
-
+import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.util.UploaderFileCacheUtils;
+import org.w3c.dom.Document;
 
 /**
- * Genera el c&oacute;digo HTML para presentar una gr&aacute;fica de Gantt con los datos 
- * de los entregables activos de la iniciativa cuyo uri se recibe.
+ * Genera el c&oacute;digo HTML para presentar una gr&aacute;fica de Gantt con
+ * los datos de los entregables activos de la iniciativa cuyo uri se recibe.
+ *
  * @author Jose Jimenez
  */
 public class GanttChart extends GenericResource {
 
-    
-    /** Realiza operaciones en la bitacora de eventos. */
+    /**
+     * Realiza operaciones en la bitacora de eventos.
+     */
     private static final Logger log = SWBUtils.getLogger(GanttChart.class);
+     public static final String Mode_PNGImage = "png";
     
     /**
-     * Genera el c&oacute;digo HTML necesario para la presentaci&oacute;n de la gr&aacute;fica de Gantt
-     * que se puede trazar con las fechas de una {@code Initiative} y de sus elementos {@code Deliverable} asociados
+     * Genera el c&oacute;digo HTML necesario para la presentaci&oacute;n de la
+     * gr&aacute;fica de Gantt que se puede trazar con las fechas de una
+     * {@code Initiative} y de sus elementos {@code Deliverable} asociados
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
@@ -63,7 +83,7 @@ public class GanttChart extends GenericResource {
                 Initiative initiative = (Initiative) genericObj;
                 Date today = new Date();
                 int countDeliverable = 0;
-                
+
                 GenericIterator<Deliverable> iterator = initiative.listDeliverables();
                 dataOut.append("[");
                 if (initiative.getPlannedStart() != null && initiative.getPlannedEnd() != null) {
@@ -72,7 +92,7 @@ public class GanttChart extends GenericResource {
                     dataOut.append(initiative.getTitle());
                     dataOut.append(paramRequest.getLocaleString("lbl_planned"));
                     dataOut.append("\",\n");
-                    dataOut.append("  startDate : new Date(" );
+                    dataOut.append("  startDate : new Date(");
                     dataOut.append(initiative.getPlannedStart().getTime());
                     dataOut.append("),\n");
                     dataOut.append("  endDate : new Date(");
@@ -86,7 +106,7 @@ public class GanttChart extends GenericResource {
                         dataOut.append(initiative.getTitle());
                         dataOut.append(paramRequest.getLocaleString("lbl_actual"));
                         dataOut.append("\",\n");
-                        dataOut.append("  startDate : new Date(" );
+                        dataOut.append("  startDate : new Date(");
                         dataOut.append(initiative.getActualStart().getTime());
                         dataOut.append("),\n");
                         dataOut.append("  endDate : new Date(");
@@ -122,7 +142,7 @@ public class GanttChart extends GenericResource {
                                 dataOut.append(deli.getTitle());
                                 dataOut.append(paramRequest.getLocaleString("lbl_planned"));
                                 dataOut.append("\",\n");
-                                dataOut.append("  startDate : new Date(" );
+                                dataOut.append("  startDate : new Date(");
                                 dataOut.append(deli.getPlannedStart().getTime());
                                 dataOut.append("),\n");
                                 dataOut.append("  endDate : new Date(");
@@ -142,7 +162,7 @@ public class GanttChart extends GenericResource {
                                 dataOut.append(deli.getTitle());
                                 dataOut.append(paramRequest.getLocaleString("lbl_actual"));
                                 dataOut.append("\",\n");
-                                dataOut.append("  startDate : new Date(" );
+                                dataOut.append("  startDate : new Date(");
                                 dataOut.append(deli.getActualStart().getTime());
                                 dataOut.append("),\n");
                                 dataOut.append("  endDate : new Date(");
@@ -167,12 +187,12 @@ public class GanttChart extends GenericResource {
                     }
                 }
                 dataOut.append("]");
-                
+
                 output.append("");
                 output.append("<div id=\"ganttChart\">\n");
                 output.append("  <script type=\"text/javascript\" src=\"");
                 output.append(SWBPlatform.getContextPath());
-                output.append("/swbadmin/js/gantt-chart-d3.js\"></script>\n");
+                output.append("/swbadmin/js/d3/gantt-chart-d3.js\"></script>\n");
                 output.append("</div>\n");
                 output.append("  <script type=\"text/javascript\">\n");
                 output.append("    var tasks = ");
@@ -200,10 +220,92 @@ public class GanttChart extends GenericResource {
                 output.append("  \n");
                 output.append("  </script>\n");
                 output.append("");
+
+                out.println(output.toString());
+
+                SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+                out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
+                out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
+                out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + exportUrl.setMode(Mode_PNGImage) + "')\"  />");
+                out.println(" </form>");
+
+                out.println(" <script type=\"text/javascript\">");
+                out.println("  function getFile(url) {");
+                out.println("   var form = document.getElementById('svgform');");
+                out.println("   var svg = document.getElementsByTagName('svg')[0];");
+                out.println("   alert('svg: ' + svg);");
+
+                out.println("   var svg_xml = (new XMLSerializer).serializeToString(svg);");
+                out.println("   form.action = url;");
+                out.println("   alert('svg_xml: ' + svg_xml);");
+                out.println("   form['data'].value = svg_xml;");
+                out.println("   form.submit();");
+                out.println("  };");
+                out.println(" </script>");
             }
-        }
-        out.println(output.toString());
+        } 
     }
-    
-    
+
+    /**
+     * Clase que recibe el svg y lo trasnforma a jpg. la imagen se almacena en
+     * un directorio
+     *
+     * @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
+     */
+    public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        WebSite webSite = getResourceBase().getWebSite();
+
+        if (webSite instanceof BSC) {
+            String data = request.getParameter("data");
+            int dataIndexOf = data.indexOf("svg");
+            int lenght = data.length();
+
+            String data1 = data.substring(0, (dataIndexOf + 3));
+            String data2 = data.substring((dataIndexOf + 3), lenght);
+            data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\"" + (data2);
+            data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
+            Document svg = SWBUtils.XML.xmlToDom(data);
+
+            String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + paramRequest.getWebPage().getWebSiteId();
+            JPEGTranscoder t = new JPEGTranscoder();
+            t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+            // Set the transcoder input and output.
+            TranscoderInput input = new TranscoderInput(svg);
+            OutputStream ostream = new FileOutputStream(destpath + "/graphics.jpg");
+            TranscoderOutput output = new TranscoderOutput(ostream);
+            try {
+                // Perform the transcoding.
+                t.transcode(input, output);
+            } catch (TranscoderException ex) {
+                java.util.logging.Logger.getLogger(GanttChart.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            ostream.flush();
+            ostream.close();
+        }
+        
+        //SWBResourceURL url = paramRequest.getRenderUrl();
+        //url.setMode(SWBResourceURL.Mode_VIEW);
+
+    }
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        final String mode = paramRequest.getMode();
+       if (Mode_PNGImage.equals(mode)) {
+            doGetPNGImage(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
 }
