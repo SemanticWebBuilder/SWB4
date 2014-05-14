@@ -1,3 +1,5 @@
+  4.5.5
+    - Soporte a nuevo SWBTripleStore, (levelDB, Kyoto Cabinet, MongoDB, Memory)(Jei)
   4.5.2.1
     - Se agregó al captcha para formas automáticas la posibilidad de usar audio (serch)
         al actualizar es necesario agregar los jars: cmu_time_awb.jar, cmu_us_kal.jar, 
