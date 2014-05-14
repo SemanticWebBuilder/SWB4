@@ -14,7 +14,6 @@ import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -237,7 +236,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                     for(Objective o:objectives) {
                         Element eobj = doc.createElement("obj");
                         eobj.setAttribute("id", o.getURI());
-                        eobj.setAttribute("href", "#");
+                        eobj.setAttribute("href", o.getEncodedURI());
                         eobj.setAttribute("orden", Integer.toString(o.getIndex()));
                         eobj.setAttribute("status", "x");
                         etheme.appendChild(eobj);
@@ -335,8 +334,12 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     public Document getDom(final Period period)
     {
         User user = SWBContext.getSessionUser(getUserRepository().getId());
+System.out.println("\n\ngetDom("+period.getTitle()+")...");
+System.out.println("repositorio="+getUserRepository().getId());
+System.out.println("1. user="+user);
         if(user==null) {
             user = SWBContext.getAdminUser();
+System.out.println("2. user="+user);            
         }
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         Document  doc = SWBUtils.XML.getNewDocument();
@@ -443,6 +446,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                         color = state==null?"#0000ff":(state.getColorHex()==null?"#FE2EF7":state.getColorHex());
                         Element eobj = doc.createElement("obj");
                         eobj.setAttribute("id", o.getURI());
+                        eobj.setAttribute("href", o.getEncodedURI());
                         eobj.setAttribute("orden", Integer.toString(o.getIndex()));
                         eobj.setAttribute("status", color);
                         etheme.appendChild(eobj);
