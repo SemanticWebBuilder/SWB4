@@ -63,9 +63,6 @@ public class StatesManager extends GenericResource {
         if(obj!=null)
         {
             final String action = paramRequest.getAction();
-System.out.println("\n\ndoView....");
-System.out.println("action="+action);
-System.out.println("sg="+request.getParameter("sg"));
             if(request.getParameter("sg")!=null)
             {
                 Status status = (Status)obj.getGenericInstance();
