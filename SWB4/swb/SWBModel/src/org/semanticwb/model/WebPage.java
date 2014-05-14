@@ -762,8 +762,11 @@ public class WebPage extends WebPageBase
         while(it.hasNext())
         {
             Resource res=it.next();
-            String work=SWBPlatform.createInstance().getPlatformWorkPath()+res.getWorkPath();
-            ret+=SWBUtils.IO.getFileSize(work);
+            if(res!=null)
+            {
+                String work=SWBPlatform.createInstance().getPlatformWorkPath()+res.getWorkPath();
+                ret+=SWBUtils.IO.getFileSize(work);
+            }
         }
         return ret/1000;
     }
