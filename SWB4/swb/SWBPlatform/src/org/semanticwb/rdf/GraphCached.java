@@ -25,12 +25,10 @@ package org.semanticwb.rdf;
 import com.hp.hpl.jena.graph.BulkUpdateHandler;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphListener;
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.TransactionHandler;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.mem.faster.GraphMemFaster;
 import com.hp.hpl.jena.shared.PrefixMapping;
-import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -65,6 +63,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param t the t
      */
+    @Override
     public void notifyAddTriple(Graph g, Triple t) {
         //System.out.println("notifyAddTriple");
         base.add(t);
@@ -76,6 +75,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param triples the triples
      */
+    @Override
     public void notifyAddArray(Graph g, Triple[] triples) {
         //System.out.println("notifyAddArray");
         base.getBulkUpdateHandler().add(triples);
@@ -87,6 +87,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param triples the triples
      */
+    @Override
     public void notifyAddList(Graph g, List<Triple> triples) {
         //System.out.println("notifyAddList");
         base.getBulkUpdateHandler().add(triples);
@@ -98,6 +99,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param it the it
      */
+    @Override
     public void notifyAddIterator(Graph g, Iterator<Triple> it) {
         //System.out.println("notifyAddIterator");
         base.getBulkUpdateHandler().add(it);
@@ -109,6 +111,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param added the added
      */
+    @Override
     public void notifyAddGraph(Graph g, Graph added) {
         //System.out.println("notifyAddGraph");
         base.getBulkUpdateHandler().add(added);
@@ -120,6 +123,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param t the t
      */
+    @Override
     public void notifyDeleteTriple(Graph g, Triple t) {
         //System.out.println("notifyDeleteTriple");
         base.delete(t);
@@ -131,6 +135,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param L the l
      */
+    @Override
     public void notifyDeleteList(Graph g, List<Triple> L) {
         //System.out.println("notifyDeleteList");
         base.getBulkUpdateHandler().delete(L);
@@ -142,6 +147,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param triples the triples
      */
+    @Override
     public void notifyDeleteArray(Graph g, Triple[] triples) {
         //System.out.println("notifyDeleteArray");
         base.getBulkUpdateHandler().delete(triples);
@@ -153,6 +159,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param it the it
      */
+    @Override
     public void notifyDeleteIterator(Graph g, Iterator<Triple> it) {
         //System.out.println("notifyDeleteIterator");
         base.getBulkUpdateHandler().delete(it);
@@ -164,6 +171,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param g the g
      * @param removed the removed
      */
+    @Override
     public void notifyDeleteGraph(Graph g, Graph removed) {
         //System.out.println("notifyDeleteGraph");
         base.getBulkUpdateHandler().delete(removed);
@@ -175,6 +183,7 @@ public class GraphCached extends GraphMemFaster implements GraphListener
      * @param source the source
      * @param value the value
      */
+    @Override
     public void notifyEvent(Graph source, Object value) {
         //System.out.println("notifyEvent");
     }

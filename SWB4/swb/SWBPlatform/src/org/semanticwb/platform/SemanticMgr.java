@@ -297,6 +297,9 @@ public class SemanticMgr implements SWBInstanceObject
         } else if (SWBPlatform.isVirtuoso())
         {
             clsname="org.semanticwb.triplestore.virtuoso.SWBTSVirtuoso";
+        } else if (SWBPlatform.isSWBTSGen())
+        {
+            clsname=SWBPlatform.getEnv("swb/tripleStoreClass","org.semanticwb.store.leveldb.SWBTSLevelDB");
         } else if (SWBPlatform.isSWBTSGemFire())
         {
             clsname="org.semanticwb.triplestore.gemfire.SWBTSGemFire";
@@ -656,7 +659,7 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel loadDBModel(String name) {
         return loadDBModel(name, tripleCache);
     }
-
+    
     /**
      * Load a Model, if the model don't exist, it will be created.
      * 
@@ -668,6 +671,18 @@ public class SemanticMgr implements SWBInstanceObject
     private SemanticModel loadDBModel(String name, boolean cached) {
         //new Exception().printStackTrace();
         Model model = loadRDFDBModel(name);
+        return loadDBModel(name, model, cached);
+    }
+
+    /**
+     * Load a Model, if the model don't exist, it will be created.
+     * 
+     * @param name the name
+     * @param cached the cached
+     * @return the semantic model
+     * @return
+     */
+    private SemanticModel loadDBModel(String name, Model model, boolean cached) {
         
         if (cached) {
             log.info("Loading Model Cache:"+name);
@@ -827,9 +842,12 @@ public class SemanticMgr implements SWBInstanceObject
         Model model = loadRDFDBModel(name);
         model.setNsPrefix(name, nameSpace);
         //System.out.println("getNsPrefix:"+model.getNsPrefixURI(name));
-        model.close();
-
-        SemanticModel ret = loadDBModel(name, cached);
+       
+        //model.close();
+        //SemanticModel ret = loadDBModel(name, cached);
+        
+        SemanticModel ret = loadDBModel(name, model, cached);
+        
         //ret.setNameSpace(nameSpace);
         //model = ret.getRDFModel();
         //System.out.println("ret:"+ret+" model:"+model);
