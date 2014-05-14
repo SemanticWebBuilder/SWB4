@@ -26,6 +26,7 @@ import org.semanticwb.social.FacebookGC;
  */
 public class FacebookGCResource extends GenericResource{
     
+    /*
     private static Logger log = SWBUtils.getLogger(FacebookGCResource.class);
     
     @Override
@@ -98,5 +99,5 @@ public class FacebookGCResource extends GenericResource{
                    facebookGC.remove();
                }
         } 
-    }  
+    }  */
 }
