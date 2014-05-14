@@ -26,6 +26,7 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public class TwitterGCResource extends GenericResource{
     
+    /*
     private static Logger log = SWBUtils.getLogger(TwitterGCResource.class);
     
     @Override
@@ -99,4 +100,5 @@ public class TwitterGCResource extends GenericResource{
                }
         } 
     }  
+    * */
 }

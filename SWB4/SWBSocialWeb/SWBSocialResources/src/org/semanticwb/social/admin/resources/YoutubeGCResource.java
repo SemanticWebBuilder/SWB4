@@ -26,6 +26,7 @@ import org.semanticwb.social.SocialAdmin;
  */
 public class YoutubeGCResource extends GenericResource{
     
+    /*
     private static Logger log = SWBUtils.getLogger(YoutubeGCResource.class);
     
     @Override
@@ -100,4 +101,6 @@ public class YoutubeGCResource extends GenericResource{
                }
         } 
     }  
+    * 
+    * */
 }

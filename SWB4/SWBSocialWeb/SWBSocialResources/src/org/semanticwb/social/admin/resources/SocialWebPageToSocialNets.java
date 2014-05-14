@@ -105,7 +105,10 @@ public class SocialWebPageToSocialNets extends GenericResource {
             if (request.getServerPort() != 80) {
                 address.append(":").append(request.getServerPort());
             }
-            address.append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(swb.getSocialwpPhoto());
+            //address.append(SWBPortal.getWebWorkPath()).append("/").append("models").append("/").append(swb.getWebSite().getId()).append("/").append("WebPage").append("/").append(swb.getId()).append("/").append(swb.getSocialwpPhoto());
+            System.out.println("address_1:"+address.toString());
+            address.append(swb.getUrl());
+            System.out.println("address_2:"+address.toString());
 
             while (i.hasNext()) {
 
