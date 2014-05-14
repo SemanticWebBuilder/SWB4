@@ -346,6 +346,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
     }
 
+    /*
     private YouTubeService getYouTubeService() {
         //YouTubeService service = new YouTubeService("SEMANTICWEBBUILDER", "AI39si4crQ_Zn6HmLxroe0TP48ZDkOXI71uodU9xc1QRyl8Y5TaRc2OIIOKMEatsw9Amce81__JcvvwObue_8yXD2yC6bFRhXA");
         YouTubeService service = new YouTubeService(getAppKey(), getSecretKey());
@@ -356,16 +357,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
         }
         return service;
     }
-
-    @Override
-    public String doRequestPermissions() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String doRequestAccess() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+*/
 
     public String getRequest(Map<String, String> params, String url,
             String userAgent, String method) throws IOException {

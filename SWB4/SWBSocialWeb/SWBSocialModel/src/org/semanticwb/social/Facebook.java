@@ -1482,17 +1482,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         //heroku pass admin12345678
     }
 
-    @Override
-    public String doRequestPermissions() {
-        //System.out.println("Facebook.doRequestPermissions()");
-        return null;
-    }
-
-    @Override
-    public String doRequestAccess() {
-        return null;
-    }
-
+    
     public void postPhotoSocialNets(Facebook facebook, SocialWebPage swb, Language l, StringBuilder address) {
 
         Map<String, String> params = new HashMap<String, String>(2);
@@ -1510,7 +1500,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             String description = swb.getDescription(l.getId()) == null ? "" : swb.getDescription(l.getId());
             params.put("message", (description) + " " + urlShort);
 
-            photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + SocialWebPage.social_socialwpPhoto.getName() + "_" + swb.getId() + "_" + swb.getSocialwpPhoto();
+            photoToPublish = SWBPortal.getWorkPath() + swb.getWorkPath() + "/" + swb.getSocialwpPhoto();
             SWBFile photoFile = new SWBFile(photoToPublish);
 
             //System.out.println("photoToPublish" + photoToPublish);

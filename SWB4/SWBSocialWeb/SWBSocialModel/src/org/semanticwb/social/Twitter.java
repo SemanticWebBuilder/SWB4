@@ -676,15 +676,6 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         return address.toString();
     }
 
-    @Override
-    public String doRequestPermissions() {
-        return null;        
-    }
-
-    @Override
-    public String doRequestAccess() {
-        return null;
-    }
     
     @Override
     public double getUserKlout(String twitterUserID)
