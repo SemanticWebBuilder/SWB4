@@ -4,32 +4,8 @@ package org.semanticwb.social.base;
    /**
    * Objeto que define un Sitio Web de Administración de SWBSocial 
    */
-public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable
+public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.Filterable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable
 {
-   /**
-   * Clase que concentra propiedades para configuración general de facebook., para mostrar en sitio admin.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_FacebookGC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#FacebookGC");
-   /**
-   * Una unica instancia de FacebookGC.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_adm_facebookgc=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#adm_facebookgc");
-   /**
-   * Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_TwitterGC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#TwitterGC");
-   /**
-   * Una unica instancia de twittergc
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_adm_twittergc=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#adm_twittergc");
-   /**
-   * Clase que concentra propiedades para configuración general de youtube., para mostrar en sitio admin.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_YoutubeGC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#YoutubeGC");
-   /**
-   * Una unica instancia de YoutubeGC.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_adm_youtubegc=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#adm_youtubegc");
    /**
    * Es una pagina web utilizada para mostrar opciones del menu dentro de la administración de SWB
    */
@@ -152,29 +128,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
         public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_facebookgc
-       * @param value Adm_facebookgc of the type org.semanticwb.social.FacebookGC
-       * @param model Model of the org.semanticwb.social.SocialAdmin
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_facebookgc(org.semanticwb.social.FacebookGC value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_adm_facebookgc, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_facebookgc
-       * @param value Adm_facebookgc of the type org.semanticwb.social.FacebookGC
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_facebookgc(org.semanticwb.social.FacebookGC value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_adm_facebookgc,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -362,29 +315,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
             return it;
         }
        /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_twittergc
-       * @param value Adm_twittergc of the type org.semanticwb.social.TwitterGC
-       * @param model Model of the org.semanticwb.social.SocialAdmin
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_twittergc(org.semanticwb.social.TwitterGC value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_adm_twittergc, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_twittergc
-       * @param value Adm_twittergc of the type org.semanticwb.social.TwitterGC
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_twittergc(org.semanticwb.social.TwitterGC value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_adm_twittergc,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.SocialAdmin with a determined ParentWebSite
        * @param value ParentWebSite of the type org.semanticwb.model.WebSite
        * @param model Model of the org.semanticwb.social.SocialAdmin
@@ -430,29 +360,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
             org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasModelProperty,value.getSemanticObject(),sclass));
             return it;
         }
-       /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_youtubegc
-       * @param value Adm_youtubegc of the type org.semanticwb.social.YoutubeGC
-       * @param model Model of the org.semanticwb.social.SocialAdmin
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_youtubegc(org.semanticwb.social.YoutubeGC value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_adm_youtubegc, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.SocialAdmin with a determined Adm_youtubegc
-       * @param value Adm_youtubegc of the type org.semanticwb.social.YoutubeGC
-       * @return Iterator with all the org.semanticwb.social.SocialAdmin
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.SocialAdmin> listSocialAdminByAdm_youtubegc(org.semanticwb.social.YoutubeGC value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialAdmin> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_adm_youtubegc,value.getSemanticObject(),sclass));
-            return it;
-        }
     }
 
     public static SocialAdminBase.ClassMgr getSocialAdminClassMgr()
@@ -467,120 +374,6 @@ public abstract class SocialAdminBase extends org.semanticwb.model.AdminWebSite 
     public SocialAdminBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Sets the value for the property Adm_facebookgc
-   * @param value Adm_facebookgc to set
-   */
-
-    public void setAdm_facebookgc(org.semanticwb.social.FacebookGC value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_adm_facebookgc, value.getSemanticObject());
-        }else
-        {
-            removeAdm_facebookgc();
-        }
-    }
-   /**
-   * Remove the value for Adm_facebookgc property
-   */
-
-    public void removeAdm_facebookgc()
-    {
-        getSemanticObject().removeProperty(social_adm_facebookgc);
-    }
-
-   /**
-   * Gets the Adm_facebookgc
-   * @return a org.semanticwb.social.FacebookGC
-   */
-    public org.semanticwb.social.FacebookGC getAdm_facebookgc()
-    {
-         org.semanticwb.social.FacebookGC ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_adm_facebookgc);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.FacebookGC)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Adm_twittergc
-   * @param value Adm_twittergc to set
-   */
-
-    public void setAdm_twittergc(org.semanticwb.social.TwitterGC value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_adm_twittergc, value.getSemanticObject());
-        }else
-        {
-            removeAdm_twittergc();
-        }
-    }
-   /**
-   * Remove the value for Adm_twittergc property
-   */
-
-    public void removeAdm_twittergc()
-    {
-        getSemanticObject().removeProperty(social_adm_twittergc);
-    }
-
-   /**
-   * Gets the Adm_twittergc
-   * @return a org.semanticwb.social.TwitterGC
-   */
-    public org.semanticwb.social.TwitterGC getAdm_twittergc()
-    {
-         org.semanticwb.social.TwitterGC ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_adm_twittergc);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.TwitterGC)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Sets the value for the property Adm_youtubegc
-   * @param value Adm_youtubegc to set
-   */
-
-    public void setAdm_youtubegc(org.semanticwb.social.YoutubeGC value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_adm_youtubegc, value.getSemanticObject());
-        }else
-        {
-            removeAdm_youtubegc();
-        }
-    }
-   /**
-   * Remove the value for Adm_youtubegc property
-   */
-
-    public void removeAdm_youtubegc()
-    {
-        getSemanticObject().removeProperty(social_adm_youtubegc);
-    }
-
-   /**
-   * Gets the Adm_youtubegc
-   * @return a org.semanticwb.social.YoutubeGC
-   */
-    public org.semanticwb.social.YoutubeGC getAdm_youtubegc()
-    {
-         org.semanticwb.social.YoutubeGC ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_adm_youtubegc);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.YoutubeGC)obj.createGenericInstance();
-         }
-         return ret;
     }
 
     public org.semanticwb.model.MenuItem getMenuItem(String id)

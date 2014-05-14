@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que controla un tab de page en Facebook 
    */
-public abstract class FacePageTabBase extends org.semanticwb.social.PageTab implements org.semanticwb.model.Viewable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Tagable,org.semanticwb.model.Trashable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Localeable,org.semanticwb.model.Expirable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Countryable,org.semanticwb.model.Searchable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableClass,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Rankable
+public abstract class FacePageTabBase extends org.semanticwb.social.PageTab implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Countryable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable
 {
    /**
    * Facebook Aplication ID
@@ -45,12 +45,6 @@ public abstract class FacePageTabBase extends org.semanticwb.social.PageTab impl
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.FacePageTab>(it, true);
-        }
-
-        public static org.semanticwb.social.FacePageTab createFacePageTab(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.FacePageTab.ClassMgr.createFacePageTab(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.FacePageTab

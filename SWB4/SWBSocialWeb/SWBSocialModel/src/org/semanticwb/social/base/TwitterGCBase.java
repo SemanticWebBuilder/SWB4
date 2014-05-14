@@ -2,12 +2,12 @@ package org.semanticwb.social.base;
 
 
    /**
-   * Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin. 
+   * Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin. ESTA CLASE YA NO SE UTILIZA, ELIMINAR DESPUES. 
    */
 public abstract class TwitterGCBase extends org.semanticwb.social.GeneralConfig implements org.semanticwb.social.Secreteable
 {
    /**
-   * Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin.
+   * Clase que concentra propiedades para configuración general de twitter., para mostrar en sitio admin. ESTA CLASE YA NO SE UTILIZA, ELIMINAR DESPUES.
    */
     public static final org.semanticwb.platform.SemanticClass social_TwitterGC=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#TwitterGC");
    /**
