@@ -22,6 +22,7 @@
  */
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.datatypes.BaseDatatype;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.math.BigDecimal;
@@ -463,12 +464,23 @@ public class SemanticLiteral
         {
             try
             {
-                String aux=(String)obj;
-                if(aux!=null && aux.length()>0)
+                if(obj instanceof String)
                 {
-                    ret=new Timestamp(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
+                    String aux=(String)obj;
+                    if(aux!=null && aux.length()>0)
+                    {
+                        ret=new Timestamp(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
+                    }
+                }else if(obj instanceof BaseDatatype.TypedValue)
+                {
+                    BaseDatatype.TypedValue tv=(BaseDatatype.TypedValue)obj;
+                    String aux=tv.lexicalValue;
+                    if(aux!=null && aux.length()>0)
+                    {
+                        ret=new Timestamp(SWBUtils.TEXT.iso8601DateParse(aux).getTime());
+                    }
                 }
-            }catch(Exception e){log.error(e);}
+            }catch(Exception e){log.error(e);System.out.println("obj:"+obj);}
         }
         return ret;
     }

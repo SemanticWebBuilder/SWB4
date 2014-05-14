@@ -118,8 +118,7 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
         {
             if(obj instanceof Statement)
             {
-                //System.out.println("res:"+((Statement)obj).getResource());
-                //System.out.println("sub:"+((Statement)obj).getSubject());
+//                System.out.println("iter obj:"+((Statement)obj));
                 try
                 {
                     if(invert)
@@ -128,10 +127,13 @@ public class SemanticIterator<T extends SemanticObject> implements Iterator
                         if(aux==null)
                         {
                             log.warn("Remove bad statement from cache:"+obj);
-                            SemanticObject o=SemanticObject.getSemanticObjectFromCache(((Statement)obj).getResource().getURI());
-                            if(o!=null)
+                            if(((Statement)obj).getObject().isResource())
                             {
-                                o.removeInv((Statement)obj);
+                                SemanticObject o=SemanticObject.getSemanticObjectFromCache(((Statement)obj).getResource().getURI());
+                                if(o!=null)
+                                {
+                                    o.removeInv((Statement)obj);
+                                }
                             }
                         }
                         return aux;

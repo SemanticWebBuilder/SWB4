@@ -23,7 +23,6 @@
 package org.semanticwb.platform;
 
 import com.hp.hpl.jena.graph.Graph;
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -54,8 +53,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.rdf.GraphExt;
 import org.semanticwb.rdf.RemoteGraph;
-import org.semanticwb.triplestore.ext.GraphExt;
 
 // TODO: Auto-generated Javadoc
 /**
