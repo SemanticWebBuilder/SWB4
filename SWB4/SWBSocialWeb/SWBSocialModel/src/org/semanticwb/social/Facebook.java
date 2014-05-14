@@ -2022,34 +2022,47 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean createPageTab(PageTab pageTab) {
-        boolean sucess = false;
+        boolean success = false;
 
         if (pageTab != null) {
             try {
                 FacePageTab fp = (FacePageTab) pageTab;
                 FacebookFanPage f = (FacebookFanPage) fp.getParent();
 
-                if (f.getPageAccessToken() == null) {
-                    String pageAccessToken = getPageAccessToken(f.getPage_id());
+                if (f.getPageAccessToken() == null || f.getPageAccessToken().trim().isEmpty()) {
+                    String pageAccessToken = getPageAccessTokenFromFB(f.getPage_id());
+                    if(pageAccessToken == null){
+                        return false;
+                    }
                     f.setPageAccessToken(pageAccessToken);
+                }
+                
+                if(isAppActiveInPage(f, fp.getFace_appid()) == true){//La pagina ya esta activa
+                    return true;
                 }
 
                 HashMap<String, String> params = new HashMap<String, String>(2);
-                params.put("access_token", (new JSONObject(f.getPageAccessToken())).getString("access_token"));
+                params.put("access_token", f.getPageAccessToken());
                 params.put("app_id", fp.getFace_appid());
-                String user = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs",
+                String response = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
-                sucess = true;
+                if(response != null && !response.trim().isEmpty()){
+                    if(response.equals("true")){
+                        success = true;
+                    }
+                }                
             } catch (Exception ex) {
-                log.error("Problem displaying News feed: " + ex.getMessage());
-                return sucess;
+                log.error("Problem creating the page tab: " + ex.getMessage());
+                return success;
             }
         }
-        return sucess;
+        //System.out.println("success**********");
+        return success;
     }
 
     @Override
     public boolean removePageTab(PageTab pageTab) {
+        //System.out.println("REMOVING page tab!!!");
         boolean sucess = false;
         FacePageTab fp = (FacePageTab) pageTab;
         FacebookFanPage f = (FacebookFanPage) fp.getParent();
@@ -2060,22 +2073,27 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean removePageTab(FanPage fanPage, String app_id) {
-
+        
         boolean sucess = false;
 
         try {
 
             FacebookFanPage f = (FacebookFanPage) fanPage;// fp.getParent();
-
-
-            if (f.getPageAccessToken() == null) {
-                String pageAccessToken = getPageAccessToken(f.getPage_id());
+            //System.out.println("remove Page ACCESS:" + f.getPageAccessToken());
+            if (f.getPageAccessToken() == null || f.getPageAccessToken().trim().isEmpty()) {
+                String pageAccessToken = getPageAccessTokenFromFB(f.getPage_id());
+                if(pageAccessToken == null){
+                    return false;
+                }
                 f.setPageAccessToken(pageAccessToken);
-
+            }
+            
+            if(isAppActiveInPage((FacebookFanPage)fanPage, app_id) == false){//La pagina ya esta eliminada
+                return true;
             }
 
             HashMap<String, String> params = new HashMap<String, String>(2);
-            params.put("access_token", (new JSONObject(f.getPageAccessToken())).getString("access_token"));
+            params.put("access_token", f.getPageAccessToken());
             params.put("app_id", app_id);
             String user = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + app_id,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
@@ -2083,23 +2101,34 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             sucess = true;
 
         } catch (Exception ex) {
-            log.error("Problem displaying create tab: " + ex.getMessage());
+            log.error("Problem removing tab: " + ex.getMessage());
             return sucess;
         }
+        //System.out.println("removed actually page tab!!!");
         return sucess;
     }
 
-    public String getPageAccessToken(String pageId) {
-        String pageAccessToken = "";
+    public String getPageAccessTokenFromFB(String pageId) {
+        String pageAccessToken = null;
         try {
             HashMap<String, String> params = new HashMap<String, String>(2);
             params.put("access_token", this.getAccessToken());
+            //System.out.println("THE CURRENT ACCESS TOKEN:" + this.getAccessToken());
             params.put("fields", "access_token");
             pageAccessToken = postRequestParams(params, "https://graph.facebook.com/" + pageId,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            JSONObject jsonObject = new JSONObject(pageAccessToken);
+            if(jsonObject.has("access_token")){
+                pageAccessToken = jsonObject.getString("access_token");
+            }else{
+                pageAccessToken = null;
+            }
         } catch (IOException ex) {
-            log.error(ex);
+            log.error("Unable to get page access token ", ex);
+        }catch(JSONException j){
+            log.error("Unable to get page access token ", j);
         }
+        //System.out.println("THE PAGE TOKEN: "  + pageAccessToken);
         return pageAccessToken;
     }
 
@@ -2133,7 +2162,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                log.error("\n\nERROR:" + response);
+                log.error("\n\nERROR for url:" + serverUrl + " -- " + response);
             }
         } finally {
             close(in);
@@ -2143,10 +2172,67 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         if (response == null) {
             response = "";
-        }
-        WebPage wp;
-        
+        }        
         return response;
+    }
+    
+    public boolean isAppActiveInPage(FacebookFanPage fp, String appID){
+        if(fp.getPage_id() == null || fp.getPage_id().trim().isEmpty()
+                || appID == null || appID.trim().isEmpty()){
+            return false;
+        }                
+        boolean isActive = false;
+        boolean keepSearching = true;
+        try {
+            HashMap<String, String> params = new HashMap<String, String>(2);
+            params.put("access_token", fp.getPageAccessToken());
+            String pageTabs = postRequestParams(params, "https://graph.facebook.com/" + fp.getPage_id() +"/tabs",
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            JSONObject jsonObject = new JSONObject(pageTabs);
+            do{
+                if(jsonObject.has("data")){
+                    JSONArray data = jsonObject.getJSONArray("data");
+                    if(data.length() > 0 ){
+                        for(int i =0 ; i < data.length() ; i++){
+                            JSONObject tmp = data.getJSONObject(i);
+                            if(tmp.has("application")){
+                                JSONObject app = tmp.getJSONObject("application");
+                                if(app.has("id")){
+                                    String appId = app.getString("id");                            
+                                    if(appId.equals(appID)){//If is active the current app, stop looking for it
+                                        isActive = true;
+                                        keepSearching = false;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }else{
+                        keepSearching = false;
+                    }
+                }
+                if(isActive == false && keepSearching == true){//If not found in the current data, find again
+                    if(jsonObject.has("paging")){
+                        JSONObject paging = jsonObject.getJSONObject("paging");
+                        if(paging.has("next")){
+                            HashMap<String, String> params1 = new HashMap<String, String>(2);                            
+                            String pageTabsNext = postRequestParams(params, paging.getString("next"),
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+                            jsonObject = new JSONObject(pageTabsNext);
+                        }else{
+                            keepSearching = false;
+                        }
+                    }else{
+                        keepSearching = false;
+                    }
+                }
+            }while(keepSearching);
+            //System.out.println("SE ENCUENTRA ACTIVO EL TAB: " + isActive);
+            return isActive;
+        } catch (Exception ex) {
+            log.error("Problem getting list of current tabs from page ", ex );
+        }
+        return false;
     }
     
 }
