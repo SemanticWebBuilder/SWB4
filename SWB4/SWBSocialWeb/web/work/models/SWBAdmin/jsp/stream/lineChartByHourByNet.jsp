@@ -43,6 +43,11 @@
         //if(1==1)return;
     } else if (semObj.getGenericInstance() instanceof SocialTopic) {
         SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
+        ArrayList nets = SWBSocialUtil.sparql.getSocialTopicSocialNetworks(socialTopic);
+        for(int i = 0; i < nets.size(); i++){
+            SocialNetwork snet= (SocialNetwork)((SemanticObject)nets.get(i)).createGenericInstance();
+            networks.put(snet, i);
+        }
         itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
     }
     
