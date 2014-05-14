@@ -52,6 +52,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     private static final Logger log = SWBUtils.getLogger(StrategicMap.class);
 
     public static final String Mode_PNGImage = "png";
+    public static final String Mode_PDFDocument = "pdf";
     public static final String Action_UPDATE = "update";
     
     public static final String HEADER_PREFIX = "head_";
@@ -352,7 +353,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         base.setData(PDFExportable.bsc_itemType, PDFExportable.PDF_StrategyMap);
         super.setResourceBase(base);
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
-        urlBase = "#";
+        urlBase = wp.getUrl();
     }
     
     public Document getDom(final Period period) throws XPathExpressionException, ClassCastException, NumberFormatException
@@ -403,6 +404,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         final int pw;
         final int perspCount;
         String uri;
+        String href;
 
         //para cada perspectiva: width, height, x, y
         expression = "/bsc/perspective";
@@ -475,9 +477,10 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                     if (nodeo.getNodeType() == Node.ELEMENT_NODE) {
                                         Element o = (Element) nodeo;
                                         uri = o.getAttribute("id");
+                                        href = o.getAttribute("href");
                                         o.setAttribute("width", Integer.toString(tw - BOX_SPACING_LEFT));
                                         o.setAttribute("x", Integer.toString(ox + BOX_SPACING_LEFT));
-                                        o.setAttribute("href", urlBase + uri);
+                                        o.setAttribute("href", urlBase+"?suri="+href);
 
                                         //relaciones con este objetivo
                                         expression = "//rel[@to='" + uri + "']";
