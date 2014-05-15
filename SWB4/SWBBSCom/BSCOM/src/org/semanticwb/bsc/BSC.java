@@ -147,15 +147,15 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         
         //title
         Element e = doc.createElement("title");
-        e.appendChild(doc.createTextNode(getDisplayTitle(lang)==null ? (getTitle()==null?"Desconocido":getTitle()) : getDisplayTitle(lang)));
+        e.appendChild(doc.createTextNode(getDisplayTitle(lang)==null ? (getTitle()==null?"Desconocido":getTitle().replaceAll("['\n]", "")) : getDisplayTitle(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //mission
         e = doc.createElement("mission");
-        e.appendChild(doc.createTextNode(getMission(lang)==null?(getMission()==null?"Desconocido":getMission()):getMission(lang)));
+        e.appendChild(doc.createTextNode(getMission(lang)==null?(getMission()==null?"Desconocido":getMission().replaceAll("['\n]", "")):getMission(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //vision
         e = doc.createElement("vision");
-        e.appendChild(doc.createTextNode(getVision(lang)==null?(getVision()==null?"Desconocido":getVision()):getVision(lang)));
+        e.appendChild(doc.createTextNode(getVision(lang)==null?(getVision()==null?"Desconocido":getVision().replaceAll("['\n]", "")):getVision(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //logo
         e = doc.createElement("logo");
@@ -184,7 +184,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
             ep.appendChild(e);
             //title
             e = doc.createElement("title");
-            e.appendChild(doc.createTextNode(p.getDisplayTitle(lang)==null?(p.getTitle()==null?"Desconocido":p.getTitle()):p.getDisplayTitle(lang)));
+            e.appendChild(doc.createTextNode(p.getDisplayTitle(lang)==null?(p.getTitle()==null?"Desconocido":p.getTitle().replaceAll("['\n]", "")):p.getDisplayTitle(lang).replaceAll("['\n]", "")));
             ep.appendChild(e);
             // lista de temas de esta perspectiva
             List<Theme> themes = p.listValidThemes();
@@ -200,7 +200,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                     ethemes.appendChild(etheme);
                     //title
                     e = doc.createElement("title");
-                    e.appendChild(doc.createTextNode(t.getDisplayTitle(lang)==null?(t.getTitle()==null?"Desconocido":t.getTitle()):t.getDisplayTitle(lang)));
+                    e.appendChild(doc.createTextNode(t.getDisplayTitle(lang)==null?(t.getTitle()==null?"Desconocido":t.getTitle().replaceAll("['\n]", "")):t.getDisplayTitle(lang).replaceAll("['\n]", "")));
                     etheme.appendChild(e);
                     
                     //relaciones tema - tema
@@ -246,18 +246,18 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                         eobj.appendChild(e);
                         //title
                         e = doc.createElement("title");
-                        e.appendChild(doc.createTextNode(o.getDisplayTitle(lang)==null?(o.getTitle()==null?"Desconocido":o.getTitle()):o.getDisplayTitle(lang)));
+                        e.appendChild(doc.createTextNode(o.getDisplayTitle(lang)==null?(o.getTitle()==null?"Desconocido":o.getTitle().replaceAll("['\n]", "")):o.getDisplayTitle(lang).replaceAll("['\n]", "")));
                         eobj.appendChild(e);
                         //sponsor
                         e = doc.createElement("sponsor");
-                        e.appendChild(doc.createTextNode(o.getSponsor()==null?"Desconocido":o.getSponsor().getFullName()));
+                        e.appendChild(doc.createTextNode(o.getSponsor()==null?"Desconocido":o.getSponsor().getFullName().replaceAll("['\n]", "")));
                         eobj.appendChild(e);
                         //frequency
                         e = doc.createElement("frequency");
                         if(o.getPeriodicity()==null) {
                             e.appendChild(doc.createTextNode("Desconocido"));
                         }else {
-                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle().replaceAll("['\n]", "")):o.getPeriodicity().getDisplayTitle(lang).replaceAll("['\n]", "")));
                         }
                         eobj.appendChild(e);
                         
@@ -304,7 +304,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                         e = doc.createElement("diff");
                         e.setAttribute("id", diff.getURI());
                         e.setAttribute("orden", Integer.toString(diff.getIndex()));
-                        e.appendChild(doc.createTextNode(diff.getDisplayTitle(lang)==null?(diff.getTitle()==null?"Desconocido":diff.getTitle()):diff.getDisplayTitle(lang)));
+                        e.appendChild(doc.createTextNode(diff.getDisplayTitle(lang)==null?(diff.getTitle()==null?"Desconocido":diff.getTitle().replaceAll("['\n]", "")):diff.getDisplayTitle(lang).replaceAll("['\n]", "")));
                         ediffgroup.appendChild(e);
                     }
                 }
@@ -323,7 +323,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
                 e.setAttribute("prefix", r.getPrefix());
                 e.setAttribute("likehood", Integer.toString(r.getFinAssessmentLikelihood()));
                 e.setAttribute("impact", Integer.toString(r.getFinAssessmentImpactLevel()));
-                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle()):r.getDisplayTitle(lang)));
+                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle().replaceAll("['\n]", "")):r.getDisplayTitle(lang).replaceAll("['\n]", "")));
                 erskgp.appendChild(e);
             }
         }
@@ -350,20 +350,20 @@ System.out.println("2. user="+user);
         
         //title
         Element e = doc.createElement("title");
-        e.appendChild(doc.createTextNode(getDisplayTitle(lang)==null ? (getTitle()==null?"Desconocido":getTitle()) : getDisplayTitle(lang)));
+        e.appendChild(doc.createTextNode(getDisplayTitle(lang)==null ? (getTitle()==null?"Desconocido":getTitle().replaceAll("['\n]", "")) : getDisplayTitle(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //mission
         e = doc.createElement("mission");
-        e.appendChild(doc.createTextNode(getMission(lang)==null?(getMission()==null?"Desconocido":getMission()):getMission(lang)));
+        e.appendChild(doc.createTextNode(getMission(lang)==null?(getMission()==null?"Desconocido":getMission().replaceAll("['\n]", "")):getMission(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //vision
         e = doc.createElement("vision");
-        e.appendChild(doc.createTextNode(getVision(lang)==null?(getVision()==null?"Desconocido":getVision()):getVision(lang)));
+        e.appendChild(doc.createTextNode(getVision(lang)==null?(getVision()==null?"Desconocido":getVision().replaceAll("['\n]", "")):getVision(lang).replaceAll("['\n]", "")));
         eroot.appendChild(e);
         //logo
         e = doc.createElement("logo");
         Attr alt = doc.createAttribute("title");
-        alt.setValue(getDisplayDescription(lang)==null?(getDescription()==null?"Desconocido":getDescription()):getDisplayDescription(lang));
+        alt.setValue(getDisplayDescription(lang)==null?(getDescription()==null?"Desconocido":getDescription().replaceAll("['\n]", "")):getDisplayDescription(lang).replaceAll("['\n]", ""));
         e.setAttributeNode(alt);
         Attr src = doc.createAttribute("src");
         src.setValue(getLogo());
@@ -385,7 +385,7 @@ System.out.println("2. user="+user);
             ep.appendChild(e);
             //title
             e = doc.createElement("title");
-            e.appendChild(doc.createTextNode(p.getDisplayTitle(lang)==null?(p.getTitle()==null?"Desconocido":p.getTitle()):p.getDisplayTitle(lang)));
+            e.appendChild(doc.createTextNode(p.getDisplayTitle(lang)==null?(p.getTitle()==null?"Desconocido":p.getTitle().replaceAll("['\n]", "")):p.getDisplayTitle(lang).replaceAll("['\n]", "")));
             ep.appendChild(e);
             
             // lista de temas por perspectiva
@@ -403,7 +403,7 @@ System.out.println("2. user="+user);
                     ethemes.appendChild(etheme);
                     //title
                     e = doc.createElement("title");
-                    e.appendChild(doc.createTextNode(t.getDisplayTitle(lang)==null?(t.getTitle()==null?"Desconocido":t.getTitle()):t.getDisplayTitle(lang)));
+                    e.appendChild(doc.createTextNode(t.getDisplayTitle(lang)==null?(t.getTitle()==null?"Desconocido":t.getTitle().replaceAll("['\n]", "")):t.getDisplayTitle(lang).replaceAll("['\n]", "")));
                     etheme.appendChild(e);
                     
                     //relaciones tema - tema
@@ -456,7 +456,7 @@ System.out.println("2. user="+user);
                         eobj.appendChild(e);
                         //title
                         e = doc.createElement("title");
-                        e.appendChild(doc.createTextNode(o.getDisplayTitle(lang)==null?(o.getTitle()==null?"Desconocido":o.getTitle()):o.getDisplayTitle(lang)));
+                        e.appendChild(doc.createTextNode(o.getDisplayTitle(lang)==null?(o.getTitle()==null?"Desconocido":o.getTitle().replaceAll("['\n]", "")):o.getDisplayTitle(lang).replaceAll("['\n]", "")));
                         eobj.appendChild(e);
                         //sponsor
                         e = doc.createElement("sponsor");
@@ -467,7 +467,7 @@ System.out.println("2. user="+user);
                         if(o.getPeriodicity()==null) {
                             e.appendChild(doc.createTextNode("Desconocido"));
                         }else {
-                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle()):o.getPeriodicity().getDisplayTitle(lang)));
+                            e.appendChild(doc.createTextNode(o.getPeriodicity().getDisplayTitle(lang)==null?(o.getPeriodicity().getTitle()==null?"Desconocido":o.getPeriodicity().getTitle().replaceAll("['\n]", "")):o.getPeriodicity().getDisplayTitle(lang).replaceAll("['\n]", "")));
                         }
                         eobj.appendChild(e);
                         
@@ -515,7 +515,7 @@ System.out.println("2. user="+user);
                         e = doc.createElement("diff");
                         e.setAttribute("id", diff.getURI());
                         e.setAttribute("orden", Integer.toString(diff.getIndex()));
-                        e.appendChild(doc.createTextNode(diff.getDisplayTitle(lang)==null?(diff.getTitle()==null?"Desconocido":diff.getTitle()):diff.getDisplayTitle(lang)));
+                        e.appendChild(doc.createTextNode(diff.getDisplayTitle(lang)==null?(diff.getTitle()==null?"Desconocido":diff.getTitle().replaceAll("['\n]", "")):diff.getDisplayTitle(lang).replaceAll("['\n]", "")));
                         ediffgroup.appendChild(e);
                     }
                 }
@@ -533,7 +533,7 @@ System.out.println("2. user="+user);
                 e.setAttribute("prefix", r.getPrefix());
                 e.setAttribute("likehood", Integer.toString(r.getFinAssessmentLikelihood()));
                 e.setAttribute("impact", Integer.toString(r.getFinAssessmentImpactLevel()));
-                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle()):r.getDisplayTitle(lang)));
+                e.appendChild(doc.createTextNode(r.getDisplayTitle(lang)==null?(r.getTitle()==null?"Desconocido":r.getTitle().replaceAll("['\n]", "")):r.getDisplayTitle(lang).replaceAll("['\n]", "")));
                 rsksgroup.appendChild(e);
             }
         }
