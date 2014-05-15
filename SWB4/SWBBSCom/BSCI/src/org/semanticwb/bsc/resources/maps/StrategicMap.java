@@ -350,8 +350,8 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
-        base.setData(PDFExportable.bsc_itemType, PDFExportable.PDF_StrategyMap);
         super.setResourceBase(base);
+        base.setData(PDFExportable.bsc_itemType, PDFExportable.PDF_StrategyMap);
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
         urlBase = wp.getUrl();
     }
@@ -694,25 +694,23 @@ public class StrategicMap extends GenericResource implements PDFExportable {
 
                 // diferenciadores de la perspectiva
                 expression = "/bsc/perspective[@id='" + pid + "']/diffgroup[1]/diff";
+                SVGjs.append(" var x;").append("\n");
                 NodeList nlDiffs = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                 boolean hasDifferentiators = nlDiffs.getLength() > 0;
                 if (hasDifferentiators) {
+                    SVGjs.append(" x = "+BOX_SPACING+";").append("\n");
                     SVGjs.append(" y_ += " + BOX_SPACING + ";").append("\n");
                     for (int k = 0; k < nlDiffs.getLength(); k++) {
                         Node nodeD = nlDiffs.item(k);
                         if (nodeD != null && nodeD.getNodeType() == Node.ELEMENT_NODE) {
                             attrs = nodeD.getAttributes();
                             String did = attrs.getNamedItem("id").getNodeValue();
-                            w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
-                            x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
-                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "'," + (x_+BOX_SPACING_RIGHT) + ",y_+"+(HEADER_4+PADDING_DOWN)+"," + HEADER_4 + ",'Verdana');").append("\n");
+                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "',x,y_-"+(0+0)+"," + HEADER_4 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
-                            //SVGjs.append(" fixParagraphAtBounding(txt," + w_ + "," + topPadding(HEADER_4) + "," + x_ + ",y_);").append("\n");
-                            SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + (x_+BOX_SPACING_RIGHT) + ");").append("\n");
                             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                            SVGjs.append(" framingRect(rect,'" + did + "'," + w_ + ",rect.height.baseVal.value," + x_ + ",y_);").append("\n");
-                            //SVGjs.append(" rect.y.baseVal.value = y_+" + HEADER_4 + ";").append("\n");
+                            SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.height.baseVal.value,x,y_);").append("\n");
                             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
+                            SVGjs.append(" x = x + rect.width.baseVal.value + "+BOX_SPACING_RIGHT+";").append("\n");
                         }
                     }
                 }
@@ -904,7 +902,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 SVGjs.append(" rect.setAttributeNS(null, 'stroke-opacity','1');").append("\n");
                 SVGjs.append(" g.insertBefore(rect,g.firstChild);").append("\n");
                 // título de la perspectiva
-                SVGjs.append(" txt = createText('" + perspectiveName + "',(" + px + "+h_/3),(h_-" + BOX_SPACING_RIGHT + ")," + HEADER_3 + ",'Verdana');").append("\n");
+                SVGjs.append(" txt = createText('" + perspectiveName + "',(" + px + "+h_/2),(h_-" + BOX_SPACING_RIGHT + ")," + HEADER_3 + ",'Verdana');").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'textLength',rect.height.baseVal.value);").append("\n");
                 //SVGjs.append(" txt.setAttributeNS(null,'lengthAdjust','spacingAndGlyphs');").append("\n");
                 SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270," + px + ",'+h_+')');").append("\n");
