@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
 {
    /**
    * Define el número de un acuerdo, tiene las siguientes características: Título del scorecard+ "-S" + número de sesión a 2 dígitos+ "-" + consecutivo del acuerdo por sesión a 2 dígitos + año actual a 2 dígitos
@@ -34,6 +34,11 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
    * Define un dueño para el acuerdo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_agreementSponsor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#agreementSponsor");
+   /**
+   * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_Meeting=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Meeting");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasAgreementInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasAgreementInv");
    /**
    * Persiste información de los temas a los que se asocia un acuerdo
    */
@@ -263,6 +268,29 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined Meeting
+       * @param value Meeting of the type org.semanticwb.bsc.tracing.Meeting
+       * @param model Model of the org.semanticwb.bsc.element.Agreement
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByMeeting(org.semanticwb.bsc.tracing.Meeting value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAgreementInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined Meeting
+       * @param value Meeting of the type org.semanticwb.bsc.tracing.Meeting
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByMeeting(org.semanticwb.bsc.tracing.Meeting value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAgreementInv,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Agreement with a determined Comment
        * @param value Comment of the type org.semanticwb.bsc.catalogs.Comment
        * @param model Model of the org.semanticwb.bsc.element.Agreement
@@ -425,6 +453,44 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Sets the value for the property Meeting
+   * @param value Meeting to set
+   */
+
+    public void setMeeting(org.semanticwb.bsc.tracing.Meeting value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_hasAgreementInv, value.getSemanticObject());
+        }else
+        {
+            removeMeeting();
+        }
+    }
+   /**
+   * Remove the value for Meeting property
+   */
+
+    public void removeMeeting()
+    {
+        getSemanticObject().removeProperty(bsc_hasAgreementInv);
+    }
+
+   /**
+   * Gets the Meeting
+   * @return a org.semanticwb.bsc.tracing.Meeting
+   */
+    public org.semanticwb.bsc.tracing.Meeting getMeeting()
+    {
+         org.semanticwb.bsc.tracing.Meeting ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasAgreementInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.Meeting)obj.createGenericInstance();
          }
          return ret;
     }
