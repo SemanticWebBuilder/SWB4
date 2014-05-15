@@ -1,7 +1,14 @@
 package org.semanticwb.bsc.admin.resources;
 
+import com.arthurdo.parser.HtmlException;
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.lowagie.text.DocumentException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,11 +47,13 @@ import org.semanticwb.model.FormElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Resourceable;
+import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticOntology;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
  * Recurso que administra instancias de tipo {@code SummaryView}. Permite crear,
@@ -55,10 +64,21 @@ import org.semanticwb.platform.SemanticOntology;
  */
 public class SummaryViewManager extends SummaryViewManagerBase implements PDFExportable {
 
+    /*Sirve para evaluar el modo recibido cuando se trate de exportar a pdf la vista resumen*/
+    public static final String Mode_PDFDocument = "pdf";
     /**
      * Realiza operaciones en la bitacora de eventos.
      */
     private static Logger log = SWBUtils.getLogger(GenericSemResource.class);
+    /**
+     * Representa el nombre del archivo asociado a las plantillas creadas con
+     * este recurso
+     */
+    private static final String TEMPLATE_FILENAME = "/templateContent.html";
+    /**
+     * Representa el nombre del modo que se encarga de exportar la vista a PDF
+     */
+    private static final String Mode_PDF = "exportPDF";
 
     /**
      * Construye una instancia de tipo {@code SummaryViewManager}
@@ -101,7 +121,6 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
         StringBuilder output = new StringBuilder(128);
         String lang = paramRequest.getUser().getLanguage();
         User user = paramRequest.getUser();
-
         if (this.getActiveView() == null) {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
         } else {
@@ -438,6 +457,361 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
 
         }
         out.println(output.toString());
+    }
+
+    //Método para exportar la vista resumen a PDF
+    /* @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se enviar&aacute; al cliente
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
+     */
+    public void doPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/pdf; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        StringBuilder sb = renderHTML(request, response, paramRequest);
+
+        if (sb != null && sb.length() > 0) {
+            OutputStream os = response.getOutputStream();
+            try {
+                ITextRenderer renderer = new ITextRenderer();
+                //renderer.setDocumentFromString(renderHTML(request, response, paramRequest));
+                String sbStr = replaceHtml(sb);
+                renderer.setDocumentFromString(sbStr);
+                renderer.layout();
+                renderer.createPDF(os);
+                renderer.finishPDF();
+            } catch (DocumentException ex) {
+                log.error("Error in: " + ex);
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException e) { /*ignore*/ }
+                }
+            }
+        }
+    }
+
+    //Método que arma el html para mostrar en el pdf
+    /* @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se enviar&aacute; al cliente
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
+     * * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
+     */
+    private StringBuilder renderHTML(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        StringBuilder output = new StringBuilder(128);
+        StringBuilder hd = new StringBuilder(128);
+        StringBuilder toReturn = new StringBuilder(128);
+        String lang = paramRequest.getUser().getLanguage();
+        User user = paramRequest.getUser();
+        if (this.getActiveView() == null) {
+            output.append(paramRequest.getLocaleString("msg_noContentView"));
+        } else {
+            SummaryView activeView = this.getActiveView();
+            List propsInView = SWBUtils.Collections.copyIterator(activeView.listPropertyListItems());
+
+            //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
+            //se tiene captura de datos en el periodo obtenido
+            SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
+            WebSite website = this.getResourceBase().getWebSite();
+            Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
+            String identifier = null; //de los elementos del grid
+            String filters = null;
+            String periodId = (String) request.getSession(true).getAttribute(website.getId());
+            boolean addStatus = false;
+
+            //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
+            if (periodId == null) {
+                periodId = request.getParameter(website.getId()) != null
+                        ? request.getParameter(website.getId()) : null;
+                if (periodId != null) {
+                    request.getSession(true).setAttribute(website.getId(), periodId);
+                }
+            }
+            Period thisPeriod = periodId != null
+                    ? Period.ClassMgr.getPeriod(periodId, website)
+                    : null;
+
+            //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
+            if (semWorkClass.equals(Objective.bsc_Objective)) {
+                identifier = paramRequest.getLocaleString("value_ObjectiveId");
+                addStatus = true;
+            } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
+                identifier = paramRequest.getLocaleString("value_IndicatorId");
+                addStatus = true;
+            } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
+                identifier = paramRequest.getLocaleString("value_InitiativeId");
+            } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
+                identifier = paramRequest.getLocaleString("value_DeliverableId");
+            } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
+                identifier = paramRequest.getLocaleString("value_AgreementId");
+            }
+            //Comienza a armar el html a regresar
+            output.append("<html>");
+            output.append("<head>");
+            output.append("<style type=\"text/css\">");
+            output.append("    @page { size: 11in 8.5in;}");
+            output.append("</style>");
+            output.append(getLinks(paramRequest, request));
+            output.append("</head>");
+            output.append("<body>");
+            output.append("<table width=\"100%\" border=\"0\" class=\"\">");
+            //Obtiene encabezados de tabla
+            output.append("<tr>");
+            Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
+            ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
+            TreeMap headings2Show = new TreeMap();
+            if (addStatus) {
+                String[] statusHeading = {
+                    "status",
+                    "Estado",
+                    "true"
+                };
+                headingsArray.add(statusHeading);
+                headings2Show.put(Integer.parseInt("0"), statusHeading);
+            }
+
+            if (viewPropertiesList != null) {
+                while (viewPropertiesList.hasNext()) {
+                    PropertyListItem propListItem = viewPropertiesList.next();
+                    SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                    int arrayIndex = propListItem.getPropertyOrder();
+                    if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                        arrayIndex++;
+                    }
+
+                    if (propListItem != null && property != null) {
+                        String[] heading = {
+                            property.getName(),
+                            property.getLabel(lang)
+                        };
+                        headingsArray.add(heading);
+                        headings2Show.put(new Integer(arrayIndex), heading);
+                    }
+                }
+            }
+
+            // Coloca cada columna en el orden guardado
+            Entry thisHeading = headings2Show.firstEntry();
+            while (thisHeading != null) {
+                Integer thisKey = (Integer) thisHeading.getKey();
+                String[] heading = (String[]) thisHeading.getValue();
+                thisHeading = headings2Show.higherEntry(thisKey);
+                output.append("<th>" + heading[1] + "</th>");
+            }
+            output.append("</tr>");
+
+
+            //Arma los renglones con el contenido de la tabla
+            while (allInstances.hasNext()) {
+                GenericObject generic = allInstances.next();
+                SemanticObject semObj = generic.getSemanticObject();
+                boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
+                boolean hasPeriod = true;
+                if (thisPeriod != null) {
+                    if (semObj.instanceOf(Seasonable.bsc_Seasonable)) {
+                        hasPeriod = semObj.hasObjectProperty(Seasonable.bsc_hasPeriod, thisPeriod.getSemanticObject());
+                    } else {//Para iniciativas y entregables:
+                        hasPeriod = true;
+                    }
+                }
+                if (!user.haveAccess(generic) || !isActive || !hasPeriod) {
+                    continue;
+                }
+                GenericIterator<PropertyListItem> viewPropertiesList1 = activeView.listPropertyListItems();
+                StringBuilder status = new StringBuilder(128);
+
+                output.append("<tr>");
+                if (addStatus) {
+                    PeriodStatus perStat = null;
+                    if (generic instanceof Objective) {
+                        Objective obj = (Objective) generic;
+                        perStat = obj.getPeriodStatus(thisPeriod);
+                    } else if (generic instanceof Indicator) {
+                        Indicator indicator = (Indicator) generic;
+                        Measure measure = indicator != null && indicator.getStar() != null
+                                ? indicator.getStar().getMeasure(thisPeriod) : null;
+                        if (measure != null && measure.getEvaluation() != null) {
+                            perStat = measure.getEvaluation();
+                        }
+                    }
+                    if (perStat != null && perStat.getStatus() != null) {
+                        if (perStat.getStatus().getIcon() != null) {
+                            status.append("<img src=\"");
+                            status.append(perStat.getStatus().getIcon());
+                            status.append("\" title=\"");
+                            status.append(perStat.getStatus().getTitle());
+                            status.append("\" />");
+                        } else {
+                            status.append("<span class=\"");
+                            status.append(perStat.getStatus().getIconClass());
+                            status.append("\">");
+                            status.append(perStat.getStatus().getTitle());
+                            status.append("</span>");
+                        }
+                    } else {
+                        status.append("<span class=\"indefinido\">Indefinido</span>");
+                    }
+                    output.append("<td>" + status.toString() + "</td>");
+
+                }
+                //Por cada propiedad en la vista:
+                request.setAttribute("pdf", "true");//atributo para validaciones en formElement y que no muestre links
+                if (viewPropertiesList1 != null) {
+                    while (viewPropertiesList1.hasNext()) {
+                        PropertyListItem propListItem = viewPropertiesList1.next();
+                        SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                        String propertyValue = renderPropertyValue(request, semObj, property.getURI(), lang);
+                        int arrayIndex = propListItem.getPropertyOrder();
+                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                            arrayIndex++;
+                        }
+                        if (propListItem != null && property != null) {
+                            String[] heading = {
+                                property.getName(),
+                                propertyValue
+                            };
+                            headingsArray.add(heading);
+                            headings2Show.put(new Integer(arrayIndex), heading);
+                        }
+                    }
+                }
+                // Coloca cada columna en el orden guardado
+                Entry thisHeading1 = headings2Show.firstEntry();
+                while (thisHeading1 != null) {
+                    Integer thisKey = (Integer) thisHeading1.getKey();
+                    String[] heading = (String[]) thisHeading1.getValue();
+                    thisHeading1 = headings2Show.higherEntry(thisKey);
+                    if (!addStatus) {
+                        output.append("<td>" + heading[1] + "</td>");
+                    }
+                    if (addStatus && thisKey > 0) {
+                        output.append("<td>" + heading[1] + "</td>");
+                    }
+
+                }
+                output.append("</tr>");
+            }
+
+            output.append("</table>");
+            output.append("</body>");
+            output.append("</html>");
+        }
+        toReturn.append(hd).append(output);
+        return (toReturn);
+    }
+
+    /**
+     * Se encarga de obtener los links de la plantilla de la p&aacute;gina
+     * actual
+     *
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * links hacia los CSS respectivos.
+     * @throws FileNotFoundException Archivo no ubicado
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
+            throws FileNotFoundException, IOException {
+        Template template = paramRequest.getWebPage().getTemplateRef().getTemplate();
+        String filePath = SWBPortal.getWorkPath()
+                + template.getWorkPath() + "/" + template.getActualVersion().getVersionNumber() + "/"
+                + template.getFileName(template.getActualVersion().getVersionNumber());
+        FileReader reader = null;
+        StringBuilder view = new StringBuilder(256);
+        reader = new FileReader(filePath);
+
+        String port = "";
+        if (request.getServerPort() != 80) {
+            port = ":" + request.getServerPort();
+        }
+        String baserequest = request.getScheme() + "://" + request.getServerName()
+                + port;
+
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
+        HtmlTag tag = new HtmlTag();
+        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            int ttype = tok.getTokenType();
+
+            if (ttype == HtmlStreamTokenizer.TT_TAG) {
+                try {
+                    tok.parseTag(tok.getStringValue(), tag);
+                } catch (HtmlException htmle) {
+                    SummaryViewManager.log.error("Al parsear la plantilla , "
+                            + filePath, htmle);
+                }
+                if (tag.getTagString().toLowerCase().equals("link")) {
+                    String tagTxt = tag.toString();
+                    if (tagTxt.contains("type=\"text/css\"")) {
+                        if (!tagTxt.contains("/>")) {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
+                        }
+                        if (!tagTxt.contains("{webpath}")) {
+                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
+                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
+                                    tagTxt.length());
+                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
+                        } else {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
+                        }
+                        view.append(tagTxt);
+                    }
+                }
+            }
+        }
+        return view.toString();
+    }
+
+    /**
+     * Reemplaza c&oacute;digo HTML por acentos, esto es para la estructura XML
+     * requerida.
+     *
+     * @param sb el objeto String al cu&aacute; ser&aacute; reemplazados los
+     * car&aacutecteres.
+     * @return el objeto String modificado
+     */
+    private String replaceHtml(StringBuilder sb) {
+        String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uuml;", "Ü");
+        return sbStr;
     }
 
     /**
@@ -1285,6 +1659,8 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             doShowForm(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("viewsList")) {
             doViewsList(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals(Mode_PDF)) {
+            doPdf(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -1309,8 +1685,6 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
-
-
         //Codigo prueba para obtener el displayElement
         Statement st = semProp.getRDFProperty().getProperty(SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty("http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
@@ -1382,34 +1756,16 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder toReturn = new StringBuilder();
-        String surl = "";
-        Resource base2 = null;
+        Resource base2 = getResource();
         String icon = "";
-        WebSite ws = paramRequest.getWebPage().getWebSite();
-        String nameClass = getWorkClass().transformToSemanticClass().getClassName();
-        Iterator<Resource> itp = ws.listResources();
-        while (itp.hasNext()) {
-            Resource resource = itp.next();
-            String itemType = resource.getData(PDFExportable.bsc_itemType);
-            String view = resource.getData(PDFExportable.viewType);
-            if ((view != null && view.equals(PDFExportable.VIEW_Summary))
-                    && (itemType != null && itemType.equals(nameClass))) {
-                if (resource.isActive()) {
-                    base2 = resource;
-                    break;
-                }
-            }
-        }
 
         if (base2 != null) {
-            Iterator<Resourceable> res = base2.listResourceables();
-            while (res.hasNext()) {
-                Resourceable re = res.next();
-                if (re instanceof WebPage) {
-                    surl = ((WebPage) re).getUrl();
-                    break;
-                }
-            }
+            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(),
+                    SWBResourceURL.UrlType_RENDER);
+
+            url.setMode(Mode_PDF);
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
+            String surl = url.toString();
 
             String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
             String image = "pdfOnline.jpg";
