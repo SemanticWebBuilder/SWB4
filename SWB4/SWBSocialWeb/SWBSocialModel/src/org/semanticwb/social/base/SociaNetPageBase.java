@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase de la cual desciende todo el manejo de FanPages en las redes sociales. 
    */
-public abstract class SociaNetPageBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Searchable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Rankable,org.semanticwb.model.Viewable,org.semanticwb.model.Countryable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Indexable,org.semanticwb.model.Expirable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Resourceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Trashable,org.semanticwb.model.Tagable,org.semanticwb.model.Localeable,org.semanticwb.model.Hiddenable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.MetaTagable,org.semanticwb.model.Activeable
+public abstract class SociaNetPageBase extends org.semanticwb.model.WebPage implements org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Rankable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Hiddenable,org.semanticwb.model.Traceable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Countryable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.PFlowRefable,org.semanticwb.model.Searchable,org.semanticwb.model.Viewable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Localeable,org.semanticwb.model.Referensable,org.semanticwb.model.Expirable,org.semanticwb.model.TemplateRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.MetaTagable,org.semanticwb.model.RoleRefable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Resourceable,org.semanticwb.model.Tagable
 {
+   /**
+   * Main Photo
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_mainPhoto=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#mainPhoto");
    /**
    * Clase de la cual desciende todo el manejo de FanPages en las redes sociales.
    */
@@ -558,5 +562,23 @@ public abstract class SociaNetPageBase extends org.semanticwb.model.WebPage impl
     public SociaNetPageBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the MainPhoto property
+* @return String with the MainPhoto
+*/
+    public String getMainPhoto()
+    {
+        return getSemanticObject().getProperty(social_mainPhoto);
+    }
+
+/**
+* Sets the MainPhoto property
+* @param value long with the MainPhoto
+*/
+    public void setMainPhoto(String value)
+    {
+        getSemanticObject().setProperty(social_mainPhoto, value);
     }
 }
