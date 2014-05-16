@@ -127,7 +127,10 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
      */
     public boolean isControlRelated() {
         
-        boolean withControls = this.getControl() != null ? true : false;
+        boolean withControls = false;
+        Iterator<Control> controlIt = this.listControls();
+        withControls = (controlIt != null && controlIt.hasNext());
+        
         return withControls;
     }
 }

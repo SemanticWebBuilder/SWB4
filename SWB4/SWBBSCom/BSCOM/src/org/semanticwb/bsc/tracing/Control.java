@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.bsc.accessory.Determinant;
+import org.semanticwb.model.SWBModel;
 
 /**
  * Gestiona la informaci&oacute;n de un control en un Riesgo.
@@ -12,6 +14,7 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
 
     public Control(org.semanticwb.platform.SemanticObject base) {
         super(base);
+        //relateToDeterminants();
     }
 
     /**
@@ -67,5 +70,22 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
             consecutive = prefixFactor + "." + "1";
         }
         return consecutive;
+    }
+    
+    /**
+     * Relaciona un {@code Control} recientemente creado al conjunto de instancias de {@code Determinant}
+     * existentes en el BSC correspondiente, al crear las instancias de {@code DeterminantValue} necesarias.
+     */
+    private void relateToDeterminants() {
+        
+        SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
+        Iterator<Determinant> determinantIt = Determinant.ClassMgr.listDeterminants(model);
+        synchronized (this) {
+            while (determinantIt != null && determinantIt.hasNext()) {
+                Determinant det = determinantIt.next();
+                DeterminantValue detValue = DeterminantValue.ClassMgr.createDeterminantValue(model);
+                detValue.setDeterminant(det);
+            }
+        }
     }
 }
