@@ -105,26 +105,38 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
      * Calcula si el riesgo es controlado suficientemente en base a la determinaci&oacute;n de todos los controles relacionados.
      * @return {@literal SI} en caso de que la determinaci&oacute;n de todos los controles relacionados sea suficiente, {@literal NO} en caso contrario
      */
-    public synchronized String calculateControled() {
+    public synchronized boolean calculateControled() {
         
-        String controled = "SI";
+        boolean controled = true;
+        System.out.println("En Risk.calculateControled() - riesgo: " + this.getId());
         
         Iterator<Factor> factorIt = this.listFactors();
-        while (factorIt != null && factorIt.hasNext()) {
-            Factor factor = factorIt.next();
-            Iterator<Control> controlIt = factor.listControls();
-            if (controlIt != null && controlIt.hasNext()) {
-                while (controlIt.hasNext()) {
-                    Control control = controlIt.next();
-                    if (control.getDeterminingControl().equalsIgnoreCase("no")) {
-                        controled = "NO";
-                        break;
+        if (factorIt != null && factorIt.hasNext()) {
+            while (factorIt.hasNext()) {
+                Factor factor = factorIt.next();
+                System.out.println("Factor: " + factor.getId());
+                Iterator<Control> controlIt = factor.listControls();
+                if (controlIt != null && controlIt.hasNext()) {
+                    while (controlIt.hasNext()) {
+                        Control control = controlIt.next();
+                        System.out.println("  Control: " + control.getId() + " - " + control.getDeterminingControl());
+                        if (control.getDeterminingControl() == null || 
+                                (control.getDeterminingControl() != null &&
+                                 control.getDeterminingControl().equalsIgnoreCase("deficient"))) {
+                            controled = false;
+                            break;
+                        }
                     }
+                } else {
+                    System.out.println("Iterador de controles nulo o vacio");
+                    controled = false;
+                    break;
                 }
-            } else {
-                controled = "NO";
-                break;
+                System.out.println("   evaluacion suficientemente controlado: " + controled);
             }
+        } else {
+            System.out.println("Iterador de factores nulo o vacio");
+            controled = false;
         }
         
         return controled;
