@@ -21,6 +21,8 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPNG;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -40,10 +42,7 @@ import org.w3c.dom.NodeList;
  */
 public class RisksMap extends GenericResource {
     private static final Logger log = SWBUtils.getLogger(RisksMap.class);
-//    private int width, height;
     
-    public static final String Mode_PNGImage = "png";
-    public static final String Mode_PDFDocument = "pdf";
     public static final String Action_UPDATE = "update";
     
     public static final String WORD_SPACING = "14 14 14 14 14 14 14 14 14 14"; // dx para los ejes de coordenadas, excluyendo el 0
@@ -85,12 +84,16 @@ public class RisksMap extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if(Mode_PNGImage.equals(mode)) {
-            doGetPNGImage(request, response, paramRequest);
-        }else if(Mode_PDFDocument.equals(mode)) {
-            doGetPDFDocument(request, response, paramRequest);
-        }else {
-            super.processRequest(request, response, paramRequest);
+        switch (mode) {
+            case Mode_StreamPNG:
+                doGetPNGImage(request, response, paramRequest);
+                break;
+            case Mode_StreamPDF:
+                doGetPDFDocument(request, response, paramRequest);
+                break;
+            default:
+                super.processRequest(request, response, paramRequest);
+                break;
         }
     }
     
@@ -113,28 +116,32 @@ public class RisksMap extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
-        Resource base = getResourceBase();
-        WebSite webSite = base.getWebSite();
-        if(webSite instanceof BSC)
-        {
-            PrintWriter out = response.getWriter();
-            String SVGjs;
-            try {
-                 SVGjs = getSvg(paramRequest);
-            }catch(XPathExpressionException xpe) {
-                System.out.println(xpe.toString());
-                out.println(xpe.getMessage());
-                return;
-            }
-            out.println(SVGjs);
-            
+        if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY)
+        {            
             final String suri = request.getParameter("suri");
-            SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            PrintWriter out = response.getWriter();
+            SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            // impresión PNG
+            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\" ");
+            out.print(" class=\"swbstgy-toolbar-printPng\" title=\"");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.print("\">");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.println("</a>");
+            
+            // impresión PDF
+            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\" ");
+            out.print(" class=\"swbstgy-toolbar-printPdf\" title=\"");
+            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
+            out.print("\">");
+            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
+            out.println("</a>");
+            
             out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
             out.println("  <input type=\"hidden\" name=\"suri\" value=\""+suri+"\" />");
             out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
-            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('"+exportUrl.setMode(Mode_PNGImage)+"')\"  />");
-            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('"+exportUrl.setMode(Mode_PDFDocument)+"')\"  />");
+//            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('"+exportUrl.setMode(Mode_PNGImage)+"')\"  />");
+//            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('"+exportUrl.setMode(Mode_PDFDocument)+"')\"  />");
             out.println(" </form>");
             
             out.println(" <script type=\"text/javascript\">");
@@ -146,7 +153,21 @@ public class RisksMap extends GenericResource {
             out.println("   form['data'].value = svg_xml;");
             out.println("   form.submit();");
             out.println("  };");
-            out.println(" </script>");   
+            out.println(" </script>");
+            
+        }
+        else
+        {
+            PrintWriter out = response.getWriter();
+            String SVGjs;
+            try {
+                 SVGjs = getSvg(paramRequest);
+            }catch(XPathExpressionException xpe) {
+                System.out.println(xpe.toString());
+                out.println(xpe.getMessage());
+                return;
+            }
+            out.println(SVGjs);
         }
     }
     
