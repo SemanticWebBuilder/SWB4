@@ -22,6 +22,8 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.PDFExportable;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPNG;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.Resource;
@@ -48,11 +50,10 @@ import org.w3c.dom.NodeList;
  * @version %I%, %G%
  * @since 1.0
  */
-public class StrategicMap extends GenericResource implements PDFExportable {
+public class StrategicMap extends GenericResource //implements PDFExportable
+{
     private static final Logger log = SWBUtils.getLogger(StrategicMap.class);
 
-    public static final String Mode_PNGImage = "png";
-    public static final String Mode_PDFDocument = "pdf";
     public static final String Action_UPDATE = "update";
     
     public static final String HEADER_PREFIX = "head_";
@@ -81,12 +82,16 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if (Mode_PNGImage.equals(mode)) {
-            doGetPNGImage(request, response, paramRequest);
-        } else if (Mode_PDFDocument.equals(mode)) {
-            doGetPDFDocument(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest);
+        switch (mode) {
+            case Mode_StreamPNG:
+                doGetPNGImage(request, response, paramRequest);
+                break;
+            case Mode_StreamPDF:
+                doGetPDFDocument(request, response, paramRequest);
+                break;
+            default:
+                super.processRequest(request, response, paramRequest);
+                break;
         }
     }
 
@@ -107,26 +112,33 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-
-        Resource base = getResourceBase();
-        WebSite webSite = base.getWebSite();
-        if (webSite instanceof BSC) {
-            PrintWriter out = response.getWriter();
-            String SVGjs = null;
-            try {
-                SVGjs = getSvg(request);
-            } catch (XPathExpressionException xpe) {
-                System.out.println(xpe.toString());
-            }
-            out.println(SVGjs);
-
+        
+        if(paramRequest.getCallMethod()==SWBParamRequest.Call_STRATEGY)
+        {
             final String suri = request.getParameter("suri");
-            SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            PrintWriter out = response.getWriter();
+            SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
+            // impresión PNG
+            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\" ");
+            out.print(" class=\"swbstgy-toolbar-printPng\" title=\"");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.print("\">");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.println("</a>");
+            
+            // impresión PDF
+            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\" ");
+            out.print(" class=\"swbstgy-toolbar-printPdf\" title=\"");
+            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
+            out.print("\">");
+            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
+            out.println("</a>");
+            
             out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
             out.println("  <input type=\"hidden\" name=\"suri\" value=\"" + suri + "\" />");
             out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
-            out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + exportUrl.setMode(Mode_PNGImage) + "')\"  />");
-            out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('" + exportUrl.setMode(Mode_PDFDocument) + "')\"  />");
+            //out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + url.setMode(Mode_PNGImage) + "')\"  />");
+            //out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('" + url.setMode(Mode_PDFDocument) + "')\"  />");
             out.println(" </form>");
 
             out.println(" <script type=\"text/javascript\">");
@@ -140,6 +152,17 @@ public class StrategicMap extends GenericResource implements PDFExportable {
             out.println("  };");
             out.println(" </script>");
         }
+        else
+        {
+            PrintWriter out = response.getWriter();
+            String SVGjs = null;
+            try {
+                SVGjs = getSvg(request);
+            } catch (XPathExpressionException xpe) {
+                System.out.println(xpe.toString());
+            }
+            out.println(SVGjs);
+        }
     }
 
     public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -148,7 +171,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".png\"");
-        if (webSite instanceof BSC) {
+//        if (webSite instanceof BSC) {
 //            Period period = getPeriod(request);
 //            if(period != null) {
 //
@@ -167,7 +190,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 response.getOutputStream().close();
             } catch (TranscoderException tcdre) {
             }
-        }
+//        }
     }
 
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -177,7 +200,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".pdf\"");
 
-        if (webSite instanceof BSC) {
+//        if (webSite instanceof BSC) {
 //            Period period = getPeriod(request);
 //            if(period != null) {
 //
@@ -196,7 +219,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                 response.getOutputStream().close();
             } catch (TranscoderException tcdre) {
             }
-        }
+//        }
     }
 
     /**
@@ -756,8 +779,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                         // relaciones causa-efecto con este tema
                         expression = "//theme[@id='" + tid + "']/rel";
                         NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
-//                        SVGjs.append(" console.log('el tema "+tid+" ');");
-//                        SVGjs.append(" console.log('tiene "+nlRels.getLength()+" relaciones ');");
                         for (int n = 0; n < nlRels.getLength(); n++) {
                             Node nodeR = nlRels.item(n);
                             if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
@@ -776,19 +797,16 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                 SVGjs.append(" }").append("\n");
 
                                 SVGjs.append(" if(to && parent) {").append("\n");
-//                                SVGjs.append("   console.log('to='+to+', parent='+parent);").append("\n");
                                 SVGjs.append("   matxTo = parent.getCTM();").append("\n");
                                 SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
                                 SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
                                 SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
                                 SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
-//                                SVGjs.append("   console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
                                 SVGjs.append("   matxFrm = g.getCTM();").append("\n");
                                 SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
                                 SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
                                 SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
                                 SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
-//                                SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
                                 SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
                                 SVGjs.append("   svg.appendChild(path);").append("\n");
                                 SVGjs.append(" }").append("\n");
@@ -837,7 +855,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                 SVGjs.append(" framingRect(rect,'" + oid + "'," + w_ + ",0," + x_ + ",y_);").append("\n");
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
-//                                SVGjs.append("console.log('oid="+oid+", rect.x='+rect.x.baseVal.value+', rect.y='+rect.y.baseVal.value);").append("\n");
                                 SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'"+color+"',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
 
@@ -864,19 +881,16 @@ public class StrategicMap extends GenericResource implements PDFExportable {
                                         SVGjs.append(" if(to && parent) {").append("\n");
                                         SVGjs.append("   to.addEventListener('mouseover', fadeout, false);").append("\n");
                                         SVGjs.append("   to.addEventListener('mouseout', fadein, false);").append("\n");
-//                                        SVGjs.append("   console.log('to='+to.id+', parent='+parent.id);").append("\n");
                                         SVGjs.append("   matxTo = parent.getCTM();").append("\n");
                                         SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
                                         SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
                                         SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
                                         SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
-//                                        SVGjs.append("   console.log('pos='+posTo+', x='+posTo.x+', y='+posTo.y);").append("\n");
                                         SVGjs.append("   matxFrm = g.getCTM();").append("\n");
                                         SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
                                         SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
                                         SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
                                         SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
-//                                        SVGjs.append("   console.log('pos='+posFrm+', x='+posFrm.x+', y='+posFrm.y);").append("\n");
                                         SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
                                         SVGjs.append("   svg.appendChild(path);").append("\n");
                                         SVGjs.append(" }").append("\n");
@@ -913,12 +927,6 @@ public class StrategicMap extends GenericResource implements PDFExportable {
             } // perspectiva
         } // lista de perspectivas
         SVGjs.append("};").append("\n");
-
-//        SVGjs.append("").append("\n");
-//        SVGjs.append("").append("\n");
-//        SVGjs.append("").append("\n");
-//        SVGjs.append("").append("\n");
-//        SVGjs.append("").append("\n");
 
         // funciones
         SVGjs.append("function createLink(url) {").append("\n");
@@ -1194,33 +1202,33 @@ public class StrategicMap extends GenericResource implements PDFExportable {
      * Excepti&oacute;n utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    @Override
-    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuilder toReturn = new StringBuilder();
-        Resource base2 = getResourceBase();
-        String icon = "";
-
-        if (base2 != null) {
-            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-            url.setMode(Mode_PDFDocument);
-            url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-            String image = "pdfOnline.jpg";
-            String alt = paramRequest.getLocaleString("alt");
-            toReturn.append("<a href=\"");
-            toReturn.append(url.toString());
-            toReturn.append("\" class=\"export-stgy\" title=\"");
-            toReturn.append(alt);
-            toReturn.append("\" target=\"_blank\">");
-            toReturn.append("<img src=\"");
-            toReturn.append(webWorkPath);
-            toReturn.append(image);
-            toReturn.append("\" alt=\"");
-            toReturn.append(alt);
-            toReturn.append("\" class=\"toolbar-img\" />");
-            toReturn.append("</a>");
-            icon = toReturn.toString();
-        }
-        return icon;
-    }
+//    @Override
+//    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+//        StringBuilder toReturn = new StringBuilder();
+//        Resource base2 = getResourceBase();
+//        String icon = "";
+//
+//        if (base2 != null) {
+//            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+//            url.setMode(Mode_PDFDocument);
+//            url.setCallMethod(SWBResourceURL.Call_DIRECT);
+//            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+//            String image = "pdfOnline.jpg";
+//            String alt = paramRequest.getLocaleString("alt");
+//            toReturn.append("<a href=\"");
+//            toReturn.append(url.toString());
+//            toReturn.append("\" class=\"export-stgy\" title=\"");
+//            toReturn.append(alt);
+//            toReturn.append("\" target=\"_blank\">");
+//            toReturn.append("<img src=\"");
+//            toReturn.append(webWorkPath);
+//            toReturn.append(image);
+//            toReturn.append("\" alt=\"");
+//            toReturn.append(alt);
+//            toReturn.append("\" class=\"toolbar-img\" />");
+//            toReturn.append("</a>");
+//            icon = toReturn.toString();
+//        }
+//        return icon;
+//    }
 }
