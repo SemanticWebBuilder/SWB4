@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Cuenta de Instagram 
    */
-public abstract class InstagramBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Relationable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Photoable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable
+public abstract class InstagramBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Listenerable,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Oauthable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Photoable
 {
    /**
    * Instagram User Id
@@ -41,6 +41,12 @@ public abstract class InstagramBase extends org.semanticwb.social.SocialNetwork 
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.Instagram>(it, true);
+        }
+
+        public static org.semanticwb.social.Instagram createInstagram(org.semanticwb.model.SWBModel model)
+        {
+            long id=model.getSemanticObject().getModel().getCounter(sclass);
+            return org.semanticwb.social.Instagram.ClassMgr.createInstagram(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.Instagram
