@@ -78,7 +78,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     /**
      * Representa el nombre del modo que se encarga de exportar la vista a PDF
      */
-    private static final String Mode_PDF = "exportPDF";
+//    private static final String Mode_PDF = "exportPDF";
 
     /**
      * Construye una instancia de tipo {@code SummaryViewManager}
@@ -471,12 +471,13 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
      * @throws IOException si ocurre un problema con la lectura/escritura de la
      * petici&oacute;n/respuesta.
      */
-    public void doPdf(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+getResourceBase().getWebSiteId()+".summary.pdf\"");
+        
         StringBuilder sb = renderHTML(request, response, paramRequest);
-
         if (sb != null && sb.length() > 0) {
             OutputStream os = response.getOutputStream();
             try {
@@ -1654,15 +1655,19 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        if (paramRequest.getMode().equals("showForm")) {
-            doShowForm(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("viewsList")) {
-            doViewsList(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals(Mode_PDF)) {
-            doPdf(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest);
+        switch (paramRequest.getMode()) {
+            case "showForm":
+                doShowForm(request, response, paramRequest);
+                break;
+            case "viewsList":
+                doViewsList(request, response, paramRequest);
+                break;
+            case Mode_StreamPDF:
+                doGetPDFDocument(request, response, paramRequest);
+                break;
+            default:
+                super.processRequest(request, response, paramRequest);
+                break;
         }
     }
 
@@ -1755,35 +1760,37 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     @Override
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuilder toReturn = new StringBuilder();
-        Resource base2 = getResource();
-        String icon = "";
+        StringBuilder ret = new StringBuilder();
+//        Resource base2 = getResource();
+//        String icon = "";
 
-        if (base2 != null) {
-            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(),
-                    SWBResourceURL.UrlType_RENDER);
-
+//        if (base2 != null) {
+            /*SWBResourceURL url = new SWBResourceURLImp(request, getResource(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
             url.setMode(Mode_PDF);
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            String surl = url.toString();
+            String surl = url.toString();*/
+            SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+            url.setMode(Mode_StreamPDF);
+            url.setCallMethod(SWBResourceURL.Call_DIRECT);
 
-            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-            String image = "pdfOnline.jpg";
-            String alt = paramRequest.getLocaleString("alt");
-            toReturn.append("<a href=\"");
-            toReturn.append(surl);
-            toReturn.append("\" class=\"export-stgy\" title=\"");
-            toReturn.append(alt);
-            toReturn.append("\" target=\"_blank\">");
-            toReturn.append("<img src=\"");
-            toReturn.append(webWorkPath);
-            toReturn.append(image);
-            toReturn.append("\" alt=\"");
-            toReturn.append(alt);
-            toReturn.append("\" class=\"toolbar-img\" />");
-            toReturn.append("</a>");
-            icon = toReturn.toString();
-        }
-        return icon;
+//            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
+//            String image = "pdfOnline.jpg";
+            String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+            ret.append("<a href=\"");
+            ret.append(url);
+            ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+            ret.append(title);
+            ret.append("\">");
+            ret.append(title);
+//            ret.append("<img src=\"");
+//            ret.append(webWorkPath);
+//            ret.append(image);
+//            ret.append("\" alt=\"");
+//            ret.append(alt);
+//            ret.append("\" class=\"toolbar-img\" />");
+            ret.append("</a>");
+//            icon = toReturn.toString();
+//        }
+        return ret.toString();
     }
 }
