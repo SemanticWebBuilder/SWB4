@@ -2564,6 +2564,32 @@
     <rdfs:comment>Propiedad que indica si en el Tema también se revisara sentimientos e intensidad en los mensajes de salida.</rdfs:comment>
     <rdfs:domain rdf:resource="#SocialTopic"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="mainPhoto">
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_mainPhoto">
+        <swbxf:formElement>
+          <social:SocialFileUpload rdf:ID="swbSocial_Photo">
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >500000</swbxf:fileMaxSize>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+          </social:SocialFileUpload>
+        </swbxf:formElement>
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >200</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:domain rdf:resource="#SociaNetPage"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Main Photo</rdfs:comment>
+    <rdfs:label xml:lang="es">Foto</rdfs:label>
+    <rdfs:label xml:lang="en">Photo</rdfs:label>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="longitude">
     <rdfs:comment>Longitud de donde se envía el mensaje</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
