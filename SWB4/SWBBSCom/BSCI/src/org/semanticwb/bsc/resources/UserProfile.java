@@ -40,11 +40,13 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
  *
  * @author ana.garcias
  */
-public class UserProfile extends GenericAdmResource {
-
+public class UserProfile extends GenericAdmResource
+{
+    private static final org.semanticwb.Logger log = SWBUtils.getLogger(GenericSemResource.class);
+    
     private final String Mode_CHANGEPASSWORD = "changePassword";
     private final String Action_CHANGEPASSWORD = "savePassword";
-    private static org.semanticwb.Logger log = SWBUtils.getLogger(GenericSemResource.class);
+    
 
     /**
      * Genera el despliegue la actualización del perfil de usuario.
@@ -63,16 +65,20 @@ public class UserProfile extends GenericAdmResource {
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
         final User user = paramRequest.getUser();
+        
+        if(!user.isSigned()){
+            UserProfile.log.error("El usuario no esta logueado.");
+            response.sendError(403);
+            return;
+        }
+        
+        
+        
         final String lang = user.getLanguage();
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
-        
-        if(!user.isSigned()){
-             UserProfile.log.error("El usuario no esta logueado."); 
-            return;
-        }
 
         String img = "";
         request.setAttribute("UserProfile", true);
@@ -96,8 +102,7 @@ public class UserProfile extends GenericAdmResource {
         formMgrPhoto.setMode(SWBFormMgr.MODE_EDIT);
         SWBResourceURL urlPhoto = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
-
-        /////////FormMgr para DATOS DE CONTACTO DE TRABAJO///////////////////////////////////////////////
+        /////////FormMgr para DATOS DE CONTACTO DE TRABAJO//////////////////////////////////
         SWBFormMgr formMgr = new SWBFormMgr(cw.getSemanticObject(), null, SWBFormMgr.MODE_EDIT);
         formMgr.clearProperties();
         formMgr.addProperty(ContactWork.bsc_employment);
@@ -113,7 +118,7 @@ public class UserProfile extends GenericAdmResource {
         formMgr.setMode(SWBFormMgr.MODE_EDIT);
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT);
 
-        //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////////////
+        //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////
         toReturn.append("<div id=\"frmUser\">");
         toReturn.append("<form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n");
         toReturn.append(formMgrPhoto.getFormHiddens());
@@ -203,7 +208,7 @@ public class UserProfile extends GenericAdmResource {
         toReturn.append("</form>\n");
         toReturn.append("</div>");
 
-        //////////////////////////MUESTRA FORM PARA DATOS DE CONTACTO DE TRABAJO///////////////////////////
+        //////////////////////////MUESTRA FORM PARA DATOS DE CONTACTO DE TRABAJO////////////
         toReturn.append("<div id=\"frmEdit\">");
         toReturn.append("<p><strong>" + paramRequest.getLocaleString("lbl_contact") + "</strong></p>");
         toReturn.append("<script type=\"text/javascript\">\n");
@@ -500,15 +505,19 @@ public class UserProfile extends GenericAdmResource {
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
-     * @return el objeto String que representa el c&oacute;digo HTML con la liga
-     * y el icono correspondiente al elemento a exportar.
      * @throws SWBResourceException SWBResourceException Excepti&oacute;n
      * utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        User user = paramRequest.getUser();
+        if(!user.isSigned()) {
+            UserProfile.log.error("El usuario no esta logueado.");
+            response.sendError(403);
+            return;
+        }
+        
         Resource base = paramRequest.getResourceBase();
         String surl = paramRequest.getWebPage().getUrl();
         Iterator<Resourceable> res = base.listResourceables();
@@ -519,20 +528,11 @@ public class UserProfile extends GenericAdmResource {
                 break;
             }
         }
-        String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-        String image = "iconUserProfile.png";
-        String alt = paramRequest.getLocaleString("alt");
-        out.println("<span class=\"span-toolbar\">");
-        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
-        out.println("<img src=\"" + webWorkPath + image + "\" alt=\"" + alt + "\" class=\"toolbar-img\" />");
-        out.println("</a>");
-        out.println("</span>");
-
-        User user = paramRequest.getUser();
-        out.println("<span class=\"span-toolbar\">");
-        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
+        
+        PrintWriter out = response.getWriter();
+        String title = paramRequest.getLocaleString("msgProfile");
+        out.println("<a href=\"" + surl + "\" class=\"swbstgy-toolbar-profile\" title=\""+title+"\">");
         out.println(user.getFullName());
         out.println("</a>");
-        out.println("</span>");
     }
 }
