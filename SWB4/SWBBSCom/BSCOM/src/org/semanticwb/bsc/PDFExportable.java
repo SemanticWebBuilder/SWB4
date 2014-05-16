@@ -42,6 +42,9 @@ public interface PDFExportable {
      * The Constant Mode_PDFDocument.
      */
     public static final String Mode_PDFDocument = "pdf";
+    
+    public static final String Mode_StreamPDF = "pdf";
+    public static final String Mode_StreamPNG = "png";
 
     /**
      * Interface que permite obtener la url para redireccionar al recurso que
