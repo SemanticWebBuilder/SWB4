@@ -19,6 +19,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.social.Facebook;
 import org.semanticwb.social.FacebookGC;
+import org.semanticwb.social.Instagram;
 import org.semanticwb.social.SocialAdmin;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
@@ -82,6 +83,10 @@ public class SocialWebResource extends GenericAdmResource
                     }
                 }
                 
+            }if(socialNetwork instanceof Instagram){//for instagram nets                    
+                    socialNetwork.setAppKey(null);
+                    socialNetwork.setSecretKey(null);
+                    validConfiguration = isValidConfiguration(socialNetwork, SWBPortal.getEnv("swbsocial/instagramAppKey"), SWBPortal.getEnv("swbsocial/instagramSecretKey"));
             }
 
             if(validConfiguration == false ){
