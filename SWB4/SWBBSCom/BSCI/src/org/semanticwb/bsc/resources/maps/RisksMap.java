@@ -4,6 +4,7 @@ package org.semanticwb.bsc.resources.maps;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.xpath.XPath;
@@ -119,7 +120,7 @@ public class RisksMap extends GenericResource {
             PrintWriter out = response.getWriter();
             String SVGjs;
             try {
-                 SVGjs = getSvg();
+                 SVGjs = getSvg(paramRequest);
             }catch(XPathExpressionException xpe) {
                 System.out.println(xpe.toString());
                 out.println(xpe.getMessage());
@@ -275,18 +276,18 @@ public class RisksMap extends GenericResource {
             htm.append("    <ul class=\"swbform-ul\">\n");
 
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen (pixeles)</label>\n");
+            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"width\" name=\"width\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("width","1050")+"\" maxlength=\"4\" />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen (pixeles)</label>\n");
+            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","800")+"\" maxlength=\"4\" />\n");
             htm.append("        </li>\n");
 
             // cuadrante 1
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"quadrant1Color\" class=\"swbform-label\">Color del cuadrante I (hexadecimal)</label>\n");
-            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant1Color\" name=\"quadrant1Color\" value=\""+base.getAttribute("quadrant1Color","#000000")+"\" onblur=\"setColor('quadrant1Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("          <label for=\"quadrant1Color\" class=\"swbform-label\">Color del cuadrante I <i>(hexadecimal)</i></label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant1Color\" name=\"quadrant1Color\" value=\""+base.getAttribute("quadrant1Color","#0000FF")+"\" onblur=\"setColor('quadrant1Color',this.value);\" maxlength=\"7\"  />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
             htm.append("          <label class=\"swbform-label\"></label>\n");
@@ -525,8 +526,8 @@ public class RisksMap extends GenericResource {
 
             // cuadrante 2
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"quadrant2Color\" class=\"swbform-label\">Color del cuadrante II (hexadecimal)</label>\n");
-            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant2Color\" name=\"quadrant2Color\" value=\""+base.getAttribute("quadrant2Color","#000000")+"\" onblur=\"setColor('quadrant2Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("          <label for=\"quadrant2Color\" class=\"swbform-label\">Color del cuadrante II <i>(hexadecimal)</i></label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant2Color\" name=\"quadrant2Color\" value=\""+base.getAttribute("quadrant2Color","#FF0000")+"\" onblur=\"setColor('quadrant2Color',this.value);\" maxlength=\"7\"  />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
             htm.append("          <label class=\"swbform-label\"></label>\n");
@@ -765,8 +766,8 @@ public class RisksMap extends GenericResource {
 
             // cuadrante 3
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"quadrant3Color\" class=\"swbform-label\">Color del cuadrante III (hexadecimal)</label>\n");
-            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant3Color\" name=\"quadrant3Color\" value=\""+base.getAttribute("quadrant3Color","#000000")+"\" onblur=\"setColor('quadrant3Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("          <label for=\"quadrant3Color\" class=\"swbform-label\">Color del cuadrante III <i>(hexadecimal)</i></label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant3Color\" name=\"quadrant3Color\" value=\""+base.getAttribute("quadrant3Color","#00FF00")+"\" onblur=\"setColor('quadrant3Color',this.value);\" maxlength=\"7\"  />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
             htm.append("          <label class=\"swbform-label\"></label>\n");
@@ -1005,8 +1006,8 @@ public class RisksMap extends GenericResource {
 
             // cuadrante 4
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"quadrant4Color\" class=\"swbform-label\">Color del cuadrante IV (hexadecimal)</label>\n");
-            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant4Color\" name=\"quadrant4Color\" value=\""+base.getAttribute("quadrant4Color","#000000")+"\" onblur=\"setColor('quadrant4Color',this.value);\" maxlength=\"7\"  />\n");
+            htm.append("          <label for=\"quadrant4Color\" class=\"swbform-label\">Color del cuadrante IV <i>(hexadecimal)</i></label>\n");
+            htm.append("          <input type=\"text\" dojoType=\"dijit.form.TextBox\" id=\"quadrant4Color\" name=\"quadrant4Color\" value=\""+base.getAttribute("quadrant4Color","#F7FE2E")+"\" onblur=\"setColor('quadrant4Color',this.value);\" maxlength=\"7\"  />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
             htm.append("          <label class=\"swbform-label\"></label>\n");
@@ -1363,7 +1364,7 @@ public class RisksMap extends GenericResource {
         return map;
     }
     
-    public String getSvg() throws XPathExpressionException, NumberFormatException
+    private String getSvg(SWBParamRequest paramRequest) throws SWBResourceException, XPathExpressionException, NumberFormatException
     {
         Resource base = getResourceBase();
         final int width, height;
@@ -1425,7 +1426,7 @@ public class RisksMap extends GenericResource {
             // Título mapa
             expression = "/riskmap/header/title";
             txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
-            txt = "Mapa de riesgos " + txt;
+            txt = paramRequest.getLocaleString("lblRiskMap")+" "+paramRequest.getLocaleString("lblOf")+" "+txt;
             SVGjs.append(" txt = createText('"+txt+"',"+(x+w/2)+","+(y+HEADER_1)+","+HEADER_1+",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -1468,7 +1469,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.setAttributeNS(null,'transform','translate('+x+','+y+')');").append("\n");
         
         // Etiqueta "Mapa de riesgos XXX"
-        SVGjs.append(" txt = createText('Mapa de riesgos',"+w_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskMap")+"',"+w_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         //SVGjs.append(" y_ = y_ + "+(HEADER_2+BOX_SPACING_BOTTOM)).append("\n");
@@ -1494,13 +1495,13 @@ public class RisksMap extends GenericResource {
         // Fin def eje de coordenadas
         
         // Cuadrantes
-        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_)+","+y_+",0,0,'"+base.getAttribute("quadrant1Color")+"',1,'"+base.getAttribute("quadrant1Color")+"',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+1+"_lg"+"',"+w_+","+h_+","+(x_)+","+y_+",0,0,'"+base.getAttribute("quadrant1Color","#0000FF")+"',1,'"+base.getAttribute("quadrant1Color","#0000FF")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'"+base.getAttribute("quadrant2Color")+"',1,'"+base.getAttribute("quadrant2Color")+"',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+2+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+y_+",0,0,'"+base.getAttribute("quadrant2Color","#FF0000")+"',1,'"+base.getAttribute("quadrant2Color","#FF0000")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant3Color")+"',1,'"+base.getAttribute("quadrant3Color")+"',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+3+"_lg"+"',"+w_+","+h_+","+(x_)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant3Color","#00FF00")+"',1,'"+base.getAttribute("quadrant3Color","#00FF00")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
-        SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant4Color")+"',1,'"+base.getAttribute("quadrant4Color")+"',1,1);").append("\n");
+        SVGjs.append(" rect = createRect('quadrant_"+4+"_lg"+"',"+w_+","+h_+","+(x_+w_+1)+","+(y_+h_+1)+",0,0,'"+base.getAttribute("quadrant4Color","#F7FE2E")+"',1,'"+base.getAttribute("quadrant4Color","#F7FE2E")+"',1,1);").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
         // abscisas (valores de impacto)
@@ -1511,7 +1512,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
         SVGjs.append(" g.appendChild(use);").append("\n");
         // Etiqueta "Impacto"
-        SVGjs.append(" txt = createText('Impacto',"+w_+","+(y_+2*h_+BOX_SPACING+HEADER_3)+","+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblImpact")+"',"+w_+","+(y_+2*h_+BOX_SPACING+HEADER_3)+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         
@@ -1524,7 +1525,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
         SVGjs.append(" g.appendChild(use);").append("\n");
         // Etiqueta "Probabilidad"
-        SVGjs.append(" txt = createText('Probabilidad',"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+","+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblProbability")+"',"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270,"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+")');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -1562,7 +1563,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" pto.x = rect.x.baseVal.value;").append("\n");
         SVGjs.append(" pto.y = rect.y.baseVal.value + rect.height.baseVal.value + "+(BOX_SPACING_BOTTOM+HEADER_4)+";").append("\n");
         SVGjs.append(" pto = pto.matrixTransform(g.getCTM());").append("\n");
-        SVGjs.append(" txt = createText('Creado "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblCreated")+" "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
                 
         // Tabla de riesgos
@@ -1587,7 +1588,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" var y_ = 0;").append("\n");
         SVGjs.append(" var h_;").append("\n");
         // Prefijo
-        SVGjs.append(" txt = createText('N. Riesgo',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskNumber")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
@@ -1596,7 +1597,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" x_ = x_ + rect.width.baseVal.value + "+PADDING_LEFT+";").append("\n");
         SVGjs.append(" h_ = rect.height.baseVal.value;").append("\n");
         // descripción
-        SVGjs.append(" txt = createText('Descripcion del riesgo',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskDescription")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+(4*w_)+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
@@ -1607,7 +1608,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
         SVGjs.append(" }").append("\n");
         // Impacto
-        SVGjs.append(" txt = createText('Impacto',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblImpact")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
@@ -1618,7 +1619,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
         SVGjs.append(" }").append("\n");
         // Probabilidad
-        SVGjs.append(" txt = createText('Probabilidad',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblProbability")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
