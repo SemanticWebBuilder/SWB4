@@ -56,7 +56,7 @@ public class StrategicMap extends GenericResource implements PDFExportable {
     public static final String Action_UPDATE = "update";
     
     public static final String HEADER_PREFIX = "head_";
-    public static final int MARGEN_LEFT = 12; // Especifica el margen izquierdo del rectángulo de una perspectiva
+    public static final int MARGEN_LEFT = 18; // Especifica el margen izquierdo del rectángulo de una perspectiva
     public static final int MARGEN_RIGHT = 100; // Especifica el margen derecho del rectángulo de una perspectiva
     public static final int MARGEN_TOP = 20; // Especifica el margen superior del rectángulo de una perspectiva
     public static final int MARGEN_BOTTOM = 30; // Especifica el margen inferior del rectángulo de una perspectiva
@@ -239,11 +239,11 @@ public class StrategicMap extends GenericResource implements PDFExportable {
             htm.append("    <ul class=\"swbform-ul\">\n");
 
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen (pixeles)</label>\n");
+            htm.append("          <label for=\"imgWidth\" class=\"swbform-label\">Anchura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"width\" name=\"width\" regExp=\"\\d{2,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("width","1024")+"\" maxlength=\"4\" />\n");
             htm.append("        </li>\n");
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen (pixeles)</label>\n");
+            htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d{2,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","1400")+"\" maxlength=\"4\" />\n");
             htm.append("        </li>\n");
             
