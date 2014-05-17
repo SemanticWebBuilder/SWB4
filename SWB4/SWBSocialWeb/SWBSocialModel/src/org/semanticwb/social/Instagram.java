@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -231,7 +232,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
     }
 
     @Override
-    public void listen(Stream stream) {
+    public void listen(Stream stream){
         if(!isSn_authenticated() || getAccessToken() == null ){
             log.error("Not authenticated network: " + getTitle() + "!!!");
             return;
@@ -248,8 +249,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         if(searchPhrases == null || searchPhrases.isEmpty()){
             return;
         }
-        
-        
+
         SocialSite socialSite = (SocialSite)WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         
         int blockOfVideos = 500; //this is the default Value,
@@ -260,15 +260,25 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         }catch(Exception e){}
         System.out.println("Message Block Instagram:" + blockOfVideos);
         
+        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        String lastPostId = null;
+        if (socialStreamSerch != null) {
+            lastPostId = getLastPostID(stream);
+        }
+        
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
+        if(lastPostId != null || !lastPostId.trim().isEmpty()){
+            params.put("min_tag_id", lastPostId);
+        }
+        
         boolean canGetMoreResults = true;
                
         int it = 0;
-        int total =0;
+        int total = 0;
         try {
             do {
-                String fbResponse = getRequest(params, "https://api.instagram.com/v1/tags/epn/media/recent",
+                String fbResponse = getRequest(params, "https://api.instagram.com/v1/tags/" + searchPhrases +"/media/recent",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");                
                 
                 JSONObject respuesta = new JSONObject(fbResponse);                
@@ -283,6 +293,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     break;
                 }
                 total += arr.length();
+                System.out.println(" Current total:" + total);
                 for(int ar = 0; ar < arr.length(); ar++){
                     String image = null;
                     String caption = null;
@@ -291,6 +302,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     String postId = null;
                     String video = null;
                     String postUrl = null;
+                    String userProfileUrl = null;
                     Date created_time = null;
                     
                     
@@ -313,6 +325,9 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                         }
                         if(!tmp.getJSONObject("user").isNull("id")){
                             userId = tmp.getJSONObject("user").getString("id");
+                        }
+                        if(!tmp.getJSONObject("user").isNull("profile_picture")){
+                            userProfileUrl = tmp.getJSONObject("user").getString("profile_picture");
                         }
                     }
 
@@ -343,19 +358,24 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     ExternalPost external = new ExternalPost();
                     external.setPostId(postId);
                     external.setCreatorId(userId);
+                    external.setCreatorPhotoUrl(userProfileUrl);
                     external.setCreatorName(username);
 
                     external.setUserUrl("http://instagram.com/" + username);
                     external.setPostUrl(postUrl);
-                    try{
-                    if(created_time.after(new Date())){
-                        external.setCreationTime(new Date());
+                    if(created_time !=null){
+                    try{                        
+                        if(created_time.after(new Date())){
+                            external.setCreationTime(new Date());
+                        }else{
+                            external.setCreationTime(created_time);
+                        }
+                        }catch(Exception e){
+                            System.out.println("error");
+                            e.printStackTrace();
+                        }
                     }else{
-                        external.setCreationTime(created_time);
-                    }
-                    }catch(Exception e){
-                        System.out.println("error");
-                        e.printStackTrace();
+                        external.setCreationTime(new Date());
                     }
                     
                     external.setMessage(caption);                    
@@ -372,8 +392,6 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                         external.setVideo(video);
                         external.setPostType(SWBSocialUtil.VIDEO);                        
                     }else{ continue;}
-                    
-                                        
                     aListExternalPost.add(external);
                 }
                 System.out.println("DATA SIZE:" + respuesta.getJSONArray("data").length());
@@ -382,6 +400,17 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                 if(!respuesta.isNull("pagination")){
                     if(it==1){
                         System.out.println("PAGINATION: " + respuesta.getJSONObject("pagination"));
+                        if(!respuesta.getJSONObject("pagination").isNull("min_tag_id")){
+                            String min_tag_id = respuesta.getJSONObject("pagination").getString("min_tag_id");
+                            try{
+                                setLastPostID(Long.parseLong(min_tag_id), stream);
+                            }catch(NumberFormatException nfe){
+                                log.error("Invalid ID value for NextDateToSearch:" , nfe);
+                            }
+                        }
+                        //max_tag_id = respuesta.getJSONObject("pagination").getString("next_max_tag_id");                        
+                        //System.out.println("the next Request:" + max_tag_id);
+                        //params.put("max_tag_id", max_tag_id);
                     }
                     if(!respuesta.getJSONObject("pagination").isNull("next_url")){
                         next = respuesta.getJSONObject("pagination").getString("next_url");                        
@@ -392,12 +421,14 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                         System.out.println("the next Request:" + max_tag_id);
                         params.put("max_tag_id", max_tag_id);
                     }else{//EXIT
-                        it= 100;
+                        //it= 100;
+                        canGetMoreResults = false;
                     }
                 }else{
                     canGetMoreResults = false;
                 }
-            } while (canGetMoreResults || total < 1000);
+            //} while (canGetMoreResults);
+            } while (canGetMoreResults && total < 100);
             System.out.println("TOTAL READS;" + total);
             //Almacena los nuevos limites para las busquedas posteriores en Facebook
 
@@ -473,5 +504,47 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         return null;
     }
     
+    private String getLastPostID(Stream stream) {
+        String lastPostID = null;
+        System.out.println("entrando al metodo get Last Post....");
+        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        System.out.append("NDTS:" + socialStreamSerch.getNextDatetoSearch());
+        
+        try {
+            if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
+                lastPostID = socialStreamSerch.getNextDatetoSearch();
+                System.out.println("RECOVERING NEXTDATETOSEARCH: " + socialStreamSerch.getNextDatetoSearch());
+            } else {
+                lastPostID = "";
+            }
+        } catch (Exception nfe) {
+            lastPostID = "";
+            log.error("Error in getLastPostID():" + nfe);
+            System.out.println("Invalid value found in NextDatetoSearch(). Set:" + lastPostID);
+        }
+        
+        return lastPostID;
+    }
     
+    private void setLastPostID(Long recentPostId, Stream stream) {
+        System.out.println("entrando al metodo setLastPostID....");
+        
+        try {
+            Long storedValue = 0L;
+            SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+            if (socialStreamSerch != null && socialStreamSerch.getNextDatetoSearch() != null) {
+                storedValue = Long.parseLong(socialStreamSerch.getNextDatetoSearch());
+            }
+            
+            System.out.println("stored Value : " + storedValue + "  dateVideo:  " + recentPostId);
+             
+            if (recentPostId > storedValue) {
+                socialStreamSerch.setNextDatetoSearch(String.valueOf(recentPostId));
+            } else {
+                System.out.println("NO ESTÁ GUARDANDO NADA PORQUE EL VALOR ALMACENADO YA ES IGUAL O MAYOR AL ACTUAL");
+            }
+        } catch (NumberFormatException nfe) {
+            log.error("Error in setLastVideoID():" + nfe);
+        }
+    }
 }
