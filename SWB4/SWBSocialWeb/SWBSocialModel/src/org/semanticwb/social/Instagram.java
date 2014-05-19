@@ -11,6 +11,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -49,16 +50,6 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         super(base);
     }
 
-   
-    @Override
-    public void postPhoto(Photo photo) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public HashMap<String, Long> monitorPostOutResponses(PostOut postOut) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     public void authenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -836,4 +827,134 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
             log.error("Error in setLastVideoID():" + nfe);
         }
     }
+    
+    
+    @Override
+    public double getUserKlout(String instagramUserID)
+    {
+        String url_1="http://api.klout.com/v2/identity.json/ig/"+instagramUserID;
+        String kloutJsonResponse_1=getData(url_1);
+        //System.out.println("kloutResult step-1:"+kloutJsonResponse_1);
+        
+        //Obtener id de json
+        try
+        {
+            if(kloutJsonResponse_1!=null)
+            {
+                JSONObject userData = new JSONObject(kloutJsonResponse_1);
+                String kloutUserId = userData != null && userData.get("id") != null ? (String) userData.get("id") : "";
+                //System.out.println("kloutId de Resultado en Json:"+kloutUserId);
+            
+                //Segunda llamada a la red social Klout, para obtener Json de Score del usuario (kloutUserId) encontrado
+                if(kloutUserId!=null)
+                {
+                    String url_2="http://api.klout.com/v2/user.json/"+kloutUserId+"/score";
+                    String kloutJsonResponse_2=getData(url_2);
+                    //System.out.println("kloutResult step-2-Json:"+kloutJsonResponse_2);
+
+                    if(kloutJsonResponse_2!=null)
+                    {
+                         JSONObject userScoreData = new JSONObject(kloutJsonResponse_2);
+                         Double kloutUserScore = userScoreData != null && userScoreData.get("score") != null ? (Double) userScoreData.get("score") : 0.00;
+                         return Math.rint(kloutUserScore.doubleValue());
+                    }
+                    /*
+                    //TEST: OBTENCIÓN DE TOPICS DEL USUARIO
+                    String url_3="http://api.klout.com/v2/user.json/"+kloutUserId+"/topics";
+                    System.out.println("url_3:"+url_3);
+                    String kloutJsonResponse_3=getData(url_3);
+                    System.out.println("kloutJsonResponse_3-Json:"+kloutJsonResponse_3);
+                    if(kloutJsonResponse_3!=null)
+                    {
+                        JSONObject userScoreData = new JSONObject(kloutJsonResponse_3);
+                        
+                        JSONArray jArrayIds=userScoreData.getJSONArray("id");
+                        for (int i = 0; i < jArrayIds.length(); i++) {
+                            JSONObject jsonObj = jArrayIds.getJSONObject(i);
+                            System.out.println("jsonObj:"+jsonObj);
+                        }
+                    }
+                       
+                    String kloutTopicId = userScoreData != null && userScoreData.get("id") != null ? (String)userScoreData.get("id"):"";
+                    String kloutTopicDisplayName  = userScoreData != null && userScoreData.get("displayName") != null ? (String)userScoreData.get("displayName"):"";
+                    String kloutTopicName  = userScoreData != null && userScoreData.get("name") != null ? (String)userScoreData.get("name"):"";
+                    String kloutTopicSlug  = userScoreData != null && userScoreData.get("slug") != null ? (String)userScoreData.get("slug"):"";
+                    String kloutTopicImgUrl  = userScoreData != null && userScoreData.get("imageUrl") != null ? (String)userScoreData.get("imageUrl"):"";
+                    String kloutTopicType  = userScoreData != null && userScoreData.get("topicType") != null ? (String)userScoreData.get("topicType"):"";
+                    System.out.println("kloutTopicType:"+kloutTopicType);
+                    if(kloutTopicType.equals("sub"))
+                    {
+                       try{ 
+                           SWBUtils.IO.log2File("c://kloutTypes.txt", kloutTopicType);
+                       }catch(Exception e){log.error(e);
+                       }
+                       System.out.println("kloutUserId:"+kloutUserId);
+                       System.out.println("kloutTopicId:"+kloutTopicId);
+                       System.out.println("kloutTopicDisplayName:"+kloutTopicDisplayName);
+                       System.out.println("kloutTopicName:"+kloutTopicName);
+                       System.out.println("kloutTopicSlug:"+kloutTopicSlug);
+                       System.out.println("kloutTopicImgUrl:"+kloutTopicImgUrl);
+                    }
+                    */
+                    //FINALIZA TEST
+                   
+                }
+            }
+        }catch(JSONException je)
+        {
+            log.error(je);
+        }
+        return 0;
+    }
+    
+    private static String getData(String url)
+    {
+        String answer = null;
+        //String key=SWBContext.getAdminWebSite().getProperty("kloutKey");    //TODO:Ver con Jei x que no funciona esto...
+        String key=SWBSocialUtil.Util.getModelPropertyValue(SWBSocialUtil.getConfigWebSite(), "kloutKey");
+        //if(key==null) key="8fkzgz7ngf7bth3nk94gnxkd";   //Solo para fines de pruebas, quitar despues y dejar línea anterior.
+        //System.out.println("key para KLOUT--Gg:"+key);
+        if(key!=null)
+        {
+            url=url+"?key="+key;
+            URLConnection conex = null;
+            try {
+                System.out.println("Url a enviar a Klout:"+url);
+                URL pagina = new URL(url);
+
+                String host = pagina.getHost();
+                //Se realiza la peticion a la página externa
+                conex = pagina.openConnection();
+                /*
+                if (userAgent != null) {
+                    conex.setRequestProperty("user-agent", userAgent);
+                }*/
+                if (host != null) {
+                    conex.setRequestProperty("host", host);
+                }
+                conex.setDoOutput(true);
+
+                conex.setConnectTimeout(20000); //15 segundos maximo, si no contesta la red Klout, cortamos la conexión
+            } catch (Exception nexc) {
+                System.out.println("nexc Error:"+nexc.getMessage());
+                conex = null;
+            }
+            //System.out.println("Twitter Klout/conex:"+conex);
+            //Analizar la respuesta a la peticion y obtener el access token
+            if (conex != null) {
+                try
+                {
+                    //System.out.println("Va a checar esto en Klit:"+conex.getInputStream());
+                    answer = getResponse(conex.getInputStream());
+                }catch(Exception e)
+                {
+                    //log.error(e);
+                }
+                //System.out.println("Twitter Klout/answer-1:"+answer);
+            }
+        }
+        //System.out.println("Twitter Klout/answer-2:"+answer);
+        return answer;
+    }
+    
 }

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Activeable,org.semanticwb.social.Geolocable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass
 {
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
@@ -83,7 +83,7 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
    /**
-   * Topics to classify messages
+   * Temas en los que se clasificaran los mensajes
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasTopics2Apply=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasTopics2Apply");
    /**
