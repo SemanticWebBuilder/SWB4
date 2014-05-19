@@ -279,7 +279,7 @@ public class GanttChart extends GenericResource {
             t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
             // Set the transcoder input and output.
             TranscoderInput input = new TranscoderInput(svg);
-            OutputStream ostream = new FileOutputStream(destpath + "/graphics.jpg");
+            OutputStream ostream = new FileOutputStream(destpath + "/ganttImage.jpg");
             TranscoderOutput output = new TranscoderOutput(ostream);
             try {
                 // Perform the transcoding.
