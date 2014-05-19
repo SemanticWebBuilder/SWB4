@@ -233,11 +233,8 @@ public class GanttChart extends GenericResource {
                 out.println("  function getFile(url) {");
                 out.println("   var form = document.getElementById('svgform');");
                 out.println("   var svg = document.getElementsByTagName('svg')[0];");
-                out.println("   alert('svg: ' + svg);");
-
                 out.println("   var svg_xml = (new XMLSerializer).serializeToString(svg);");
                 out.println("   form.action = url;");
-                out.println("   alert('svg_xml: ' + svg_xml);");
                 out.println("   form['data'].value = svg_xml;");
                 out.println("   form.submit();");
                 out.println("  };");
