@@ -304,6 +304,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     String postUrl = null;
                     String userProfileUrl = null;
                     Date created_time = null;
+                    int likes = 0;
                     
                     
                     JSONObject tmp = arr.getJSONObject(ar);
@@ -339,6 +340,11 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                         postUrl = tmp.getString("link");
                     }
                     
+                    if(!tmp.isNull("likes")){
+                        if(!tmp.getJSONObject("likes").isNull("count")){
+                            likes = tmp.getJSONObject("likes").getInt("count");
+                        }
+                    }
                     if(type.equalsIgnoreCase("image")){
                         if(!tmp.isNull("images")){
                             if(!tmp.getJSONObject("images").isNull("thumbnail")){
@@ -360,7 +366,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     external.setCreatorId(userId);
                     external.setCreatorPhotoUrl(userProfileUrl);
                     external.setCreatorName(username);
-
+                    external.setPostShared(likes);
                     external.setUserUrl("http://instagram.com/" + username);
                     external.setPostUrl(postUrl);
                     if(created_time !=null){
@@ -428,7 +434,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                     canGetMoreResults = false;
                 }
             //} while (canGetMoreResults);
-            } while (canGetMoreResults && total < 100);
+            } while (canGetMoreResults && total < 2000);
             System.out.println("TOTAL READS;" + total);
             //Almacena los nuevos limites para las busquedas posteriores en Facebook
 
@@ -449,6 +455,243 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         System.out.println("Total POSTS: " + total);
     }
     
+    
+    /**
+     @Override
+    public void listen(Stream stream){
+        if(!isSn_authenticated() || getAccessToken() == null ){
+            log.error("Not authenticated network: " + getTitle() + "!!!");
+            return;
+        }
+
+        System.out.println("Entra al metodo listen.... Instagram");
+        ArrayList<ExternalPost> aListExternalPost = new ArrayList();
+        String searchPhrases = formatsInstagramPhrases(stream);//getPhrases(stream.getPhrase());
+        if(searchPhrases == null || searchPhrases.isEmpty()){
+            log.warn("\n Not a valid value to make a instagram search:" + searchPhrases);
+            return;
+        }
+
+        if(searchPhrases == null || searchPhrases.isEmpty()){
+            return;
+        }
+
+        SocialSite socialSite = (SocialSite)WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        
+        int blockOfPosts = 500; //this is the default Value,
+        try{
+            if(socialSite.getBlockofMsgToClassify() > 0){
+                blockOfPosts = socialSite.getBlockofMsgToClassify();
+            }
+        }catch(Exception e){}
+        System.out.println("Message Block Instagram:" + blockOfPosts);
+        
+        SocialNetStreamSearch socialStreamSerch = SocialNetStreamSearch.getSocialNetStreamSearchbyStreamAndSocialNetwork(stream, this);
+        String lastPostId = null;
+        Long lastPostIdLong = 0L;
+        if(socialStreamSerch != null){
+            lastPostId = getLastPostID(stream);
+            if(lastPostId != null || !lastPostId.trim().isEmpty()){
+                try{
+                    lastPostIdLong = Long.parseLong(lastPostId);
+                }catch(NumberFormatException nfe){}            
+            }
+        }
+        
+        HashMap<String, String> params = new HashMap<String, String>(2);
+        params.put("access_token", this.getAccessToken());
+        
+        
+        boolean canGetMoreResults = true;
+               
+        int it = 0;
+        int total = 0;
+        try {
+            do {
+                String fbResponse = getRequest(params, "https://api.instagram.com/v1/tags/" + searchPhrases +"/media/recent",
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");                
+                
+                JSONObject respuesta = new JSONObject(fbResponse);                
+                Long firstElementObtained = 0L;
+                String max_tag_id = null;
+                
+                
+                JSONArray arr = respuesta.getJSONArray("data");
+                System.out.println("SIZE of data:" + arr.length());
+                if(arr.length()==0){
+                    canGetMoreResults = false;
+                    break;
+                }
+                total += arr.length();
+                System.out.println(" Current total:" + total);
+                for(int ar = 0; ar < arr.length(); ar++){
+                    String image = null;
+                    String caption = null;
+                    String username = null;
+                    String userId = null;
+                    String postId = null;
+                    Long postIdLong = 0L;
+                    String video = null;
+                    String postUrl = null;
+                    String userProfileUrl = null;
+                    Date created_time = null;
+                    
+                    
+                    JSONObject tmp = arr.getJSONObject(ar);
+                    String type = !tmp.isNull("type") ? tmp.getString("type") : "";
+                    
+                    if(!tmp.isNull("id")){
+                        postId = tmp.getString("id");
+                        if(postId.contains("_")){
+                            postId = postId.split("_")[0];
+                            System.out.println("the id::" + postId);
+                            try{
+                                postIdLong = Long.parseLong(postId);
+                            }catch(NumberFormatException nfe){}
+                        }
+                    }
+                    if(ar == 0){
+                        firstElementObtained = postIdLong;
+                    }
+                    
+                    if(postIdLong <= lastPostIdLong){//If current post is smaller than the saved then has reached the limit
+                        canGetMoreResults = false;
+                        break;
+                    }
+                    
+                    if(!tmp.isNull("caption")){
+                        if(!tmp.getJSONObject("caption").isNull("text")){
+                            caption = tmp.getJSONObject("caption").getString("text");
+                        }
+                        if(!tmp.getJSONObject("caption").isNull("created_time")){
+                            String created_tmp = tmp.getJSONObject("caption").getString("created_time");
+                            created_time = new java.util.Date(Long.parseLong(created_tmp) * 1000);
+                        }
+                    }
+
+                    if(!tmp.isNull("user")){
+                        if(!tmp.getJSONObject("user").isNull("username")){
+                            username = tmp.getJSONObject("user").getString("username");
+                        }
+                        if(!tmp.getJSONObject("user").isNull("id")){
+                            userId = tmp.getJSONObject("user").getString("id");
+                        }
+                        if(!tmp.getJSONObject("user").isNull("profile_picture")){
+                            userProfileUrl = tmp.getJSONObject("user").getString("profile_picture");
+                        }
+                    }                    
+                    
+                    
+                    
+                    if(!tmp.isNull("link")){
+                        postUrl = tmp.getString("link");
+                    }
+                    
+                    if(type.equalsIgnoreCase("image")){
+                        if(!tmp.isNull("images")){
+                            if(!tmp.getJSONObject("images").isNull("thumbnail")){
+                                image = tmp.getJSONObject("images").getJSONObject("thumbnail").getString("url");
+                            }
+                        }
+                    }else if(type.equalsIgnoreCase("video")){
+                        if(!tmp.isNull("videos")){
+                            if(!tmp.getJSONObject("videos").isNull("low_resolution")){
+                                if(!tmp.getJSONObject("videos").getJSONObject("low_resolution").isNull("url")){
+                                    video = tmp.getJSONObject("videos").getJSONObject("low_resolution").getString("url");
+                                }
+                            }
+                        }
+                    }
+                    
+                    ExternalPost external = new ExternalPost();
+                    external.setPostId(postId);
+                    external.setCreatorId(userId);
+                    external.setCreatorPhotoUrl(userProfileUrl);
+                    external.setCreatorName(username);
+
+                    external.setUserUrl("http://instagram.com/" + username);
+                    external.setPostUrl(postUrl);
+                    if(created_time !=null){
+                    try{                        
+                        if(created_time.after(new Date())){
+                            external.setCreationTime(new Date());
+                        }else{
+                            external.setCreationTime(created_time);
+                        }
+                        }catch(Exception e){
+                            System.out.println("error");
+                            e.printStackTrace();
+                        }
+                    }else{
+                        external.setCreationTime(new Date());
+                    }
+                    
+                    external.setMessage(caption);                    
+                    external.setSocialNetwork(this);
+
+                    
+                    if (image != null) {//Photo                        
+                        ArrayList pictures = new ArrayList();
+                        pictures.add(image);
+                        external.setPictures(pictures);
+                        external.setPostType(SWBSocialUtil.PHOTO);
+                        
+                    } else if (video != null) {//Video
+                        external.setVideo(video);
+                        external.setPostType(SWBSocialUtil.VIDEO);                        
+                    }else{ continue;}
+                    aListExternalPost.add(external);
+                }
+                System.out.println("DATA SIZE:" + respuesta.getJSONArray("data").length());
+                it++;                
+                
+                if(!respuesta.isNull("pagination")){
+                    if(it == 1){//only for the first iteration and the first element of the 'data' object
+                        try{
+                            setLastPostID(firstElementObtained, stream);
+                        }catch(NumberFormatException nfe){
+                            log.error("Invalid ID value for NextDateToSearch:" , nfe);
+                        }
+                    
+                        
+                        //max_tag_id = respuesta.getJSONObject("pagination").getString("next_max_tag_id");                        
+                        //System.out.println("the next Request:" + max_tag_id);
+                        //params.put("max_tag_id", max_tag_id);
+                    }
+                   
+                    if(!respuesta.getJSONObject("pagination").isNull("next_max_tag_id")){
+                        max_tag_id = respuesta.getJSONObject("pagination").getString("next_max_tag_id");                        
+                        System.out.println("the next Request:" + max_tag_id);
+                        params.put("max_tag_id", max_tag_id);
+                    }else{//EXIT
+                        //it= 100;
+                        canGetMoreResults = false;
+                    }
+                }else{
+                    canGetMoreResults = false;
+                }
+            //} while (canGetMoreResults);
+            } while (canGetMoreResults && total < 100);
+            System.out.println("TOTAL READS;" + total);
+            //Almacena los nuevos limites para las busquedas posteriores en Facebook
+
+            
+        } catch (JSONException jsone) {
+            log.error("JSON al parsear datos recibidos ", jsone);
+        } catch (IOException ioe) {
+            log.error("IO, al recibir informacion ",  ioe);
+        } catch (Exception e) {
+            log.error("Exception, al ejecutar la búsqueda ", e);
+        }
+
+        System.out.println("Total POSTS in Array: " + aListExternalPost.size());
+
+        if (aListExternalPost.size() > 0) {
+            new Classifier(aListExternalPost, stream, this, true);
+        }
+        System.out.println("Total POSTS: " + total);
+    }
+     */
     private String formatsInstagramPhrases(Stream stream){       
         String exactPhrases = "";
         if(stream.getStream_exactPhrase() != null && !stream.getStream_exactPhrase().trim().isEmpty()){//Exact phrase
@@ -499,9 +742,55 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         return response;
     }
 
+    /**
+     *
+     * @param id identifier of the facebook user
+     * @return returns a JSONObject containing the requested fields with a valid
+     * value {friends, followers, latitude, longitude, country_code, place_name}
+     * all the values might or might not be present in the JSONObject.
+     */
     @Override
     public JSONObject getUserInfobyId(String userId) {
-        return null;
+        HashMap<String, String> params = new HashMap<String, String>(2);        
+        params.put("access_token", this.getAccessToken());
+
+        JSONObject userInfo = new JSONObject();
+        try {
+            String insResponse = getRequest(params, "https://api.instagram.com/v1/users/" + userId,
+                    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+            try {
+                JSONObject parseUsrInf = new JSONObject(insResponse);
+                JSONObject user = null;
+
+                //System.out.println("THE RESPONSE:" + parseUsrInf);
+                if (parseUsrInf.isNull("data")) {
+                    log.error("Not data found for id:" + userId);
+                    return null;
+                }
+                
+                user = parseUsrInf.getJSONObject("data");
+
+                if(!user.isNull("counts")){
+                    //Check if fields exists and if they're not null
+                    if(!user.getJSONObject("counts").isNull("follows")){
+                        userInfo.put("friends", user.getJSONObject("counts").getInt("follows"));
+                    }else {
+                        userInfo.put("friends", 0);
+                    }
+                    if(!user.getJSONObject("counts").isNull("followed_by")){
+                        userInfo.put("followers", user.getJSONObject("counts").getInt("followed_by"));
+                    }else {
+                        userInfo.put("followers", 0);
+                    }
+                }
+            } catch (JSONException jsone) {
+                log.error("Error parsing json response from facebook ", jsone);
+            }
+
+        } catch (IOException e) {
+            log.error("Error getting user information ", e);
+        }
+        return userInfo;
     }
     
     private String getLastPostID(Stream stream) {
