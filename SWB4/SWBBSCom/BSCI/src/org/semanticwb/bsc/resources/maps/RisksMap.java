@@ -1454,7 +1454,6 @@ public class RisksMap extends GenericResource {
             // Título mapa
             expression = "/riskmap/header/title";
             txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
-            //txt = paramRequest.getLocaleString("lblRiskMap")+" "+paramRequest.getLocaleString("lblOf")+" "+txt;
             txt = SWBUtils.TEXT.getLocaleString(bundle, "lblRiskMap", locale)+" "+SWBUtils.TEXT.getLocaleString(bundle, "lblOf", locale)+" "+txt;
             SVGjs.append(" txt = createText('"+txt+"',"+(x+w/2)+","+(y+HEADER_1)+","+HEADER_1+",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
@@ -1498,7 +1497,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.setAttributeNS(null,'transform','translate('+x+','+y+')');").append("\n");
         
         // Etiqueta "Mapa de riesgos XXX"
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskMap")+"',"+w_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblRiskMap", locale)+"',"+w_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -1542,7 +1540,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
         SVGjs.append(" g.appendChild(use);").append("\n");
         // Etiqueta "Impacto"
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblImpact")+"',"+w_+","+(y_+2*h_+BOX_SPACING+HEADER_3)+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblImpact", locale)+"',"+w_+","+(y_+2*h_+BOX_SPACING+HEADER_3)+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
@@ -1556,7 +1553,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" use.setAttributeNS(XLINK_,'xlink:href','#axis');").append("\n");
         SVGjs.append(" g.appendChild(use);").append("\n");
         // Etiqueta "Probabilidad"
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblProbability")+"',"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblProbability", locale)+"',"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+","+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'transform','rotate(270,"+(x_+2*w_+BOX_SPACING+HEADER_3)+","+h_+")');").append("\n");
@@ -1595,8 +1591,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" pto.x = rect.x.baseVal.value;").append("\n");
         SVGjs.append(" pto.y = rect.y.baseVal.value + rect.height.baseVal.value + "+(BOX_SPACING_BOTTOM+HEADER_4)+";").append("\n");
         SVGjs.append(" pto = pto.matrixTransform(g.getCTM());").append("\n");
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblCreated")+" "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
-        SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblProbability", locale)+" "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblCreated", locale)+" "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
                 
         // Tabla de riesgos
@@ -1621,7 +1616,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" var y_ = 0;").append("\n");
         SVGjs.append(" var h_;").append("\n");
         // Prefijo
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskNumber")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblRiskNumber", locale)+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
@@ -1631,7 +1625,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" x_ = x_ + rect.width.baseVal.value + "+PADDING_LEFT+";").append("\n");
         SVGjs.append(" h_ = rect.height.baseVal.value;").append("\n");
         // descripción
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblRiskDescription")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblRiskDescription", locale)+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+(4*w_)+",x_);").append("\n");
@@ -1643,7 +1636,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
         SVGjs.append(" }").append("\n");
         // Impacto
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblImpact")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblImpact", locale)+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
@@ -1655,7 +1647,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
         SVGjs.append(" }").append("\n");
         // Probabilidad
-        //SVGjs.append(" txt = createText('"+paramRequest.getLocaleString("lblProbability")+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblProbability", locale)+"',x_,y_,"+HEADER_3+",'Verdana');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
