@@ -18,7 +18,6 @@ import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.fop.svg.PDFTranscoder;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBException;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
@@ -37,7 +36,6 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
-import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -53,7 +51,7 @@ import org.w3c.dom.NodeList;
  * @version %I%, %G%
  * @since 1.0
  */
-public class StrategicMap extends GenericResource //implements PDFExportable
+public class StrategicMap extends GenericResource
 {
     private static final Logger log = SWBUtils.getLogger(StrategicMap.class);
 
@@ -1194,49 +1192,4 @@ public class StrategicMap extends GenericResource //implements PDFExportable
     private int topPadding(int value) {
         return value + PADDING_TOP;
     }
-
-    /**
-     * Recorre los recursos y evalua aquel que contengan los atributos
-     * PDFExportable.viewType con valor PDFExportable.PDF_StrategyMap y genera
-     * un url con la p&aacute;gina web que contenga el recurso.
-     *
-     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
-     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
-     * @return el objeto String que representa el c&oacute;digo HTML con la liga
-     * y el icono correspondiente al elemento a exportar.
-     * @throws SWBResourceException SWBResourceException SWBResourceException
-     * Excepti&oacute;n utilizada para recursos de SWB
-     * @throws IOException Excepti&oacute;n de IO
-     */
-//    @Override
-//    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-//        StringBuilder toReturn = new StringBuilder();
-//        Resource base2 = getResourceBase();
-//        String icon = "";
-//
-//        if (base2 != null) {
-//            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-//            url.setMode(Mode_PDFDocument);
-//            url.setCallMethod(SWBResourceURL.Call_DIRECT);
-//            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-//            String image = "pdfOnline.jpg";
-//            String alt = paramRequest.getLocaleString("alt");
-//            toReturn.append("<a href=\"");
-//            toReturn.append(url.toString());
-//            toReturn.append("\" class=\"export-stgy\" title=\"");
-//            toReturn.append(alt);
-//            toReturn.append("\" target=\"_blank\">");
-//            toReturn.append("<img src=\"");
-//            toReturn.append(webWorkPath);
-//            toReturn.append(image);
-//            toReturn.append("\" alt=\"");
-//            toReturn.append(alt);
-//            toReturn.append("\" class=\"toolbar-img\" />");
-//            toReturn.append("</a>");
-//            icon = toReturn.toString();
-//        }
-//        return icon;
-//    }
 }
