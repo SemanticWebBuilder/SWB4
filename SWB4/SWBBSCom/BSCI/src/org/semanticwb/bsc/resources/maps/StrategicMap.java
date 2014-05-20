@@ -2,6 +2,7 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,8 @@ import static org.semanticwb.bsc.PDFExportable.Mode_StreamPNG;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -255,7 +258,7 @@ public class StrategicMap extends GenericResource //implements PDFExportable
             htm.append("</script>\n");
 
             htm.append("<div class=\"swbform\">\n");
-            htm.append("<form id=\"frmPromo\" dojoType=\"dijit.form.Form\" method=\"post\" action=\""+url+"\">\n");
+            htm.append("<form id=\"frmPromo\"  method=\"post\" action=\""+url+"\">\n");
             htm.append("<div title=\"Configuración del estilo\" open=\"true\" dojoType=\"dijit.TitlePane\" duration=\"150\" minSize_=\"20\" splitter_=\"true\" region=\"bottom\">\n");
             htm.append("<fieldset>\n");
             htm.append("    <legend>Estilo</legend>\n");
@@ -275,13 +278,13 @@ public class StrategicMap extends GenericResource //implements PDFExportable
             htm.append("</div>\n");
 
             htm.append("<fieldset>\n");
-            htm.append("   <legend></legend>\n");
-            htm.append("   <ul class=\"swbform-ul\">\n");
-            htm.append("      <li>\n");
-            htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\" onclick=\"return isValid()\">Guardar</button>\n");
+//            htm.append("   <legend></legend>\n");
+//            htm.append("   <ul class=\"swbform-ul\">\n");
+//            htm.append("      <li>\n");
+            htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>\n");
             htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
-            htm.append("      </li>\n");
-            htm.append("   </ul>\n");
+//            htm.append("      </li>\n");
+//            htm.append("   </ul>\n");
             htm.append("</fieldset>\n");
             htm.append("</form>\n");
             htm.append("</div>\n");        
@@ -543,6 +546,11 @@ public class StrategicMap extends GenericResource //implements PDFExportable
         Element rootBSC = map.getDocumentElement();
         int width = assertValue(rootBSC.getAttribute("width"));
         int height = assertValue(rootBSC.getAttribute("height"));
+        
+        User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
+        String lang = user.getLanguage();
+        String bundle = getClass().getName();
+        Locale locale = new Locale(lang);
 
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var width = " + width + ";").append("\n");
@@ -629,7 +637,7 @@ public class StrategicMap extends GenericResource //implements PDFExportable
             w_ = w / 3;
             h_ = h - vPadding(HEADER_1) - PADDING_DOWN;
 
-            SVGjs.append(" txt = createText('Mision'," + (x_ + w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblMission", locale)+"'," + (x_ + w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
 //            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+x_+","+y_+");").append("\n");
@@ -638,7 +646,7 @@ public class StrategicMap extends GenericResource //implements PDFExportable
 //            SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
 
             // pleca Vision
-            SVGjs.append(" txt = createText('Vision'," + (x_ + 5 * w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
+            SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblVision", locale)+"'," + (x_ + 5 * w_ / 2) + "," + y_ + "," + HEADER_2 + ",'Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
 //            SVGjs.append(" fixParagraphAtBounding(txt,"+w_+","+HEADER_2+","+(x_+2*w_)+","+y_+");").append("\n");
