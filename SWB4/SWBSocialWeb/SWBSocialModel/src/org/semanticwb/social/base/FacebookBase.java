@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.social.Photoable,org.semanticwb.social.Pageable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.social.Secreteable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Messageable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableClass
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Pageable,org.semanticwb.social.Relationable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Messageable,org.semanticwb.model.Trashable,org.semanticwb.social.Listenerable,org.semanticwb.social.Photoable,org.semanticwb.social.Oauthable,org.semanticwb.social.Videoable,org.semanticwb.model.FilterableNode,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Secreteable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable
 {
    /**
    * Access token de la aplicación. Esta propiedad se utiliza para poder obtener la propiedad Third_party_id de facebook y esta a su vez, para poder obtener el klout de facebook en la red Klout.
