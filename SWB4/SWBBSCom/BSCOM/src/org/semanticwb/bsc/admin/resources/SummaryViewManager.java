@@ -729,9 +729,12 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
      */
     private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
             throws FileNotFoundException, IOException {
-        Template template = paramRequest.getWebPage().getTemplateRef().getTemplate();
-        String filePath = SWBPortal.getWorkPath()
-                + template.getWorkPath() + "/" + template.getActualVersion().getVersionNumber() + "/"
+        User user = paramRequest.getUser();
+        WebPage wp = paramRequest.getWebPage();
+        
+        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
+        String filePath = template.getWorkPath() + "/" + 
+                template.getActualVersion().getVersionNumber() + "/"
                 + template.getFileName(template.getActualVersion().getVersionNumber());
         FileReader reader = null;
         StringBuilder view = new StringBuilder(256);
