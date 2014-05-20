@@ -1565,10 +1565,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Recorre los recursos y evalua aquel que contengan los atributos
-     * PDFExportable.viewType con valor PDFExportable.VIEW_Detail y
-     * PDFExportable.bsc_itemType con valor el nombre de la clase del elemento
-     * BSC al que pertenezca.
+     * Genera el icono para imprimir el PDF de la vista actual.  Envia los par&aacute;metros
+     * que se usaran para generar el PDF.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
@@ -1596,8 +1594,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
             String surl = url.toString();
 
-            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-            String image = "pdfOnline.jpg";
             String alt = paramRequest.getLocaleString("alt");
 
             toReturn.append("\n <script type=\"text/javascript\">");
@@ -1616,15 +1612,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             toReturn.append("<a href=\"javascript:getFile();");
             toReturn.append("\" class=\"export-stgy\" title=\"");
             toReturn.append(alt);
-            toReturn.append("\" target=\"_blank\">");
-            toReturn.append("<img src=\"");
-            toReturn.append(webWorkPath);
-            toReturn.append(image);
-            toReturn.append("\" alt=\"");
+            toReturn.append("\" >");
             toReturn.append(alt);
-            toReturn.append("\" class=\"toolbar-img\" />");
             toReturn.append("</a>");
-            toReturn.append("<form id=\"frmDetail\" name=\"frmDetail\"  method=\"post\" action=\"");
+            toReturn.append("<form id=\"frmDetail\" method=\"post\" action=\"");
             toReturn.append(surl);
             toReturn.append("\">");
             toReturn.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>");

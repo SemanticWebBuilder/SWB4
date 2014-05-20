@@ -283,17 +283,22 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
         StringBuilder sb = new StringBuilder();
         Resource base = this.getResourceBase();
         String data = request.getParameter("image");
-        int dataIndexOf = data.indexOf("svg");
-        int lenght = data.length();
         float width = base.getAttribute("width") != null
                 ? Float.parseFloat(base.getAttribute("width")) : 550;
         float height = base.getAttribute("height") != null
                 ? Float.parseFloat(base.getAttribute("height")) : 250;
 
-        String data1 = data.substring(0, (dataIndexOf + 3));
-        String data2 = data.substring((dataIndexOf + 3), lenght);
-        data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" width=\"100%\" height=\"100%\" " + (data2);
+        int dataIndexOf = data.indexOf("svg");
+        int lenght = data.length();
+        
+        if(!data.contains("xmlns=")) {
+            String data1 = data.substring(0, (dataIndexOf + 3));
+            String data2 = data.substring((dataIndexOf + 3), lenght);
+            data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" " + (data2);
+        }
+        
         data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
+        
         Document svg = SWBUtils.XML.xmlToDom(data);
         try {
             String destpath = SWBPlatform.getContextPath() + "/work/models/"
