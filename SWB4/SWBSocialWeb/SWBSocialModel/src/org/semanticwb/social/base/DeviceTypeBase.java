@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc 
    */
-public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.
@@ -14,6 +14,11 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
    * Que tipo de plataforma es el deviceType.
    */
     public static final org.semanticwb.platform.SemanticProperty social_devicePlatform=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#devicePlatform");
+   /**
+   * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
+    public static final org.semanticwb.platform.SemanticProperty social_hasPostInDeviceInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasPostInDeviceInv");
    /**
    * Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc
    */
@@ -45,12 +50,6 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType>(it, true);
-        }
-
-        public static org.semanticwb.social.DeviceType createDeviceType(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.DeviceType.ClassMgr.createDeviceType(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.DeviceType
@@ -161,6 +160,29 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
             org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.DeviceType with a determined PostInDeviceInv
+       * @param value PostInDeviceInv of the type org.semanticwb.social.PostIn
+       * @param model Model of the org.semanticwb.social.DeviceType
+       * @return Iterator with all the org.semanticwb.social.DeviceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.DeviceType> listDeviceTypeByPostInDeviceInv(org.semanticwb.social.PostIn value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInDeviceInv, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.DeviceType with a determined PostInDeviceInv
+       * @param value PostInDeviceInv of the type org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.DeviceType
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.DeviceType> listDeviceTypeByPostInDeviceInv(org.semanticwb.social.PostIn value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasPostInDeviceInv,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static DeviceTypeBase.ClassMgr getDeviceTypeClassMgr()
@@ -216,24 +238,6 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -249,6 +253,24 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
@@ -356,6 +378,45 @@ public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass imple
          if(obj!=null)
          {
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+   /**
+   * Gets all the org.semanticwb.social.PostIn
+   * @return A GenericIterator with all the org.semanticwb.social.PostIn
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> listPostInDeviceInvs()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn>(getSemanticObject().listObjectProperties(social_hasPostInDeviceInv));
+    }
+
+   /**
+   * Gets true if has a PostInDeviceInv
+   * @param value org.semanticwb.social.PostIn to verify
+   * @return true if the org.semanticwb.social.PostIn exists, false otherwise
+   */
+    public boolean hasPostInDeviceInv(org.semanticwb.social.PostIn value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasPostInDeviceInv,value.getSemanticObject());
+        }
+        return ret;
+    }
+
+   /**
+   * Gets the PostInDeviceInv
+   * @return a org.semanticwb.social.PostIn
+   */
+    public org.semanticwb.social.PostIn getPostInDeviceInv()
+    {
+         org.semanticwb.social.PostIn ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasPostInDeviceInv);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.PostIn)obj.createGenericInstance();
          }
          return ret;
     }

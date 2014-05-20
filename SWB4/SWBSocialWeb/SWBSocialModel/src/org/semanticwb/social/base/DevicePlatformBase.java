@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada. 
    */
-public abstract class DevicePlatformBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DevicePlatformBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc
@@ -42,12 +42,6 @@ public abstract class DevicePlatformBase extends org.semanticwb.model.SWBClass i
         {
             java.util.Iterator it=sclass.listInstances();
             return new org.semanticwb.model.GenericIterator<org.semanticwb.social.DevicePlatform>(it, true);
-        }
-
-        public static org.semanticwb.social.DevicePlatform createDevicePlatform(org.semanticwb.model.SWBModel model)
-        {
-            long id=model.getSemanticObject().getModel().getCounter(sclass);
-            return org.semanticwb.social.DevicePlatform.ClassMgr.createDevicePlatform(String.valueOf(id), model);
         }
        /**
        * Gets a org.semanticwb.social.DevicePlatform
@@ -213,24 +207,6 @@ public abstract class DevicePlatformBase extends org.semanticwb.model.SWBClass i
     }
 
 /**
-* Gets the Updated property
-* @return java.util.Date with the Updated
-*/
-    public java.util.Date getUpdated()
-    {
-        return getSemanticObject().getDateProperty(swb_updated);
-    }
-
-/**
-* Sets the Updated property
-* @param value long with the Updated
-*/
-    public void setUpdated(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(swb_updated, value);
-    }
-
-/**
 * Gets the Created property
 * @return java.util.Date with the Created
 */
@@ -246,6 +222,24 @@ public abstract class DevicePlatformBase extends org.semanticwb.model.SWBClass i
     public void setCreated(java.util.Date value)
     {
         getSemanticObject().setDateProperty(swb_created, value);
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
     }
 
 /**
