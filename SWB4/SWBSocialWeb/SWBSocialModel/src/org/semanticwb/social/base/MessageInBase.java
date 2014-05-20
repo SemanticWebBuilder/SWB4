@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener 
    */
-public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.model.Tagable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable
+public abstract class MessageInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Mensaje y que entran por el Listener
@@ -83,6 +83,29 @@ public abstract class MessageInBase extends org.semanticwb.social.PostIn impleme
         public static boolean hasMessageIn(String id, org.semanticwb.model.SWBModel model)
         {
             return (getMessageIn(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined DeviceType
+       * @param value DeviceType of the type org.semanticwb.social.DeviceType
+       * @param model Model of the org.semanticwb.social.MessageIn
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByDeviceType(org.semanticwb.social.DeviceType value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_deviceType, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.MessageIn with a determined DeviceType
+       * @param value DeviceType of the type org.semanticwb.social.DeviceType
+       * @return Iterator with all the org.semanticwb.social.MessageIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.MessageIn> listMessageInByDeviceType(org.semanticwb.social.DeviceType value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.MessageIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_deviceType,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.MessageIn with a determined Msg_lang

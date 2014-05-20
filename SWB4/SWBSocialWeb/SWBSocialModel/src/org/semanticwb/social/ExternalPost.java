@@ -165,6 +165,11 @@ public class ExternalPost {
      */
     private String postUrl;
     
+    /**
+     * Device type
+     */
+    private DeviceType deviceType;
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -652,6 +657,21 @@ public class ExternalPost {
         return userGeoLocation;
     }
     
+    /*
+     *  @param devicetype is the type of device which is used for the user that post the message that enters to the system
+     */
+    public void serDeviceType(DeviceType devicetype)
+    {
+        this.deviceType=devicetype;
+    }
     
     
+    /**
+     * 
+     * @return the Type of device user by the user
+     */
+    public DeviceType getDeviceType()
+    {
+        return deviceType;
+    }
 }
