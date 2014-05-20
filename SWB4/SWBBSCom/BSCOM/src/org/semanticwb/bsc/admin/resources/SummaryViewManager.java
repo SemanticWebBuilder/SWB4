@@ -1743,57 +1743,22 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
         }
         return exists;
     }
-
-    /**
-     * Recorre los recursos y evalua aquel que contengan los atributos
-     * PDFExportable.viewType con valor PDFExportable.VIEW_Summary y
-     * PDFExportable.bsc_itemType con valor el nombre de la clase del elemento
-     * BSC al que pertenezca.
-     *
-     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
-     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
-     * @return el objeto String que representa el c&oacute;digo HTML con la liga
-     * y el icono correspondiente al elemento a exportar.
-     * @throws SWBResourceException SWBResourceException Excepti&oacute;n
-     * utilizada para recursos de SWB
-     * @throws IOException Excepti&oacute;n de IO
-     */
+    
     @Override
     public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder();
-//        Resource base2 = getResource();
-//        String icon = "";
-
-//        if (base2 != null) {
-            /*SWBResourceURL url = new SWBResourceURLImp(request, getResource(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-            url.setMode(Mode_PDF);
-            url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            String surl = url.toString();*/
-            SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-            url.setMode(Mode_StreamPDF);
-            url.setCallMethod(SWBResourceURL.Call_DIRECT);
-
-//            String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-//            String image = "pdfOnline.jpg";
-            String title = paramRequest.getLocaleString("msgPrintPDFDocument");
-            ret.append("<a href=\"");
-            ret.append(url);
-            ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-            ret.append(title);
-            ret.append("\">");
-            ret.append(title);
-//            ret.append("<img src=\"");
-//            ret.append(webWorkPath);
-//            ret.append(image);
-//            ret.append("\" alt=\"");
-//            ret.append(alt);
-//            ret.append("\" class=\"toolbar-img\" />");
-            ret.append("</a>");
-//            icon = toReturn.toString();
-//        }
+        SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+        url.setMode(Mode_StreamPDF);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+        ret.append("<a href=\"");
+        ret.append(url);
+        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+        ret.append(title);
+        ret.append("\">");
+        ret.append(title);
+        ret.append("</a>");
         return ret.toString();
     }
 }
