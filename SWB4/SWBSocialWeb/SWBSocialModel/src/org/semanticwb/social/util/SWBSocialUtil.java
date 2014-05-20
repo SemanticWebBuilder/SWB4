@@ -243,7 +243,7 @@ public class SWBSocialUtil {
             }
         }
         */
-        
+        System.out.println("SWBContext.getAdminWebSite():"+SWBContext.getAdminWebSite());
         File profileDir=new File(SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/profiles/"); 
         if(profileDir.exists() && profileDir.isDirectory())
         {
