@@ -375,7 +375,6 @@ public class StrategicMap extends GenericResource
     @Override
     public void setResourceBase(Resource base) throws SWBResourceException {
         super.setResourceBase(base);
-        base.setData(PDFExportable.bsc_itemType, PDFExportable.PDF_StrategyMap);
         WebPage wp = base.getWebSite().getWebPage(Objective.class.getSimpleName());
         urlBase = wp.getUrl();
     }
