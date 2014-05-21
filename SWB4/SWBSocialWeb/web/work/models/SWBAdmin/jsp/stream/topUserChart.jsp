@@ -33,16 +33,11 @@
     if (semObj.getGenericInstance() instanceof Stream) {
         Stream stream = (Stream) semObj.getGenericInstance();
         title = stream.getTitle();
-        usersByStream = SWBSocialUtil.sparql.getSocialUsersInStream(stream);
-        Iterator it =  usersByStream.entrySet().iterator();
-        while(it.hasNext()){
-            Map.Entry pair = (Map.Entry)it.next();
-            SocialNetworkUser snetu= (SocialNetworkUser)((SemanticObject)pair.getKey()).createGenericInstance();
-            System.out.println(snetu + ":" + snetu.getSnu_name()  + "--" + pair.getValue());
-        }        
+        usersByStream = SWBSocialUtil.sparql.getSocialUsersInStream(stream);             
     } else if (semObj.getGenericInstance() instanceof SocialTopic) {
         SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
         title = socialTopic.getTitle();
+        usersByStream = SWBSocialUtil.sparql.getSocialUsersInSocialTopic(socialTopic);
         //itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
     }
     
