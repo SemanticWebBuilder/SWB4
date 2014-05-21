@@ -96,11 +96,11 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                     external.setCreatorName("@"+status.getUser().getScreenName());
                     external.setCreationTime(status.getCreatedAt());
-                    external.setDevice(status.getSource());
+                    //external.setDevice(status.getSource());
                     if (status.getText()!=null) {
                        external.setMessage(status.getText());
                     }                            
-                    external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
+                    external.setPostType(SWBSocialUtil.MESSAGE);   
                     external.setFollowers(status.getUser().getFollowersCount());
                     external.setFriendsNumber(status.getUser().getFriendsCount());
                     //System.out.println("status.getUser().getLocation()----->"+status.getUser().getLocation());

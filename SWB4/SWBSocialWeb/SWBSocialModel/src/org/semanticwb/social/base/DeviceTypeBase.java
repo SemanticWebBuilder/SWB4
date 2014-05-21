@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc 
    */
-public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class DeviceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.

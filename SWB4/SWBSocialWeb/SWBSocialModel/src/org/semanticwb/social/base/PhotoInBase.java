@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener 
    */
-public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostImageable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
+public abstract class PhotoInBase extends org.semanticwb.social.PostIn implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable,org.semanticwb.social.PostImageable
 {
    /**
    * Clase en donde se almacenan todos los post de tipo Photo y que entran por el Listener
@@ -83,6 +83,29 @@ public abstract class PhotoInBase extends org.semanticwb.social.PostIn implement
         public static boolean hasPhotoIn(String id, org.semanticwb.model.SWBModel model)
         {
             return (getPhotoIn(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostInDevicePlatform
+       * @param value PostInDevicePlatform of the type org.semanticwb.social.DevicePlatform
+       * @param model Model of the org.semanticwb.social.PhotoIn
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostInDevicePlatform(org.semanticwb.social.DevicePlatform value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInDevicePlatform, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PhotoIn with a determined PostInDevicePlatform
+       * @param value PostInDevicePlatform of the type org.semanticwb.social.DevicePlatform
+       * @return Iterator with all the org.semanticwb.social.PhotoIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PhotoIn> listPhotoInByPostInDevicePlatform(org.semanticwb.social.DevicePlatform value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PhotoIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInDevicePlatform,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.PhotoIn with a determined DeviceType
