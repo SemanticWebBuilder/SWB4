@@ -8987,8 +8987,8 @@ nv.models.multiBarHorizontalChart = function() {
     ;
 
   var margin = {top: 30, right: 20, bottom: 50, left: 60}
-    , width = null
-    , height = null
+    , width = 800
+    , height = 400
     , color = nv.utils.defaultColor()
     , showControls = true
     , showLegend = true
@@ -8998,7 +8998,7 @@ nv.models.multiBarHorizontalChart = function() {
     , tooltips = true
     , tooltip = function(key, x, y, e, graph) {
         return '<h3>' + key + ' - ' + x + '</h3>' +
-               '<p>' +  y + '</p>'
+               '<p>Mensajes recibidos:' +  y + '</p>'
       }
     , x //can be accessed via chart.xScale()
     , y //can be accessed via chart.yScale()
