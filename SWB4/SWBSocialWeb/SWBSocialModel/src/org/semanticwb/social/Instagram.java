@@ -232,7 +232,7 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
         System.out.println("Entra al metodo listen.... Instagram");
         ArrayList<ExternalPost> aListExternalPost = new ArrayList();
         String searchPhrases = formatsInstagramPhrases(stream);//getPhrases(stream.getPhrase());
-        if(searchPhrases == null || searchPhrases.isEmpty()){
+        if(searchPhrases == null || searchPhrases.trim().isEmpty()){
             log.warn("\n Not a valid value to make a instagram search:" + searchPhrases);
             return;
         }
@@ -685,10 +685,10 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
      */
     private String formatsInstagramPhrases(Stream stream){       
         String exactPhrases = "";
-        if(stream.getStream_exactPhrase() != null && !stream.getStream_exactPhrase().trim().isEmpty()){//Exact phrase
-            exactPhrases = stream.getStream_exactPhrase();
+        if(stream.getPhrase() != null && !stream.getPhrase().trim().isEmpty()){//Exact phrase
+            exactPhrases = stream.getPhrase();
             exactPhrases = SWBSocialUtil.Strings.replaceSpecialCharacters(exactPhrases);
-            exactPhrases = exactPhrases.trim().replaceAll(" ", ""); //replace multiple spaces beetwen words for one only one space
+            exactPhrases = exactPhrases.split(" ")[0];
         }
         
         System.out.println("Instagram Final String-->" + exactPhrases + "<-");        
