@@ -520,7 +520,7 @@ if(tmhome == null) {
 //                    html.append("</a>");
                 }else {
                     node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
-                    node.setAttribute("url", tmhome.getUrl());
+                    node.setAttribute("url", tmhome.getUrl(user.getLanguage(),false));
                 }
 
                 if(opened) {
@@ -633,7 +633,7 @@ if(tpsite == null) {
 //                    html.append("</a>");
                 }else {
                     node.setAttribute("title", tmhome.getDisplayTitle(user.getLanguage()));
-                    node.setAttribute("url", tmhome.getUrl());
+                    node.setAttribute("url", tmhome.getUrl(user.getLanguage(),false));
                 }
 
                 if(tpsite!=null && opened) {                
@@ -714,7 +714,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", webpage.getUrl());
+                            child.setAttribute("url", webpage.getUrl(user.getLanguage(),false));
                         }
 
                         if(opened) {
@@ -728,7 +728,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", webpage.getUrl());
+                            child.setAttribute("url", webpage.getUrl(user.getLanguage(),false));
                         }
                     }
                 }
@@ -797,7 +797,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", webpage.getUrl());
+                            child.setAttribute("url", webpage.getUrl(user.getLanguage(),false));
                         }
 
                         if(opened) {
@@ -811,7 +811,7 @@ if(tpsite == null) {
 //                            html.append("</a>");
                         }else {
                             child.setAttribute("title", webpage.getDisplayTitle(user.getLanguage()));
-                            child.setAttribute("url", webpage.getUrl());
+                            child.setAttribute("url", webpage.getUrl(user.getLanguage(),false));
                         }
                     }
                 }

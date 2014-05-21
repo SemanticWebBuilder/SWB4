@@ -141,7 +141,7 @@ public class Search extends GenericAdmResource
                 search.setAttribute("wordsEnc", java.net.URLEncoder.encode(q));
                 //search.setAttribute("path",AFUtils.getInstance().getWebPath()+AFUtils.getInstance().getEnv("wb/distributor")+"/"+tm.getId()+"/");
                 search.setAttribute("work", SWBPortal.getWebWorkPath());
-                search.setAttribute("url", paramRequest.getWebPage().getUrl());
+                search.setAttribute("url", paramRequest.getWebPage().getUrl(scope,false));
 
                 StringTokenizer st = new StringTokenizer(q, " ");
                 Vector w = new Vector();

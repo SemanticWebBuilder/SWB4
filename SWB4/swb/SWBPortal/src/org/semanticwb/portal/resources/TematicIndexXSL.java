@@ -166,7 +166,7 @@ public class TematicIndexXSL extends GenericAdmResource
                     Element son = dom.createElement("son");
                     son.appendChild(dom.createTextNode(""));
                     //son.setAttribute("sonref",webpath+dist+"/"+tm.getId()+"/"+hijo.getId());
-                    son.setAttribute("sonref",hijo.getUrl());
+                    son.setAttribute("sonref",hijo.getUrl(usrlanguage,false));
                     son.setAttribute("path", path);
                     son.setAttribute("id", hijo.getId());
                     if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
@@ -199,7 +199,7 @@ public class TematicIndexXSL extends GenericAdmResource
                             Element grandson = dom.createElement("grandson");
                             grandson.appendChild(dom.createTextNode(""));
                             //grandson.setAttribute("grandsonref",webpath+dist+"/"+tm.getId()+"/"+nieto.getId());
-                            grandson.setAttribute("grandsonref",nieto.getUrl());
+                            grandson.setAttribute("grandsonref",nieto.getUrl(usrlanguage,false));
                             grandson.setAttribute("path", path);
                             grandson.setAttribute("id", nieto.getId());
                             if (nieto.getTarget() != null && !"".equalsIgnoreCase(nieto.getTarget())) {

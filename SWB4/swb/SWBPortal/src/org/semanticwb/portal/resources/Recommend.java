@@ -351,6 +351,7 @@ public class Recommend extends GenericAdmResource {
      */
     public Document getDomEmail(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         Resource base = getResourceBase();
+        User user=paramRequest.getUser();
         try {
             String strFromEmail = (null != request.getParameter("txtFromEmail") && !"".equals(request.getParameter("txtFromEmail").trim()))
                     ? request.getParameter("txtFromEmail").trim()
@@ -403,7 +404,7 @@ public class Recommend extends GenericAdmResource {
                 addElem(dom, emn, "topic",
                         topic.getDisplayTitle(lang) != null
                         ? topic.getDisplayTitle(lang) : "Sin título");
-                addElem(dom, emn, "topicurl", strUrl + topic.getUrl());
+                addElem(dom, emn, "topicurl", strUrl + topic.getUrl(user.getLanguage(),false));
 
                 if (strFromName != null) {
                     addElem(dom, emn, "fromname", strFromName);
@@ -472,6 +473,7 @@ public class Recommend extends GenericAdmResource {
      * @throws IOException Signals that an I/O exception has occurred.
      */
     public Document getDomEmail(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        User user=response.getUser();
         Resource base = getResourceBase();
         try {
             String strFromEmail = (null != request.getParameter("txtFromEmail") && !"".equals(request.getParameter("txtFromEmail").trim()))
@@ -525,7 +527,7 @@ public class Recommend extends GenericAdmResource {
                 addElem(dom, emn, "topic",
                         topic.getDisplayTitle(lang) != null
                         ? topic.getDisplayTitle(lang) : "Sin título");
-                addElem(dom, emn, "topicurl", strUrl + topic.getUrl());
+                addElem(dom, emn, "topicurl", strUrl + topic.getUrl(user.getLanguage(),false));
 
                 if (strFromName != null) {
                     addElem(dom, emn, "fromname", strFromName);

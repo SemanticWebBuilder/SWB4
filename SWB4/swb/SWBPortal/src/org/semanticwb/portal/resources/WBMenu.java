@@ -136,9 +136,9 @@ public class WBMenu extends GenericAdmResource
             dom.appendChild(emenu);
 
             Element ecurSection = dom.createElement("currenttopic");
-            ecurSection.setAttribute("id", tpid.getUrl());
+            ecurSection.setAttribute("id", tpid.getUrl(lang,false));
             ecurSection.setAttribute("name", tpid.getDisplayName(lang));
-            ecurSection.setAttribute("path", tpid.getUrl());
+            ecurSection.setAttribute("path", tpid.getUrl(lang,false));
             emenu.appendChild(ecurSection);
 
             WebPage padre = tpid.getParent();
@@ -146,7 +146,7 @@ public class WBMenu extends GenericAdmResource
                 Element epadre = dom.createElement("parent");
                 epadre.setAttribute("id", padre.getId());
                 epadre.setAttribute("name", padre.getDisplayName(lang));
-                epadre.setAttribute("path", padre.getUrl());
+                epadre.setAttribute("path", padre.getUrl(lang,false));
                 if (padre.getTarget() != null && !"".equalsIgnoreCase(padre.getTarget())) {
                     epadre.setAttribute("target", padre.getTarget());
                 }
@@ -165,7 +165,7 @@ public class WBMenu extends GenericAdmResource
                         Element esibling = dom.createElement("brother");
                         esibling.setAttribute("id", tphermano.getId());
                         esibling.setAttribute("name", tphermano.getDisplayName(lang));
-                        esibling.setAttribute("path", tphermano.getUrl());
+                        esibling.setAttribute("path", tphermano.getUrl(lang,false));
                         if (tphermano.getTarget() != null && !"".equalsIgnoreCase(tphermano.getTarget())) {
                             esibling.setAttribute("target", tphermano.getTarget());
                         }
@@ -183,7 +183,7 @@ public class WBMenu extends GenericAdmResource
                                     Element ehijo = dom.createElement("child");
                                     ehijo.setAttribute("id", hijo.getId());
                                     ehijo.setAttribute("name", hijo.getDisplayName(lang));
-                                    ehijo.setAttribute("path", hijo.getUrl());
+                                    ehijo.setAttribute("path", hijo.getUrl(lang,false));
                                     if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
                                         ehijo.setAttribute("target", hijo.getTarget());
                                     }
@@ -205,7 +205,7 @@ public class WBMenu extends GenericAdmResource
                 Element esibling = dom.createElement("brother");
                 esibling.setAttribute("id", tpid.getId());
                 esibling.setAttribute("name", tpid.getDisplayName(lang));
-                esibling.setAttribute("path", tpid.getUrl());
+                esibling.setAttribute("path", tpid.getUrl(lang,false));
                 esibling.setAttribute("current", "1");
                 if (tpid.getTarget() != null && !"".equalsIgnoreCase(tpid.getTarget())) {
                     esibling.setAttribute("target", tpid.getTarget());
@@ -221,7 +221,7 @@ public class WBMenu extends GenericAdmResource
                         Element ehijo = dom.createElement("child");
                         ehijo.setAttribute("id", hijo.getId());
                         ehijo.setAttribute("name", hijo.getDisplayName(lang));
-                        ehijo.setAttribute("path", hijo.getUrl());
+                        ehijo.setAttribute("path", hijo.getUrl(lang,false));
                         if (hijo.getTarget() != null && !"".equalsIgnoreCase(hijo.getTarget())) {
                             ehijo.setAttribute("target", hijo.getTarget());
                         }

@@ -31,6 +31,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -125,6 +126,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
      */
     public org.w3c.dom.Document getDom(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        User user=paramRequest.getUser();
         Resource base=getResourceBase();
         WebPage wp = paramRequest.getWebPage();
         WebSite ws = wp.getWebSite();
@@ -204,7 +206,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
                     Element son = dom.createElement("son");
                     son.appendChild(dom.createTextNode(""));
                     //son.setAttribute("sonref",webpath+dist+"/"+tm.getId()+"/"+hijo.getId());
-                    son.setAttribute("sonref",hijo.getUrl()+querystring);
+                    son.setAttribute("sonref",hijo.getUrl(user.getLanguage(),false)+querystring);
                     son.setAttribute("path", path);
                     son.setAttribute("id", hijo.getId());
                     Element sontitle = dom.createElement("sontitle");
@@ -244,7 +246,7 @@ public class TematicIndexXSLConfig extends GenericAdmResource
                             Element grandson = dom.createElement("grandson");
                             grandson.appendChild(dom.createTextNode(""));
                             //grandson.setAttribute("grandsonref",webpath+dist+"/"+tm.getId()+"/"+nieto.getId());
-                            grandson.setAttribute("grandsonref",nieto.getUrl()+querystring);
+                            grandson.setAttribute("grandsonref",nieto.getUrl(user.getLanguage(),false)+querystring);
                             grandson.setAttribute("path", path);
                             grandson.setAttribute("id", nieto.getId());
                             Element grandsontitle = dom.createElement("grandsontitle");
