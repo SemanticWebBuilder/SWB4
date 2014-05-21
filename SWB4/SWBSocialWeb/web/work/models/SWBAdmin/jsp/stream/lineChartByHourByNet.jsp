@@ -52,10 +52,17 @@
     }
     
     
-    if (itObjPostIns == null) {
-        JSONArray node = new JSONArray();
-        //return node;
-    }    
+    if (itObjPostIns == null || !itObjPostIns.hasNext()) {
+%>
+    <script>
+        var ifHour = parent.document.getElementById('<%=suri + "byNet"%>');
+        if(ifHour){
+            ifHour.style.height = '0px';
+        }
+    </script>
+<%
+        return;
+    }
     java.util.Date date = null;
     Calendar calendario = Calendar.getInstance();
     int netsNumber = networks.size();
@@ -126,6 +133,7 @@ svg {
 </style>
 <body class='with-3d-shadow with-transitions'>
 
+<div align="center" style="margin-left: 100px; width: 700px">MENSAJES POR HORA DEL D&Iacute;A POR RED SOCIAL</div>
 <div id="chart1" >
   <svg style="height: 430px;"></svg>
 </div>
