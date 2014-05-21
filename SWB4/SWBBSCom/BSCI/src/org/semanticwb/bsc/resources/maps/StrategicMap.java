@@ -523,12 +523,6 @@ public class StrategicMap extends GenericResource
                 }
             }
         } //lista de perspectivas
-
-
-
-        // TODO
-        // atributo href de los objetivos
-
         return documentBSC;
     }
     
@@ -709,11 +703,10 @@ public class StrategicMap extends GenericResource
                 String pid = attrs.getNamedItem("id").getNodeValue();
                 int pw = assertValue(attrs.getNamedItem("width").getNodeValue());
                 int px = assertValue(attrs.getNamedItem("x").getNodeValue());
-
+                
                 // título de la perspectiva
                 expression = "/bsc/perspective[@id='" + pid + "']/title";
                 perspectiveName = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
-
                 SVGjs.append(" g = document.createElementNS(SVG_,'g');").append("\n");
                 SVGjs.append(" g.setAttributeNS(null,'id','" + pid + "');").append("\n");
                 SVGjs.append(" svg.appendChild(g);").append("\n");
@@ -733,7 +726,7 @@ public class StrategicMap extends GenericResource
                         if (nodeD != null && nodeD.getNodeType() == Node.ELEMENT_NODE) {
                             attrs = nodeD.getAttributes();
                             String did = attrs.getNamedItem("id").getNodeValue();
-                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "',x,y_-"+(0+0)+"," + HEADER_4 + ",'Verdana');").append("\n");
+                            SVGjs.append(" txt = createText('" + nodeD.getFirstChild().getNodeValue() + "',x,y_," + HEADER_4 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
                             SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
                             SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.height.baseVal.value,x,y_);").append("\n");
@@ -761,7 +754,6 @@ public class StrategicMap extends GenericResource
                         String tid = attrs.getNamedItem("id").getNodeValue();
                         w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
                         x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
-
                         // r guarda algunas valores de la perspectiva actual para después recuperarlas por su identificador
                         // esto resulta muy conveniente para construir los paths de relaciones causa/efecto
                         SVGjs.append(" r = document.createElementNS(SVG_,'rect');").append("\n");
@@ -770,9 +762,12 @@ public class StrategicMap extends GenericResource
                         SVGjs.append(" defs.appendChild(r);").append("\n");
 
                         // rectángulo tema
-                        if (!isHidden) {
+                        if(!isHidden) {
                             expression = "/bsc/perspective[@id='" + pid + "']/themes/theme[@id='" + tid + "']/title";
+                            //if(!isHidden)
                             title = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
+                            //else
+                            //title=" ";
                             SVGjs.append(" txt = createText('" + title + "'," + x_ + ",y__," + HEADER_3 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
                             SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + x_ + ");").append("\n");
@@ -780,41 +775,43 @@ public class StrategicMap extends GenericResource
                             SVGjs.append(" framingRect(rect,'" + tid + "'," + w_ + ",rect.height.baseVal.value," + x_ + ",y__);").append("\n");
                             SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                         }
+                            
+                        if(!isHidden) {
+                            // relaciones causa-efecto con este tema
+                            expression = "//theme[@id='" + tid + "']/rel";
+                            NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
+                            for (int n = 0; n < nlRels.getLength(); n++) {
+                                Node nodeR = nlRels.item(n);
+                                if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
+                                    attrs = nodeR.getAttributes();
+                                    String to = attrs.getNamedItem("to").getNodeValue();
+                                    String parent = attrs.getNamedItem("parent").getNodeValue();
+                                    SVGjs.append(" to = document.getElementById('" + to + "');").append("\n");
+                                    SVGjs.append(" parent = document.getElementById('" + parent + "');").append("\n");
 
-                        // relaciones causa-efecto con este tema
-                        expression = "//theme[@id='" + tid + "']/rel";
-                        NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
-                        for (int n = 0; n < nlRels.getLength(); n++) {
-                            Node nodeR = nlRels.item(n);
-                            if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
-                                attrs = nodeR.getAttributes();
-                                String to = attrs.getNamedItem("to").getNodeValue();
-                                String parent = attrs.getNamedItem("parent").getNodeValue();
-                                SVGjs.append(" to = document.getElementById('" + to + "');").append("\n");
-                                SVGjs.append(" parent = document.getElementById('" + parent + "');").append("\n");
+                                    SVGjs.append(" r = document.getElementById('w_" + parent + "');").append("\n");
+                                    SVGjs.append(" if(r) {").append("\n");
+                                    SVGjs.append("     w = r.width.baseVal.value;").append("\n");
+                                    SVGjs.append("     w = w/2;").append("\n");
+                                    SVGjs.append(" }else {").append("\n");
+                                    SVGjs.append("     w = 0;").append("\n");
+                                    SVGjs.append(" }").append("\n");
 
-                                SVGjs.append(" r = document.getElementById('w_" + parent + "');").append("\n");
-                                SVGjs.append(" if(r) {").append("\n");
-                                SVGjs.append("     w = r.width.baseVal.value;").append("\n");
-                                SVGjs.append("     w = w/2;").append("\n");
-                                SVGjs.append(" }else {").append("\n");
-                                SVGjs.append("     w = 0;").append("\n");
-                                SVGjs.append(" }").append("\n");
-
-                                SVGjs.append(" if(to && parent) {").append("\n");
-                                SVGjs.append("   matxTo = parent.getCTM();").append("\n");
-                                SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
-                                SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
-                                SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
-                                SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
-                                SVGjs.append("   matxFrm = g.getCTM();").append("\n");
-                                SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
-                                SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
-                                SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
-                                SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
-                                SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
-                                SVGjs.append("   svg.appendChild(path);").append("\n");
-                                SVGjs.append(" }").append("\n");
+                                    SVGjs.append(" if(to && parent) {").append("\n");
+                                    SVGjs.append("   matxTo = parent.getCTM();").append("\n");
+                                    SVGjs.append("   posTo = svg.createSVGPoint();").append("\n");
+                                    SVGjs.append("   posTo.x = to.x.baseVal.value + w;").append("\n");
+                                    SVGjs.append("   posTo.y = to.y.baseVal.value;").append("\n");
+                                    SVGjs.append("   posTo = posTo.matrixTransform(matxTo);").append("\n");
+                                    SVGjs.append("   matxFrm = g.getCTM();").append("\n");
+                                    SVGjs.append("   posFrm = svg.createSVGPoint();").append("\n");
+                                    SVGjs.append("   posFrm.x = rect.x.baseVal.value;").append("\n");
+                                    SVGjs.append("   posFrm.y = rect.y.baseVal.value;").append("\n");
+                                    SVGjs.append("   posFrm = posFrm.matrixTransform(matxFrm);").append("\n");
+                                    SVGjs.append("   path = createArrow(posFrm.x+'_'+posFrm.y+'_'+posTo.x+'_'+posTo.y,posFrm.x+" + (w_ / 2) + ",posFrm.y,posTo.x,posTo.y);").append("\n");
+                                    SVGjs.append("   svg.appendChild(path);").append("\n");
+                                    SVGjs.append(" }").append("\n");
+                                }
                             }
                         }
 
@@ -834,7 +831,7 @@ public class StrategicMap extends GenericResource
                                 String oid = attrs.getNamedItem("id").getNodeValue();
                                 String href = attrs.getNamedItem("href").getNodeValue();
                                 w_ = assertValue(attrs.getNamedItem("width").getNodeValue());
-                                x_ = assertValue(attrs.getNamedItem("x").getNodeValue());
+                                x_ = assertValue(attrs.getNamedItem("x").getNodeValue());                               
                                 String color = attrs.getNamedItem("status").getNodeValue();
 
                                 info = new StringBuilder();
@@ -865,7 +862,7 @@ public class StrategicMap extends GenericResource
 
                                 //relaciones causa-efecto con este objetivo
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/rel";
-                                nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
+                                NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
                                 for (int n = 0; n < nlRels.getLength(); n++) {
                                     Node nodeR = nlRels.item(n);
                                     if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
