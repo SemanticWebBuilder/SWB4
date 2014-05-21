@@ -764,10 +764,7 @@ public class StrategicMap extends GenericResource
                         // rectángulo tema
                         if(!isHidden) {
                             expression = "/bsc/perspective[@id='" + pid + "']/themes/theme[@id='" + tid + "']/title";
-                            //if(!isHidden)
                             title = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
-                            //else
-                            //title=" ";
                             SVGjs.append(" txt = createText('" + title + "'," + x_ + ",y__," + HEADER_3 + ",'Verdana');").append("\n");
                             SVGjs.append(" g.appendChild(txt);").append("\n");
                             SVGjs.append(" fixParagraphToWidth(txt," + w_ + "," + x_ + ");").append("\n");
@@ -780,9 +777,11 @@ public class StrategicMap extends GenericResource
                             // relaciones causa-efecto con este tema
                             expression = "//theme[@id='" + tid + "']/rel";
                             NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
-                            for (int n = 0; n < nlRels.getLength(); n++) {
+                            for (int n = 0; n < nlRels.getLength(); n++)
+                            {
                                 Node nodeR = nlRels.item(n);
-                                if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
+                                if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE)
+                                {
                                     attrs = nodeR.getAttributes();
                                     String to = attrs.getNamedItem("to").getNodeValue();
                                     String parent = attrs.getNamedItem("parent").getNodeValue();
@@ -824,9 +823,11 @@ public class StrategicMap extends GenericResource
 
                         expression = "//theme[@id='" + tid + "']/obj";
                         NodeList nlObjs = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
-                        for (int m = 0; m < nlObjs.getLength(); m++) {
+                        for (int m = 0; m < nlObjs.getLength(); m++)
+                        {
                             Node nodeO = nlObjs.item(m);
-                            if (nodeO != null && nodeO.getNodeType() == Node.ELEMENT_NODE) {
+                            if (nodeO != null && nodeO.getNodeType() == Node.ELEMENT_NODE)
+                            {
                                 attrs = nodeO.getAttributes();
                                 String oid = attrs.getNamedItem("id").getNodeValue();
                                 String href = attrs.getNamedItem("href").getNodeValue();
@@ -863,9 +864,11 @@ public class StrategicMap extends GenericResource
                                 //relaciones causa-efecto con este objetivo
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/rel";
                                 NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
-                                for (int n = 0; n < nlRels.getLength(); n++) {
+                                for (int n = 0; n < nlRels.getLength(); n++)
+                                {
                                     Node nodeR = nlRels.item(n);
-                                    if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE) {
+                                    if (nodeR != null && nodeR.getNodeType() == Node.ELEMENT_NODE)
+                                    {
                                         attrs = nodeR.getAttributes();
                                         String to = attrs.getNamedItem("to").getNodeValue();
                                         String parent = attrs.getNamedItem("parent").getNodeValue();
