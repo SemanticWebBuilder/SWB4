@@ -5,7 +5,6 @@
 package org.semanticwb.bsc;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 
@@ -18,31 +17,6 @@ import org.semanticwb.portal.api.SWBResourceException;
  */
 public interface PDFExportable {
 
-    /**
-     * The Constant bsc_itemType.
-     */
-    public static final String bsc_itemType = "itemType";
-    /**
-     * The Constant viewType.
-     */
-    public static final String viewType = "viewType";
-    /**
-     * The Constant PDF_StrategyMap.
-     */
-    public static final String PDF_StrategyMap = "detailStrategyMap";
-    /**
-     * The Constant VIEW_Summary.
-     */
-    public static final String VIEW_Summary = "1";
-    /**
-     * The Constant VIEW_Detail.
-     */
-    public static final String VIEW_Detail = "2";    
-    /**
-     * The Constant Mode_PDFDocument.
-     */
-    public static final String Mode_PDFDocument = "pdf";
-    
     public static final String Mode_StreamPDF = "pdf";
     public static final String Mode_StreamPNG = "png";
 
@@ -51,8 +25,6 @@ public interface PDFExportable {
      * contega la exportaci&oacute;n a PDF del elemento correspondiente.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @return el objeto String que representa el c&oacute;digo HTML con la liga
      * y el icono correspondiente al elemento a exportar.
@@ -60,7 +32,8 @@ public interface PDFExportable {
      * utilizada para recursos de SWB
      * @throws java.io.IOException Excepti&oacute;n de IO
      */
-    public String doIconExportPDF(HttpServletRequest request,
-            HttpServletResponse response, SWBParamRequest paramRequest)
+    public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest)
             throws SWBResourceException, java.io.IOException;
+    
+    
 }
