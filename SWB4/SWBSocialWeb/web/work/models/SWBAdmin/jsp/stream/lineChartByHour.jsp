@@ -30,15 +30,22 @@
         itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
         title = socialTopic.getTitle();
     }    
-    if (itObjPostIns == null) {
-        JSONArray node = new JSONArray();
-        //return node;
+    if (itObjPostIns == null || !itObjPostIns.hasNext()) {
+%>
+<script>
+    var ifHour = parent.document.getElementById('<%=suri + "byHour"%>');
+    if(ifHour){
+        ifHour.style.height = '0px';
+    }
+    </script>
+<%
+        return;
     }    
     java.util.Date date = null;
     Calendar calendario = Calendar.getInstance();
     int dataArray[][] = new int[24][3];//positive, negative, neutrals
     int totalPosts = 0;
-    while(itObjPostIns.hasNext()){     
+    while(itObjPostIns.hasNext()){
         PostIn postIn = itObjPostIns.next();
         if (postIn.getPi_createdInSocialNet() != null) {
             date = postIn.getPi_createdInSocialNet();
@@ -98,7 +105,8 @@ svg {
 </style>
 <body class='with-3d-shadow with-transitions'>
 
-<div id="chart1" >
+<div align="center" style="margin-left: 100px; width: 700px">N&Uacute;MERO DE MENSAJES POR HORA DEL D&Iacute;A</div>
+<div id="chart1" >  
   <svg style="height: 500px;"></svg>
 </div>
 
