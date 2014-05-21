@@ -141,8 +141,12 @@ public class MainSurvey extends GenericResource
             // xsl proprcionado por el usuario administrador
             if(null!=base.getAttribute("template"))
             {
-                tpl=SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath("/work"+base.getWorkPath() + "/" + base.getAttribute("template").trim())));
+                tpl=SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath()+base.getWorkPath() + "/" + base.getAttribute("template").trim())));
+                if(tpl==null){
+                    System.out.println("XML:"+SWBUtils.XML.domToXml(dom));
+                }
             }
+            
             else
             {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/MainSurvey/MainSurvey.xsl"));
@@ -280,7 +284,7 @@ public class MainSurvey extends GenericResource
 
             try
             {
-                tpl=SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath("/work"+base.getWorkPath() + "/" + base.getAttribute("template").trim())));
+                tpl=SWBUtils.XML.loadTemplateXSLT(SWBUtils.IO.getStreamFromString(SWBUtils.IO.getFileFromPath(SWBPortal.getWorkPath()+base.getWorkPath() + "/" + base.getAttribute("template").trim())));
                 base.setAttribute("path", workpath + "/");
                 trans = tpl.newTransformer();
             }
