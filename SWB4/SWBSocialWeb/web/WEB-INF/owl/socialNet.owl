@@ -1116,6 +1116,7 @@
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasPostInDeviceInv"/>
   <owl:ObjectProperty rdf:ID="hasSocialPFlowinstance">
     <rdfs:domain rdf:resource="#SocialPFlow"/>
     <rdfs:range rdf:resource="#SocialPFlowInstance"/>
@@ -1386,6 +1387,44 @@
   <owl:ObjectProperty rdf:ID="pc_SocialNetworkInv">
     <rdfs:comment>Con esta propiedad inversa, se puede saber a que red social pertenece este grupo de post agrupados por mes y año</rdfs:comment>
   </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="devicePlatform">
+    <rdfs:label xml:lang="en">Platform</rdfs:label>
+    <rdfs:label xml:lang="es">Plataforma</rdfs:label>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="hasDeviceTypeInv"/>
+    </owl:inverseOf>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_devicePlatform">
+        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
+        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >10</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Que tipo de plataforma es el deviceType.</rdfs:comment>
+    <rdfs:range>
+      <swb:Class rdf:ID="DevicePlatform">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:comment>Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain>
+      <swb:Class rdf:ID="DeviceType">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
+        <rdfs:comment>Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:domain>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostOut_published">
     <rdfs:domain rdf:resource="#SocialCalendar"/>
     <rdfs:range rdf:resource="#PostOut"/>
@@ -1447,6 +1486,12 @@
     <rdfs:comment>PostOut que tiene una red social. Si se elimina una red social, No se eliminan todos los mensajes que tiene de salida, porque puede que un PostOut tenga otra red social asociada ademas de esta que se intenta eliminar, por lo tanto eso lo controlo en un Observador en esta clase (SocialNetwork, ahi busco todos los PostOut de la red social que se desea eliminar y si No tienen mas intancias de SocialNetwork asociadas los elimino, de lo contrario, no lo hago.</rdfs:comment>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >false</swb:removeDependency>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="deviceType">
+    <owl:inverseOf rdf:resource="#hasPostInDeviceInv"/>
+    <rdfs:comment>Device type</rdfs:comment>
+    <rdfs:range rdf:resource="#DeviceType"/>
+    <rdfs:domain rdf:resource="#PostIn"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialNets">
     <rdfs:range rdf:resource="#SocialNetwork"/>
@@ -2526,6 +2571,20 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:domain rdf:resource="#FacebookFanPage"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="userCanReValueMsg">
+    <rdfs:domain rdf:resource="#SocialUserExtAttributes"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Indica si un usuario puede reevaluar los mensajes de entrada.</rdfs:comment>
+    <rdfs:label xml:lang="en">Is Autorized to revalue messages</rdfs:label>
+    <rdfs:label xml:lang="es">Puede revaluar mensajes</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_userCanReValueMsg">
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >130</swb:index>
+        <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="west">
     <rdfs:comment>Punto oeste, del punto South West (SW) de un bounding box.</rdfs:comment>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
@@ -2540,20 +2599,6 @@
     </swb:displayProperty>
     <rdfs:label xml:lang="en">West</rdfs:label>
     <rdfs:domain rdf:resource="#GeoMapable"/>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="userCanReValueMsg">
-    <rdfs:domain rdf:resource="#SocialUserExtAttributes"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment>Indica si un usuario puede reevaluar los mensajes de entrada.</rdfs:comment>
-    <rdfs:label xml:lang="en">Is Autorized to revalue messages</rdfs:label>
-    <rdfs:label xml:lang="es">Puede revaluar mensajes</rdfs:label>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_userCanReValueMsg">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >130</swb:index>
-        <swbxf:propGroup rdf:resource="#SocialUserGroup"/>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="postSentimentalValue">
     <rdfs:domain rdf:resource="#Post"/>
@@ -2758,7 +2803,7 @@
         <swbxf:formElement>
           <social:TextPhrase rdf:ID="TextPhrase_Or">
             <social:tf_socialNet rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >T,F,Y</social:tf_socialNet>
+            >T,F,Y,I</social:tf_socialNet>
           </social:TextPhrase>
         </swbxf:formElement>
         <swbxf:propInvalidMessage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -2856,16 +2901,16 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <rdfs:domain rdf:resource="#PostOut"/>
   </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="published">
-    <rdfs:domain rdf:resource="#PostOut"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-    <rdfs:comment>Define si un PostOut se encuentra en estado de publicado o no.</rdfs:comment>
-  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="pfiVersion">
     <rdfs:domain rdf:resource="#SocialPFlowInstance"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
     <swb:propertyCodeName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >version</swb:propertyCodeName>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="published">
+    <rdfs:domain rdf:resource="#PostOut"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:comment>Define si un PostOut se encuentra en estado de publicado o no.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="capitalLatitude">
     <rdfs:domain rdf:resource="#GeoMapable"/>
