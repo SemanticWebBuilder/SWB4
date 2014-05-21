@@ -34,6 +34,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.ComponentExportable;
 import org.semanticwb.bsc.PDFExportable;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.*;
 import org.semanticwb.bsc.formelement.DateElement;
@@ -73,7 +74,8 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
  * @author jose.jimenez
  */
 public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.DetailViewManagerBase
-        implements PDFExportable {
+        implements PDFExportable
+{
 
     /**
      * Realiza operaciones en la bitacora de eventos.
@@ -895,17 +897,23 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        if (paramRequest.getMode().equals("showListing")) {
-            doShowListing(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("editTemplate")) {
-            doEditTemplate(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("getPropertiesInfo")) {
-            doGetPropertiesInfo(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals(Mode_PDFDocument)) {
-            doExportPDF(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest);
+System.out.println("\n\nDetailViewManager.processRequest()... modo="+paramRequest.getMode());
+        switch (paramRequest.getMode()) {
+            case "showListing":
+                doShowListing(request, response, paramRequest);
+                break;
+            case "editTemplate":
+                doEditTemplate(request, response, paramRequest);
+                break;
+            case "getPropertiesInfo":
+                doGetPropertiesInfo(request, response, paramRequest);
+                break;
+            case Mode_StreamPDF:
+                doGetPDFDocument(request, response, paramRequest);
+                break;
+            default:
+                super.processRequest(request, response, paramRequest);
+                break;
         }
     }
 
@@ -1565,67 +1573,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     }
 
     /**
-     * Genera el icono para imprimir el PDF de la vista actual.  Envia los par&aacute;metros
-     * que se usaran para generar el PDF.
-     *
-     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
-     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
-     * @return el objeto String que representa el c&oacute;digo HTML con la liga
-     * y el icono correspondiente al elemento a exportar.
-     * @throws SWBResourceException SWBResourceException SWBResourceException
-     * Excepti&oacute;n utilizada para recursos de SWB
-     * @throws IOException Excepti&oacute;n de IO
-     */
-    @Override
-    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuilder toReturn = new StringBuilder();
-        Resource base2 = getResource();
-        String icon = "";
-        String suri = request.getParameter("suri");
-        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-        if (base2 != null && semObj != null) {
-            SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(),
-                    SWBResourceURL.UrlType_RENDER);
-            url.setParameter("suri", semObj.getURI());
-            url.setMode(Mode_PDFDocument);
-            url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            String surl = url.toString();
-
-            String alt = paramRequest.getLocaleString("alt");
-
-            toReturn.append("\n <script type=\"text/javascript\">");
-            toReturn.append("\n  function getFile() {");
-            toReturn.append("\n   var form = document.getElementById('frmDetail');");
-
-            toReturn.append("\n   var svg = document.getElementsByTagName('svg')[0];");
-            toReturn.append("\n   if(svg != null) {");
-            toReturn.append("\n      var svg_xml = (new XMLSerializer).serializeToString(svg);");
-            toReturn.append("\n      document.getElementById('image').value=svg_xml;");
-            toReturn.append("\n   }");
-            toReturn.append("\n   form.submit();");
-            toReturn.append("\n  };");
-            toReturn.append("\n </script>");
-
-            toReturn.append("<a href=\"javascript:getFile();");
-            toReturn.append("\" class=\"export-stgy\" title=\"");
-            toReturn.append(alt);
-            toReturn.append("\" >");
-            toReturn.append(alt);
-            toReturn.append("</a>");
-            toReturn.append("<form id=\"frmDetail\" method=\"post\" action=\"");
-            toReturn.append(surl);
-            toReturn.append("\">");
-            toReturn.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>");
-            toReturn.append("</form>");
-            icon = toReturn.toString();
-        }
-        return icon;
-    }
-
-    /**
      * Ejecutar&aacute; la exportaci&oacute;n a PDF del elemento actual.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
@@ -1636,12 +1583,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * Excepti&oacute;n utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    public void doExportPDF(HttpServletRequest request, HttpServletResponse response,
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        String title = "No Defined";
+        String title = "Undefined";
+
         if (request.getParameter("suri") != null) {
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -1806,20 +1754,20 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("<body>");
         output.append(getHtml(request, paramRequest));
         GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
-        TreeSet ret = new TreeSet(new SWBPriorityComparator(true));
+        TreeSet<ComponentExportable> ret = new TreeSet<>(new SWBPriorityComparator(true));
 
         while (it.hasNext()) {
             Resource resourceIt = it.next();
             SWBResource base = SWBPortal.getResourceMgr().getResource(resourceIt.getURI());
-            if (base != null) {
-                if (base instanceof ComponentExportable) {
-                    ret.add(base);
-                }
+            try {
+                ComponentExportable ce = (ComponentExportable)base;
+                ret.add(ce);
+            }catch(ClassCastException | NullPointerException cce) {
             }
         }
-        Iterator itRes = ret.iterator();
+        Iterator<ComponentExportable> itRes = ret.iterator();
         while (itRes.hasNext()) {
-            ComponentExportable compExpor = (ComponentExportable) itRes.next();
+            ComponentExportable compExpor = itRes.next();
             output.append("<br/><br/><br/>");
             output.append(compExpor.doComponentExport(request, paramRequest));
             output.append("");
@@ -2026,5 +1974,45 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
         }
         return ret != null ? ret : "";
+    }
+
+    @Override
+    public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        final String suri = request.getParameter("suri");
+        
+        SWBResourceURL url = new SWBResourceURLImp(request, getResource(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+        url.setMode(Mode_StreamPDF);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url.setParameter("suri", suri);
+        
+        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+        
+        StringBuilder ret = new StringBuilder();
+ret.append("<script type=\"text/javascript\">").append("\n");
+ret.append(" function getFile() {").append("\n");
+ret.append("   var form = document.getElementById('frmDetail');").append("\n");
+ret.append("   var svg = document.getElementsByTagName('svg')[0];").append("\n");
+ret.append("   if(svg != null) {").append("\n");
+ret.append("     var svg_xml = (new XMLSerializer).serializeToString(svg);").append("\n");
+ret.append("     document.getElementById('image').value=svg_xml;").append("\n");
+//ret.append("     document.getElementById('suri').value='"+request.getParameter("suri")+"';").append("\n");
+ret.append("   }").append("\n");
+ret.append("   form.submit();").append("\n");
+ret.append(" };").append("\n");
+ret.append("</script>").append("\n");
+
+ret.append("<a href=\"javascript:getFile();");
+ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+ret.append(title);
+ret.append("\" >");
+ret.append(title);
+ret.append("</a>").append("\n");
+ret.append("<form id=\"frmDetail\" method=\"post\" action=\"");
+ret.append(url);
+ret.append("\">").append("\n");
+ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
+ret.append("</form>").append("\n");
+
+        return ret.toString();
     }
 }
