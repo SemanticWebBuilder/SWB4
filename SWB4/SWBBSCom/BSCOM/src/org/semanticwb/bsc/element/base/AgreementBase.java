@@ -4,12 +4,16 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable
 {
    /**
    * Define el número de un acuerdo, tiene las siguientes características: Título del scorecard+ "-S" + número de sesión a 2 dígitos+ "-" + consecutivo del acuerdo por sesión a 2 dígitos + año actual a 2 dígitos
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_agreementNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#agreementNumber");
+   /**
+   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
    /**
    * Define el responsable del acuerdo
    */
@@ -26,10 +30,6 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
    * Persiste información del estatus de un acuerdo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_agreementStatus=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#agreementStatus");
-   /**
-   * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
-   */
-    public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
    /**
    * Define un dueño para el acuerdo
    */
@@ -150,6 +150,29 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByModifiedBy(org.semanticwb.model.User value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined AgreementResponsible
+       * @param value AgreementResponsible of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.element.Agreement
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByAgreementResponsible(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_agreementResponsible, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined AgreementResponsible
+       * @param value AgreementResponsible of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByAgreementResponsible(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_agreementResponsible,value.getSemanticObject(),sclass));
             return it;
         }
        /**
@@ -346,23 +369,43 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
     {
         getSemanticObject().setProperty(bsc_agreementNumber, value);
     }
+   /**
+   * Sets the value for the property AgreementResponsible
+   * @param value AgreementResponsible to set
+   */
 
-/**
-* Gets the AgreementResponsible property
-* @return String with the AgreementResponsible
-*/
-    public String getAgreementResponsible()
+    public void setAgreementResponsible(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getProperty(bsc_agreementResponsible);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_agreementResponsible, value.getSemanticObject());
+        }else
+        {
+            removeAgreementResponsible();
+        }
+    }
+   /**
+   * Remove the value for AgreementResponsible property
+   */
+
+    public void removeAgreementResponsible()
+    {
+        getSemanticObject().removeProperty(bsc_agreementResponsible);
     }
 
-/**
-* Sets the AgreementResponsible property
-* @param value long with the AgreementResponsible
-*/
-    public void setAgreementResponsible(String value)
+   /**
+   * Gets the AgreementResponsible
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getAgreementResponsible()
     {
-        getSemanticObject().setProperty(bsc_agreementResponsible, value);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_agreementResponsible);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
