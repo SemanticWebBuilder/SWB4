@@ -168,6 +168,8 @@ public class TextPhrase extends org.semanticwb.social.base.TextPhraseBase
                         ret.append("<div class=\"stream_facebook_icon\"><img src=\"/swbadmin/css/images/config-fb.png\" /></div>");   //Facebook
                     }else if(socialNets[i].trim().equalsIgnoreCase("Y")){
                      ret.append("<div class=\"stream_youtube_icon\"><img src=\"/swbadmin/css/images/config-yt.png\" /></div>");   //Youtube
+                    }else if(socialNets[i].trim().equalsIgnoreCase("I")){
+                     ret.append("<div class=\"stream_instagram_icon\"><img src=\"/swbadmin/css/images/config-in.png\" /></div>");   //Youtube
                     }
                 }
             }
