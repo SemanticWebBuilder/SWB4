@@ -244,7 +244,7 @@ public class WBMenuMap extends GenericAdmResource
                 {
                     childs=true;
 
-                    String tpurl = tp.getUrl();
+                    String tpurl = tp.getUrl(lang,false);
                     Element ele = dom.createElement("node");
                     ele.setAttribute("id", tpurl);
                     ele.setAttribute("name", tp.getDisplayName(lang));

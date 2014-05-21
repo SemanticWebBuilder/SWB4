@@ -191,7 +191,7 @@ public class RelatedTopics extends GenericAdmResource
                             if (user.haveAccess(tpla) && tpla.isActive())
                             {
                                 Element hijo = dom.createElement("hijo");
-                                hijo.setAttribute("url", tpla.getUrl());
+                                hijo.setAttribute("url", tpla.getUrl(user.getLanguage(),false));
                                 hijo.setAttribute("nombre", tpla.getDisplayName(user.getLanguage()));
 								//                                if(tpla.getIcon() !=null ) {
 								//                                    hijo.setAttribute("icon", tpla.getIcon());
