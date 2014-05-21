@@ -16,14 +16,13 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
 /*
  * Clase que persiste informaci&oacute;n de un indicador. Un indicador permite informar sobre el avance para alcanzar un objetivo.
  */
-public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase 
+public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
 {
     public static final String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
     static
@@ -292,5 +291,5 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public Period currentMeasurementPeriod()
     {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
+    }    
 }
