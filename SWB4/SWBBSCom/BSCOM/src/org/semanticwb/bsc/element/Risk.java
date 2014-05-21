@@ -77,7 +77,7 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     public synchronized short calculateQuadrant(boolean initial) {
         
         short quadrant = 0;
-        if (initial) {
+        if (initial && this.getIniAssessmentImpactLevel() > 0 && this.getIniAssessmentLikelihood() > 0) {
             if (this.getIniAssessmentImpactLevel() > 5 && this.getIniAssessmentLikelihood() > 5) {
                 quadrant = 1;
             } else if (this.getIniAssessmentImpactLevel() <= 5 && this.getIniAssessmentLikelihood() > 5) {
@@ -87,7 +87,7 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
             } else if (this.getIniAssessmentImpactLevel() <= 5 && this.getIniAssessmentLikelihood() <= 5) {
                 quadrant = 4;
             }
-        } else {
+        } else if (!initial && this.getFinAssessmentImpactLevel() > 0 && this.getFinAssessmentLikelihood() > 0) {
             if (this.getFinAssessmentImpactLevel() > 5 && this.getFinAssessmentLikelihood() > 5) {
                 quadrant = 1;
             } else if (this.getFinAssessmentImpactLevel() < 6 && this.getFinAssessmentLikelihood() > 5) {

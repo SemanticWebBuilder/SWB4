@@ -88,4 +88,29 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
             }
         }
     }
+    
+    /**
+     * Calcula el resultado de la determinacion del control en base al valor asignado a cada determinante asociado al control
+     * @return {@code true} en caso de que el valor asignado a cada determinante asociado al control sea positivo, {@code false} en
+     * caso de que al menos uno de los determinantes tenga asociado un valor negativo.
+     */
+    public boolean calculateDetermination() {
+        
+        boolean result = true;
+        Iterator<DeterminantValue> detIt = this.listDeterminantValues();
+        if (detIt != null) {
+            while (detIt.hasNext()) {
+                DeterminantValue detValue = detIt.next();
+                System.out.println("determinanValue.getIsDeterminant(): " + detValue.getIsDeterminant());
+                if (detValue.getIsDeterminant() == null ||
+                        (detValue.getIsDeterminant() != null && detValue.getIsDeterminant().equalsIgnoreCase("no"))) {
+                    result = false;
+                    break;
+                }
+            }
+        } else {
+            result = false;
+        }
+        return result;
+    }
 }
