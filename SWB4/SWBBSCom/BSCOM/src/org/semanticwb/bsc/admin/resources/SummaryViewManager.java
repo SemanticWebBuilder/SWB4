@@ -1745,8 +1745,8 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     }
     
     @Override
-    public String doIconExportPDF(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest) 
+            throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder();
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode(Mode_StreamPDF);
