@@ -907,6 +907,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                     for (int i = 0; i < count; i++) {
                         ExternalPost external = new ExternalPost();
                         JSONObject id = items.getJSONObject(i);
+                        System.out.println("TouTube Listen:"+id.toString());
                         String idItem = id.getString("id");
                         String uploader = id.getString("uploader");
                         String updatedItem = id.getString("updated");

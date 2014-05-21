@@ -402,6 +402,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                             if(!status.isRetweet())
                             {
                                 if(status.getUser() != null){
+                                    System.out.println("Twitter status/Source:"+status.getSource());
                                     ExternalPost external = new ExternalPost();
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
