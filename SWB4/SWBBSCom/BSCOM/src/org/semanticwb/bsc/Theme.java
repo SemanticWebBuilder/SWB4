@@ -44,6 +44,10 @@ public class Theme extends org.semanticwb.bsc.base.ThemeBase implements Comparab
     
     @Override
     public boolean isValid() {
+if(getPerspective()==null){
+    System.out.println("tema="+getTitle()+", perspectiva nula");
+    return false;
+}
         return super.isValid() && getPerspective().isValid();
     }
 }
