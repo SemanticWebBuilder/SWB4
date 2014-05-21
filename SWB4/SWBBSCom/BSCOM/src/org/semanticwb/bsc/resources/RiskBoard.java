@@ -976,6 +976,34 @@ public class RiskBoard extends GenericResource {
                 }
             }
             
+        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_EDIT) && risk != null) {
+            String suri = request.getParameter("suri");
+            SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+            if (semObj != null) {
+                formMgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
+                try {
+                    formMgr.processForm(request);
+                    SWBPortal.getServiceMgr().updateTraceable(semObj, user);
+                } catch (FormValidateException ex) {
+                    RiskBoard.log.error("Al modificar informacion de: " + semObj.getURI(), ex);
+                }
+            }
+            /*
+            if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName())) {
+            
+            } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName())) {
+                
+            }*/
+        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_REMOVE) && risk != null) {
+            String suri = request.getParameter("suri");
+            GenericObject genericObj = SemanticObject.getSemanticObject(suri).createGenericInstance();
+            if (genericObj instanceof MitigationAction) {
+                MitigationAction mitAction = (MitigationAction) genericObj;
+                risk.removeMitigationAction(mitAction);
+            } else if (genericObj instanceof Initiative) {
+                Initiative ini = (Initiative) genericObj;
+                risk.removeInitiative(ini);
+            }
         } else {
             super.processAction(request, response);
         }
