@@ -897,7 +897,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-System.out.println("\n\nDetailViewManager.processRequest()... modo="+paramRequest.getMode());
+
         switch (paramRequest.getMode()) {
             case "showListing":
                 doShowListing(request, response, paramRequest);
