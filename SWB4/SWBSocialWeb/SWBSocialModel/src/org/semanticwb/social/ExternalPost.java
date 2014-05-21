@@ -170,6 +170,11 @@ public class ExternalPost {
      */
     private DeviceType deviceType;
     
+     /**
+     * Device platform
+     */
+    private DevicePlatform devicePlatform;
+    
 
     /**
      * Creates a new instance of ExternalPost
@@ -660,7 +665,7 @@ public class ExternalPost {
     /*
      *  @param devicetype is the type of device which is used for the user that post the message that enters to the system
      */
-    public void serDeviceType(DeviceType devicetype)
+    public void setDeviceType(DeviceType devicetype)
     {
         this.deviceType=devicetype;
     }
@@ -673,5 +678,23 @@ public class ExternalPost {
     public DeviceType getDeviceType()
     {
         return deviceType;
+    }
+    
+     /*
+     *  @param deviceplatform is the opetating system of device which is used for the user that post the message that enters to the system
+     */
+    public void setDevicePlatform(DevicePlatform deviceplatform)
+    {
+        this.devicePlatform=devicePlatform;
+    }
+    
+    
+    /**
+     * 
+     * @return the Type of device user by the user
+     */
+    public DevicePlatform getDevicePlatform()
+    {
+        return devicePlatform;
     }
 }

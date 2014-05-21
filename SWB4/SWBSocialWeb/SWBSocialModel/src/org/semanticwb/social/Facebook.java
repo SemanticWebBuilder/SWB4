@@ -516,6 +516,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             ArrayList<ExternalPost> aListExternalPost = new ArrayList();
                             for (int k = 0; k < postsData.length(); k++) {
                                 cont++;
+                                System.out.println("FaceListen:"+postsData.getJSONObject(k).toString());
                                 ExternalPost external = new ExternalPost();
                                 external.setPostId(postsData.getJSONObject(k).getString("id"));
                                 external.setCreatorId(postsData.getJSONObject(k).getJSONObject("from").getString("id"));
