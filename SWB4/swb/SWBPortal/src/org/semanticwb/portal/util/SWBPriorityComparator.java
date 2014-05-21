@@ -61,8 +61,8 @@ public class SWBPriorityComparator implements Comparator
      * @param obj the obj
      * @param obj1 the obj1
      * @return the int
-     * @return
      */
+    @Override
     public int compare(java.lang.Object obj, java.lang.Object obj1)
     {
         int x;
