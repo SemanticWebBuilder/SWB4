@@ -717,6 +717,7 @@ public class SentimentalDataClassifier {
                 postIn.setPostInStream(stream);
 
                 //System.out.println("Ya en Msg ReTweets:"+message.getPostRetweets());
+                /*
                 if (externalPost.getDevice() != null) //Dispositivo utilizado
                 {
                     String source = null;
@@ -730,7 +731,18 @@ public class SentimentalDataClassifier {
                         source = externalPost.getDevice();
                     }
                     postIn.setPostSource(source);
+                }*/
+                
+                if (externalPost.getDeviceType() != null) //Dispositivo utilizado
+                {
+                    postIn.setDeviceType(externalPost.getDeviceType());
                 }
+                
+                if (externalPost.getDevicePlatform() != null) //Dispositivo utilizado
+                {
+                    postIn.setPostInDevicePlatform(externalPost.getDevicePlatform()); 
+                }
+                
                 //System.out.println("Ya en Msg source:"+source);
 
 

@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Cuenta de Instagram 
    */
-public abstract class InstagramBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.Filterable,org.semanticwb.social.Relationable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.social.Kloutable,org.semanticwb.social.Secreteable,org.semanticwb.social.Oauthable,org.semanticwb.social.Listenerable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class InstagramBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.Oauthable,org.semanticwb.model.FilterableClass,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.Kloutable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Instagram User Id

@@ -4,8 +4,16 @@ package org.semanticwb.social.base;
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta. 
    */
-public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable
+public abstract class PostInBase extends org.semanticwb.social.Post implements org.semanticwb.social.PostTextable,org.semanticwb.social.PostDataable,org.semanticwb.model.Tagable
 {
+   /**
+   * Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_DevicePlatform=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#DevicePlatform");
+   /**
+   * Device Platform of the postIn
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_postInDevicePlatform=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postInDevicePlatform");
    /**
    * Veces que ha sido re-enviado o compartido el post
    */
@@ -72,13 +80,13 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
    */
     public static final org.semanticwb.platform.SemanticProperty social_haspostOutResponseInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#haspostOutResponseInv");
    /**
-   * Fecha de creación del post en la red social.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_pi_createdInSocialNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_createdInSocialNet");
-   /**
    * Dispositivo desde el que se ha enviado el post
    */
     public static final org.semanticwb.platform.SemanticProperty social_postSource=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#postSource");
+   /**
+   * Fecha de creación del post en la red social.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_pi_createdInSocialNet=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#pi_createdInSocialNet");
    /**
    * Url del PostIn en la red social
    */
@@ -162,6 +170,29 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
         public static boolean hasPostIn(String id, org.semanticwb.model.SWBModel model)
         {
             return (getPostIn(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostInDevicePlatform
+       * @param value PostInDevicePlatform of the type org.semanticwb.social.DevicePlatform
+       * @param model Model of the org.semanticwb.social.PostIn
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostInDevicePlatform(org.semanticwb.social.DevicePlatform value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_postInDevicePlatform, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.PostIn with a determined PostInDevicePlatform
+       * @param value PostInDevicePlatform of the type org.semanticwb.social.DevicePlatform
+       * @return Iterator with all the org.semanticwb.social.PostIn
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.PostIn> listPostInByPostInDevicePlatform(org.semanticwb.social.DevicePlatform value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.PostIn> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_postInDevicePlatform,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.social.PostIn with a determined DeviceType
@@ -384,6 +415,44 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public PostInBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property PostInDevicePlatform
+   * @param value PostInDevicePlatform to set
+   */
+
+    public void setPostInDevicePlatform(org.semanticwb.social.DevicePlatform value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(social_postInDevicePlatform, value.getSemanticObject());
+        }else
+        {
+            removePostInDevicePlatform();
+        }
+    }
+   /**
+   * Remove the value for PostInDevicePlatform property
+   */
+
+    public void removePostInDevicePlatform()
+    {
+        getSemanticObject().removeProperty(social_postInDevicePlatform);
+    }
+
+   /**
+   * Gets the PostInDevicePlatform
+   * @return a org.semanticwb.social.DevicePlatform
+   */
+    public org.semanticwb.social.DevicePlatform getPostInDevicePlatform()
+    {
+         org.semanticwb.social.DevicePlatform ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_postInDevicePlatform);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.DevicePlatform)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
@@ -704,24 +773,6 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     }
 
 /**
-* Gets the Pi_createdInSocialNet property
-* @return java.util.Date with the Pi_createdInSocialNet
-*/
-    public java.util.Date getPi_createdInSocialNet()
-    {
-        return getSemanticObject().getDateProperty(social_pi_createdInSocialNet);
-    }
-
-/**
-* Sets the Pi_createdInSocialNet property
-* @param value long with the Pi_createdInSocialNet
-*/
-    public void setPi_createdInSocialNet(java.util.Date value)
-    {
-        getSemanticObject().setDateProperty(social_pi_createdInSocialNet, value);
-    }
-
-/**
 * Gets the PostSource property
 * @return String with the PostSource
 */
@@ -737,6 +788,24 @@ public abstract class PostInBase extends org.semanticwb.social.Post implements o
     public void setPostSource(String value)
     {
         getSemanticObject().setProperty(social_postSource, value);
+    }
+
+/**
+* Gets the Pi_createdInSocialNet property
+* @return java.util.Date with the Pi_createdInSocialNet
+*/
+    public java.util.Date getPi_createdInSocialNet()
+    {
+        return getSemanticObject().getDateProperty(social_pi_createdInSocialNet);
+    }
+
+/**
+* Sets the Pi_createdInSocialNet property
+* @param value long with the Pi_createdInSocialNet
+*/
+    public void setPi_createdInSocialNet(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(social_pi_createdInSocialNet, value);
     }
 
 /**

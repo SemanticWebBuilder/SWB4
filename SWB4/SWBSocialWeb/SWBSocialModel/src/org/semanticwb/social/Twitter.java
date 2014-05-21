@@ -414,7 +414,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     }else{
                                         external.setCreationTime(new Date());
                                     }
-                                    external.setDevice(status.getSource());
+                                    //external.setDevice(status.getSource());
                                     if (status.getText()!=null) {
                                        external.setMessage(status.getText());
                                     }                         

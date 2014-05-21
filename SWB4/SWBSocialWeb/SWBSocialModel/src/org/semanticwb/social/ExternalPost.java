@@ -107,7 +107,7 @@ public class ExternalPost {
     /**
      * Device used by the post creator
      */
-    private String device;
+    //private String device;
     
     /**
      * Date when the user was created
@@ -479,24 +479,6 @@ public class ExternalPost {
        this.postShared=postShared;
     }
     
-     /**
-     * 
-     * @return the device
-     */
-    public String getDevice()
-    {
-       return device; 
-    }
-    
-    
-    /**
-     * 
-     * @param the device to set
-     */
-    public void setDevice(String device)
-    {
-       this.device=device; 
-    }
     
     /**
      * 
