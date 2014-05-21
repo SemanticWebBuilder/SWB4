@@ -10,6 +10,7 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 //import org.semanticwb.rdf.sparql.SWBQueryExecution;
@@ -146,6 +147,50 @@ public class SWBSocial {
                         aResult.add(semObj);
                     }
                 }
+            }
+        }
+        return aResult;
+   }
+   /**
+    * Specific implementation to return a pair of values, the Semantic Object
+    * and the count value for this SemObj
+    * @param query
+    * @param wsite
+    * @return The user and the number of posts per user.
+    */
+   public static LinkedHashMap executeQueryArraySemObjAndCount(String query, WebSite wsite)
+   {
+        LinkedHashMap aResult = new LinkedHashMap();
+        QueryExecution qe=wsite.getSemanticModel().sparQLQuery(query);
+        ResultSet rs=qe.execSelect();
+        while(rs!=null && rs.hasNext())
+        {
+            QuerySolution qs=rs.next();
+            Iterator<String> it=rs.getResultVars().iterator();
+            SemanticObject semObjTmp = null;
+            String tmpValue = null;
+            while(it.hasNext())
+            {
+                String name=it.next();
+                if(name.equalsIgnoreCase("semObj"))
+                {
+                    RDFNode node=qs.get(name);
+                    String val="";
+                    if( node != null && node.isResource()){
+                        val=node.asResource().getURI();
+                        SemanticObject semObj=SemanticObject.createSemanticObject(val, wsite.getSemanticModel()); 
+                        semObjTmp = semObj;
+                        //aResult.add(semObj);
+                    }
+                }else{                    
+                    RDFNode node=qs.get(name);
+                    if(node != null && node.asLiteral().getInt() > 0){
+                        tmpValue = String.valueOf(node.asLiteral().getInt());
+                    }
+                }
+            }
+            if(semObjTmp != null && tmpValue != null){
+                aResult.put(semObjTmp, tmpValue);
             }
         }
         return aResult;
