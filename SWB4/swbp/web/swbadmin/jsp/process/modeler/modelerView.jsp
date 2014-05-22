@@ -1103,6 +1103,6 @@ if (!isViewMode) {
         <%
         }
         %>
-        loadProcess();
+        //loadProcess();
     </script>
 </body>
