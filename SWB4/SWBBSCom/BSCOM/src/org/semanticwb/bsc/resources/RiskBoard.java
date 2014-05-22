@@ -15,6 +15,8 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.PDFExportable;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Risk;
@@ -44,6 +46,7 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import static org.semanticwb.portal.api.SWBResourceModes.Action_ADD;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  * Despliega el tablero de riesgos y proporciona las facilidades para actualizar parte de la 
@@ -51,7 +54,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * a los riesgos.
  * @author jose.jimenez
  */
-public class RiskBoard extends GenericResource {
+public class RiskBoard extends GenericResource implements PDFExportable {
 
     
     /**
@@ -96,23 +99,6 @@ public class RiskBoard extends GenericResource {
             determinants[cont] = det;
             cont++;
         }
-        dataOut.append("<style>\n");
-        dataOut.append("    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n");
-        dataOut.append("    th {  text-align:center; background-color:#EEEEEE;  }\n");
-        dataOut.append("    .evalRiesgo {  background-color:#87CEEB;  }\n");
-        dataOut.append("    .evalControl {  background-color:#1E90FF;  }\n");
-        dataOut.append("    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n");
-        dataOut.append("    .mapaRiesgoth {  background-color:#FFFFFF;  }\n");
-        dataOut.append("    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n");
-        dataOut.append("    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n");
-        dataOut.append("    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n");
-        dataOut.append("    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n");
-        dataOut.append("    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n");
-        dataOut.append("    .riesgoControlado {  background-color:#389738;  }\n");
-        dataOut.append("    .riesgoNoControlado {  background-color:#FFFF80;  }\n");
-        dataOut.append("    .noValido {  background-color:#FF6666;  }\n");
-        dataOut.append("    .textCentered {  text-align:center;  }\n");
-        dataOut.append("</style>\n");
         dataOut.append(generateBoardView(determinants, website, mode, request, paramRequest));
         out.println(dataOut.toString());
     }
@@ -137,6 +123,23 @@ public class RiskBoard extends GenericResource {
             SWBParamRequest paramRequest) throws SWBResourceException {
         
         StringBuilder output = new StringBuilder(512);
+        output.append("<style>\n");
+        output.append("    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n");
+        output.append("    th {  text-align:center; background-color:#EEEEEE;  }\n");
+        output.append("    .evalRiesgo {  background-color:#87CEEB;  }\n");
+        output.append("    .evalControl {  background-color:#1E90FF;  }\n");
+        output.append("    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n");
+        output.append("    .mapaRiesgoth {  background-color:#FFFFFF;  }\n");
+        output.append("    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n");
+        output.append("    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n");
+        output.append("    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n");
+        output.append("    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n");
+        output.append("    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n");
+        output.append("    .riesgoControlado {  background-color:#389738;  }\n");
+        output.append("    .riesgoNoControlado {  background-color:#FFFF80;  }\n");
+        output.append("    .noValido {  background-color:#FF6666;  }\n");
+        output.append("    .textCentered {  text-align:center;  }\n");
+        output.append("</style>\n");
         if (mode != null && mode.equalsIgnoreCase("edit")) {
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("showAddWindow");
@@ -144,17 +147,26 @@ public class RiskBoard extends GenericResource {
             output.append("<script type=\"text/javascript\">");
             output.append("  var reloadPage = true;");
             output.append("\n  dojo.require(\"dojo.parser\");");
+            output.append("\n  dojo.require(\"dojo.ready\");");
+            output.append("\n  dojo.require(\"dojo.date.locale\");");
             output.append("\n  dojo.require(\"dijit.Dialog\");");
             output.append("\n  dojo.require(\"dijit.form.TextBox\");");
             output.append("\n  dojo.require(\"dijit.form.ValidationTextBox\");");
             output.append("\n  dojo.require(\"dijit.form.Button\");");
             output.append("\n  dojo.require(\"dojox.layout.ContentPane\");");
+            output.append("\n  dojo.require(\"dojox.editor.plugins.PasteFromWord\");");
+            output.append("\n  dojo.require(\"dijit.InlineEditBox\");");
+            output.append("\n  dojo.require(\"dijit.form.Textarea\");");
+            output.append("\n  dojo.require(\"dijit.form.DateTextBox\");");
+            output.append("\n  dojo.require(\"dijit.Editor\");");
+            output.append("\n  dojo.require(\"dijit._editor.plugins.AlwaysShowToolbar\");");
+            output.append("\n  dojo.require(\"dijit._editor.plugins.TextColor\");");
             output.append("\n  dojo.require(\"dijit.form.CheckBox\");");
-            output.append("\n  dojo.require(\"dojo.fx\");");
+            output.append("\n  dojo.require(\"dijit.Editor\");");
             output.append("</script>");
             output.append("<div style=\"align:right;\">");
             output.append("  ");
-            output.append("<a href=\"#\" onclick=\"showDialog('");
+            output.append("<a href=\"#\" onclick=\"showMyDialog('");
             output.append(url);
             output.append("', '");
             output.append(paramRequest.getLocaleString("lbl_addTitle"));
@@ -169,13 +181,11 @@ public class RiskBoard extends GenericResource {
             output.append("    Cargando...\n");
             output.append("  </div>\n");
             output.append("</div>\n");
-            output.append("");
-            output.append("");
         }
-        output.append("<table>");
+        output.append("<table>\n");
         output.append(createTableHeading(determinants));
         output.append(createTableBody(determinants, website, mode, request, paramRequest));
-        output.append("</table>");
+        output.append("</table>\n");
         return output.toString();
     }
     
@@ -283,11 +293,15 @@ public class RiskBoard extends GenericResource {
         String simpleTd = "      <td>\n";
         String simpleTextCenteredTd = "      <td class=\"textCentered\">\n";
         String lang = paramRequest.getUser().getLanguage();
+        User user = paramRequest.getUser();
         
         data.append("  <tbody>\n");
         //Se obtienen todos los riesgos creados en el BSC indicado
         while (risks != null && risks.hasNext()) {
             Risk risk = risks.next();
+            if (!risk.isValid() || !user.haveAccess(risk)) {
+                continue;
+            }
             short riskSpan = calculateRowSpan(risk, null);
             short factorSpan = 1;
             String spanRiskTd = "      <td" + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "") + ">\n";
@@ -936,7 +950,7 @@ public class RiskBoard extends GenericResource {
         String modeToShow = SWBResourceURL.Mode_VIEW;
         
         if (request.getParameter("urlRisk") != null) {
-            System.out.println("urlRisk - processAction: " + request.getParameter("urlRisk"));
+//            System.out.println("urlRisk - processAction: " + request.getParameter("urlRisk"));
             generic = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("urlRisk")),
                 scorecard.getSemanticModel()).createGenericInstance();
             if (generic instanceof Risk) {
@@ -1257,7 +1271,7 @@ public class RiskBoard extends GenericResource {
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
                     data.append("        <td>");
-                    data.append("<a href=\"#\" onclick=\"showDialog('");
+                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
                     data.append(url);
                     data.append("?suri=");
                     data.append(action.getEncodedURI());
@@ -1326,7 +1340,7 @@ public class RiskBoard extends GenericResource {
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
                     data.append("        <td>");
-                    data.append("<a href=\"#\" onclick=\"showDialog('");
+                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
                     data.append(url);
                     data.append("?suri=");
                     data.append(initiative.getEncodedURI());
@@ -1378,6 +1392,7 @@ public class RiskBoard extends GenericResource {
         
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
+        boolean bigDisplay = false;
         //WebSite website = paramRequest.getWebPage().getWebSite();
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_EDIT);
@@ -1410,6 +1425,13 @@ public class RiskBoard extends GenericResource {
                 formMgr.addProperty(Initiative.bsc_totalInvestment);
                 formMgr.addProperty(Initiative.bsc_analysis);
                 formMgr.addProperty(Initiative.bsc_recommendations);
+                formMgr.addProperty(Initiative.bsc_actualEnd);
+                formMgr.addProperty(Initiative.bsc_actualStart);
+                formMgr.addProperty(Initiative.bsc_estimatedEnd);
+                formMgr.addProperty(Initiative.bsc_estimatedStart);
+                formMgr.addProperty(Initiative.bsc_plannedEnd);
+                formMgr.addProperty(Initiative.bsc_plannedStart);
+                bigDisplay = true;
             }
             formMgr.setType(SWBFormMgr.TYPE_DOJO);
             formMgr.setSubmitByAjax(true);
@@ -1421,10 +1443,55 @@ public class RiskBoard extends GenericResource {
                     + "onclick=\"dijit.byId('swbDialog').hide()\">"
                     + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>\n");
             formMgr.setAction(url.toString());
-            output.append("<div id=\"frmEdit\">");
-            output.append(formMgr.renderForm(request));
+            output.append("<div id=\"frmEdit\"");
+            if (bigDisplay) {
+                output.append(" style=\"max-height:400px;\"");
+            }
+            output.append(">");
+            
+            //Se elimina la liga para captura de los valores localizados de las propiedades title y description
+            String htmlCode = formMgr.renderForm(request);
+            int fromIndex = 0;
+            int toIndex = 0;
+            if (htmlCode.indexOf("<input name=\"title\"") > 0) {
+                fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<input name=\"title\""));
+                toIndex = htmlCode.indexOf("locale</a>", fromIndex);
+                String beginning = htmlCode.substring(0, fromIndex);
+                String ending = htmlCode.substring(toIndex + "locale</a>".length());
+                htmlCode = beginning + ending;
+            }
+            if (htmlCode.indexOf("<textarea name=\"description\"") > 0) {
+                fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<textarea name=\"description\""));
+                toIndex = htmlCode.indexOf("locale</a>", fromIndex);
+                String beginning = htmlCode.substring(0, fromIndex);
+                String ending = htmlCode.substring(toIndex + "locale</a>".length());
+                htmlCode = beginning + ending;
+            }
+                    
+            output.append(htmlCode);
             output.append("</div>");
         }
         out.println(output.toString());
     }
+    
+    @Override
+    public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest) 
+            throws SWBResourceException, IOException {
+        
+        StringBuilder ret = new StringBuilder(128);
+        SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(),
+                paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+        url.setMode(PDFExportable.Mode_StreamPDF);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        String title = paramRequest.getLocaleString("msg_PrintPDFDocument");
+        ret.append("<a href=\"");
+        ret.append(url);
+        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+        ret.append(title);
+        ret.append("\">");
+        ret.append(title);
+        ret.append("</a>");
+        return ret.toString();
+    }
+    
 }
