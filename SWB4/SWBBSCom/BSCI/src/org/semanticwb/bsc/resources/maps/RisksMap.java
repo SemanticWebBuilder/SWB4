@@ -306,6 +306,11 @@ public class RisksMap extends GenericResource {
             htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d+\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","800")+"\" maxlength=\"4\" />\n");
             htm.append("        </li>\n");
+            
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"viewBox\" class=\"swbform-label\">Atributo viewBox </label>\n");
+            htm.append("          <input type=\"text\" id=\"viewBox\" name=\"viewBox\" regExp=\"\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("viewBox","0,0,1050,800")+"\" />\n");
+            htm.append("        </li>\n");
 
             // cuadrante 1
             htm.append("        <li class=\"swbform-li\">\n");
@@ -1299,6 +1304,7 @@ public class RisksMap extends GenericResource {
             Resource base = response.getResourceBase();
             base.setAttribute("width", request.getParameter("width"));
             base.setAttribute("height", request.getParameter("height"));
+            base.setAttribute("viewBox", request.getParameter("viewBox"));
             base.setAttribute("quadrant1Color", request.getParameter("quadrant1Color"));
             base.setAttribute("quadrant2Color", request.getParameter("quadrant2Color"));
             base.setAttribute("quadrant3Color", request.getParameter("quadrant3Color"));
@@ -1422,7 +1428,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" svg.setAttributeNS(null,'id','"+root.getAttribute("id")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'width','"+width+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'height','"+height+"');").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0,"+width+","+height+"');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'viewBox','"+base.getAttribute("viewBox","0 0 1050 800")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'onload','init(evt)');").append("\n");
         SVGjs.append(" document.body.appendChild(svg);").append("\n");

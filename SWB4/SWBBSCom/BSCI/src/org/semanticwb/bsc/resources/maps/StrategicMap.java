@@ -241,7 +241,7 @@ public class StrategicMap extends GenericResource
     {
         Resource base=getResourceBase();
         PrintWriter out = response.getWriter();
-
+        
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
         if(SWBParamRequest.Action_ADD.equals(action) || SWBParamRequest.Action_EDIT.equals(action))
         {
@@ -269,6 +269,11 @@ public class StrategicMap extends GenericResource
             htm.append("        <li class=\"swbform-li\">\n");
             htm.append("          <label for=\"imgHeight\" class=\"swbform-label\">Altura de la imagen <i>(pixeles)</i></label>\n");
             htm.append("          <input type=\"text\" id=\"height\" name=\"height\" regExp=\"\\d{2,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("height","1400")+"\" maxlength=\"4\" />\n");
+            htm.append("        </li>\n");
+            
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"viewBox\" class=\"swbform-label\">Atributo viewBox </label>\n");
+            htm.append("          <input type=\"text\" id=\"viewBox\" name=\"viewBox\" regExp=\"\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("viewBox","0,0,1024,1400")+"\" />\n");
             htm.append("        </li>\n");
             
             htm.append("</ul>\n");
@@ -333,6 +338,7 @@ public class StrategicMap extends GenericResource
             Resource base = response.getResourceBase();
             base.setAttribute("width", request.getParameter("width"));
             base.setAttribute("height", request.getParameter("height"));
+            base.setAttribute("viewBox", request.getParameter("viewBox"));
             try {
                 base.updateAttributesToDB();
                 response.setAction(Action_UPDATE);
@@ -527,6 +533,7 @@ public class StrategicMap extends GenericResource
     }
     
     public String getSvg(HttpServletRequest request) throws XPathExpressionException {
+        Resource base = getResourceBase();
         String id, txt, expression;
         int w, h, w_, h_;
         int x, y = 0, x_, y_;
@@ -538,7 +545,7 @@ public class StrategicMap extends GenericResource
         int width = assertValue(rootBSC.getAttribute("width"));
         int height = assertValue(rootBSC.getAttribute("height"));
         
-        User user = SWBContext.getSessionUser(getResourceBase().getWebSite().getUserRepository().getId());
+        User user = SWBContext.getSessionUser(base.getWebSite().getUserRepository().getId());
         String lang = user.getLanguage();
         String bundle = getClass().getName();
         Locale locale = new Locale(lang);
@@ -550,10 +557,10 @@ public class StrategicMap extends GenericResource
         SVGjs.append(" var XLINK_ = '" + XLNK_NS_URI + "';").append("\n");
         SVGjs.append(" window.onload = function() {").append("\n");
         SVGjs.append(" var svg = document.createElementNS(SVG_,'svg'); ").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'id','" + getResourceBase().getWebSiteId() + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'id','" + base.getWebSiteId() + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'width','" + width + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'height','" + height + "');").append("\n");
-        SVGjs.append(" svg.setAttributeNS(null,'viewBox','0,0," + width + "," + height + "');").append("\n");
+        SVGjs.append(" svg.setAttributeNS(null,'viewBox','"+base.getAttribute("viewBox","0 0 1024 1400")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" document.body.appendChild(svg);").append("\n");
 
