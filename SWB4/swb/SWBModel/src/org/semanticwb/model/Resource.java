@@ -591,6 +591,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
         Resourceable resourceable=getResourceable();
         if(ret && resourceable!=null && resourceable instanceof SWBClass) ret=((SWBClass)resourceable).isValid();
         if(ret)ret=getResourceType().isValid();
+        if(ret && getResourceSubType()!=null)ret=getResourceSubType().isValid();
         return ret;
     }
 
