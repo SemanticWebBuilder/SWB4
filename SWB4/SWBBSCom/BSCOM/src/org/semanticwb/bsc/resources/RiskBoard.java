@@ -3,6 +3,7 @@ package org.semanticwb.bsc.resources;
 import com.hp.hpl.jena.rdf.model.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -88,7 +89,7 @@ public class RiskBoard extends GenericResource {
         
         ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
         Determinant[] determinants = new Determinant[detList.size()];
-        String mode = request.getParameter("dispMode") == null ? "edit" : "view";
+        String mode = request.getParameter("dispMode") == null && userCanEdit() ? "edit" : "view";
         int cont = 0;
         //Se asegura el orden de despliegue de los determinantes al utilizar un arreglo
         for (Determinant det : detList) {
@@ -127,9 +128,13 @@ public class RiskBoard extends GenericResource {
      * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
      * @return un {@code String} que contiene el c&oacute;digo HTML para representar la informaci&oacute;n de los riesgos
      *        en el modo en que se desea mostrar el tablero
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     *         m&eacute;todo. Como la extracci&oacute;n de valores para
+     *         par&aacute;metros de i18n.
      */
     private String generateBoardView(Determinant[] determinants, WebSite website, String mode, HttpServletRequest request,
-            SWBParamRequest paramRequest) {
+            SWBParamRequest paramRequest) throws SWBResourceException {
         
         StringBuilder output = new StringBuilder(512);
         if (mode != null && mode.equalsIgnoreCase("edit")) {
@@ -145,12 +150,17 @@ public class RiskBoard extends GenericResource {
             output.append("\n  dojo.require(\"dijit.form.Button\");");
             output.append("\n  dojo.require(\"dojox.layout.ContentPane\");");
             output.append("\n  dojo.require(\"dijit.form.CheckBox\");");
+            output.append("\n  dojo.require(\"dojo.fx\");");
             output.append("</script>");
             output.append("<div style=\"align:right;\">");
             output.append("  ");
             output.append("<a href=\"#\" onclick=\"showDialog('");
             output.append(url);
-            output.append("', 'Agregar Acciones/Iniciativas');\">Agregar Acciones/Iniciativas</a>");
+            output.append("', '");
+            output.append(paramRequest.getLocaleString("lbl_addTitle"));
+            output.append("');\">");
+            output.append(paramRequest.getLocaleString("lbl_addTitle"));
+            output.append("</a>");
             output.append("</div>");
             output.append("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"swbDialog\" ");
             output.append("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
@@ -229,7 +239,7 @@ public class RiskBoard extends GenericResource {
             data.append("      <th>");
             data.append(det.getTitle());
             data.append("</th>\n");
-            System.out.println("Encabezado tablero: " + det.getTitle());
+//            System.out.println("Encabezado tablero: " + det.getTitle());
         }
         data.append("      <th>Resultado de la determinaci&oacute;n del Control</th>\n");
         data.append("      <th>Grado de Impacto</th>\n");
@@ -304,16 +314,16 @@ public class RiskBoard extends GenericResource {
                     Control control = controlIt.next();
                     rows[ctrlRowCount][0] = factor.getSemanticObject();
                     rows[ctrlRowCount][1] = control.getSemanticObject();
-                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI());
-                    System.out.println("Pos: [" + ctrlRowCount + "][1]: " + control.getURI());
-                    System.out.println("controlCount: " + controlCount);
+//                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI());
+//                    System.out.println("Pos: [" + ctrlRowCount + "][1]: " + control.getURI());
+//                    System.out.println("controlCount: " + controlCount);
                     ctrlRowCount++;
                     controlCount++;
                 }
                 if (controlCount == 0) {
                     rows[ctrlRowCount][0] = factor.getSemanticObject();
                     ctrlRowCount++;
-                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI() + "  -- controlCount == 0");
+//                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI() + "  -- controlCount == 0");
                 }
             }
             
@@ -500,14 +510,14 @@ public class RiskBoard extends GenericResource {
             data.append(tdEnclosing);
             data.append(spanRiskTd);
             try {
-                data.append(getActionsDisplay(risk, paramRequest));
+                data.append(getActionsDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
                 RiskBoard.log.error("Despliegue de Actions, risk = " + risk.getURI(), swbe);
             }
             data.append(tdEnclosing);
             data.append(spanRiskTd);
             try {
-                data.append(getInitiativesDisplay(risk, paramRequest));
+                data.append(getInitiativesDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
                 RiskBoard.log.error("Despliegue de Initiatives, risk = " + risk.getURI(), swbe);
             }
@@ -926,7 +936,8 @@ public class RiskBoard extends GenericResource {
         String modeToShow = SWBResourceURL.Mode_VIEW;
         
         if (request.getParameter("urlRisk") != null) {
-            generic = SemanticObject.createSemanticObject(request.getParameter("urlRisk"),
+            System.out.println("urlRisk - processAction: " + request.getParameter("urlRisk"));
+            generic = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("urlRisk")),
                 scorecard.getSemanticModel()).createGenericInstance();
             if (generic instanceof Risk) {
                 risk = (Risk) generic;
@@ -951,10 +962,10 @@ public class RiskBoard extends GenericResource {
                 RiskBoard.log.error("Al asignar permisos", swbe);
                 errorMsg = "err_PermissionAssigned";
             }
-        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_ADD) && risk != null) {
+        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_ADD)) {
             String objType = request.getParameter("objType");
             
-            if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName())) {
+            if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName()) && risk != null) {
                 formMgr = new SWBFormMgr(MitigationAction.sclass, scorecard.getSemanticObject(), null);
                 try {
                     SemanticObject sobj = formMgr.processForm(request);
@@ -964,7 +975,7 @@ public class RiskBoard extends GenericResource {
                 } catch (FormValidateException ex) {
                     RiskBoard.log.error("Al crear MitigationAction", ex);
                 }
-            } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName())) {
+            } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName()) && risk != null) {
                 formMgr = new SWBFormMgr(Initiative.sclass, scorecard.getSemanticObject(), null);
                 try {
                     SemanticObject sobj = formMgr.processForm(request);
@@ -976,7 +987,7 @@ public class RiskBoard extends GenericResource {
                 }
             }
             
-        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_EDIT) && risk != null) {
+        } else if (action.equalsIgnoreCase(SWBActionResponse.Action_EDIT)) {
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
             if (semObj != null) {
@@ -1061,6 +1072,8 @@ public class RiskBoard extends GenericResource {
             doShowAddWindow(request, response, paramRequest);
         } else if (paramRequest.getMode().equals("addElement")) {
             doAddElement(request, response, paramRequest);
+        } else if (paramRequest.getMode().equals("editElement")) {
+            doEditElement(request, response, paramRequest);
         } else {
             super.processRequest(request, response, paramRequest);
         }
@@ -1096,7 +1109,7 @@ public class RiskBoard extends GenericResource {
         output.append(url);
         //postHtml(url, tagid)
         //submitFormPortal(formid)
-        output.append("\" onsubmit=\"mySubmitForm(this.id);return false;\" class=\"swbform\" method=\"post\">\n");
+        output.append("\" onsubmit=\"validateSubmit(this);return false;\" class=\"swbform\" method=\"post\">\n");
         output.append("  <fieldset>\n");
         output.append("    <legend>Selecciona los datos para crear un registro</fieldset>\n");
         output.append("    <label for=\"risk\">");
@@ -1131,8 +1144,8 @@ public class RiskBoard extends GenericResource {
         output.append("  </fieldset>\n");
         output.append("  <fieldset>\n");
         output.append("  </fieldset>\n");
-        output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviar\">");
-        output.append(paramRequest.getLocaleString("lbl_createBtn"));
+        output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"continuar\">");
+        output.append(paramRequest.getLocaleString("lbl_continuateBtn"));
         output.append("</button>");
         output.append("          <button dojoType=\"dijit.form.Button\" onclick=\"dijit.byId('swbDialog').hide()\">");
         output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
@@ -1172,9 +1185,6 @@ public class RiskBoard extends GenericResource {
         GenericObject semObj = SemanticObject.createSemanticObject(riskUrl).createGenericInstance();
         Risk risk = null;
         
-        if (website.getSemanticModel().getModelObject() == null) {
-            System.out.println("El objeto referencia a SWBFormMgr es nulo!!!!");
-        }
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -1190,24 +1200,24 @@ public class RiskBoard extends GenericResource {
                 formMgr = new SWBFormMgr(Initiative.bsc_Initiative,
                         website.getSemanticModel().getModelObject(), SWBFormMgr.MODE_CREATE);
             }
-        /*formMgr.clearProperties();
-        formMgr.addProperty(Action.swb_title);
-        formMgr.addProperty(Action.swb_description);*/
-        formMgr.setType(SWBFormMgr.TYPE_XHTML);
-        formMgr.setSubmitByAjax(true);
-        formMgr.setOnSubmit("submitForm(this.id);return false;");
-        formMgr.setMode(SWBFormMgr.MODE_CREATE);
-        formMgr.addHiddenParameter("urlRisk", risk.getURI());
-        formMgr.addHiddenParameter("objType", objectType);
-        formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
-                + "name=\"enviar\" >" + paramRequest.getLocaleString("lbl_createBtn") + "</button>");
-        formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
-                + "onclick=\"dijit.byId('swbDialog').hide()\">"
-                + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>");
-        formMgr.setAction(url.toString());
-        output.append("<div id=\"frmAdd\">");
-        output.append(formMgr.renderForm(request));
-        output.append("</div>");
+            /*formMgr.clearProperties();
+            formMgr.addProperty(Action.swb_title);
+            formMgr.addProperty(Action.swb_description);*/
+            formMgr.setType(SWBFormMgr.TYPE_DOJO);
+            //formMgr.setSubmitByAjax(true);
+            formMgr.setOnSubmit("submitAndReload(this.id);return false;");
+            formMgr.setMode(SWBFormMgr.MODE_CREATE);
+            formMgr.addHiddenParameter("urlRisk", risk.getURI());
+            formMgr.addHiddenParameter("objType", objectType);
+            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
+                    + "name=\"enviar\" >" + paramRequest.getLocaleString("lbl_createBtn") + "</button>");
+            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
+                    + "onclick=\"dijit.byId('swbDialog').hide()\">"
+                    + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>");
+            formMgr.setAction(url.toString());
+            output.append("<div id=\"frmAdd\">");
+            output.append(formMgr.renderForm(request));
+            output.append("</div>");
         }
         out.println(output.toString());
     }
@@ -1216,45 +1226,63 @@ public class RiskBoard extends GenericResource {
      * Genera el c&oacute;digo HTML con el que se presentan los datos de las acciones relacionadas a los riesgos
      * @param risk la instancia {@code Risk} a la que estan asociadas las acciones a desplegar
      * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es {@literal edit} se presentan las
+     *         opciones para editar y eliminar cada elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
      * @return un {@code String} que representa al c&oacute;digo HTML para el despliegue de las acciones de un riesgo
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
      *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
      *         m&eacute;todo. Como la extracci&oacute;n de valores para
      *         par&aacute;metros de i18n.
      */
-    private String getActionsDisplay(Risk risk, SWBParamRequest paramRequest) throws SWBResourceException {
+    private String getActionsDisplay(Risk risk, SWBParamRequest paramRequest, String mode)
+            throws SWBResourceException {
         
         StringBuilder data = new StringBuilder (256);
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setMode("editElement");
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        SWBResourceURL urlDelete = paramRequest.getActionUrl();
+        urlDelete.setAction(SWBResourceURL.Action_REMOVE);
+        urlDelete.setCallMethod(SWBResourceURL.Call_DIRECT);
+        urlDelete.setParameter("urlRisk", risk.getEncodedURI());
         
         Iterator<MitigationAction> actionIt = risk.listMitigationActions();
         if (actionIt != null && actionIt.hasNext()) {
-            data.append("      <table>\n");
+            data.append("      <table height=\"100%\">\n");
             while (actionIt.hasNext()) {
                 MitigationAction action = actionIt.next();
                 data.append("      <tr>\n");
                 data.append("        <td>");
                 data.append(action.getTitle());
                 data.append("</td>\n");
-                data.append("        <td>");
-                data.append("<a href=\"#\" onclick=\"editElement('");
-                data.append(MitigationAction.bsc_MitigationAction.getClassCodeName());
-                data.append("', '");
-                data.append(action.getEncodedURI());
-                data.append("');\"><img src=\"");
-                data.append(SWBPlatform.getContextPath());
-                data.append(paramRequest.getLocaleString("path_editImg"));
-                data.append("\" alt=\"");
-                data.append(paramRequest.getLocaleString("lbl_editAlt"));
-                data.append("\"></a>&nbsp;&nbsp;&nbsp;");
-                data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
-                data.append(action.getEncodedURI());
-                data.append("\"');\"><img src=\"");
-                data.append(SWBPlatform.getContextPath());
-                data.append(paramRequest.getLocaleString("path_deleteImg"));
-                data.append("\" alt=\"");
-                data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
-                data.append("\"></a>");
-                data.append("</td>\n");
+                if (mode != null && mode.equalsIgnoreCase("edit")) {
+                    data.append("        <td>");
+                    data.append("<a href=\"#\" onclick=\"showDialog('");
+                    data.append(url);
+                    data.append("?suri=");
+                    data.append(action.getEncodedURI());
+                    data.append("', '");
+                    data.append(action.getTitle());
+                    data.append("');\"><img src=\"");
+                    data.append(SWBPlatform.getContextPath());
+                    data.append(paramRequest.getLocaleString("path_editImg"));
+                    data.append("\" alt=\"");
+                    data.append(paramRequest.getLocaleString("lbl_editAlt"));
+                    data.append("\"></a>&nbsp;&nbsp;&nbsp;");
+                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
+                    data.append(action.getTitle());
+                    data.append("', '");
+                    data.append(urlDelete.toString());
+                    data.append("&suri=");
+                    data.append(action.getEncodedURI());
+                    data.append("');\"><img src=\"");
+                    data.append(SWBPlatform.getContextPath());
+                    data.append(paramRequest.getLocaleString("path_deleteImg"));
+                    data.append("\" alt=\"");
+                    data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
+                    data.append("\"></a>");
+                    data.append("</td>\n");
+                }
                 data.append("      </tr>\n");
             }
             data.append("      </table>\n");
@@ -1267,15 +1295,25 @@ public class RiskBoard extends GenericResource {
      * Genera el c&oacute;digo HTML con el que se presentan los datos de las iniciativas relacionadas a los riesgos
      * @param risk la instancia {@code Risk} a la que estan asociadas las iniciativas a desplegar
      * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es {@literal edit} se presentan las
+     *         opciones para editar y eliminar cada elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
      * @return un {@code String} que representa al c&oacute;digo HTML para el despliegue de las iniciativas de un riesgo
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
      *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
      *         m&eacute;todo. Como la extracci&oacute;n de valores para
      *         par&aacute;metros de i18n.
      */
-    private String getInitiativesDisplay(Risk risk, SWBParamRequest paramRequest) throws SWBResourceException {
+    private String getInitiativesDisplay(Risk risk, SWBParamRequest paramRequest, String mode)
+            throws SWBResourceException {
         
         StringBuilder data = new StringBuilder (256);
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setMode("editElement");
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        SWBResourceURL urlDelete = paramRequest.getActionUrl();
+        urlDelete.setAction(SWBResourceURL.Action_REMOVE);
+        urlDelete.setCallMethod(SWBResourceURL.Call_DIRECT);
+        urlDelete.setParameter("urlRisk", risk.getEncodedURI());
         
         Iterator<Initiative> iniIt = risk.listInitiatives();
         if (iniIt != null && iniIt.hasNext()) {
@@ -1286,31 +1324,107 @@ public class RiskBoard extends GenericResource {
                 data.append("        <td>");
                 data.append(initiative.getTitle());
                 data.append("</td>\n");
-                data.append("        <td>");
-                data.append("<a href=\"#\" onclick=\"editElement('");
-                data.append(Initiative.bsc_Initiative.getClassCodeName());
-                data.append("', '");
-                data.append(initiative.getEncodedURI());
-                data.append("');\"><img src=\"");
-                data.append(SWBPlatform.getContextPath());
-                data.append(paramRequest.getLocaleString("path_editImg"));
-                data.append("\" alt=\"");
-                data.append(paramRequest.getLocaleString("lbl_editAlt"));
-                data.append("\"></a>&nbsp;&nbsp;&nbsp;");
-                data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
-                data.append(initiative.getEncodedURI());
-                data.append("\"');\"><img src=\"");
-                data.append(SWBPlatform.getContextPath());
-                data.append(paramRequest.getLocaleString("path_deleteImg"));
-                data.append("\" alt=\"");
-                data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
-                data.append("\"></a>");
-                data.append("</td>\n");
+                if (mode != null && mode.equalsIgnoreCase("edit")) {
+                    data.append("        <td>");
+                    data.append("<a href=\"#\" onclick=\"showDialog('");
+                    data.append(url);
+                    data.append("?suri=");
+                    data.append(initiative.getEncodedURI());
+                    data.append("', '");
+                    data.append(initiative.getTitle());
+                    data.append("');\"><img src=\"");
+                    data.append(SWBPlatform.getContextPath());
+                    data.append(paramRequest.getLocaleString("path_editImg"));
+                    data.append("\" alt=\"");
+                    data.append(paramRequest.getLocaleString("lbl_editAlt"));
+                    data.append("\"></a>&nbsp;&nbsp;&nbsp;");
+                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
+                    data.append(initiative.getTitle());
+                    data.append("', '");
+                    data.append(urlDelete.toString());
+                    data.append("&suri=");
+                    data.append(initiative.getEncodedURI());
+                    data.append("');\"><img src=\"");
+                    data.append(SWBPlatform.getContextPath());
+                    data.append(paramRequest.getLocaleString("path_deleteImg"));
+                    data.append("\" alt=\"");
+                    data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
+                    data.append("\"></a>");
+                    data.append("</td>\n");
+                }
                 data.append("      </tr>\n");
             }
             data.append("      </table>\n");
         }
         
         return data.toString();
+    }
+    
+    /**
+     * Presenta la interface para la edici&oacute;n de los datos correspondientes al elemento indicado 
+     * por el par&aacute;metro {@code suri} en {@code request}.
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     *         m&eacute;todo. Como la extracci&oacute;n de valores para
+     *         par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     *         petici&oacute;n/respuesta.
+     */
+    private void doEditElement(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        
+        PrintWriter out = response.getWriter();
+        StringBuilder output = new StringBuilder(512);
+        //WebSite website = paramRequest.getWebPage().getWebSite();
+        SWBResourceURL url = paramRequest.getActionUrl();
+        url.setAction(SWBResourceURL.Action_EDIT);
+        url.setCallMethod(SWBResourceURL.Call_CONTENT);
+        //SWBFormMgr formMgr = null;
+        SemanticObject semObject = SemanticObject.createSemanticObject(URLDecoder.
+                decode(request.getParameter("suri")));
+        
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        if (semObject != null) {
+            GenericObject generic = semObject.createGenericInstance();
+            SWBFormMgr formMgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
+            formMgr.clearProperties();
+            if (generic instanceof MitigationAction) {
+                formMgr.addProperty(MitigationAction.swb_title);
+                formMgr.addProperty(MitigationAction.swb_description);
+                formMgr.addProperty(MitigationAction.bsc_progressPercentage);
+                formMgr.addProperty(MitigationAction.bsc_progressDescription);
+            } else if (generic instanceof Initiative) {
+                formMgr.addProperty(Initiative.swb_title);
+                formMgr.addProperty(Initiative.swb_description);
+                formMgr.addProperty(Initiative.bsc_businessCase);
+                formMgr.addProperty(Initiative.bsc_initiativeFacilitator);
+                formMgr.addProperty(Initiative.bsc_area);
+                formMgr.addProperty(Initiative.bsc_investmentAmount);
+                formMgr.addProperty(Initiative.bsc_percentageProgress);
+                formMgr.addProperty(Initiative.bsc_totalInvestment);
+                formMgr.addProperty(Initiative.bsc_analysis);
+                formMgr.addProperty(Initiative.bsc_recommendations);
+            }
+            formMgr.setType(SWBFormMgr.TYPE_DOJO);
+            formMgr.setSubmitByAjax(true);
+            formMgr.setOnSubmit("mySubmitForm(this.id)");
+            formMgr.setMode(SWBFormMgr.MODE_EDIT);
+            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
+                    + "name=\"enviar\" >" + paramRequest.getLocaleString("lbl_editBtn") + "</button>\n");
+            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
+                    + "onclick=\"dijit.byId('swbDialog').hide()\">"
+                    + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>\n");
+            formMgr.setAction(url.toString());
+            output.append("<div id=\"frmEdit\">");
+            output.append(formMgr.renderForm(request));
+            output.append("</div>");
+        }
+        out.println(output.toString());
     }
 }
