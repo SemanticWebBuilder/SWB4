@@ -168,6 +168,19 @@ public class Process extends org.semanticwb.process.model.base.ProcessBase
         }
         return wp;
     }
+
+    @Override
+    public boolean isValid()
+    {
+        boolean ret=super.isValid();
+        if(ret)
+        {
+            ret=!getProcessGroup().isDeleted();
+        }
+        return ret; //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
     /**
      * Verifica si el usuario puede acceder al proceso.
