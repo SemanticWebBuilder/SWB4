@@ -1,3 +1,4 @@
+    - Soporte a papelera de tipos de recursos
     - Corrección de doble codificacion en menus de url con caracter &amp; (jei)
   4.5.5
     - Soporte a nuevo SWBTripleStore, (levelDB, Kyoto Cabinet, MongoDB, Memory)(Jei)
