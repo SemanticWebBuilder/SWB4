@@ -2212,7 +2212,7 @@
                 _this.svg.mouseX=_this.getEventX(evt);
                 _this.svg.mouseY=_this.getEventY(evt);
 
-                if(resizeObj!==null)
+                if(resizeObj && resizeObj!==null)
                 {
                     if (resizeObj.parent.elementType==="Lane") {
                         var w = resizeObj.parent.getWidth();
@@ -2237,7 +2237,7 @@
                         _this.updateResizeBox();
                     }
 
-                }else if(_this.svg.dragObject!==null)  //dragObjects
+                }else if(_this.svg.dragObject && _this.svg.dragObject!==null)  //dragObjects
                 {
                     _this.selected.unselect=false; //si hace drag no deselecciona
                     x=_this.getEventX(evt)-_this.svg.dragOffsetX;
@@ -2264,7 +2264,7 @@
                         }
                         _this.updateResizeBox();
                     }
-                }else if(_this.selectBox!==null) //SelectBox
+                }else if(_this.selectBox && _this.selectBox!==null) //SelectBox
                 {
                     var w=_this.getEventX(evt)-_this.svg.dragOffsetX;
                     var h=_this.getEventY(evt)-_this.svg.dragOffsetY;
@@ -2329,7 +2329,7 @@
         keydown:function(evt) {
             if(evt.keyCode===8 && evt.which===8)
             {
-                if (Modeler.selectedPath !== null) {
+                if (Modeler.selectedPath && Modeler.selectedPath !== null) {
                     Modeler.selectedPath.remove();
                     Modeler.selectedPath = null;
                 }
@@ -2341,13 +2341,13 @@
         {
             if (Modeler.mode === "view") return false;
             modeler.window.focus();
-            if (Modeler.selectedPath !== null) {
+            if (Modeler.selectedPath && Modeler.selectedPath !== null) {
                 Modeler.selectedPath.select(false);
                 Modeler.selectedPath = null;
             }
             if (!Modeler.creationDropObject) Modeler.creationDropObject = null;
             
-            if(Modeler.creationId!==null)
+            if(Modeler.creationId && Modeler.creationId!==null)
             {
                 var obj=Modeler.mapObject(Modeler.creationId);
                 if(obj.move) //es un FlowNode
@@ -2363,6 +2363,32 @@
                         } else {
                             obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                             obj.snap2Grid();
+                            
+                            //link parents
+                            for (var i = ToolKit.svg.childNodes.length; i-- && i>=0;)
+                            {
+                                var tobj=ToolKit.svg.childNodes[i];
+                                if(tobj && tobj.contents)
+                                {   
+                                    if(tobj==obj)
+                                    {
+                                        for (;i-- && i>=0;)
+                                        {
+                                            tobj=ToolKit.svg.childNodes[i];
+                                            if(tobj.hidden==false && tobj.inBounds && tobj.inBounds(obj.getX(), obj.getY()))
+                                            {
+                                                if(ToolKit.selected.indexOf(tobj)==-1)
+                                                {
+                                                    tobj.onDropObjects([obj]);
+                                                    i=0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }                            
+                            
+                            
                         }
                         if (obj.typeOf("GraphicalElement")) {
                             Modeler.fadeInObject(obj);
@@ -2371,7 +2397,7 @@
                     }
                 }else   //Es un ConnectionObject
                 {
-                    if(Modeler.creationDropObject!==null)
+                    if(Modeler.creationDropObject && Modeler.creationDropObject!==null)
                     {
                         Modeler.dragConnection=obj;//Modeler.mapObject(Modeler.creationId);
                         if (Modeler.creationDropObject.canStartLink(Modeler.dragConnection)) {
@@ -2393,11 +2419,12 @@
                 
         onmousemove:function(evt)
         {
+            var _this = ToolKit;
             if (Modeler.mode === "view") return false;
             if(Modeler.dragConnection && Modeler.dragConnection!==null)
             {
                 Modeler.dragConnection.show();
-                if(Modeler.dragConnection.toObject!==null)
+                if(Modeler.dragConnection.toObject && Modeler.dragConnection.toObject!==null)
                 {
                     Modeler.dragConnection.toObject=null;
                     _this.unSelectAll();
@@ -2429,7 +2456,7 @@
                 Modeler.dragConnection=null;
             }
             
-            if (resizeObj !== null && resizeObj.parent.elementType==="Lane") {
+            if (resizeObj && resizeObj !== null && resizeObj.parent.elementType==="Lane") {
                 var oldH = ty;
                 y=_this.getEventY(evt)-_this.svg.dragOffsetY;
                 ty=y-resizeObj.parent.getY();
@@ -2445,7 +2472,7 @@
         objectMouseDown:function(evt,obj)
         {
             if (Modeler.mode === "view") return false;
-            if(Modeler.creationId!==null)
+            if(Modeler.creationId && Modeler.creationId!==null)
             {
                 if (obj.elementType !== "Lane") {
                     Modeler.creationDropObject=obj;
@@ -2563,7 +2590,7 @@
             obj.onmousedown = function (evt) {
                 if (Modeler.mode === "view") return false;
                 obj.pressed = true;
-                if (Modeler.selectedPath !== null) {
+                if (Modeler.selectedPath && Modeler.selectedPath !== null) {
                     Modeler.selectedPath.select(false);
                 }
                 obj.select(true);
@@ -2582,7 +2609,7 @@
             
             obj.onmousemove = function (evt) {
                 if (Modeler.mode === "view") return false;
-                if (Modeler.selectedPath !== null && Modeler.selectedPath === obj) {
+                if (Modeler.selectedPath && Modeler.selectedPath !== null && Modeler.selectedPath === obj) {
                     obj.select(false);
                     Modeler.selectedPath = null;
                 }
@@ -2722,10 +2749,12 @@
                 obj.setAttributeNS(null, "oclass", "swimlane_o")
                 return obj;
             };
-                
+                            
             var obj = ToolKit.createObject(con, id, parent);
             obj.canSelect = false;
             obj.resizeable = true;
+            
+            var fRemove = obj.remove;            
             
             obj.onmousedown = function(evt) {
                 return false;
@@ -2735,11 +2764,36 @@
                 return false;
             };
             
+            obj.remove=function() {
+                fRemove();
+                
+                //elimina el objeto de contents
+                while ((ax = obj.parent.lanes.indexOf(obj)) !== -1) {
+                    obj.parent.lanes.splice(ax, 1);
+                }
+                
+                //calcula el nuevo tamaño en height
+                var totHeight = 0;
+                for (var i = 0; i < obj.parent.lanes.length; i++) {
+                    var l = obj.parent.lanes[i];
+                    totHeight += l.getHeight();
+                }                
+                obj.parent.resize(obj.parent.getWidth(), totHeight);                
+                
+                obj.parent.updateLanes();
+            };
+            
             var fUpdateText = null;
             var fSetText = obj.setText;
             obj.setText = function(text) {
                 fSetText(text,0,0,obj.getHeight(),1);
                 fUpdateText = obj.text.update;
+                
+                obj.text.onclick=function(evt)
+                {
+                    //alert(evt);
+                    ToolKit.selectObj(obj,true);
+                };
 
                 obj.text.ondblclick = function(evt) {
                     var txt = prompt("Titulo:",obj.text.value);                  
@@ -2747,12 +2801,12 @@
                     {
                         obj.text.value=txt;
                         obj.text.update();
-                        obj.updateHeaderLine();
+                        if(obj.updateHeaderLine)obj.updateHeaderLine();
                     }
                 };
 
                 obj.text.update = function() {
-                    if (fUpdateText !== null) {
+                    if (fUpdateText && fUpdateText !== null) {
                         obj.text.textW = obj.getHeight();
                         fUpdateText();
                         //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
@@ -2842,7 +2896,14 @@
                 obj.lanes.push(ob);
                 
                 if (ob.lindex === -1) {
-                    ob.lindex = obj.lanes.length;
+                    var mindex=0;
+                    
+                    for (var i = 0; i < obj.lanes.length; i++) 
+                    {
+                        var l = obj.lanes[i];
+                        if(l.lindex>mindex)mindex=l.lindex;
+                    }                    
+                    ob.lindex = mindex+1; //obj.lanes.length;
                 }
                 
                 var totHeight = 0;
@@ -2859,7 +2920,7 @@
                 }
                 
                 obj.updateLanes();
-                obj.updateHeaderLine();
+                //obj.updateHeaderLine();
             };
             
             obj.updateLanes = function() {
@@ -3049,7 +3110,7 @@
             var icon=obj.addIcon("#subProcessMarker",0,1,-1,-12);
             obj.subLayer={parent:obj};
             
-            if (Modeler.options !== null && Modeler.options.layerNavigation) {
+            if (Modeler.options && Modeler.options !== null && Modeler.options.layerNavigation) {
                 icon.obj.ondblclick=function(evt)
                 {
                     ToolKit.setLayer(obj.subLayer);
@@ -3192,7 +3253,7 @@
                 if (obj.getContainer() !== null) {
                     ret.container = obj.getContainer().id;
                 }
-                if (obj.parent !== null) {
+                if (obj.parent && obj.parent !== null) {
                     ret.parent = obj.parent.id;
                 }
                 ret.labelSize="12";//TODO:Extraer tamaño de la fuente
@@ -3235,6 +3296,7 @@
                 ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo. Archivo mal formado.", 200, "Error");
                 return;
             }
+            ToolKit.setLayer(null);
             
             try {
                 var json = JSON.parse(jsonString);
@@ -3269,7 +3331,7 @@
                         var obj = Modeler.mapObject("Pool");
                         obj.setURI(tmp.uri);
 
-                        if (tmp.title !== null) {
+                        if (tmp.title && tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
                         obj.layer = null;
@@ -3294,10 +3356,10 @@
                     if (tmp.class==="Lane") {
                         var obj = Modeler.mapObject("Lane");
                         obj.setURI(tmp.uri);
-                        if (tmp.title !== null) {
+                        if (tmp.title && tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
-                        if (tmp.lindex !== null) {
+                        if (tmp.lindex && tmp.lindex !== null) {
                             obj.setIndex(tmp.lindex);
                         }
                         obj.resize(tmp.w, tmp.h);
@@ -3325,10 +3387,10 @@
                     obj.setURI(tmp.uri);
 
                     if (obj.typeOf("GraphicalElement")) {
-                        if (tmp.title !== null) {
+                        if (tmp.title && tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
-                        if (obj.resizeable !== null && obj.resizeable) {
+                        if (obj.resizeable && obj.resizeable !== null && obj.resizeable) {
                             obj.resize(tmp.w, tmp.h);
                         }
                         
@@ -3336,9 +3398,9 @@
                             obj.index = tmp.index;
                         }
 
-                        if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting !== null) {
+                        if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting && tmp.isInterrupting !== null) {
                             var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                            if (par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
+                            if (par && par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
                                 obj.setInterruptor(false);
                             }
                         }
@@ -3371,7 +3433,7 @@
                     var start = Modeler.getGraphElementByURI(null, tmp.start);
                     var end = Modeler.getGraphElementByURI(null, tmp.end);
 
-                    if (start !== null && end !== null) {
+                    if (start && start !== null && end && end !== null) {
                         if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
                             obj.removeAttribute("marker-start");
                             obj.soff = 0;
@@ -3417,6 +3479,7 @@
                 }
                 ToolKit.setLayer(null);
             } catch (err) {
+                console.log(err);
                 ToolKit.showTooltip(0,"Ocurrió un problema al cargar el modelo."+err, 200, "Error");
             }
         },
@@ -3429,7 +3492,7 @@
             var currentLayer = layer;
             do {
                 var pid = "";
-                if (currentLayer.parent !== null) {
+                if (currentLayer.parent && currentLayer.parent !== null) {
                     pid = currentLayer.parent.id;
                 }
                 ret.push({label:currentLayer.parent.text.value, layer:pid});
@@ -3440,7 +3503,7 @@
         },
                 
         createNavPath: function() {
-            if (Modeler.navPath !== null) {
+            if (Modeler.navPath && Modeler.navPath !== null) {
                 Modeler.navPath.bar.remove();
             }
             
@@ -3550,7 +3613,14 @@
                 load: function(response, ioArgs) {
                     //console.log(response);
                     ToolKit.hideToolTip();
-                    callbackHandler(response);
+//                    if(response && response.indexOf("{error:")==0)
+//                    {
+//                        console.log(response);
+//                        ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación", 200, "Error");
+//                    }else
+                    {                        
+                        callbackHandler(response);
+                    }
                     return response;
                 },
                 error: function(response, ioArgs) {
@@ -3576,7 +3646,7 @@
             var ret = {uri:"test", nodes:[]};
             var uris = "";
             for (var i = 0; i < ToolKit.contents.length; i++) {
-                if (ToolKit.contents[i].typeOf && (ToolKit.contents[i].typeOf("GraphicalElement") || ToolKit.contents[i].typeOf("ConnectionObject"))) {
+                if (ToolKit.contents[i]!=null && ToolKit.contents[i].typeOf && (ToolKit.contents[i].typeOf("GraphicalElement") || ToolKit.contents[i].typeOf("ConnectionObject"))) {
                     var json = Modeler.getJSONObject(ToolKit.contents[i]);
                     if (json !== null) {
                         ret.nodes.push(json);
@@ -3779,15 +3849,19 @@
             }
             else if(type=='ExclusiveStartEventGateway') {
                 ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
+                ret.setText("Exclusiva (evetos iniciales)");
             }
             else if(type=='ExclusiveIntermediateEventGateway') {
                 ret= new _ExclusiveIntermediateEventGateway(Modeler.createObject("#eventGateway",null,null));
+                ret.setText("Exclusiva (evetos intermedios)");
             }
             else if(type=='ParallelGateway') {
                 ret= new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
+                ret.setText("Paralela");
             }
             else if(type=='ParallelStartEventGateway') {
                 ret= new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
+                ret.setText("Paralela (eventos iniciales)");
             }
             else if(type=='ComplexGateway') {
                 ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
