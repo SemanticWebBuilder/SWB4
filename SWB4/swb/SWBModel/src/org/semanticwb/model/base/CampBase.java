@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento) 
    */
-public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Roleable,org.semanticwb.model.Ruleable,org.semanticwb.model.Referensable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable
+public abstract class CampBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.Ruleable,org.semanticwb.model.CalendarRefable,org.semanticwb.model.Traceable
 {
    /**
    * Define una campaña de recursos o componentes de SemanticWebBuilder (No usada de momento)

@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por el cual se define un filtro para que un usuario tenga acceso o no a la estructura del sitio 
    */
-public abstract class UserFilterBase extends org.semanticwb.model.SectionFilter implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public abstract class UserFilterBase extends org.semanticwb.model.SectionFilter implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
    /**
    * Objeto por el cual se define un filtro para que un usuario tenga acceso o no a la estructura del sitio

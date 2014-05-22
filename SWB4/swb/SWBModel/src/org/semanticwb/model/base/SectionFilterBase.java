@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Superclase de filtrado por secciones para recursos y usuarios 
    */
-public abstract class SectionFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.XMLable
+public abstract class SectionFilterBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.XMLable,org.semanticwb.model.Traceable
 {
    /**
    * Superclase de filtrado por secciones para recursos y usuarios
