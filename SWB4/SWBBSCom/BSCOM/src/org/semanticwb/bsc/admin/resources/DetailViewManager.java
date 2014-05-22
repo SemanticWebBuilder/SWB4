@@ -1980,8 +1980,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * que se usaran para generar el PDF.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @return el objeto String que representa el c&oacute;digo HTML con la liga
      * y el icono correspondiente al elemento a exportar.
