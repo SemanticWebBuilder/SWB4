@@ -1129,6 +1129,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 ? this.getWorkClass().transformToSemanticClass()
                 : null;
         String messageType = null;
+        User user = paramRequest.getUser();
 
         //Variable para evaluar al periodo especificado
         String modelName = paramRequest.getWebPage().getWebSiteId();
@@ -1147,6 +1148,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (messageType == null && genericObject == null) {
             messageType = "uriNotValid";
         }
+        //Revisa que el usuario tenga permisos de acceso a la información del objeto especificado
+        if (messageType == null && !user.haveAccess(genericObject)) {
+            messageType = "userHasNoPermissions";
+        }
         if (messageType == null && (genericObject instanceof Objective && workClassSC != Objective.sclass)) {
             messageType = "objectTypeMissmatch";
         } else if (messageType == null && (genericObject instanceof Indicator && workClassSC != Indicator.sclass)) {
@@ -1160,6 +1165,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         } else if (messageType == null && (genericObject instanceof Theme && workClassSC != Theme.sclass)) {
             messageType = "objectTypeMissmatch";
         } else if (messageType == null && (genericObject instanceof Agreement && workClassSC != Agreement.sclass)) {
+            messageType = "objectTypeMissmatch";
+        } else if (messageType == null && (genericObject instanceof Risk && workClassSC != Risk.sclass)) {
             messageType = "objectTypeMissmatch";
         }
 
@@ -1336,11 +1343,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
+/*                  Antes se evaluaba de la siguiente forma
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
                             || (userCanCollaborate(collaboration) && isEditable(formElement))
                             || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit()
                             && isEditable(formElement)) || (elementBSC.createGenericInstance() instanceof Deliverable
-                            && userCanEdit() && isEditable(formElement))) {
+                            && userCanEdit() && isEditable(formElement))) {*/
+                    if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement)) ||
+                            (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() && isEditable(formElement)) ||
+                            (elementBSC.createGenericInstance() instanceof Deliverable && userCanEdit() && isEditable(formElement))) {
                         applyInlineEdit = true;
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
