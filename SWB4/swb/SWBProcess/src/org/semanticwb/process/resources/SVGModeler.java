@@ -60,6 +60,7 @@ import org.semanticwb.process.model.ConnectionObject;
 import org.semanticwb.process.model.Containerable;
 import org.semanticwb.process.model.GraphicalElement;
 import org.semanticwb.process.model.IntermediateCatchEvent;
+import org.semanticwb.process.model.Lane;
 import org.semanticwb.process.model.LoopCharacteristics;
 import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
@@ -378,7 +379,7 @@ public class SVGModeler extends GenericAdmResource {
      * @return 
      */
     public boolean reviewJSON(org.semanticwb.process.model.Process process, HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramsRequest, HashMap<String, JSONObject> hmjson, boolean bupdate){
-        boolean ret = Boolean.TRUE;
+        boolean ret = true;
         HashMap<String, String> hmori = loadProcessElements(process);
         HashMap<String, String> hmnew = new HashMap();
 
@@ -473,7 +474,7 @@ public class SVGModeler extends GenericAdmResource {
                             index = json.getInt(PROP_index);
                             //System.out.println("Viene isCollecion:"+isCollection.booleanValue());
                         } catch (Exception e) {
-                            index = 0;
+                            index = 1000;
                             //System.out.println("No viene isCollecion....."+title);
                         }
 
@@ -483,6 +484,7 @@ public class SVGModeler extends GenericAdmResource {
                         y = json.getInt(PROP_Y);
                         w = json.getInt(PROP_W);
                         h = json.getInt(PROP_H);
+                        
                         parent = json.optString(PROP_PARENT);
                         container = json.optString(PROP_CONTAINER);
                         labelSize = json.getInt(PROP_labelSize);
@@ -492,7 +494,8 @@ public class SVGModeler extends GenericAdmResource {
                             //System.out.println("revisando si el elemento existe");
                             go = ont.getGenericObject(uri);
 
-                            if (go instanceof GraphicalElement) {
+                            if (go instanceof GraphicalElement) 
+                            {
                                 // actualizando datos en elemento existente
                                 ge = (GraphicalElement) go;
                                 if (!ge.getTitle().equals(title)) {
@@ -609,7 +612,16 @@ public class SVGModeler extends GenericAdmResource {
                                 }
                                 // se agrega en este hm para la parte de la secuencia del proceso
                                 if(bupdate) hmnew.put(uri, go.getURI());
+                                
                             }
+                            
+                            //System.out.println("go:"+go);
+                            //System.out.println("lindex:"+json.has("lindex"));
+                            if(go instanceof Lane && json.has("lindex"))
+                            {
+                                //System.out.println("val:"+json.getInt("lindex")+" "+json.get("lindex"));
+                                ((Lane)go).setLindex(json.getInt("lindex"));
+                            }                            
                             // se quita elemento que ha sido actualizado
                             if(bupdate) hmori.remove(uri);
 
@@ -720,6 +732,15 @@ public class SVGModeler extends GenericAdmResource {
 
                             // se agrega nuevo elemento en el hmnew
                             if(bupdate) hmnew.put(uri, gi.getURI());
+                            
+                            
+                            //System.out.println("ge:"+ge);
+                            //System.out.println("lindex:"+json.has("lindex"));
+                            if(ge instanceof Lane && json.has("lindex"))
+                            {
+                                //System.out.println("val:"+json.getInt("lindex")+" "+json.get("lindex"));
+                                ((Lane)ge).setLindex(json.getInt("lindex"));
+                            }  
 
                             ///////////////////////////////////////
 //                        if(semclass.isSubClass(Task.swp_Task))
@@ -805,8 +826,7 @@ public class SVGModeler extends GenericAdmResource {
                             if (go_ge != null && go_ge instanceof GraphicalElement) {
                                 ge.setParent((GraphicalElement) go_ge);
                             }
-                        }
-
+                        }else if(ge.getParent()!=null)ge.removeParent();
                     }
                 }
             }
@@ -1084,7 +1104,11 @@ public class SVGModeler extends GenericAdmResource {
                     }
                     //System.out.println("===>"+colble.isCollection());
                 }
-
+                
+                if( obj instanceof Lane) {
+                     //System.out.println("put index:"+obj+" "+((Lane)obj).getLindex());
+                     ele.put("lindex", ((Lane)obj).getLindex());
+                }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
@@ -1190,6 +1214,10 @@ public class SVGModeler extends GenericAdmResource {
                         ele.put(PROP_isCollection, false);
                     }
                     //System.out.println("===>"+colble.isCollection());
+                }
+                
+                if( obj instanceof Lane) {
+                     ele.put("lindex", ((Lane)obj).getLindex());
                 }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
