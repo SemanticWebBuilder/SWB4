@@ -68,8 +68,11 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String modeTmp = request.getParameter("modeTmp");
+        String downloadEle = request.getAttribute("downloadEle") != null ? 
+                request.getAttribute("downloadEle").toString() : null;
+        
 
-        if (modeTmp == null && mode.equals(SWBFormMgr.MODE_VIEW)) {
+        if (modeTmp == null && mode.equals(SWBFormMgr.MODE_VIEW) && downloadEle == null) {
             toReturn.append(renderModeView(request, obj, prop, propName, type, mode, lang));
         } else if (modeTmp == null || (modeTmp != null && Mode_VIEW.equals(modeTmp))) {
             toReturn.append(renderElementView(request, obj, prop, propName, type, mode, lang));
