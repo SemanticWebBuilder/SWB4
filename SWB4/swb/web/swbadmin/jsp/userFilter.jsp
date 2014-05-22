@@ -147,7 +147,7 @@
 
         UserRepository rep=UserRepository.ClassMgr.getUserRepository(userRep);
         
-        out.println("<form id=\"userFilter/form\" dojoType=\"dijit.form.Form\" action=\""+contx+"/swbadmin/jsp/userFilter.jsp\" class=\"swbform\" onsubmit=\"submitForm('userFilter/form');return false;\">");
+        out.println("<form id=\"userFilter/form\" dojoType=\"dijit.form.Form\" action=\""+path+"\" class=\"swbform\" onsubmit=\"submitForm('userFilter/form');return false;\">");
         out.println("<fieldset>");
         out.println("<legend>Usuarios seleccionados</legend>");
         out.println("<ul>");
