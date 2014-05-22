@@ -167,17 +167,43 @@ public class WebPage extends WebPageBase
      */
     public String getUrl()
     {
-        return getUrl((String)null);
-    }
+        String url=getUrl((String)null,true);
+        //System.out.println("url 3:"+url);
+        return url;
+    } 
     
     /**
-     * Regresa el Url de la pagina
+     * Regresa el Url de la pagina codificando o no los amps
+     * Ejemplo: /swb/jei/home.
+     * 
+     * @param encodeAmps boolean
+     * @return String
+     */
+    public String getUrl(boolean encodeAmps)
+    {
+        return getUrl(null, encodeAmps);
+    }  
+    
+    /**
+     * Regresa el Url de la pagina en base al idioma especificado
      * Ejemplo: /swb/jei/home.
      * 
      * @param lang the lang
      * @return String
      */
     public String getUrl(String lang)
+    {
+        return getUrl(lang, true);
+    }    
+    
+    /**
+     * Regresa el Url de la pagina en base al idioma especificado
+     * Ejemplo: /swb/jei/home.
+     * 
+     * @param lang the lang
+     * @return String
+     */
+    public String getUrl(String lang, boolean encodeAmps)
     {
         String country=null;
         User user=SWBContext.getSessionUser(getWebSite().getUserRepository().getId());
@@ -190,11 +216,12 @@ public class WebPage extends WebPageBase
         String url=getDisplayWebPageURL(lang);
         if(url!=null)
         {
+            //System.out.println("url 1:"+url);
             {
-                if(url.indexOf('&')>-1)
+                if(encodeAmps && url.indexOf('&')>-1)
                 {
-                    url=url.replace("&amp;", "&");
-                    url=url.replace("&", "&amp;");
+                    url=url.replaceAll("&amp;", "&");
+                    url=url.replaceAll("&", "&amp;");
                 }
                 if(url.startsWith("/"))
                 {
@@ -203,6 +230,7 @@ public class WebPage extends WebPageBase
                 {
                     //url=url.substring(1);
                 }
+                //System.out.println("url 2:"+url);
             }
             return url;
         }else if(getFriendlyURL()!=null)
