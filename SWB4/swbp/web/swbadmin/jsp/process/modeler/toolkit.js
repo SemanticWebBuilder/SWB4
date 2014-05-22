@@ -1005,11 +1005,15 @@
                 {
                     //En algunos casos, el parent es nulo, es decir, el canvas
                     var parent = obj.parent;
-                    if (parent == null) {
-                        parent = _this;
+                    if (parent && parent != null) 
+                    {
+                        while ((ax = parent.contents.indexOf(obj)) !== -1) {
+                            parent.contents.splice(ax, 1);
+                        }
                     }
-                    while ((ax = parent.contents.indexOf(obj)) !== -1) {
-                        parent.contents.splice(ax, 1);
+                    //elimina el objeto de contents
+                    while ((ax = _this.contents.indexOf(obj)) !== -1) {
+                        _this.contents.splice(ax, 1);
                     }
                 }
                 
@@ -1188,8 +1192,8 @@
                     if (_this.contents.indexOf(obj) === -1) {
                         _this.contents.push(obj);
                         //obj.parent=_this;
-                        obj.parent=null;
                     }
+                    obj.parent=null;
                 }
             };
             
@@ -1311,7 +1315,10 @@
             }
             
             obj.setParent(parent);
-            _this.svg.appendChild(obj);
+            if(_this.svg)
+            {
+                _this.svg.appendChild(obj);
+            }
             if(obj.getWidth()==0 && obj.getHeight()==0)
             {
                 var bb=obj.getBBox();
