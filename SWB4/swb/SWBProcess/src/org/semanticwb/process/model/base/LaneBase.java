@@ -1,8 +1,9 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.model.Traceable,org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Sortable,org.semanticwb.model.RoleRefable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Referensable,org.semanticwb.model.Descriptiveable
+public abstract class LaneBase extends org.semanticwb.process.model.GraphicalElement implements org.semanticwb.process.model.ResourceAssignmentable,org.semanticwb.model.Referensable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable,org.semanticwb.model.UserGroupRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.RoleRefable
 {
+    public static final org.semanticwb.platform.SemanticProperty swp_lindex=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/process#lindex");
     public static final org.semanticwb.platform.SemanticClass swp_Lane=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/process#Lane");
    /**
    * The semantic class that represents the currentObject
@@ -491,6 +492,24 @@ public abstract class LaneBase extends org.semanticwb.process.model.GraphicalEle
              ret=(org.semanticwb.model.RuleRef)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Lindex property
+* @return int with the Lindex
+*/
+    public int getLindex()
+    {
+        return getSemanticObject().getIntProperty(swp_lindex);
+    }
+
+/**
+* Sets the Lindex property
+* @param value long with the Lindex
+*/
+    public void setLindex(int value)
+    {
+        getSemanticObject().setIntProperty(swp_lindex, value);
     }
 
 /**
