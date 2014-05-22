@@ -1,7 +1,7 @@
 package org.semanticwb.process.model.base;
 
 
-public abstract class GatewayBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Sortable
+public abstract class GatewayBase extends org.semanticwb.process.model.FlowNode implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Sortable
 {
    /**
    * {Converging|Diverging|Mixed} Indica el modo en que la compuerta se usa.
