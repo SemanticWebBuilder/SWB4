@@ -2006,7 +2006,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append("   if(svg != null) {").append("\n");
         ret.append("     var svg_xml = (new XMLSerializer).serializeToString(svg);").append("\n");
         ret.append("     document.getElementById('image').value=svg_xml;").append("\n");
-//ret.append("     document.getElementById('suri').value='"+request.getParameter("suri")+"';").append("\n");
         ret.append("   }").append("\n");
         ret.append("   form.submit();").append("\n");
         ret.append(" };").append("\n");
