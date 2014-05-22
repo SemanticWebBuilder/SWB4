@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:swpd="http://www.semanticwebbuilder.org/swb4/process_doc#"
+    xmlns:swb="http://www.semanticwebbuilder.org/swb4/ontology#"
+    xmlns:swbxf="http://www.semanticwebbuilder.org/swb4/xforms/ontology#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://www.semanticwebbuilder.org/swb4/process_doc">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.semanticwebbuilder.org/swb4/process"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="ProcessDocPropertyDataType">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ProcessDocProperty"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#ProcessDocProperty">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessDocSection">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Sortable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessDocType">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessDocPropertyCollection">
+    <rdfs:subClassOf rdf:resource="#ProcessDocProperty"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasProcessDocSection">
+    <rdfs:range rdf:resource="#ProcessDocSection"/>
+    <rdfs:domain rdf:resource="#ProcessDocType"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSecProcessDocProperty">
+    <rdfs:range rdf:resource="#ProcessDocProperty"/>
+    <rdfs:domain rdf:resource="#ProcessDocSection"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasProcessDocPropery">
+    <rdfs:range rdf:resource="#ProcessDocProperty"/>
+    <rdfs:domain rdf:resource="#ProcessDocPropertyCollection"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="dataType">
+    <rdfs:domain rdf:resource="#ProcessDocPropertyDataType"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_dataType">
+        <swbxf:propSelectValues rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >date:Date|int:Integer|string:String|float:Float|boolean:Boolean|datetime:DateTime|file:File</swbxf:propSelectValues>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="propName">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#ProcessDocProperty"/>
+  </owl:DatatypeProperty>
+  <swpd:ProcessDocType rdf:ID="ProcessDocType_1">
+    <swb:title rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Tipo 1</swb:title>
+  </swpd:ProcessDocType>
+</rdf:RDF>
+
+<!-- Created with TopBraid Composer -->
