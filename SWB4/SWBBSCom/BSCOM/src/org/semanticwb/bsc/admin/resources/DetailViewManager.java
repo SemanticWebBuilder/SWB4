@@ -74,8 +74,7 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
  * @author jose.jimenez
  */
 public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.DetailViewManagerBase
-        implements PDFExportable
-{
+        implements PDFExportable {
 
     /**
      * Realiza operaciones en la bitacora de eventos.
@@ -86,7 +85,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * este recurso
      */
     private static final String TEMPLATE_FILENAME = "/templateContent.html";
-
 
     /**
      * Genera una instancia de este recurso
@@ -786,7 +784,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("Facilitator");
                     //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
                 }
-                
+
             } else if (generic != null && generic instanceof Deliverable) {
                 Deliverable deliverable = (Deliverable) generic;
                 if (deliverable.getResponsible() != null) {
@@ -795,7 +793,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("responsable");
                     //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
                 }
-                
+
             }
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
@@ -1340,8 +1338,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     boolean applyInlineEdit = false;
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
                             || (userCanCollaborate(collaboration) && isEditable(formElement))
-                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() 
-                            && isEditable(formElement))|| (elementBSC.createGenericInstance() instanceof Deliverable 
+                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit()
+                            && isEditable(formElement)) || (elementBSC.createGenericInstance() instanceof Deliverable
                             && userCanEdit() && isEditable(formElement))) {
                         applyInlineEdit = true;
                         //atributo agregado para permitir administrar los archivos adjuntos
@@ -1351,6 +1349,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
                         }
+                        request.setAttribute("downloadEle", "true");
                         ret = fe.renderElement(request, elementBSC, semProp, semProp.getName(),
                                 SWBFormMgr.TYPE_XHTML,
                                 applyInlineEdit ? "inlineEdit" : SWBFormMgr.MODE_VIEW,
@@ -1403,8 +1402,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     private boolean userCanEdit() {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
-        
-        final WebSite scorecard = (WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
         if (user != null) {
@@ -1512,7 +1511,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * grupo indicado, {@literal false} de lo contrario
      */
     private boolean userCanCollaborate(final UserGroup collaboration) {
-        final WebSite scorecard = (WebSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
         return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
     }
@@ -1683,8 +1682,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         WebPage wp = paramRequest.getWebPage();
 
         Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/" + 
-                template.getActualVersion().getVersionNumber() + "/"
+        String filePath = template.getWorkPath() + "/"
+                + template.getActualVersion().getVersionNumber() + "/"
                 + template.getFileName(template.getActualVersion().getVersionNumber());
         FileReader reader = null;
         StringBuilder view = new StringBuilder(256);
@@ -1760,9 +1759,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             Resource resourceIt = it.next();
             SWBResource base = SWBPortal.getResourceMgr().getResource(resourceIt.getURI());
             try {
-                ComponentExportable ce = (ComponentExportable)base;
+                ComponentExportable ce = (ComponentExportable) base;
                 ret.add(ce);
-            }catch(ClassCastException | NullPointerException cce) {
+            } catch (ClassCastException | NullPointerException cce) {
             }
         }
         Iterator<ComponentExportable> itRes = ret.iterator();
@@ -1979,39 +1978,39 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     @Override
     public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String suri = request.getParameter("suri");
-        
+
         SWBResourceURL url = new SWBResourceURLImp(request, getResource(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode(Mode_StreamPDF);
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setParameter("suri", suri);
-        
-        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
-        
-        StringBuilder ret = new StringBuilder();
-ret.append("<script type=\"text/javascript\">").append("\n");
-ret.append(" function getFile() {").append("\n");
-ret.append("   var form = document.getElementById('frmDetail');").append("\n");
-ret.append("   var svg = document.getElementsByTagName('svg')[0];").append("\n");
-ret.append("   if(svg != null) {").append("\n");
-ret.append("     var svg_xml = (new XMLSerializer).serializeToString(svg);").append("\n");
-ret.append("     document.getElementById('image').value=svg_xml;").append("\n");
-//ret.append("     document.getElementById('suri').value='"+request.getParameter("suri")+"';").append("\n");
-ret.append("   }").append("\n");
-ret.append("   form.submit();").append("\n");
-ret.append(" };").append("\n");
-ret.append("</script>").append("\n");
 
-ret.append("<a href=\"javascript:getFile();");
-ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-ret.append(title);
-ret.append("\" >");
-ret.append(title);
-ret.append("</a>").append("\n");
-ret.append("<form id=\"frmDetail\" method=\"post\" action=\"");
-ret.append(url);
-ret.append("\">").append("\n");
-ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
-ret.append("</form>").append("\n");
+        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+
+        StringBuilder ret = new StringBuilder();
+        ret.append("<script type=\"text/javascript\">").append("\n");
+        ret.append(" function getFile() {").append("\n");
+        ret.append("   var form = document.getElementById('frmDetail');").append("\n");
+        ret.append("   var svg = document.getElementsByTagName('svg')[0];").append("\n");
+        ret.append("   if(svg != null) {").append("\n");
+        ret.append("     var svg_xml = (new XMLSerializer).serializeToString(svg);").append("\n");
+        ret.append("     document.getElementById('image').value=svg_xml;").append("\n");
+//ret.append("     document.getElementById('suri').value='"+request.getParameter("suri")+"';").append("\n");
+        ret.append("   }").append("\n");
+        ret.append("   form.submit();").append("\n");
+        ret.append(" };").append("\n");
+        ret.append("</script>").append("\n");
+
+        ret.append("<a href=\"javascript:getFile();");
+        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+        ret.append(title);
+        ret.append("\" >");
+        ret.append(title);
+        ret.append("</a>").append("\n");
+        ret.append("<form id=\"frmDetail\" method=\"post\" action=\"");
+        ret.append(url);
+        ret.append("\">").append("\n");
+        ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
+        ret.append("</form>").append("\n");
 
         return ret.toString();
     }
