@@ -131,13 +131,13 @@
         <%        
 
         User user=SWBContext.getAdminUser();
-       
+/*       
         if(user==null)
         {
             response.sendError(403);
             return;
         }            
-
+*/
             String stop=null;// request.getParameter("stop");
             if(stop!=null)
             {

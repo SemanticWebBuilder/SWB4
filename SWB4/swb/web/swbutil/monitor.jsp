@@ -19,13 +19,13 @@ static private SWBSummary swbSummary = new SWBSummary();
     <body>        
 <%
     org.semanticwb.model.User user=SWBContext.getAdminUser();
-    
+/*    
     if(user==null)
     {
         response.sendError(403);
         return;
     }
-    
+*/    
  
     String pc=null; //request.getParameter("pageCache");
     SWBSummaryData sample=swbSummary.getSample();
