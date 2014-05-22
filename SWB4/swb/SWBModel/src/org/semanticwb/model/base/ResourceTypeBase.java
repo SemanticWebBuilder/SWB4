@@ -4,7 +4,7 @@ package org.semanticwb.model.base;
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso 
    */
-public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableClass
+public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticProperty swb_resourceCache=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#resourceCache");
    /**
@@ -354,6 +354,24 @@ public abstract class ResourceTypeBase extends org.semanticwb.model.SWBClass imp
     public void setDescription(String description, String lang)
     {
         getSemanticObject().setProperty(swb_description, description, lang);
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
    /**
    * Gets all the org.semanticwb.model.Resource

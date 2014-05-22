@@ -590,6 +590,7 @@ public class Resource extends org.semanticwb.model.base.ResourceBase {
         boolean ret=super.isValid();
         Resourceable resourceable=getResourceable();
         if(ret && resourceable!=null && resourceable instanceof SWBClass) ret=((SWBClass)resourceable).isValid();
+        if(ret)ret=getResourceType().isValid();
         return ret;
     }
 

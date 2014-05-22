@@ -6,7 +6,7 @@ package org.semanticwb.model.base;
 public interface ExpirableBase extends org.semanticwb.model.GenericObject
 {
    /**
-   * Fecha de expiración 
+   * Expiration date 
    */
     public static final org.semanticwb.platform.SemanticProperty swb_expiration=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/ontology#expiration");
    /**
