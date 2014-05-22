@@ -93,7 +93,7 @@ public class ReportGenerator extends GenericResource {
         output.append("    <div class=\"\">\n");
         output.append("      <select name=\"elementType\" id=\"elementType\" onchange=\"listTitles(this);\">\n");
         output.append("        <option value=\"\">");
-        output.append(paramRequest.getLocaleString("lbl_noSelection"));
+        output.append(paramRequest.getLocaleString("lbl_title_opt"));
         output.append("</option>\n");
         
         OntClass claseOnt = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getOntClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
@@ -102,6 +102,9 @@ public class ReportGenerator extends GenericResource {
         List<String> elements = new ArrayList<String>();
         while (children != null && children.hasNext()) {
             OntClass child = children.next();
+            if (child.getLocalName().equals("Agreement") || child.getLocalName().equals("Risk")) {
+                continue;
+            }
             String id = child.getLabel("es") != null ? child.getLabel("es") : child.getLocalName();
             childMap.put(id, child);
             elements.add(id);
