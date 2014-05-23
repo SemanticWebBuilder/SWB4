@@ -665,7 +665,7 @@ public class ExternalPost {
      /*
      *  @param deviceplatform is the opetating system of device which is used for the user that post the message that enters to the system
      */
-    public void setDevicePlatform(DevicePlatform deviceplatform)
+    public void setDevicePlatform(DevicePlatform devicePlatform)
     {
         this.devicePlatform=devicePlatform;
     }
@@ -677,6 +677,6 @@ public class ExternalPost {
      */
     public DevicePlatform getDevicePlatform()
     {
-        return devicePlatform;
+        return this.devicePlatform;
     }
 }
