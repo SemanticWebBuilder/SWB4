@@ -8,16 +8,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.model.base.FileUploadBase;
 import org.semanticwb.platform.SemanticLiteral;
+import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.GenericSemResource;
@@ -90,6 +94,11 @@ public class EmailResource extends GenericResource {
         toReturn.append("</select></p>");
         toReturn.append("<div><input id=\"ccText\" name=\"ccText\" size=\"100\" type=\"text\"></input></div>");
         toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_Subject") +"<input name=\"subject\" size=\"50\" type=\"text\"></input></p>");
+        //Adjuntar archivo
+        //toReturn.append("<input type=\"file\" name=\"fichero\"><input type=\"submit\">");
+
+        //Termina archivos adjuntos
+        
         toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_Message") +"<textarea name=\"message\" rows=\"10\" cols=\"50\"></textarea></p>");
         toReturn.append("<p><button type=\"submit\">"
                 + paramRequest.getLocaleString("lbl_Send") + "</button>");
@@ -115,7 +124,6 @@ public class EmailResource extends GenericResource {
 
         out.println(toReturn.toString());
     }
-
     /**
      * Recibe los datos del formulario e implementa la funcionalidad de enviar
      * correo.
@@ -155,9 +163,20 @@ public class EmailResource extends GenericResource {
                     System.out.println("\n" + ccEmails);
                 }
             }
-            SWBUtils.EMAIL.sendMail("ana.garcias@infotec.com.mx", subject, message);
-            //SWBUtils.EMAIL.sendMail(emailFrom, nameFrom, listEmails, listCcEmails, null, subject, "text/html;", message, to, message, null);
-        
+           SWBUtils.EMAIL.sendMail("ana.garcias@infotec.com.mx", subject, message);
+          
+           /*SWBMail mail = new SWBMail();
+           mail.setFromEmail(emailFrom);
+           mail.setFromName(nameFrom);
+           mail.setSubject(subject);
+           mail.setToEmail(listEmails);
+           mail.setCcEmail(listCcEmails);
+           mail.setContentType("text/html");*/
+           
+           //EmailAttachment an = new 
+                                 
+           //SWBUtils.EMAIL.sendMail(mail);
+          
         } else {
             super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
         }
