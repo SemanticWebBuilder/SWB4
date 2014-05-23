@@ -3,8 +3,6 @@ package org.semanticwb.bsc.accessory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.semanticwb.SWBUtils;
-import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.DeterminantValue;
 import org.semanticwb.model.SWBContext;
