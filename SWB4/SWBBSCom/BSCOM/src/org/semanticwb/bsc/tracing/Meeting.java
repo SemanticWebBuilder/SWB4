@@ -26,7 +26,9 @@ public class Meeting extends org.semanticwb.bsc.tracing.base.MeetingBase
         String prefix = super.getPrefix();
         if(prefix==null) {
             try {
-                prefix = getBSC().getId()+"-"+getMeetingType()+"-"+(getSerial()>9?"":"0")+getSerial();
+                prefix = getBSC().getId()+"-"+(getMeetingType()!= null
+                        ?getMeetingType().toUpperCase() : "")+"-"+(getSerial()>9
+                        ?"":"0")+getSerial();
             }catch(Exception e) {
                 prefix = "Untitled";
             }
