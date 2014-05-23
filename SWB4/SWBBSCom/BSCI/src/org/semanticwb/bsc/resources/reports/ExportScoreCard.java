@@ -16,6 +16,8 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
+import org.semanticwb.Logger;
+import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Period;
@@ -32,9 +34,8 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author ana.garcias
  */
 public class ExportScoreCard extends GenericResource {
-
+    private static Logger log = SWBUtils.getLogger(ExportScoreCard.class);
     
-
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         doViewStrategy(request, response, paramRequest);
@@ -113,22 +114,19 @@ public class ExportScoreCard extends GenericResource {
                 exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
                 exporter.exportReport();
             } catch (IOException | JRException e) {
-                e.printStackTrace(System.err);
+                log.error(e);
             }
 
         }
     }
 
     private Period getPeriod(HttpServletRequest request) {
-        //String id = getResourceBase().getWebSiteId();
         WebSite ws = getResourceBase().getWebSite();
         Period period = null;
-        //if (request.getSession(true).getAttribute(ws.getId()) != null) {
         String pid = (String) request.getSession(true).getAttribute(ws.getId());
         if (Period.ClassMgr.hasPeriod(pid, ws)) {
             period = Period.ClassMgr.getPeriod(pid, ws);
         }
-        //}
         return period;
     }
 
