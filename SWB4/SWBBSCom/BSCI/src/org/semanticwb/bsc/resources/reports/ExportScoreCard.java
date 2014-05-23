@@ -33,6 +33,22 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class ExportScoreCard extends GenericResource {
 
+    
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        doViewStrategy(request, response, paramRequest);
+    }
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (Mode_StreamPDF.equals(paramRequest.getMode())) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+    
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("application/pdf");
@@ -103,22 +119,6 @@ public class ExportScoreCard extends GenericResource {
         }
     }
 
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        doViewStrategy(request, response, paramRequest);
-    }
-
-    @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-System.out.println("\n\nExportScorecar.processRequest()...");
-System.out.println("mode="+paramRequest.getMode());
-        if (Mode_StreamPDF.equals(paramRequest.getMode())) {
-            doGetPDFDocument(request, response, paramRequest);
-        }else {
-            super.processRequest(request, response, paramRequest);
-        }
-    }
-
     private Period getPeriod(HttpServletRequest request) {
         //String id = getResourceBase().getWebSiteId();
         WebSite ws = getResourceBase().getWebSite();
@@ -140,8 +140,6 @@ System.out.println("mode="+paramRequest.getMode());
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
-     * @return el objeto String que representa el c&oacute;digo HTML con la liga
-     * y el icono correspondiente al elemento a exportar.
      * @throws SWBResourceException SWBResourceException Excepti&oacute;n
      * utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
