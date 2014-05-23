@@ -1198,7 +1198,7 @@ public class SWBASchedule extends GenericResource {
      */
     public void addElem(Document doc, Element parent, String elemName, String elemValue) {
         Element elem = doc.createElement(elemName);
-        elem.appendChild(doc.createTextNode(elemValue));
+        if(elemValue!=null)elem.appendChild(doc.createTextNode(elemValue));
         parent.appendChild(elem);
     }
 
