@@ -13,6 +13,11 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     public Agreement(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
+    
+    @Override
+    public String getPrefix() {
+        return getAgreementNumber();
+    }
 
     /**
      * Obtiene el valor de la propiedad agreementNumber. Si el valor es {@code null}, se genera el valor
@@ -22,21 +27,21 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
      * El valor sugerido es editable.
      * @return 
      */
-    @Override
-    public String getAgreementNumber() {
-        String agreementNumber = super.getAgreementNumber();
+    private String getAgreementNumber() {
+        String prefix = super.getPrefix();
         
-        if (agreementNumber == null) {
+        if (prefix == null) {
             Agreement agreement = (Agreement) getSemanticObject().createGenericInstance();
             Meeting meeting = agreement.getMeeting();
             if (meeting != null) {
-                int meetingId = 0;
+                int meetingIndex;
                 int agreementId = 0;
                 String meetingType = "";
                 try {
-                    if (meeting.getId() != null) {
-                        meetingId = Integer.parseInt(meeting.getId());
-                    }
+//                    if (meeting.getId() != null) {
+//                        meetingIndex = Integer.parseInt(meeting.getId());
+//                    }
+                    meetingIndex = meeting.getSerial();
                     if (agreement.getId() != null) {
                         agreementId = Integer.parseInt(agreement.getId());
                     }
@@ -45,26 +50,22 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
                 } catch (NumberFormatException nfe) {
                     System.err.println("Error al formar numero de acuerdo con id: " +
                             agreement.getId() + ", " + nfe.getCause());
+                    meetingIndex = 0;
                 }
                 java.util.GregorianCalendar systemDate = new java.util.GregorianCalendar();
                 int anio = systemDate.get(GregorianCalendar.YEAR) % 100;
-                agreementNumber = agreement.getBSC().getTitle() + "-" +
+                prefix = agreement.getBSC().getTitle() + "-" +
                          meetingType +
-                        (meetingId > 9 ? "" : "0") + meetingId + "-" +
+                        (meetingIndex > 9 ? "" : "0") + meetingIndex + "-" +
                         (agreementId > 9 ? "" : "0") + agreementId + "-" + anio;
-                setAgreementNumber(agreementNumber);
+                setPrefix(prefix);
             }
         }
-        return agreementNumber;
+        return prefix;
     }
 
-    /**
-     * Almacena el valor recibido como valor de la propiedad agreementNumber.
-     * @param value valor a almacenar
-     */
     @Override
-    public void setAgreementNumber(String value) {
-        super.setAgreementNumber(value);
+    public void setPrefix(String value) {
+        super.setPrefix(value);           
     }
-    
 }

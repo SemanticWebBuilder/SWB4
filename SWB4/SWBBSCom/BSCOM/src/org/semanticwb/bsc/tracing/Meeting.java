@@ -10,4 +10,33 @@ public class Meeting extends org.semanticwb.bsc.tracing.base.MeetingBase
     {
         super(base);
     }
+    
+    @Override
+    public int getSerial() {
+        return Integer.parseInt(getId());
+    }
+
+    @Override
+    public synchronized void setSerial(int value) {
+        super.setSerial(value);
+    }
+    
+    @Override
+    public String getPrefix() {
+        String prefix = super.getPrefix();
+        if(prefix==null) {
+            try {
+                prefix = getBSC().getId()+"-"+getMeetingType()+"-"+(getSerial()>9?"":"0")+getSerial();
+            }catch(Exception e) {
+                prefix = "Untitled";
+            }
+            setPrefix(prefix);
+        }
+        return prefix;
+    }
+
+    @Override
+    public void setPrefix(String value) {
+        super.setPrefix(value);           
+    }
 }
