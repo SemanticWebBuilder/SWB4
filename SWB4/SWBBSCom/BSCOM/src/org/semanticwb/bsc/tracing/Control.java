@@ -101,7 +101,6 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
         if (detIt != null) {
             while (detIt.hasNext()) {
                 DeterminantValue detValue = detIt.next();
-                System.out.println("determinanValue.getIsDeterminant(): " + detValue.getIsDeterminant());
                 if (detValue.getIsDeterminant() == null ||
                         (detValue.getIsDeterminant() != null && detValue.getIsDeterminant().equalsIgnoreCase("no"))) {
                     result = false;
