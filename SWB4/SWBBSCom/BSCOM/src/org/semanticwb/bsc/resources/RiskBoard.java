@@ -1,7 +1,14 @@
 package org.semanticwb.bsc.resources;
 
+import com.arthurdo.parser.HtmlException;
+import com.arthurdo.parser.HtmlStreamTokenizer;
+import com.arthurdo.parser.HtmlTag;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.lowagie.text.DocumentException;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -16,7 +23,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.PDFExportable;
-import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Risk;
@@ -32,8 +38,10 @@ import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -47,6 +55,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import static org.semanticwb.portal.api.SWBResourceModes.Action_ADD;
 import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.portal.api.SWBResourceURLImp;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
  * Despliega el tablero de riesgos y proporciona las facilidades para actualizar parte de la 
@@ -84,28 +93,13 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         StringBuilder dataOut = new StringBuilder(512);
         WebSite website = this.getResourceBase().getWebSite();
         
-//        Iterator<Determinant> iteratorDet = Determinant.ClassMgr.listDeterminants(website);
-//        System.out.println("Lista de determinantes en: " + website.getId());
-//        while (iteratorDet != null && iteratorDet.hasNext()) {
-//            System.out.println("Id: " + iteratorDet.next().getTitle());
-//        }
-        
-        ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
-        Determinant[] determinants = new Determinant[detList.size()];
         String mode = request.getParameter("dispMode") == null && userCanEdit() ? "edit" : "view";
-        int cont = 0;
-        //Se asegura el orden de despliegue de los determinantes al utilizar un arreglo
-        for (Determinant det : detList) {
-            determinants[cont] = det;
-            cont++;
-        }
-        dataOut.append(generateBoardView(determinants, website, mode, request, paramRequest));
+        dataOut.append(generateBoardView(website, mode, request, paramRequest));
         out.println(dataOut.toString());
     }
     
     /**
      * Genera el c&oacute;digo HTML utilizado para presentar la vista del tablero de riesgos en el modo en que se indica.
-     * @param determinants conjunto de objetos {@code Determinant} utilizado para generaci&oacute;n del tablero
      * @param website la instancia de {@code WebSite} de la que se debe extraer la informaci&oacute; de los riesgos
      * @param mode modo de visualizaci&oacute;n de la informaci&oacute;n presentada en el tablero. Puede tener los valores:
      *        {@literal view} con el que solo se muestra la informaci&oacute;n almacenada y {@literal edit} con el que 
@@ -119,7 +113,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
      *         m&eacute;todo. Como la extracci&oacute;n de valores para
      *         par&aacute;metros de i18n.
      */
-    private String generateBoardView(Determinant[] determinants, WebSite website, String mode, HttpServletRequest request,
+    private String generateBoardView(WebSite website, String mode, HttpServletRequest request,
             SWBParamRequest paramRequest) throws SWBResourceException {
         
         StringBuilder output = new StringBuilder(512);
@@ -140,6 +134,16 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         output.append("    .noValido {  background-color:#FF6666;  }\n");
         output.append("    .textCentered {  text-align:center;  }\n");
         output.append("</style>\n");
+        
+        ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
+        Determinant[] determinants = new Determinant[detList.size()];
+        int cont = 0;
+        //Se asegura el orden de despliegue de los determinantes al utilizar un arreglo
+        for (Determinant det : detList) {
+            determinants[cont] = det;
+            cont++;
+        }
+        
         if (mode != null && mode.equalsIgnoreCase("edit")) {
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("showAddWindow");
@@ -1082,14 +1086,20 @@ public class RiskBoard extends GenericResource implements PDFExportable {
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
-        if (paramRequest.getMode().equals("showAddWindow")) {
-            doShowAddWindow(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("addElement")) {
-            doAddElement(request, response, paramRequest);
-        } else if (paramRequest.getMode().equals("editElement")) {
-            doEditElement(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest);
+        switch (paramRequest.getMode()) {
+            case "showAddWindow":
+                doShowAddWindow(request, response, paramRequest);
+                break;
+            case "addElement":
+                doAddElement(request, response, paramRequest);
+                break;
+            case "editElement":
+                doEditElement(request, response, paramRequest);
+                break;
+            case PDFExportable.Mode_StreamPDF:
+                doGetPDFDocument(request, response, paramRequest);
+                break;
+            default: super.processRequest(request, response, paramRequest);
         }
     }
     
@@ -1483,6 +1493,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
                 paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode(PDFExportable.Mode_StreamPDF);
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
+//        url.setParameter("dispMode", "view");
         String title = paramRequest.getLocaleString("msg_PrintPDFDocument");
         ret.append("<a href=\"");
         ret.append(url);
@@ -1492,6 +1503,164 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         ret.append(title);
         ret.append("</a>");
         return ret.toString();
+    }
+    
+    /**
+     * Genera la misma vista de informacion que el metodo {@code doView} pero con formato PDF.
+     * @param request la petici&oacute;n HTTP enviada por el cliente
+     * @param response la respuesta HTTP que se enviar&aacute; al cliente
+     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     * petici&oacute;n/respuesta.
+     */
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response,
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        
+        response.setContentType("application/pdf; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Content-Disposition", "attachment; filename=\""+getResourceBase().getWebSiteId()+".summary.pdf\"");
+        
+        WebSite website = paramRequest.getWebPage().getWebSite();
+        StringBuilder output = new StringBuilder(512);
+        String htmlCode = generateBoardView(website, "view", request, paramRequest);
+        
+        output.append("<html>");
+        output.append("<head>");
+        output.append("<style type=\"text/css\">");
+        output.append("    @page { size: 11in 8.5in;}");
+        output.append("</style>");
+        output.append(getLinks(paramRequest, request));
+        output.append("</head>");
+        output.append("<body>");
+        output.append(htmlCode);
+        output.append("</body>");
+        output.append("</html>");
+        
+        if (htmlCode != null && htmlCode.length() > 0) {
+            OutputStream os = response.getOutputStream();
+            try {
+                ITextRenderer renderer = new ITextRenderer();
+                //renderer.setDocumentFromString(renderHTML(request, response, paramRequest));
+                String sbStr = replaceHtml(output.toString());
+                renderer.setDocumentFromString(sbStr);
+                renderer.layout();
+                renderer.createPDF(os);
+                renderer.finishPDF();
+            } catch (DocumentException ex) {
+                log.error("Error in: " + ex);
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException e) { /*ignore*/ }
+                }
+            }
+        }
+    }
+    
+    /**
+     * Reemplaza c&oacute;digo HTML por acentos, esto es para la estructura XML
+     * requerida.
+     * @param htmlString el objeto String en que se reemplazar&aacute;n las entidades de HTML por car&aacute;cteres.
+     * @return el objeto String modificado
+     */
+    private String replaceHtml(String htmlString) {
+        String sbStr = SWBUtils.TEXT.replaceAll(htmlString, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
+        return sbStr;
+    }
+    
+    /**
+     * Se encarga de obtener los links de la plantilla de la p&aacute;gina
+     * actual
+     *
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * links hacia los CSS respectivos.
+     * @throws FileNotFoundException Archivo no ubicado
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
+            throws FileNotFoundException, IOException {
+        User user = paramRequest.getUser();
+        WebPage wp = paramRequest.getWebPage();
+        
+        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
+        String filePath = template.getWorkPath() + "/" + 
+                template.getActualVersion().getVersionNumber() + "/"
+                + template.getFileName(template.getActualVersion().getVersionNumber());
+        FileReader reader = null;
+        StringBuilder view = new StringBuilder(256);
+        reader = new FileReader(filePath);
+
+        String port = "";
+        if (request.getServerPort() != 80) {
+            port = ":" + request.getServerPort();
+        }
+        String baserequest = request.getScheme() + "://" + request.getServerName()
+                + port;
+
+        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
+        HtmlTag tag = new HtmlTag();
+        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+            int ttype = tok.getTokenType();
+
+            if (ttype == HtmlStreamTokenizer.TT_TAG) {
+                try {
+                    tok.parseTag(tok.getStringValue(), tag);
+                } catch (HtmlException htmle) {
+                    RiskBoard.log.error("Al parsear la plantilla , "
+                            + filePath, htmle);
+                }
+                if (tag.getTagString().toLowerCase().equals("link")) {
+                    String tagTxt = tag.toString();
+                    if (tagTxt.contains("type=\"text/css\"")) {
+                        if (!tagTxt.contains("/>")) {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
+                        }
+                        if (!tagTxt.contains("{webpath}")) {
+                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
+                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
+                                    tagTxt.length());
+                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
+                        } else {
+                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
+                        }
+                        view.append(tagTxt);
+                    }
+                }
+            }
+        }
+        return view.toString();
     }
     
 }
