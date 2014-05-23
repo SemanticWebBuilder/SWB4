@@ -22,7 +22,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Risk;
@@ -63,7 +62,28 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
  * a los riesgos.
  * @author jose.jimenez
  */
-public class RiskBoard extends GenericResource implements PDFExportable {
+public class RiskBoard extends GenericResource {
+
+    /**
+     * Define clases de estilos para adornar el despliegue de los datos en el tablero
+     */
+    private static final String OWNSTYLES = "<style>\n" + 
+        "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n" +
+        "    th {  text-align:center; background-color:#EEEEEE;  }\n" + 
+        "    .evalRiesgo {  background-color:#87CEEB;  }\n" + 
+        "    .evalControl {  background-color:#1E90FF;  }\n" + 
+        "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n" + 
+        "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n" +
+        "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n" +
+        "    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n" +
+        "    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n" +
+        "    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n" +
+        "    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n" +
+        "    .riesgoControlado {  background-color:#389738;  }\n" +
+        "    .riesgoNoControlado {  background-color:#FFFF80;  }\n" +
+        "    .noValido {  background-color:#FF6666;  }\n" +
+        "    .textCentered {  text-align:center;  }\n" +
+        "</style>\n";
 
     
     /**
@@ -93,8 +113,12 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         StringBuilder dataOut = new StringBuilder(512);
         WebSite website = this.getResourceBase().getWebSite();
         
-        String mode = request.getParameter("dispMode") == null && userCanEdit() ? "edit" : "view";
-        dataOut.append(generateBoardView(website, mode, request, paramRequest));
+        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
+            dataOut.append(doIconExport(request, paramRequest));
+        } else if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
+            String mode = request.getParameter("dispMode") == null && userCanEdit() ? "edit" : "view";
+            dataOut.append(generateBoardView(website, mode, request, paramRequest));
+        }
         out.println(dataOut.toString());
     }
     
@@ -117,23 +141,10 @@ public class RiskBoard extends GenericResource implements PDFExportable {
             SWBParamRequest paramRequest) throws SWBResourceException {
         
         StringBuilder output = new StringBuilder(512);
-        output.append("<style>\n");
-        output.append("    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n");
-        output.append("    th {  text-align:center; background-color:#EEEEEE;  }\n");
-        output.append("    .evalRiesgo {  background-color:#87CEEB;  }\n");
-        output.append("    .evalControl {  background-color:#1E90FF;  }\n");
-        output.append("    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n");
-        output.append("    .mapaRiesgoth {  background-color:#FFFFFF;  }\n");
-        output.append("    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n");
-        output.append("    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n");
-        output.append("    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n");
-        output.append("    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n");
-        output.append("    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n");
-        output.append("    .riesgoControlado {  background-color:#389738;  }\n");
-        output.append("    .riesgoNoControlado {  background-color:#FFFF80;  }\n");
-        output.append("    .noValido {  background-color:#FF6666;  }\n");
-        output.append("    .textCentered {  text-align:center;  }\n");
-        output.append("</style>\n");
+        
+        if (mode.equalsIgnoreCase("edit")) {
+            output.append(RiskBoard.OWNSTYLES);
+        }
         
         ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
         Determinant[] determinants = new Determinant[detList.size()];
@@ -988,6 +999,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
                 try {
                     SemanticObject sobj = formMgr.processForm(request);
                     MitigationAction mitAction = (MitigationAction) sobj.createGenericInstance();
+                    mitAction.setActive(true);
                     SWBPortal.getServiceMgr().updateTraceable(mitAction.getSemanticObject(), user);
                     risk.addMitigationAction(mitAction);
                 } catch (FormValidateException ex) {
@@ -998,6 +1010,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
                 try {
                     SemanticObject sobj = formMgr.processForm(request);
                     Initiative initiative = (Initiative) sobj.createGenericInstance();
+                    initiative.setActive(true);
                     SWBPortal.getServiceMgr().updateTraceable(initiative.getSemanticObject(), user);
                     risk.addInitiative(initiative);
                 } catch (FormValidateException ex) {
@@ -1096,8 +1109,8 @@ public class RiskBoard extends GenericResource implements PDFExportable {
             case "editElement":
                 doEditElement(request, response, paramRequest);
                 break;
-            case PDFExportable.Mode_StreamPDF:
-                doGetPDFDocument(request, response, paramRequest);
+            case "export":
+                doGetExportedDocument(request, response, paramRequest);
                 break;
             default: super.processRequest(request, response, paramRequest);
         }
@@ -1484,23 +1497,50 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         out.println(output.toString());
     }
     
-    @Override
-    public String doIconExportPDF(HttpServletRequest request, SWBParamRequest paramRequest) 
+    /**
+     * Genera la vista del recurso cuando es ejecutado como recurso de estrategia
+     * @param request la petici&oacute;n HTML hecha por el cliente
+     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @return un {@code String} que representa las ligas de HTML hacia los m&eacute;todos que muestran el tablero 
+     * como archivos PDF o de Excel.
+     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
+     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     *         m&eacute;todo. Como la extracci&oacute;n de valores para
+     *         par&aacute;metros de i18n.
+     * @throws IOException si ocurre un problema con la lectura/escritura de la
+     *         petici&oacute;n/respuesta.
+     */
+    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest) 
             throws SWBResourceException, IOException {
         
         StringBuilder ret = new StringBuilder(128);
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(),
                 paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-        url.setMode(PDFExportable.Mode_StreamPDF);
+        SWBResourceURL urlExcel = new SWBResourceURLImp(request, getResourceBase(),
+                paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+        url.setMode("export");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-//        url.setParameter("dispMode", "view");
-        String title = paramRequest.getLocaleString("msg_PrintPDFDocument");
+        url.setParameter("dispMode", "view");
+        url.setParameter("type", "pdf");
+        String titlePdf = paramRequest.getLocaleString("msg_PrintPDFDocument");
         ret.append("<a href=\"");
         ret.append(url);
         ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-        ret.append(title);
+        ret.append(titlePdf);
         ret.append("\">");
-        ret.append(title);
+        ret.append(titlePdf);
+        ret.append("</a>");
+        urlExcel.setMode("export");
+        urlExcel.setCallMethod(SWBResourceURL.Call_DIRECT);
+        urlExcel.setParameter("dispMode", "view");
+        urlExcel.setParameter("type", "excel");
+        String titleExcel = paramRequest.getLocaleString("msg_PrintXlDocument");
+        ret.append("&nbsp; &nbsp; <a href=\"");
+        ret.append(urlExcel);
+        ret.append("\" class=\"swbstgy-toolbar-printExcel\" title=\"");
+        ret.append(titleExcel);
+        ret.append("\">");
+        ret.append(titleExcel);
         ret.append("</a>");
         return ret.toString();
     }
@@ -1517,24 +1557,35 @@ public class RiskBoard extends GenericResource implements PDFExportable {
      * @throws IOException si ocurre un problema con la lectura/escritura de la
      * petici&oacute;n/respuesta.
      */
-    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response,
+    public void doGetExportedDocument(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
-        response.setContentType("application/pdf; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\""+getResourceBase().getWebSiteId()+".summary.pdf\"");
         
         WebSite website = paramRequest.getWebPage().getWebSite();
         StringBuilder output = new StringBuilder(512);
         String htmlCode = generateBoardView(website, "view", request, paramRequest);
+        String displayType = request.getParameter("type") != null ? request.getParameter("type") : null;
+        String fileExtension = null;
         
+        if (displayType != null && displayType.equalsIgnoreCase("excel")) {
+            response.setContentType("application/xls; charset=ISO-8859-1");
+            fileExtension = "xlsx";
+        } else {
+            response.setContentType("application/pdf; charset=ISO-8859-1");
+            fileExtension = "pdf";
+        }
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        if (displayType != null && !displayType.equalsIgnoreCase("excel")) {
+            response.setHeader("Content-Disposition", "attachment; filename=\"" +
+                    getResourceBase().getWebSiteId() + ".tableroRiesgos." + fileExtension + "\"");
+        }
         output.append("<html>");
         output.append("<head>");
         output.append("<style type=\"text/css\">");
-        output.append("    @page { size: 11in 8.5in;}");
+        output.append("    @page { size: 90cm 21.59cm;}");  // 11in 8.5in
         output.append("</style>");
         output.append(getLinks(paramRequest, request));
+        output.append(RiskBoard.OWNSTYLES);
         output.append("</head>");
         output.append("<body>");
         output.append(htmlCode);
@@ -1611,6 +1662,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
      */
     private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
             throws FileNotFoundException, IOException {
+        
         User user = paramRequest.getUser();
         WebPage wp = paramRequest.getWebPage();
         
@@ -1626,8 +1678,7 @@ public class RiskBoard extends GenericResource implements PDFExportable {
         if (request.getServerPort() != 80) {
             port = ":" + request.getServerPort();
         }
-        String baserequest = request.getScheme() + "://" + request.getServerName()
-                + port;
+        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
 
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
         HtmlTag tag = new HtmlTag();
