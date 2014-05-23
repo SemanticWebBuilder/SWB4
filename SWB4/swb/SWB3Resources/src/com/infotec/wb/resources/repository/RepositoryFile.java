@@ -72,6 +72,7 @@ public class RepositoryFile {
     String[] values;
     protected Notification notification = new Notification();
     protected TreeRepHtml dirs = new TreeRepHtml();
+    protected boolean hideSuscriptions=true;
 
     /**
      * Creates a new instance of RepositoryFile
@@ -1568,7 +1569,7 @@ public class RepositoryFile {
                             }
                         }
                     }
-                    if (user.getId() != null && user.isSigned()) {
+                    if (!hideSuscriptions && user.getId() != null && user.isSigned()) {
                         if (!subcriptions.contains(new Long(0))) { //dir
 
                             if (!subcriptions.contains(new Long(repdocid))) {
@@ -1948,7 +1949,7 @@ public class RepositoryFile {
             ret.append("\n<table>");
             ret.append("\n<caption>");
             ret.append("\n<span>" + foldername+"</span> ");
-            if (user.getId() != null && user.isSigned()) {
+            if (!hideSuscriptions && user.getId() != null && user.isSigned()) {
                 if (!subcriptions.contains(new Long(0))) {
                     ret.append("<a  class=\"suscribir\" href=\"javascript: doSuscribe(" + i_log + ");\" title=\"" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "\"><span>" + paramsRequest.getLocaleString("msgSuscribeDirectory") + "</span></a>");
                 } else {
@@ -2063,7 +2064,7 @@ public class RepositoryFile {
                     }
                     ret.append("\n</td>");
                     ret.append("\n<td class=\"accion\">");
-                    if (user.getId() != null && user.isSigned()) {
+                    if (!hideSuscriptions && user.getId() != null && user.isSigned()) {
                         if (!subcriptions.contains(new Long(0))) //dir
                         {
                             if (!subcriptions.contains(new Long(repdocid))) {
