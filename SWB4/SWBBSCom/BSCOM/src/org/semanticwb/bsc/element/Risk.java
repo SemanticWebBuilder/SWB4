@@ -108,18 +108,15 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     public synchronized boolean calculateControled() {
         
         boolean controled = true;
-        System.out.println("En Risk.calculateControled() - riesgo: " + this.getId());
         
         Iterator<Factor> factorIt = this.listFactors();
         if (factorIt != null && factorIt.hasNext()) {
             while (factorIt.hasNext()) {
                 Factor factor = factorIt.next();
-                System.out.println("Factor: " + factor.getId());
                 Iterator<Control> controlIt = factor.listControls();
                 if (controlIt != null && controlIt.hasNext()) {
                     while (controlIt.hasNext()) {
                         Control control = controlIt.next();
-                        System.out.println("  Control: " + control.getId() + " - " + control.getDeterminingControl());
                         if (control.getDeterminingControl() == null || 
                                 (control.getDeterminingControl() != null &&
                                  control.getDeterminingControl().equalsIgnoreCase("deficient"))) {
@@ -128,14 +125,11 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
                         }
                     }
                 } else {
-                    System.out.println("Iterador de controles nulo o vacio");
                     controled = false;
                     break;
                 }
-                System.out.println("   evaluacion suficientemente controlado: " + controled);
             }
         } else {
-            System.out.println("Iterador de factores nulo o vacio");
             controled = false;
         }
         
