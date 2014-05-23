@@ -1349,10 +1349,10 @@
     </bsc:displayElement>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="determinant">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</swb:removeDependency>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Es el determinante sobre el Control</rdfs:comment>
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
     <rdfs:domain rdf:resource="#DeterminantValue"/>
     <rdfs:range rdf:resource="#Determinant"/>
     <swb:displayProperty>
