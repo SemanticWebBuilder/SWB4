@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -15,14 +16,11 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
-import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
+import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.model.Resource;
-import org.semanticwb.model.Resourceable;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -35,9 +33,11 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class ExportScoreCard extends GenericResource {
 
-    public void doExport(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("application/pdf");
         WebSite ws = paramRequest.getWebPage().getWebSite();
+        response.setHeader("Content-Disposition", "attachment; filename=\""+ws.getId()+".pdf\"");
 
         if (ws instanceof BSC) {
             String objective = "";
@@ -46,7 +46,7 @@ public class ExportScoreCard extends GenericResource {
             String indicator = "";
             String scoreCard = "";
 
-            LinkedList<ParamsScoreCard> lista = new LinkedList<ParamsScoreCard>();
+            LinkedList<ParamsScoreCard> lista = new LinkedList<>();
             Period period = getPeriod(request);
             scoreCard = ws.getTitle();
             JasperTemplates jasperLogo = JasperTemplates.LOGO;
@@ -96,44 +96,26 @@ public class ExportScoreCard extends GenericResource {
                 exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
                 exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
                 exporter.exportReport();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (IOException | JRException e) {
+                e.printStackTrace(System.err);
             }
 
         }
-
     }
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //super.doView(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
-        /*PrintWriter out = response.getWriter();
-         StringBuilder liga = new StringBuilder(128);
-
-         SWBResourceURL url = paramRequest.getRenderUrl();
-         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-         url.setMode("export");
-         liga.append("<table height=\"200px\"><tr><td>H</td></tr></table>");
-         liga.append("<a href=\"");
-         liga.append(url);
-         liga.append("\" target=\"_new\">Exportar AQUI</a>");
-         out.write(liga.toString());*/
-        SWBResourceURL url = paramRequest.getRenderUrl();
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        url.setMode("export");
-        response.sendRedirect(url.toString());
+        doViewStrategy(request, response, paramRequest);
     }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //Evaluar el mode
-        if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
-            doViewStrategy(request, response, paramRequest);
-        } else if (paramRequest.getMode().equalsIgnoreCase("export")) {
-            doExport(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
+System.out.println("\n\nExportScorecar.processRequest()...");
+System.out.println("mode="+paramRequest.getMode());
+        if (Mode_StreamPDF.equals(paramRequest.getMode())) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
         }
     }
 
@@ -164,24 +146,19 @@ public class ExportScoreCard extends GenericResource {
      * utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("application/pdf; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
         PrintWriter out = response.getWriter();
-        Resource base = paramRequest.getResourceBase();
-        String surl = paramRequest.getWebPage().getUrl();
-        Iterator<Resourceable> res = base.listResourceables();
-        while (res.hasNext()) {
-            Resourceable re = res.next();
-            if (re instanceof WebPage) {
-                surl = ((WebPage) re).getUrl();
-                break;
-            }
-        }
-        String webWorkPath = SWBPlatform.getContextPath() + "/swbadmin/icons/";
-        String image = "exportScoreCard.png";
-        String alt = paramRequest.getLocaleString("alt");
-        out.println("<a href=\"" + surl + "\" class=\"swb-toolbar-stgy\" title=\"image\">");
-        out.println("<img src=\"" + webWorkPath + image + "\" alt=\"" + alt + "\" class=\"toolbar-img\" />");
+        
+        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url.setMode(Mode_StreamPDF);
+        out.print("<a href=\"" + url + "\" class=\"swb-toolbar-stgy\" title=\""+title+"\">");
+        out.print(title);
         out.println("</a>");
     }
 }
