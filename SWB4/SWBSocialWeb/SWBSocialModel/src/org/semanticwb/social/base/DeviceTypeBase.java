@@ -7,14 +7,6 @@ package org.semanticwb.social.base;
 public abstract class DeviceTypeBase extends org.semanticwb.social.Device implements org.semanticwb.model.Tagable
 {
    /**
-   * Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.
-   */
-    public static final org.semanticwb.platform.SemanticClass social_DevicePlatform=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#DevicePlatform");
-   /**
-   * Que tipo de plataforma es el deviceType.
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_devicePlatform=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#devicePlatform");
-   /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
@@ -92,29 +84,6 @@ public abstract class DeviceTypeBase extends org.semanticwb.social.Device implem
             return (getDeviceType(id, model)!=null);
         }
        /**
-       * Gets all org.semanticwb.social.DeviceType with a determined DevicePlatform
-       * @param value DevicePlatform of the type org.semanticwb.social.DevicePlatform
-       * @param model Model of the org.semanticwb.social.DeviceType
-       * @return Iterator with all the org.semanticwb.social.DeviceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.DeviceType> listDeviceTypeByDevicePlatform(org.semanticwb.social.DevicePlatform value,org.semanticwb.model.SWBModel model)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_devicePlatform, value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
-       * Gets all org.semanticwb.social.DeviceType with a determined DevicePlatform
-       * @param value DevicePlatform of the type org.semanticwb.social.DevicePlatform
-       * @return Iterator with all the org.semanticwb.social.DeviceType
-       */
-
-        public static java.util.Iterator<org.semanticwb.social.DeviceType> listDeviceTypeByDevicePlatform(org.semanticwb.social.DevicePlatform value)
-        {
-            org.semanticwb.model.GenericIterator<org.semanticwb.social.DeviceType> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_devicePlatform,value.getSemanticObject(),sclass));
-            return it;
-        }
-       /**
        * Gets all org.semanticwb.social.DeviceType with a determined PostInDeviceInv
        * @param value PostInDeviceInv of the type org.semanticwb.social.PostIn
        * @param model Model of the org.semanticwb.social.DeviceType
@@ -151,44 +120,6 @@ public abstract class DeviceTypeBase extends org.semanticwb.social.Device implem
     public DeviceTypeBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
-    }
-   /**
-   * Sets the value for the property DevicePlatform
-   * @param value DevicePlatform to set
-   */
-
-    public void setDevicePlatform(org.semanticwb.social.DevicePlatform value)
-    {
-        if(value!=null)
-        {
-            getSemanticObject().setObjectProperty(social_devicePlatform, value.getSemanticObject());
-        }else
-        {
-            removeDevicePlatform();
-        }
-    }
-   /**
-   * Remove the value for DevicePlatform property
-   */
-
-    public void removeDevicePlatform()
-    {
-        getSemanticObject().removeProperty(social_devicePlatform);
-    }
-
-   /**
-   * Gets the DevicePlatform
-   * @return a org.semanticwb.social.DevicePlatform
-   */
-    public org.semanticwb.social.DevicePlatform getDevicePlatform()
-    {
-         org.semanticwb.social.DevicePlatform ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_devicePlatform);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.social.DevicePlatform)obj.createGenericInstance();
-         }
-         return ret;
     }
    /**
    * Gets all the org.semanticwb.social.PostIn
