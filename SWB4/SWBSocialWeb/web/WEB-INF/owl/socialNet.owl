@@ -1387,48 +1387,6 @@
   <owl:ObjectProperty rdf:ID="pc_SocialNetworkInv">
     <rdfs:comment>Con esta propiedad inversa, se puede saber a que red social pertenece este grupo de post agrupados por mes y año</rdfs:comment>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="devicePlatform">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
-    <rdfs:label xml:lang="en">Platform</rdfs:label>
-    <rdfs:label xml:lang="es">Plataforma</rdfs:label>
-    <owl:inverseOf>
-      <owl:ObjectProperty rdf:ID="hasDeviceTypeInv"/>
-    </owl:inverseOf>
-    <swb:displayProperty>
-      <swbxf:DisplayProperty rdf:ID="dp_devicePlatform">
-        <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
-        <swbxf:formElement rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#selectOneModelWithBlank"/>
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >10</swb:index>
-      </swbxf:DisplayProperty>
-    </swb:displayProperty>
-    <rdfs:comment>Que tipo de plataforma es el deviceType.</rdfs:comment>
-    <rdfs:range>
-      <swb:Class rdf:ID="DevicePlatform">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swb:autogenId>
-        <rdfs:comment>Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.</rdfs:comment>
-        <rdfs:subClassOf>
-          <swb:Class rdf:ID="Device">
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
-            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
-            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-          </swb:Class>
-        </rdfs:subClassOf>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:range>
-    <rdfs:domain>
-      <swb:Class rdf:ID="DeviceType">
-        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-        >false</swb:autogenId>
-        <rdfs:comment>Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc</rdfs:comment>
-        <rdfs:subClassOf rdf:resource="#Device"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Class>
-    </rdfs:domain>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostOut_published">
     <rdfs:domain rdf:resource="#SocialCalendar"/>
     <rdfs:range rdf:resource="#PostOut"/>
@@ -1494,10 +1452,24 @@
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="deviceType">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    >false</swb:removeDependency>
     <owl:inverseOf rdf:resource="#hasPostInDeviceInv"/>
     <rdfs:comment>Device type</rdfs:comment>
-    <rdfs:range rdf:resource="#DeviceType"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="DeviceType">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:comment>Tipo de dispositivo desde donde se envía el mensaje de entrada. Android Phone, Android Table, Ipad, Windows phone, etc</rdfs:comment>
+        <rdfs:subClassOf>
+          <swb:Class rdf:ID="Device">
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Tagable"/>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Class>
+        </rdfs:subClassOf>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialNets">
@@ -1670,11 +1642,19 @@
     <rdfs:domain rdf:resource="#PostOut"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="postInDevicePlatform">
-    <owl:inverseOf rdf:resource="#hasPostInDevicePlatformInv"/>
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
+    >false</swb:removeDependency>
+    <owl:inverseOf rdf:resource="#hasPostInDevicePlatformInv"/>
     <rdfs:comment>Device Platform of the postIn</rdfs:comment>
-    <rdfs:range rdf:resource="#DevicePlatform"/>
+    <rdfs:range>
+      <swb:Class rdf:ID="DevicePlatform">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</swb:autogenId>
+        <rdfs:comment>Plataforma (Sistema Operativo) desde donde se envió el mensaje de entrada.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="#Device"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
     <rdfs:domain rdf:resource="#PostIn"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="haspopr_socialNetworkInv">
@@ -1767,10 +1747,6 @@
     <rdfs:comment>Usuario autor del mensaje</rdfs:comment>
     <rdfs:range rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#User"/>
     <rdfs:domain rdf:resource="#UserMessage"/>
-  </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:about="#hasDeviceTypeInv">
-    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:removeDependency>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="pflow">
     <rdfs:domain rdf:resource="#SocialPFlowRef"/>
