@@ -4,12 +4,8 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA 
    */
-public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.bsc.Serializable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
-   /**
-   * Persiste información de dos dígitos. El número de sesiones se reinicia con el número de año actual.
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_meetingSerial=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#meetingSerial");
    /**
    * Almacena la clasificación de sesiones: RAE y NOA.
    */
@@ -236,23 +232,23 @@ public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing 
     }
 
 /**
-* Gets the MeetingSerial property
-* @return String with the MeetingSerial
+* Gets the Prefix property
+* @return String with the Prefix
 */
-    public String getMeetingSerial()
+    public String getPrefix()
     {
         //Override this method in Meeting object
-        return getSemanticObject().getProperty(bsc_meetingSerial,false);
+        return getSemanticObject().getProperty(bsc_prefix,false);
     }
 
 /**
-* Sets the MeetingSerial property
-* @param value long with the MeetingSerial
+* Sets the Prefix property
+* @param value long with the Prefix
 */
-    public void setMeetingSerial(String value)
+    public void setPrefix(String value)
     {
         //Override this method in Meeting object
-        getSemanticObject().setProperty(bsc_meetingSerial, value,false);
+        getSemanticObject().setProperty(bsc_prefix, value,false);
     }
 
 /**
@@ -354,6 +350,24 @@ public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing 
     public void setMeetingDate(java.util.Date value)
     {
         getSemanticObject().setDateProperty(bsc_meetingDate, value);
+    }
+
+/**
+* Gets the Serial property
+* @return int with the Serial
+*/
+    public int getSerial()
+    {
+        return getSemanticObject().getIntProperty(bsc_serial);
+    }
+
+/**
+* Sets the Serial property
+* @param value long with the Serial
+*/
+    public void setSerial(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_serial, value);
     }
 
    /**
