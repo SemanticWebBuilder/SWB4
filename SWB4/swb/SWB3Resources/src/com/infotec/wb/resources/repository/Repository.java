@@ -375,7 +375,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                         if (i_log == 1) {
                             ret.append("\n<table class=\"dirfile\">");
                             ret.append("\n<tr>");
-                            ret.append("\n<td>");
+                            ret.append("\n<td class=\"dirtd\">");
                             ret.append("<div id=\"dir\">");
 
                             //************************** menu directorios ********************************************
@@ -406,7 +406,7 @@ public class Repository extends org.semanticwb.portal.api.GenericResource {
                             ret.append("</div>");
                             ret.append("\n</td>");
                             ///////////////////////////////////////////////////  muestra archivos en el folder
-                            ret.append("\n<td>");
+                            ret.append("\n<td class=\"filetd\">");
                             ret.append("<div id=\"file\">");
                             if ("AdmTopics".equals(repobj)) {
                                 if ("create".equals(repacc)) {

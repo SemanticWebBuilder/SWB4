@@ -149,9 +149,9 @@ public class TreeRepHtml {
 
             String tmpName = topic.getDisplayName(user.getLanguage());
             String tmpNameShort = topic.getDisplayName(user.getLanguage());
-            if(null!=tmpName&&tmpName.trim().length()>15){
-                tmpNameShort = tmpName.substring(0, 15)+"...";
-            }
+            //if(null!=tmpName&&tmpName.trim().length()>15){
+            //    tmpNameShort = tmpName.substring(0, 15)+"...";
+            //}
             
             sbfRet.append("<li >");
             url1.setTopic(topic);
@@ -182,9 +182,9 @@ public class TreeRepHtml {
 //                    }
                     tmpName = tp.getDisplayName();
                     tmpNameShort = tp.getDisplayName();
-                    if (null != tmpName && tmpName.trim().length() > 15) {
-                        tmpNameShort = tmpName.substring(0, 14) + "...";
-                    }
+                    //if (null != tmpName && tmpName.trim().length() > 15) {
+                    //    tmpNameShort = tmpName.substring(0, 14) + "...";
+                    //}
                     sbfRet.append("<li>");
                     url1.setTopic(tp);
                     sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tp.getId() + "\" title=\""+tmpName+"\">");
@@ -255,9 +255,9 @@ public class TreeRepHtml {
 
                     String tmpName =  tpsub.getDisplayName();
                     String tmpNameShort =  tpsub.getDisplayName();
-                    if (null != tmpName && tmpName.trim().length() > 15) {
-                        tmpNameShort = tmpName.substring(0, 14) + "...";
-                    }
+                    //if (null != tmpName && tmpName.trim().length() > 15) {
+                    //    tmpNameShort = tmpName.substring(0, 14) + "...";
+                    //}
                     sbfRet.append("<li>");
                     url1.setTopic(tpsub);
                     sbfRet.append("<a " + backg + " href=\"" + url1 + "?reptp=" + tpsub.getId() + "\" title=\""+tmpName+"\">");
@@ -413,9 +413,9 @@ public class TreeRepHtml {
 
             String tmpName = topic.getDisplayName(user.getLanguage());
             String tmpNameShort = topic.getDisplayName(user.getLanguage());
-            if(null!=tmpName&&tmpName.trim().length()>15){
-                tmpNameShort = tmpName.substring(0, 14)+"...";
-            }
+            //if(null!=tmpName&&tmpName.trim().length()>15){
+            //    tmpNameShort = tmpName.substring(0, 14)+"...";
+            //}
             
             sbfRet.append("<li   "+ backg +" >");
             sbfRet.append("<a href=\"" + strUrl + "&reptp=" + topic.getId() + "\" title=\""+tmpName+"\">");
@@ -444,9 +444,9 @@ public class TreeRepHtml {
                     
                     tmpName = tp.getDisplayName(user.getLanguage());
                     tmpNameShort = tp.getDisplayName(user.getLanguage());
-                    if (null != tmpName && tmpName.trim().length() > 15) {
-                        tmpNameShort = tmpName.substring(0, 14) + "...";
-                    }
+                    //if (null != tmpName && tmpName.trim().length() > 15) {
+                    //    tmpNameShort = tmpName.substring(0, 14) + "...";
+                    //}
             
                     sbfRet.append("<li>");
                     sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tp.getId() + "\" title=\""+tmpName+"\">");
@@ -553,9 +553,9 @@ public class TreeRepHtml {
                     }
                     String tmpName = tpsub.getDisplayName();
                     String tmpNameShort = tpsub.getDisplayName();
-                    if (null != tmpName && tmpName.trim().length() > 15) {
-                        tmpNameShort = tmpName.substring(0, 14) + "...";
-                    }
+                    //if (null != tmpName && tmpName.trim().length() > 15) {
+                    //    tmpNameShort = tmpName.substring(0, 14) + "...";
+                    //}
 
                     sbfRet.append("<li>");
                     sbfRet.append("<a " + backg + " href=\"" + strUrl + "&reptp=" + tpsub.getId() + "\" title=\""+tmpName+"\">");
