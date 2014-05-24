@@ -117,9 +117,7 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
                 if (controlIt != null && controlIt.hasNext()) {
                     while (controlIt.hasNext()) {
                         Control control = controlIt.next();
-                        if (control.getDeterminingControl() == null || 
-                                (control.getDeterminingControl() != null &&
-                                 control.getDeterminingControl().equalsIgnoreCase("deficient"))) {
+                        if (!control.calculateDetermination()) {
                             controled = false;
                             break;
                         }
