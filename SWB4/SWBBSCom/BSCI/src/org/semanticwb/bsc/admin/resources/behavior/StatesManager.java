@@ -240,12 +240,19 @@ public class StatesManager extends GenericResource {
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-                
+System.out.println("\n\nStatesManager");
+System.out.println("doEdit().....");
                 Status status = (Status)obj.getGenericInstance();
+System.out.println("status="+status);
                 Iterator<State> istates = status.listStates();
                 Set<StateGroup> groups = new HashSet<>();
                 while(istates.hasNext()) {
-                    groups.add(istates.next().getStateGroup());
+                    State state = istates.next();
+System.out.println("--state="+state);
+if(state==null){
+continue;
+}
+                    groups.add(state.getStateGroup());
                 }
                 
                 Iterator<StateGroup> sg = groups.iterator();
