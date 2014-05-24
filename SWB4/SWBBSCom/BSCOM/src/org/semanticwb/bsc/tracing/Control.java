@@ -14,7 +14,7 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
 
     public Control(org.semanticwb.platform.SemanticObject base) {
         super(base);
-        //relateToDeterminants();
+        relateToDeterminants();
     }
 
     /**
