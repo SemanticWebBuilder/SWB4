@@ -292,14 +292,14 @@ public class RiskBoard extends GenericResource {
             SWBParamRequest paramRequest) {
         
         StringBuilder data = new StringBuilder(256);
-        String fields = "Risk.prefix|Risk.area|Risk.elementRelated|Risk.elementInstanceRelated|Risk.title" +
-                "|Risk.riskLeveldecision|Risk.classificationRisk|Risk.classifRiskSpecifyOther|Factor.prefix" +
-                "|Factor.title|Factor.classificationFactor|Factor.factorType|Risk.possibleEffectsRisk" +
-                "|Risk.iniAssessmentImpactLevel|Risk.iniAssessmentLikelihood|Risk.calculateQuadrant|Factor.isControlRelated" +
-                "|Control.prefix|Control.title|Control.controlType|DeterminantValue.isDeterminant" +
-                "|Control.calculateDetermination|Risk.calculateControled|Risk.finAssessmentImpactLevel" +
-                "|Risk.finAssessmentLikelihood|Risk.calculateQuadrant|Risk.stratManageRisk|Action.title" +
-                "|Initiative.title";
+//        String fields = "Risk.prefix|Risk.area|Risk.elementRelated|Risk.elementInstanceRelated|Risk.title" +
+//                "|Risk.riskLeveldecision|Risk.classificationRisk|Risk.classifRiskSpecifyOther|Factor.prefix" +
+//                "|Factor.title|Factor.classificationFactor|Factor.factorType|Risk.possibleEffectsRisk" +
+//                "|Risk.iniAssessmentImpactLevel|Risk.iniAssessmentLikelihood|Risk.calculateQuadrant|Factor.isControlRelated" +
+//                "|Control.prefix|Control.title|Control.controlType|DeterminantValue.isDeterminant" +
+//                "|Control.calculateDetermination|Risk.calculateControled|Risk.finAssessmentImpactLevel" +
+//                "|Risk.finAssessmentLikelihood|Risk.calculateQuadrant|Risk.stratManageRisk|Action.title" +
+//                "|Initiative.title";
         SemanticProperty[] factorFields = {
                 Factor.bsc_prefix, Factor.swb_title, Factor.bsc_classificationFactor, Factor.bsc_factorType
             };
@@ -309,6 +309,7 @@ public class RiskBoard extends GenericResource {
         String simpleTextCenteredTd = "      <td class=\"textCentered\">\n";
         String lang = paramRequest.getUser().getLanguage();
         User user = paramRequest.getUser();
+        int totalRows = 0;
         
         data.append("  <tbody>\n");
         //Se obtienen todos los riesgos creados en el BSC indicado
@@ -318,6 +319,7 @@ public class RiskBoard extends GenericResource {
                 continue;
             }
             short riskSpan = calculateRowSpan(risk, null);
+            totalRows += riskSpan;
             short factorSpan = 1;
             String spanRiskTd = "      <td" + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "") + ">\n";
             String spanRiskTextCenteredTd = "      <td" + 
@@ -621,6 +623,10 @@ public class RiskBoard extends GenericResource {
             
         }
         data.append("  </tbody>\n");
+        
+        if (mode.equalsIgnoreCase("view")) {
+            request.setAttribute("totalRows", totalRows);
+        }
         
         return data.toString();
     }
@@ -1567,7 +1573,7 @@ public class RiskBoard extends GenericResource {
         String fileExtension = null;
         
         if (displayType != null && displayType.equalsIgnoreCase("excel")) {
-            response.setContentType("application/xls; charset=ISO-8859-1");
+            response.setContentType("application/vnd.ms-excel; charset=ISO-8859-1");
             fileExtension = "xlsx";
         } else {
             response.setContentType("application/pdf; charset=ISO-8859-1");
@@ -1578,12 +1584,26 @@ public class RiskBoard extends GenericResource {
         if (displayType != null && !displayType.equalsIgnoreCase("excel")) {
             response.setHeader("Content-Disposition", "attachment; filename=\"" +
                     getResourceBase().getWebSiteId() + ".tableroRiesgos." + fileExtension + "\"");
+        } else if (displayType != null && displayType.equalsIgnoreCase("excel")) {
+            response.setHeader("Content-Disposition", "inline; filename=\"tableroRiesgos.xls\"");  //- See more at: http://www.quicklyjava.com/export-web-page-to-excel/#sthash.dS3knjmu.dpuf
         }
         output.append("<html>");
         output.append("<head>");
-        output.append("<style type=\"text/css\">");
-        output.append("    @page { size: 90cm 21.59cm;}");  // 11in 8.5in
-        output.append("</style>");
+        if (fileExtension.equals("pdf")) {
+            float paperHeight = 21.59F;
+            if (request.getAttribute("totalRows") != null) {
+                try {
+                    paperHeight = (((Integer) request.getAttribute("totalRows")).intValue()) * 1.8F;
+                } catch (NumberFormatException nfe) {
+                    paperHeight = 21.59F;
+                }
+            }
+            output.append("<style type=\"text/css\">");
+            output.append("    @page { size: 90cm ");
+            output.append(paperHeight);
+            output.append("cm;}");  // 11in 8.5in
+            output.append("</style>");
+        }
         output.append(getLinks(paramRequest, request));
         output.append(RiskBoard.OWNSTYLES);
         output.append("</head>");
@@ -1592,25 +1612,30 @@ public class RiskBoard extends GenericResource {
         output.append("</body>");
         output.append("</html>");
         
-        if (htmlCode != null && htmlCode.length() > 0) {
-            OutputStream os = response.getOutputStream();
-            try {
-                ITextRenderer renderer = new ITextRenderer();
-                //renderer.setDocumentFromString(renderHTML(request, response, paramRequest));
-                String sbStr = replaceHtml(output.toString());
-                renderer.setDocumentFromString(sbStr);
-                renderer.layout();
-                renderer.createPDF(os);
-                renderer.finishPDF();
-            } catch (DocumentException ex) {
-                log.error("Error in: " + ex);
-            } finally {
-                if (os != null) {
-                    try {
-                        os.close();
-                    } catch (IOException e) { /*ignore*/ }
+        if (fileExtension.equals("pdf")) {
+            if (htmlCode != null && htmlCode.length() > 0) {
+                OutputStream os = response.getOutputStream();
+                try {
+                    ITextRenderer renderer = new ITextRenderer();
+                    //renderer.setDocumentFromString(renderHTML(request, response, paramRequest));
+                    String sbStr = replaceHtml(output.toString());
+                    renderer.setDocumentFromString(sbStr);
+                    renderer.layout();
+                    renderer.createPDF(os);
+                    renderer.finishPDF();
+                } catch (DocumentException ex) {
+                    log.error("Error in: " + ex);
+                } finally {
+                    if (os != null) {
+                        try {
+                            os.close();
+                        } catch (IOException e) { /*ignore*/ }
+                    }
                 }
             }
+        } else {
+            PrintWriter out = response.getWriter();
+            out.println(SWBUtils.TEXT.replaceAll(output.toString(), " textCentered", ""));
         }
     }
     
