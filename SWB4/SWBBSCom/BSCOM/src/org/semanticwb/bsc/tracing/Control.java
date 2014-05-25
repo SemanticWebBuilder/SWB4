@@ -2,6 +2,7 @@ package org.semanticwb.bsc.tracing;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.bsc.accessory.Determinant;
@@ -15,6 +16,7 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
     public Control(org.semanticwb.platform.SemanticObject base) {
         super(base);
         relateToDeterminants();
+        System.out.println("  -- En constructor de Control");
     }
 
     /**
@@ -80,13 +82,37 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
         
         SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
         Iterator<Determinant> determinantIt = Determinant.ClassMgr.listDeterminants(model);
-        synchronized (this) {
-            while (determinantIt != null && determinantIt.hasNext()) {
-                Determinant det = determinantIt.next();
-                DeterminantValue detValue = DeterminantValue.ClassMgr.createDeterminantValue(model);
-                detValue.setDeterminant(det);
+        HashMap<Determinant, Boolean> existent = new HashMap<Determinant, Boolean>();
+        
+        while (determinantIt != null && determinantIt.hasNext()) {
+            Determinant det = determinantIt.next();
+            existent.put(det, Boolean.FALSE);
+        }
+        
+        Iterator<DeterminantValue> detValIt = this.listDeterminantValues();
+        while (detValIt != null && detValIt.hasNext()) {
+            DeterminantValue detValue = detValIt.next();
+            existent.put(detValue.getDeterminant(), Boolean.TRUE);
+        }
+        
+        if (existent.containsValue(Boolean.FALSE)) {
+            synchronized (this) {
+                Iterator<Determinant> inSetDeterminant = existent.keySet().iterator();
+                while (inSetDeterminant.hasNext()) {
+                    Determinant det = inSetDeterminant.next();
+                    if (!existent.get(det)) {
+                        DeterminantValue detValue = DeterminantValue.ClassMgr.createDeterminantValue(model);
+                        detValue.setDeterminant(det);
+                        this.addDeterminantValue(detValue);
+                        System.out.println("Creando relacion entre: " + this.getTitle() + " and " + det.getTitle());
+                    }
+                }
             }
         }
+                    
+                    
+        
+        
     }
     
     /**

@@ -145,8 +145,9 @@ public class RiskBoard extends GenericResource {
         if (mode.equalsIgnoreCase("edit")) {
             output.append(RiskBoard.OWNSTYLES);
         }
-        
+        System.out.println("En generateBoardView() - Antes de obtener Determinant");
         ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
+        System.out.println("Despues de Determinant.listValidDeterminants()");
         Determinant[] determinants = new Determinant[detList.size()];
         int cont = 0;
         //Se asegura el orden de despliegue de los determinantes al utilizar un arreglo
