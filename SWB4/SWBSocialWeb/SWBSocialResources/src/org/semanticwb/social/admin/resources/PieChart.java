@@ -617,7 +617,7 @@ public class PieChart extends GenericResource {
         String selectDay = request.getParameter("selectDay");
         String selectMonth2 = request.getParameter("selectMonth2");
 
-
+        
         Iterator<PostIn> itObjPostIns = null;
         if (semObj.getGenericInstance() instanceof Stream) {
             Stream stream = (Stream) semObj.getGenericInstance();
@@ -641,7 +641,7 @@ public class PieChart extends GenericResource {
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
             if (postIn != null && postIn.getPostInSocialNetwork() != null) {
-                cal.setTime(postIn.getPi_created());
+                cal.setTime(postIn.getPi_createdInSocialNet());
 
                 int year = cal.get(Calendar.YEAR);
                 int month = cal.get(Calendar.MONTH) + 1;
