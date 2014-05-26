@@ -22,6 +22,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.ComponentExportable;
 import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.GenericIterator;
@@ -42,14 +43,14 @@ import org.w3c.dom.Document;
  *
  * @author Jose Jimenez
  */
-public class GanttChart extends GenericResource {
+public class GanttChart extends GenericResource implements ComponentExportable {
 
     /**
      * Realiza operaciones en la bitacora de eventos.
      */
     private static final Logger log = SWBUtils.getLogger(GanttChart.class);
-     public static final String Mode_PNGImage = "png";
-    
+    public static final String Mode_PNGImage = "png";
+
     /**
      * Genera el c&oacute;digo HTML necesario para la presentaci&oacute;n de la
      * gr&aacute;fica de Gantt que se puede trazar con las fechas de una
@@ -223,55 +224,38 @@ public class GanttChart extends GenericResource {
 
                 out.println(output.toString());
 
-                SWBResourceURL exportUrl = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-                out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
-                out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
-                out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + exportUrl.setMode(Mode_PNGImage) + "')\"  />");
-                out.println(" </form>");
-
-                out.println(" <script type=\"text/javascript\">");
-                out.println("  function getFile(url) {");
-                out.println("   var form = document.getElementById('svgform');");
-                out.println("   var svg = document.getElementsByTagName('svg')[0];");
-                out.println("   var svg_xml = (new XMLSerializer).serializeToString(svg);");
-                out.println("   form.action = url;");
-                out.println("   form['data'].value = svg_xml;");
-                out.println("   form.submit();");
-                out.println("  };");
-                out.println(" </script>");
             }
-        } 
+        }
     }
 
     /**
-     * Clase que recibe el svg y lo trasnforma a jpg. la imagen se almacena en
-     * un directorio
+     * Genera el c&oacute;digo HTML de la gr&aacute;fica de Gantt
+     * usado en la exportaci&oacute;n a PDF del componente
      *
-     * @param request la petici&oacute;n HTTP enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de
-     * la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos
-     * exclusivos de SWB
-     * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     * m&eacute;todo. Como la extracci&oacute;n de valores para
-     * par&aacute;metros de i18n.
-     * @throws IOException si ocurre un problema con la lectura/escritura de la
-     * petici&oacute;n/respuesta.
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @return el objeto String que representa el c&oacute;digo HTML con los
+     * datos a exportar(Gr&aacute;fica de Gantt de una iniciativa)
+     * @throws SWBResourceException SWBResourceException SWBResourceException
+     * Excepti&oacute;n utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
      */
-    public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+    @Override
+    public String doComponentExport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite webSite = getResourceBase().getWebSite();
-
+        StringBuilder sb = new StringBuilder();
         if (webSite instanceof BSC) {
-            String data = request.getParameter("data");
-            int dataIndexOf = data.indexOf("svg");
-            int lenght = data.length();
+            String data = request.getParameter("image");
 
-            String data1 = data.substring(0, (dataIndexOf + 3));
-            String data2 = data.substring((dataIndexOf + 3), lenght);
-            data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\"" + (data2);
+            if (!data.contains("xmlns=")) {
+                int dataIndexOf = data.indexOf("svg");
+                int lenght = data.length();
+                String data1 = data.substring(0, (dataIndexOf + 3));
+                String data2 = data.substring((dataIndexOf + 3), lenght);
+                data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" " + (data2);
+            }
             data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
+            data = SWBUtils.TEXT.replaceAll(data, "fill: null", "fill: #000");
             Document svg = SWBUtils.XML.xmlToDom(data);
 
             String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + paramRequest.getWebPage().getWebSiteId();
@@ -279,7 +263,7 @@ public class GanttChart extends GenericResource {
             t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
             // Set the transcoder input and output.
             TranscoderInput input = new TranscoderInput(svg);
-            OutputStream ostream = new FileOutputStream(destpath + "/ganttImage.jpg");
+            OutputStream ostream = new FileOutputStream(destpath + "/ganttChart.jpg");
             TranscoderOutput output = new TranscoderOutput(ostream);
             try {
                 // Perform the transcoding.
@@ -290,19 +274,12 @@ public class GanttChart extends GenericResource {
             ostream.flush();
             ostream.close();
         }
-        
-        //SWBResourceURL url = paramRequest.getRenderUrl();
-        //url.setMode(SWBResourceURL.Mode_VIEW);
-
-    }
-
-    @Override
-    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        final String mode = paramRequest.getMode();
-       if (Mode_PNGImage.equals(mode)) {
-            doGetPNGImage(request, response, paramRequest);
-        } else {
-            super.processRequest(request, response, paramRequest); //To change body of generated methods, choose Tools | Templates.
-        }
+        String destpath = SWBPlatform.getContextPath() + "/work/models/"
+                + paramRequest.getWebPage().getWebSiteId()
+                + "/ganttChart.jpg";
+        sb.append("<p><img width=\"100%\" heigth=\"100%\" src=\"");
+        sb.append(destpath);
+        sb.append("\" alt=\"graphics\"/></p>");
+        return sb.toString();
     }
 }
