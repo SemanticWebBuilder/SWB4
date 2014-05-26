@@ -9157,8 +9157,8 @@ nv.models.multiBarHorizontalChart = function() {
 
       if (showControls) {
         var controlsData = [
-          { key: 'Grouped', disabled: multibar.stacked() },
-          { key: 'Stacked', disabled: !multibar.stacked() }
+          { key: 'Agrupado', disabled: multibar.stacked() },
+          { key: 'Apilado', disabled: !multibar.stacked() }
         ];
 
         controls.width(controlWidth()).color(['#444', '#444', '#444']);
