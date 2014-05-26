@@ -378,6 +378,11 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String suri = (String) request.getParameter("suri");
+        if(suri == null) {
+            suri = (String) request.getAttribute("suri");
+        }
+        
+        
         if (suri != null) {
             SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
             DeliverableAssignable element = null;
