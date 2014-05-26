@@ -29,7 +29,9 @@
     SemanticObject semObj = SemanticObject.createSemanticObject(suri);
     if(semObj == null)return;
     String title = "";
-    LinkedHashMap usersByStream = null;    
+    LinkedHashMap usersByStream = null;//<SocialNetUser,post number>
+    LinkedHashMap<SocialNetworkUser, Integer[]> userCount= new LinkedHashMap<SocialNetworkUser,Integer[]>();//SocialNetUser, [neutrals][positives][negatives]
+    
     if (semObj.getGenericInstance() instanceof Stream) {
         Stream stream = (Stream) semObj.getGenericInstance();
         title = stream.getTitle();
@@ -39,6 +41,25 @@
         title = socialTopic.getTitle();
         usersByStream = SWBSocialUtil.sparql.getSocialUsersInSocialTopic(socialTopic);
         //itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+    }
+    
+    Iterator usersToCount =  usersByStream.entrySet().iterator();
+    int maxUsers = 0;
+    while(usersToCount.hasNext()){
+        if(++maxUsers > 10 )break;
+        Map.Entry pair = (Map.Entry)usersToCount.next();
+        SocialNetworkUser snetu= (SocialNetworkUser)((SemanticObject)pair.getKey()).createGenericInstance();
+        
+        Iterator posts = snetu.listPostInInvs();//Lists user posts
+        Integer[] sentimentCounter = {0,0,0};//array of posts number [neutrals][positive][neagtive]
+        while(posts.hasNext()){
+            PostIn postIn = (PostIn)posts.next();
+            //adds 1 depending what is the post sentiment
+            if(postIn.getPostSentimentalType() >= 0 &&postIn.getPostSentimentalType() <=2 ){
+                sentimentCounter[postIn.getPostSentimentalType()]++;
+            }
+        }
+        userCount.put(snetu, sentimentCounter);
     }
     
     if(usersByStream == null || usersByStream.size() <= 0){
@@ -103,10 +124,10 @@ nv.addGraph(function() {
       .margin({top: 30, right: 20, bottom: 50, left: 175})
       //.showValues(true)
       //.tooltips(false)
-      .barColor(d3.scale.category20().range())
+      //.barColor(d3.scale.category20().range())
       .transitionDuration(250)
       .stacked(true)
-      .showControls(false);
+      .showControls(true);
 
   chart.yAxis
       .axisLabel("No. de mensajes")
@@ -124,28 +145,38 @@ nv.addGraph(function() {
 });
 
 function getChartData() {      
-    return[{
-        key:'<%=title%>',
-        color:'#1f77b4',
-        values:[
+    return[
         <%
-            Iterator it =  usersByStream.entrySet().iterator();
-            int maxUsers = 0;
-            while(it.hasNext()){
-                if(++maxUsers > 10 )break;
-                
-                Map.Entry pair = (Map.Entry)it.next();
-                SocialNetworkUser snetu= (SocialNetworkUser)((SemanticObject)pair.getKey()).createGenericInstance();
+            String labels[] = {"Neutros","Positivos","Negativos"};
+            String colors[] = {"#FFD700","#008000","#FF0000"};
+            for(int i = 0; i < 3 ; i++){//for
+        %>
+        {
+            key:'<%=labels[i]%>',
+            color:'<%=colors[i]%>',
+            values:[
+        <%
+                maxUsers = 0;
+                Iterator entries =  userCount.entrySet().iterator();
+                while(entries.hasNext()){//while
+                    if(++maxUsers > 10 )break;
+                    Map.Entry entry = (Map.Entry)entries.next();
+                    SocialNetworkUser userEntry = (SocialNetworkUser) entry.getKey();
+                    Integer entrySentiments[] = (Integer[]) entry.getValue();
         %>
             {
-                "label": "<%=snetu.getSnu_name()%>",
-                "value": <%=pair.getValue()%>
-            }<%=it.hasNext() && maxUsers < 10 ? ",":""%>
-        <%                    
-            }
+                "label": "<%=userEntry.getSnu_name()%>",
+                "value": <%=entrySentiments[i]%>
+            }<%=entries.hasNext() && maxUsers < 10 ? ",":""%>
+        <%
+                }//while
         %>
-        ]
-    }];
+            ]
+        }<%=i<2 ?",":""%>
+        <%
+            }//for
+        %>                                                
+    ];
 }
 
 </script>

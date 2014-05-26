@@ -925,6 +925,7 @@
     <iframe id="<%=suri+"byHour"%>" src="/work/models/SWBAdmin/jsp/stream/lineChartByHour.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
     <iframe id="<%=suri+"byNet"%>" src="/work/models/SWBAdmin/jsp/stream/lineChartByHourByNet.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
     <iframe id="<%=suri+"byUser"%>" src="/work/models/SWBAdmin/jsp/stream/topUserChart.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
+    <iframe id="<%=suri+"byPlatform"%>" src="/work/models/SWBAdmin/jsp/stream/devicePlatform.jsp?suri=<%=URLEncoder.encode(suri)%>" frameborder="0" width="100%" height="500" scrolling="no"></iframe>
 </div>
 
 

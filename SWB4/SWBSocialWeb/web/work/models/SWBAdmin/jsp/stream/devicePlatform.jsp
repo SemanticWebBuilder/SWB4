@@ -31,7 +31,7 @@
     if(semObj == null)return;
     String title = "";
     Iterator<PostIn> itObjPostIns = null;
-    LinkedHashMap<DevicePlatform, Integer> lhm = new LinkedHashMap<DevicePlatform,Integer>();
+    LinkedHashMap<DevicePlatform, Integer[]> lhm = new LinkedHashMap<DevicePlatform,Integer[]>();
     
     if (semObj.getGenericInstance() instanceof Stream) {
         Stream stream = (Stream) semObj.getGenericInstance();
@@ -57,15 +57,18 @@
     Iterator<DevicePlatform> dps = DevicePlatform.ClassMgr.listDevicePlatforms(SWBContext.getGlobalWebSite());
     while(dps.hasNext()){
         DevicePlatform dp = dps.next();
-        lhm.put(dp, 0);        
+        lhm.put(dp, new Integer[]{0,0,0});
     }
-    
     while(itObjPostIns.hasNext()){
         PostIn postIn = itObjPostIns.next();
         DevicePlatform pInDP = postIn.getPostInDevicePlatform();
         if(pInDP != null){
             if(lhm.containsKey(pInDP)){
-                lhm.put(pInDP, lhm.get(pInDP) + 1);
+                Integer [] tmp = lhm.get(pInDP);//0Neutrals, 1positives, 2negatives
+                if(postIn.getPostSentimentalType() >= 0 &&postIn.getPostSentimentalType() <=2 ){
+                    tmp[postIn.getPostSentimentalType()]++;
+                }
+                lhm.put(pInDP, tmp);
             }
         }
     }
@@ -120,10 +123,10 @@ nv.addGraph(function() {
       .margin({top: 30, right: 20, bottom: 50, left: 175})
       //.showValues(true)
       //.tooltips(false)
-      .barColor(d3.scale.category20().range())
+      //.barColor(d3.scale.category20().range())
       .transitionDuration(250)
       .stacked(true)
-      .showControls(false);
+      .showControls(true);
 
   chart.yAxis
       .axisLabel("No. de mensajes")
@@ -141,9 +144,15 @@ nv.addGraph(function() {
 });
 
 function getChartData() {      
-    return[{
-        key:'<%=title%>',
-        color:'#1f77b4',
+    return[
+    <%
+        String labels[] = {"Neutros","Positivos","Negativos"};
+        String colors[] = {"#FFD700","#008000","#FF0000"};
+        for(int i = 0 ; i < 3 ; i++){
+    %>
+    {
+        key:'<%=labels[i]%>',
+        color:'<%=colors[i]%>',
         values:[
         <%
             Iterator it =  lhm.entrySet().iterator();
@@ -151,16 +160,21 @@ function getChartData() {
                 
                 Map.Entry pair = (Map.Entry)it.next();
                 DevicePlatform platform= (DevicePlatform)pair.getKey();
+                Integer value[] = (Integer[])pair.getValue();
         %>
             {
                 "label": "<%=platform.getId()%>",
-                "value": <%=pair.getValue()%>
+                "value": <%=value[i]%>                
             }<%=it.hasNext() ? ",":""%>
         <%
             }
         %>
         ]
-    }];
+    }<%=i<2 ?",":""%>
+    <%
+       }//cerra el for
+    %>
+    ];
 }
 
 </script>
