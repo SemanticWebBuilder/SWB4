@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.SWBComparator;
@@ -83,7 +86,7 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
                 tmpPrefix = prefix.substring(prefix.lastIndexOf("_") + 1,
                         prefix.length());
             }
-            prefix = getConsecutive(tmpPrefix, risk);
+            prefix = tmpPrefix + "." + getConsecutive(risk);
             setPrefix(prefix);
         }
         return prefix;
@@ -95,28 +98,35 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
      * @param risk el Riesgo que contiene al Factor actual
      * @return el objeto String que representa el siguiente prefijo para un Factor 
      */
-    private String getConsecutive(String prefixRisk, Risk risk) {
-        String consecutive = "";
-        List map = new ArrayList();
+    private synchronized int getConsecutive(Risk risk) {
+        int consecutive = 0;
+        //List map = new ArrayList();
+        SortedSet<Integer> map = new TreeSet<Integer>();
         Iterator<Factor> it = risk.listFactors();
         while (it.hasNext()) {
             Factor obj = it.next();
-            String prefix = obj.getSemanticObject()
-                    .getProperty(bsc_prefix, false);
+            String prefix = obj.getSemanticObject().getProperty(bsc_prefix, false);
             if (prefix != null && prefix.lastIndexOf(".") > -1) {
                 prefix = prefix.substring(prefix.lastIndexOf(".") + 1,
                         prefix.length());
-                int intPrefix = Integer.parseInt(prefix);
-                map.add(intPrefix);
+                int serial = Integer.parseInt(prefix);
+                map.add(serial);
             }
         }
-        try {
+        /*try {
             Collections.sort(map);
             int index = Integer.parseInt(map.get(map.size() - 1).toString());
             index++;
             consecutive = prefixRisk + "." + index;
         } catch (Exception ex) {
             consecutive = prefixRisk + "." + "1";
+        }*/
+        try {
+            consecutive = map.last();  //map.get(map.size() - 1;
+        }catch(NoSuchElementException nse) {
+            consecutive = 0;
+        }finally {
+            consecutive++;
         }
         return consecutive;
     }
