@@ -2028,7 +2028,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append("\" >");
         ret.append(title);
         ret.append("</a>").append("\n");
-        ret.append("<form id=\"frmDetail\" method=\"post\" action=\"");
+        ret.append("<form id=\"frmDetail\" method=\"post\" accept-charset=\"utf-8\" action=\"");
         ret.append(url);
         ret.append("\">").append("\n");
         ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");

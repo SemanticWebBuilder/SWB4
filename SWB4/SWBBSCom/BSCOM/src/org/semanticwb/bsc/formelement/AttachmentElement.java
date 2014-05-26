@@ -1,6 +1,7 @@
 package org.semanticwb.bsc.formelement;
 
 import java.net.URLDecoder;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -71,10 +72,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         super(base);
     }
 
-
     /**
-     * Genera el c&oacute;digo HTML para representar la administraci&oacute;n de los Archivos
-     * adjuntos de los elementos del BSC.
+     * Genera el c&oacute;digo HTML para representar la administraci&oacute;n de
+     * los Archivos adjuntos de los elementos del BSC.
      *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
@@ -96,8 +96,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String modeTmp = request.getParameter("modeTmp");
-        String downloadEle = request.getAttribute("downloadEle") != null ? 
-                request.getAttribute("downloadEle").toString() : null;
+        String downloadEle = request.getAttribute("downloadEle") != null
+                ? request.getAttribute("downloadEle").toString() : null;
         if (modeTmp == null && mode.equals(SWBFormMgr.MODE_VIEW) && downloadEle == null) {
             toReturn.append(renderModeView(request, obj, prop, propName, type, mode, lang));
         } else if (modeTmp == null || (modeTmp != null && Mode_VIEW.equals(modeTmp))) {
@@ -113,8 +113,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     * Procesa la informaci&oacute;n enviada por el elemento de forma, para almacenarla
-     * en la propiedad del objeto indicado.
+     * Procesa la informaci&oacute;n enviada por el elemento de forma, para
+     * almacenarla en la propiedad del objeto indicado.
      *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
@@ -176,8 +176,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     * Genera el c&oacute;digo HTML para representar la edici&oacute;n de un archivo 
-     * adjunto.
+     * Genera el c&oacute;digo HTML para representar la edici&oacute;n de un
+     * archivo adjunto.
      *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
@@ -473,20 +473,20 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("\n</div>");
 
                 toReturn.append("<br/>");
+                toReturn.append("\n<div class=\"swbform\" id=\"swbform\">");
                 if (itAttachments.hasNext()) {
-                    toReturn.append("\n<div class=\"swbform\" id=\"swbform\">");
                     toReturn.append(listAttachment(itAttachments, suri, obj, prop, type,
                             mode, lang, usrWithGrants));
-                    toReturn.append("\n</div>");
                 }
+                toReturn.append("\n</div>");
             }
         }
         return toReturn.toString();
     }
 
     /**
-     * Genera el c&oacute;digo HTML para representar la vista para agregar un nuevo
-     * archivo adjunto
+     * Genera el c&oacute;digo HTML para representar la vista para agregar un
+     * nuevo archivo adjunto
      *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
@@ -531,9 +531,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     }
 
     /**
-     * Vista utilizada para recargar la vista despu&eacute;s de ejecutar una 
+     * Vista utilizada para recargar la vista despu&eacute;s de ejecutar una
      * acci&oacute;n, tal como Agregar, Editar o Eliminar
-     * 
+     *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
@@ -571,7 +571,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
 
     /**
      * Lista en HTML los archivos adjuntos.
-     * 
+     *
      * @param itAttachments el iterador con los archivos adjuntos
      * @param suri el objeto que contiene el formElement
      * @param obj la propiedad asociada a este FormElement
@@ -583,8 +583,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
-     * @param usrWithGrants define si existen permisos para editar o eliminar los
-     * archivos adjuntos.
+     * @param usrWithGrants define si existen permisos para editar o eliminar
+     * los archivos adjuntos.
      * @return el objeto String que representa el c&oacute;digo HTML con el
      * conjunto de archivos adjuntos.
      */
@@ -674,6 +674,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
 
 
             }
+            toReturn.append("\n</tr>");
         }
         toReturn.append("\n</table>");
         return toReturn.toString();
@@ -681,7 +682,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
 
     /**
      * Genera la vista view del elemento de forma.
-     * 
+     *
      * @param request la petici&oacute;n HTTP hecha por el cliente
      * @param obj el objeto a quien pertenece la propiedad asociada a este
      * FormElement
@@ -701,9 +702,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             SemanticProperty prop, String propName, String type, String mode, String lang) {
         StringBuilder toReturn = new StringBuilder();
         String suri = (String) request.getParameter("suri");
-//        String usrWithGrants = (String) request.getAttribute("usrWithGrants") == null
-//                ? (String) request.getParameter("usrWithGrants")
-//                : (String) request.getAttribute("usrWithGrants");
+        if (suri == null) {
+            suri = (String) request.getAttribute("suri");
+        }
         if (suri != null) {
             SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
             Attachmentable element = null;
