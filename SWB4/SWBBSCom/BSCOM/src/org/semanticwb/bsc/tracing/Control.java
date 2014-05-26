@@ -16,7 +16,6 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
     public Control(org.semanticwb.platform.SemanticObject base) {
         super(base);
         relateToDeterminants();
-        System.out.println("  -- En constructor de Control");
     }
 
     /**
@@ -104,7 +103,6 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
                         DeterminantValue detValue = DeterminantValue.ClassMgr.createDeterminantValue(model);
                         detValue.setDeterminant(det);
                         this.addDeterminantValue(detValue);
-                        System.out.println("Creando relacion entre: " + this.getTitle() + " and " + det.getTitle());
                     }
                 }
             }

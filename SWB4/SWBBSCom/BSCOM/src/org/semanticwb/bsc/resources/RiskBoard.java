@@ -141,13 +141,12 @@ public class RiskBoard extends GenericResource {
             SWBParamRequest paramRequest) throws SWBResourceException {
         
         StringBuilder output = new StringBuilder(512);
+        String exportType = request.getParameter("type");
         
-        if (mode.equalsIgnoreCase("edit")) {
+        if (exportType == null) {  //mode.equalsIgnoreCase("edit")
             output.append(RiskBoard.OWNSTYLES);
         }
-        System.out.println("En generateBoardView() - Antes de obtener Determinant");
         ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
-        System.out.println("Despues de Determinant.listValidDeterminants()");
         Determinant[] determinants = new Determinant[detList.size()];
         int cont = 0;
         //Se asegura el orden de despliegue de los determinantes al utilizar un arreglo
@@ -265,7 +264,6 @@ public class RiskBoard extends GenericResource {
             data.append("      <th>");
             data.append(det.getTitle());
             data.append("</th>\n");
-//            System.out.println("Encabezado tablero: " + det.getTitle());
         }
         data.append("      <th>Resultado de la determinaci&oacute;n del Control</th>\n");
         data.append("      <th>Grado de Impacto</th>\n");
@@ -346,16 +344,12 @@ public class RiskBoard extends GenericResource {
                     Control control = controlIt.next();
                     rows[ctrlRowCount][0] = factor.getSemanticObject();
                     rows[ctrlRowCount][1] = control.getSemanticObject();
-//                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI());
-//                    System.out.println("Pos: [" + ctrlRowCount + "][1]: " + control.getURI());
-//                    System.out.println("controlCount: " + controlCount);
                     ctrlRowCount++;
                     controlCount++;
                 }
                 if (controlCount == 0) {
                     rows[ctrlRowCount][0] = factor.getSemanticObject();
                     ctrlRowCount++;
-//                    System.out.println("Pos: [" + ctrlRowCount + "][0]: " + factor.getURI() + "  -- controlCount == 0");
                 }
             }
             
@@ -972,7 +966,6 @@ public class RiskBoard extends GenericResource {
         String modeToShow = SWBResourceURL.Mode_VIEW;
         
         if (request.getParameter("urlRisk") != null) {
-//            System.out.println("urlRisk - processAction: " + request.getParameter("urlRisk"));
             generic = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("urlRisk")),
                 scorecard.getSemanticModel()).createGenericInstance();
             if (generic instanceof Risk) {
