@@ -92,8 +92,8 @@ public class RiskBoard extends GenericResource {
     private static final Logger log = SWBUtils.getLogger(GenericSemResource.class);
     
     /**
-     * Genera el codigo HTML para la presentacion del tablero de riesgos tomando en cuenta los permisos del usuario
-     * y el estado de los elementos asociados que se presentan en el.
+     * Genera el codigo HTML para la presentacion de los vínculos hacia las operaciones de 
+     * exportación del contenido del tablero de riesgos a formato PDF y Excel.
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
      * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
@@ -117,7 +117,7 @@ public class RiskBoard extends GenericResource {
             dataOut.append(doIconExport(request, paramRequest));
         } else if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
             String mode = request.getParameter("dispMode") == null && userCanEdit() ? "edit" : "view";
-            dataOut.append(generateBoardView(website, mode, request, paramRequest));
+            dataOut.append(this.generateBoardView(website, mode, request, paramRequest));
         }
         out.println(dataOut.toString());
     }
@@ -199,8 +199,8 @@ public class RiskBoard extends GenericResource {
             output.append("</div>\n");
         }
         output.append("<table>\n");
-        output.append(createTableHeading(determinants));
-        output.append(createTableBody(determinants, website, mode, request, paramRequest));
+        output.append(this.createTableHeading(determinants));
+        output.append(this.createTableBody(determinants, website, mode, request, paramRequest));
         output.append("</table>\n");
         return output.toString();
     }
@@ -319,7 +319,7 @@ public class RiskBoard extends GenericResource {
             if (!risk.isValid() || !user.haveAccess(risk)) {
                 continue;
             }
-            short riskSpan = calculateRowSpan(risk, null);
+            short riskSpan = this.calculateRowSpan(risk, null);
             totalRows += riskSpan;
             short factorSpan = 1;
             String spanRiskTd = "      <td" + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "") + ">\n";
@@ -361,34 +361,34 @@ public class RiskBoard extends GenericResource {
             
             data.append("    <tr>\n");
             data.append(spanRiskTextCenteredTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_prefix, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_prefix, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_area, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_area, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_elementRelated, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_elementRelated, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_elementInstanceRelated, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_elementInstanceRelated, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.swb_title, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.swb_title, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_riskLeveldecision, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_riskLeveldecision, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_classificationRisk, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_classificationRisk, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_classifRiskSpecifyOther, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_classifRiskSpecifyOther, lang, mode));
             data.append(tdEnclosing);
             
             //Se agregan las propiedades del Factor
             if (rows[0][0] != null) {
                 formerFactor = (Factor) rows[0][0].getGenericInstance();
-                factorSpan = calculateRowSpan(null, formerFactor);
+                factorSpan = this.calculateRowSpan(null, formerFactor);
                 spanFactorTd = "      <td" + (factorSpan > 1 ? " rowspan=\"" + factorSpan + "\"" : "");
                 int index = 0;
                 for (SemanticProperty property : factorFields) {
@@ -397,7 +397,7 @@ public class RiskBoard extends GenericResource {
                         data.append(" class=\"textCentered\"");
                     }
                     data.append(">\n");
-                    data.append(renderPropertyValue(request, formerFactor.getSemanticObject(), property, lang, mode));
+                    data.append(this.renderPropertyValue(request, formerFactor.getSemanticObject(), property, lang, mode));
                     data.append(tdEnclosing);
                     index++;
                 }
@@ -407,13 +407,13 @@ public class RiskBoard extends GenericResource {
             }
 
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_possibleEffectsRisk, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_possibleEffectsRisk, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTextCenteredTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_iniAssessmentImpactLevel, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_iniAssessmentImpactLevel, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTextCenteredTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_iniAssessmentLikelihood, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_iniAssessmentLikelihood, lang, mode));
             data.append(tdEnclosing);
             
             String quadrantLabel = null;
@@ -450,7 +450,7 @@ public class RiskBoard extends GenericResource {
                 formerControl = (Control) rows[0][1].getGenericInstance();
                 for (SemanticProperty property : controlFields) {
                     data.append(simpleTd);
-                    data.append(renderPropertyValue(request, formerControl.getSemanticObject(), property, lang, mode));
+                    data.append(this.renderPropertyValue(request, formerControl.getSemanticObject(), property, lang, mode));
                     data.append(tdEnclosing);
                 }
             } else {
@@ -468,7 +468,7 @@ public class RiskBoard extends GenericResource {
                 if (formerControl != null) {
                     DeterminantValue value = determValues.get(det);
                     data.append(simpleTextCenteredTd);
-                    data.append(renderPropertyValue(request, value.getSemanticObject(),
+                    data.append(this.renderPropertyValue(request, value.getSemanticObject(),
                             DeterminantValue.bsc_isDeterminant, lang, mode));
                     data.append(tdEnclosing);
                 } else {
@@ -494,7 +494,7 @@ public class RiskBoard extends GenericResource {
             /*realizar llamado a validateAssessment() para saber si marcar en rojo estas dos celdas*/
             short initialValue = (short) risk.getIniAssessmentImpactLevel();
             short finalValue = (short) risk.getFinAssessmentImpactLevel();
-            boolean validAssessment = validateAssessment(initialValue, finalValue, isRiskControled);
+            boolean validAssessment = this.validateAssessment(initialValue, finalValue, isRiskControled);
             if (validAssessment) {
                 data.append(spanRiskTextCenteredTd);
             } else {
@@ -502,11 +502,11 @@ public class RiskBoard extends GenericResource {
                 data.append(" class=\"noValido textCentered\"");
                 data.append(closeTdTag);
             }
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentImpactLevel, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentImpactLevel, lang, mode));
             data.append(tdEnclosing);
             initialValue = (short) risk.getIniAssessmentLikelihood();
             finalValue = (short) risk.getFinAssessmentLikelihood();
-            validAssessment = validateAssessment(initialValue, finalValue, isRiskControled);
+            validAssessment = this.validateAssessment(initialValue, finalValue, isRiskControled);
             if (validAssessment) {
                 data.append(spanRiskTextCenteredTd);
             } else {
@@ -514,7 +514,7 @@ public class RiskBoard extends GenericResource {
                 data.append(" class=\"noValido textCentered\"");
                 data.append(closeTdTag);
             }
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentLikelihood, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentLikelihood, lang, mode));
             data.append(tdEnclosing);
             
             quadrantLabel = null;
@@ -538,18 +538,18 @@ public class RiskBoard extends GenericResource {
             data.append(tdEnclosing);
             
             data.append(spanRiskTd);
-            data.append(renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_stratManageRisk, lang, mode));
+            data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_stratManageRisk, lang, mode));
             data.append(tdEnclosing);
             data.append(spanRiskTd);
             try {
-                data.append(getActionsDisplay(risk, paramRequest, mode));
+                data.append(this.getActionsDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
                 RiskBoard.log.error("Despliegue de Actions, risk = " + risk.getURI(), swbe);
             }
             data.append(tdEnclosing);
             data.append(spanRiskTd);
             try {
-                data.append(getInitiativesDisplay(risk, paramRequest, mode));
+                data.append(this.getInitiativesDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
                 RiskBoard.log.error("Despliegue de Initiatives, risk = " + risk.getURI(), swbe);
             }
@@ -565,7 +565,7 @@ public class RiskBoard extends GenericResource {
                 
                 //Si el factor no se ha desplegado, se extraen los datos para el despliegue de las columnas
                 if (!factorInTurn.equals(formerFactor)) {
-                    factorSpan = calculateRowSpan(null, factorInTurn);
+                    factorSpan = this.calculateRowSpan(null, factorInTurn);
                     spanFactorTd = "      <td" + (factorSpan > 1 ? " rowspan=\"" + factorSpan + "\"" : "");
                     int index = 0;
                     for (SemanticProperty property : factorFields) {
@@ -574,7 +574,7 @@ public class RiskBoard extends GenericResource {
                             data.append(" class=\"textCentered\"");
                         }
                         data.append(">\n");
-                        data.append(renderPropertyValue(request, factorInTurn.getSemanticObject(), property, lang, mode));
+                        data.append(this.renderPropertyValue(request, factorInTurn.getSemanticObject(), property, lang, mode));
                         data.append(tdEnclosing);
                     }
                     data.append(spanFactorTd);
@@ -587,7 +587,7 @@ public class RiskBoard extends GenericResource {
                     Control controlInTurn = (Control) rows[rowCount][1].createGenericInstance();
                     for (SemanticProperty property : controlFields) {
                         data.append(simpleTd);
-                        data.append(renderPropertyValue(request, controlInTurn.getSemanticObject(), property, lang, mode));
+                        data.append(this.renderPropertyValue(request, controlInTurn.getSemanticObject(), property, lang, mode));
                         data.append(tdEnclosing);
                     }
                     //Para agregar columnas de determinantes
@@ -600,7 +600,7 @@ public class RiskBoard extends GenericResource {
                         DeterminantValue value = determValues.get(det);
                         data.append(simpleTextCenteredTd);
                         if (value != null) {
-                            data.append(renderPropertyValue(request, value.getSemanticObject(),
+                            data.append(this.renderPropertyValue(request, value.getSemanticObject(),
                                     DeterminantValue.bsc_isDeterminant, lang, mode));
                         } else {
                             data.append("&nbsp;\n");
@@ -1553,7 +1553,8 @@ public class RiskBoard extends GenericResource {
     }
     
     /**
-     * Genera la misma vista de informacion que el metodo {@code doView} pero con formato PDF.
+     * Genera la misma vista de informaci&oacute;n que el m&eacute;todo {@code doView} pero con formato PDF o Excel, 
+     * de acuerdo al par&aacute;metro {@code type} recibido en {@code request}.
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
      * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
@@ -1569,7 +1570,7 @@ public class RiskBoard extends GenericResource {
         
         WebSite website = paramRequest.getWebPage().getWebSite();
         StringBuilder output = new StringBuilder(512);
-        String htmlCode = generateBoardView(website, "view", request, paramRequest);
+        String htmlCode = this.generateBoardView(website, "view", request, paramRequest);
         String displayType = request.getParameter("type") != null ? request.getParameter("type") : null;
         String fileExtension = null;
         
@@ -1605,7 +1606,7 @@ public class RiskBoard extends GenericResource {
             output.append("cm;}");  // 11in 8.5in
             output.append("</style>");
         }
-        output.append(getLinks(paramRequest, request));
+        output.append(this.getLinks(paramRequest, request));
         output.append(RiskBoard.OWNSTYLES);
         output.append("</head>");
         output.append("<body>");
@@ -1619,7 +1620,7 @@ public class RiskBoard extends GenericResource {
                 try {
                     ITextRenderer renderer = new ITextRenderer();
                     //renderer.setDocumentFromString(renderHTML(request, response, paramRequest));
-                    String sbStr = replaceHtml(output.toString());
+                    String sbStr = this.replaceHtml(output.toString());
                     renderer.setDocumentFromString(sbStr);
                     renderer.layout();
                     renderer.createPDF(os);
@@ -1676,9 +1677,7 @@ public class RiskBoard extends GenericResource {
     }
     
     /**
-     * Se encarga de obtener los links de la plantilla de la p&aacute;gina
-     * actual
-     *
+     * Obtiene los links de la plantilla de la p&aacute;gina actual
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @return el objeto String que representa el c&oacute;digo HTML con los
