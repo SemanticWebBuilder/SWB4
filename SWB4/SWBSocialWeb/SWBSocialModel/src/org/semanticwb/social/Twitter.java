@@ -354,6 +354,12 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         }catch(Exception e){}
         //System.out.println("Message Block Twitter:" + blockOfTweets);
         
+        Iterator<DevicePlatform> dpTmp = DevicePlatform.ClassMgr.listDevicePlatforms(SWBContext.getGlobalWebSite());
+        ArrayList<DevicePlatform> devicePlatform = new ArrayList<DevicePlatform>();
+        while(dpTmp.hasNext()){
+            DevicePlatform dp = dpTmp.next();
+            devicePlatform.add(dp);
+        }
         try{            
             long lastTweetID = getLastTweetID(stream); //gets the value stored in NextDatetoSearch
             twitter4j.Twitter twitter = new TwitterFactory(configureOAuth().build()).getInstance();
@@ -422,6 +428,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                                     external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
                                     external.setFollowers(status.getUser().getFollowersCount());
                                     external.setFriendsNumber(status.getUser().getFriendsCount());
+                                    external.setDevicePlatform(getDevicePlatform(devicePlatform, status.getSource()));
                                     if(status.getPlace()!=null)
                                     {
                                         external.setPlace(status.getPlace().getFullName());
@@ -1078,5 +1085,40 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         System.out.println("Final String-->" + parsedPhrases + "<-");        
         return parsedPhrases;
     }
-    
+    private DevicePlatform getDevicePlatform(ArrayList<DevicePlatform> dp, String source){
+        DevicePlatform validDP = null;
+        
+        if(source != null && !source.trim().isEmpty()){
+            source = source.toLowerCase();
+            for(int i = 0; i < dp.size(); i++){
+                if(validDP != null){
+                    break;
+                }
+
+                String tags = dp.get(i).getTags();
+                if(tags != null && !tags.trim().isEmpty()){
+                    String tagsArray[] = tags.toLowerCase().split(",");
+                    if(tagsArray.length > 0){
+                        for(int j = 0; j < tagsArray.length; j++){
+                            if(source.contains(tagsArray[j])){
+                                //validDP = dp.get(i);
+                                validDP = (DevicePlatform)SemanticObject.createSemanticObject(dp.get(i).getURI()).createGenericInstance();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(validDP == null){
+            validDP = DevicePlatform.ClassMgr.getDevicePlatform("other", SWBContext.getGlobalWebSite());
+            validDP = (DevicePlatform)SemanticObject.createSemanticObject(validDP.getURI()).createGenericInstance();
+            
+        }
+        if(validDP != null){
+            System.out.println("validDP:" +validDP.getId());
+        }
+        
+        return validDP;
+    }
 }

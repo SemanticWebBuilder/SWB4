@@ -10,7 +10,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Level;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
@@ -485,7 +484,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         boolean isThereMoreMsgs = false;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT-6"));
-
+        Iterator<DevicePlatform> dpTmp = DevicePlatform.ClassMgr.listDevicePlatforms(SWBContext.getGlobalWebSite());
+        ArrayList<DevicePlatform> devicePlatform = new ArrayList<DevicePlatform>();
+        while(dpTmp.hasNext()){
+            DevicePlatform dp = dpTmp.next();
+            devicePlatform.add(dp);
+        }
         try {
             JSONArray mainObject = new JSONArray(response);
             if (mainObject != null) {
@@ -516,7 +520,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             ArrayList<ExternalPost> aListExternalPost = new ArrayList();
                             for (int k = 0; k < postsData.length(); k++) {
                                 cont++;
-                                System.out.println("FaceListen:"+postsData.getJSONObject(k).toString());
+                                //System.out.println("FaceListen:"+postsData.getJSONObject(k).toString());
                                 ExternalPost external = new ExternalPost();
                                 external.setPostId(postsData.getJSONObject(k).getString("id"));
                                 external.setCreatorId(postsData.getJSONObject(k).getJSONObject("from").getString("id"));
@@ -524,7 +528,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 external.setCreationTime(formatter.parse(postsData.getJSONObject(k).getString("created_time")));
                                 external.setUpdateTime(formatter.parse(postsData.getJSONObject(k).getString("updated_time")));
                                 external.setCreatorPhotoUrl("http://graph.facebook.com/" + postsData.getJSONObject(k).getJSONObject("from").getString("id") + "/picture?width=150&height=150");
-                                
+                                if(!postsData.getJSONObject(k).isNull("application")){
+                                    external.setDevicePlatform(getDevicePlatform(devicePlatform, postsData.getJSONObject(k).getJSONObject("application").toString()));
+                                }else{
+                                    external.setDevicePlatform(getDevicePlatform(devicePlatform, ""));
+                                }
+
                                 String postId = "";
                                 if(postsData.getJSONObject(k).getString("id").contains("_")){
                                     postId = postsData.getJSONObject(k).getString("id").split("_")[1];
@@ -1728,7 +1737,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
 
         } catch (IOException e) {
-            System.out.println("Error getting user information" + e.getMessage());
+            log.error("Error getting user information ", e);
         }
         return userInfo;
     }
@@ -2226,4 +2235,35 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return false;
     }
     
+    private DevicePlatform getDevicePlatform(ArrayList<DevicePlatform> dp, String source){
+        DevicePlatform validDP = null;
+        
+        if(source != null && !source.trim().isEmpty()){
+            source = source.toLowerCase();
+            for(int i = 0; i < dp.size(); i++){
+                if(validDP != null){
+                    break;
+                }
+
+                String tags = dp.get(i).getTags();
+                if(tags != null && !tags.trim().isEmpty()){
+                    String tagsArray[] = tags.toLowerCase().split(",");
+                    if(tagsArray.length > 0){
+                        for(int j = 0; j < tagsArray.length; j++){
+                            if(source.contains(tagsArray[j])){
+                                //validDP = dp.get(i);
+                                validDP = (DevicePlatform)SemanticObject.createSemanticObject(dp.get(i).getURI()).createGenericInstance();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(validDP == null){
+            validDP = DevicePlatform.ClassMgr.getDevicePlatform("other", SWBContext.getGlobalWebSite());
+            
+        }
+        return validDP;
+    }
 }
