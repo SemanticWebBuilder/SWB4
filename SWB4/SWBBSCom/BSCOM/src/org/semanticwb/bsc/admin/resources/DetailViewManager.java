@@ -746,6 +746,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String periodId = request.getSession().getAttribute(modelName) != null
                     ? (String) request.getSession().getAttribute(modelName)
                     : null;
+            String statusStyleClass = "indefinido";
+            String secondStatusStyleClass = null;
             //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
@@ -763,6 +765,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
+                statusStyleClass = periodStatus.getStatus().getIconClass();
                 if (objective.getSponsor() != null) {
                     collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
                 }
@@ -772,6 +775,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
+                    statusStyleClass = periodStatus.getStatus().getIconClass();
                 }
                 if (indicator.getChampion() != null) {
                     collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
@@ -787,6 +791,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
             } else if (generic != null && generic instanceof Deliverable) {
                 Deliverable deliverable = (Deliverable) generic;
+                statusStyleClass = deliverable.getStatusAssigned() != null
+                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
+                secondStatusStyleClass = deliverable.getAutoStatus() != null
+                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
                 if (deliverable.getResponsible() != null) {
                     collaboration = deliverable.getResponsible().getUserRepository().getUserGroup("responsable");
                 } else {
@@ -804,14 +812,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
             output.append("<h2");
             output.append(" class=\"");
-            if (periodStatus != null && periodStatus.getStatus() != null
-                    && periodStatus.getStatus().getIconClass() != null) {
-                output.append(periodStatus.getStatus().getIconClass());
-            } else {
-                output.append("indefinido");
+            output.append(statusStyleClass);
+            output.append("\">");
+            if (secondStatusStyleClass != null) {
+                output.append("<span class=\"");
+                output.append(secondStatusStyleClass);
+                output.append("\"> &nbsp; </span>");
             }
-            output.append("\"");
-            output.append(">");
             output.append(semObj.getDisplayName());
             output.append("</h2>\n");
 
