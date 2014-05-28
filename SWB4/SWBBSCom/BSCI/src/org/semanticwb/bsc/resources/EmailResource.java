@@ -42,6 +42,7 @@ import com.oreilly.servlet.MultipartRequest;
 import javax.mail.internet.InternetAddress;
 import org.apache.commons.fileupload.FileItem;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -87,17 +88,17 @@ public class EmailResource extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
         toReturn.append("<div class=\"swbform\" id=\"EmailSend\">");
-        toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data'>\n");
+        toReturn.append("<form id=\"formEmail\" name=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
         toReturn.append("<input type=\"hidden\" name=\"nameFrom\" value=\"" + user.getFullName() + "\">");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_From") + "<input id=\"from\" name=\"from\" size=\"30\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input></p>");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_To") + "<select id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
         toReturn.append("<option value=\"\">Selecciona...</option>");
         while (itTo.hasNext()) {
             User usr = itTo.next();
-            toReturn.append("<option value=\"" + usr.getEmail() + "-" + usr.getId() + "\">" + usr.getFullName() + "</option>");
+            toReturn.append("<option value=\"" + usr.getEmail() + "-" + usr.getId() + "\">" + replaceHtml(usr.getFullName()) + "</option>");
         }
         toReturn.append("</select></p>");
-        toReturn.append("<div><input id=\"toText\" name=\"toText\" size=\"100\" type=\"text\"></div>");
+        toReturn.append("<div id=\"divTo\" style=\"display:none;\"><input id=\"toText\" name=\"toText\" size=\"100\" type=\"text\"></div>");
         toReturn.append("<input type=\"hidden\" id=\"toId\" name=\"toId\">");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Cc") + "<select id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
         toReturn.append("<option value=\"\">Selecciona...</option>");
@@ -106,67 +107,32 @@ public class EmailResource extends GenericResource {
             toReturn.append("<option value=\"" + usr.getEmail() + "-" + usr.getId() + "\">" + usr.getFullName() + "</option>");
         }
         toReturn.append("</select></p>");
-        toReturn.append("<div><input id=\"ccText\" name=\"ccText\" size=\"100\" type=\"text\"></input></div>");
+        toReturn.append("<div id=\"divCc\" style=\"display:none;\"><input id=\"ccText\" name=\"ccText\" size=\"100\" type=\"text\"></input></div>");
         toReturn.append("<input type=\"hidden\" id=\"ccId\" name=\"ccId\">");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Subject") + "<input name=\"subject\" size=\"50\" type=\"text\"></input></p>");
-        //Adjuntar archivo
         toReturn.append("<input type=\"file\" name=\"uploadFile\" />");
         toReturn.append("<input type=\"hidden\" name=\"upload\" value=\"upload\" />");
-        /*String cad = UploaderFileCacheUtils.uniqueCad();
-         String url2 = SWBPlatform.getContextPath() + "/multiuploader/" + wsite.getId() + cad;
-         System.out.println("url2: " + url2);
-
-         toReturn.append("<input ");
-         toReturn.append("name=\"uploadedfile\" ");
-         toReturn.append("data-dojo-props=\" \n");
-         toReturn.append("multiple:'");
-         toReturn.append(("false"));
-         toReturn.append("', \n");
-         toReturn.append("uploadOnSelect:'true', \n");
-         toReturn.append("url:'" + url2 + "', \n");
-         toReturn.append("submit: function(form) {}, \n");
-         toReturn.append("onComplete: function (result) {console.log('result:'+result); ");
-         toReturn.append("dojo.byId('selectFile').innerHTML =result.detail}, \n");
-         toReturn.append("onCancel: function() {console.log('cancelled');}, \n");
-         toReturn.append("onAbort: function() {console.log('aborted');}, \n");
-         toReturn.append("onError: function (evt) {console.log(evt);}, \n");
-         toReturn.append("\" ");
-         toReturn.append("type=\"file\" ");
-         toReturn.append("data-dojo-type=\"dojox.form.Uploader\" ");
-         toReturn.append("label=\"Select File\" ");
-         toReturn.append("id=\"");
-         toReturn.append(cad);
-         toReturn.append("_defaultAuto\" ");
-         toReturn.append("/>  ");
-         toReturn.append("<br/>\n");
-         toReturn.append("<div id=\"selectFile\">\n");
-         toReturn.append("</div>\n");
-
-         UploaderFileCacheUtils.put(cad, new java.util.LinkedList<UploadedFile>());
-         toReturn.append("<input type=\"hidden\" name=\"cad\" value=\"" + cad + "\">");
-         */
-        //Termina archivos adjuntos
-
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Message") + "<textarea name=\"message\" rows=\"10\" cols=\"50\"></textarea></p>");
-        toReturn.append("<p><button type=\"submit\" onclick=\"dijit.byId('swbDialog').hide()\">"
+        toReturn.append("<p><button type=\"submit\">"
                 + paramRequest.getLocaleString("lbl_Send") + "</button>");
         toReturn.append("</form>");
         toReturn.append("</div>");
 
-
         toReturn.append("\n <script type=\"text/javascript\">");
-        toReturn.append("\n  function getClose() {");
-        toReturn.append("\n  alert('entra a cerrar');");
-        toReturn.append("\n  window.close();");
-        toReturn.append("\n  }");
-        toReturn.append("\n  function getTo(idUser) {");
-
+        toReturn.append("\n function getValidate(){");
+        toReturn.append("\n var form = document.getElementById('formEmail');");
+        toReturn.append(" if(document.getElementById('toText').value == ''){");
+        toReturn.append("alert('Debes seleccionar un destinatario.'); return false;};");
+        toReturn.append("return true;");
+         toReturn.append("}");
+        toReturn.append("\n  function getTo() {");
         toReturn.append("\n var to = document.getElementById('To').value;");
         toReturn.append("\n var idUserTo = to.split('-');");
         toReturn.append("\n var mailTo = idUserTo[0];");
         toReturn.append("\n var id = idUserTo[1];");
         toReturn.append("if (document.getElementById('toText').value.indexOf(mailTo) == -1){ ");
         toReturn.append("\n document.getElementById('toText').value+=mailTo +\";\";");
+        toReturn.append("\n document.getElementById('divTo').style.display =\"\";");
         toReturn.append("\n document.getElementById('toId').value+=id +\";\";");
         toReturn.append("}");
         toReturn.append("\n document.getElementById('To').value = \"\";");
@@ -178,6 +144,7 @@ public class EmailResource extends GenericResource {
         toReturn.append("\n var idCc = idUserCc[1];");
         toReturn.append("if (document.getElementById('ccText').value.indexOf(mailCc) == -1){ ");
         toReturn.append("\n document.getElementById('ccText').value+=mailCc +\";\";");
+        toReturn.append("\n document.getElementById('divCc').style.display =\"\";");
         toReturn.append("\n document.getElementById('ccId').value+=idCc +\";\";");
         toReturn.append("}");
         toReturn.append("\n document.getElementById('Cc').value = \"\";");
@@ -186,7 +153,42 @@ public class EmailResource extends GenericResource {
 
         out.println(toReturn.toString());
     }
-
+    
+      /**
+     * Reemplaza c&oacute;digo HTML por acentos, esto es para la estructura XML
+     * requerida.
+     * @param htmlString el objeto String en que se reemplazar&aacute;n las entidades de HTML por car&aacute;cteres.
+     * @return el objeto String modificado
+     */
+    private String replaceHtml(String htmlString) {
+        String sbStr = SWBUtils.TEXT.replaceAll(htmlString, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
+        return sbStr;
+    }
+    
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (Mode_SendMail.equals(paramRequest.getMode())) {
@@ -214,7 +216,7 @@ public class EmailResource extends GenericResource {
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode(Mode_SendMail);
-
+        
         out.print("<a href=\"#\" class=\"swb-toolbar-stgy\" onclick=\"showDialog('");
         out.print(url);
         out.print("', '");
@@ -246,6 +248,7 @@ public class EmailResource extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
+        System.out.println("llega al processAction");
         String action = response.getAction();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
@@ -353,5 +356,6 @@ public class EmailResource extends GenericResource {
         } else {
             super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
         }
+        response.sendRedirect(response.getWebPage().getUrl());
     }
 }
