@@ -63,6 +63,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
 import org.semanticwb.portal.api.*;
 import org.semanticwb.portal.util.SWBPriorityComparator;
+import org.semanticwb.util.UploaderFileCacheUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
@@ -1643,6 +1644,21 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     } catch (IOException e) { /*ignore*/ }
                 }
             }
+            String uniqueImage = request.getParameter("uniqueImage");
+            String path = org.semanticwb.SWBPortal.getWorkPath() + "/models/"
+                        + paramRequest.getWebPage().getWebSiteId()
+                        + "/ganttChart_" + uniqueImage + ".jpg";
+            File fileChart = new File(path);
+            if (fileChart.exists()) {
+                fileChart.delete();
+            }
+            path = org.semanticwb.SWBPortal.getWorkPath() + "/models/"
+                        + paramRequest.getWebPage().getWebSiteId()
+                        + "/graphics_" + uniqueImage + ".jpg";
+            fileChart = new File(path);
+            if (fileChart.exists()) {
+                fileChart.delete();
+            }
         }
     }
 
@@ -2066,6 +2082,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append(url);
         ret.append("\">").append("\n");
         ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
+        ret.append("   <input type=\"hidden\" id=\"uniqueImage\" name=\"uniqueImage\" value=\"");
+        ret.append(UploaderFileCacheUtils.uniqueCad());
+        ret.append("\"/>\n");
         ret.append("</form>").append("\n");
 
         return ret.toString();

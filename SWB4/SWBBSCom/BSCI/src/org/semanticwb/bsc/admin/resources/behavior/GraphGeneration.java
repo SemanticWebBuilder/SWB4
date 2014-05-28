@@ -283,6 +283,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
         StringBuilder sb = new StringBuilder();
         Resource base = this.getResourceBase();
         String data = request.getParameter("image");
+        String uniqueImage = request.getParameter("uniqueImage");
         if (data.trim().length() > 0) {
             float width = base.getAttribute("width") != null
                     ? Float.parseFloat(base.getAttribute("width")) : 550;
@@ -304,8 +305,9 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
             try {
                 String destpath = SWBPlatform.getContextPath() + "/work/models/"
                         + paramRequest.getWebPage().getWebSiteId()
-                        + "/graphics.jpg";
-                saveGraphics(svg, paramRequest.getWebPage().getWebSiteId(), width, height);
+                        + "/graphics_" + uniqueImage + ".jpg";
+                saveGraphics(svg, paramRequest.getWebPage().getWebSiteId(), width, height, 
+                        uniqueImage);
 
                 sb.append("<p><img src=\"");
                 sb.append(destpath);
@@ -327,7 +329,8 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
      * @param height alto de la imagen a generar
      * @throws Exception Excepti&oacute;n de IO
      */
-    private void saveGraphics(Document document, String idWebSite, float width, float height)
+    private void saveGraphics(Document document, String idWebSite, float width, float height,
+            String uniqueImage)
             throws Exception {
         String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + idWebSite;
         JPEGTranscoder t = new JPEGTranscoder();
@@ -337,7 +340,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
 
         // Set the transcoder input and output.
         TranscoderInput input = new TranscoderInput(document);
-        OutputStream ostream = new FileOutputStream(destpath + "/graphics.jpg");
+        OutputStream ostream = new FileOutputStream(destpath + "/graphics_" + uniqueImage +".jpg");
         TranscoderOutput output = new TranscoderOutput(ostream);
 
         // Perform the transcoding.
