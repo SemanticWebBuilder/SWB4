@@ -338,7 +338,7 @@ public class RiskBoard extends GenericResource {
             Iterator<Factor> factorIt = risk.listValidFactorsByPrefix();
             while (factorIt != null && factorIt.hasNext()) {
                 Factor factor = factorIt.next();
-                Iterator<Control> controlIt = factor.listControls();
+                Iterator<Control> controlIt = factor.listValidControlsByPrefix();  //listControls()
                 int controlCount = 0;
                 while (controlIt != null && controlIt.hasNext()) {
                     Control control = controlIt.next();
@@ -641,11 +641,11 @@ public class RiskBoard extends GenericResource {
         short factorCont = 0;
         
         if (risk != null) {
-            Iterator<Factor> factorIt = risk.listFactors();
+            Iterator<Factor> factorIt = risk.listValidFactors();  // listFactors()
             while (factorIt != null && factorIt.hasNext()) {
                 Factor riskFactor = factorIt.next();
                 short controlCont = 0;
-                Iterator<Control> controlIt = riskFactor.listControls();
+                Iterator<Control> controlIt = riskFactor.listValidControls();  //listControls()
                 while (controlIt != null && controlIt.hasNext()) {
                     Control control = controlIt.next();
                     controlCont++;
@@ -662,7 +662,7 @@ public class RiskBoard extends GenericResource {
             }
         } else if (factor != null) {
             short controlCont = 0;
-            Iterator<Control> controlIt = factor.listControls();
+            Iterator<Control> controlIt = factor.listValidControls();  // listControls()
             while (controlIt != null && controlIt.hasNext()) {
                 Control control = controlIt.next();
                 controlCont++;

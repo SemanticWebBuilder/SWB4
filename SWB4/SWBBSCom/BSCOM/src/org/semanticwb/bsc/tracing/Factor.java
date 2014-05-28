@@ -1,16 +1,18 @@
 package org.semanticwb.bsc.tracing;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import org.semanticwb.bsc.accessory.Determinant;
 import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -142,5 +144,59 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
         withControls = (controlIt != null && controlIt.hasNext());
         
         return withControls;
+    }
+    
+    /**
+     * Genera un conjunto de objetos {@code Control} validos para el usuario de sesi&oacute;n, relacionados a este {@code Factor},
+     * ordenado por el prefijo de cada uno.
+     * @return un {@code Iterator} con el conjunto de controles asociados al factor que son v&aacute;lidos
+     *          y a los que el usuario tiene acceso.
+     */
+    public Iterator<Control> listValidControlsByPrefix() {
+        
+        Iterator<Control> controlIt = listControls();
+        TreeMap<Long, Control> validControls = new TreeMap<Long, Control>();
+        User user = SWBContext.getSessionUser();
+        
+        while (controlIt != null && controlIt.hasNext()) {
+            Control control = controlIt.next();
+            if (control.isValid() && user != null && user.haveAccess(control)) {
+                long prefix = 0L;
+                try {
+                    prefix = Long.parseLong(control.getPrefix().replaceAll("\\.", ""));
+                } catch (NumberFormatException nfe) {
+                    prefix = 0L;
+                }
+                validControls.put(prefix, control);
+            }
+        }
+        Iterator<Entry<Long, Control>> entriesIt = validControls.entrySet().iterator();
+        ArrayList<Control> controls = new ArrayList<Control>();
+        while (entriesIt.hasNext()) {
+            Entry<Long, Control> entry = entriesIt.next();
+            controls.add(entry.getValue());
+        }
+        return controls.iterator();
+    }
+    
+    /**
+     * Genera un conjunto de objetos {@code Control} v&aacute;lidos para el usuario de 
+     * sesi&oacute;n, relacionados a este {@code Factor}.
+     * @return un {@code Iterator} con el conjunto de controles asociados al factor que
+     *          son v&aacute;lidos y a los que el usuario tiene acceso.
+     */
+    public Iterator<Control> listValidControls() {
+        
+        Iterator<Control> controlIt = listControls();
+        ArrayList<Control> controls = new ArrayList<Control>();
+        User user = SWBContext.getSessionUser();
+        
+        while (controlIt != null && controlIt.hasNext()) {
+            Control control = controlIt.next();
+            if (control.isValid() && user != null && user.haveAccess(control)) {
+                controls.add(control);
+            }
+        }
+        return controls.iterator();
     }
 }
