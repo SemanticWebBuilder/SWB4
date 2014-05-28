@@ -17,6 +17,14 @@
   <owl:Class rdf:ID="Deliverable">
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
+    <rdfs:subClassOf>
+      <swb:Interface rdf:ID="Measurable">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Comportamiento que presentan las instancias de Series para capturar valores de mediciones de los períodos de medición correspondientes del indicador.</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Interface>
+    </rdfs:subClassOf>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
     <rdfs:subClassOf>
@@ -405,14 +413,7 @@
                 >swbstrgyIconSeries</swb:iconClass>
               </swbxf:DisplayObject>
             </swb:displayObject>
-            <rdfs:subClassOf>
-              <swb:Interface rdf:ID="Measurable">
-                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-                >Comportamiento que presentan las instancias de Series para capturar valores de mediciones de los períodos de medición correspondientes del indicador.</rdfs:comment>
-                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-              </swb:Interface>
-            </rdfs:subClassOf>
+            <rdfs:subClassOf rdf:resource="#Measurable"/>
             <rdfs:subClassOf>
               <owl:Restriction>
                 <owl:allValuesFrom rdf:resource="#Indicator"/>
