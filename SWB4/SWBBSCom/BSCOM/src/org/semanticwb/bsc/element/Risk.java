@@ -147,25 +147,19 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     public Iterator<Factor> listValidFactorsByPrefix() {
         
         Iterator<Factor> facIt = listFactors();
-        TreeMap<Long, Factor> validFactors = new TreeMap<Long, Factor>();
+        TreeMap<String, Factor> validFactors = new TreeMap<String, Factor>();
         User user = SWBContext.getSessionUser();
         
         while (facIt != null && facIt.hasNext()) {
             Factor factor = facIt.next();
             if (factor.isValid() && user != null && user.haveAccess(factor)) {
-                long prefix = 0L;
-                try {
-                    prefix = Long.parseLong(factor.getPrefix().replaceAll("\\.", ""));
-                } catch (NumberFormatException nfe) {
-                    prefix = 0L;
-                }
-                validFactors.put(prefix, factor);
+                validFactors.put(factor.getPrefix(), factor);
             }
         }
-        Iterator<Entry<Long, Factor>> entriesIt = validFactors.entrySet().iterator();
+        Iterator<Entry<String, Factor>> entriesIt = validFactors.entrySet().iterator();
         ArrayList<Factor> factors = new ArrayList<Factor>();
         while (entriesIt.hasNext()) {
-            Entry<Long, Factor> entry = entriesIt.next();
+            Entry<String, Factor> entry = entriesIt.next();
             factors.add(entry.getValue());
         }
         return factors.iterator();

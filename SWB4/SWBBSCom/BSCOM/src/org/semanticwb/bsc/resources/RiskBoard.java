@@ -64,26 +64,26 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
  */
 public class RiskBoard extends GenericResource {
 
-    /**
+    /*--*
      * Define clases de estilos para adornar el despliegue de los datos en el tablero
      */
-    private static final String OWNSTYLES = "<style>\n" + 
-        "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n" +
-        "    th {  text-align:center; background-color:#EEEEEE;  }\n" + 
-        "    .evalRiesgo {  background-color:#87CEEB;  }\n" + 
-        "    .evalControl {  background-color:#1E90FF;  }\n" + 
-        "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n" + 
-        "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n" +
-        "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n" +
-        "    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n" +
-        "    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n" +
-        "    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n" +
-        "    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n" +
-        "    .riesgoControlado {  background-color:#389738;  }\n" +
-        "    .riesgoNoControlado {  background-color:#FFFF80;  }\n" +
-        "    .noValido {  background-color:#FF6666;  }\n" +
-        "    .textCentered {  text-align:center;  }\n" +
-        "</style>\n";
+//    private static final String OWNSTYLES = "<style>\n" + 
+//        "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n" +
+//        "    th {  text-align:center; background-color:#EEEEEE;  }\n" + 
+//        "    .evalRiesgo {  background-color:#87CEEB;  }\n" + 
+//        "    .evalControl {  background-color:#1E90FF;  }\n" + 
+//        "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n" + 
+//        "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n" +
+//        "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n" +
+//        "    .cuadrante1 {  background-color:#FF0000; color:#000000;  }\n" +
+//        "    .cuadrante2 {  background-color:#FFFF00; color:#000000;  }\n" +
+//        "    .cuadrante3 {  background-color:#00FFFF; color:#000000;  }\n" +
+//        "    .cuadrante4 {  background-color:#3CB371; color:#000000;  }\n" +
+//        "    .riesgoControlado {  background-color:#389738;  }\n" +
+//        "    .riesgoNoControlado {  background-color:#FFFF80;  }\n" +
+//        "    .noValido {  background-color:#FF6666;  }\n" +
+//        "    .textCentered {  text-align:center;  }\n" +
+//        "</style>\n";
 
     
     /**
@@ -111,7 +111,7 @@ public class RiskBoard extends GenericResource {
         PrintWriter out = response.getWriter();
         
         StringBuilder dataOut = new StringBuilder(512);
-        WebSite website = this.getResourceBase().getWebSite();
+        WebSite website = this.getResourceBase().getWebSite();website.getModelProperty("quadrant1HexColor");
         
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             dataOut.append(doIconExport(request, paramRequest));
@@ -143,8 +143,8 @@ public class RiskBoard extends GenericResource {
         StringBuilder output = new StringBuilder(512);
         String exportType = request.getParameter("type");
         
-        if (exportType == null) {  //mode.equalsIgnoreCase("edit")
-            output.append(RiskBoard.OWNSTYLES);
+        if (exportType == null) {
+            output.append(this.getStylesString());
         }
         ArrayList<Determinant> detList = (ArrayList<Determinant>) Determinant.listValidDeterminants(website);
         Determinant[] determinants = new Determinant[detList.size()];
@@ -1600,7 +1600,7 @@ public class RiskBoard extends GenericResource {
             output.append("</style>");
         }
         output.append(this.getLinks(paramRequest, request));
-        output.append(RiskBoard.OWNSTYLES);
+        output.append(this.getStylesString());
         output.append("</head>");
         output.append("<body>");
         output.append(htmlCode);
@@ -1730,6 +1730,43 @@ public class RiskBoard extends GenericResource {
             }
         }
         return view.toString();
+    }
+    
+    /**
+     * Genera un {@code String} que representa los estilos CSS a utilizar para la presentaci&oacute;n 
+     * del tablero. Obtiene del modelo correspondiente las propiedades: {@literal quadrant1HexColor}, {@literal quadrant2HexColor},
+     * {@literal quadrant3HexColor} y {@literal quadrant4HexColor} para utilizar su contenido en el armado de los estilos.
+     * @return el {@code String} con los estilos del tablero de riesgos
+     */
+    private String getStylesString() {
+        
+        WebSite website = this.getResourceBase().getWebSite();
+        String stylesString = "<style>\n" + 
+                "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n" +
+                "    th {  text-align:center; background-color:#EEEEEE;  }\n" + 
+                "    .evalRiesgo {  background-color:#87CEEB;  }\n" + 
+                "    .evalControl {  background-color:#1E90FF;  }\n" + 
+                "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n" + 
+                "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n" +
+                "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n" +
+                "    .cuadrante1 {  background-color:" + 
+                (website.getModelProperty("quadrant1HexColor") != null ? website.getModelProperty("quadrant1HexColor") : "#FF0000") +
+                ";  }\n" +
+                "    .cuadrante2 {  background-color:" +
+                (website.getModelProperty("quadrant2HexColor") != null ? website.getModelProperty("quadrant2HexColor") : "#FFFF00") +
+                ";  }\n" +
+                "    .cuadrante3 {  background-color:" +
+                (website.getModelProperty("quadrant3HexColor") != null ? website.getModelProperty("quadrant3HexColor") : "#00FFFF") +
+                ";  }\n" +
+                "    .cuadrante4 {  background-color:" +
+                (website.getModelProperty("quadrant4HexColor") != null ? website.getModelProperty("quadrant4HexColor") : "#3CB371") +
+                ";  }\n" +
+                "    .riesgoControlado {  background-color:#389738;  }\n" +
+                "    .riesgoNoControlado {  background-color:#FFFF80;  }\n" +
+                "    .noValido {  background-color:#FF6666;  }\n" +
+                "    .textCentered {  text-align:center;  }\n" +
+                "</style>\n";
+        return stylesString;
     }
     
 }
