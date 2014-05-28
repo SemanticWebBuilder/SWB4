@@ -4,34 +4,44 @@
  */
 package org.semanticwb.bsc.resources;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
+import org.semanticwb.bsc.utils.EmailLog;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.model.base.FileUploadBase;
-import org.semanticwb.platform.SemanticLiteral;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.GenericSemResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.util.MultipartInputStream;
 import org.semanticwb.util.UploadFileRequest;
 import org.semanticwb.util.UploadedFile;
 import org.semanticwb.util.UploaderFileCacheUtils;
+import sun.misc.IOUtils;
+import com.oreilly.servlet.MultipartRequest;
+import javax.mail.internet.InternetAddress;
+import org.apache.commons.fileupload.FileItem;
+import org.semanticwb.SWBPortal;
 
 /**
  *
@@ -40,6 +50,12 @@ import org.semanticwb.util.UploaderFileCacheUtils;
 public class EmailResource extends GenericResource {
 
     private static org.semanticwb.Logger log = SWBUtils.getLogger(GenericSemResource.class);
+    private final String Mode_SendMail = "mail";
+
+    @Override
+    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        doViewStrategy(request, response, paramRequest);
+    }
 
     /**
      * Genera el despliegue de la vista del formulario para enviar un correo.
@@ -53,12 +69,9 @@ public class EmailResource extends GenericResource {
      * @throws IOException si durante la ejecuci&oacute;n ocurre alg&uacute;n
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
-    @Override
-    public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+    public void doMail(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
-        System.out.println("entra al doView!!");
         final User user = paramRequest.getUser();
-        final String lang = user.getLanguage();
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
         Resource base = getResourceBase();
@@ -71,52 +84,101 @@ public class EmailResource extends GenericResource {
 
         Iterator<User> itTo = wsite.getUserRepository().listUsers();
         Iterator<User> itCc = wsite.getUserRepository().listUsers();
-
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
-        toReturn.append("<div id=\"EmailSend\">");
-        toReturn.append("<form id=\"formEmail\" class=\"swbform\" action=\"" + url + "\" method=\"post\">\n");
+
+        toReturn.append("<div class=\"swbform\" id=\"EmailSend\">");
+        toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data'>\n");
         toReturn.append("<input type=\"hidden\" name=\"nameFrom\" value=\"" + user.getFullName() + "\">");
-        toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_From") +"<input name=\"emailFrom\" disabled=\"true\" size=\"30\" type=\"text\" value=\"" + user.getEmail() + "\"></input></p>");
-        toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_To") +"<select id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
+        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_From") + "<input id=\"from\" name=\"from\" size=\"30\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input></p>");
+        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_To") + "<select id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
         toReturn.append("<option value=\"\">Selecciona...</option>");
         while (itTo.hasNext()) {
             User usr = itTo.next();
-            toReturn.append("<option value=" + usr.getEmail() + ">" + usr.getFullName() + "</option>");
+            toReturn.append("<option value=\"" + usr.getEmail() + "-" + usr.getId() + "\">" + usr.getFullName() + "</option>");
         }
         toReturn.append("</select></p>");
-        toReturn.append("<div><input id=\"toText\" name=\"toText\" size=\"100\" type=\"text\"></input></div>");
-        toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_Cc") +"<select id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
+        toReturn.append("<div><input id=\"toText\" name=\"toText\" size=\"100\" type=\"text\"></div>");
+        toReturn.append("<input type=\"hidden\" id=\"toId\" name=\"toId\">");
+        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Cc") + "<select id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
         toReturn.append("<option value=\"\">Selecciona...</option>");
         while (itCc.hasNext()) {
             User usr = itCc.next();
-            toReturn.append("<option value=" + usr.getEmail() + ">" + usr.getFullName() + "</option>");
+            toReturn.append("<option value=\"" + usr.getEmail() + "-" + usr.getId() + "\">" + usr.getFullName() + "</option>");
         }
         toReturn.append("</select></p>");
         toReturn.append("<div><input id=\"ccText\" name=\"ccText\" size=\"100\" type=\"text\"></input></div>");
-        toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_Subject") +"<input name=\"subject\" size=\"50\" type=\"text\"></input></p>");
+        toReturn.append("<input type=\"hidden\" id=\"ccId\" name=\"ccId\">");
+        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Subject") + "<input name=\"subject\" size=\"50\" type=\"text\"></input></p>");
         //Adjuntar archivo
-        //toReturn.append("<input type=\"file\" name=\"fichero\"><input type=\"submit\">");
+        toReturn.append("<input type=\"file\" name=\"uploadFile\" />");
+        toReturn.append("<input type=\"hidden\" name=\"upload\" value=\"upload\" />");
+        /*String cad = UploaderFileCacheUtils.uniqueCad();
+         String url2 = SWBPlatform.getContextPath() + "/multiuploader/" + wsite.getId() + cad;
+         System.out.println("url2: " + url2);
 
+         toReturn.append("<input ");
+         toReturn.append("name=\"uploadedfile\" ");
+         toReturn.append("data-dojo-props=\" \n");
+         toReturn.append("multiple:'");
+         toReturn.append(("false"));
+         toReturn.append("', \n");
+         toReturn.append("uploadOnSelect:'true', \n");
+         toReturn.append("url:'" + url2 + "', \n");
+         toReturn.append("submit: function(form) {}, \n");
+         toReturn.append("onComplete: function (result) {console.log('result:'+result); ");
+         toReturn.append("dojo.byId('selectFile').innerHTML =result.detail}, \n");
+         toReturn.append("onCancel: function() {console.log('cancelled');}, \n");
+         toReturn.append("onAbort: function() {console.log('aborted');}, \n");
+         toReturn.append("onError: function (evt) {console.log(evt);}, \n");
+         toReturn.append("\" ");
+         toReturn.append("type=\"file\" ");
+         toReturn.append("data-dojo-type=\"dojox.form.Uploader\" ");
+         toReturn.append("label=\"Select File\" ");
+         toReturn.append("id=\"");
+         toReturn.append(cad);
+         toReturn.append("_defaultAuto\" ");
+         toReturn.append("/>  ");
+         toReturn.append("<br/>\n");
+         toReturn.append("<div id=\"selectFile\">\n");
+         toReturn.append("</div>\n");
+
+         UploaderFileCacheUtils.put(cad, new java.util.LinkedList<UploadedFile>());
+         toReturn.append("<input type=\"hidden\" name=\"cad\" value=\"" + cad + "\">");
+         */
         //Termina archivos adjuntos
-        
-        toReturn.append("<p>"+ paramRequest.getLocaleString("lbl_Message") +"<textarea name=\"message\" rows=\"10\" cols=\"50\"></textarea></p>");
-        toReturn.append("<p><button type=\"submit\">"
+
+        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Message") + "<textarea name=\"message\" rows=\"10\" cols=\"50\"></textarea></p>");
+        toReturn.append("<p><button type=\"submit\" onclick=\"dijit.byId('swbDialog').hide()\">"
                 + paramRequest.getLocaleString("lbl_Send") + "</button>");
         toReturn.append("</form>");
         toReturn.append("</div>");
 
+
         toReturn.append("\n <script type=\"text/javascript\">");
-        toReturn.append("\n  function getTo() {");
-        toReturn.append("\n   var to = document.getElementById('To').value;");
-        toReturn.append("if (document.getElementById('toText').value.indexOf(to) == -1){ ");
-        toReturn.append("\n document.getElementById('toText').value+=to +\";\";");
+        toReturn.append("\n  function getClose() {");
+        toReturn.append("\n  alert('entra a cerrar');");
+        toReturn.append("\n  window.close();");
+        toReturn.append("\n  }");
+        toReturn.append("\n  function getTo(idUser) {");
+
+        toReturn.append("\n var to = document.getElementById('To').value;");
+        toReturn.append("\n var idUserTo = to.split('-');");
+        toReturn.append("\n var mailTo = idUserTo[0];");
+        toReturn.append("\n var id = idUserTo[1];");
+        toReturn.append("if (document.getElementById('toText').value.indexOf(mailTo) == -1){ ");
+        toReturn.append("\n document.getElementById('toText').value+=mailTo +\";\";");
+        toReturn.append("\n document.getElementById('toId').value+=id +\";\";");
         toReturn.append("}");
         toReturn.append("\n document.getElementById('To').value = \"\";");
         toReturn.append("\n  };");
         toReturn.append("\n  function getCc() {");
-        toReturn.append("\n   var cc = document.getElementById('Cc').value;");
-        toReturn.append("if (document.getElementById('ccText').value.indexOf(cc) == -1){ ");
-        toReturn.append("\n document.getElementById('ccText').value+=cc +\";\";");
+        toReturn.append("\n var cc = document.getElementById('Cc').value;");
+        toReturn.append("\n var idUserCc = cc.split('-');");
+        toReturn.append("\n var mailCc = idUserCc[0];");
+        toReturn.append("\n var idCc = idUserCc[1];");
+        toReturn.append("if (document.getElementById('ccText').value.indexOf(mailCc) == -1){ ");
+        toReturn.append("\n document.getElementById('ccText').value+=mailCc +\";\";");
+        toReturn.append("\n document.getElementById('ccId').value+=idCc +\";\";");
         toReturn.append("}");
         toReturn.append("\n document.getElementById('Cc').value = \"\";");
         toReturn.append("\n  };");
@@ -124,6 +186,53 @@ public class EmailResource extends GenericResource {
 
         out.println(toReturn.toString());
     }
+
+    @Override
+    public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        if (Mode_SendMail.equals(paramRequest.getMode())) {
+            doMail(request, response, paramRequest);
+        } else {
+            super.processRequest(request, response, paramRequest);
+        }
+    }
+
+    /**
+     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que
+     * envia un correo.
+     *
+     * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
+     * @param response Proporciona funcionalidad especifica HTTP para
+     * envi&oacute; en la respuesta
+     * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
+     * @throws SWBResourceException SWBResourceException Excepti&oacute;n
+     * utilizada para recursos de SWB
+     * @throws IOException Excepti&oacute;n de IO
+     */
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+
+        PrintWriter out = response.getWriter();
+        SWBResourceURL url = paramRequest.getRenderUrl();
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url.setMode(Mode_SendMail);
+
+        out.print("<a href=\"#\" class=\"swb-toolbar-stgy\" onclick=\"showDialog('");
+        out.print(url);
+        out.print("', '");
+        out.print(paramRequest.getLocaleString("lbl_addTitle"));
+        out.print("');\">");
+        out.print(paramRequest.getLocaleString("lbl_addTitle"));
+        out.print("</a>");
+
+        out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"swbDialog\" ");
+        out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
+        out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" ");
+        out.print("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
+        out.print("    Cargando...\n");
+        out.print("  </div>\n");
+        out.print("</div>\n");
+
+    }
+
     /**
      * Recibe los datos del formulario e implementa la funcionalidad de enviar
      * correo.
@@ -138,21 +247,62 @@ public class EmailResource extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
+        Resource base = getResourceBase();
+        WebSite wsite = base.getWebSite();
+        User user = SWBContext.getSessionUser(wsite.getUserRepository().getId());
+        String uriUser = user.getURI();
+        SemanticObject sObj = SemanticObject.getSemanticObject(uriUser);
+        SWBModel model = (SWBModel) sObj.getModel().getModelObject().createGenericInstance();
+        SWBModel modelWS = model.getParentWebSite();
+
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
-            String emailFrom = request.getParameter("emailFrom") == null ? "" : request.getParameter("emailFrom");
-            String nameFrom = request.getParameter("nameFrom") == null ? "" : request.getParameter("nameFrom");
-            String subject = request.getParameter("subject") == null ? "" : request.getParameter("subject");
-            String message = request.getParameter("message") == null ? "" : request.getParameter("message");
-            String to = request.getParameter("toText") == null ? "" : request.getParameter("toText");
-            String cc = request.getParameter("ccText") == null ? "" : request.getParameter("ccText");
+            String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
+            System.out.println("path: " + path);
+            MultipartRequest mrequest = new MultipartRequest(request, path);
+            String pathFile = "";
+           if(mrequest.getParameter("uploadFile")!= null){
+               System.out.println("trae archivo adjunto!");
+                File f = mrequest.getFile("uploadFile");
+                pathFile = f.getPath();
+           }
+
+            /*String[] arrStr = rutaReal.split(new String("\\\\"));
+             String nombreA = arrStr[arrStr.length - 1];
+             File des = new File(path);
+             File archivo = new File(des, nombreA);*/
+
+
+            String emailFrom = (String) mrequest.getParameter("from") == null ? "" : (String) mrequest.getParameter("from");
+            String nameFrom = (String) mrequest.getParameter("nameFrom") == null ? "" : (String) mrequest.getParameter("nameFrom");
+            String subject = (String) mrequest.getParameter("subject") == null ? "" : (String) mrequest.getParameter("subject");
+            String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
+            String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
+            String idUserTo = (String) mrequest.getParameter("toId") == null ? "" : (String) mrequest.getParameter("toId");
+            String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
+            String idUserCc = (String) mrequest.getParameter("ccId") == null ? "" : (String) mrequest.getParameter("ccId");
+            //Collection listEmails = new ArrayList<InternetAddress>();
+           // Collection listCcEmails = new ArrayList<InternetAddress>();
             Collection listEmails = new ArrayList<String>();
             Collection listCcEmails = new ArrayList<String>();
+            List usersTo = new ArrayList<User>();
+            List usersCc = new ArrayList<User>();
+
+            /*System.out.println("\n emailFrom :" + emailFrom);
+            System.out.println("\n subject: " + subject);
+            System.out.println("\n namefrom: " + nameFrom);
+            System.out.println("\n message: " + message);
+            System.out.println("\n isUserTo: " + idUserTo);
+            System.out.println("\n isUserCc: " + idUserCc);*/
 
             if (to != "") {
                 String emailsArray[] = to.split(";");
                 for (String emails : emailsArray) {
                     listEmails.add(emails);
-                    System.out.println("\n" + emails);
+                }
+                String idToArray[] = idUserTo.split(";");
+                for (String idTo : idToArray) {
+                    User userTo = User.ClassMgr.getUser(idTo, model);
+                    usersTo.add(userTo);
                 }
             }
             //Valida que traiga correos Cc
@@ -160,23 +310,46 @@ public class EmailResource extends GenericResource {
                 String ccArray[] = cc.split(";");
                 for (String ccEmails : ccArray) {
                     listCcEmails.add(ccEmails);
-                    System.out.println("\n" + ccEmails);
+                }
+                String ccToArray[] = idUserCc.split(";");
+                for (String ccTo : ccToArray) {
+                    User userCc = User.ClassMgr.getUser(ccTo, model);
+                    usersCc.add(userCc);
                 }
             }
-           SWBUtils.EMAIL.sendMail("ana.garcias@infotec.com.mx", subject, message);
-          
-           /*SWBMail mail = new SWBMail();
-           mail.setFromEmail(emailFrom);
-           mail.setFromName(nameFrom);
-           mail.setSubject(subject);
-           mail.setToEmail(listEmails);
-           mail.setCcEmail(listCcEmails);
-           mail.setContentType("text/html");*/
-           
-           //EmailAttachment an = new 
-                                 
-           //SWBUtils.EMAIL.sendMail(mail);
-          
+
+            EmailAttachment att = new EmailAttachment();
+            SWBMail mail = new SWBMail();
+            att.setPath(pathFile);
+            mail.addAttachment(att);
+            mail.setFromEmail(emailFrom);
+            mail.setFromName(nameFrom);
+            mail.setSubject(subject);
+            mail.setToEmail(listEmails);
+            mail.setCcEmail(listCcEmails);
+            mail.setContentType("HTML");
+            mail.setData(message);
+
+            try {
+                SWBUtils.EMAIL.sendMail(mail);
+                //Crea el emailLog
+                EmailLog log = EmailLog.ClassMgr.createEmailLog(user.getId(), modelWS);
+                log.setFrom(user);
+                log.setSubject(subject);
+                log.setMessage(message);
+                Iterator<User> iter = usersTo.iterator();
+                Iterator<User> iterCc = usersCc.iterator();
+                while (iter.hasNext()) {
+                    User userTo1 = iter.next();
+                    log.addTo(userTo1);
+                }
+                while (iterCc.hasNext()) {
+                    User userCc1 = iterCc.next();
+                    log.addCc(userCc1);
+                }
+            } catch (SocketException e) {
+                EmailResource.log.error("Error en el envio :" + e);
+            }
         } else {
             super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
         }
