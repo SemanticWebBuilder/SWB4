@@ -335,7 +335,7 @@ public class RiskBoard extends GenericResource {
             Control formerControl = null;
             HashMap<Determinant, DeterminantValue> determValues = new HashMap<Determinant, DeterminantValue>(8);
             
-            Iterator<Factor> factorIt = risk.listFactors();
+            Iterator<Factor> factorIt = risk.listValidFactorsByPrefix();
             while (factorIt != null && factorIt.hasNext()) {
                 Factor factor = factorIt.next();
                 Iterator<Control> controlIt = factor.listControls();
