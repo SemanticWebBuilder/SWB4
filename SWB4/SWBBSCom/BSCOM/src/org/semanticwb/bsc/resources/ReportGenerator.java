@@ -52,6 +52,7 @@ import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
 import org.semanticwb.model.WebPage;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -1556,7 +1557,19 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
 
         //Comentada para que en formelement.TextField se obtenga el Id desde el objeto semantico
         //request.setAttribute("websiteId", paramRequest.getWebPage().getWebSiteId());
-
+        WebSite ws = paramRequest.getWebPage().getWebSite();
+        String lang = paramRequest.getUser().getLanguage();
+        String modelSite = ws.getTitle(lang) == null ? ws.getTitle() : ws.getTitle(lang);
+        Date date = new Date();
+        output.append("<div class=\"headerPDF\" style=\"width:50%;float:left;\">");
+        output.append(modelSite);
+        output.append("</div>");
+        output.append("<div class=\"headerPDF\" style=\"width:50%;float:rigth;\">");
+        output.append(paramRequest.getLocaleString("lblDateGeneration"));
+        output.append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy"));
+        output.append("</div>");
+        output.append("<br/>");
+        output.append("<br/>");
         output.append("<table border=\"1\" style=\"width:100%\" >\n");
         output.append("  <tr>\n");
         for (SemanticProperty prop : criteria.getProps2Show()) {
