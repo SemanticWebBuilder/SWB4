@@ -1350,15 +1350,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
-/*                  Antes se evaluaba de la siguiente forma
+                    /*                  Antes se evaluaba de la siguiente forma
+                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
+                     || (userCanCollaborate(collaboration) && isEditable(formElement))
+                     || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit()
+                     && isEditable(formElement)) || (elementBSC.createGenericInstance() instanceof Deliverable
+                     && userCanEdit() && isEditable(formElement))) {*/
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
-                            || (userCanCollaborate(collaboration) && isEditable(formElement))
-                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit()
-                            && isEditable(formElement)) || (elementBSC.createGenericInstance() instanceof Deliverable
-                            && userCanEdit() && isEditable(formElement))) {*/
-                    if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement)) ||
-                            (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() && isEditable(formElement)) ||
-                            (elementBSC.createGenericInstance() instanceof Deliverable && userCanEdit() && isEditable(formElement))) {
+                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() && isEditable(formElement))
+                            || (elementBSC.createGenericInstance() instanceof Deliverable && userCanEdit() && isEditable(formElement))) {
                         applyInlineEdit = true;
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
@@ -1811,6 +1811,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         StringBuilder output = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
         output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
+        String statusStyleClass = "indefinido";
+        String secondStatusStyleClass = null;
 
         if (message == null) {
             FileReader reader = retrieveTemplate();
@@ -1837,13 +1839,21 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (generic != null && generic instanceof Objective) {
                 Objective objective = (Objective) generic;
                 periodStatus = objective.getPeriodStatus(period);
+                statusStyleClass = periodStatus.getStatus().getIconClass();
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
                 Measure measure = indicator != null && indicator.getStar() != null
                         ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
+                    statusStyleClass = periodStatus.getStatus().getIconClass();
                 }
+            } else if (generic != null && generic instanceof Deliverable) {
+                Deliverable deliverable = (Deliverable) generic;
+                statusStyleClass = deliverable.getStatusAssigned() != null
+                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
+                secondStatusStyleClass = deliverable.getAutoStatus() != null
+                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
             }
 
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
@@ -1853,18 +1863,35 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
+            WebSite ws = paramRequest.getWebPage().getWebSite();
+            String lang = paramRequest.getUser().getLanguage();
+            String modelSite = ws.getTitle(lang) == null ? ws.getTitle() : ws.getTitle(lang);
+            String titlePeriod = period.getTitle(lang) == null ? period.getTitle() : period.getTitle(lang);
+            Date date = new Date();
+            output.append("<div class=\"headerPDF\" style=\"width:40%;float:left;\">");
+            output.append(modelSite);
+            output.append("</div>");
+            output.append("<div class=\"headerPDF\" style=\"width:30%;float:left;\">");
+            output.append(titlePeriod);
+            output.append("</div>");
+            output.append("<div class=\"headerPDF\" style=\"width:30%;float:left;\">");
+            output.append(paramRequest.getLocaleString("lblDateGeneration"));
+            output.append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy"));
+            output.append("</div>");
+            output.append("<br/>");
+            output.append("<br/>");
             output.append("<h2");
             output.append(" class=\"");
-            if (periodStatus != null && periodStatus.getStatus() != null
-                    && periodStatus.getStatus().getIconClass() != null) {
-                output.append(periodStatus.getStatus().getIconClass());
-            } else {
-                output.append("indefinido");
+            output.append(statusStyleClass);
+            output.append("\">");
+            if (secondStatusStyleClass != null) {
+                output.append("<span class=\"");
+                output.append(secondStatusStyleClass);
+                output.append("\"> &nbsp; </span>");
             }
-            output.append("\"");
-            output.append(">");
             output.append(semObj.getDisplayName());
             output.append("</h2>\n");
+
 
             if (reader != null) {
                 output.append(generateDisplayPDF(request, paramRequest, reader, semObj));
@@ -1992,10 +2019,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
         return ret != null ? ret : "";
     }
-    
+
     /**
-     * Genera el icono para imprimir el PDF de la vista actual.  Envia los par&aacute;metros
-     * que se usaran para generar el PDF.
+     * Genera el icono para imprimir el PDF de la vista actual. Envia los
+     * par&aacute;metros que se usaran para generar el PDF.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
