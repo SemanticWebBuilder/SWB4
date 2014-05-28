@@ -155,25 +155,19 @@ public class Factor extends org.semanticwb.bsc.tracing.base.FactorBase {
     public Iterator<Control> listValidControlsByPrefix() {
         
         Iterator<Control> controlIt = listControls();
-        TreeMap<Long, Control> validControls = new TreeMap<Long, Control>();
+        TreeMap<String, Control> validControls = new TreeMap<String, Control>();
         User user = SWBContext.getSessionUser();
         
         while (controlIt != null && controlIt.hasNext()) {
             Control control = controlIt.next();
             if (control.isValid() && user != null && user.haveAccess(control)) {
-                long prefix = 0L;
-                try {
-                    prefix = Long.parseLong(control.getPrefix().replaceAll("\\.", ""));
-                } catch (NumberFormatException nfe) {
-                    prefix = 0L;
-                }
-                validControls.put(prefix, control);
+                validControls.put(control.getPrefix(), control);
             }
         }
-        Iterator<Entry<Long, Control>> entriesIt = validControls.entrySet().iterator();
+        Iterator<Entry<String, Control>> entriesIt = validControls.entrySet().iterator();
         ArrayList<Control> controls = new ArrayList<Control>();
         while (entriesIt.hasNext()) {
-            Entry<Long, Control> entry = entriesIt.next();
+            Entry<String, Control> entry = entriesIt.next();
             controls.add(entry.getValue());
         }
         return controls.iterator();
