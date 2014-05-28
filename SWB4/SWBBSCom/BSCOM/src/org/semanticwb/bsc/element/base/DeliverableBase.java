@@ -4,12 +4,14 @@ package org.semanticwb.bsc.element.base;
    /**
    * Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad. 
    */
-public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Schedule,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Updateable
+public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Measurable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.StatusManuallyAssignable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Schedule,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Updateable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable
 {
    /**
    * Porcentaje de avance a reportar
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_progress=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#progress");
+    public static final org.semanticwb.platform.SemanticClass bsc_InitiativeEvaluationRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#InitiativeEvaluationRule");
+    public static final org.semanticwb.platform.SemanticProperty bsc_hasInitiativeEvaluationRule=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiativeEvaluationRule");
    /**
    * Ruta del archivo físico asociado
    */
@@ -23,10 +25,6 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
    * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
-   /**
-   * Estatus asignado por el usuario
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_statusAssigned=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#statusAssigned");
    /**
    * Estatus asignado automáticamente por el sistema
    */
@@ -116,6 +114,29 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
         public static boolean hasDeliverable(String id, org.semanticwb.model.SWBModel model)
         {
             return (getDeliverable(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined InitiativeEvaluationRule
+       * @param value InitiativeEvaluationRule of the type org.semanticwb.bsc.tracing.InitiativeEvaluationRule
+       * @param model Model of the org.semanticwb.bsc.element.Deliverable
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiativeEvaluationRule(org.semanticwb.bsc.tracing.InitiativeEvaluationRule value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeEvaluationRule, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Deliverable with a determined InitiativeEvaluationRule
+       * @param value InitiativeEvaluationRule of the type org.semanticwb.bsc.tracing.InitiativeEvaluationRule
+       * @return Iterator with all the org.semanticwb.bsc.element.Deliverable
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Deliverable> listDeliverableByInitiativeEvaluationRule(org.semanticwb.bsc.tracing.InitiativeEvaluationRule value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Deliverable> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasInitiativeEvaluationRule,value.getSemanticObject(),sclass));
+            return it;
         }
        /**
        * Gets all org.semanticwb.bsc.element.Deliverable with a determined ModifiedBy
@@ -379,6 +400,71 @@ public abstract class DeliverableBase extends org.semanticwb.bsc.element.BSCElem
     public void setProgress(int value)
     {
         getSemanticObject().setIntProperty(bsc_progress, value);
+    }
+   /**
+   * Gets all the org.semanticwb.bsc.tracing.InitiativeEvaluationRule
+   * @return A GenericIterator with all the org.semanticwb.bsc.tracing.InitiativeEvaluationRule
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.InitiativeEvaluationRule> listInitiativeEvaluationRules()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.tracing.InitiativeEvaluationRule>(getSemanticObject().listObjectProperties(bsc_hasInitiativeEvaluationRule));
+    }
+
+   /**
+   * Gets true if has a InitiativeEvaluationRule
+   * @param value org.semanticwb.bsc.tracing.InitiativeEvaluationRule to verify
+   * @return true if the org.semanticwb.bsc.tracing.InitiativeEvaluationRule exists, false otherwise
+   */
+    public boolean hasInitiativeEvaluationRule(org.semanticwb.bsc.tracing.InitiativeEvaluationRule value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(bsc_hasInitiativeEvaluationRule,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a InitiativeEvaluationRule
+   * @param value org.semanticwb.bsc.tracing.InitiativeEvaluationRule to add
+   */
+
+    public void addInitiativeEvaluationRule(org.semanticwb.bsc.tracing.InitiativeEvaluationRule value)
+    {
+        getSemanticObject().addObjectProperty(bsc_hasInitiativeEvaluationRule, value.getSemanticObject());
+    }
+   /**
+   * Removes all the InitiativeEvaluationRule
+   */
+
+    public void removeAllInitiativeEvaluationRule()
+    {
+        getSemanticObject().removeProperty(bsc_hasInitiativeEvaluationRule);
+    }
+   /**
+   * Removes a InitiativeEvaluationRule
+   * @param value org.semanticwb.bsc.tracing.InitiativeEvaluationRule to remove
+   */
+
+    public void removeInitiativeEvaluationRule(org.semanticwb.bsc.tracing.InitiativeEvaluationRule value)
+    {
+        getSemanticObject().removeObjectProperty(bsc_hasInitiativeEvaluationRule,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the InitiativeEvaluationRule
+   * @return a org.semanticwb.bsc.tracing.InitiativeEvaluationRule
+   */
+    public org.semanticwb.bsc.tracing.InitiativeEvaluationRule getInitiativeEvaluationRule()
+    {
+         org.semanticwb.bsc.tracing.InitiativeEvaluationRule ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasInitiativeEvaluationRule);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.tracing.InitiativeEvaluationRule)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**
