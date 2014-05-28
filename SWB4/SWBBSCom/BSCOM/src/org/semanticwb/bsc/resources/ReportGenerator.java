@@ -508,11 +508,16 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             } else if (generic instanceof Indicator) {
                 iterator = ((Indicator) generic).getObjective().listStates();
             } else if (generic instanceof Initiative) {
-                iterator = ((Initiative) generic).listStates();
+                //iterator = ((Initiative) generic).listStates();
+                if (((Initiative) generic).getStatusAssigned() != null) {
+                    states.add(((Initiative) generic).getStatusAssigned());
+                }
             } else if (generic instanceof Deliverable) {
                 if (((Deliverable) generic).getInitiative() instanceof Initiative) {
                     Initiative ini = (Initiative) ((Deliverable) generic).getInitiative();
-                    iterator = ini.listStates();
+                    if (ini.getStatusAssigned() != null) {
+                        states.add(ini.getStatusAssigned());
+                    }
                 }
             }
             while (iterator != null && iterator.hasNext()) {
