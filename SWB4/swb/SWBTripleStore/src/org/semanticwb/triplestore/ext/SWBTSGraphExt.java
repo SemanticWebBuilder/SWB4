@@ -40,7 +40,7 @@ import org.semanticwb.triplestore.SWBTSUtil;
  *
  * @author jei
  */
-public class SWBTSGraphExt extends SWBTSGraph implements GraphExt
+public class SWBTSGraphExt extends SWBTSGraph implements org.semanticwb.rdf.GraphExt
 {
     private static Logger log = SWBUtils.getLogger(SWBTSGraphExt.class);
 
