@@ -140,7 +140,8 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     }
     
     /**
-     * Genera un conjunto de Factores ordenado por el prefijo de cada uno
+     * Genera un conjunto de objetos {@code Factor} validos para el usuario de sesi&oacute;n, relacionados a este {@code Risk},
+     * ordenado por el prefijo de cada uno.
      * @return un {@code Iterator} con el conjunto de factores asociados al riesgo que son validos y a los que el usuario tiene acceso.
      */
     public Iterator<Factor> listValidFactorsByPrefix() {
@@ -166,6 +167,25 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
         while (entriesIt.hasNext()) {
             Entry<Long, Factor> entry = entriesIt.next();
             factors.add(entry.getValue());
+        }
+        return factors.iterator();
+    }
+    
+    /**
+     * Genera un conjunto de objetos {@code Factor} validos para el usuario de sesi&oacute;n, relacionados a este {@code Risk}.
+     * @return un {@code Iterator} con el conjunto de factores asociados al riesgo que son validos y a los que el usuario tiene acceso.
+     */
+    public Iterator<Factor> listValidFactors() {
+        
+        Iterator<Factor> facIt = listFactors();
+        ArrayList<Factor> factors = new ArrayList<Factor>();
+        User user = SWBContext.getSessionUser();
+        
+        while (facIt != null && facIt.hasNext()) {
+            Factor factor = facIt.next();
+            if (factor.isValid() && user != null && user.haveAccess(factor)) {
+                factors.add(factor);
+            }
         }
         return factors.iterator();
     }
