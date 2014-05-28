@@ -246,6 +246,7 @@ public class GanttChart extends GenericResource implements ComponentExportable {
         StringBuilder sb = new StringBuilder();
         if (webSite instanceof BSC) {
             String data = request.getParameter("image");
+            String uniqueImage = request.getParameter("uniqueImage");
             if (data.trim().length() > 0) {
                 if (!data.contains("xmlns=")) {
                     int dataIndexOf = data.indexOf("svg");
@@ -263,7 +264,7 @@ public class GanttChart extends GenericResource implements ComponentExportable {
                 t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
                 // Set the transcoder input and output.
                 TranscoderInput input = new TranscoderInput(svg);
-                OutputStream ostream = new FileOutputStream(destpath + "/ganttChart.jpg");
+                OutputStream ostream = new FileOutputStream(destpath + "/ganttChart_" + uniqueImage + ".jpg");
                 TranscoderOutput output = new TranscoderOutput(ostream);
                 try {
                     // Perform the transcoding.
@@ -275,7 +276,7 @@ public class GanttChart extends GenericResource implements ComponentExportable {
                 ostream.close();
                 destpath = SWBPlatform.getContextPath() + "/work/models/"
                         + paramRequest.getWebPage().getWebSiteId()
-                        + "/ganttChart.jpg";
+                        + "/ganttChart_" + uniqueImage + ".jpg";
                 sb.append("<p><img width=\"100%\" heigth=\"100%\" src=\"");
                 sb.append(destpath);
                 sb.append("\" alt=\"graphics\"/></p>");
