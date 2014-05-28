@@ -229,8 +229,8 @@ public class GanttChart extends GenericResource implements ComponentExportable {
     }
 
     /**
-     * Genera el c&oacute;digo HTML de la gr&aacute;fica de Gantt
-     * usado en la exportaci&oacute;n a PDF del componente
+     * Genera el c&oacute;digo HTML de la gr&aacute;fica de Gantt usado en la
+     * exportaci&oacute;n a PDF del componente
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
@@ -246,40 +246,42 @@ public class GanttChart extends GenericResource implements ComponentExportable {
         StringBuilder sb = new StringBuilder();
         if (webSite instanceof BSC) {
             String data = request.getParameter("image");
+            if (data.trim().length() > 0) {
+                if (!data.contains("xmlns=")) {
+                    int dataIndexOf = data.indexOf("svg");
+                    int lenght = data.length();
+                    String data1 = data.substring(0, (dataIndexOf + 3));
+                    String data2 = data.substring((dataIndexOf + 3), lenght);
+                    data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" " + (data2);
+                }
+                data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
+                data = SWBUtils.TEXT.replaceAll(data, "fill: null", "fill: #000");
+                Document svg = SWBUtils.XML.xmlToDom(data);
 
-            if (!data.contains("xmlns=")) {
-                int dataIndexOf = data.indexOf("svg");
-                int lenght = data.length();
-                String data1 = data.substring(0, (dataIndexOf + 3));
-                String data2 = data.substring((dataIndexOf + 3), lenght);
-                data = (data1) + " xmlns=\"http://www.w3.org/2000/svg\" " + (data2);
-            }
-            data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
-            data = SWBUtils.TEXT.replaceAll(data, "fill: null", "fill: #000");
-            Document svg = SWBUtils.XML.xmlToDom(data);
+                String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + paramRequest.getWebPage().getWebSiteId();
+                JPEGTranscoder t = new JPEGTranscoder();
+                t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+                // Set the transcoder input and output.
+                TranscoderInput input = new TranscoderInput(svg);
+                OutputStream ostream = new FileOutputStream(destpath + "/ganttChart.jpg");
+                TranscoderOutput output = new TranscoderOutput(ostream);
+                try {
+                    // Perform the transcoding.
+                    t.transcode(input, output);
+                } catch (TranscoderException ex) {
+                    java.util.logging.Logger.getLogger(GanttChart.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                ostream.flush();
+                ostream.close();
+                destpath = SWBPlatform.getContextPath() + "/work/models/"
+                        + paramRequest.getWebPage().getWebSiteId()
+                        + "/ganttChart.jpg";
+                sb.append("<p><img width=\"100%\" heigth=\"100%\" src=\"");
+                sb.append(destpath);
+                sb.append("\" alt=\"graphics\"/></p>");
 
-            String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + paramRequest.getWebPage().getWebSiteId();
-            JPEGTranscoder t = new JPEGTranscoder();
-            t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
-            // Set the transcoder input and output.
-            TranscoderInput input = new TranscoderInput(svg);
-            OutputStream ostream = new FileOutputStream(destpath + "/ganttChart.jpg");
-            TranscoderOutput output = new TranscoderOutput(ostream);
-            try {
-                // Perform the transcoding.
-                t.transcode(input, output);
-            } catch (TranscoderException ex) {
-                java.util.logging.Logger.getLogger(GanttChart.class.getName()).log(Level.SEVERE, null, ex);
             }
-            ostream.flush();
-            ostream.close();
         }
-        String destpath = SWBPlatform.getContextPath() + "/work/models/"
-                + paramRequest.getWebPage().getWebSiteId()
-                + "/ganttChart.jpg";
-        sb.append("<p><img width=\"100%\" heigth=\"100%\" src=\"");
-        sb.append(destpath);
-        sb.append("\" alt=\"graphics\"/></p>");
         return sb.toString();
     }
 }
