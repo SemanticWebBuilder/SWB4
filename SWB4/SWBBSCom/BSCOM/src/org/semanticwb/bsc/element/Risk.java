@@ -1,12 +1,17 @@
 package org.semanticwb.bsc.element;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.Factor;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 
 public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
@@ -132,5 +137,36 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
         }
         
         return controled;
+    }
+    
+    /**
+     * Genera un conjunto de Factores ordenado por el prefijo de cada uno
+     * @return un {@code Iterator} con el conjunto de factores asociados al riesgo que son validos y a los que el usuario tiene acceso.
+     */
+    public Iterator<Factor> listValidFactorsByPrefix() {
+        
+        Iterator<Factor> facIt = listFactors();
+        TreeMap<Long, Factor> validFactors = new TreeMap<Long, Factor>();
+        User user = SWBContext.getSessionUser();
+        
+        while (facIt != null && facIt.hasNext()) {
+            Factor factor = facIt.next();
+            if (factor.isValid() && user != null && user.haveAccess(factor)) {
+                long prefix = 0L;
+                try {
+                    prefix = Long.parseLong(factor.getPrefix().replaceAll("\\.", ""));
+                } catch (NumberFormatException nfe) {
+                    prefix = 0L;
+                }
+                validFactors.put(prefix, factor);
+            }
+        }
+        Iterator<Entry<Long, Factor>> entriesIt = validFactors.entrySet().iterator();
+        ArrayList<Factor> factors = new ArrayList<Factor>();
+        while (entriesIt.hasNext()) {
+            Entry<Long, Factor> entry = entriesIt.next();
+            factors.add(entry.getValue());
+        }
+        return factors.iterator();
     }
 }
