@@ -61,6 +61,7 @@ public class LinksRedirector extends GenericResource {
                             {
                                 PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
                                 postOutHitIp.setUserIP(request.getRemoteAddr());
+                                link.addUserIp(postOutHitIp);
                             }
                             
                             PrintWriter out=response.getWriter(); 
