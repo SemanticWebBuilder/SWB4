@@ -451,7 +451,7 @@
             %>
             <div>
                 <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafFacebook" value="<%=sN.getTitle()%>" >
-                <label title="FaceBook" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
+                <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                 <div id="<%=sN.getTitle()%>"></div>
             </div>
 
@@ -461,7 +461,7 @@
                 %>     
                 <div>
                     <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafTwitter" value="<%=sN.getTitle()%>" > 
-                    <label title="Twitter" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
+                    <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                     <div id="<%=sN.getTitle()%>"></div>
                 </div>
                     <%
@@ -469,12 +469,20 @@
                     %>
                     <div>
                         <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafYoutube" value="<%=sN.getTitle()%>" > 
-                        <label title="YouTube" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
+                        <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
                         <div id="<%=sN.getTitle()%>"></div>
-                            </div>
-                        <%
-                            }
-                        %>
+                    </div>
+                    <%
+                      }else if (sN instanceof Instagram){
+                    %>
+                    <div>
+                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafInstagram" value="<%=sN.getTitle()%>" > 
+                        <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
+                        <div id="<%=sN.getTitle()%>"></div>
+                    </div>
+                    <%  
+                      }
+                    %>
                 
                     <%
                         }
@@ -484,8 +492,26 @@
             </div>
 
         </div>
-        <script>    
-            function pieNetworkSocial(parametro, cont){   
+        <script>
+            function setChartLabels(labelId, positive, negative, neutral){
+                var paraPositives= document.createElement("p");   
+                var paraNegatives= document.createElement("p");   
+                var paraNeutrals= document.createElement("p");   
+
+                var nodePositives = document.createTextNode( positive );
+                var nodeNegatives= document.createTextNode( negative );
+                var nodeNeutrals = document.createTextNode( neutral );
+
+                paraPositives.appendChild(nodePositives);
+                paraNegatives.appendChild(nodeNegatives);
+                paraNeutrals.appendChild(nodeNeutrals);
+                var element =   document.getElementById(labelId);
+                element.appendChild(paraPositives);
+                element.appendChild(paraNegatives);
+                element.appendChild(paraNeutrals);
+            }
+        
+            function pieNetworkSocial(parametro, cont, isFirstLoad){   
                 document.getElementById('pieNetworkSocial').innerHTML="";
                 var val = document.querySelector('input[name="socialNetwork"]:checked').value;
                 var xArrayRedes = new Array();
@@ -496,7 +522,7 @@
                     opciones[i].disabled = true;
                 }
 
-                console.log('THE PARAM:' + parametro);        
+                //console.log('THE PARAM:' + parametro);        
                 var xArray = new Array();
                 var color = d3.scale.category10();
                 var width = 760,
@@ -507,7 +533,7 @@
 
                 var pie = d3.layout.pie()
                 //.sort(null)
-                .value(function(d) { console.log('PieChartgender value'+d.value2); return d.value2; });    
+                .value(function(d) { return d.value2; });    
     
     
                 var arc = d3.svg.arc()
@@ -567,7 +593,7 @@
                         for(var i=0; i<opciones.length; i++) {        
                             opciones[i].disabled = true;
                         }
-                        pieNetworkSocial(this.value, cont);
+                        pieNetworkSocial(this.value, cont, false);
                         var value = this.value;
                         pie.value(function(d) { return d[value]; }); // change the value function
                         path = path.data(pie); // compute the new angles
@@ -670,30 +696,38 @@
                             xArrayRedes.push(data[i].label3);                                            
 
                         }  
-                     //   if(xArray.length!=1){                      
-                            console.log("entro");
-                            for (var x = data.length-1; x < data.length; x++) {  
-                                console.log("data");
-                                var to;
-                                var to;
-                                to = data[x].valor;
-                  
-                                var paraPositives= document.createElement("p");   
-                                var paraNegatives= document.createElement("p");   
-                                var paraNeutrals= document.createElement("p");   
-
-                                var nodPositives = document.createTextNode(to.positivos);
-                                var nodNegatives= document.createTextNode(to.negativos);
-                                var nodNeutrals = document.createTextNode(to.neutros);
-                            
-                                paraPositives.appendChild(nodPositives);
-                                paraNegatives.appendChild(nodNegatives);
-                                paraNeutrals.appendChild(nodNeutrals);
                         
-                                var element = document.getElementById("todoSocialNetworkDiv");                            
-                                element.appendChild(paraPositives);
-                                element.appendChild(paraNegatives);
-                                element.appendChild(paraNeutrals);
+                        for (var i = 0; i < data.length; i++) {
+                            if(data[i].emptyData && isFirstLoad){
+                                setChartLabels('todoSocialNetworkDiv',0,0,0);
+                            }
+                        }
+                     //   if(xArray.length!=1){                      
+                            //console.log("entro");
+                            for (var x = data.length-1; x < data.length; x++) {  
+                                //console.log("data");
+                                var to;
+                                var to;
+                                if(data[x].valor){
+                                    to = data[x].valor;
+
+                                    var paraPositives= document.createElement("p");   
+                                    var paraNegatives= document.createElement("p");   
+                                    var paraNeutrals= document.createElement("p");   
+
+                                    var nodPositives = document.createTextNode(to.positivos);
+                                    var nodNegatives= document.createTextNode(to.negativos);
+                                    var nodNeutrals = document.createTextNode(to.neutros);
+
+                                    paraPositives.appendChild(nodPositives);
+                                    paraNegatives.appendChild(nodNegatives);
+                                    paraNeutrals.appendChild(nodNeutrals);
+
+                                    var element = document.getElementById("todoSocialNetworkDiv");                            
+                                    element.appendChild(paraPositives);
+                                    element.appendChild(paraNegatives);
+                                    element.appendChild(paraNeutrals);
+                                }
                                 break;
                                 cont++;
                             } 
@@ -703,21 +737,21 @@
                                 var paraNegative = document.createElement("p");                                  
                                 var paraNeutrals = document.createElement("p");                      
                                 var myJSONObject = xArrayRedes[j];                               
-                        
-                                var nodePositives = document.createTextNode(myJSONObject.positivos);
-                                var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                                var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
-                        
-                                paraPositive.appendChild(nodePositives);
-                                paraNegative.appendChild(nodeNegatives);
-                                paraNeutrals.appendChild(nodeNeutros);
-                                var element; 
-                            
-                                element =   document.getElementById(data[j].label);                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
-                                    
+                                if(myJSONObject){
+                                    var nodePositives = document.createTextNode(myJSONObject.positivos);
+                                    var nodeNegatives = document.createTextNode(myJSONObject.negativos);
+                                    var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
+
+                                    paraPositive.appendChild(nodePositives);
+                                    paraNegative.appendChild(nodeNegatives);
+                                    paraNeutrals.appendChild(nodeNeutros);
+                                    var element; 
+
+                                    element =   document.getElementById(data[j].label);                            
+                                    element.appendChild(paraPositive);
+                                    element.appendChild(paraNegative);
+                                    element.appendChild(paraNeutrals);
+                                }
                         
                             }
                         
@@ -734,7 +768,7 @@
                 
             }
     
-            pieNetworkSocial('all', '0');
+            pieNetworkSocial('all', '0', true);
     
         </script>
         <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" ></script>

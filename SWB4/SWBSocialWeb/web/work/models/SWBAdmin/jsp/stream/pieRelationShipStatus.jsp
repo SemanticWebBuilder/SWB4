@@ -62,7 +62,18 @@
             }
         }
 
-
+        if(totalPost == 0){
+            JSONArray arr = new JSONArray();
+            JSONObject node0 = new JSONObject();
+            node0.put("color", "#E6E6E6");
+            node0.put("chartclass", "neuClass");
+            node0.put("label", "Sin Datos");
+            node0.put("value1", "0");
+            node0.put("value2", "100");
+            node0.put("emptyData", "true");
+            arr.put(node0);
+            return arr;
+        }
 
         Iterator singleI = singleArray.iterator();
         int neutralsSingle = 0, positivesSingle = 0, negativesSingle = 0, totalPostSingle = 0;
