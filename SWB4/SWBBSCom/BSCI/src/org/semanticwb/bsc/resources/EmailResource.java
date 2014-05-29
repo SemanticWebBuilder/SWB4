@@ -17,7 +17,6 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -27,11 +26,9 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import com.oreilly.servlet.MultipartRequest;
-import java.util.Arrays;
-import java.util.Enumeration;
 import org.apache.commons.mail.EmailAttachment;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.bsc.utils.EmailLog;
+import org.semanticwb.model.UserRepository;
 
 /**
  *
@@ -88,7 +85,7 @@ public class EmailResource extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
         toReturn.append("<div class=\"swbform\" id=\"EmailSend\">");
-        toReturn.append("<form id=\"formEmail\" name=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
+        toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_From") + "<input id=\"from\" name=\"from\" size=\"30\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input></p>");
         toReturn.append("<p>" + paramRequest.getLocaleString("lbl_To") + "<select id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
         toReturn.append("<option value=\"\">Selecciona...</option>");
@@ -265,8 +262,8 @@ public class EmailResource extends GenericResource {
             List usersTo = new ArrayList();
             List usersCc = new ArrayList();
 
-            listEmails = validMails(to);
-            listCcEmails = validMails(cc);
+            listEmails = validateEMailAccounts(to);
+            listCcEmails = validateEMailAccounts(cc);
 
             SWBMail mail = new SWBMail();
             EmailAttachment att = new EmailAttachment();
@@ -296,15 +293,16 @@ public class EmailResource extends GenericResource {
         response.sendRedirect(response.getWebPage().getUrl());
     }
 
-    private List<String> validMails(String accounts) {
+    private List<String> validateEMailAccounts(String accounts) {
         List<String> list = new ArrayList();
+        UserRepository ur = getResourceBase().getWebSite().getUserRepository();
         String[] mails = accounts.split(";");
-        for (String mail : mails) {
-            if (SWBUtils.EMAIL.isValidEmailAddress(mail)) {
-                if (getResourceBase().getWebSite().getUserRepository().getUserByEmail(mail) != null) {
-                    list.add(mail);
+        for (String account : mails) {
+            if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
+                if (ur.getUserByEmail(account) != null) {
+                    list.add(account);
                 } else {
-                    otherMails.add(mail);
+                    otherMails.add(account);
                 }
             }
         }
