@@ -259,44 +259,17 @@ public class EmailResource extends GenericResource {
             String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
             String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
             String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
-            listEmails = validateEMailAccounts(to);    
+            listEmails = validateEMailAccounts(to);
             listCcEmails = validateEMailAccounts(cc);
             //Valida usuarios
-            if(!listEmails.isEmpty()){
-            validateUsers(listEmails, "To");
+            if (!listEmails.isEmpty()) {
+                validateUsers(listEmails, "To");
             }
-            if(!listCcEmails.isEmpty()){
-            validateUsers(listCcEmails, "Cc");
+            if (!listCcEmails.isEmpty()) {
+                validateUsers(listCcEmails, "Cc");
             }
-            System.out.println("\nlista de correos Para: " + listEmails.toString());
-            System.out.println("\n usuarios Para bitacora Para: " + usersTo.toString());
-            System.out.println("\n lista de correos CC: " + listCcEmails.toString());
-            System.out.println("\n lista de usuarios con CC para bitacora: " + usersCc.toString());
-            System.out.println("\n lista de otros correos: " + otherMails);
             Date date = new Date();
-   
-            //Crea el email Log
-            System.out.println("wsite: " + wsite);
-           EmailLog emLog = EmailLog.ClassMgr.createEmailLog(wsite);
-                emLog.setFrom(user);
-                emLog.setSubject(subject);
-                emLog.setMessage(message);
-                emLog.setDate(date);
-                Iterator<User> iter = usersTo.iterator();
-                Iterator<User> iterCc = usersCc.iterator();
-              
-                while (iter.hasNext()) {
-                    User userTo1 = iter.next();
-                    emLog.addTo(userTo1);
-                }
-                while (iterCc.hasNext()) {
-                    User userCc1 = iterCc.next();
-                    emLog.addCc(userCc1);
-                }
-               if(!otherMails.equals("")) {
-                    emLog.setOtherAccounts(otherMails);
-                }            
-         
+
             SWBMail mail = new SWBMail();
             EmailAttachment att = new EmailAttachment();
             if (mrequest.getFile("uploadFile") != null) {
@@ -314,8 +287,27 @@ public class EmailResource extends GenericResource {
 
             try {
                 SWBUtils.EMAIL.sendMail(mail);
-                //Crea el emailLog
-                
+                //Crea el email Log
+                EmailLog emLog = EmailLog.ClassMgr.createEmailLog(wsite);
+                emLog.setFrom(user);
+                emLog.setSubject(subject);
+                emLog.setMessage(message);
+                emLog.setDate(date);
+                Iterator<User> iter = usersTo.iterator();
+                Iterator<User> iterCc = usersCc.iterator();
+
+                while (iter.hasNext()) {
+                    User userTo1 = iter.next();
+                    emLog.addTo(userTo1);
+                }
+                while (iterCc.hasNext()) {
+                    User userCc1 = iterCc.next();
+                    emLog.addCc(userCc1);
+                }
+                if (!otherMails.equals("")) {
+                    emLog.setOtherAccounts(otherMails);
+                }
+
             } catch (SocketException se) {
                 EmailResource.log.error("Error en el envio :" + se);
             }
@@ -330,30 +322,27 @@ public class EmailResource extends GenericResource {
         String[] mails = accounts.split(";");
         for (String account : mails) {
             if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
-                 list.add(account);
+                list.add(account);
             }
         }
         return list;
     }
-    
-    private void validateUsers (List listMails, String accountType){
-         Iterator <String> itListTo = listMails.iterator();
-            while(itListTo.hasNext()){
-                String mailT = itListTo.next();
-                UserRepository ur = getResourceBase().getWebSite().getUserRepository();
-                 if (ur.getUserByEmail(mailT) != null)  {
-                     User us = getResourceBase().getWebSite().getUserRepository().getUserByEmail(mailT);
-                     if(accountType.equals("To")){
-                          usersTo.add(us);
-                     }
-                     else if (accountType.equals("Cc")){
-                         usersCc.add(us);
-                     }  
-                 }
-                 else{
-                     otherMails += mailT + ";";
-                 }
+
+    private void validateUsers(List listMails, String accountType) {
+        Iterator<String> itListTo = listMails.iterator();
+        while (itListTo.hasNext()) {
+            String mailT = itListTo.next();
+            UserRepository ur = getResourceBase().getWebSite().getUserRepository();
+            if (ur.getUserByEmail(mailT) != null) {
+                User us = getResourceBase().getWebSite().getUserRepository().getUserByEmail(mailT);
+                if (accountType.equals("To")) {
+                    usersTo.add(us);
+                } else if (accountType.equals("Cc")) {
+                    usersCc.add(us);
+                }
+            } else {
+                otherMails += mailT + ";";
             }
+        }
     }
-    
 }
