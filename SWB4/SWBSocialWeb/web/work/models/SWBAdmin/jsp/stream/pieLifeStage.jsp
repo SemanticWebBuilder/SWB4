@@ -84,7 +84,19 @@
             }
         }
 
-
+        if(totalPost == 0){
+            JSONArray arr = new JSONArray();
+            JSONObject node0 = new JSONObject();
+            node0.put("color", "#E6E6E6");
+            node0.put("chartclass", "neuClass");
+            node0.put("label", "Sin Datos");
+            node0.put("value1", "0");
+            node0.put("value2", "100");
+            node0.put("emptyData", "true");
+            arr.put(node0);
+            return arr;
+        }
+        
         Iterator childI = childArray.iterator();
         int neutralsChild = 0, positivesChild = 0, negativesChild = 0, totalChild = 0;
         while (childI.hasNext()) {
@@ -828,7 +840,7 @@
         String lang = request.getParameter("lang");
         String idModel = request.getParameter("idModel");
         String filter = request.getParameter("filter");
-        //System.out.println("filter en life : "+filter);
+        //System.out.println("filter en life : "+filter);        
         out.println(getObject(semObj, lang, idModel, filter));
     }
 %>

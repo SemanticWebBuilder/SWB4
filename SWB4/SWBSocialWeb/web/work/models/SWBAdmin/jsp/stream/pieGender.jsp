@@ -56,7 +56,21 @@
                 }
             }
         }
-
+        //this is a quick fix to show the graph and don't show a empty blank space
+        //when there is no data. It returns 'Sin Datos' message and a new variable: 'emptyData'
+        //used to display or not the Zero values below each icon below the graph.
+        if(totalPost == 0){
+            JSONArray arr = new JSONArray();
+            JSONObject node0 = new JSONObject();
+            node0.put("color", "#E6E6E6");
+            node0.put("chartclass", "neuClass");
+            node0.put("label", "Sin Datos");
+            node0.put("value1", "0");
+            node0.put("value2", "100");
+            node0.put("emptyData", "true");
+            arr.put(node0);
+            return arr;
+        }
         Iterator gMale = genderMale.iterator();
         int neutralsMale = 0, positivesMale = 0, negativesMale = 0, totalMale = 0;
         while (gMale.hasNext()) {

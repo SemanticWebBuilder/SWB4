@@ -175,7 +175,24 @@
         <div class="clear"></div>   
     </div>
     <script>    
-        function pieGender(parametro, cont){   
+        function setChartLabels(labelId, positive, negative, neutral){
+            var paraPositives= document.createElement("p");   
+            var paraNegatives= document.createElement("p");   
+            var paraNeutrals= document.createElement("p");   
+
+            var nodePositives = document.createTextNode( positive );
+            var nodeNegatives= document.createTextNode( negative );
+            var nodeNeutrals = document.createTextNode( neutral );
+
+            paraPositives.appendChild(nodePositives);
+            paraNegatives.appendChild(nodeNegatives);
+            paraNeutrals.appendChild(nodeNeutrals);
+            var element =   document.getElementById(labelId);
+            element.appendChild(paraPositives);
+            element.appendChild(paraNegatives);
+            element.appendChild(paraNeutrals);
+        }
+        function pieGender(parametro, cont, isFirstLoad){   
             document.getElementById('pieGender').innerHTML="";
             var val = document.querySelector('input[name="gender"]:checked').value;
 
@@ -231,7 +248,7 @@
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
                     }
-                    pieGender(this.value, cont);
+                    pieGender(this.value, cont,false);//for future loads of the chart the last param is false
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
                     path = path.data(pie); // compute the new angles
@@ -328,11 +345,18 @@
                 //Obtenemos los valores para los radios
 
         
-                var total;           
-            
+                var total;
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].emptyData && isFirstLoad){
+                        setChartLabels('allGender',0,0,0);
+                        setChartLabels('mascGender',0,0,0);
+                        setChartLabels('femGender',0,0,0);
+                        setChartLabels('nodefGender',0,0,0);
+                    }
+                }
                 if(cont == 0){
-                    for (var i = 0; i < data.length; i++) {         
-                        xArray.push(data[i].valor);                                            
+                    for (var i = 0; i < data.length; i++) {
+                        xArray.push(data[i].valor);                        
                     }  
                     
                     if(xArray.length!=1){                      
@@ -340,56 +364,19 @@
                         for (var x = 0; x < data.length; x++) {  
                             total = data[x].label3;
                             //console.log("total"+total);
-                            var paraPositives= document.createElement("p");   
-                            var paraNegatives= document.createElement("p");   
-                            var paraNeutrals= document.createElement("p");   
-                            
-                            var nodePositives = document.createTextNode( total.positivos );
-                            var nodeNegatives= document.createTextNode( total.negativos );
-                            var nodeNeutrals = document.createTextNode( total.neutros );
-                            
-                            
-                            paraPositives.appendChild(nodePositives);
-                            paraNegatives.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutrals);
-                            var element =   document.getElementById("allGender");                            
-                            element.appendChild(paraPositives);
-                            element.appendChild(paraNegatives);
-                            element.appendChild(paraNeutrals);
+                            setChartLabels('allGender',total.positivos,total.negativos,total.neutros);
                             break;
                             cont++;
                         } 
                                           
-                        for (var j = 0; j <xArray.length ; j++) {   
-                            var paraPositive = document.createElement("p");                                  
-                            var paraNegative = document.createElement("p");                                  
-                            var paraNeutrals = document.createElement("p");                      
-                            var myJSONObject = xArray[j];
-                        
-                            var nodePositives = document.createTextNode(myJSONObject.positivos);
-                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
-                        
-                            paraPositive.appendChild(nodePositives);
-                            paraNegative.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutros);
-                            var element; 
-                            
+                        for (var j = 0; j <xArray.length ; j++) {                               
+                            var myJSONObject = xArray[j];                            
                             if(j==0){
-                                element =   document.getElementById("mascGender");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('mascGender',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==1){
-                                element =   document.getElementById("femGender");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('femGender',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==2){
-                                element =   document.getElementById("nodefGender");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('nodefGender',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }
                         
                         }
@@ -406,7 +393,7 @@
                 
         }
     
-        pieGender('all', '0');
+        pieGender('all', '0', true);//only the first load the last param is true
     
     </script>
 
@@ -415,7 +402,7 @@
         <div class="grafTit">
             <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)%></h1>                
             <a id="hrefEducation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
-        </div>
+</div>
         <div id="pieEducation" >
         </div>
         <div class="grafOptions">
@@ -450,10 +437,10 @@
         <div class="clear"></div>   
     </div>
     <script>
-        function pieEducation(parametro, cont){   
+        function pieEducation(parametro, cont, isFirstLoad){   
             document.getElementById('pieEducation').innerHTML="";
             var val = document.querySelector('input[name="education"]:checked').value;
-            document.getElementById("hrefEducation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+            document.getElementById("hrefEducation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val+"&isFirstLoad"+isFirstLoad ;
      
             var opciones =  document.getElementsByName("education");//.disabled=false;
             for(var i=0; i<opciones.length; i++) {        
@@ -510,7 +497,7 @@
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
                     }
-                    pieEducation(this.value, cont);
+                    pieEducation(this.value, cont, false);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
                     path = path.data(pie); // compute the new angles
@@ -604,6 +591,15 @@
                     return - width/2;
                 });    
               
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].emptyData && isFirstLoad){
+                        setChartLabels('todoEduDiv',0,0,0);
+                        setChartLabels('secuEduDiv',0,0,0);
+                        setChartLabels('medioEduDiv',0,0,0);
+                        setChartLabels('graduadoEduDiv',0,0,0);
+                        setChartLabels('nodefinidoEduDiv',0,0,0);
+                    }
+                }
                 for (var i = 0; i < data.length; i++) {               
                     educationArray.push(data[i].valor);                                            
                 } 
@@ -613,68 +609,22 @@
                  
                     var total;
                     if(cont == 0){
-                        var pPostives= document.createElement("p"); 
-                        var pNegatives= document.createElement("p"); 
-                        var pNeutrals= document.createElement("p"); 
-                    
-                    
                         for (var x = 0; x < data.length; x++) {  
-                            total = data[x].label3;                                 
- 
-                            var nodePositives = document.createTextNode( total.positivos );
-                            var nodeNegatives = document.createTextNode( total.negativos );
-                            var nodeNeutrals = document.createTextNode( total.neutros );
-                        
-                            pPostives.appendChild(nodePositives);
-                            pNegatives.appendChild(nodeNegatives);
-                            pNeutrals.appendChild(nodeNeutrals);
-                        
-                            var element=document.getElementById("todoEduDiv");
-                            element.appendChild(pPostives);
-                            element.appendChild(pNegatives);
-                            element.appendChild(pNeutrals);
+                            total = data[x].label3;
+                            setChartLabels('todoEduDiv',total.positivos,total.negativos,total.neutros);
                             break;
                         } 
-        
-                  
-                                          
-                        for (var j = 0; j <educationArray.length ; j++) {   
-                            var paraPositives = document.createElement("p");    
-                            var paraNegatives = document.createElement("p");    
-                            var paraNeutrals = document.createElement("p");    
+                        
+                        for (var j = 0; j <educationArray.length ; j++) {
                             var myJSONObject = educationArray[j];
-                            var nodePositives = document.createTextNode(myJSONObject.positivos);
-                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );
-                        
-                        
-                            paraPositives.appendChild(nodePositives);
-                            paraNegatives.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutros);
-                            var element;
                             if(j==0){
-                                element = document.getElementById("secuEduDiv");
-                                element.appendChild(paraPositives);
-                                element.appendChild(paraNegatives);
-                                element.appendChild(paraNeutrals);
-                    
+                                setChartLabels('secuEduDiv',myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==1){
-                                element = document.getElementById("medioEduDiv");
-                                element.appendChild(paraPositives);
-                                element.appendChild(paraNegatives);
-                                element.appendChild(paraNeutrals);
-                    
+                                setChartLabels('medioEduDiv',myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==2){
-                                element = document.getElementById("graduadoEduDiv");
-                                element.appendChild(paraPositives);
-                                element.appendChild(paraNegatives);
-                                element.appendChild(paraNeutrals);
-                    
+                                setChartLabels('graduadoEduDiv',myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);                    
                             }else if(j==3){
-                                element = document.getElementById("nodefinidoEduDiv");
-                                element.appendChild(paraPositives);
-                                element.appendChild(paraNegatives);
-                                element.appendChild(paraNeutrals);                    
+                                setChartLabels('nodefinidoEduDiv',myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }
                        
                         }      
@@ -690,7 +640,7 @@
             });       
         }
     
-        pieEducation('all', '0');
+        pieEducation('all', '0', true);
                 
     </script>
 
@@ -738,7 +688,7 @@
         <div class="clear"></div>
     </div>
     <script>
-        function pieRelation(parametro, cont){   
+        function pieRelation(parametro, cont, isFirstLoad){   
             document.getElementById('pieRelationShipStatus').innerHTML="";
             var val = document.querySelector('input[name="relation"]:checked').value;
             document.getElementById("hrefRelation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
@@ -791,7 +741,7 @@
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
                     }
-                    pieRelation(this.value, cont);
+                    pieRelation(this.value, cont, false);
                     var value = this.value;
                     pie.value(function(d) { return d[value]; }); // change the value function
                     path = path.data(pie); // compute the new angles
@@ -889,76 +839,41 @@
                         relationArray.push(data[i].valor);                                            
                     }                      
                     var total;
-                    
+                    for (var i = 0; i < data.length; i++) {
+                        if(data[i].emptyData && isFirstLoad){
+                            setChartLabels('rAll',0,0,0);
+                            setChartLabels('rSingle',0,0,0);
+                            setChartLabels('rMarried',0,0,0);
+                            setChartLabels('rWidowed',0,0,0);
+                            setChartLabels('rDivorced',0,0,0);
+                            setChartLabels('rUndefined',0,0,0);
+                        }
+                    }
                     if(relationArray.length!=1){
               
               
                         for (var x = 0; x < data.length; x++) {  
                             total = data[x].label3;
-                            var paraPositives= document.createElement("p");   
-                            var paraNegatives= document.createElement("p");   
-                            var paraNeutrals= document.createElement("p");   
-                            
-                            var nodePositives = document.createTextNode( total.positivos );
-                            var nodeNegatives= document.createTextNode( total.negativos );
-                            var nodeNeutrals = document.createTextNode( total.neutros );
-                            
-                            
-                            paraPositives.appendChild(nodePositives);
-                            paraNegatives.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutrals);
-                            var element =   document.getElementById("rAll");                            
-                            element.appendChild(paraPositives);
-                            element.appendChild(paraNegatives);
-                            element.appendChild(paraNeutrals);
+                            setChartLabels('rAll',total.positivos,total.negativos,total.neutros);
                             break;
                             cont++;
                         }                 
                         
               
                                           
-                        for (var j = 0; j <relationArray.length ; j++) {   
-                            var paraPositive = document.createElement("p");                                  
-                            var paraNegative = document.createElement("p");                                  
-                            var paraNeutrals = document.createElement("p");                                  
-                       
-                        
+                        for (var j = 0; j <relationArray.length ; j++) {
                             var myJSONObject = relationArray[j];
-                        
-                            var nodePositives = document.createTextNode(myJSONObject.positivos);
-                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
-                        
-                            paraPositive.appendChild(nodePositives);
-                            paraNegative.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutros);
-                            var element; 
-                            
+
                             if(j==0){
-                                element =   document.getElementById("rSingle");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('rSingle',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==1){
-                                element =   document.getElementById("rMarried");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('rMarried',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==2){
-                                element =   document.getElementById("rWidowed");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('rWidowed',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==3){
-                                element =   document.getElementById("rDivorced");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('rDivorced',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }else if(j==4){
-                                element =   document.getElementById("rUndefined");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('rUndefined',myJSONObject.positivos,myJSONObject.negativos,myJSONObject.neutros);
                             }
                         
                         } 
@@ -974,7 +889,7 @@
     
         }
     
-        pieRelation('all', '0');
+        pieRelation('all', '0', true);
                 
 
     </script>
@@ -1035,7 +950,7 @@
 
     <script>
     
-        function pieLifeStage(parametro, cont){   
+        function pieLifeStage(parametro, cont, isFirstLoad){   
             document.getElementById('profileLifeStage').innerHTML="";
 
             var val = document.querySelector('input[name="life"]:checked').value;
@@ -1093,7 +1008,7 @@
                     for(var i=0; i<opciones.length; i++) {        
                         opciones[i].disabled = true;
                     }
-                    pieLifeStage(this.value, cont);
+                    pieLifeStage(this.value, cont, false);
                     var value = this.value;
                     //clearTimeout(timeout);
                     pie.value(function(d) { return d[value]; }); // change the value function
@@ -1190,90 +1105,49 @@
                 var total;
                 for (var i = 0; i < data.length; i++) {               
                     lifeStageArray.push(data[i].valor);                                            
-                }  
+                }
+                
+                for (var i = 0; i < data.length; i++) {
+                    if(data[i].emptyData && isFirstLoad){
+                        setChartLabels('lAll',0,0,0);
+                        setChartLabels('lChild',0,0,0);
+                        setChartLabels('lTeenAge',0,0,0);
+                        setChartLabels('lYoung',0,0,0);
+                        setChartLabels('lYoungAdult',0,0,0);
+                        setChartLabels('lAdul',0,0,0);
+                        setChartLabels('lThirdAge',0,0,0);
+                        setChartLabels('lNodefine',0,0,0);
+                    }
+                }
             
                 if(lifeStageArray.length!=1){
                 
         
                     if(cont == 0){
                         for (var x = 0; x < data.length; x++) {  
-                            total = data[x].label3;
-                            //console.log("total"+total);
-                            var paraPositives= document.createElement("p");   
-                            var paraNegatives= document.createElement("p");   
-                            var paraNeutrals= document.createElement("p");   
-                            
-                            var nodePositives = document.createTextNode( total.positivos );
-                            var nodeNegatives= document.createTextNode( total.negativos );
-                            var nodeNeutrals = document.createTextNode( total.neutros );
-
-                            
-                            paraPositives.appendChild(nodePositives);
-                            paraNegatives.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutrals);
-                            var element =   document.getElementById("lAll");                            
-                            element.appendChild(paraPositives);
-                            element.appendChild(paraNegatives);
-                            element.appendChild(paraNeutrals);
+                            total = data[x].label3;                            
+                            setChartLabels('lAll',total.positivos,total.negativos,total.neutros);
                             break;
                             cont++;
-                        } 
-           
-                        
-
+                        }
                                           
-                        for (var j = 0; j <lifeStageArray.length ; j++) {   
-                            var paraPositive = document.createElement("p");                                  
-                            var paraNegative = document.createElement("p");                                  
-                            var paraNeutrals = document.createElement("p");                                  
-                       
-                        
+                        for (var j = 0; j <lifeStageArray.length ; j++) {
                             var myJSONObject = lifeStageArray[j];
-                        
-                            var nodePositives = document.createTextNode(myJSONObject.positivos);
-                            var nodeNegatives = document.createTextNode(myJSONObject.negativos);
-                            var nodeNeutros = document.createTextNode(myJSONObject.neutros );             
-                        
-                            paraPositive.appendChild(nodePositives);
-                            paraNegative.appendChild(nodeNegatives);
-                            paraNeutrals.appendChild(nodeNeutros);
-                            var element; 
                             
                             if(j==0){
-                                element =   document.getElementById("lChild");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lChild', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==1){
-                                element =   document.getElementById("lTeenAge");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lTeenAge', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==2){
-                                element =   document.getElementById("lYoung");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lYoung', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==3){
-                                element =   document.getElementById("lYoungAdult");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lYoungAdult', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==4){
-                                element =   document.getElementById("lAdul");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lAdul', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==5){
-                                element =   document.getElementById("lThirdAge");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lThirdAge', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }else if(j==6){
-                                element =   document.getElementById("lNodefine");                            
-                                element.appendChild(paraPositive);
-                                element.appendChild(paraNegative);
-                                element.appendChild(paraNeutrals);
+                                setChartLabels('lNodefine', myJSONObject.positivos, myJSONObject.negativos, myJSONObject.neutros);
                             }
                             cont++;
                         }
@@ -1288,7 +1162,7 @@
     
         }
     
-        pieLifeStage('all', '0');
+        pieLifeStage('all', '0',true);
     </script>
 
     <!-- grafica de mexico -->
