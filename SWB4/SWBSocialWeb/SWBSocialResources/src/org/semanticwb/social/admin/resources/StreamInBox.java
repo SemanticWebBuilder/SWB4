@@ -69,7 +69,7 @@ import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
-
+import org.semanticwb.social.SocialNetPostable;
 /**
  *
  * @author jorge.jimenez
@@ -2629,7 +2629,7 @@ public class StreamInBox extends GenericResource {
                     + "'); return false;\"></a>");
         }
 
-        if (userCanRespondMsg || userCandoEveryThing) {
+        if ((userCanRespondMsg || userCandoEveryThing) && (postIn.getPostInSocialNetwork() instanceof SocialNetPostable)) {
             //Respond
             if (postIn.getSocialTopic() != null) {
                 SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());

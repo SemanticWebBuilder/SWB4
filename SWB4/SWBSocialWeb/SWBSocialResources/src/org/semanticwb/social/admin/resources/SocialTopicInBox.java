@@ -70,6 +70,8 @@ import org.semanticwb.social.Youtube;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 import org.semanticwb.social.util.SWBSocialUtil;
 import org.semanticwb.social.util.SocialLoader;
+import org.semanticwb.social.SocialNetPostable;
+
 
 /**
  *
@@ -2450,7 +2452,7 @@ public class SocialTopicInBox extends GenericResource {
         }
 
 
-        if (userCanRespondMsg || userCandoEveryThing) {
+        if ((userCanRespondMsg || userCandoEveryThing) && (postIn.getPostInSocialNetwork() instanceof SocialNetPostable)) {
             //Respond
             SWBResourceURL urlresponse = paramRequest.getRenderUrl().setMode(Mode_RESPONSE).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postIn.getURI());
             out.println("<a href=\"#\" class=\"answ\" title=\"" + paramRequest.getLocaleString("respond") + "\"  onclick=\"showDialog('" + urlresponse + "','" + paramRequest.getLocaleString("respond")
