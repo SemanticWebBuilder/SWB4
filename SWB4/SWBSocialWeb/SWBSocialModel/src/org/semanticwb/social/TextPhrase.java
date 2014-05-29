@@ -169,7 +169,7 @@ public class TextPhrase extends org.semanticwb.social.base.TextPhraseBase
                     }else if(socialNets[i].trim().equalsIgnoreCase("Y")){
                      ret.append("<div class=\"stream_youtube_icon\"><img src=\"/swbadmin/css/images/config-yt.png\" /></div>");   //Youtube
                     }else if(socialNets[i].trim().equalsIgnoreCase("I")){
-                     ret.append("<div class=\"stream_instagram_icon\"><img src=\"/swbadmin/css/images/config-in.png\" /></div>");   //Youtube
+                     ret.append("<div class=\"stream_instagram_icon\"><img src=\"/swbadmin/css/images/config-ig.png\" /></div>");   //Youtube
                     }
                 }
             }
