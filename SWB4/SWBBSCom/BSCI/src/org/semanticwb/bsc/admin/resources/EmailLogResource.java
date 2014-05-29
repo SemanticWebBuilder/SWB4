@@ -104,26 +104,30 @@ public class EmailLogResource extends GenericResource {
         toReturn.append("<p>&nbsp;</p>");
         toReturn.append("</div>");
 
+       EmailLog log = null;
+        Iterator<EmailLog> itlogUser = null;
+        User to = null;
+        User cc = null;
+        String from = "";
+        String subject = "";
+        String otherAccounts = "";
+        Date date1;
+        Date date2;
+        Date date3;
+        
         toReturn.append("<table width=\"94%\">");
         toReturn.append("<thead>");
         toReturn.append("<tr>");
         toReturn.append("<th>" + paramRequest.getLocaleString("lbl_fromData") + "</th>");
         toReturn.append("<th>" + paramRequest.getLocaleString("lbl_toData") + "</th>");
         toReturn.append("<th>" + paramRequest.getLocaleString("lbl_cc") + "</th>");
+        toReturn.append("<th>" + paramRequest.getLocaleString("lbl_other") + "</th>");
         toReturn.append("<th>" + paramRequest.getLocaleString("lbl_subject") + "</th>");
         toReturn.append("<th>" + paramRequest.getLocaleString("lbl_date") + "</th>");
         toReturn.append("</tr>");
         toReturn.append("</thead>");
 
-        EmailLog log = null;
-        Iterator<EmailLog> itlogUser = null;
-        User to = null;
-        User cc = null;
-        String from = "";
-        String subject = "";
-        Date date1;
-        Date date2;
-        Date date3;
+       
 
         if ((uriUser.equals("0")) && (dateFrom.equals("")) && (dateTo.equals(""))) {
             toReturn.append("<script type=\"text/javascript\">");
@@ -149,6 +153,7 @@ public class EmailLogResource extends GenericResource {
             while (itlogUser.hasNext()) {
                 log = itlogUser.next();
                 subject = log.getSubject() == null ? "" : log.getSubject();
+                otherAccounts = log.getOtherAccounts() == null ? "" : log.getOtherAccounts();
                 if (log.getFrom() != null) {
                     from = log.getFrom().getEmail();
                 }
@@ -180,6 +185,7 @@ public class EmailLogResource extends GenericResource {
                 } else {
                     toReturn.append("<td></td>");
                 }
+                toReturn.append("<td>" + otherAccounts + "</td>");
                 toReturn.append("<td>" + subject + "</td>");
                 toReturn.append("<td>" + dateFormat.format(dateLog) + "</td>");
                 toReturn.append("</tr>");
@@ -213,6 +219,8 @@ public class EmailLogResource extends GenericResource {
                     }
                     if ((cal3.after(cal1) || cal3.equals(cal1)) && (cal3.before(cal2) || cal3.equals(cal2))) {
                         subject = log.getSubject() == null ? "" : log.getSubject();
+                        otherAccounts = log.getOtherAccounts() == null ? "" : log.getOtherAccounts();
+                        
                         if (log.getFrom() != null) {
                             from = log.getFrom().getEmail();
                         }
@@ -244,6 +252,7 @@ public class EmailLogResource extends GenericResource {
                         } else {
                             toReturn.append("<td></td>");
                         }
+                        toReturn.append("<td>" + otherAccounts + "</td>");
                         toReturn.append("<td>" + subject + "</td>");
                         toReturn.append("<td>" + dateFormat.format(dateLog) + "</td>");
                         toReturn.append("</tr>");
@@ -283,6 +292,7 @@ public class EmailLogResource extends GenericResource {
 
                     if ((cal3.after(cal1) || cal3.equals(cal1)) && (cal3.before(cal2) || cal3.equals(cal2))) {
                         subject = log.getSubject() == null ? "" : log.getSubject();
+                        otherAccounts = log.getOtherAccounts() == null ? "" : log.getOtherAccounts();
                         if (log.getFrom() != null) {
                             from = log.getFrom().getEmail();
                         }
@@ -314,6 +324,7 @@ public class EmailLogResource extends GenericResource {
                         } else {
                             toReturn.append("<td></td>");
                         }
+                        toReturn.append("<td>" + otherAccounts + "</td>");
                         toReturn.append("<td>" + subject + "</td>");
                         toReturn.append("<td>" + dateFormat.format(dateLog) + "</td>");
                         toReturn.append("</tr>");
