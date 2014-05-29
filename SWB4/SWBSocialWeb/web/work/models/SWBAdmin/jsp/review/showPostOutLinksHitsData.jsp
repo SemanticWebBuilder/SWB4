@@ -16,6 +16,7 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="org.semanticwb.*"%>
 <%@page import="org.semanticwb.social.util.*"%>
+<%@page import="java.text.SimpleDateFormat"%> 
 <%@page import="java.util.*"%>
 
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
@@ -42,16 +43,17 @@
         try{
             PostOutLinksHits postOutLinksHits=(PostOutLinksHits)SemanticObject.createSemanticObject(postOutLinksHitsUri).createGenericInstance(); 
             Iterator <PostOutLinksHitsIp> itIps=postOutLinksHits.listUserIps();
+            SimpleDateFormat df = new SimpleDateFormat();
             while(itIps.hasNext())
             {
                 PostOutLinksHitsIp postOutLinksHitsIp=itIps.next();
                 %>
                     <tr>
                         <td>
-                            <%=postOutLinksHitsIp.getUserIP()%>
+                            <%=postOutLinksHitsIp.getUserIP()%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </td>
                         <td>
-                            <%=postOutLinksHitsIp.getCreated()%>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=df.format(postOutLinksHitsIp.getCreated())%>
                         </td>
                     </tr>
                 <%
