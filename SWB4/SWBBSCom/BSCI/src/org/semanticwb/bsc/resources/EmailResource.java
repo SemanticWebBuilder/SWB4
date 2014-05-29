@@ -26,8 +26,10 @@ import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import com.oreilly.servlet.MultipartRequest;
+import java.util.Date;
 import org.apache.commons.mail.EmailAttachment;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.bsc.utils.EmailLog;
 import org.semanticwb.model.UserRepository;
 
 /**
@@ -40,7 +42,9 @@ public class EmailResource extends GenericResource {
     private static final String Mode_SendMail = "mail";
     private static List listEmails = new ArrayList();
     private static List listCcEmails = new ArrayList();
-    private static List otherMails = new ArrayList();
+    private static String otherMails = "";
+    private static List usersTo = new ArrayList();
+    private static List usersCc = new ArrayList();
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -245,31 +249,58 @@ public class EmailResource extends GenericResource {
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
         User user = SWBContext.getSessionUser(wsite.getUserRepository().getId());
-        String uriUser = user.getURI();
-        SemanticObject sObj = SemanticObject.getSemanticObject(uriUser);
-//        SWBModel model = (SWBModel) sObj.getModel().getModelObject().createGenericInstance();
-//        SWBModel modelWS = model.getParentWebSite();
+        usersTo.clear();
+        usersCc.clear();
 
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
             MultipartRequest mrequest = new MultipartRequest(request, path);
-
             String subject = (String) mrequest.getParameter("subject") == null ? "" : (String) mrequest.getParameter("subject");
             String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
             String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
             String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
-
-            List usersTo = new ArrayList();
-            List usersCc = new ArrayList();
-
-            listEmails = validateEMailAccounts(to);
+            listEmails = validateEMailAccounts(to);    
             listCcEmails = validateEMailAccounts(cc);
-
+            //Valida usuarios
+            if(!listEmails.isEmpty()){
+            validateUsers(listEmails, "To");
+            }
+            if(!listCcEmails.isEmpty()){
+            validateUsers(listCcEmails, "Cc");
+            }
+            System.out.println("\nlista de correos Para: " + listEmails.toString());
+            System.out.println("\n usuarios Para bitacora Para: " + usersTo.toString());
+            System.out.println("\n lista de correos CC: " + listCcEmails.toString());
+            System.out.println("\n lista de usuarios con CC para bitacora: " + usersCc.toString());
+            System.out.println("\n lista de otros correos: " + otherMails);
+            Date date = new Date();
+   
+            //Crea el email Log
+            System.out.println("wsite: " + wsite);
+           EmailLog emLog = EmailLog.ClassMgr.createEmailLog(wsite);
+                emLog.setFrom(user);
+                emLog.setSubject(subject);
+                emLog.setMessage(message);
+                emLog.setDate(date);
+                Iterator<User> iter = usersTo.iterator();
+                Iterator<User> iterCc = usersCc.iterator();
+              
+                while (iter.hasNext()) {
+                    User userTo1 = iter.next();
+                    emLog.addTo(userTo1);
+                }
+                while (iterCc.hasNext()) {
+                    User userCc1 = iterCc.next();
+                    emLog.addCc(userCc1);
+                }
+               if(!otherMails.equals("")) {
+                    emLog.setOtherAccounts(otherMails);
+                }            
+         
             SWBMail mail = new SWBMail();
             EmailAttachment att = new EmailAttachment();
             if (mrequest.getFile("uploadFile") != null) {
                 File file = mrequest.getFile("uploadFile");
-               // System.out.println("file=" + file.getPath());
                 att.setPath(file.getPath());
                 mail.addAttachment(att);
             }
@@ -284,6 +315,7 @@ public class EmailResource extends GenericResource {
             try {
                 SWBUtils.EMAIL.sendMail(mail);
                 //Crea el emailLog
+                
             } catch (SocketException se) {
                 EmailResource.log.error("Error en el envio :" + se);
             }
@@ -295,17 +327,33 @@ public class EmailResource extends GenericResource {
 
     private List<String> validateEMailAccounts(String accounts) {
         List<String> list = new ArrayList();
-        UserRepository ur = getResourceBase().getWebSite().getUserRepository();
         String[] mails = accounts.split(";");
         for (String account : mails) {
             if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
-                if (ur.getUserByEmail(account) != null) {
-                    list.add(account);
-                } else {
-                    otherMails.add(account);
-                }
+                 list.add(account);
             }
         }
         return list;
     }
+    
+    private void validateUsers (List listMails, String accountType){
+         Iterator <String> itListTo = listMails.iterator();
+            while(itListTo.hasNext()){
+                String mailT = itListTo.next();
+                UserRepository ur = getResourceBase().getWebSite().getUserRepository();
+                 if (ur.getUserByEmail(mailT) != null)  {
+                     User us = getResourceBase().getWebSite().getUserRepository().getUserByEmail(mailT);
+                     if(accountType.equals("To")){
+                          usersTo.add(us);
+                     }
+                     else if (accountType.equals("Cc")){
+                         usersCc.add(us);
+                     }  
+                 }
+                 else{
+                     otherMails += mailT + ";";
+                 }
+            }
+    }
+    
 }
