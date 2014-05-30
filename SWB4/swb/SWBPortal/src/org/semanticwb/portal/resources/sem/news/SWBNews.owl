@@ -69,6 +69,10 @@
         >80</swb:index>
         <swbxf:formElement>
           <swb:DojoImageUpload rdf:ID="DojoImageUpload_1">
+              <swbxf:imgThumbnailWidth rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >120</swbxf:imgThumbnailWidth>
+            <swbxf:imgThumbnailHeight rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >120</swbxf:imgThumbnailHeight>
             <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
             >*.jpg:JPG|*.gif:GIF|*.png:PNG</swbxf:fileFilter>
             <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
