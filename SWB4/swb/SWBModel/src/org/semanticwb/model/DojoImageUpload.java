@@ -252,7 +252,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
             //imagen_Noticia_de_ejemplo_Hydrangeas.jpg ejemplo
             //thmb_iconoNombreArchivo_Evento_de_ejemplo_Chrysant antes se mostraba asi            
             // se cambia así, ya que no siempre se define tener una imagen de thmb y se controla el tamaño desde esta vista
-            ret=ret+"<br/><image width=\"120\" height=\"120\"  src=\""+SWBPlatform.getContextPath()+"/work"+obj.getWorkPath()+"/imagen_"+obj.getId()+"_"+img+"\">";
+            ret=ret+"<br/><image width=\"120\" height=\"120\"  src=\""+SWBPlatform.getContextPath()+"/work"+obj.getWorkPath()+"/image_"+obj.getId()+"_"+img+"\">";
         }
         return ret;
     }
