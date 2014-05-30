@@ -248,8 +248,11 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
         String ret=super.renderElement(request, obj, prop, propName, type, mode, lang);
         String img=obj.getProperty(prop);
         if(img!=null)
-        {
-            ret=ret+"<br/><image src=\""+SWBPlatform.getContextPath()+"/work"+obj.getWorkPath()+"/thmb_iconoNombreArchivo_"+obj.getId()+"_"+img+"\">";
+        {            
+            //imagen_Noticia_de_ejemplo_Hydrangeas.jpg ejemplo
+            //thmb_iconoNombreArchivo_Evento_de_ejemplo_Chrysant antes se mostraba asi            
+            // se cambia así, ya que no siempre se define tener una imagen de thmb y se controla el tamaño desde esta vista
+            ret=ret+"<br/><image width=\"120\" height=\"120\"  src=\""+SWBPlatform.getContextPath()+"/work"+obj.getWorkPath()+"/imagen_"+obj.getId()+"_"+img+"\">";
         }
         return ret;
     }
