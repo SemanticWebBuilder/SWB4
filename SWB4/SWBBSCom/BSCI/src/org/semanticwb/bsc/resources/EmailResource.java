@@ -19,7 +19,6 @@ import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
-import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
 import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -29,6 +28,7 @@ import com.oreilly.servlet.MultipartRequest;
 import java.util.Date;
 import org.apache.commons.mail.EmailAttachment;
 import org.semanticwb.SWBPortal;
+import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.utils.EmailLog;
 import org.semanticwb.model.UserRepository;
 
@@ -40,11 +40,6 @@ public class EmailResource extends GenericResource {
 
     private static final org.semanticwb.Logger log = SWBUtils.getLogger(EmailResource.class);
     private static final String Mode_SendMail = "mail";
-    private static List listEmails = new ArrayList();
-    private static List listCcEmails = new ArrayList();
-    private static String otherMails = "";
-    private static List usersTo = new ArrayList();
-    private static List usersCc = new ArrayList();
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -249,8 +244,8 @@ public class EmailResource extends GenericResource {
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
         User user = SWBContext.getSessionUser(wsite.getUserRepository().getId());
-        usersTo.clear();
-        usersCc.clear();
+        List listEmails = new ArrayList();
+        List listCcEmails = new ArrayList();
 
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
@@ -259,16 +254,9 @@ public class EmailResource extends GenericResource {
             String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
             String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
             String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
+
             listEmails = validateEMailAccounts(to);
             listCcEmails = validateEMailAccounts(cc);
-            //Valida usuarios
-            if (!listEmails.isEmpty()) {
-                validateUsers(listEmails, "To");
-            }
-            if (!listCcEmails.isEmpty()) {
-                validateUsers(listCcEmails, "Cc");
-            }
-            Date date = new Date();
 
             SWBMail mail = new SWBMail();
             EmailAttachment att = new EmailAttachment();
@@ -288,29 +276,12 @@ public class EmailResource extends GenericResource {
             try {
                 SWBUtils.EMAIL.sendMail(mail);
                 //Crea el email Log
-                EmailLog emLog = EmailLog.ClassMgr.createEmailLog(wsite);
-                emLog.setFrom(user);
-                emLog.setSubject(subject);
-                emLog.setMessage(message);
-                emLog.setDate(date);
-                Iterator<User> iter = usersTo.iterator();
-                Iterator<User> iterCc = usersCc.iterator();
-
-                while (iter.hasNext()) {
-                    User userTo1 = iter.next();
-                    emLog.addTo(userTo1);
-                }
-                while (iterCc.hasNext()) {
-                    User userCc1 = iterCc.next();
-                    emLog.addCc(userCc1);
-                }
-                if (!otherMails.equals("")) {
-                    emLog.setOtherAccounts(otherMails);
-                }
-
+                saveLogMail(user, subject, message, listEmails, listCcEmails);
             } catch (SocketException se) {
                 EmailResource.log.error("Error en el envio :" + se);
             }
+            saveLogMail(user, subject, message, listEmails, listCcEmails);
+            
         } else {
             super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
         }
@@ -328,21 +299,82 @@ public class EmailResource extends GenericResource {
         return list;
     }
 
-    private void validateUsers(List listMails, String accountType) {
-        Iterator<String> itListTo = listMails.iterator();
-        while (itListTo.hasNext()) {
-            String mailT = itListTo.next();
-            UserRepository ur = getResourceBase().getWebSite().getUserRepository();
-            if (ur.getUserByEmail(mailT) != null) {
-                User us = getResourceBase().getWebSite().getUserRepository().getUserByEmail(mailT);
-                if (accountType.equals("To")) {
-                    usersTo.add(us);
-                } else if (accountType.equals("Cc")) {
-                    usersCc.add(us);
-                }
-            } else {
-                otherMails += mailT + ";";
+
+    private void saveLogMail(User user, String subject, String message, List<String> mailsTo, List<String> mailsCc) {
+        final UserRepository ur = getResourceBase().getWebSite().getUserRepository();
+        final List<User> listUserTo = new ArrayList();
+        final List<User> listUserCc = new ArrayList();
+        // cuentas internas
+        List<String> intAccTo = SWBUtils.Collections.filterIterator(mailsTo.iterator(), new GenericFilterRule<String>() {
+            @Override
+            public boolean filter(String mail) {
+                return ur.getUserByEmail(mail) == null;
             }
+        });       
+            Iterator<String> iter = intAccTo.iterator();
+            while (iter.hasNext()) {
+                String mail = iter.next();
+                User uTo = ur.getUserByEmail(mail);
+                listUserTo.add(uTo);
+            }
+
+        // cuentas externas
+        List<String> extAccTo = SWBUtils.Collections.filterIterator(mailsTo.iterator(), new GenericFilterRule<String>() {
+            @Override
+            public boolean filter(String mail) {
+                return ur.getUserByEmail(mail) != null;
+            }
+        });
+
+        List<String> intAccCc = SWBUtils.Collections.filterIterator(mailsCc.iterator(), new GenericFilterRule<String>() {
+            @Override
+            public boolean filter(String mail) {
+                return ur.getUserByEmail(mail) == null;
+            }
+        });
+        if (!intAccCc.isEmpty()) {
+            Iterator<String> iterCc = intAccCc.iterator();
+            while (iterCc.hasNext()) {
+                String mailCc = iterCc.next();
+                User uCc = ur.getUserByEmail(mailCc);
+                listUserCc.add(uCc);
+            }
+        }
+
+        // cuentas externas
+        List<String> extAccCc = SWBUtils.Collections.filterIterator(mailsCc.iterator(), new GenericFilterRule<String>() {
+            @Override
+            public boolean filter(String mail) {
+                return ur.getUserByEmail(mail) != null;
+            }
+        });
+
+        List anothersAcc = new ArrayList(extAccTo);
+        anothersAcc.addAll(extAccCc);
+        String anothers = java.util.Arrays.toString(anothersAcc.toArray());
+        anothers=anothers.replace("[","");
+        anothers=anothers.replace("]", "");
+
+        Date date = new Date();
+        EmailLog emLog = EmailLog.ClassMgr.createEmailLog(getResourceBase().getWebSite());
+        emLog.setFrom(user);
+        emLog.setSubject(subject);
+        emLog.setMessage(message);
+        emLog.setDate(date);
+        
+        Iterator<User> iterTo = listUserTo.iterator();
+        Iterator<User> iterCc = listUserCc.iterator();
+
+        while (iterTo.hasNext()) {
+            User userTo1 = iterTo.next();
+            emLog.addTo(userTo1);
+        }
+        while (iterCc.hasNext()) {
+            User userCc1 = iterCc.next();
+            emLog.addCc(userCc1);
+        }
+        if (!anothers.equals("")) {
+            emLog.setOtherAccounts(anothers);
         }
     }
 }
