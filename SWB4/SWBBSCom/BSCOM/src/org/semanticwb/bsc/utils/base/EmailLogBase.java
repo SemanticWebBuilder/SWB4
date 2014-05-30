@@ -12,6 +12,7 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
     public static final org.semanticwb.platform.SemanticClass swb_User=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#User");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasTo=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasTo");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasCc=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasCc");
+    public static final org.semanticwb.platform.SemanticProperty bsc_otherAccounts=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#otherAccounts");
     public static final org.semanticwb.platform.SemanticProperty bsc_subject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#subject");
     public static final org.semanticwb.platform.SemanticProperty bsc_from=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#from");
     public static final org.semanticwb.platform.SemanticProperty bsc_date=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#date");
@@ -307,6 +308,24 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
              ret=(org.semanticwb.model.User)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the OtherAccounts property
+* @return String with the OtherAccounts
+*/
+    public String getOtherAccounts()
+    {
+        return getSemanticObject().getProperty(bsc_otherAccounts);
+    }
+
+/**
+* Sets the OtherAccounts property
+* @param value long with the OtherAccounts
+*/
+    public void setOtherAccounts(String value)
+    {
+        getSemanticObject().setProperty(bsc_otherAccounts, value);
     }
 
 /**
