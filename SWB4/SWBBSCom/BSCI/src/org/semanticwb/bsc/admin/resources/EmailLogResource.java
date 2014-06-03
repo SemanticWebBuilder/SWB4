@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.bsc.utils.EmailLog;
+
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -104,7 +105,7 @@ public class EmailLogResource extends GenericResource {
         toReturn.append("<p>&nbsp;</p>");
         toReturn.append("</div>");
 
-       EmailLog log = null;
+        EmailLog log = null;
         Iterator<EmailLog> itlogUser = null;
         User to = null;
         User cc = null;
@@ -157,7 +158,7 @@ public class EmailLogResource extends GenericResource {
                 if (log.getFrom() != null) {
                     from = log.getFrom().getEmail();
                 }
-                Date dateLog = log.getDate();
+                Date dateLog = log.getCreated();
                 toReturn.append("<tr>");
                 toReturn.append("<td>");
                 toReturn.append(from);
@@ -210,13 +211,14 @@ public class EmailLogResource extends GenericResource {
                 Iterator<EmailLog> itLogDate = EmailLog.ClassMgr.listEmailLogs();
                 while (itLogDate.hasNext()) {
                     log = itLogDate.next();
-                    String dateL = dateFormat2.format(log.getDate());
-                    try {
-                        date3 = dateFormat2.parse(dateL);
-                        cal3.setTime(date3);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(EmailLogResource.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    //String dateL = dateFormat2.format(log.getDate());
+                    //try {
+                        //date3 = dateFormat2.parse(dateL);
+                    Date dateLog = log.getCreated();
+                        cal3.setTime(dateLog);
+                    //} catch (ParseException ex) {
+                    //    Logger.getLogger(EmailLogResource.class.getName()).log(Level.SEVERE, null, ex);
+                    //}
                     if ((cal3.after(cal1) || cal3.equals(cal1)) && (cal3.before(cal2) || cal3.equals(cal2))) {
                         subject = log.getSubject() == null ? "" : log.getSubject();
                         otherAccounts = log.getOtherAccounts() == null ? "" : log.getOtherAccounts();
@@ -224,7 +226,7 @@ public class EmailLogResource extends GenericResource {
                         if (log.getFrom() != null) {
                             from = log.getFrom().getEmail();
                         }
-                        Date dateLog = log.getDate();
+                        //Date dateLog = log.getDate();
                         toReturn.append("<tr>");
                         toReturn.append("<td>");
                         toReturn.append(from);
@@ -282,13 +284,14 @@ public class EmailLogResource extends GenericResource {
                 Iterator<EmailLog> itLog = EmailLog.ClassMgr.listEmailLogByFrom(user, modelWS);
                 while (itLog.hasNext()) {
                     log = itLog.next();
-                    String dateL = dateFormat2.format(log.getDate());
-                    try {
-                        date3 = dateFormat2.parse(dateL);
-                        cal3.setTime(date3);
-                    } catch (ParseException ex) {
-                        Logger.getLogger(EmailLogResource.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    Date dateLog = log.getCreated();
+//                    String dateL = dateFormat2.format(log.getDate());
+//                    try {
+//                        date3 = dateFormat2.parse(dateL);
+                        cal3.setTime(dateLog);
+//                    } catch (ParseException ex) {
+//                        Logger.getLogger(EmailLogResource.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
 
                     if ((cal3.after(cal1) || cal3.equals(cal1)) && (cal3.before(cal2) || cal3.equals(cal2))) {
                         subject = log.getSubject() == null ? "" : log.getSubject();
@@ -296,7 +299,7 @@ public class EmailLogResource extends GenericResource {
                         if (log.getFrom() != null) {
                             from = log.getFrom().getEmail();
                         }
-                        Date dateLog = log.getDate();
+                        
                         toReturn.append("<tr>");
                         toReturn.append("<td>");
                         toReturn.append(from);
