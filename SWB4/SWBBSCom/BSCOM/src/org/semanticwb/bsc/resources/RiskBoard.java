@@ -472,6 +472,8 @@ public class RiskBoard extends GenericResource {
             data.append(simpleTd);
             if (formerControl != null) {
                 data.append(formerControl.calculateDetermination() ? "Suficiente" : "Deficiente");
+            } else {
+                data.append("      <td>&nbsp;</td>");
             }
             boolean isRiskControled = risk.calculateControled();
             data.append(tdEnclosing);
@@ -609,6 +611,7 @@ public class RiskBoard extends GenericResource {
                     for (Determinant det : determinants) {
                             data.append("      <td>&nbsp;</td>\n");
                     }
+                    data.append("      <td>&nbsp;</td>\n");
                 }
                 
                 formerFactor = factorInTurn;
