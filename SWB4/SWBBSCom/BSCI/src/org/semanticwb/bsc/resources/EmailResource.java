@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.semanticwb.bsc.resources;
 
 import java.io.File;
@@ -16,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.SWBMail;
 import org.semanticwb.model.Resource;
-import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -26,6 +22,7 @@ import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
 import com.oreilly.servlet.MultipartRequest;
 import java.util.Date;
+import javax.mail.internet.InternetAddress;
 import org.apache.commons.mail.EmailAttachment;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.base.util.GenericFilterRule;
@@ -243,10 +240,8 @@ public class EmailResource extends GenericResource {
         String action = response.getAction();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
-        User user = SWBContext.getSessionUser(wsite.getUserRepository().getId());
-        List listEmails = new ArrayList();
-        List listCcEmails = new ArrayList();
-
+        final User user = response.getUser();
+System.out.println("\n\nprocessAction()......");
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
             MultipartRequest mrequest = new MultipartRequest(request, path);
@@ -254,46 +249,83 @@ public class EmailResource extends GenericResource {
             String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
             String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
             String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
-
-            listEmails = validateEMailAccounts(to);
-            listCcEmails = validateEMailAccounts(cc);
-
-            SWBMail mail = new SWBMail();
-            EmailAttachment att = new EmailAttachment();
-            if (mrequest.getFile("uploadFile") != null) {
-                File file = mrequest.getFile("uploadFile");
-                att.setPath(file.getPath());
-                mail.addAttachment(att);
+            File attachment = mrequest.getFile("uploadFile");
+            
+            if(subject==null) {
             }
+            if(message==null) {
+            }
+            if(to==null) {
+            }
+            
+            SWBMail mail = new SWBMail();
+            mail.setContentType("HTML");
             mail.setFromEmail(user.getEmail());
             mail.setFromName(user.getFullName());
             mail.setSubject(subject);
-            mail.setToEmail(listEmails);
-            mail.setCcEmail(listCcEmails);
-            mail.setContentType("HTML");
             mail.setData(message);
+            if (attachment != null) {
+                EmailAttachment emailAttachment = new EmailAttachment();
+                emailAttachment.setPath(attachment.getPath());
+                mail.addAttachment(emailAttachment);
+            }
+            
+            InternetAddress ia;
+            ArrayList<InternetAddress> addresses = null;
+            
+System.out.println("\n\nto="+to);
+            List<String> emailsTo = validateEMailAccounts(to);
+            if(emailsTo == null) {
+                return;
+            }else {
+                addresses = new ArrayList<>();
+                for(String em:emailsTo) {
+                    ia = new InternetAddress();
+                    ia.setAddress(em);
+                    addresses.add(ia);
+                }
+            }
+System.out.println("addresses="+addresses);
+            mail.setAddress(addresses);
+            
 
+System.out.println("\n\n-------------------\ncc="+cc);
+            List<String> emailsCc = validateEMailAccounts(cc);
+            if(emailsCc != null) {
+                addresses = new ArrayList<>();
+                for(String em:emailsCc) {
+                    ia = new InternetAddress();
+                    ia.setAddress(em);
+                    addresses.add(ia);
+                }
+    System.out.println("emailsCc="+emailsCc);
+                mail.setCcEmail(emailsCc);
+            }
+            
             try {
                 SWBUtils.EMAIL.sendMail(mail);
                 //Crea el email Log
-                saveLogMail(user, subject, message, listEmails, listCcEmails);
+                //saveLogMail(user, subject, message, emailsTo, emailsCc);
             } catch (SocketException se) {
-                EmailResource.log.error("Error en el envio :" + se);
+System.out.println("\n\nerror..."+se);
+                log.error("Error en el envio :" + se);
             }
-            saveLogMail(user, subject, message, listEmails, listCcEmails);
-            
-        } else {
-            super.processAction(request, response); //To change body of generated methods, choose Tools | Templates.
         }
-        response.sendRedirect(response.getWebPage().getUrl());
+        //response.sendRedirect(response.getWebPage().getUrl());
     }
 
     private List<String> validateEMailAccounts(String accounts) {
-        List<String> list = new ArrayList();
-        String[] mails = accounts.split(";");
-        for (String account : mails) {
-            if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
-                list.add(account);
+        if(accounts.isEmpty()) {
+            return null;
+        }
+        List<String> list = null;
+        String[] mails = accounts.split("[;|,]",0);
+        if(mails.length > 0) {            
+            list = new ArrayList<>();
+            for (String account : mails) {
+                if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
+                    list.add(account);
+                }
             }
         }
         return list;
@@ -355,12 +387,12 @@ public class EmailResource extends GenericResource {
         anothers=anothers.replace("[","");
         anothers=anothers.replace("]", "");
 
-        Date date = new Date();
+        //Date date = new Date();
         EmailLog emLog = EmailLog.ClassMgr.createEmailLog(getResourceBase().getWebSite());
         emLog.setFrom(user);
         emLog.setSubject(subject);
         emLog.setMessage(message);
-        emLog.setDate(date);
+        //emLog.setDate(date);
         
         Iterator<User> iterTo = listUserTo.iterator();
         Iterator<User> iterCc = listUserCc.iterator();
