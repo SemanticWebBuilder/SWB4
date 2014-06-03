@@ -40,7 +40,7 @@ public class EmailLogResource extends GenericResource {
         StringBuilder toReturn = new StringBuilder();
         SWBResourceURL url = paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW);
         User usr = null;
-        String uriUser = request.getParameter("selectUser") == null ? "0" : (String) request.getParameter("selectUser");
+        String uriUser = request.getParameter("selectUser") == null ? "1" : (String) request.getParameter("selectUser");
         String dateFrom = request.getParameter("dateFrom") == null ? "" : (String) request.getParameter("dateFrom");
         String dateTo = request.getParameter("dateTo") == null ? "" : (String) request.getParameter("dateTo");
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -115,7 +115,7 @@ public class EmailLogResource extends GenericResource {
         Date date1;
         Date date2;
         Date date3;
-        
+       
         toReturn.append("<table width=\"94%\">");
         toReturn.append("<thead>");
         toReturn.append("<tr>");
@@ -144,7 +144,7 @@ public class EmailLogResource extends GenericResource {
             toReturn.append("    </script>");
         }
         //Consulta por Usuario
-        if ((!uriUser.equals("0")) && (dateFrom.equals("")) && (dateTo.equals(""))) {
+        if ((!uriUser.equals("0")) && (!uriUser.equals("1")) && (dateFrom.equals("")) && (dateTo.equals(""))) {
             SemanticObject sObj = SemanticObject.getSemanticObject(uriUser);
             SWBModel model = (SWBModel) sObj.getModel().getModelObject().createGenericInstance();
             SWBModel modelWS = model.getParentWebSite();
@@ -152,8 +152,8 @@ public class EmailLogResource extends GenericResource {
             User user = User.ClassMgr.getUser(sObj.getId(), model);
             itlogUser = EmailLog.ClassMgr.listEmailLogByFrom(user, modelWS);
             while (itlogUser.hasNext()) {
-                log = itlogUser.next();
-                subject = log.getSubject() == null ? "" : log.getSubject();
+               log = itlogUser.next();                  
+               subject = log.getSubject() == null ? "" : log.getSubject();
                 otherAccounts = log.getOtherAccounts() == null ? "" : log.getOtherAccounts();
                 if (log.getFrom() != null) {
                     from = log.getFrom().getEmail();
@@ -263,7 +263,7 @@ public class EmailLogResource extends GenericResource {
             }
         }
         //Consulta por usuario y por fechas
-        if ((!uriUser.equals("0")) && (!dateFrom.equals("")) && (!dateTo.equals(""))) {
+        if ((!uriUser.equals("0")) && (!uriUser.equals("1")) && (!dateFrom.equals("")) && (!dateTo.equals(""))) {
             SemanticObject sObj = SemanticObject.getSemanticObject(uriUser);
             SWBModel model = (SWBModel) sObj.getModel().getModelObject().createGenericInstance();
             SWBModel modelWS = model.getParentWebSite();
