@@ -4,6 +4,7 @@
     Author     : javier.solis.g
 --%>
 
+<%@page import="java.io.FileInputStream"%>
 <%@page import="com.hp.hpl.jena.rdf.model.RDFNode"%>
 <%@page import="java.util.Random"%>
 <%@page import="com.hp.hpl.jena.rdf.model.Model"%>
@@ -44,64 +45,23 @@
     if(request.getParameter("load")!=null)
     {
         System.out.println("Load...");
-        int pers=100000;
-        int dirs=pers/4;
-        int emps=1000;
-        //model.getGraph().delete(new Triple(Node.ANY, Node.createURI("http://www.swb.com/prop#direccion"), Node.ANY));
-        //model.getGraph().delete(new Triple(Node.ANY, Node.createURI("http://www.swb.com/prop#empresa"), Node.ANY));
         
-        for(int d=0;d<dirs;d++)
-        {
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), RDF.type, model.createResource("http://www.swb.com/ontology#Direccion")));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#id"), ""+d));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#calle"), "calle "+ran.nextInt(300)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#colonia"), "colonia "+ran.nextInt(100)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#delegacion"), "delegacion "+ran.nextInt(50)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#estado"), "estado "+ran.nextInt(30)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#pais"), "pais "+ran.nextInt(10)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/direccion:"+d), model.createProperty("http://www.swb.com/prop#cp"), "cp "+ran.nextInt(200)));
-            if(d%100==0)System.out.print("x:"+d+"\r");
-        }
-        System.out.println("End Dirs...");
         
-        for(int d=0;d<emps;d++)
-        {
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/empresa:"+d), RDF.type, model.createResource("http://www.swb.com/ontology#Empresa")));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/empresa:"+d), model.createProperty("http://www.swb.com/prop#nombre"), "nombre "+d));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/empresa:"+d), model.createProperty("http://www.swb.com/prop#direccion"), model.createResource("http://www.swb.com/inst/direccion:"+ran.nextInt(dirs))));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/empresa:"+d), model.createProperty("http://www.swb.com/prop#telefono"), "telefono "+ran.nextInt(emps)));
-            if(d%100==0)System.out.print("x:"+d+"\r");
-        }
-        System.out.println("End Emps...");
         
-        for(int d=0;d<pers;d++)
-        {
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), RDF.type, model.createResource("http://www.swb.com/ontology#Persona")));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#nombre"), "nombre "+d));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#direccion"), model.createResource("http://www.swb.com/inst/direccion:"+ran.nextInt(dirs))));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#telefono"), "telefono "+ran.nextInt(pers)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#nss"), "nss "+ran.nextInt(pers)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#rfc"), "rfc "+ran.nextInt(pers)));
-            model.add(model.createStatement(model.createResource("http://www.swb.com/inst/persona:"+d), model.createProperty("http://www.swb.com/prop#empresa"), model.createResource("http://www.swb.com/inst/empresa:"+ran.nextInt(emps))));
-            if(d%100==0)System.out.print("x:"+d+"\r");
-        }                
-        System.out.println("End Pers...");
- 
-    }else
-    {
-        /*
-        ArrayList query=new ArrayList();    
-        //query.add(Triple.create(Node.ANY, RDF.type.asNode(), WebPage.sclass.getOntClass().asNode()));
-        //query.add(Triple.create(Node.ANY, WebPage.swb_active.getRDFProperty().asNode(), Node.createLiteral(LiteralLabelFactory.create(Boolean.valueOf(false)))));
-        //query.add(Triple.create(Node.ANY, WebPage.swb_tags.getRDFProperty().asNode(), Node.createLiteral("Hola")));
-        //Iterator<SemanticObject> it=SemanticSearch.search(site.getSemanticModel(), query,WebPage.sclass.getClassGroupId(),null,null,WebPage.swb_views.getRDFProperty(), true);
-        Iterator<SemanticObject> it=SemanticSearch.search(site.getSemanticModel(), query, null, null, null, null, true);
-        while(it!=null && it.hasNext())
-        {
-            SemanticObject obj=it.next();
-            out.println(obj);
-        }
-        */
+        long time=System.currentTimeMillis();
+        //FileManager.get().readModel( tdbModel, dbdump1, "N-TRIPLES");
+        model.read(new FileInputStream("/data/bench/infoboxes-fixed.nt"),null,"N-TRIPLES");
+        System.out.println("time loading infoboxes-fixed.nt:"+time);
+        time=System.currentTimeMillis();
+        
+        model.read(new FileInputStream("/data/bench/geocoordinates-fixed.nt"),null,"N-TRIPLES");
+        System.out.println("time loading geocoordinates-fixed.nt:"+time);
+        time=System.currentTimeMillis();
+        
+        
+        model.read(new FileInputStream("/data/bench/homepages-fixed.nt"),null,"N-TRIPLES");
+        System.out.println("time loading homepages-fixed.nt:"+time);
+        time=System.currentTimeMillis();
     }
      
 %>        
