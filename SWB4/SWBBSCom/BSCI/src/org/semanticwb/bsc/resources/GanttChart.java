@@ -119,9 +119,9 @@ public class GanttChart extends GenericResource implements ComponentExportable {
                         dataOut.append("),\n");
                         dataOut.append("  status : ");
                         //En base al status asignar color
-                        if (initiative.getState() != null) {
+                        if (initiative.getStatusAssigned() != null) {
                             dataOut.append("\"");
-                            dataOut.append(initiative.getState().getColorHex());
+                            dataOut.append(initiative.getStatusAssigned().getColorHex());
                             dataOut.append("\"");
                         } else {
                             dataOut.append("\"#CCCCCC\"");
