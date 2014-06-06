@@ -58,13 +58,21 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
+        Resource base = this.getResourceBase();
+        
         //Colores a utilizar para cada serie
         String[] colors = {"#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
             "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
             "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
             "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
         StringBuilder output = new StringBuilder(512);
-
+        StringBuilder firstOutput = new StringBuilder(128);
+        StringBuilder svgOutput = new StringBuilder(64);
+        String graphHeight = base.getAttribute("graphHeight", "500");
+        String graphWidth = base.getAttribute("graphWidth", "600");
+        String barWidth = base.getAttribute("barWidth", null);
+        int periodsQuantity = 0;  //numero de periodos a graficar
+        
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
             if (genericObj instanceof Indicator) {
@@ -85,6 +93,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                         while (measurablePeriods.hasNext()) {
                             periodsList.add(measurablePeriods.next());
                         }
+                        periodsQuantity = periodsList.size();
                     }
                 } catch (UndefinedFrequencyException ex) {
                     out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
@@ -100,16 +109,16 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                     out.close();
                 }
                 //Codigo HTML para generar la grafica
-                output.append("<div id=\"graphContainer\">\n");
-                output.append("   <div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>\n");
-                output.append("       <h4 align=\"center\">");
-                output.append(indicator.getTitle());
-                output.append("       </h4>\n");
-                output.append("       <div>\n");
-                output.append("         <input type=\"radio\" name=\"graphType\" id=\"hGraph\" value=\"1\" onclick=\"javascript:showGraph(this);\" checked=\"checked\"><label for=\"hGraph\">Horizontal</label>\n");
-                output.append("         <input type=\"radio\" name=\"graphType\" id=\"vGraph\" value=\"2\" onclick=\"javascript:showGraph(this);\"><label for=\"vGraph\">Vertical</label>\n");
-                output.append("       </div>\n");
-                output.append("       <svg></svg>\n");
+                firstOutput.append("<div id=\"graphContainer\">\n");
+                firstOutput.append("   <div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>\n");
+                firstOutput.append("       <h4 align=\"center\">");
+                firstOutput.append(indicator.getTitle());
+                firstOutput.append("       </h4>\n");
+                firstOutput.append("       <div>\n");
+                firstOutput.append("         <input type=\"radio\" name=\"graphType\" id=\"hGraph\" value=\"1\" onclick=\"javascript:showGraph(this);\" checked=\"checked\"><label for=\"hGraph\">Horizontal</label>\n");
+                firstOutput.append("         <input type=\"radio\" name=\"graphType\" id=\"vGraph\" value=\"2\" onclick=\"javascript:showGraph(this);\"><label for=\"vGraph\">Vertical</label>\n");
+                firstOutput.append("       </div>\n");
+                
                 output.append("   </div>\n");
                 output.append("<script type=\"text/javascript\">\n");
                 output.append("long_short_data = [\n");
@@ -126,7 +135,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                                 output.append(",\n");  //separador de series
                             }
                             output.append("{");
-                            //Se coloca el identificador de cada seria
+                            //Se coloca el identificador de cada serie
                             if (seriesFormat != null) {
                                 output.append("  key: \"");
                                 output.append(graphSeries.getTitle());
@@ -220,6 +229,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 output.append("      .x(function(d) { return d.label })\n");
                 output.append("      .y(function(d) { return d.value })\n");
                 output.append("    .margin({top: 30, right: 20, bottom: 30, left: 125})\n");
+                //output.append("    .margin({top: 0, right: 0, bottom: 0, left: 0})\n");
                 output.append("    .transitionDuration(250)\n");
                 output.append("    .showControls(true);\n");
                 output.append("  chart.yAxis\n");
@@ -259,6 +269,42 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 output.append("  }\n");
                 output.append("  </script>\n");
                 output.append("</div>\n");
+
+                if (barWidth != null) {
+                    //Se calcula el ancho y alto de grafica si se configuró el ancho de cada barra
+                    int width4bars = Integer.parseInt(barWidth);
+                    int width = width4bars * periodsQuantity * seriesCount + 100 + 30; //100 para etiqueta eje Y; 30 del padding derecho
+                    //Se debe cumplir con un mínimo y un máximo del tamaño de la gráfica
+                    if (width > 850) {
+                        width = 850;
+                    } else if (width < 550) {
+                        width = 550;
+                    }
+                    graphWidth = String.valueOf(width);
+                    int height = width4bars * periodsQuantity * seriesCount + 30;  //30 para etiqueta eje X
+                    if (seriesCount > 2) {  //Para etiquetas de las series a graficar
+                        height += (seriesCount % 2) * 20;
+                    } else {
+                        height += 20;
+                    }
+                    //Se debe cumplir con un mínimo y un máximo del tamaño de la gráfica
+                    if (height > 850) {
+                        height = 850;
+                    } else if (height < 450) {
+                        height = 450;
+                    }
+                    graphHeight = String.valueOf(height);
+                }
+                
+                svgOutput.append("       <svg style=\"height:");
+                svgOutput.append(graphHeight);
+                svgOutput.append("px; width:");
+                svgOutput.append(graphWidth);
+                svgOutput.append("px;");
+                svgOutput.append("\"></svg>\n");
+                
+                out.println(firstOutput.toString());
+                out.println(svgOutput.toString());
                 out.println(output.toString());
             }
         }
