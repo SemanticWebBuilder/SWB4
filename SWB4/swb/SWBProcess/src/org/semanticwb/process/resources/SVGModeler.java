@@ -66,6 +66,7 @@ import org.semanticwb.process.model.MultiInstanceLoopCharacteristics;
 import org.semanticwb.process.model.ProcessSite;
 import org.semanticwb.process.model.StandarLoopCharacteristics;
 import org.semanticwb.process.model.UserTask;
+import org.semanticwb.process.xpdl.XPDLParser;
 
 /**
  * Modelador de procesos basado en SVG y Javascript.
@@ -1263,6 +1264,15 @@ public class SVGModeler extends GenericAdmResource {
                             java.util.Scanner scanner = new Scanner(stream, "UTF-8").useDelimiter("\\A");
                             if (scanner.hasNext()) {
                                 data = scanner.next();
+                            }
+                        } else {
+                            if (item.getName().endsWith(".xpdl")) {//Es un archivo XPDL
+                                InputStream stream = item.openStream();
+                                XPDLParser parser = new XPDLParser();
+                                JSONObject ret = parser.parse(stream);
+                                if (ret != null) {
+                                    data = ret.toString(2);
+                                }
                             }
                         }
                     }
