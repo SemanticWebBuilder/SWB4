@@ -944,7 +944,7 @@ if (!isViewMode) {
                     <script type="text/javascript">
                         frame = document.getElementById('target_upload_swpFile');
                         function validFileType(element) {
-                            if (!isFileType(element.value,'swp' )) {
+                            if (!isFileType(element.value,'swp|xpdl')) {
                                 element.value="";
                             }
                             return false;
