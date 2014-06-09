@@ -280,6 +280,38 @@ public class XPDLParser extends DefaultHandler {
                         referred.put("x", x);
                         referred.put("y", y);
                     }
+                } else if (XPDLProcessor.XPDLEntities.ASSOCIATION.equals(cls)) {
+                    JSONObject source = elements.get(el.optString(XPDLProcessor.XPDLAttributes.SOURCE, ""));
+                    JSONObject target = elements.get(el.optString("parent", ""));
+                    
+                    String sourceCls = "";
+                    String targetCls = "";
+                    
+                    if (source != null) {
+                        sourceCls = source.optString("_class", source.optString("class", ""));
+                    }
+                    if (target != null) {
+                        targetCls = target.optString("_class", target.optString("class", ""));
+                    }
+                    
+                    if (XPDLProcessor.XPDLEntities.DATAOBJECT.equals(sourceCls) || XPDLProcessor.XPDLEntities.DATAOBJECT.equals(targetCls)
+                            || XPDLProcessor.XPDLEntities.DATASTOREREFERENCE.equals(sourceCls) || XPDLProcessor.XPDLEntities.DATASTOREREFERENCE.equals(targetCls)) {
+                        _cls = "DirectionalAssociation";
+                    } else {
+                        _cls = "AssociationFlow";
+                    }
+                    
+                    if (XPDLProcessor.XPDLEntities.DATASTOREREFERENCE.equals(sourceCls)) {
+                        el.put("start",source.optString(XPDLProcessor.XPDLAttributes.DATASTOREREF,""));
+                    } else {
+                        el.put("start",source.getString("uri"));
+                    }
+                    
+                    if (XPDLProcessor.XPDLEntities.DATASTOREREFERENCE.equals(targetCls)) {
+                        el.put("end",target.optString(XPDLProcessor.XPDLAttributes.DATASTOREREF,""));
+                    } else {
+                        el.put("end",target.getString("uri"));
+                    }
                 }
                 
                 if (el.optString("container", "").equals("")) {
@@ -444,6 +476,9 @@ public class XPDLParser extends DefaultHandler {
         }
         if (XPDLProcessor.XPDLEntities.ACTIVITYSET.equals(localName)) {
             processor.processActivitySet(XMLElementNames, XMLElementObjects, atts);
+        }
+        if (XPDLProcessor.XPDLEntities.ASSOCIATION.equals(localName)) {
+            processor.processAssociation(XMLElementNames, XMLElementObjects, atts);
         }
         //Put current tag on top of the stack
         XMLElementNames.push(localName);
