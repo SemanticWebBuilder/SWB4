@@ -165,6 +165,11 @@ public abstract class AnswerBase extends org.semanticwb.model.SWBClass implement
         }
     }
 
+    public static AnswerBase.ClassMgr getAnswerClassMgr()
+    {
+        return new AnswerBase.ClassMgr();
+    }
+
    /**
    * Constructs a AnswerBase with a SemanticObject
    * @param base The SemanticObject with the properties for the Answer

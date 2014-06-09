@@ -181,6 +181,11 @@ public abstract class QuestionVoteBase extends org.semanticwb.model.SWBClass imp
         }
     }
 
+    public static QuestionVoteBase.ClassMgr getQuestionVoteClassMgr()
+    {
+        return new QuestionVoteBase.ClassMgr();
+    }
+
    /**
    * Constructs a QuestionVoteBase with a SemanticObject
    * @param base The SemanticObject with the properties for the QuestionVote

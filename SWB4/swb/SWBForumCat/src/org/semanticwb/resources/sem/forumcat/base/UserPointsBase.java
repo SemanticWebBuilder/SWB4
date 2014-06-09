@@ -146,6 +146,11 @@ public abstract class UserPointsBase extends org.semanticwb.model.SWBClass
         }
     }
 
+    public static UserPointsBase.ClassMgr getUserPointsClassMgr()
+    {
+        return new UserPointsBase.ClassMgr();
+    }
+
    /**
    * Constructs a UserPointsBase with a SemanticObject
    * @param base The SemanticObject with the properties for the UserPoints
