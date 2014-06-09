@@ -3384,9 +3384,10 @@
                 for (i = 0; i < flowNodes.length; i++) {
                     var tmp = flowNodes[i];
                     var obj = Modeler.mapObject(tmp.class);
-                    obj.setURI(tmp.uri);
+                    if (obj !== null) {
+                        obj.setURI(tmp.uri);
 
-                    if (obj.typeOf("GraphicalElement")) {
+                        if (obj.typeOf("GraphicalElement")) {
                         if (tmp.title && tmp.title !== null) {
                             obj.setText(tmp.title);
                         }
@@ -3403,18 +3404,19 @@
                             if (par && par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
                                 obj.setInterruptor(false);
                             }
-                        }
-                        obj.move(tmp.x, tmp.y);
-                        if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
-                            obj.snap2Grid();
-                        }
-                        
-                        //Evitar edición de texto
-                        if (Modeler.mode === "view") {
-                            if (obj.text && obj.text !== null) {
-                                obj.text.ondblclick = function(evt) {
-                                    return false;
-                                };
+                                }
+                            obj.move(tmp.x, tmp.y);
+                            if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
+                                obj.snap2Grid();
+                            }
+
+                            //Evitar edición de texto
+                            if (Modeler.mode === "view") {
+                                if (obj.text && obj.text !== null) {
+                                    obj.text.ondblclick = function(evt) {
+                                        return false;
+                                    };
+                                }
                             }
                         }
                     }
@@ -3423,17 +3425,17 @@
                 //Crear objetos de conexión
                 for (i = 0; i < connObjects.length; i++) {
                     var tmp = connObjects[i];
-                    var obj = Modeler.mapObject(tmp.class);
-                    obj.setURI(tmp.uri);
-                    
-                    if (tmp.connectionPoints && tmp.connectionPoints !== undefined) {
-                        obj.connectionPoints = tmp.connectionPoints;
-                    }
-                    
                     var start = Modeler.getGraphElementByURI(null, tmp.start);
                     var end = Modeler.getGraphElementByURI(null, tmp.end);
-
+                    
                     if (start && start !== null && end && end !== null) {
+                        var obj = Modeler.mapObject(tmp.class);
+                        obj.setURI(tmp.uri);
+                    
+                        if (tmp.connectionPoints && tmp.connectionPoints !== undefined) {
+                            obj.connectionPoints = tmp.connectionPoints;
+                        }
+                    
                         if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
                             obj.removeAttribute("marker-start");
                             obj.soff = 0;
@@ -3867,7 +3869,7 @@
                 ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
                 ret.setText("Compleja");
             }
-            else if(type=='Group') {
+            else if(type=='GroupArtifact') {
                 ret= new _Group(Modeler.createGroupArtifact(null,null));
                 ret.resize(300,300);
             }
