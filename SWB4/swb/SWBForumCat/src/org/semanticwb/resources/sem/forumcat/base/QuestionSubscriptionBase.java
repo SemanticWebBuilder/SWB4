@@ -133,6 +133,11 @@ public abstract class QuestionSubscriptionBase extends org.semanticwb.model.SWBC
         }
     }
 
+    public static QuestionSubscriptionBase.ClassMgr getQuestionSubscriptionClassMgr()
+    {
+        return new QuestionSubscriptionBase.ClassMgr();
+    }
+
    /**
    * Constructs a QuestionSubscriptionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the QuestionSubscription

@@ -136,6 +136,11 @@ public abstract class CategorySubscriptionBase extends org.semanticwb.model.SWBC
         }
     }
 
+    public static CategorySubscriptionBase.ClassMgr getCategorySubscriptionClassMgr()
+    {
+        return new CategorySubscriptionBase.ClassMgr();
+    }
+
    /**
    * Constructs a CategorySubscriptionBase with a SemanticObject
    * @param base The SemanticObject with the properties for the CategorySubscription

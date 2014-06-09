@@ -182,6 +182,11 @@ public abstract class AnswerVoteBase extends org.semanticwb.model.SWBClass imple
         }
     }
 
+    public static AnswerVoteBase.ClassMgr getAnswerVoteClassMgr()
+    {
+        return new AnswerVoteBase.ClassMgr();
+    }
+
    /**
    * Constructs a AnswerVoteBase with a SemanticObject
    * @param base The SemanticObject with the properties for the AnswerVote
