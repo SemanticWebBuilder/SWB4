@@ -32,7 +32,7 @@ import org.json.JSONObject;
  * @author Hasdai Pacheco {ebenezer.sanchez@infotec.com.mx}
  */
 public class XPDLProcessor {
-    String strings = "URI|TITLE|DESCRIPTION|CLASS|PARENT|CONNECTIONPOINTS|START|END|CONTAINER|EXCLUSIVETYPE|GATEWAYTYPE|DATASTOREREF|ACTIVITYSETID|CATCHTHROW";
+    String strings = "URI|TITLE|DESCRIPTION|CLASS|PARENT|CONNECTIONPOINTS|START|END|CONTAINER|EXCLUSIVETYPE|GATEWAYTYPE|DATASTOREREF|ACTIVITYSETID|CATCHTHROW|SOURCE|TARGET";
     String booleans = "ISFORCOMPENSATION|ISINTERRUPTING|ISLOOP|ISMULTIINSTANCE|ISSEQUENTIALMULTIINSTANCE|PARALLELEVENTBASED|INSTANTIATE|ISCOLLECTION";
     String numbers = "W|H|X|Y|LABELSIZE";
     
@@ -364,6 +364,23 @@ public class XPDLProcessor {
     }
     
     /**
+     * Procesa un bloque XPDL correspondiente a un Association.
+     * @param tags Pila de tags en el parser.
+     * @param elements Lista de elementos generados en el parser.
+     * @param atts Atributos del elemento.
+     * @throws JSONException 
+     */
+    public void processAssociation(Stack<String> tags, Stack<JSONObject> elements, HashMap<String,String> atts) throws JSONException {
+        if (tags.peek().equals(XPDLEntities.ASSOCIATIONS)) {
+            JSONObject obj = new JSONObject();
+            
+            obj.put("class", XPDLEntities.ASSOCIATION);
+            setAttributes(obj, atts);
+            elements.push(obj);
+        }
+    }
+    
+    /**
      * Procesa un bloque XPDL correspondiente a un ProcessWorkFlow (Proceso).
      * @param tags Pila de tags en el parser.
      * @param elements Lista de elementos generados en el parser.
@@ -395,7 +412,7 @@ public class XPDLProcessor {
                 String cls = obj.optString("_class","");
                 String points = obj.optString("connectionPoints","");
                             
-                if ("SequenceFlow".equals(cls) || "ConditionalFlow".equals(cls) || "DefaultFlow".equals(cls) || "AssociationFlow".equals(cls) || "DirectionalAssociation".equals(cls)) {
+                if ("SequenceFlow".equals(cls) || "ConditionalFlow".equals(cls) || "DefaultFlow".equals(cls) || XPDLEntities.ASSOCIATION.equals(cls)) {
                     points += atts.get(XPDLAttributes.XCOORDINATE) + "," + atts.get(XPDLAttributes.YCOORDINATE) + "|";
                     atts.remove(XPDLAttributes.XCOORDINATE);
                     atts.remove(XPDLAttributes.YCOORDINATE);
@@ -557,5 +574,6 @@ public class XPDLProcessor {
         public static final String GATEWAYTYPE = "GatewayType";
         public static final String INSTANTIATE = "Instantiate";
         public static final String ACTIVITYSETID = "ActivitySetId";
+        public static final String SOURCE = "Source";
     }
 }
