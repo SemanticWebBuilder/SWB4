@@ -214,9 +214,9 @@ public class EmailResource extends GenericResource {
         out.print(paramRequest.getLocaleString("lbl_addTitle"));
         out.println("</a>");
 
-        out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"swbDialog\" ");
+        out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"emailDialog\" ");
         out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
-        out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" ");
+        out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"emailDialogImp\" ");
         out.print("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
         out.print("    Cargando...\n");
         out.print("  </div>\n");
