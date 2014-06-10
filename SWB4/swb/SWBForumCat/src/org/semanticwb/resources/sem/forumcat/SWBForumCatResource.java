@@ -55,8 +55,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             if (pos2 == -1)
             {
                 text = text.substring(0, pos).trim();
-            }
-            else
+            } else
             {
                 String tmp = text.substring(0, pos).trim();
                 String tmp2 = text.substring(pos2 + 1).trim();
@@ -82,8 +81,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             request.setAttribute("paramRequest", paramRequest);
             RequestDispatcher rd = request.getRequestDispatcher(jsp);
             rd.include(request, response);
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
@@ -114,76 +112,58 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             if (action.equals("addQuestion"))
             {
                 addQuestion(request, user, website, response);
-            }
-            else if (action.equals("editQuestion"))
+            } else if (action.equals("editQuestion"))
             {
                 editQuestion(request, user, response);
-            }
-            else if (action.equals("removeQuestion"))
+            } else if (action.equals("removeQuestion"))
             {
                 removeQuestion(request, user, response);
-            }
-            else if (action.equals("answerQuestion"))
+            } else if (action.equals("answerQuestion"))
             {
                 answerQuestion(request, user, response, website);
-            }
-            else if (action.equals("editAnswer"))
+            } else if (action.equals("editAnswer"))
             {
                 editAnswer(request, response, user);
-            }
-            else if (action.equals("markQuestionAsInnapropiate"))
+            } else if (action.equals("markQuestionAsInnapropiate"))
             {
                 markQuestionAsInnapropiate(request, website, response);
-            }
-            else if (action.equals("markAnswerAsInnapropiate"))
+            } else if (action.equals("markAnswerAsInnapropiate"))
             {
                 markAnswerAsInnapropiate(request, website, response);
-            }
-            else if (action.equals("bestAnswer"))
+            } else if (action.equals("bestAnswer"))
             {
                 bestAnswer(request, response, user, website);
-            }
-            else if (action.equals("closeQuestion"))
+            } else if (action.equals("closeQuestion"))
             {
                 closeQuestion(request, user, response);
-            }
-            else if (action.equals("openQuestion"))
+            } else if (action.equals("openQuestion"))
             {
                 openQuestion(request, user, response);
-            }
-            else if (action.equals("voteQuestion"))
+            } else if (action.equals("voteQuestion"))
             {
                 voteQuestion(request, user, website, response);
-            }
-            else if (action.equals("voteAnswer"))
+            } else if (action.equals("voteAnswer"))
             {
                 voteAnswer(request, user, website, response);
-            }
-            else if (action.equals("removeAnswer"))
+            } else if (action.equals("removeAnswer"))
             {
                 removeAnswer(request, user, response);
-            }
-            else if (action.equals("subcribe2question"))
+            } else if (action.equals("subcribe2question"))
             {
                 subcribe2question(request, user, website, response);
-            }
-            else if (action.equals("subcribe2category"))
+            } else if (action.equals("subcribe2category"))
             {
                 subcribe2category(request, website, user);
-            }
-            else if (action.equals("AcceptQuestion"))
+            } else if (action.equals("AcceptQuestion"))
             {
                 AcceptQuestion(user, request, response);
-            }
-            else if (action.equals("AcceptAnswer"))
+            } else if (action.equals("AcceptAnswer"))
             {
                 AcceptAnswer(user, request, response);
-            }
-            else if (action.equals("RejectQuestion"))
+            } else if (action.equals("RejectQuestion"))
             {
                 RejectQuestion(user, request, response);
-            }
-            else if (action.equals("RejectAnswer"))
+            } else if (action.equals("RejectAnswer"))
             {
                 RejectAnswer(user, request, response);
             }
@@ -223,8 +203,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
                         swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
                         SWBUtils.EMAIL.sendBGEmail(swbMail);
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
                         log.debug(e);
                     }
@@ -238,8 +217,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("deleted", request.getParameter("deleted"));
                 }
                 response.setAction("moderate");
-            }
-            else
+            } else
             {
                 if (request.getParameter("cat") != null)
                 {
@@ -285,8 +263,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         swbMail.setFromEmail(SWBPlatform.getEnv("af/adminEmail"));
                         swbMail.setHostName(SWBPlatform.getEnv("swb/smtpServer"));
                         SWBUtils.EMAIL.sendBGEmail(swbMail);
-                    }
-                    catch (Exception e)
+                    } catch (Exception e)
                     {
                         log.debug(e);
                     }
@@ -300,8 +277,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("deleted", request.getParameter("deleted"));
                 }
                 response.setAction("moderate");
-            }
-            else
+            } else
             {
                 if (request.getParameter("cat") != null)
                 {
@@ -340,8 +316,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("deleted", request.getParameter("deleted"));
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("cat") != null)
                 {
@@ -380,8 +355,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("deleted", request.getParameter("deleted"));
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("cat") != null)
                 {
@@ -412,8 +386,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     catSubs.setCategoryUser(user);
                 }
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
@@ -446,8 +419,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         questionSubs.setUserObj(user);
                     }
                     //TODO: Enviar correo
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                 }
@@ -458,8 +430,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("uri", request.getParameter("uri"));
                     }
-                }
-                else
+                } else
                 {
                     response.setAction("edit");
                 }
@@ -476,8 +447,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("deleted") != null)
             {
@@ -514,8 +484,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                    }
-                    else
+                    } else
                     {
                         response.setAction("showDetail");
                     }
@@ -524,8 +493,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("uri", answer.getAnsQuestion().getURI());
                     }
                     answer.remove();
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                 }
@@ -542,8 +510,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 response.setRenderParameter("cat", request.getParameter("cat"));
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("deleted") != null)
             {
@@ -607,8 +574,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         if (likeVote)
                         {
                             points.setPoints(points.getPoints() + getPointsLikeAnswer());
-                        }
-                        else
+                        } else
                         {
                             int p = points.getPoints() - getPointsDontLikeAnswer();
                             if (p < 0)
@@ -645,8 +611,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("showDetail");
                 }
@@ -667,8 +632,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 response.setRenderParameter("cat", request.getParameter("cat"));
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("deleted") != null)
             {
@@ -724,8 +688,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("uri", request.getParameter("uri"));
                     }
-                }
-                else
+                } else
                 {
                     response.setAction("edit");
                 }
@@ -742,8 +705,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 response.setRenderParameter("cat", request.getParameter("cat"));
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("deleted") != null)
             {
@@ -781,16 +743,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         question.setClosed(false);
                     }
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                 }
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("showDetail");
                 }
@@ -811,8 +771,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("cat") != null)
             {
@@ -851,16 +810,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         question.setClosed(true);
                     }
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     log.error(e);
                 }
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("showDetail");
                 }
@@ -881,8 +838,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("cat") != null)
             {
@@ -911,16 +867,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     answer.setBestAnswer(true);
                 }
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 log.error(e);
             }
             if (request.getParameter("org") != null)
             {
                 response.setAction(request.getParameter("org"));
-            }
-            else
+            } else
             {
                 response.setAction("showDetail");
             }
@@ -959,8 +913,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 response.setRenderParameter("page", request.getParameter("page"));
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("cat") != null)
             {
@@ -1042,8 +995,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("uri", request.getParameter("uri"));
                     }
-                }
-                else
+                } else
                 {
                     response.setAction("edit");
                 }
@@ -1059,13 +1011,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("page", request.getParameter("page"));
                 }
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 log.error(e);
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("cat") != null)
             {
@@ -1147,8 +1097,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     {
                         response.setRenderParameter("uri", request.getParameter("uri"));
                     }
-                }
-                else
+                } else
                 {
                     response.setAction("edit");
                 }
@@ -1164,13 +1113,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 log.error(e);
             }
-        }
-        else
+        } else
         {
             if (request.getParameter("page") != null)
             {
@@ -1204,8 +1151,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 pass = true;
                 request.getSession().removeAttribute(sAttr);
             }
-        }
-        else
+        } else
         {
             pass = false;
         }
@@ -1218,16 +1164,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 try
                 {
                     mgr.processForm(request);
-                }
-                catch (FormValidateException e)
+                } catch (FormValidateException e)
                 {
                     log.error(e);
                 }
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("showDetail");
                 }
@@ -1264,8 +1208,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("cat", request.getParameter("cat"));
                     }
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("page") != null)
                 {
@@ -1280,8 +1223,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
-        }
-        else
+        } else
         {
             // no pass
             response.setAction("editAnswer");
@@ -1325,8 +1267,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 pass = true;
                 request.getSession().removeAttribute(sAttr);
             }
-        }
-        else
+        } else
         {
             pass = false;
         }
@@ -1352,21 +1293,18 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (isIsModerate())
                     {
                         answer.setAnsStatus(STATUS_REGISTERED);
-                    }
-                    else
+                    } else
                     {
                         answer.setAnsStatus(STATUS_ACEPTED);
                     }
-                }
-                catch (FormValidateException e)
+                } catch (FormValidateException e)
                 {
                     log.error(e);
                 }
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("showDetail");
                 }
@@ -1397,16 +1335,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("uri", request.getParameter("uri"));
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("cat") != null)
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
-        }
-        else
+        } else
         {
             // no pass
             response.setAction("answerQuestion");
@@ -1454,8 +1390,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     if (request.getParameter("org") != null)
                     {
                         response.setAction(request.getParameter("org"));
-                    }
-                    else
+                    } else
                     {
                         response.setAction("edit");
                     }
@@ -1472,8 +1407,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                         response.setRenderParameter("deleted", request.getParameter("deleted"));
                     }
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("page") != null)
                 {
@@ -1488,8 +1422,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("deleted", request.getParameter("deleted"));
                 }
             }
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             log.error(e);
         }
@@ -1512,8 +1445,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 pass = true;
                 request.getSession().removeAttribute(sAttr);
             }
-        }
-        else
+        } else
         {
             pass = false;
         }
@@ -1530,6 +1462,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     String validQuestion = placeAnchors(question.getQuestion());
                     validQuestion = validQuestion.replaceAll("\r\n", "<br>");
                     question.setQuestion(validQuestion);
+                    if (request.getParameter("title") != null)
+                    {
+                        String title = request.getParameter("title").toString().trim();
+                        if (!title.isEmpty())
+                        {
+                            question.setTitle(title);
+                        }
+                    }
                     if (request.getParameter("categoryuri") != null && !request.getParameter("categoryuri").equals(""))
                     {
                         boolean canedit = false;
@@ -1556,16 +1496,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                             }
                         }
                     }
-                }
-                catch (FormValidateException e)
+                } catch (FormValidateException e)
                 {
                     log.error(e);
                 }
                 if (request.getParameter("org") != null)
                 {
                     response.setAction(request.getParameter("org"));
-                }
-                else
+                } else
                 {
                     response.setAction("edit");
                 }
@@ -1585,8 +1523,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 {
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
-            }
-            else
+            } else
             {
                 if (request.getParameter("page") != null)
                 {
@@ -1601,8 +1538,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                     response.setRenderParameter("cat", request.getParameter("cat"));
                 }
             }
-        }
-        else
+        } else
         {
             // no pass
             response.setAction("editQuestion");
@@ -1646,8 +1582,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 pass = true;
                 request.getSession().removeAttribute(sAttr);
             }
-        }
-        else
+        } else
         {
             pass = false;
         }
@@ -1661,6 +1596,14 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (user != null && user.isSigned())
                 {
                     question.setCreator(user);
+                }
+                if (request.getParameter("title") != null)
+                {
+                    String title = request.getParameter("title").toString().trim();
+                    if (!title.isEmpty())
+                    {
+                        question.setTitle(title);
+                    }
                 }
                 question.setCreated(Calendar.getInstance().getTime());
                 question.setForumResource(this);
@@ -1686,13 +1629,11 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 if (isIsModerate())
                 {
                     question.setQueStatus(STATUS_REGISTERED);
-                }
-                else
+                } else
                 {
                     question.setQueStatus(STATUS_ACEPTED);
                 }
-            }
-            catch (FormValidateException e)
+            } catch (FormValidateException e)
             {
                 log.error(e);
             }
@@ -1707,8 +1648,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 }
                 points.setPoints(points.getPoints() + getPointsPublishQuestion());
             }
-        }
-        else
+        } else
         {
             // no pass
             response.setAction("add");
@@ -1802,7 +1742,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 port = ":" + request.getServerPort();
             }
 
-
             URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
             swbMail.setData("Se creó el mensaje: " + titulo + " en el sitio: " + urilocal.toString());
             swbMail.setSubject("Mensaje de foro creado");
@@ -1824,7 +1763,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             {
                 port = ":" + request.getServerPort();
             }
-
 
             urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
             swbMail.setData("Se creó el tema con el nombre " + titulo + " en el sitio: " + urilocal.toString());
@@ -1862,7 +1800,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 port = ":" + request.getServerPort();
             }
 
-
             URL urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
             swbMail.setData("Se creó una respuesta para un mensaje: " + respuesta + " mensaje: " + mensaje + " en el sitio: " + urilocal.toString());
             swbMail.setSubject("Respuesta a mensaje de foro creado");
@@ -1872,8 +1809,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             try
             {
                 SWBUtils.EMAIL.sendBGEmail(swbMail);
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 log.error(e);
             }
@@ -1893,7 +1829,6 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
                 port = ":" + request.getServerPort();
             }
 
-
             urilocal = new URL(request.getScheme() + "://" + request.getServerName() + port);
             swbMail.setData("Se creó el tema con el nombre " + mensaje + " en el sitio: " + urilocal.toString());
             swbMail.setSubject("Mensaje de foro creado");
@@ -1902,8 +1837,7 @@ public class SWBForumCatResource extends org.semanticwb.resources.sem.forumcat.b
             try
             {
                 SWBUtils.EMAIL.sendBGEmail(swbMail);
-            }
-            catch (Exception e)
+            } catch (Exception e)
             {
                 log.error(e);
             }
