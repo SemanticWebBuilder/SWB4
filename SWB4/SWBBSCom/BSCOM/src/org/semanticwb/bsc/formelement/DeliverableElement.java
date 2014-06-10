@@ -5,8 +5,8 @@ import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.bsc.DeliverableAssignable;
 import org.semanticwb.bsc.element.Deliverable;
+import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.platform.SemanticObject;
@@ -102,8 +102,8 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
             String sobj = request.getParameter("obj");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
             SemanticObject semObjDeliv = SemanticObject.getSemanticObject(sobj);
-            if (semObjDeliv.createGenericInstance() instanceof DeliverableAssignable) {
-                DeliverableAssignable objectDeliv = (DeliverableAssignable) semObjDeliv.createGenericInstance();
+            if (semObjDeliv.createGenericInstance() instanceof Initiative) {
+                Initiative objectDeliv = (Initiative) semObjDeliv.createGenericInstance();
                 Deliverable deliv = (Deliverable) semObj.createGenericInstance();
                 objectDeliv.removeDeliverable(deliv);
                 deliv.remove();
@@ -144,9 +144,9 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
 
         if (suri != null) {
             SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
-            DeliverableAssignable element = null;
-            if (semObj != null && semObj.createGenericInstance() instanceof DeliverableAssignable) {
-                element = (DeliverableAssignable) semObj.createGenericInstance();
+            Initiative element = null;
+            if (semObj != null && semObj.createGenericInstance() instanceof Initiative) {
+                element = (Initiative) semObj.createGenericInstance();
                 Iterator<Deliverable> itDeliverables = element.listDeliverables();
                 FormElementURL urlFE = getRenderURL(obj, prop, type, mode, lang);
                 urlFE.setParameter("modeTmp", Mode_RELOAD);
@@ -246,9 +246,9 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
                 : (String) request.getAttribute("usrWithGrants");
         if (suri != null) {
             SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
-            DeliverableAssignable element = null;
-            if (semObj != null && semObj.createGenericInstance() instanceof DeliverableAssignable) {
-                element = (DeliverableAssignable) semObj.createGenericInstance();
+            Initiative element = null;
+            if (semObj != null && semObj.createGenericInstance() instanceof Initiative) {
+                element = (Initiative) semObj.createGenericInstance();
                 Iterator<Deliverable> itDeliverables = element.listDeliverables();
                 toReturn.append(listDeliverables(itDeliverables, suri, obj, prop, type,
                         usrWithGrants));
@@ -385,9 +385,9 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
         
         if (suri != null) {
             SemanticObject semObj = SemanticObject.getSemanticObject(URLDecoder.decode(suri));
-            DeliverableAssignable element = null;
-            if (semObj != null && semObj.createGenericInstance() instanceof DeliverableAssignable) {
-                element = (DeliverableAssignable) semObj.createGenericInstance();
+            Initiative element = null;
+            if (semObj != null && semObj.createGenericInstance() instanceof Initiative) {
+                element = (Initiative) semObj.createGenericInstance();
                 Iterator<Deliverable> itDeliverables = element.listDeliverables();
                 toReturn.append("\n<table width=\"98%\">");
                 itDeliverables = SWBComparator.sortByCreated(itDeliverables, false);
