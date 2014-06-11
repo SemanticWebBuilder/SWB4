@@ -96,6 +96,16 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public void setPrefix(String value) {
         super.setPrefix(value);
     }
+
+    @Override
+    public boolean updateAppraisal(Period period) {
+        return getObjective().updateAppraisal(period);
+    }
+    
+    @Override
+    public boolean hasState(State value) {
+        return getObjective().hasState(value);
+    }
     
     private List<Period> sortValidPeriods() {
         return sortValidPeriods(true);
@@ -144,7 +154,10 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     /**
      * Devuelve todos los períodos de medición ordenados ascendentemente
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
+     * @throws org.semanticwb.bsc.utils.UndefinedFrequencyException
+     * @throws org.semanticwb.bsc.utils.InappropriateFrequencyException
      */
+    @Override
     public Iterator<Period> listMeasurablesPeriods() throws UndefinedFrequencyException, InappropriateFrequencyException {
         return listMeasurablesPeriods(true);
     }
@@ -153,7 +166,10 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      * Devuelve todos los períodos de medición ordenados.
      * @param ascendent - para ordenar ascendente use ascendent=true y descendentemente=false para orden descendente
      * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
+     * @throws org.semanticwb.bsc.utils.UndefinedFrequencyException
+     * @throws org.semanticwb.bsc.utils.InappropriateFrequencyException
      */
+    @Override
     public Iterator<Period> listMeasurablesPeriods(boolean ascendent) throws UndefinedFrequencyException, InappropriateFrequencyException {
         int f = 0;
         try {
@@ -166,7 +182,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         }
         
         List<Period> periods = sortValidPeriods();        
-        List<Period> measurablesPeriods = new ArrayList<Period>();
+        List<Period> measurablesPeriods = new ArrayList<>();
         for(int i=1; i<=periods.size(); i++) {                 
             if(i%f==0) {                
                 measurablesPeriods.add(periods.get(i-1));
@@ -198,6 +214,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
      * Recupera el último período de la lista de períodos asignados al indicador.
      * @return El período más posterior
      */
+    @Override
     public Period getLastPeriod()
     {
         List<Period> periods = sortValidPeriods();
@@ -208,6 +225,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return null;
     }
     
+    @Override
     public State getMinimumState() {
         List<State> states = sortStates();
         try {
@@ -218,6 +236,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return null;
     }
     
+    @Override
     public State getMaximumState() {
         List<State> states = sortStates();
         try {
@@ -249,6 +268,17 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return sortPeriods(ascendent).iterator();
     }
     
+    @Override
+    public Iterator<Period> listAvailablePeriods() {
+        return getObjective().listAvailablePeriods();
+    }
+    
+    @Override
+    public Iterator<Period> listAvailablePeriods(boolean ascendent) {
+        return getObjective().listAvailablePeriods(ascendent);
+    }
+    
+    @Override
     public List<Series> listValidSerieses() {
         List<Series> validSerieses = SWBUtils.Collections.filterIterator(super.listSerieses(), new GenericFilterRule<Series>() {
                                                                         @Override
@@ -277,6 +307,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return validPeriods;
     }
     
+    @Override
     public List<State> listValidStates() {
         return getObjective().listValidStates();
     }

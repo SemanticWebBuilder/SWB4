@@ -76,7 +76,7 @@ public class RiskBoardTest {
 
     public void setUpSessionUser(BSC model) {
         Iterator it = model.getUserRepository().listUsers();
-        UserGroup userGroup = UserGroup.ClassMgr.getUserGroup(userGroupId, model);
+        UserGroup userGroup = UserGroup.ClassMgr.getUserGroup(null, model);
         while (it.hasNext()) {
             User user = (User) it.next();
             if (user.hasUserGroup(userGroup)) {

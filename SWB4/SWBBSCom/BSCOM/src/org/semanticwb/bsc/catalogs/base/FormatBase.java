@@ -1,9 +1,15 @@
 package org.semanticwb.bsc.catalogs.base;
 
 
-public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable
+   /**
+   * Un formato define un patrón para formatear mediciones. Tal como dólares, pesos, porcentaje, etc. 
+   */
+public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_formatPattern=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#formatPattern");
+   /**
+   * Un formato define un patrón para formatear mediciones. Tal como dólares, pesos, porcentaje, etc.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Format=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Format");
    /**
    * The semantic class that represents the currentObject
@@ -80,6 +86,29 @@ public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog imp
             return (getFormat(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.bsc.catalogs.Format with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Format
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Format
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Format> listFormatByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Format> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Format with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Format
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Format> listFormatByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Format> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.catalogs.Format with a determined Country
        * @param value Country of the type org.semanticwb.model.Country
        * @param model Model of the org.semanticwb.bsc.catalogs.Format
@@ -123,6 +152,29 @@ public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog imp
         public static java.util.Iterator<org.semanticwb.bsc.catalogs.Format> listFormatByLanguage(org.semanticwb.model.Language value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Format> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_language,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Format with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Format
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Format
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Format> listFormatByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Format> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Format with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Format
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Format> listFormatByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Format> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
             return it;
         }
     }

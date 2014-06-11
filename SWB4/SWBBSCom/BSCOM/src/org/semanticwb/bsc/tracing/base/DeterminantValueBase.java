@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Permite almacenar los valores que pueden tomar los determinantes definidos para conocer si son suficientes o no los controles de un riesgo 
    */
-public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Gestiona la información de un control en un Riesgo.
@@ -12,7 +12,7 @@ public abstract class DeterminantValueBase extends org.semanticwb.bsc.tracing.BS
     public static final org.semanticwb.platform.SemanticClass bsc_Control=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Control");
     public static final org.semanticwb.platform.SemanticProperty bsc_determinantValueInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#determinantValueInv");
    /**
-   * Determinante que define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.
+   * Un determinante define un criterio para evaluar si un control es suficiente o insuficiente para un Riesgo. Un riesgo puede tener varios determinantes.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Determinant=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Determinant");
    /**

@@ -53,7 +53,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         });
     }
     
-    
     public Objective(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
@@ -114,7 +113,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         super.setPrefix(value);
     }
     
-    public boolean updateAppraisal(Period period) {
+    public boolean updateAppraisal(Period period)
+    {
         boolean res = Boolean.FALSE;
         State status;
         PeriodStatus appraisal = getPeriodStatus(period);
@@ -143,6 +143,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         return res;
     }
     
+    @Override
     public State getMinimumState() {
         List<State> states = sortStates();
         try {
@@ -153,6 +154,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         return null;
     }
     
+    @Override
     public State getMaximumState() {
         List<State> states = sortStates(false);
         try {
@@ -172,9 +174,10 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         return status;
     }
     
+    @Override
     public PeriodStatus getPeriodStatus(Period period) {
         Iterator<PeriodStatus> appraisals = listPeriodStatuses();
-        PeriodStatus appraisal = null;
+        PeriodStatus appraisal;
         while(appraisals.hasNext())
         {
             appraisal = appraisals.next();
@@ -191,7 +194,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     }
     
     private List<Period> sortPeriods(boolean ascendent) {
-        List<Period> periods = SWBUtils.Collections.copyIterator(super.listPeriods());
+        List<Period> periods;
+        periods = SWBUtils.Collections.copyIterator(super.listPeriods());
         if(ascendent) {
             Collections.sort(periods);
         }else {             
@@ -205,11 +209,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     }
     
     private List<State> sortStates(boolean ascendent) {
-        //List<State> states = SWBUtils.Collections.copyIterator(super.listStates());
         List<State> states = listValidStates();
-        
-        
-        
         if(ascendent) {
             Collections.sort(states);
         }else {            
@@ -229,12 +229,13 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     }
     
     @Override
-    public GenericIterator<Period> listPeriods() {
-        return (GenericIterator)listPeriods(true);
+    public Iterator<Period> listAvailablePeriods() {
+        return getBSC().listPeriods();
     }
     
-    public Iterator<Period> listPeriods(boolean ascendent) {
-        return sortPeriods(ascendent).iterator();
+    @Override
+    public Iterator<Period> listAvailablePeriods(boolean ascendent) {
+        return getBSC().listPeriods(ascendent);
     }
     
     public List<State> listValidStates() {
@@ -299,27 +300,6 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
             gi.next().removeAllPeriod();
         }
     }
-    
-//    @Override
-//    public void removeState(State value) {
-//        // Eliminar en cascada el estado de los indicadores del objetivo
-//        GenericIterator<Indicator> gi = listIndicators();
-//        while(gi.hasNext()) {
-//            gi.next().removeState(value);
-//        }
-//        super.removeState(value);
-//    }
-    
-//    @Override
-//    public void removeAllState()
-//    {
-//        // Eliminar en cascada los estados asignados a los indicadores del objetivo
-//        GenericIterator<Indicator> gi = listIndicators();
-//        while(gi.hasNext()) {
-//            gi.next().removeAllState();
-//        }
-//        super.removeAllState();
-//    }
     
     @Override
     public int compareTo(Objective anotherObjective)

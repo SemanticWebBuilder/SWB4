@@ -1,12 +1,18 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.Roleable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Iconable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Machinable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo. 
+   */
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Iconable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Define el color asociado al estado
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_colorHex=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#colorHex");
+   /**
+   * Agrupa uno más estados.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
     public static final org.semanticwb.platform.SemanticProperty bsc_stateGroupInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#stateGroupInv");
    /**
@@ -15,6 +21,9 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     public static final org.semanticwb.platform.SemanticClass bsc_Status=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Status");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasStatusInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasStatusInv");
     public static final org.semanticwb.platform.SemanticProperty bsc_icon=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#icon");
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
    * The semantic class that represents the currentObject

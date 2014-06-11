@@ -4,7 +4,7 @@ package org.semanticwb.bsc.admin.base;
    /**
    * Administración de BSC 
    */
-public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Filterable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Descriptiveable
+public abstract class AdminBSCBase extends org.semanticwb.model.AdminWebSite implements org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Es una pagina web utilizada para mostrar comportamientos (tabs) dentro de la administración de SWB

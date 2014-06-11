@@ -10,6 +10,7 @@ import org.semanticwb.bsc.accessory.StateGroup;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.Perspective;
+import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.Theme;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.FormValidateException;
@@ -75,7 +76,7 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
         else if(genObj instanceof Series)
         {
             Series series = (Series)genObj;
-            Indicator parent = series.getIndicator();
+            SM parent = series.getSm();
             GenericIterator<Series> it = parent.listSerieses();
             while(it.hasNext()) {
                 Series s = it.next();

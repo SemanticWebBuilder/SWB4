@@ -1,8 +1,9 @@
 package org.semanticwb.bsc.catalogs.base;
 
 
-public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+    public static final org.semanticwb.platform.SemanticProperty bsc_weighing=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#weighing");
     public static final org.semanticwb.platform.SemanticClass bsc_Priority=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Priority");
    /**
    * The semantic class that represents the currentObject
@@ -78,6 +79,52 @@ public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog i
         {
             return (getPriority(id, model)!=null);
         }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Priority with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Priority
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Priority> listPriorityByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Priority> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Priority with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Priority> listPriorityByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Priority with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Priority
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Priority> listPriorityByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Priority> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Priority with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Priority
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Priority> listPriorityByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Priority> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static PriorityBase.ClassMgr getPriorityClassMgr()
@@ -92,5 +139,23 @@ public abstract class PriorityBase extends org.semanticwb.bsc.catalogs.Catalog i
     public PriorityBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Weighing property
+* @return float with the Weighing
+*/
+    public float getWeighing()
+    {
+        return getSemanticObject().getFloatProperty(bsc_weighing);
+    }
+
+/**
+* Sets the Weighing property
+* @param value long with the Weighing
+*/
+    public void setWeighing(float value)
+    {
+        getSemanticObject().setFloatProperty(bsc_weighing, value);
     }
 }

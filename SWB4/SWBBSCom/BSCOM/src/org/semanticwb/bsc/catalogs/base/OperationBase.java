@@ -1,9 +1,15 @@
 package org.semanticwb.bsc.catalogs.base;
 
 
-public abstract class OperationBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable
+   /**
+   * Las operaciones aritméticas, intervienen en la definición de reglas de evaluación de las mediciones y determinar su estado. 
+   */
+public abstract class OperationBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_script=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#script");
+   /**
+   * Las operaciones aritméticas, intervienen en la definición de reglas de evaluación de las mediciones y determinar su estado.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Operation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Operation");
    /**
    * The semantic class that represents the currentObject
@@ -78,6 +84,52 @@ public abstract class OperationBase extends org.semanticwb.bsc.catalogs.Catalog 
         public static boolean hasOperation(String id, org.semanticwb.model.SWBModel model)
         {
             return (getOperation(id, model)!=null);
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Operation with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Operation
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Operation
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Operation> listOperationByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Operation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Operation with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Operation
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Operation> listOperationByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Operation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Operation with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.catalogs.Operation
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Operation
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Operation> listOperationByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Operation> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.catalogs.Operation with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.catalogs.Operation
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.catalogs.Operation> listOperationByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Operation> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
         }
     }
 
