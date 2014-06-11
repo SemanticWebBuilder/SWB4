@@ -110,7 +110,7 @@ if (!isViewMode) {
                 }
                 %>
 <span class="saveProcess" title="<%=paramRequest.getLocaleString("itemSave")%>" onclick="submit_download_form('swp')"></span>
-            <span class="saveAsImage" title="<%=paramRequest.getLocaleString("itemSaveImageSVG")%>" onclick="submit_download_form('svg')"></span>
+            <span class="saveAsSVG" title="<%=paramRequest.getLocaleString("itemSaveImageSVG")%>" onclick="submit_download_form('svg')"></span>
             <span class="saveAsImage" title="<%=paramRequest.getLocaleString("itemSaveImagePNG")%>" onclick="submit_download_form('png')"></span>
                 <span class="subbarEnd"></span>
             </div>
