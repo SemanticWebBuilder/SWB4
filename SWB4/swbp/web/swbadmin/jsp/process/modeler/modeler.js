@@ -2394,6 +2394,8 @@
                             Modeler.fadeInObject(obj);
                         }
                         obj.layer = ToolKit.layer;
+                    } else {
+                        obj.remove();
                     }
                 }else   //Es un ConnectionObject
                 {
