@@ -77,9 +77,7 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         }
         return perspectives;
     }
-    
-    
-    
+
     public List<Period> listValidPeriods() {
         List<Period> validPeriods = SWBUtils.Collections.filterIterator(listPeriods(), new GenericFilterRule<Period>() {
                                                                         @Override

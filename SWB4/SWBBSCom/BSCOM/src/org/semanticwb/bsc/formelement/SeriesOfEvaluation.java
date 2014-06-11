@@ -2,6 +2,7 @@ package org.semanticwb.bsc.formelement;
 
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.DisplayProperty;
@@ -91,7 +92,7 @@ public class SeriesOfEvaluation extends org.semanticwb.bsc.formelement.base.Seri
             displayedValue = value.getDisplayName(lang);
         }
         
-        if(!(obj.createGenericInstance() instanceof Indicator)) {
+        if(!(obj.createGenericInstance() instanceof SM)) {
             return lang.equals("es")?"Clase no soportada...":"Unsupported class...";
         }
         
@@ -113,11 +114,11 @@ public class SeriesOfEvaluation extends org.semanticwb.bsc.formelement.base.Seri
                 ret.append(" value=\"\"></option>");
             }
             
-            Indicator indicator = (Indicator) obj.createGenericInstance();
+            SM sm = (SM) obj.createGenericInstance();
             Iterator<Series> it = null;
             
-            if(indicator !=null) {
-                it = SWBComparator.sortSemanticObjects(lang, indicator.listSerieses());
+            if(sm !=null) {
+                it = SWBComparator.sortSemanticObjects(lang, sm.listSerieses());
             }
 
             if(it != null)

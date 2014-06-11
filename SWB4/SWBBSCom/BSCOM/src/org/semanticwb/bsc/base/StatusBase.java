@@ -5,6 +5,9 @@ package org.semanticwb.bsc.base;
    */
 public interface StatusBase extends org.semanticwb.model.GenericObject
 {
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo. 
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
    * Lista de estados del grupo 

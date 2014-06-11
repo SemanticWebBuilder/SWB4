@@ -4,7 +4,7 @@ package org.semanticwb.bsc.utils.base;
    /**
    * Contiene la bitácora de correos enviados desde la aplicación 
    */
-public abstract class EmailLogBase extends org.semanticwb.model.SWBClass 
+public abstract class EmailLogBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable
 {
    /**
    * Un usuario es una persona que tiene relación con el portal a través de un método de acceso.
@@ -15,7 +15,6 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
     public static final org.semanticwb.platform.SemanticProperty bsc_otherAccounts=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#otherAccounts");
     public static final org.semanticwb.platform.SemanticProperty bsc_subject=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#subject");
     public static final org.semanticwb.platform.SemanticProperty bsc_from=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#from");
-    public static final org.semanticwb.platform.SemanticProperty bsc_date=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#date");
     public static final org.semanticwb.platform.SemanticProperty bsc_message=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#message");
    /**
    * Contiene la bitácora de correos enviados desde la aplicación
@@ -96,6 +95,29 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
             return (getEmailLog(id, model)!=null);
         }
        /**
+       * Gets all org.semanticwb.bsc.utils.EmailLog with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.utils.EmailLog
+       * @return Iterator with all the org.semanticwb.bsc.utils.EmailLog
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.utils.EmailLog> listEmailLogByModifiedBy(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.utils.EmailLog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.utils.EmailLog with a determined ModifiedBy
+       * @param value ModifiedBy of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.utils.EmailLog
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.utils.EmailLog> listEmailLogByModifiedBy(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.utils.EmailLog> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_modifiedBy,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.utils.EmailLog with a determined To
        * @param value To of the type org.semanticwb.model.User
        * @param model Model of the org.semanticwb.bsc.utils.EmailLog
@@ -164,6 +186,29 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.utils.EmailLog> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_from,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.bsc.utils.EmailLog with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @param model Model of the org.semanticwb.bsc.utils.EmailLog
+       * @return Iterator with all the org.semanticwb.bsc.utils.EmailLog
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.utils.EmailLog> listEmailLogByCreator(org.semanticwb.model.User value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.utils.EmailLog> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(swb_creator, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.utils.EmailLog with a determined Creator
+       * @param value Creator of the type org.semanticwb.model.User
+       * @return Iterator with all the org.semanticwb.bsc.utils.EmailLog
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.utils.EmailLog> listEmailLogByCreator(org.semanticwb.model.User value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.utils.EmailLog> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_creator,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static EmailLogBase.ClassMgr getEmailLogClassMgr()
@@ -178,6 +223,80 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
     public EmailLogBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+   /**
+   * Sets the value for the property ModifiedBy
+   * @param value ModifiedBy to set
+   */
+
+    public void setModifiedBy(org.semanticwb.model.User value)
+    {
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_modifiedBy, value.getSemanticObject());
+        }else
+        {
+            removeModifiedBy();
+        }
+    }
+   /**
+   * Remove the value for ModifiedBy property
+   */
+
+    public void removeModifiedBy()
+    {
+        getSemanticObject().removeProperty(swb_modifiedBy);
+    }
+
+   /**
+   * Gets the ModifiedBy
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getModifiedBy()
+    {
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_modifiedBy);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
+    }
+
+/**
+* Gets the Updated property
+* @return java.util.Date with the Updated
+*/
+    public java.util.Date getUpdated()
+    {
+        return getSemanticObject().getDateProperty(swb_updated);
+    }
+
+/**
+* Sets the Updated property
+* @param value long with the Updated
+*/
+    public void setUpdated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_updated, value);
+    }
+
+/**
+* Gets the Created property
+* @return java.util.Date with the Created
+*/
+    public java.util.Date getCreated()
+    {
+        return getSemanticObject().getDateProperty(swb_created);
+    }
+
+/**
+* Sets the Created property
+* @param value long with the Created
+*/
+    public void setCreated(java.util.Date value)
+    {
+        getSemanticObject().setDateProperty(swb_created, value);
     }
    /**
    * Gets all the org.semanticwb.model.User
@@ -383,23 +502,43 @@ public abstract class EmailLogBase extends org.semanticwb.model.SWBClass
          }
          return ret;
     }
+   /**
+   * Sets the value for the property Creator
+   * @param value Creator to set
+   */
 
-/**
-* Gets the Date property
-* @return java.util.Date with the Date
-*/
-    public java.util.Date getDate()
+    public void setCreator(org.semanticwb.model.User value)
     {
-        return getSemanticObject().getDateProperty(bsc_date);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(swb_creator, value.getSemanticObject());
+        }else
+        {
+            removeCreator();
+        }
+    }
+   /**
+   * Remove the value for Creator property
+   */
+
+    public void removeCreator()
+    {
+        getSemanticObject().removeProperty(swb_creator);
     }
 
-/**
-* Sets the Date property
-* @param value long with the Date
-*/
-    public void setDate(java.util.Date value)
+   /**
+   * Gets the Creator
+   * @return a org.semanticwb.model.User
+   */
+    public org.semanticwb.model.User getCreator()
     {
-        getSemanticObject().setDateProperty(bsc_date, value);
+         org.semanticwb.model.User ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(swb_creator);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.model.User)obj.createGenericInstance();
+         }
+         return ret;
     }
 
 /**

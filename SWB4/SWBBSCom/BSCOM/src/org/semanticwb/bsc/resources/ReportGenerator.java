@@ -513,12 +513,12 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
                     states.add(((Initiative) generic).getStatusAssigned());
                 }
             } else if (generic instanceof Deliverable) {
-                if (((Deliverable) generic).getInitiative() instanceof Initiative) {
+//                if (((Deliverable) generic).getDeliverableAssignable() instanceof Initiative) {
                     Initiative ini = (Initiative) ((Deliverable) generic).getInitiative();
                     if (ini.getStatusAssigned() != null) {
                         states.add(ini.getStatusAssigned());
                     }
-                }
+//                }
             }
             while (iterator != null && iterator.hasNext()) {
                 State state = iterator.next();
@@ -1148,7 +1148,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
                         }
                     } else if (inTurn instanceof Deliverable) {
                         Deliverable deli = (Deliverable) inTurn;
-                        if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                        if (deli.getDeliverableAssignable() != null && deli.getDeliverableAssignable() instanceof Initiative) {
                             Initiative ini = (Initiative) deli.getInitiative();
                             if (ini.getInitiativeAssignable() != null
                                     && ini.getInitiativeAssignable() instanceof Indicator) {
@@ -1157,7 +1157,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
                                     mustBeAdded = true;
                                 }
                             }
-                        }
+//                        }
                     }
                 }
             } else if (criteria.getSponsor() == null && mustBeAdded) {
@@ -1263,7 +1263,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             Deliverable deli = (Deliverable) element;
             for (String type : relatedTypes) {
                 if (type.endsWith(Objective.bsc_Objective.getName())) {
-                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                    if (deli.getDeliverableAssignable() != null && deli.getDeliverableAssignable() instanceof Initiative) {
                         //Se hace la comparacion debido a la creacion de la interface DeliverableAssignable
                         Initiative ini = (Initiative) deli.getInitiative();
                         if (ini.getInitiativeAssignable() != null
@@ -1272,17 +1272,17 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
                             Indicator indi = (Indicator) ini.getInitiativeAssignable();
                             additional.add(indi.getObjective().getSemanticObject());
                         }
-                    }
+//                    }
                 } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
-                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                    if (deli.getDeliverableAssignable() != null && deli.getDeliverableAssignable() instanceof Initiative) {
                         Initiative ini = (Initiative) deli.getInitiative();
                         if (ini.getInitiativeAssignable() != null
                                 && ini.getInitiativeAssignable() instanceof Indicator) {
                             //se obtiene el indicador a partir de la iniciativa
                             additional.add(((Indicator) ini.getInitiativeAssignable()).getSemanticObject());
                         }
-                    }
-                } else if (type.endsWith(Initiative.bsc_Initiative.getName()) && deli.getInitiative() != null) {
+//                    }
+                } else if (type.endsWith(Initiative.bsc_Initiative.getName()) && deli.getInitiative()!= null) {
                     additional.add(deli.getInitiative().getSemanticObject());
                 }
             }

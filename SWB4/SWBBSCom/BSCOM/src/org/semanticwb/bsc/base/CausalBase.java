@@ -13,6 +13,9 @@ public interface CausalBase extends org.semanticwb.model.GenericObject
    * Persiste información de las relaciones causa efecto que existe con otros Objetivos 
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_hasCausalTheme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasCausalTheme");
+   /**
+   * Define las características de un Objetivo estratégico. 
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * Persiste información de las relaciones causa efecto que existe con otros Objetivos 

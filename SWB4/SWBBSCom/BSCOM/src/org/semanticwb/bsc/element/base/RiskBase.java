@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Roleable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.Filterable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Traceable
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Referensable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
@@ -45,13 +45,13 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_stratManageRisk=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#stratManageRisk");
    /**
-   * Define si un riesgo es controlado suficientemente dependiendo si existen controles para cada factor y si cada uno de los Controles son Suficientes
-   */
-    public static final org.semanticwb.platform.SemanticProperty bsc_riskControlledSufficiently=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#riskControlledSufficiently");
-   /**
    * Define el nivel de desición del Riesgo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_riskLeveldecision=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#riskLeveldecision");
+   /**
+   * Define si un riesgo es controlado suficientemente dependiendo si existen controles para cada factor y si cada uno de los Controles son Suficientes
+   */
+    public static final org.semanticwb.platform.SemanticProperty bsc_riskControlledSufficiently=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#riskControlledSufficiently");
    /**
    * En caso de que ninguna clasificación del Riesgo corresponda al Riesgo definido, este campo permite especifica otra clasficación mediante su descripción
    */
@@ -707,24 +707,6 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     }
 
 /**
-* Gets the RiskControlledSufficiently property
-* @return String with the RiskControlledSufficiently
-*/
-    public String getRiskControlledSufficiently()
-    {
-        return getSemanticObject().getProperty(bsc_riskControlledSufficiently);
-    }
-
-/**
-* Sets the RiskControlledSufficiently property
-* @param value long with the RiskControlledSufficiently
-*/
-    public void setRiskControlledSufficiently(String value)
-    {
-        getSemanticObject().setProperty(bsc_riskControlledSufficiently, value);
-    }
-
-/**
 * Gets the RiskLeveldecision property
 * @return String with the RiskLeveldecision
 */
@@ -740,6 +722,24 @@ public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement imp
     public void setRiskLeveldecision(String value)
     {
         getSemanticObject().setProperty(bsc_riskLeveldecision, value);
+    }
+
+/**
+* Gets the RiskControlledSufficiently property
+* @return String with the RiskControlledSufficiently
+*/
+    public String getRiskControlledSufficiently()
+    {
+        return getSemanticObject().getProperty(bsc_riskControlledSufficiently);
+    }
+
+/**
+* Sets the RiskControlledSufficiently property
+* @param value long with the RiskControlledSufficiently
+*/
+    public void setRiskControlledSufficiently(String value)
+    {
+        getSemanticObject().setProperty(bsc_riskControlledSufficiently, value);
     }
 
 /**

@@ -475,16 +475,16 @@ public class ReportGeneratorTest {
                         }
                     } else if (inTurn instanceof Deliverable) {
                         Deliverable deli = (Deliverable) inTurn;
-                        if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
-                            Initiative ini = (Initiative) deli.getInitiative();
-                            if (ini.getInitiativeAssignable() != null
-                                    && ini.getInitiativeAssignable() instanceof Indicator) {
-                                Indicator indi = (Indicator) ini.getInitiativeAssignable();
-                                if (indi.getObjective().getSponsor().equals(criteria.getSponsor())) {
-                                    mustBeAdded = true;
-                                }
-                            }
-                        }
+//                        if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                            Initiative ini = (Initiative) deli.getInitiative();
+//                            if (ini.getInitiativeAssignable() != null
+//                                    && ini.getInitiativeAssignable() instanceof Indicator) {
+//                                Indicator indi = (Indicator) ini.getInitiativeAssignable();
+//                                if (indi.getObjective().getSponsor().equals(criteria.getSponsor())) {
+//                                    mustBeAdded = true;
+//                                }
+//                            }
+//                        }
                     }
                 }
             } else if (criteria.getSponsor() == null && mustBeAdded) {
@@ -590,28 +590,29 @@ public class ReportGeneratorTest {
             Deliverable deli = (Deliverable) element;
             for (String type : relatedTypes) {
                 if (type.endsWith(Objective.bsc_Objective.getName())) {
-                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
-                        //Se hace la comparacion debido a la creacion de la interface DeliverableAssignable
-                        Initiative ini = (Initiative) deli.getInitiative();
-                        if (ini.getInitiativeAssignable() != null
-                                && ini.getInitiativeAssignable() instanceof Indicator) {
-                            //se obtiene el objetivo del entregable a partir de la iniciativa
-                            Indicator indi = (Indicator) ini.getInitiativeAssignable();
-                            additional.add(indi.getObjective().getSemanticObject());
-                        }
-                    }
+//                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                        //Se hace la comparacion debido a la creacion de la interface DeliverableAssignable
+//                        Initiative ini = (Initiative) deli.getInitiative();
+//                        if (ini.getInitiativeAssignable() != null
+//                                && ini.getInitiativeAssignable() instanceof Indicator) {
+//                            //se obtiene el objetivo del entregable a partir de la iniciativa
+//                            Indicator indi = (Indicator) ini.getInitiativeAssignable();
+//                            additional.add(indi.getObjective().getSemanticObject());
+//                        }
+//                    }
                 } else if (type.endsWith(Indicator.bsc_Indicator.getName())) {
-                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
-                        Initiative ini = (Initiative) deli.getInitiative();
-                        if (ini.getInitiativeAssignable() != null
-                                && ini.getInitiativeAssignable() instanceof Indicator) {
-                            //se obtiene el indicador a partir de la iniciativa
-                            additional.add(((Indicator) ini.getInitiativeAssignable()).getSemanticObject());
-                        }
-                    }
-                } else if (type.endsWith(Initiative.bsc_Initiative.getName()) && deli.getInitiative() != null) {
-                    additional.add(deli.getInitiative().getSemanticObject());
-                }
+//                    if (deli.getInitiative() != null && deli.getInitiative() instanceof Initiative) {
+//                        Initiative ini = (Initiative) deli.getInitiative();
+//                        if (ini.getInitiativeAssignable() != null
+//                                && ini.getInitiativeAssignable() instanceof Indicator) {
+//                            //se obtiene el indicador a partir de la iniciativa
+//                            additional.add(((Indicator) ini.getInitiativeAssignable()).getSemanticObject());
+//                        }
+//                    }
+                } 
+//                else if (type.endsWith(Initiative.bsc_Initiative.getName()) && deli.getInitiative() != null) {
+//                    additional.add(deli.getInitiative().getSemanticObject());
+//                }
             }
         }
         //se agregan los elementos seleccionados a resultSet

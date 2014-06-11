@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import javax.script.ScriptException;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Operation;
 
@@ -83,8 +84,8 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
     
     public boolean evaluate(Period period) {
         boolean res = false;
-        if(Operation.ClassMgr.hasOperation(getOperationId(), getSeries().getIndicator().getBSC())) {
-            Operation op = Operation.ClassMgr.getOperation(getOperationId(), getSeries().getIndicator().getBSC());
+        if( Operation.ClassMgr.hasOperation(getOperationId(), getSeries().getSm().getBSC()) ) {
+            Operation op = Operation.ClassMgr.getOperation(getOperationId(), getSeries().getSm().getBSC());
             double value1 = getSeries().getMeasure(period).getValue();
             double value2 = getAnotherSeries()==null?0:(getAnotherSeries().getMeasure(period)==null?0:getAnotherSeries().getMeasure(period).getValue());
             Object[][] f = lexerFactor();
@@ -94,20 +95,23 @@ public class EvaluationRule extends org.semanticwb.bsc.tracing.base.EvaluationRu
                         double coef = (Double)f[0][1];
                         
                         res = op.evaluate(value1, coef*value2);
-                    }catch(Exception e) {
+                    }catch(NoSuchMethodException e) {
+                    }catch (ScriptException e) {
                     }
                 }else if(f.length==2) {
                     double coef1 = (Double)f[0][1];
                     double coef2 = (Double)f[1][1];
                     try {
                         res = op.evaluate(value1, coef1*value2, coef2*value2);
-                    }catch(Exception e) {
+                    }catch(NoSuchMethodException e) {
+                    }catch (ScriptException e) {
                     }
                 }
             }else {
                 try {
                     res = op.evaluate(value1, value2);
-                }catch(Exception e) {
+                }catch(NoSuchMethodException e) {
+                }catch (ScriptException e) {
                 }
             }
         }

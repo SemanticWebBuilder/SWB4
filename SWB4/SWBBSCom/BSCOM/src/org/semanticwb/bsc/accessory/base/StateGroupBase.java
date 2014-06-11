@@ -1,10 +1,19 @@
 package org.semanticwb.bsc.accessory.base;
 
 
-public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Help,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+   /**
+   * Agrupa uno más estados. 
+   */
+public abstract class StateGroupBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasGroupedStates=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasGroupedStates");
+   /**
+   * Agrupa uno más estados.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_StateGroup=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#StateGroup");
    /**
    * The semantic class that represents the currentObject

@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Localeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Countryable,org.semanticwb.model.Indexable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Traceable,org.semanticwb.model.Undeleteable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -23,7 +23,13 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Referencia a un objeto de tipo Rule
    */
     public static final org.semanticwb.platform.SemanticClass swb_RuleRef=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#RuleRef");
+   /**
+   * Las operaciones aritméticas, intervienen en la definición de reglas de evaluación de las mediciones y determinar su estado.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Operation=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Operation");
+   /**
+   * Define las características de un Objetivo estratégico.
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Objective=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Objective");
    /**
    * Objeto por medio del cual se define un tipo de componente o recurso
@@ -55,7 +61,7 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Factor=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Factor");
    /**
-   * Persiste los atributos de un indicador
+   * Define las características de un Indicador.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Indicator=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Indicator");
    /**
@@ -78,6 +84,9 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Meeting=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Meeting");
+   /**
+   * Define las características de una Iniciativa
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_Initiative=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Initiative");
    /**
    * Define las características de un Acuerdo.

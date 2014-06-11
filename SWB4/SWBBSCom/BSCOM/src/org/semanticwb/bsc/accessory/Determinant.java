@@ -22,6 +22,15 @@ public class Determinant extends org.semanticwb.bsc.accessory.base.DeterminantBa
 //        relateToControls();
     }
     
+    @Override
+    public void remove() {
+        SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
+        Iterator<DeterminantValue> determinantValues = DeterminantValue.ClassMgr.listDeterminantValueByDeterminant(this, model);
+        
+        
+        super.remove(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     /**
      * Obtiene el conjunto de determinantes cuyo estado actual es activo, no eliminado y para los cuales
      * el usuario en sesi&oacute;n tiene acceso
@@ -51,7 +60,6 @@ public class Determinant extends org.semanticwb.bsc.accessory.base.DeterminantBa
      * existente en el sitio BSC correspondiente.
      */
     private void relateToControls() {
-        
         System.out.println("Relacionando Determinantes con Controles");
         SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
         Iterator<Control> controlIt = Control.ClassMgr.listControls(model);

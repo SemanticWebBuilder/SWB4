@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
+import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.base.SeriesBase;
@@ -79,7 +80,7 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
 
     @Override
     public Measure getMeasure() {
-        return getMeasure(getIndicator().getLastPeriod());
+        return getMeasure(getSm().getLastPeriod());
     }
     
     public Measure getMeasure(Period period)
@@ -89,7 +90,7 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
         }
         
         Iterator<Measure> measures = listMeasures();
-        Measure measure = null;
+        Measure measure;
         while(measures.hasNext())
         {
             measure = measures.next();
@@ -109,7 +110,8 @@ public class Series extends org.semanticwb.bsc.tracing.base.SeriesBase implement
         List<EvaluationRule> validRules = SWBUtils.Collections.filterIterator(listEvaluationRules(), new GenericFilterRule<EvaluationRule>() {
                                                                         @Override
                                                                         public boolean filter(EvaluationRule r) {
-                                                                            User user = SWBContext.getSessionUser(getIndicator().getBSC().getUserRepository().getId());
+                                                                            BSC scorecard = (BSC)r.getSemanticObject().getModel().getModelObject().createGenericInstance();
+                                                                            User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
                                                                             if(user==null) {
                                                                                 user = SWBContext.getAdminUser();
                                                                             }
