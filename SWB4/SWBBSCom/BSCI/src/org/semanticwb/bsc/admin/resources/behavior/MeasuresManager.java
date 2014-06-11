@@ -16,7 +16,6 @@ import org.semanticwb.bsc.Measurable;
 import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.catalogs.Format;
-import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
