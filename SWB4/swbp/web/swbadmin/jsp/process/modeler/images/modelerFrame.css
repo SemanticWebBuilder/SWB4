@@ -479,6 +479,18 @@ ul.breadcrumbs.alt1 li.last a{
     background: url(file_saveasimage2.png) top center no-repeat;
 }
 
+.saveAsSVG {
+    background: url(file_saveassvg1.png) top center no-repeat;
+    position: relative;
+    float: left;
+    height:43px;
+    width:37px;
+}
+
+.saveAsSVG:hover {
+    background: url(file_saveassvg2.png) top center no-repeat;
+}
+
 .normalStartEvent {
     background: url(start_normal1.png) top center no-repeat;
     position: relative;
