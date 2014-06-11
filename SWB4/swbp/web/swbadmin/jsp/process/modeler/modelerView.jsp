@@ -216,7 +216,7 @@ if (!isViewMode) {
             <div id="artifactsBar" class="subbarHidden" style="width: 89px;">
                 <span class="subbarStart"></span>
                 <span class="annotation" cId ="AnnotationArtifact" title="<%=paramRequest.getLocaleString("itemAnnotation")%>" onclick="Modeler.creationStart(this)"></span>
-                <span class="group" cId ="Group" title="<%=paramRequest.getLocaleString("itemGroup")%>" onclick="Modeler.creationStart(this)"></span>
+                <span class="group" cId ="GroupArtifact" title="<%=paramRequest.getLocaleString("itemGroup")%>" onclick="Modeler.creationStart(this)"></span>
                 <span class="subbarEnd"></span>
             </div>
             <div id="dataobjectsBar" class="subbarHidden" style="width: 163px;">
