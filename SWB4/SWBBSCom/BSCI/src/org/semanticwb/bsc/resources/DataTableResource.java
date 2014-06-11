@@ -352,7 +352,7 @@ public class DataTableResource extends GenericResource implements ComponentExpor
                 }finally {
                     measure.setValue(value);
                     measure.evaluate();
-                    series.getIndicator().getObjective().updateAppraisal(period);
+                    series.getSm().updateAppraisal(period);
                 }
             }else {
 //TODO algo va aqui
