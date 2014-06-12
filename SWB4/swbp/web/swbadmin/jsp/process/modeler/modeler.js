@@ -3647,8 +3647,10 @@
                 
         clearCanvas: function() {
             for (var i = ToolKit.contents.length; i--;) {
-                ToolKit.contents[i].remove(true);
-                ToolKit.contents[i] = null;
+                if (ToolKit.contents[i] && ToolKit.contents[i].remove) {
+                    ToolKit.contents[i].remove(true);
+                    ToolKit.contents[i] = null;
+                }
             }
             
             ToolKit.contents = [];
