@@ -122,10 +122,13 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
             appraisal.setPeriod(period);
             addPeriodStatus(appraisal);
-            status = getMaximumState();
-        }else {
-            status = appraisal.getStatus();
+//            status = getMaximumState();
         }
+//        else
+//        {
+//            status = appraisal.getStatus();
+//        }
+        status = getMaximumState();
         
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
