@@ -19,6 +19,7 @@ import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.bsc.utils.BSCUtils;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
@@ -390,109 +391,12 @@ System.out.println("semObj="+semObj);
             response.setRenderParameter("statmsg", response.getLocaleString("msgUnauthorizedUser"));
             return;
         }
-
-//        if(measurable instanceof Series) {
-            processObjectiveRuleAction(request, response);
-//        }else if(measurable instanceof Deliverable) {
-//            processInitiativeRuleAction(request, response);
-//        }
-        
+        processMeasureEvaluation(request, response);
         response.setAction(SWBResourceURL.Action_EDIT);
         response.setRenderParameter("suri", suri);
-        
-        
-//        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-//        SemanticObject semanticObj = ont.getSemanticObject(suri);
-//        if(semanticObj==null) {
-//            response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-//            return;
-//        }
-        
-//        GenericObject genericObj = semanticObj.getGenericInstance();
-//        if(genericObj instanceof Series)
-//        {
-//            Series series = (Series)genericObj;
-//
-//            if(SWBResourceURL.Action_REMOVE.equalsIgnoreCase(action))
-//            {
-//                SemanticObject objMeasure = ont.getSemanticObject(request.getParameter("sval"));
-//                if(objMeasure!=null) {
-//                    Measure measure = (Measure)objMeasure.getGenericInstance();
-//                    if(series.hasMeasure(measure)) {
-//                        series.removeMeasure(measure);
-//                        response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveOk"));
-//                    }else {
-//                        response.setRenderParameter("statmsg", response.getLocaleString("msgRemoveError"));
-//                    }
-//                }else {
-//                    response.setRenderParameter("statmsg", response.getLocaleString("msgNoSuchSemanticElement"));
-//                }
-//            }
-//            else
-//            {
-//                Format format = series.getFormat();
-//                Locale locale;
-//                try {
-//                    locale = new Locale(format.getLanguage().getId().toLowerCase(), format.getCountry().getId().toUpperCase());
-//                }catch(Exception e) {
-//                    locale = new Locale("es","MX");
-//                }
-//                NumberFormat numFormat = NumberFormat.getNumberInstance(locale);
-//                DecimalFormat formatter = (DecimalFormat)numFormat;
-//                try {
-//                    formatter.applyPattern(format.getFormatPattern());
-//                }catch(Exception iae) {
-//                    formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN));
-//                }
-//
-//                String pid, val;
-//                BSC bsc = (BSC) semanticObj.getModel().getModelObject().getGenericInstance();
-//                Enumeration<String> e = request.getParameterNames();
-//                if(e.hasMoreElements())
-//                {
-//                    while(e.hasMoreElements()) {
-//                        pid = e.nextElement();
-//                        val = request.getParameter(pid)==null?"":request.getParameter(pid);
-//                        if(Period.ClassMgr.hasPeriod(pid, bsc))
-//                        {
-//                            Period period = Period.ClassMgr.getPeriod(pid, bsc);
-//                            Measure measure = series.getMeasure(period);
-//                            PeriodStatus ps;
-//                            if(measure == null) {
-//                                measure = Measure.ClassMgr.createMeasure(bsc);
-//                                series.addMeasure(measure);
-//                                ps = PeriodStatus.ClassMgr.createPeriodStatus(bsc);
-//                                ps.setPeriod(period);
-//                                measure.setEvaluation(ps);
-//                            }
-//                            if(val.isEmpty()) {
-//                                measure.setValue(0);
-//                                measure.getEvaluation().setStatus(null);
-//                                continue;
-//                            }
-//                            try {
-//                                float value = Float.parseFloat(val);
-//                                measure.setValue(value);
-//                            }catch(NumberFormatException nfe) {
-//                                try {
-//                                    Number value = formatter.parse(val);
-//                                    measure.setValue(value.floatValue());
-//                                }catch(ParseException pe) {
-//                                    measure.setValue(0);
-//                                }
-//                            }finally {
-//                                measure.evaluate();
-//                                series.getIndicator().getObjective().updateAppraisal(period);
-//                            }
-//                        }
-//                    } //while
-//                    response.setRenderParameter("statmsg", response.getLocaleString("msgUpdtOk"));
-//                } //if
-//            } //else
-//        }
     }
     
-    private void processObjectiveRuleAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
+    private void processMeasureEvaluation(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
         final String action = response.getAction();
         final String suri = request.getParameter("suri");
@@ -561,6 +465,7 @@ System.out.println("semObj="+semObj);
                         try {
                             float value = Float.parseFloat(val);
                             measure.setValue(value);
+                            //measure.setValue(BSCUtils.Formats.round(value, 2).floatValue());
                         }catch(NumberFormatException nfe) {
                             try {
                                 Number value = formatter.parse(val);
@@ -570,7 +475,6 @@ System.out.println("semObj="+semObj);
                             }
                         }finally {
                             measure.evaluate();
-                            //((Indicator)series.getSm()).getObjective().updateAppraisal(period);
                             series.getSm().updateAppraisal(period);
                         }
                     }
@@ -579,23 +483,4 @@ System.out.println("semObj="+semObj);
             } //if
         } //else
     }
-    
-    /*private void processInitiativeRuleAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
-    {
-System.out.println("\n\nprocessInitiativeRuleAction().....");
-//        final String action = response.getAction();
-        final String suri = request.getParameter("suri");
-        response.setRenderParameter("suri", suri);
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject semanticObj = ont.getSemanticObject(suri);
-        GenericObject genericObj = semanticObj.getGenericInstance();
-        Deliverable deliverable = (Deliverable)genericObj;
-        int value;
-        try {
-            value = Integer.parseInt(request.getParameter(deliverable.getId()));
-        }catch(NumberFormatException nfe) {
-            value = 0;
-        }
-        deliverable.setProgress(value);
-    }*/
 }
