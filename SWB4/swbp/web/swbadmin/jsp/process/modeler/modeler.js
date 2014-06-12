@@ -1883,6 +1883,12 @@
         return _this;
     };
     
+    var _CallSubProcess = function (obj) {
+        var _this = new _CallActivity(obj);
+        _this.setElementType("CallSubProcess");
+        return _this;
+    };
+    
     var _Task = function(obj) {
         var _this = new _Activity(obj);
         _this.setElementType("Task");
@@ -3123,6 +3129,10 @@
                 obj.setAttributeNS(null,"bclass","eventSubTask");
                 obj.setAttributeNS(null,"oclass","eventSubTask_o");
                 obj.setBaseClass();                        
+            } else if (type === "callSubProcess") {
+                obj.setAttributeNS(null,"bclass","callActivity");
+                obj.setAttributeNS(null,"oclass","callActivity_o");
+                obj.setBaseClass();
             }
             else if (type=="transactionsubProcess")
             {
@@ -3966,7 +3976,7 @@
                 ret.setText("Tarea de script reusada");
                 ret.resize(100,60);
             }
-            else if(type=='CallBusinessRuleTask') {
+            else if(type==='CallUserTask') {
                 ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
                 ret.addIcon("#userMarker",-1,-1,13,8);
                 ret.setText("Tarea de usuario reusada");
@@ -3974,6 +3984,11 @@
             }
             else if(type=='SubProcess') {
                 ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
+                ret.setText("Subproceso");
+                ret.resize(100,60);
+            }
+            else if(type==='CallSubProcess') {
+                ret = new _CallSubProcess(Modeler.createSubProcess(null, null, "callSubProcess"));
                 ret.setText("Subproceso");
                 ret.resize(100,60);
             }
