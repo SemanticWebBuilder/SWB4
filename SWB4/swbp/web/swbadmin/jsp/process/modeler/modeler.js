@@ -3319,7 +3319,6 @@
                 var flowNodes = [];
 
                 Modeler.clearCanvas();
-
                 while(i < jsarr.length) {
                     var tmp = jsarr[i];
                     var cls = tmp.class;
@@ -3639,7 +3638,7 @@
                 },
                 error: function(response, ioArgs) {
                     //console.log("error");
-                    ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación", 200, "Error");
+                    ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación: "+ioArgs.xhr.status, 200, "Error");
                     return response;
                 },
                 handleAs: "text"
