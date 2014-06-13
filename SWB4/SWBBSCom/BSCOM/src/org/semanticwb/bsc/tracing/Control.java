@@ -1,10 +1,7 @@
 package org.semanticwb.bsc.tracing;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -21,6 +18,7 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
         relateToDeterminants();
     }
 
+    static private int FLAG2DELETE = 0;
     /**
      * Obtiene el prefijo en base al prefijo del Factor padre. La nomenclatura
      * en la que se basa se muestra a continuaci&oacute;n: Prefijo del Factor +
@@ -98,7 +96,6 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
             Determinant det = determinantIt.next();
             existent.put(det, Boolean.FALSE);
         }
-        
         Iterator<DeterminantValue> detValIt = this.listDeterminantValues();
         while (detValIt != null && detValIt.hasNext()) {
             DeterminantValue detValue = detValIt.next();
@@ -118,10 +115,6 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
                 }
             }
         }
-                    
-                    
-        
-        
     }
     
     /**
@@ -136,8 +129,10 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
         if (detIt != null) {
             while (detIt.hasNext()) {
                 DeterminantValue detValue = detIt.next();
-                if (detValue.getIsDeterminant() == null ||
-                        (detValue.getIsDeterminant() != null && detValue.getIsDeterminant().equalsIgnoreCase("no"))) {
+                Determinant det = detValue.getDeterminant();
+                if (det.isValid() && (detValue.getIsDeterminant() == null ||
+                        (detValue.getIsDeterminant() != null &&
+                         detValue.getIsDeterminant().equalsIgnoreCase("no")))) {
                     result = false;
                     break;
                 }
