@@ -18,6 +18,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.ComponentExportable;
+import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.element.Indicator;
@@ -69,12 +70,12 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject sobj = ont.getSemanticObject(suri);
-        if(sobj==null || !(sobj.getGenericInstance() instanceof Indicator)) {
-            response.getWriter().println("No hay indicador");
+        if(sobj==null || !(sobj.getGenericInstance() instanceof SM)) {
+            response.getWriter().println("No hay instancia de SM");
             return;
         }
-        Indicator indicator = (Indicator)sobj.getGenericInstance();
-        Series star = indicator.getStar();
+        SM sm = (SM)sobj.getGenericInstance();
+        Series star = sm.getStar();
         if(star == null) {
             response.getWriter().println("No hay STAR");
             return;
@@ -82,15 +83,15 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         
         final String prx = getResourceBase().getWebSite().getId() + "_"; 
         
-        List<Series> serieses = indicator.listValidSerieses();
+        List<Series> serieses = sm.listValidSerieses();
         Collections.sort(serieses);
         PrintWriter out = response.getWriter();
         
         Iterator<Period> periods;
         try {
-            periods = indicator.listMeasurablesPeriods();
+            periods = sm.listMeasurablesPeriods();
         }catch(Exception e) {
-            List<Period> lperiods = indicator.listValidPeriods();
+            List<Period> lperiods = sm.listValidPeriods();
             Collections.sort(lperiods);
             periods = lperiods.iterator();
         }
@@ -125,7 +126,7 @@ public class DataTableResource extends GenericResource implements ComponentExpor
             
                 State state = star.getMeasure(period).getEvaluation().getStatus();
                 if(state==null) {
-                    state = indicator.getMinimumState();
+                    state = sm.getMinimumState();
                     star.getMeasure(period).getEvaluation().setStatus(state);
                 }
                 String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
