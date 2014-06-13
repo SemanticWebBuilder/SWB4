@@ -461,6 +461,11 @@ public class RiskBoard extends GenericResource {
             for (Determinant det : determinants) {
                 if (formerControl != null) {
                     DeterminantValue value = determValues.get(det);
+                    if (value == null) {
+                        value = DeterminantValue.ClassMgr.createDeterminantValue(website);
+                        value.setDeterminant(det);
+                        formerControl.addDeterminantValue(value);
+                    }
                     data.append(simpleTextCenteredTd);
                     data.append(this.renderPropertyValue(request, value.getSemanticObject(),
                             DeterminantValue.bsc_isDeterminant, lang, mode));
@@ -594,6 +599,11 @@ public class RiskBoard extends GenericResource {
                     }
                     for (Determinant det : determinants) {
                         DeterminantValue value = determValues.get(det);
+                        if (value == null) {
+                            value = DeterminantValue.ClassMgr.createDeterminantValue(website);
+                            value.setDeterminant(det);
+                            controlInTurn.addDeterminantValue(value);
+                        }
                         data.append(simpleTextCenteredTd);
                         if (value != null) {
                             data.append(this.renderPropertyValue(request, value.getSemanticObject(),
