@@ -204,9 +204,25 @@ public class EmailResource extends GenericResource {
         out.println("<script type=\"text/javascript\">");
         out.println("  dojo.require('dijit.Dialog');");
         out.println("  dojo.require('dojox.layout.ContentPane');");
+        out.println("function showEmailDialog(url, title){");
+        out.println("dojo.xhrGet({");
+        out.println("url: url,");
+        out.println("load: function(response, ioArgs) {");
+        out.println("dijit.byId('emailDialogImp').attr('content', response);"); 
+        out.println("dijit.byId('emailDialog').show();");
+        out.println("    setDialogTitle(title);");
+        out.println("    return response;");
+        out.println("},");
+        out.println("error: function(response, ioArgs) {");
+        out.println("    showStatus('Error:' + response);");
+        out.println("    return response;");
+        out.println("},");
+        out.println("handleAs: 'text'");
+        out.println("});");
+        out.println("}");
         out.println("</script>");
 
-        out.print("<a href=\"#\" class=\"swbstgy-toolbar-mail\" onclick=\"showDialog('");
+        out.print("<a href=\"#\" class=\"swbstgy-toolbar-mail\" onclick=\"showEmailDialog('");
         out.print(url);
         out.print("', '");
         out.print(paramRequest.getLocaleString("lbl_addTitle"));
@@ -241,7 +257,6 @@ public class EmailResource extends GenericResource {
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
         final User user = response.getUser();
-System.out.println("\n\nprocessAction()......");
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
             MultipartRequest mrequest = new MultipartRequest(request, path);
@@ -272,42 +287,34 @@ System.out.println("\n\nprocessAction()......");
             
             InternetAddress ia;
             ArrayList<InternetAddress> addresses = null;
-            
-System.out.println("\n\nto="+to);
             List<String> emailsTo = validateEMailAccounts(to);
             if(emailsTo == null) {
                 return;
             }else {
-                addresses = new ArrayList<>();
+                addresses = new ArrayList();
                 for(String em:emailsTo) {
                     ia = new InternetAddress();
                     ia.setAddress(em);
                     addresses.add(ia);
                 }
             }
-System.out.println("addresses="+addresses);
             mail.setAddress(addresses);
-            
-
-System.out.println("\n\n-------------------\ncc="+cc);
             List<String> emailsCc = validateEMailAccounts(cc);
             if(emailsCc != null) {
-                addresses = new ArrayList<>();
+                addresses = new ArrayList();
                 for(String em:emailsCc) {
                     ia = new InternetAddress();
                     ia.setAddress(em);
                     addresses.add(ia);
                 }
-    System.out.println("emailsCc="+emailsCc);
                 mail.setCcEmail(emailsCc);
             }
             
             try {
                 SWBUtils.EMAIL.sendMail(mail);
                 //Crea el email Log
-                //saveLogMail(user, subject, message, emailsTo, emailsCc);
+                saveLogMail(user, subject, message, emailsTo, emailsCc);
             } catch (SocketException se) {
-System.out.println("\n\nerror..."+se);
                 log.error("Error en el envio :" + se);
             }
         }
@@ -321,7 +328,7 @@ System.out.println("\n\nerror..."+se);
         List<String> list = null;
         String[] mails = accounts.split("[;|,]",0);
         if(mails.length > 0) {            
-            list = new ArrayList<>();
+            list = new ArrayList();
             for (String account : mails) {
                 if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
                     list.add(account);
