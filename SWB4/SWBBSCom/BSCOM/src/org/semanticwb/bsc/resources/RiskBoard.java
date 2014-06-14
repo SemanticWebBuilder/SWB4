@@ -43,6 +43,7 @@ import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticOntology;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
@@ -1782,4 +1783,22 @@ public class RiskBoard extends GenericResource {
         return stylesString;
     }
     
+    /*
+     * Realiza la verificacion de la existencia de todos los DeterminantValue asociados a los controles registrados.
+     * En caso de que alguno no exista, lo crea y asocia al control correspondiente
+     */
+    static {
+        Control.bsc_Control.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action) {
+                if("ADD".equalsIgnoreCase(action)) {
+                    GenericObject generic = obj.createGenericInstance();
+                    if (generic instanceof Control) {
+                        Control control = (Control) generic;
+                        control.calculateDetermination();
+                    }
+                }
+            }
+        });
+    }
 }

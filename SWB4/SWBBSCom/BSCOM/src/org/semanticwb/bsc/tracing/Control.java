@@ -15,10 +15,8 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
 
     public Control(org.semanticwb.platform.SemanticObject base) {
         super(base);
-        relateToDeterminants();
     }
 
-    static private int FLAG2DELETE = 0;
     /**
      * Obtiene el prefijo en base al prefijo del Factor padre. La nomenclatura
      * en la que se basa se muestra a continuaci&oacute;n: Prefijo del Factor +
@@ -86,7 +84,7 @@ public class Control extends org.semanticwb.bsc.tracing.base.ControlBase {
      * Relaciona un {@code Control} recientemente creado al conjunto de instancias de {@code Determinant}
      * existentes en el BSC correspondiente, al crear las instancias de {@code DeterminantValue} necesarias.
      */
-    private void relateToDeterminants() {
+    public void relateToDeterminants() {
         
         SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
         Iterator<Determinant> determinantIt = Determinant.ClassMgr.listDeterminants(model);
