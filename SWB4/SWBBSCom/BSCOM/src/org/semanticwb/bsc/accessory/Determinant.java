@@ -3,7 +3,6 @@ package org.semanticwb.bsc.accessory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.DeterminantValue;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -19,7 +18,6 @@ public class Determinant extends org.semanticwb.bsc.accessory.base.DeterminantBa
 {
     public Determinant(org.semanticwb.platform.SemanticObject base) {
         super(base);
-//        relateToControls();
     }
     
     @Override
@@ -55,33 +53,4 @@ public class Determinant extends org.semanticwb.bsc.accessory.base.DeterminantBa
         return validItems;
     }
     
-    /**
-     * Crea una instancia de {@code DeterminantValue} por cada instancia de {@code Control}
-     * existente en el sitio BSC correspondiente.
-     */
-    private void relateToControls() {
-        System.out.println("Relacionando Determinantes con Controles");
-        SWBModel model = (SWBModel) this.getSemanticObject().getModel().getModelObject().createGenericInstance();
-        Iterator<Control> controlIt = Control.ClassMgr.listControls(model);
-        while (controlIt != null && controlIt.hasNext()) {
-            Control control = controlIt.next();
-            synchronized (control) {
-                Iterator<DeterminantValue> detValueIt = control.listDeterminantValues();
-                boolean determinantValueExists = false;
-                while (detValueIt != null && detValueIt.hasNext()) {
-                    DeterminantValue detVal = detValueIt.next();
-                    if (detVal.getDeterminant() == this) {
-                        determinantValueExists = true;
-                    }
-                }
-                System.out.println("No existe relacion entre ctrl: " + control.getTitle() + " y det: " + this.getTitle());
-                /*
-                if (!determinantValueExists) {
-                    DeterminantValue detValue = DeterminantValue.ClassMgr.createDeterminantValue(model);
-                    detValue.setDeterminant(this);
-                    control.addDeterminantValue(detValue);
-                }*/
-            }
-        }
-    }
 }
