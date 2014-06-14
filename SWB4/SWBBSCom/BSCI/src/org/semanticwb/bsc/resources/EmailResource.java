@@ -204,9 +204,9 @@ public class EmailResource extends GenericResource {
         out.println("<script type=\"text/javascript\">");
         out.println("  dojo.require('dijit.Dialog');");
         out.println("  dojo.require('dojox.layout.ContentPane');");
-        out.println("function setDialogTitle(title, objId){");
+        out.println("function setDialogTitleEmail(title){");
         out.println("if (title)");
-        out.println("dijit.byId(objId).titleNode.innerHTML = title;");
+        out.println("dijit.byId('emailDialog').titleNode.innerHTML = title;");
         out.println("}");
         
         out.println("function showEmailDialog(url, title){");
@@ -215,7 +215,7 @@ public class EmailResource extends GenericResource {
         out.println("load: function(response, ioArgs) {");
         out.println("dijit.byId('emailDialogImp').attr('content', response);"); 
         out.println("dijit.byId('emailDialog').show();");
-        out.println("    setDialogTitle(title,'emailDialog');");
+        out.println("    setDialogTitleEmail(title);");
         out.println("    return response;");
         out.println("},");
         out.println("error: function(response, ioArgs) {");
