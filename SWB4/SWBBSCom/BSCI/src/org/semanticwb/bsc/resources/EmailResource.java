@@ -204,6 +204,9 @@ public class EmailResource extends GenericResource {
         out.println("<script type=\"text/javascript\">");
         out.println("  dojo.require('dijit.Dialog');");
         out.println("  dojo.require('dojox.layout.ContentPane');");
+        out.println("function setDialogTitle(title){");
+        out.println("if (title)");
+        out.println("dijit.byId('emailDialog').titleNode.innerHTML = title;}");
         out.println("function showEmailDialog(url, title){");
         out.println("dojo.xhrGet({");
         out.println("url: url,");
@@ -214,7 +217,7 @@ public class EmailResource extends GenericResource {
         out.println("    return response;");
         out.println("},");
         out.println("error: function(response, ioArgs) {");
-        out.println("    showStatus('Error:' + response);");
+        out.println("    alert('Error:' + response);");
         out.println("    return response;");
         out.println("},");
         out.println("handleAs: 'text'");
@@ -279,7 +282,7 @@ public class EmailResource extends GenericResource {
             mail.setFromName(user.getFullName());
             mail.setSubject(subject);
             mail.setData(message);
-            if (attachment != null) {
+           if (attachment != null) {
                 EmailAttachment emailAttachment = new EmailAttachment();
                 emailAttachment.setPath(attachment.getPath());
                 mail.addAttachment(emailAttachment);
