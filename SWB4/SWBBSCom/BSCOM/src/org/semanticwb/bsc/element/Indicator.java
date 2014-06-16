@@ -9,6 +9,7 @@ import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.EvaluationRule;
+import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
@@ -293,6 +294,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         return validSerieses;
     }
     
+    @Override
     public List<Period> listValidPeriods() {
         List<Period> validPeriods = SWBUtils.Collections.filterIterator(super.listPeriods(), new GenericFilterRule<Period>() {
                                                                         @Override
@@ -322,5 +324,23 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public Period currentMeasurementPeriod()
     {
         throw new UnsupportedOperationException("Not supported yet.");
-    }    
+    }
+    
+    @Override
+    public String getIconClass() {
+        String iconClass = "undefined";
+        if(getStar()!=null && getStar().getMeasure()!=null && getStar().getMeasure().getEvaluation()!=null) {
+            iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
+        }
+        return iconClass;
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        String iconClass = "undefined";
+        if(getStar()!=null && getStar().getMeasure(period)!=null && getStar().getMeasure(period).getEvaluation()!=null) {
+            iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
+        }
+        return iconClass;
+    }
 }

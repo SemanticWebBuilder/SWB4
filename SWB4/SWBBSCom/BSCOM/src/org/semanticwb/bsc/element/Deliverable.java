@@ -10,6 +10,7 @@ import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.EvaluationRule;
+import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
@@ -41,20 +42,6 @@ System.out.println("setProgress. value="+value);
         //evaluate();
         //3. recalcular estatus de iniciativa
     }
-    
-    /*public void evaluate() {
-//        getEvaluation().setStatus(getSeries().getIndicator().getObjective().getMinimumState());        
-        Iterator<EvaluationRule> rules = listValidEvaluationRules(false).iterator();
-	while(rules.hasNext())
-	{
-            EvaluationRule rule = rules.next();
-            if(rule.evaluate(null)) {
-                setAutoStatus(rule.getAppraisal());
-                break;
-            }
-	}
-    }*/
-    
     
     @Override
     public boolean updateAppraisal(Period period) {
@@ -101,6 +88,7 @@ System.out.println("setProgress. value="+value);
         return periods;
     }
     
+    @Override
     public List<Period> listValidPeriods() {
         List<Period> validPeriods = SWBUtils.Collections.filterIterator(super.listPeriods(), new GenericFilterRule<Period>() {
                                                                         @Override
@@ -223,5 +211,23 @@ System.out.println("setProgress. value="+value);
             Collections.sort(measurablesPeriods, Collections.reverseOrder());
         }
         return measurablesPeriods.iterator();
+    }
+    
+    @Override
+    public String getIconClass() {
+        String iconClass = "undefined";
+        if(getStar()!=null && getStar().getMeasure()!=null && getStar().getMeasure().getEvaluation()!=null) {
+            iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
+        }
+        return iconClass;
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        String iconClass = "undefined";
+        if(getStar()!=null && getStar().getMeasure(period)!=null && getStar().getMeasure(period).getEvaluation()!=null) {
+            iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
+        }
+        return iconClass;
     }
 }

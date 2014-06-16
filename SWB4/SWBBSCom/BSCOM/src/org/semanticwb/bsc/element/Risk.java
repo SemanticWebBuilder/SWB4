@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.Factor;
 import org.semanticwb.model.SWBContext;
@@ -172,7 +173,7 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     public Iterator<Factor> listValidFactors() {
         
         Iterator<Factor> facIt = listFactors();
-        ArrayList<Factor> factors = new ArrayList<Factor>();
+        ArrayList<Factor> factors = new ArrayList<>();
         User user = SWBContext.getSessionUser();
         
         while (facIt != null && facIt.hasNext()) {
@@ -182,5 +183,15 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
             }
         }
         return factors.iterator();
+    }
+    
+    @Override
+    public String getIconClass() {
+        return null;//getStatus.getIconClass;
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        return null;//getStatus.getIconClass;
     }
 }

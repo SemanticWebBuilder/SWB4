@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Roleable,org.semanticwb.model.Referensable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Detailed,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Referensable
 {
    /**
    * Define el responsable del acuerdo

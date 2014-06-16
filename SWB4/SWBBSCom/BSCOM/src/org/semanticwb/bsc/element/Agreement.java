@@ -1,6 +1,7 @@
 package org.semanticwb.bsc.element;
 
 import java.util.GregorianCalendar;
+import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.tracing.Meeting;
 
 
@@ -67,5 +68,15 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     @Override
     public void setPrefix(String value) {
         super.setPrefix(value);           
+    }
+    
+    @Override
+    public String getIconClass() {
+        return null;//getStatus.getIconClass;
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        return null;//getStatus.getIconClass;
     }
 }
