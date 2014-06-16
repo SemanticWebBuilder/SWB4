@@ -2066,13 +2066,14 @@
         },
 
         showSubBar: function(barId,obj) {
+            clearTimeout(ToolBar.intervalOver);
             ToolBar.hideSubBars();
             var ele=document.getElementById(barId);
             ele.setAttribute("class", "subbar");
 
             if(obj)
             {
-                ele.style.top=obj.offsetTop+"px";
+                ele.style.top=obj.offsetTop-obj.offsetParent.scrollTop+"px";
                 ele.style.left=(obj.offsetLeft+47)+"px";
             }
         },
@@ -2082,11 +2083,12 @@
             ToolBar.intervalOver=setTimeout(ToolBar.hideSubBars,1000);
         },
 
-        overToolBar: function()
+        overToolBar: function(isItem)
         {
-            clearTimeout(ToolBar.intervalOver);
+            if (isItem || false) {
+                clearTimeout(ToolBar.intervalOver);
+            }
         }
-
     };
     
     /**********************************Modeler*******************************/
