@@ -83,6 +83,9 @@ public class ProcessForm extends GenericResource {
     public static final String ADM_MODESIMPLE = "simple";
     public static final String ATT_TASK = "task";
     public static final String ATT_RBASE = "rbase";
+    public static final String ATT_PROPMAP = "propMap";
+    public static final String ATT_CLASSMAP = "classMap";
+    public static final String ATT_USERVARS = "userDefinedVars";
     public static final String ACT_TOGGLEBUTTON = "toggleBut";
     public static final String ACT_ADDPROPS = "addProps";
     public static final String ACT_REMOVEPROP = "removeProp";
@@ -305,7 +308,6 @@ public class ProcessForm extends GenericResource {
                     log.error("Error al guardar las propiedades de acuerdo al display property.",e);
                 }
             }
-            response.setMode(SWBActionResponse.Mode_ADMIN);
         } else if (ACT_REMOVEPROP.equals(action)) {
             String prop = request.getParameter(PARAM_PROPIDX);
 
@@ -648,17 +650,11 @@ public class ProcessForm extends GenericResource {
     }
 
     public void doAddProps(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuilder sb = new StringBuilder();
-        PrintWriter out = response.getWriter();
+        String jsp = "/swbadmin/jsp/process/formsBuilder/listProps.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        Resource base = getResourceBase();
         
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        
-        String taskUri = request.getParameter(ATT_TASK);
-        SWBResourceURL urladd = paramRequest.getActionUrl().setAction(ProcessForm.ACT_ADDPROPS);
-        
-        UserTask uTask = (UserTask)SWBPlatform.getSemanticMgr().getOntology().getGenericObject(URLDecoder.decode(taskUri, "utf-8"));
+        UserTask uTask = (UserTask)base.getResourceable();
         if (uTask != null) {
             HashMap<String, SemanticProperty> allprops = new HashMap();
             Iterator<ItemAware> it = uTask.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
@@ -678,7 +674,6 @@ public class ProcessForm extends GenericResource {
                 }
             }
             
-            Resource base = getResourceBase();
             int max = 1;
             while (!base.getAttribute("prop" + max, "").equals("")) {
                 String val = base.getAttribute("prop" + max++);
@@ -689,58 +684,69 @@ public class ProcessForm extends GenericResource {
                 }
             }
             
-            ArrayList<String> list = new ArrayList(allprops.keySet());
-            if (!list.isEmpty()) {
-                Collections.sort(list);
-                Iterator<String> its = list.iterator();
-                
-                sb.append("<form action=\"").append(urladd)
-                    .append("\" class=\"swbform\" dojoType=\"dijit.form.Form\" id=\"")
-                    .append(uTask.getId())
-                    .append("/addProps\" method=\"post\" onsubmit=\"submitForm('")
-                    .append(uTask.getId())
-                    .append("/addProps'); return false;\">");
-                sb.append("  <fieldset>");
-                sb.append("    <select multiple size=\"10\" name=\"properties\" style=\"width:250px;\">");
-                while (its.hasNext()) {
-                    String str = its.next();
-                    String varName = "";
-                    StringTokenizer stoken = new StringTokenizer(str, "|");
-                    if (stoken.hasMoreTokens()) {
-                        varName = stoken.nextToken();
-                    }
-                    SemanticProperty sp = allprops.get(str);
-                    sb.append("<option value=\"").append(str).append("\">").append(varName).append(".").append(sp.getPropertyCodeName()).append("</option>");
-                }
-                sb.append("    </select>");
-                sb.append("  </fieldset>");
-                sb.append("  <fieldset>");
-                sb.append("    <button dojoType=\"dijit.form.Button\" type=\"submit\">").append(paramRequest.getLocaleString("addSelected")).append("</button>");
-                sb.append("    <button dojoType=\"dijit.form.Button\" onclick=\"hideDialog('configDialog');\">").append(paramRequest.getLocaleString("cancel")).append("</button>");
-                sb.append("  </fieldset>");
-                sb.append("</form>");
-            } else {
-                sb.append("<span>").append(paramRequest.getLocaleString("msgNoProps")).append("</span>");
+            try {
+                request.setAttribute(ATT_PROPMAP, allprops);
+                request.setAttribute(ATT_PARAMREQUEST, paramRequest);
+                rd.include(request, response);
+            } catch (Exception ex) {
+                log.error(ex);
             }
-        } else {
-            sb.append("<span>").append(paramRequest.getLocaleString("msgNoTask")).append("</span>");
         }
-        out.print(sb.toString());
     }
     
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String jsp = "/swbadmin/jsp/process/formsBuilder/admin.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(jsp);
         Resource base = getResourceBase();
+        HashMap<String, ItemAware> userDefinedVars = new HashMap();
+        HashMap<String, SemanticProperty> allprops = new HashMap();
+        HashMap<String, SemanticClass> hmclass = new HashMap();
+        ArrayList<String> baseProps = new ArrayList<String>();
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         
-        RequestDispatcher rd = request.getRequestDispatcher(jsp);
+        UserTask task = (UserTask)base.getResourceable();
+        Iterator<ItemAware> it = task.listHerarquicalRelatedItemAwarePlusNullOutputs().iterator();
+        while (it.hasNext()) {
+            ItemAware item = it.next();
+            SemanticClass cls = item.getItemSemanticClass();
+            if (cls != null) {
+                Iterator<SemanticProperty> itp = cls.listProperties();
+                while (itp.hasNext()) {
+                    SemanticProperty prop = itp.next();
+                    String name = item.getName() + "|" + prop.getPropId();
+                    if (cls.isSubClass(DataTypes.sclass) && !userDefinedVars.containsKey(name)) {
+                        userDefinedVars.put(name, item);
+                    }
+                    if (!prop.getPropId().equals("swb:valid") && !allprops.containsKey(name)) {
+                        allprops.put(name, prop);
+                        if (!hmclass.containsKey(item.getName())) {
+                            hmclass.put(item.getName(), item.getItemSemanticClass());
+                        }
+                    }
+                }
+            }
+        }
+
+        int max = 1;
+        while (!base.getAttribute("prop" + max, "").equals("")) {
+            String val = base.getAttribute("prop" + max++);
+            HashMap<String, String> map = ProcessForm.getPropertiesMap(val);
+            String key = map.get("varName") + "|" + map.get("propId");
+            if (allprops.containsKey(key)) {
+                baseProps.add(val);
+            }
+        }
+        
         try {
             request.setAttribute(ATT_PARAMREQUEST, paramRequest);
             request.setAttribute(ATT_RBASE, base);
+            request.setAttribute(ATT_PROPMAP, baseProps);
+            request.setAttribute(ATT_CLASSMAP, hmclass);
+            request.setAttribute(ATT_USERVARS, userDefinedVars);
             if (base.getResourceable() instanceof UserTask) {
-                request.setAttribute(ATT_TASK, (UserTask)base.getResourceable());
+                request.setAttribute(ATT_TASK, task);
             }
             rd.include(request, response);
         } catch (Exception ex) {
