@@ -348,6 +348,7 @@ public class EmailResource extends GenericResource {
         final UserRepository ur = getResourceBase().getWebSite().getUserRepository();
         final List<User> listUserTo = new ArrayList();
         final List<User> listUserCc = new ArrayList();
+        String anothers = "";
         // cuentas internas
         List<String> intAccTo = SWBUtils.Collections.filterIterator(mailsTo.iterator(), new GenericFilterRule<String>() {
             @Override
@@ -369,13 +370,16 @@ public class EmailResource extends GenericResource {
                 return ur.getUserByEmail(mail) != null;
             }
         });
-
+        
+        List anothersAcc = new ArrayList(extAccTo);
+        
+        if(mailsCc != null){
         List<String> intAccCc = SWBUtils.Collections.filterIterator(mailsCc.iterator(), new GenericFilterRule<String>() {
             @Override
             public boolean filter(String mail) {
                 return ur.getUserByEmail(mail) == null;
             }
-        });
+        });     
         if (!intAccCc.isEmpty()) {
             Iterator<String> iterCc = intAccCc.iterator();
             while (iterCc.hasNext()) {
@@ -384,7 +388,7 @@ public class EmailResource extends GenericResource {
                 listUserCc.add(uCc);
             }
         }
-
+       
         // cuentas externas
         List<String> extAccCc = SWBUtils.Collections.filterIterator(mailsCc.iterator(), new GenericFilterRule<String>() {
             @Override
@@ -393,12 +397,12 @@ public class EmailResource extends GenericResource {
             }
         });
 
-        List anothersAcc = new ArrayList(extAccTo);
-        anothersAcc.addAll(extAccCc);
-        String anothers = java.util.Arrays.toString(anothersAcc.toArray());
+       anothersAcc.addAll(extAccCc);
+      
+}
+        anothers = java.util.Arrays.toString(anothersAcc.toArray());
         anothers=anothers.replace("[","");
         anothers=anothers.replace("]", "");
-
         //Date date = new Date();
         EmailLog emLog = EmailLog.ClassMgr.createEmailLog(getResourceBase().getWebSite());
         emLog.setFrom(user);
