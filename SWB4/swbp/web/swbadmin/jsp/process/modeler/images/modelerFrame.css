@@ -252,6 +252,11 @@ ul.breadcrumbs.alt1 li.last a{
 
 
 /*****************************  TOOLBAR **********************************************/
+.toolbarContainer {
+    position: fixed;
+    overflow-y: scroll;
+    height: 100%;    
+}
 
 .toolbarItem {
     width: 49px;
@@ -1428,7 +1433,7 @@ ul.breadcrumbs.alt1 li.last a{
 }
 
 .subbar {
-    position: absolute;
+    position: fixed;
     /*border: #000 solid 1px;*/
 }
 
