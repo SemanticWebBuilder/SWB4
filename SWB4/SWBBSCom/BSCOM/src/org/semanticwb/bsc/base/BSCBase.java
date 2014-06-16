@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableClass,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Trashable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Indexable,org.semanticwb.model.Activeable,org.semanticwb.model.Countryable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.OntologyDepable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
