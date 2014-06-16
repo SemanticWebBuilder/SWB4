@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Objetivo estratégico. 
    */
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Causal
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Status,org.semanticwb.bsc.Updateable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Detailed,org.semanticwb.bsc.Serializable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Causal,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable
 {
    /**
    * Define las características de un Indicador.

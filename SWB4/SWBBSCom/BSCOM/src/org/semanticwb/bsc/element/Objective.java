@@ -315,4 +315,14 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     public boolean isValid() {
         return super.isValid() && getTheme().isValid();
     }
+
+    @Override
+    public String getIconClass() {
+        return getPeriodStatus().getStatus().getIconClass();
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        return getPeriodStatus(period).getStatus().getIconClass();
+    }
 }

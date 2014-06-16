@@ -10,6 +10,7 @@ import org.semanticwb.bsc.accessory.State;
 import static org.semanticwb.bsc.element.Deliverable.names;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.bsc.utils.BSCUtils;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -147,31 +148,22 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
     
     public boolean updateAppraisal(Period period)
     {
-System.out.println("\n\nIniciativa.updateappraisal()....");
-System.out.println("period="+period.getTitle());
         boolean res = Boolean.FALSE;
         
         // Determinar el estatus del período especificado
         State status;
         PeriodStatus appraisal = getPeriodStatus(period);
         if(appraisal==null) {
-System.out.println("if");
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
             appraisal.setPeriod(period);
             addPeriodStatus(appraisal);
-            status = getMaximumState();
-        }else {
-System.out.println("else");
-            status = appraisal.getStatus();
         }
-System.out.println("status="+status.getTitle());
+        status = getMaximumState();
         
         // Determinar el estatus de la iniciativa
         List<Deliverable> deliverables = listValidDeliverables();
         for(Deliverable deliverable:deliverables) {
-System.out.println("deliverable="+deliverable);
             Series star = deliverable.getStar();
-System.out.println("star="+star);
             if(star==null || star.getMeasure(period)==null || star.getMeasure(period).getEvaluation().getStatus()==null) {
                 continue;
             }
@@ -180,22 +172,10 @@ System.out.println("star="+star);
                 res = Boolean.TRUE;
             }
         }
-System.out.println("status="+status.getTitle());
         appraisal.setStatus(status);
         
         // Calcular el porcentaje de avance
-        float m;
-        float weighingSum = 0;
-        float xwSum = 0;        
-        for(Deliverable deliverable:deliverables) {
-            if(deliverable.getPriority()==null) {
-                continue;
-            }
-            xwSum += deliverable.getProgress()*deliverable.getPriority().getWeighing();
-            weighingSum += deliverable.getPriority().getWeighing();
-        }
-        m = xwSum/weighingSum;
-        setPercentageProgress(m);
+        setPercentageProgress();
         
         return res;
     }
@@ -213,4 +193,43 @@ System.out.println("status="+status.getTitle());
         }
         return states;
     }
+
+    public void setPercentageProgress() {
+        // Calcular el porcentaje de avance de los entregables
+        List<Deliverable> deliverables = listValidDeliverables();
+        float m;
+        float weighingSum = 0;
+        float xwSum = 0;        
+        for(Deliverable deliverable:deliverables) {
+            if(deliverable.getPriority()==null) {
+                continue;
+            }
+            xwSum += deliverable.getProgress()*deliverable.getPriority().getWeighing();
+            weighingSum += deliverable.getPriority().getWeighing();
+        }
+        
+        m = xwSum/weighingSum;
+        super.setPercentageProgress(BSCUtils.Formats.round(m,2).floatValue());
+    }
+    
+    @Override
+    public String getIconClass() {
+        String iconClass = "undefined";
+        if(getPeriodStatus()!=null && getPeriodStatus().getStatus()!=null) {
+            iconClass = getPeriodStatus().getStatus().getIconClass();
+        }
+        return iconClass;
+    }
+    
+    @Override
+    public String getIconClass(Period period) {
+        String iconClass = "undefined";
+        if(getPeriodStatus(period)!=null && getPeriodStatus(period).getStatus()!=null) {
+            iconClass = getPeriodStatus(period).getStatus().getIconClass();
+        }
+        return iconClass;
+    }
+    
+    
+    
 }
