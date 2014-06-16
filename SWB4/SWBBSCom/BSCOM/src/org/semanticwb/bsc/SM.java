@@ -33,4 +33,6 @@ public interface SM extends org.semanticwb.bsc.base.SMBase
     public Iterator<Period> listMeasurablesPeriods() throws UndefinedFrequencyException, InappropriateFrequencyException;
     
     public Iterator<Period> listMeasurablesPeriods(boolean ascendent) throws UndefinedFrequencyException, InappropriateFrequencyException;
+    
+    public List<Period> listValidPeriods();
 }
