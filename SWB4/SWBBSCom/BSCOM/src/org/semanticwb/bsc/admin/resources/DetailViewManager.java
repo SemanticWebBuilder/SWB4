@@ -762,65 +762,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
             UserGroup collaboration = null;
 
-            //Si el semObj es hijo de PeriodStatusAssignable se debe:
             GenericObject generic = semObj.createGenericInstance();
-            if (generic != null && generic instanceof Objective) {
-                Objective objective = (Objective) generic;
-                periodStatus = objective.getPeriodStatus(period);
-                statusStyleClass = periodStatus.getStatus().getIconClass();
-                if (objective.getSponsor() != null) {
-                    collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
-                }
-System.out.println("objetivo..."+statusStyleClass);
-            } else if (generic != null && generic instanceof Indicator) {
-                Indicator indicator = (Indicator) generic;
-                Measure measure = indicator != null && indicator.getStar() != null
-                        ? indicator.getStar().getMeasure(period) : null;
-                if (measure != null && measure.getEvaluation() != null) {
-                    periodStatus = measure.getEvaluation();
-                    statusStyleClass = periodStatus.getStatus().getIconClass();
-                }
-System.out.println("indicador..."+statusStyleClass);
-                if (indicator.getChampion() != null) {
-                    collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
-                }
-            } else if (generic != null && generic instanceof Initiative) {
-                Initiative initiative = (Initiative) generic;
-                if (initiative.getInitiativeFacilitator() != null) {
-                    collaboration = initiative.getInitiativeFacilitator().getUserRepository().getUserGroup("Facilitator");
-                } else {
-                    collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("Facilitator");
-                    //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
-                }
-                if(initiative.getPeriodStatus(period)!=null && initiative.getPeriodStatus(period).getStatus()!=null) {
-                    statusStyleClass = initiative.getPeriodStatus(period).getStatus().getIconClass();
-                }
-System.out.println("iniciativa..."+statusStyleClass);
-            } else if (generic != null && generic instanceof Deliverable) {
-                Deliverable deliverable = (Deliverable) generic;
-//                statusStyleClass = deliverable.getStatusAssigned() != null
-//                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
-//                secondStatusStyleClass = deliverable.getAutoStatus() != null
-//                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
-                Measure measure = deliverable != null && deliverable.getStar() != null
-                        ? deliverable.getStar().getMeasure(period) : null;
-                if (measure != null && measure.getEvaluation() != null) {
-                    periodStatus = measure.getEvaluation();
-                    statusStyleClass = periodStatus.getStatus().getIconClass();
-                }
-System.out.println("entregable..."+statusStyleClass);
-                if (deliverable.getResponsible() != null) {
-                    collaboration = deliverable.getResponsible().getUserRepository().getUserGroup("responsable");
-                } else {
-                    collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("responsable");
-                    //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
-                }
+            Detailed d = (Detailed)generic;
+            statusStyleClass = d.getStatusIconClass(period);
 
-            }else {
-                System.out.println("otro:("+generic+")..."+statusStyleClass);
-            }
-Detailed d = (Detailed)generic;            
-System.out.println("con interfaz..."+d.getStatusIconClass(period));   
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
