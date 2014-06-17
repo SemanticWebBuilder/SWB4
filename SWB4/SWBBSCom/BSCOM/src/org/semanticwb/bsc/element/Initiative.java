@@ -91,6 +91,8 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
         return validDeliverables;
     }
     
+    
+    @Override
     public List<State> listValidStates()
     {
         List<State> validStates = SWBUtils.Collections.filterIterator(super.listStates(), new GenericFilterRule<State>() {
@@ -213,7 +215,7 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
     }
     
     @Override
-    public String getIconClass() {
+    public String getStatusIconClass() {
         String iconClass = "undefined";
         if(getPeriodStatus()!=null && getPeriodStatus().getStatus()!=null) {
             iconClass = getPeriodStatus().getStatus().getIconClass();
@@ -222,7 +224,7 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
     }
     
     @Override
-    public String getIconClass(Period period) {
+    public String getStatusIconClass(Period period) {
         String iconClass = "undefined";
         if(getPeriodStatus(period)!=null && getPeriodStatus(period).getStatus()!=null) {
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
