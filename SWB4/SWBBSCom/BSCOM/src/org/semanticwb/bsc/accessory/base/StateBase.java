@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo. 
    */
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Iconable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Iconable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable
 {
    /**
    * Define el color asociado al estado
@@ -316,6 +316,24 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     {
         getSemanticObject().setProperty(bsc_colorHex, value);
     }
+
+/**
+* Gets the Index property
+* @return int with the Index
+*/
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(bsc_index);
+    }
+
+/**
+* Sets the Index property
+* @param value long with the Index
+*/
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_index, value);
+    }
    /**
    * Sets the value for the property Previus
    * @param value Previus to set
@@ -447,24 +465,6 @@ public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessor
     public void setIconClass(String value)
     {
         getSemanticObject().setProperty(swb_iconClass, value);
-    }
-
-/**
-* Gets the Orden property
-* @return int with the Orden
-*/
-    public int getOrden()
-    {
-        return getSemanticObject().getIntProperty(bsc_orden);
-    }
-
-/**
-* Sets the Orden property
-* @param value long with the Orden
-*/
-    public void setOrden(int value)
-    {
-        getSemanticObject().setIntProperty(bsc_orden, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.Status
