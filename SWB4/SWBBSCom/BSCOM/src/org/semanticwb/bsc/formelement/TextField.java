@@ -1,13 +1,10 @@
 package org.semanticwb.bsc.formelement;
 
 import javax.servlet.http.HttpServletRequest;
-import org.semanticwb.bsc.element.Deliverable;
-import org.semanticwb.bsc.element.Indicator;
-import org.semanticwb.bsc.element.Initiative;
-import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.bsc.element.Agreement;
+import org.semanticwb.bsc.element.BSCElement;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBModel;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -48,9 +45,9 @@ public class TextField extends org.semanticwb.bsc.formelement.base.TextFieldBase
             String baseUrl = null;
             
             GenericObject genObject = obj.createGenericInstance();
-            if (genObject instanceof Objective || genObject instanceof Indicator ||
-                    genObject instanceof Initiative || genObject instanceof Deliverable || genObject instanceof Agreement) {
-                if(request.getAttribute("pdf") == null){
+            SemanticClass rootClass = obj.getSemanticClass().getRootClass();
+            if (rootClass.equals(BSCElement.bsc_BSCElement)) {
+                if (request.getAttribute("pdf") == null) {
                 showLink = true;
                 viewString.append("<a href=\"");
                 if (websiteId != null && request.getRequestURI().contains(websiteId)) {
