@@ -58,7 +58,7 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
         {
             State state = (State)obj.createGenericInstance();
             StateGroup parent = state.getStateGroup();
-            if(parent instanceof StateGroup) {
+//            if(parent instanceof StateGroup) {
                 GenericIterator<State> it = parent.listGroupedStateses();
                 while(it.hasNext()) {
                     State so = it.next();
@@ -71,7 +71,7 @@ public class OrdinalCategorical extends org.semanticwb.bsc.formelement.base.Ordi
                     }
 
                 }
-            }
+//            }
         }
         else if(genObj instanceof Series)
         {
