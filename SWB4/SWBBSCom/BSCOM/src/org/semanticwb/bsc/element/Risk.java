@@ -186,12 +186,12 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     }
     
     @Override
-    public String getIconClass() {
+    public String getStatusIconClass() {
         return null;//getStatus.getIconClass;
     }
     
     @Override
-    public String getIconClass(Period period) {
+    public String getStatusIconClass(Period period) {
         return null;//getStatus.getIconClass;
     }
 }
