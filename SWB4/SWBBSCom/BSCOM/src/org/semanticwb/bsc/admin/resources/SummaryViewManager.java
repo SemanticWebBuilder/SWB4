@@ -132,7 +132,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
             WebSite website = this.getResourceBase().getWebSite();
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
-            String identifier = null; //de los elementos del grid
+            String identifier = "uri"; //de los elementos del grid
             String filters = null;
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
             boolean addStatus = false;
