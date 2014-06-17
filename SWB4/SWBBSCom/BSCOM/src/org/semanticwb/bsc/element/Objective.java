@@ -241,6 +241,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         return getBSC().listPeriods(ascendent);
     }
     
+    @Override
     public List<State> listValidStates() {
         List<State> validStates = SWBUtils.Collections.filterIterator(super.listStates(), new GenericFilterRule<State>() {
                                                         @Override
@@ -317,12 +318,20 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     }
 
     @Override
-    public String getIconClass() {
-        return getPeriodStatus().getStatus().getIconClass();
+    public String getStatusIconClass() {
+        String iconClass = getMinimumState().getIconClass();
+        if(getPeriodStatus()!=null) {
+            iconClass = getPeriodStatus().getStatus().getIconClass();
+        }
+        return iconClass;
     }
     
     @Override
-    public String getIconClass(Period period) {
-        return getPeriodStatus(period).getStatus().getIconClass();
+    public String getStatusIconClass(Period period) {
+        String iconClass = getMinimumState().getIconClass();
+        if(getPeriodStatus(period)!=null) {
+            iconClass = getPeriodStatus(period).getStatus().getIconClass();
+        }
+        return iconClass;
     }
 }
