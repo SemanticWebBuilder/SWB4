@@ -71,12 +71,12 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     }
     
     @Override
-    public String getIconClass() {
-        return null;//getStatus.getIconClass;
+    public String getStatusIconClass() {
+        return getAgreementStatus();
     }
     
     @Override
-    public String getIconClass(Period period) {
-        return null;//getStatus.getIconClass;
+    public String getStatusIconClass(Period period) {
+        return getAgreementStatus();
     }
 }
