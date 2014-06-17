@@ -33,6 +33,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.ComponentExportable;
+import org.semanticwb.bsc.Detailed;
 import org.semanticwb.bsc.PDFExportable;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Period;
@@ -770,6 +771,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (objective.getSponsor() != null) {
                     collaboration = objective.getSponsor().getUserRepository().getUserGroup("Sponsors");
                 }
+System.out.println("objetivo..."+statusStyleClass);
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
                 Measure measure = indicator != null && indicator.getStar() != null
@@ -778,6 +780,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     periodStatus = measure.getEvaluation();
                     statusStyleClass = periodStatus.getStatus().getIconClass();
                 }
+System.out.println("indicador..."+statusStyleClass);
                 if (indicator.getChampion() != null) {
                     collaboration = indicator.getChampion().getUserRepository().getUserGroup("Champions");
                 }
@@ -789,13 +792,23 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     collaboration = paramRequest.getWebPage().getWebSite().getUserRepository().getUserGroup("Facilitator");
                     //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
                 }
-
+                if(initiative.getPeriodStatus(period)!=null && initiative.getPeriodStatus(period).getStatus()!=null) {
+                    statusStyleClass = initiative.getPeriodStatus(period).getStatus().getIconClass();
+                }
+System.out.println("iniciativa..."+statusStyleClass);
             } else if (generic != null && generic instanceof Deliverable) {
                 Deliverable deliverable = (Deliverable) generic;
-                statusStyleClass = deliverable.getStatusAssigned() != null
-                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
-                secondStatusStyleClass = deliverable.getAutoStatus() != null
-                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
+//                statusStyleClass = deliverable.getStatusAssigned() != null
+//                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
+//                secondStatusStyleClass = deliverable.getAutoStatus() != null
+//                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
+                Measure measure = deliverable != null && deliverable.getStar() != null
+                        ? deliverable.getStar().getMeasure(period) : null;
+                if (measure != null && measure.getEvaluation() != null) {
+                    periodStatus = measure.getEvaluation();
+                    statusStyleClass = periodStatus.getStatus().getIconClass();
+                }
+System.out.println("entregable..."+statusStyleClass);
                 if (deliverable.getResponsible() != null) {
                     collaboration = deliverable.getResponsible().getUserRepository().getUserGroup("responsable");
                 } else {
@@ -803,7 +816,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     //collaboration = UserGroup.ClassMgr.getUserGroup("Facilitator", paramRequest.getWebPage().getWebSite());
                 }
 
+            }else {
+                System.out.println("otro:("+generic+")..."+statusStyleClass);
             }
+Detailed d = (Detailed)generic;            
+System.out.println("con interfaz..."+d.getStatusIconClass(period));   
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
@@ -811,6 +828,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
+            output.append("<!-- .....Aqui va el iconclass.............. -->").append("\n");
             output.append("<h2");
             output.append(" class=\"");
             output.append(statusStyleClass);
@@ -1425,7 +1443,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
-        if (user != null) {
+        if (user!=null && user.isSigned()) {
             if (str_role != null) {
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 GenericObject gobj = null;
