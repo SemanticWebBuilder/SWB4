@@ -5,6 +5,7 @@ import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.model.GenericIterator;
 import java.util.Iterator;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
@@ -17,6 +18,8 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import static org.semanticwb.bsc.element.Indicator.*;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.platform.SemanticProperty;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase implements Comparable<Objective>
 {
@@ -333,5 +336,27 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
         }
         return iconClass;
+    }
+
+    @Override
+    public void validOrder(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException {
+        int ordinal;
+        try {
+            String value = request.getParameter(propName);
+            ordinal = Integer.parseInt(value);
+        }catch(NumberFormatException pe) {            
+            throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+        }
+        
+        GenericIterator<Objective> it = getTheme().listObjectives();
+        while(it.hasNext()) {
+            Objective o = it.next();
+            if( this.equals(o) ) {
+                continue;
+            }
+            if(o.getIndex() == ordinal) {
+                throw new FormValidateException("El valor ordinal debe ser numérico y no puede repetirse");
+            }
+        }
     }
 }
