@@ -19,7 +19,7 @@ public class StateGroup extends org.semanticwb.bsc.accessory.base.StateGroupBase
                 if("CREATE".equalsIgnoreCase(action)) {
                     SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
                     State undefined = State.ClassMgr.createState(model);
-                    undefined.setOrden(0);
+                    undefined.setIndex(1);
                     undefined.setTitle("No definido");
                     undefined.setTitle("No definido", lang);
                     undefined.setDescription("No aplica mediciones", lang);
