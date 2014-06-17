@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.Sortable;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBModel;
@@ -124,29 +125,28 @@ public class Ordinal extends org.semanticwb.bsc.formelement.base.OrdinalBase
     @Override
     public void validate(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) throws FormValidateException
     {
-        int ordinal;
-        try            
-        {
-            String value = request.getParameter(propName);
-            ordinal = Integer.parseInt(value);
-        }   
-        catch(Exception pe)
-        {            
-            throw new FormValidateException("El valor debe ser numérico y no debe repetirse");
-        }
-        
-        SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
-        Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
-        while(it.hasNext()) {
-            SemanticObject so = it.next();
-            if( obj.equals(so) ) {
-                continue;
-            }
-            if(ordinal == so.getIntProperty(prop))
-            {
-                throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
-            }
-        }        
+        org.semanticwb.bsc.Sortable sortable = (Sortable) obj.getGenericInstance();
+        sortable.validOrder(request, prop, propName);
+//        int ordinal;
+//        try {
+//            String value = request.getParameter(propName);
+//            ordinal = Integer.parseInt(value);
+//        }catch(NumberFormatException pe) {            
+//            throw new FormValidateException("El valor debe ser numérico y no debe repetirse");
+//        }
+//        
+//        SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+//        Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
+//        while(it.hasNext()) {
+//            SemanticObject so = it.next();
+//            if( obj.equals(so) ) {
+//                continue;
+//            }
+//            if(ordinal == so.getIntProperty(prop))
+//            {
+//                throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+//            }
+//        }        
     }
 
     @Override
