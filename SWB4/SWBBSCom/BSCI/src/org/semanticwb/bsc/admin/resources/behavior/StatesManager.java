@@ -104,7 +104,7 @@ public class StatesManager extends GenericResource {
                         {
                             out.println("<tr>");
                             // Orden
-                            out.println(" <td>"+state.getOrden()+"</td>");
+                            out.println(" <td>"+state.getIndex()+"</td>");
 
                             // Estado
                             out.println(" <td>");
@@ -240,18 +240,15 @@ public class StatesManager extends GenericResource {
                 out.println("</tr>");
                 out.println("</thead>");
                 out.println("<tbody>");
-System.out.println("\n\nStatesManager");
-System.out.println("doEdit().....");
                 Status status = (Status)obj.getGenericInstance();
-System.out.println("status="+status);
                 Iterator<State> istates = status.listStates();
                 Set<StateGroup> groups = new HashSet<>();
                 while(istates.hasNext()) {
                     State state = istates.next();
-System.out.println("--state="+state);
-if(state==null){
-continue;
-}
+                    if(state==null){
+                        log.error("State nulo en elemento: "+status);
+                        continue;
+                    }
                     groups.add(state.getStateGroup());
                 }
                 
@@ -266,7 +263,7 @@ continue;
                         {
                             out.println("<tr>");
                             // Orden
-                            out.println(" <td>"+state.getOrden()+"</td>");
+                            out.println(" <td>"+state.getIndex()+"</td>");
 
                             // Estado
                             out.println(" <td>");
