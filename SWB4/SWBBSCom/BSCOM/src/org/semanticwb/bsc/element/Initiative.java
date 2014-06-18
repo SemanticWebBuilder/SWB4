@@ -216,18 +216,22 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
     
     @Override
     public String getStatusIconClass() {
-        String iconClass = "undefined";
-        if(getPeriodStatus()!=null && getPeriodStatus().getStatus()!=null) {
+        String iconClass;
+        try{
             iconClass = getPeriodStatus().getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = "undefined";
         }
         return iconClass;
     }
     
     @Override
     public String getStatusIconClass(Period period) {
-        String iconClass = "undefined";
-        if(getPeriodStatus(period)!=null && getPeriodStatus(period).getStatus()!=null) {
+        String iconClass;
+        try{
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = "undefined";
         }
         return iconClass;
     }

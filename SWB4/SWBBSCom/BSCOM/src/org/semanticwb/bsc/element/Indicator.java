@@ -328,18 +328,22 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     
     @Override
     public String getStatusIconClass() {
-        String iconClass = "undefined";
-        if(getStar()!=null && getStar().getMeasure()!=null && getStar().getMeasure().getEvaluation()!=null) {
+        String iconClass;
+        try{
             iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = "undefined";
         }
         return iconClass;
     }
     
     @Override
     public String getStatusIconClass(Period period) {
-        String iconClass = "undefined";
-        if(getStar()!=null && getStar().getMeasure(period)!=null && getStar().getMeasure(period).getEvaluation()!=null) {
+        String iconClass;
+        try {
             iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = "undefined";
         }
         return iconClass;
     }

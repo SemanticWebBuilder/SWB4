@@ -322,17 +322,21 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
 
     @Override
     public String getStatusIconClass() {
-        String iconClass = getMinimumState().getIconClass();
-        if(getPeriodStatus()!=null) {
+        String iconClass;
+        try{
             iconClass = getPeriodStatus().getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = getMinimumState().getIconClass();
         }
         return iconClass;
     }
     
     @Override
     public String getStatusIconClass(Period period) {
-        String iconClass = getMinimumState().getIconClass();
-        if(getPeriodStatus(period)!=null) {
+        String iconClass;
+        try{
+            iconClass = getPeriodStatus().getStatus().getIconClass();
+        }catch(NullPointerException npe) {
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
         }
         return iconClass;
