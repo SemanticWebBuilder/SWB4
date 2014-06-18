@@ -25,7 +25,11 @@ package org.semanticwb.process.xpdl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -107,8 +111,7 @@ public class XPDLParser extends DefaultHandler {
                 parser.setProperty(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
                 parser.setProperty(JAXP_SCHEMA_SOURCE, xsdPath);
             } catch (SAXNotRecognizedException ex) {
-                System.err.println("Error: JAXP SAXParser property not recognized: " + JAXP_SCHEMA_LANGUAGE);
-                System.err.println( "Check to see if parser conforms to the JAXP spec.");
+                log.error("Error: JAXP SAXParser property not recognized: " + JAXP_SCHEMA_LANGUAGE +" Check to see if parser conforms to the JAXP spec.");
             }
         }
         
@@ -193,6 +196,7 @@ public class XPDLParser extends DefaultHandler {
         
         if (elements != null && !elements.isEmpty()) {
             JSONArray nodes = new JSONArray();
+            HashMap<String, ArrayList<JSONObject>> pools = new HashMap<String, ArrayList<JSONObject>>();
             
             for(String key : elements.keySet()) {
                 JSONObject el = elements.get(key);
@@ -321,8 +325,31 @@ public class XPDLParser extends DefaultHandler {
                     el.put("labelSize", 12);
                     el.put("index", 0);
                 }
-                if (!XPDLProcessor.XPDLEntities.WORKFLOWPROCESS.equals(cls) && !XPDLProcessor.XPDLEntities.POOL.equals(cls) && !XPDLProcessor.XPDLEntities.LANE.equals(cls)) {
-                    nodes.put(el);
+                if (!XPDLProcessor.XPDLEntities.WORKFLOWPROCESS.equals(cls)) {// && !XPDLProcessor.XPDLEntities.POOL.equals(cls) && !XPDLProcessor.XPDLEntities.LANE.equals(cls)) {
+                    if (XPDLProcessor.XPDLEntities.LANE.equals(cls)) {
+                        String poolId = el.optString("parent", "");
+                        if (!"".equals(poolId)) {
+                            ArrayList<JSONObject> lanes = pools.get(poolId);
+                            if (lanes == null) {
+                                lanes = new ArrayList<JSONObject>();
+                            }
+                            lanes.add(el);
+                            pools.put(poolId, lanes);
+                        }
+                    } else {
+                        if (XPDLProcessor.XPDLEntities.POOL.equals(cls)) {
+                            boolean visible = el.optBoolean(XPDLProcessor.XPDLAttributes.BOUNDARYVISIBLE, false);
+                            if (visible) {
+                                double w = el.optDouble("w",0);
+                                double h = el.optDouble("h",0);
+                                el.put("x", el.getDouble("x")+(w/2));
+                                el.put("y", el.getDouble("y")+(h/2));
+                                nodes.put(el);
+                            }
+                        } else {
+                            nodes.put(el);
+                        }
+                    }
                 }
                 
                 el.put("class", _cls);
@@ -337,6 +364,31 @@ public class XPDLParser extends DefaultHandler {
                 }
                 
                 el.remove("_class");
+            }
+            
+            //Sort lanes
+            Comparator<JSONObject> posComp = new Comparator<JSONObject>() {
+                @Override
+                public int compare(JSONObject o1, JSONObject o2) {
+                    double y1 = o1.optDouble("y", 0);
+                    double y2 = o2.optDouble("y", 0);
+                    
+                    if (y1 == y2) return 0;
+                    else if (y1 > y2) return 1;
+                    else return -1;
+                }
+            };
+            
+            for (String key : pools.keySet()) {
+                ArrayList<JSONObject> lanes = pools.get(key);
+                Collections.sort(lanes, posComp);
+                if (lanes != null && !lanes.isEmpty()) {
+                    Iterator<JSONObject> it = lanes.iterator();
+                    while (it.hasNext()) {
+                        JSONObject jSONObject = it.next();
+                        nodes.put(jSONObject);
+                    }
+                }
             }
             ret.put("nodes", nodes);
         }
