@@ -151,7 +151,7 @@ public class PeriodsManager extends GenericResource {
 
                     //mostrar las columnas del listado con sus valores
                     out.println("    <tr>");
-                    out.append("      <td>"+period.getOrden()+"</td>");
+                    out.append("      <td>"+period.getIndex()+"</td>");
                     out.println("     <td>");
                     out.print("<a href=\"#\" onclick=\"addNewTab('" + period.getURI() + "','");
                     out.print(SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + title);
