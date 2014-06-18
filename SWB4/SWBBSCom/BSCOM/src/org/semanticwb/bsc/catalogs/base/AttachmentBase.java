@@ -4,7 +4,7 @@ package org.semanticwb.bsc.catalogs.base;
    /**
    * Define las características de un archivo adjunto. 
    */
-public abstract class AttachmentBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class AttachmentBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode
 {
    /**
    * Almacena el nombre del archivo adjunto

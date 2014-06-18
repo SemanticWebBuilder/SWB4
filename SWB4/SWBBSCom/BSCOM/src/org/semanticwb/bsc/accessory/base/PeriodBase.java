@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable
 {
    /**
    * Indica la fecha incial del periodo representado
@@ -273,6 +273,24 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
     {
         super(base);
     }
+
+/**
+* Gets the Index property
+* @return int with the Index
+*/
+    public int getIndex()
+    {
+        return getSemanticObject().getIntProperty(bsc_index);
+    }
+
+/**
+* Sets the Index property
+* @param value long with the Index
+*/
+    public void setIndex(int value)
+    {
+        getSemanticObject().setIntProperty(bsc_index, value);
+    }
    /**
    * Sets the value for the property Previus
    * @param value Previus to set
@@ -366,24 +384,6 @@ public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccesso
              ret=(org.semanticwb.bsc.Machinable)obj.createGenericInstance();
          }
          return ret;
-    }
-
-/**
-* Gets the Orden property
-* @return int with the Orden
-*/
-    public int getOrden()
-    {
-        return getSemanticObject().getIntProperty(bsc_orden);
-    }
-
-/**
-* Sets the Orden property
-* @param value long with the Orden
-*/
-    public void setOrden(int value)
-    {
-        getSemanticObject().setIntProperty(bsc_orden, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.Seasonable

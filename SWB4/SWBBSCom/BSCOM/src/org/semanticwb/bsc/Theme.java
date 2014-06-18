@@ -1,11 +1,15 @@
 package org.semanticwb.bsc;
 
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.element.Objective;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticProperty;
 
 
    /**
@@ -44,10 +48,31 @@ public class Theme extends org.semanticwb.bsc.base.ThemeBase implements Comparab
     
     @Override
     public boolean isValid() {
-if(getPerspective()==null){
-    System.out.println("tema="+getTitle()+", perspectiva nula");
-    return false;
-}
+        if(getPerspective()==null){
+            return false;
+        }
         return super.isValid() && getPerspective().isValid();
+    }
+
+    @Override
+    public void validOrder(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException {
+        int ordinal;
+        try {
+            String value = request.getParameter(propName);
+            ordinal = Integer.parseInt(value);
+        }catch(NumberFormatException pe) {            
+            throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+        }
+        
+        GenericIterator<Theme> it = getPerspective().listThemes();
+        while(it.hasNext()) {
+            Theme t = it.next();
+            if( this.equals(t) ) {
+                continue;
+            }
+            if(t.getIndex() == ordinal) {
+                throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+            }
+        }
     }
 }
