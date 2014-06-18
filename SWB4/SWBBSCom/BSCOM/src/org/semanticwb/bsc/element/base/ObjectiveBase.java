@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Objetivo estratégico. 
    */
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Status,org.semanticwb.bsc.Updateable,org.semanticwb.model.RuleRefable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Detailed,org.semanticwb.bsc.Serializable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Causal,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Seasonable,org.semanticwb.model.Referensable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Causal,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Traceable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Detailed,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Updateable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Seasonable
 {
    /**
    * Define las características de un Indicador.
@@ -15,6 +15,9 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.
    */
     public static final org.semanticwb.platform.SemanticClass bsc_Theme=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Theme");
+   /**
+   * Indica el objeto Theme al que se relaciona el objeto Objective en cuestión
+   */
     public static final org.semanticwb.platform.SemanticProperty bsc_themeInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#themeInv");
    /**
    * Define las características de un Objetivo estratégico.

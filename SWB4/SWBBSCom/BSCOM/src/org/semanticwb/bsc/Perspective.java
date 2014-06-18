@@ -1,11 +1,17 @@
 package org.semanticwb.bsc;
 
+import java.util.Iterator;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.DifferentiatorGroup;
+import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.platform.SemanticProperty;
 
 
 public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase implements Comparable<Perspective>
@@ -84,5 +90,32 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
                                                                         }            
                                                                     });
         return validDiffGroups;
+    }
+
+    @Override
+    public void validOrder(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException {
+        int ordinal;
+        try            
+        {
+            String value = request.getParameter(propName);
+            ordinal = Integer.parseInt(value);
+        }   
+        catch(NumberFormatException pe)
+        {            
+            throw new FormValidateException("El valor debe ser numérico y no debe repetirse");
+        }
+        
+        SemanticObject obj = getSemanticObject();
+        SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+        Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
+        while(it.hasNext()) {
+            SemanticObject so = it.next();
+            if( obj.equals(so) ) {
+                continue;
+            }
+            if(ordinal == so.getIntProperty(prop)) {
+                throw new FormValidateException("El valor ordinal debe ser numérico y no puede repetirse");
+            }
+        }
     }
 }

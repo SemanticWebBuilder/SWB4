@@ -2,9 +2,14 @@ package org.semanticwb.bsc.accessory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
+import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.bsc.accessory.base.PeriodBase;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
+import org.semanticwb.platform.SemanticProperty;
 
 public class Period extends PeriodBase implements Comparable<Period>
 {
@@ -58,7 +63,7 @@ public class Period extends PeriodBase implements Comparable<Period>
     @Override
     public int compareTo(Period anotherPeriod)
     {
-        int compare = 0;
+        int compare;
         Date d1 = getStart();
         Date d2 = anotherPeriod.getStart();
         compare = d1.getTime() > d2.getTime() ? 1 : -1;
@@ -76,5 +81,30 @@ public class Period extends PeriodBase implements Comparable<Period>
         sb.append(getEnd());        
         //return sb.toString();
         return super.toString();
+    }
+
+    @Override
+    public void validOrder(HttpServletRequest request, SemanticProperty prop, String propName) throws FormValidateException {
+        int ordinal;
+        try {
+            String value = request.getParameter(propName);
+            ordinal = Integer.parseInt(value);
+        }catch(NumberFormatException pe) {            
+            throw new FormValidateException("El valor debe ser numérico y no puede repetirse");
+        }
+        
+        SemanticObject obj = getSemanticObject();
+        SWBModel model = (SWBModel)obj.getModel().getModelObject().createGenericInstance();
+        Iterator<SemanticObject> it = model.getSemanticModel().listInstancesOfClass(obj.getSemanticClass());
+        while(it.hasNext()) {
+            SemanticObject so = it.next();
+            if( obj.equals(so) ) {
+                continue;
+            }
+            if(ordinal == so.getIntProperty(prop))
+            {
+                throw new FormValidateException("El valor ordinal debe ser numérico y no puede repetirse");
+            }
+        }
     }
 }
