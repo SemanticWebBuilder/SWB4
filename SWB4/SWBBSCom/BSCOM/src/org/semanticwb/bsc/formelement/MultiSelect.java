@@ -2,13 +2,8 @@ package org.semanticwb.bsc.formelement;
 
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
-import org.semanticwb.bsc.InitiativeAssignable;
-import org.semanticwb.bsc.element.Agreement;
 import org.semanticwb.bsc.element.BSCElement;
-import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Indicator;
-import org.semanticwb.bsc.element.Initiative;
-import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.bsc.element.Risk;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBClass;
