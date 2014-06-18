@@ -219,13 +219,13 @@ String admMode = base.getAttribute(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MO
                                                                     <%
                                                                     if (max != 1) {
                                                                         %>
-                                                                        <a href="#" class="btn btn-xs btn-default" onclick="window.location='<%=urlmove%>'; return false;" title="<%=paramRequest.getLocaleString("lblUp")%>"><span class="fa fa-chevron-up"></span></a>
+                                                                        <a href="#" class="btn btn-xs btn-default" onclick="window.location='<%=urlmove%>'; return false;" data-tooltip="tooltip" data-placement="right" title="<%=paramRequest.getLocaleString("lblUp")%>"><span class="fa fa-chevron-up"></span></a>
                                                                         <%
                                                                     }
                                                                     if (max < baseProps.size()) {
                                                                         urlmove.setParameter(ProcessForm.PARAM_DIR, "down");
                                                                         %>
-                                                                        <a href="#" class="btn btn-xs btn-default" onclick="window.location='<%=urlmove%>'; return false;" title="<%=paramRequest.getLocaleString("lblDown")%>"><span class="fa fa-chevron-down"></span></a>
+                                                                        <a href="#" class="btn btn-xs btn-default" onclick="window.location='<%=urlmove%>'; return false;" data-tooltip="tooltip" data-placement="right" title="<%=paramRequest.getLocaleString("lblDown")%>"><span class="fa fa-chevron-down"></span></a>
                                                                         <%
                                                                     }
                                                                     %>
@@ -281,8 +281,8 @@ String admMode = base.getAttribute(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MO
                                                                 editUrl.setAction(ProcessForm.ACT_UPDPROP);
                                                                 %>
                                                                 <td width="80" align="right">
-                                                                    <a href="#" class="btn btn-xs btn-default" title="<%=paramRequest.getLocaleString("lblDelete")%>" onclick="window.location='<%=delUrl%>';return false;"><span class="fa fa-trash-o"></span></a>
-                                                                    <a href="#" class="btn btn-xs btn-default" title="<%=paramRequest.getLocaleString("lblEdit")%>" onclick="showModal('<%=editUrl%>'); return false;"><span class="fa fa-pencil"></span></a>
+                                                                    <a href="#" class="btn btn-xs btn-default" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblDelete")%>" onclick="window.location='<%=delUrl%>';return false;"><span class="fa fa-trash-o"></span></a>
+                                                                    <a href="#" class="btn btn-xs btn-default" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblEdit")%>" onclick="showModal('<%=editUrl%>'); return false;"><span class="fa fa-pencil"></span></a>
                                                                 </td>
                                                             </tr>
                                                             <%
@@ -305,25 +305,25 @@ String admMode = base.getAttribute(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MO
                                         if (btnSave) {
                                             editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnSave");
                                             %>
-                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
+                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnSaveLabel",paramRequest.getLocaleString("btnSaveTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
                                             <%
                                         }
                                         if (btnAccept) {
                                             editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnAccept");
                                             %>
-                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
+                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnAcceptLabel",paramRequest.getLocaleString("btnCloseTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
                                             <%
                                         }
                                         if (btnReject) {
                                             editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnReject");
                                             %>
-                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
+                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnRejectLabel",paramRequest.getLocaleString("btnRejectTask"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
                                             <%
                                         }
                                         if (btnCancel) {
                                             editUrl.setParameter(ProcessForm.PARAM_BTNID , "btnCancel");
                                             %>
-                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
+                                            <button dojoType="dijit.form.Button"><%=base.getAttribute("btnCancelLabel",paramRequest.getLocaleString("btnBack"))%></button><a href="#" class="btn btn-xs btn-default" onclick="showModal('<%=editUrl%>'); return false;" data-tooltip="tooltip" data-placement="bottom" title="<%=paramRequest.getLocaleString("lblEdit")%>"><span class="fa fa-pencil"></span></a>
                                             <%
                                         }
                                         %>
