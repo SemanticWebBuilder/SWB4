@@ -192,9 +192,9 @@ public class XPDLProcessor {
             if (!elements.isEmpty()) {
                 JSONObject obj = elements.pop();
                 
-                String cls = atts.get("class");
+                String cls = atts.get(XPDLAttributes.TYPE);
                 if (cls == null) cls = "SequenceFlow";
-                
+
                 if ("CONDITION".equalsIgnoreCase(cls)) {
                     cls = "ConditionalFlow";
                 } else if ("OTHERWISE".equalsIgnoreCase(cls)) {
