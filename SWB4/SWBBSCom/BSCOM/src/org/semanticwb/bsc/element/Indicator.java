@@ -332,7 +332,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         try{
             iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = "undefined";
+            iconClass = "indefinido";
         }
         return iconClass;
     }
@@ -343,7 +343,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         try {
             iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = "undefined";
+            iconClass = "indefinido";
         }
         return iconClass;
     }
