@@ -83,9 +83,9 @@ if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != nu
                                 <%=paramRequest.getLocaleString("lblMode")%>:
                             </label>
                             <div class="col-sm-9">
-                                <label class="checkbox-inline">
+                                <label class="radio-inline">
                                     <input type="radio" <%=propsMap.get("mode").equals("view")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="view"/>&nbsp;<%=paramRequest.getLocaleString("lblView")%>
-                                    <input type="radio" <%=propsMap.get("mode").equals("edit")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="edit"/>&nbsp;<%=paramRequest.getLocaleString("lblEdit")%>
+                                    <input type="radio" <%=propsMap.get("mode").equals("edit")?"checked":""%> name="<%=ProcessForm.PARAM_PROPMODE%>" value="edit"/>&nbsp;<%=paramRequest.getLocaleString("lblModeEdit")%>
                                 </label>
                             </div>
                         </div>
