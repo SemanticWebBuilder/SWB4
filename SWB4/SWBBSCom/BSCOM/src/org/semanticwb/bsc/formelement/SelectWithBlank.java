@@ -15,12 +15,9 @@ import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 
 
-   /**
-   * Extrae información de la propiedad indicada en parentProperty y la muestra para que el usuario seleccione un dato 
-   */
-public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFromParentBase  {
+public class SelectWithBlank extends org.semanticwb.bsc.formelement.base.SelectWithBlankBase {
     
-    public DataFromParent(org.semanticwb.platform.SemanticObject base) {
+    public SelectWithBlank(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
     
@@ -112,7 +109,9 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
             }
 
             if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
-                ret.append("<select name=\"" + name + "\"");
+                ret.append("<select name=\"");
+                ret.append(name);
+                ret.append("\"");
 
                 if (dojo) {
                     ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" invalidMessage=\""
@@ -121,7 +120,9 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
 
                 if (!mode.equals("filter")) {
                     if (required) {
-                        ret.append(" required=\"" + required + "\"");
+                        ret.append(" required=\"");
+                        ret.append(required);
+                        ret.append("\"");
                     }
                 }
 
@@ -129,10 +130,13 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
                     ret.append(" displayedvalue=\"\"");
                 }
 
-                ret.append(" " + ext + ">");
+                ret.append(" ");
+                ret.append(ext);
+                ret.append(">");
 
                 if ((mode.equals("filter") || isBlankSuport())) {
-                    ret.append("<option value=\"\"></option>");
+                    ret.append("<option");
+                    ret.append(" value=\"\"></option>");
                 }
 
                 SemanticClass cls = prop.getRangeClass();
@@ -154,24 +158,14 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
                         model = m.getSemanticObject().getModel();
                     }
                     it = SWBComparator.sortSemanticObjects(lang, model.listInstancesOfClass(cls));
-                } else if (this.getParentProperty() != null) {
-                    //Se obtienen los objetos asociados a obj
-                    System.out.println("Se obtienen datos del padre ...");
-                    SemanticClass semClass = obj.getSemanticClass();
-                    SemanticProperty property = semClass.getProperty(this.getParentProperty());
-                    if (property != null && property.isObjectProperty()) {
-                        SemanticObject parent = obj.getHerarquicalParent();
-                        if (parent != null) {
-                            it = SWBComparator.sortSemanticObjects(lang, parent.listObjectProperties(property));
-                        }
-                    }
                 } else {
                     SemanticModel model = getModel();
                     SWBModel m = (SWBModel) model.getModelObject().createGenericInstance();
                     if (m.getParentWebSite() != null) {
                         m = m.getParentWebSite();
-                    }
+                    }                    
                     model = m.getSemanticModel();
+                    
                     it = SWBComparator.sortSemanticObjects(lang, model.listInstancesOfClass(cls));
                 }
 
@@ -200,7 +194,13 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
                 }
                 ret.append("</select>");
             } else if (mode.equals("view")) {
-                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">" + value + "</span>");
+                ret.append("<span _id=\"");
+                ret.append(name);
+                ret.append("\" name=\"");
+                ret.append(name);
+                ret.append("\">");
+                ret.append(value);
+                ret.append("</span>");
             }
         } else {// isDataProperty
             if (selectValues != null) {
@@ -255,18 +255,18 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
                     ret.append("</select>");
                 } else if (mode.equals("view")) {
                     StringTokenizer st = new StringTokenizer(selectValues, "|");
-
+                    
                     while (st.hasMoreTokens()) {
                         String tok = st.nextToken();
                         int ind = tok.indexOf(':');
                         String id  = tok;
                         String val = tok;
-
+                        
                         if (ind > 0) {
                             id = tok.substring(0, ind);
                             val = tok.substring(ind + 1);
                         }
-
+                        
                         if (id.equals(value)) {
                             ret.append("<span _id=\"");
                             ret.append(name);
@@ -281,7 +281,7 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
                 }
             }
         }
-
+        
         return ret.toString();
     }
     
