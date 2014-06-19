@@ -210,6 +210,16 @@ System.out.println("setProgress. value="+value);
         return measurablesPeriods.iterator();
     }
     
+    public String getAutoStatusIconClass() {
+        String iconClass;
+        try {
+            iconClass = super.getAutoStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = "indefinido";
+        }
+        return iconClass;
+    }
+    
     @Override
     public String getStatusIconClass() {
         String iconClass;
