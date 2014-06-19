@@ -9,13 +9,10 @@ import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import org.semanticwb.bsc.tracing.EvaluationRule;
-import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 
 
