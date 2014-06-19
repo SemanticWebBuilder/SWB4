@@ -1,14 +1,18 @@
 package org.semanticwb.bsc.formelement;
 
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.FormElementURL;
 import org.semanticwb.model.SWBComparator;
+import org.semanticwb.model.SWBModel;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticProperty;
 import org.semanticwb.portal.SWBFormMgr;
@@ -208,10 +212,16 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
 
                 toReturn.append("<br/>");
                 if (itDeliverables.hasNext()) {
-                    toReturn.append("\n<div class=\"swbDeliverable\" id=\"swbDeliverable\">");
-                    toReturn.append(listDeliverables(itDeliverables, suri, obj, prop, type,
-                            usrWithGrants));
-                    toReturn.append("\n</div>");
+                    final SWBModel scorecard = (SWBModel)obj.getModel().getModelObject().getGenericInstance();
+                    final String scorecardId = scorecard.getId();
+                    Object periodId = request.getSession(true).getAttribute(scorecardId);
+                    if(periodId!=null && Period.ClassMgr.hasPeriod(periodId.toString(), scorecard))
+                    {
+                        Period period = Period.ClassMgr.getPeriod(periodId.toString(), scorecard);
+                        toReturn.append("\n<div class=\"swbDeliverable\" id=\"swbDeliverable\">");
+                        toReturn.append(listDeliverables(itDeliverables, suri, obj, prop, type, period, usrWithGrants));
+                        toReturn.append("\n</div>");
+                    }
                 }
             }
         }
@@ -250,8 +260,16 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
             if (semObj != null && semObj.createGenericInstance() instanceof Initiative) {
                 element = (Initiative) semObj.createGenericInstance();
                 Iterator<Deliverable> itDeliverables = element.listDeliverables();
-                toReturn.append(listDeliverables(itDeliverables, suri, obj, prop, type,
-                        usrWithGrants));
+                
+                
+                final BSC scorecard = element.getBSC();
+                final String scorecardId = scorecard.getId();
+                Object periodId = request.getSession(true).getAttribute(scorecardId);
+                if(periodId!=null && Period.ClassMgr.hasPeriod(periodId.toString(), scorecard))
+                {
+                    Period period = Period.ClassMgr.getPeriod(periodId.toString(), scorecard);
+                    toReturn.append(listDeliverables(itDeliverables, suri, obj, prop, type, period, usrWithGrants));
+                }
             }
         }
         return toReturn.toString();
@@ -273,7 +291,7 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
      * conjunto de entregables.
      */
     private String listDeliverables(Iterator<Deliverable> itDeliverables, String suri,
-            SemanticObject obj, SemanticProperty prop, String lang, String usrWithGrants) {
+            SemanticObject obj, SemanticProperty prop, String lang, Period period, String usrWithGrants) {
         StringBuilder toReturn = new StringBuilder();
         toReturn.append("\n<table width=\"98%\">");
         itDeliverables = SWBComparator.sortByCreated(itDeliverables, false);
@@ -289,28 +307,32 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
                 urlRemove.setParameter("obj", suri);
                 urlRemove.setParameter("usrWithGrants", usrWithGrants);
                 toReturn.append("\n<td>");
-                toReturn.append("<div");
-                toReturn.append(" class=\"");
-                if (deliverable.getAutoStatus() != null && deliverable.getAutoStatus().getStatus()
-                        != null && deliverable.getAutoStatus().getIconClass() != null) {
-                    toReturn.append(deliverable.getAutoStatus().getIconClass());
-                } else {
-                    toReturn.append("indefinido");
-                }
-                toReturn.append("\"></div>");
+                toReturn.append("<span class=\"");
+//                if (deliverable.getAutoStatus() != null && deliverable.getAutoStatus().getStatus()
+//                        != null && deliverable.getAutoStatus().getIconClass() != null) {
+//                    toReturn.append(deliverable.getAutoStatus().getIconClass());
+//                } else {
+//                    toReturn.append("indefinido");
+//                }
+                toReturn.append(deliverable.getAutoStatusIconClass());
+                toReturn.append("\"></span>");
+                toReturn.append("<span class=\"");
+                toReturn.append(deliverable.getStatusIconClass(period));
+                toReturn.append("\"></span>");
                 toReturn.append("\n</td>");
-                toReturn.append("\n<td>");
-                toReturn.append("<div");
-                toReturn.append(" class=\"");
-                if (deliverable.getStatusAssigned() != null && deliverable.getStatusAssigned().
-                        getStatus() != null && deliverable.getStatusAssigned().getIconClass()
-                        != null) {
-                    toReturn.append(deliverable.getStatusAssigned().getIconClass());
-                } else {
-                    toReturn.append("indefinido");
-                }
-                toReturn.append("\"></div>");
-                toReturn.append("\n</td>");
+                
+//                toReturn.append("\n<td>");
+//                toReturn.append("<div");
+//                toReturn.append(" class=\"");
+//                if (deliverable.getStatusAssigned() != null && deliverable.getStatusAssigned().
+//                        getStatus() != null && deliverable.getStatusAssigned().getIconClass()
+//                        != null) {
+//                    toReturn.append(deliverable.getStatusAssigned().getIconClass());
+//                } else {
+//                    toReturn.append("indefinido");
+//                }
+//                toReturn.append("\"></div>");
+//                toReturn.append("\n</td>");
                 toReturn.append("\n<td>");
                 toReturn.append("\n<a href=\"Deliverable");
                 toReturn.append("?suri=");
@@ -397,13 +419,14 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
                     toReturn.append("\n<tr>");
                     toReturn.append("\n<td>");
                     toReturn.append("\n<div>");
-                    toReturn.append(deliverable.getTitle() == null ? "" : deliverable.getTitle());
+                    toReturn.append(deliverable.getDisplayTitle(lang) == null ? deliverable.getTitle() : deliverable.getDisplayTitle(lang));
                     toReturn.append("\n</div>");
                     toReturn.append("\n</td>");
 
                     toReturn.append("\n<td>");
-                    toReturn.append(deliverable.getCreated() == null ? ""
-                            : SWBUtils.TEXT.getStrDate(deliverable.getCreated(), "es", "dd/mm/yyyy"));
+                    toReturn.append(deliverable.getCreated() == null ? 
+                            SWBUtils.TEXT.getStrDate(new Date(), lang, "dd/mm/yyyy")
+                            : SWBUtils.TEXT.getStrDate(deliverable.getCreated(), lang, "dd/mm/yyyy"));
                     toReturn.append("\n</td>");
 
                     toReturn.append("</tr>");
