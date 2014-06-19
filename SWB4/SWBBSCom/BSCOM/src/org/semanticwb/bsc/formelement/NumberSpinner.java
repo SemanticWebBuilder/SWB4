@@ -47,7 +47,6 @@ public class NumberSpinner extends org.semanticwb.bsc.formelement.base.NumberSpi
     public String renderElement(HttpServletRequest request, SemanticObject obj, 
     SemanticProperty prop, String propName, String type, String mode, String lang) {
         
-        System.out.println("En NumberSpinner: \nobj: " + obj + "\nprop: " + prop + "\ntype: " + type + "\nmode: " + mode);
         StringBuilder buffer = new StringBuilder(256);
         String value = null;
         if (obj.getProperty(prop) != null) {
