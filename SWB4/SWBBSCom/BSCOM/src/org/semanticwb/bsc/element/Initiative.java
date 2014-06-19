@@ -40,8 +40,8 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
                             series = Series.ClassMgr.createSeries(model);
                             series.setTitle(names[i]);
                             series.setTitle(names[i], lang);
-                            series.setDescription("Serie "+names[i]);
-                            series.setDescription("Serie "+names[i], lang);
+                            series.setDescription("Hito de cumplimiento");
+                            series.setDescription("Hito de cumplimiento", lang);
                             series.setIndex(i);
                             series.setActive(true);
                             deliverable.addSeries(series);
