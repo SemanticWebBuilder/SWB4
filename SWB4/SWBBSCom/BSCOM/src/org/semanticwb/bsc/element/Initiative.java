@@ -220,7 +220,7 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
         try{
             iconClass = getPeriodStatus().getStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = "undefined";
+            iconClass = "indefinido";
         }
         return iconClass;
     }
@@ -231,7 +231,7 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
         try{
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = "undefined";
+            iconClass = "indefinido";
         }
         return iconClass;
     }
