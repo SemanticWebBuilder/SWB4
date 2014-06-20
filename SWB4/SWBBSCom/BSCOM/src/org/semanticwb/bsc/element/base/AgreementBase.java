@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Acuerdo. 
    */
-public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Detailed,org.semanticwb.model.RuleRefable
+public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Referensable,org.semanticwb.bsc.Detailed,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Traceable
 {
    /**
    * Define el responsable del acuerdo
@@ -22,6 +22,10 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
    * Conjunto de usuarios que podra ver y actualizar información de un acuerdo
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_agreementVisibility=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#agreementVisibility");
+   /**
+   * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.
+   */
+    public static final org.semanticwb.platform.SemanticClass bsc_State=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#State");
    /**
    * Persiste información del estatus de un acuerdo
    */
@@ -248,6 +252,29 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
             return it;
         }
        /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined AgreementStatus
+       * @param value AgreementStatus of the type org.semanticwb.bsc.accessory.State
+       * @param model Model of the org.semanticwb.bsc.element.Agreement
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByAgreementStatus(org.semanticwb.bsc.accessory.State value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_agreementStatus, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Agreement with a determined AgreementStatus
+       * @param value AgreementStatus of the type org.semanticwb.bsc.accessory.State
+       * @return Iterator with all the org.semanticwb.bsc.element.Agreement
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Agreement> listAgreementByAgreementStatus(org.semanticwb.bsc.accessory.State value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Agreement> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_agreementStatus,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
        * Gets all org.semanticwb.bsc.element.Agreement with a determined RuleRef
        * @param value RuleRef of the type org.semanticwb.model.RuleRef
        * @param model Model of the org.semanticwb.bsc.element.Agreement
@@ -448,23 +475,43 @@ public abstract class AgreementBase extends org.semanticwb.bsc.element.BSCElemen
          }
          return ret;
     }
+   /**
+   * Sets the value for the property AgreementStatus
+   * @param value AgreementStatus to set
+   */
 
-/**
-* Gets the AgreementStatus property
-* @return String with the AgreementStatus
-*/
-    public String getAgreementStatus()
+    public void setAgreementStatus(org.semanticwb.bsc.accessory.State value)
     {
-        return getSemanticObject().getProperty(bsc_agreementStatus);
+        if(value!=null)
+        {
+            getSemanticObject().setObjectProperty(bsc_agreementStatus, value.getSemanticObject());
+        }else
+        {
+            removeAgreementStatus();
+        }
+    }
+   /**
+   * Remove the value for AgreementStatus property
+   */
+
+    public void removeAgreementStatus()
+    {
+        getSemanticObject().removeProperty(bsc_agreementStatus);
     }
 
-/**
-* Sets the AgreementStatus property
-* @param value long with the AgreementStatus
-*/
-    public void setAgreementStatus(String value)
+   /**
+   * Gets the AgreementStatus
+   * @return a org.semanticwb.bsc.accessory.State
+   */
+    public org.semanticwb.bsc.accessory.State getAgreementStatus()
     {
-        getSemanticObject().setProperty(bsc_agreementStatus, value);
+         org.semanticwb.bsc.accessory.State ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_agreementStatus);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
+         }
+         return ret;
     }
    /**
    * Sets the value for the property AgreementSponsor
