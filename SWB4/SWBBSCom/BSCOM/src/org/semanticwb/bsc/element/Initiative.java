@@ -216,8 +216,6 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
     
     public String getAutoStatusIconClass() {
         StringBuilder iconClass = new StringBuilder();
-        iconClass.append(getAutoStatusIconClass());
-        iconClass.append(" ");
         try {
             iconClass.append(getStatusAssigned().getIconClass());
         }catch(NullPointerException npe) {
