@@ -3458,6 +3458,23 @@
                     }
                 }
 
+                //Asignar contenedores de los flowNodes y lineas
+                for (i = 0; i < flowNodes.length; i++) {
+                    var tmp = flowNodes[i];
+                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
+                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                    if (tmp.container && tmp.container !== null) {
+                        var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                        if (cont !== null && obj !== null) {
+                            if (cont.typeOf("SubProcess")) {
+                                obj.layer = cont.subLayer;
+                            } else {
+                                obj.layer = null;
+                            }
+                        }
+                    }
+                }
+
                 //Asignar padres de los flowNodes
                 for (i = 0; i < flowNodes.length; i++) {
                     var tmp = flowNodes[i];
@@ -3473,24 +3490,12 @@
                             }
                             obj.moveFirst();
                         }
+                    } else if (obj !== null) {
+                        ToolKit.svg.dragObject = obj;
+                        ToolKit.selectObj(obj, false);
+                        ToolKit.svg.onmouseup();
                     }
-                }
-
-                //Asignar contenedores de los flowNodes
-                for (i = 0; i < flowNodes.length; i++) {
-                    var tmp = flowNodes[i];
-                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                    if (tmp.container && tmp.container !== null) {
-                        var cont = Modeler.getGraphElementByURI(null, tmp.container);
-                        if (cont !== null && obj !== null) {
-                            if (cont.typeOf("SubProcess")) {
-                                obj.layer = cont.subLayer;
-                            } else {
-                                obj.layer = null;
-                            }
-                        }
-                    }
+                    ToolKit.unSelectAll();
                 }
                 ToolKit.setLayer(null);
             } catch (err) {
