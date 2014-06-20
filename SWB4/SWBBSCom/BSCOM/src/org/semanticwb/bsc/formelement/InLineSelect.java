@@ -257,7 +257,7 @@ public class InLineSelect extends org.semanticwb.bsc.formelement.base.InLineSele
                             viewString.append("        { label: \"");
                             viewString.append(sob.getDisplayName(lang));
                             viewString.append("\", value: \"");
-                            viewString.append(sob.getURI());
+                            viewString.append(sob.getEncodedURI());
                             viewString.append("\"");
                             if (sob.getURI().equals(uri)) {
                                 viewString.append(", selected: true");
@@ -285,7 +285,7 @@ public class InLineSelect extends org.semanticwb.bsc.formelement.base.InLineSele
                 viewString.append(urlProcess.toString());
                 viewString.append("&");
                 viewString.append(prop.getName());
-                viewString.append("='+value);\n");
+                viewString.append("='+value2Send);\n");
                 viewString.append("          if (reloadPage != undefined && reloadPage) {\n");
                 viewString.append("            location.reload();\n");
                 viewString.append("          }\n");
