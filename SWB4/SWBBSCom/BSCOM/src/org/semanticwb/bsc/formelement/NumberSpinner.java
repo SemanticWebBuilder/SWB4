@@ -81,7 +81,7 @@ public class NumberSpinner extends org.semanticwb.bsc.formelement.base.NumberSpi
             buffer.append("\"/>");
         } else if (mode.equals("inlineEdit")) {
             /*Al utilizar este modo, se debe incluir en el HTML las instrucciones 
-             * dojo.require del dijit.form.NumberSpinner, al menos*/
+             * dojo.require de dijit.InlineEditBox y dijit.form.NumberSpinner, al menos*/
             FormElementURL urlProcess = getProcessURL(obj, prop);
             String objectId = obj.getSemanticClass().getClassCodeName() + obj.getId() + propName;
 
