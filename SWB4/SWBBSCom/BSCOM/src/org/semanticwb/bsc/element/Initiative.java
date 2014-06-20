@@ -214,26 +214,42 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
         super.setPercentageProgress(BSCUtils.Formats.round(m,2).floatValue());
     }
     
+    public String getAutoStatusIconClass() {
+        StringBuilder iconClass = new StringBuilder();
+        iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");
+        try {
+            iconClass.append(getStatusAssigned().getIconClass());
+        }catch(NullPointerException npe) {
+            iconClass.append("indefinido");
+        }
+        return iconClass.toString();
+    }
+    
     @Override
     public String getStatusIconClass() {
-        String iconClass;
+        StringBuilder iconClass = new StringBuilder();
+        iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");
         try{
-            iconClass = getPeriodStatus().getStatus().getIconClass();
+            iconClass.append(getPeriodStatus().getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass.append("indefinido");
         }
-        return iconClass;
+        return iconClass.toString();
     }
     
     @Override
     public String getStatusIconClass(Period period) {
-        String iconClass;
-        try{
-            iconClass = getPeriodStatus(period).getStatus().getIconClass();
+        StringBuilder iconClass = new StringBuilder();
+        iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");
+        try {
+            iconClass.append(getPeriodStatus(period).getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass.append("indefinido");
         }
-        return iconClass;
+        return iconClass.toString();
     }
     
     
