@@ -213,7 +213,7 @@ System.out.println("setProgress. value="+value);
     public String getAutoStatusIconClass() {
         String iconClass;
         try {
-            iconClass = super.getAutoStatus().getIconClass();
+            iconClass = getAutoStatus().getIconClass();
         }catch(NullPointerException npe) {
             iconClass = "indefinido";
         }
@@ -222,23 +222,27 @@ System.out.println("setProgress. value="+value);
     
     @Override
     public String getStatusIconClass() {
-        String iconClass;
+        StringBuilder iconClass = new StringBuilder();
+        iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");
         try {
-            iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
+            iconClass.append(getStar().getMeasure().getEvaluation().getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass.append("indefinido");
         }
-        return iconClass;
+        return iconClass.toString();
     }
     
     @Override
     public String getStatusIconClass(Period period) {
-        String iconClass;
+        StringBuilder iconClass = new StringBuilder();
+        iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");
         try {
-            iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
+            iconClass.append(getStar().getMeasure(period).getEvaluation().getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass.append("indefinido");
         }
-        return iconClass;
+        return iconClass.toString();
     }
 }
