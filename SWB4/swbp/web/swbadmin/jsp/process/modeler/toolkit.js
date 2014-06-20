@@ -33,6 +33,7 @@
         tooltip:null,
         loaded:false,
         tmHandler:null,
+        lineHandler:null,
 
         setLayer:function(layer)
         {
@@ -1280,6 +1281,7 @@
             obj.addInConnection=function(connectionPath)
             {
                 if (obj.inConnections.indexOf(connectionPath) === -1) {
+                    connectionPath.layer = obj.layer;
                     obj.inConnections.push(connectionPath);
                     connectionPath.toObject=obj;
                     connectionPath.setEndPoint(obj.getX(),obj.getY());
@@ -1298,6 +1300,7 @@
             obj.addOutConnection=function(connectionPath)
             {
                 if (obj.outConnections.indexOf(connectionPath) === -1) {
+                    connectionPath.layer = obj.layer;
                     obj.outConnections.push(connectionPath);
                     connectionPath.fromObject=obj;
                     connectionPath.setStartPoint(obj.getX(),obj.getY());
