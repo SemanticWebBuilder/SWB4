@@ -1321,8 +1321,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                      && isEditable(formElement)) || (elementBSC.createGenericInstance() instanceof Deliverable
                      && userCanEdit() && isEditable(formElement))) {*/
                     if ((userCanEdit() && isInMeasurementTime(period) && isEditable(formElement))
-                            || (elementBSC.createGenericInstance() instanceof Initiative && userCanEdit() && isEditable(formElement))
-                            || (elementBSC.createGenericInstance() instanceof Deliverable && userCanEdit() && isEditable(formElement))) {
+                            || (this.isNonMeasurableElement(elementBSC) && userCanEdit() && isEditable(formElement))) {
                         applyInlineEdit = true;
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
@@ -2051,5 +2050,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append("</form>").append("\n");
 
         return ret.toString();
+    }
+    
+    /**
+     * Eval&uacute;a si {@code object} es una instancia de alg&uacute;n {@code BSCElement} que no requiere de
+     * mediciones en per&iacute;odos.
+     * @param object el objeto a evaluar
+     * @return si el objeto es una instancia de alg&uacute;n {@code BSCElement} al que no es necesario realizar
+     *      mediciones peri&oacute;dicas, devuelve {@literal true}, de lo contrario devuelve {@false}
+     */
+    private boolean isNonMeasurableElement(SemanticObject object) {
+        
+        GenericObject generic = object.createGenericInstance(); 
+        return (generic instanceof Initiative || generic instanceof Deliverable ||
+                generic instanceof Agreement || generic instanceof Risk);
     }
 }
