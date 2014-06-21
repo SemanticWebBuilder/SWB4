@@ -21,7 +21,6 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
-import org.semanticwb.bsc.PDFExportable;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPNG;
 import org.semanticwb.bsc.accessory.Period;
