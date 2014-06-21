@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
+import org.semanticwb.bsc.InitiativeAssignable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.Series;
@@ -363,4 +364,16 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
             }
         }
     }
+    
+    public boolean hasInitiative(Initiative initiative) {
+        Iterator<Indicator> indicators = Indicator.ClassMgr.listIndicatorByInitiative(initiative, getBSC());
+        while(indicators.hasNext()) {
+            Indicator indicator = indicators.next();
+            if(hasIndicator(indicator)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }
