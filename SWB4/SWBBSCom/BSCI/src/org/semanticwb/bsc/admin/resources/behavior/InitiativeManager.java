@@ -9,8 +9,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.InitiativeAssignable;
 import org.semanticwb.bsc.element.Initiative;
-import org.semanticwb.bsc.element.Objective;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticOntology;
@@ -188,7 +186,7 @@ public class InitiativeManager extends GenericResource {
                 response.setRenderParameter("statmsg", "Objeto semantico no ubicado.");
             }
         }else if(Action_ACTIVE_ALL.equalsIgnoreCase(action)) {
-            Iterator<Initiative> initiatives = model.listValidInitiative().iterator();
+            Iterator<Initiative> initiatives = model.listValidInitiatives().iterator();
             if(initiatives.hasNext()) {
                 obj.removeAllInitiative();
                 while(initiatives.hasNext()) {
