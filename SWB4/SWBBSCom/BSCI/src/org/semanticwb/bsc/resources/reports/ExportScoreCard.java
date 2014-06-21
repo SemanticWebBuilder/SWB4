@@ -153,7 +153,7 @@ public class ExportScoreCard extends GenericResource {
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode(Mode_StreamPDF);
-        out.print("<a href=\"" + url + "\" class=\"swb-toolbar-stgy\" title=\""+title+"\">");
+        out.print("<a href=\"" + url + "\" class=\"swbstgy--toolbar-sc\" title=\""+title+"\">");
         out.print(title);
         out.println("</a>");
     }
