@@ -27,8 +27,8 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         super(base);
     }
     
-    public List<Initiative> listValidInitiative() {
-        List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(listInitiatives(), new GenericFilterRule<Initiative>() {
+    public List<Initiative> listValidInitiatives() {
+        List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(super.listInitiatives(), new GenericFilterRule<Initiative>() {
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
