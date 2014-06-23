@@ -1,11 +1,15 @@
 package org.semanticwb.bsc;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.DifferentiatorGroup;
+import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -90,6 +94,37 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
                                                                         }            
                                                                     });
         return validDiffGroups;
+    }
+    
+    public List<Objective> listValidObjectives() {
+        List<Objective> objectives = new ArrayList<>();
+        List<Objective> objs;
+        List<Theme> themes = listValidThemes();
+        Collections.sort(themes);
+        for(Theme t:themes) {
+            objs = t.listValidObjectives();
+            Collections.sort(objs);
+            objectives.addAll(objs);
+        }
+        return objectives;
+    }
+    
+    public List<Objective> listValidObjectives(Period period) {
+        List<Objective> objectives = new ArrayList<>();
+        List<Objective> objs;
+        List<Theme> themes = listValidThemes();
+        Collections.sort(themes);
+        for(Theme t:themes) {
+            objs = t.listValidObjectives();
+            Collections.sort(objs);
+            for(Objective o : objs) {
+                if(!o.hasPeriod(period)) {
+                    continue;
+                }
+                objectives.add(o);
+            }
+        }
+        return objectives;
     }
 
     @Override
