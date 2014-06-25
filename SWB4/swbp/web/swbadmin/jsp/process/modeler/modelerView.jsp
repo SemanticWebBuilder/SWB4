@@ -1060,8 +1060,6 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
             var viewBox = document.getElementById("modeler");
             var element = document.getElementById("viewBox");
             element.value = viewBox.getAttribute('viewBox');
-            console.log('viewBox : ' + viewBox);
-            console.log('element.value : ' + element.value);
             
             
             
@@ -1117,7 +1115,6 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
         %>
         function storeProcess() {
             var json = Modeler.getProcessJSON();
-            console.log('json send : ' + json);
             var jsonString = "JSONSTART" + JSON.stringify(json) + "JSONEND";
             if (ToolKit && ToolKit !== null) {
                 ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("sending")%>", 200, "Warning");
