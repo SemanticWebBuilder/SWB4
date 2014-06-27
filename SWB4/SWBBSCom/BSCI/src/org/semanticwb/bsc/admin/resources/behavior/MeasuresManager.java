@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.Committable;
 import org.semanticwb.bsc.Measurable;
 import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.accessory.Period;
@@ -19,7 +20,6 @@ import org.semanticwb.bsc.catalogs.Format;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
-import org.semanticwb.bsc.utils.BSCUtils;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericObject;
@@ -86,9 +86,6 @@ public class MeasuresManager extends GenericAdmResource {
         User user = paramRequest.getUser();
         
         SemanticObject semObj = SemanticObject.createSemanticObject(suri);
-System.out.println("\n\ndoEditSeries()....");
-System.out.println("semObj="+semObj);
-//semObj.remove();
         Series series = (Series)semObj.getGenericInstance();
         final SM sm = series.getSm();
         Iterator<Period> measurablesPeriods = null;
@@ -155,6 +152,18 @@ System.out.println("semObj="+semObj);
                 formatter.applyPattern(getResourceBase().getAttribute("defaultFormatPattern", Default_FORMAT_PATTERN));
             }
             Period period;
+            
+            Committable committable = (Committable)series;
+            final boolean canEdit;
+            final String disabled;
+            if( committable.isCommited() &&  user.hasUserGroup(user.getUserRepository().getUserGroup("editor")) ) {
+                canEdit = Boolean.FALSE;
+                disabled = " readonly ";
+            }else {
+                canEdit = Boolean.TRUE;
+                disabled = "";
+            }
+            
             while(measurablesPeriods.hasNext())
             {
                 period = measurablesPeriods.next();
@@ -212,7 +221,7 @@ System.out.println("semObj="+semObj);
 
                 // Valor de la medición
                 out.println("<td>");
-                out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" />");
+                out.println("<input type=\"text\" dojoType=\"dijit.form.TextBox\" name=\"" + period.getId() + "\" value=\""+value+"\" "+disabled+" />");
                 out.println("</td>");
 
                 // Estatus
