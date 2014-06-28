@@ -1,12 +1,17 @@
 package org.semanticwb.bsc.formelement;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.SWBPlatform;
+import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.Activeable;
 import org.semanticwb.model.DisplayProperty;
 import org.semanticwb.model.FormElementURL;
+import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -138,11 +143,21 @@ public class DataFromParent extends org.semanticwb.bsc.formelement.base.DataFrom
             } else if (this.getParentProperty() != null) {
                 //Se obtienen los objetos asociados a obj a partir de parentProperty
                 SemanticObject parent = obj.getHerarquicalParent();
-                SemanticClass semClass = parent.getSemanticClass();
-                SemanticProperty property = semClass.getProperty(this.getParentProperty());
-                if (property != null && property.isObjectProperty()) {
+                GenericObject thisGenericObj = obj.createGenericInstance();
+                if (thisGenericObj instanceof Initiative) {
+                    List<State> semObjIt = ((Initiative) thisGenericObj).listValidStates();
+                    ArrayList<SemanticObject> array = new ArrayList<SemanticObject>(semObjIt.size());
+                    for (State state : semObjIt) {
+                        array.add(state.getSemanticObject());
+                    }
+                    it = array.iterator();
+                } else {
                     if (parent != null) {
-                        it = SWBComparator.sortSemanticObjects(lang, parent.listObjectProperties(property));
+                        SemanticClass semClass = parent.getSemanticClass();
+                        SemanticProperty property = semClass.getProperty(this.getParentProperty());
+                        if (property != null && property.isObjectProperty()) {
+                            it = SWBComparator.sortSemanticObjects(lang, parent.listObjectProperties(property));
+                        }
                     }
                 }
             } else {
