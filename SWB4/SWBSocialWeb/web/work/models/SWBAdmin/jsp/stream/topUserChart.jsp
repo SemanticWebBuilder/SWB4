@@ -31,7 +31,8 @@
     String title = "";
     LinkedHashMap usersByStream = null;//<SocialNetUser,post number>
     LinkedHashMap<SocialNetworkUser, Integer[]> userCount= new LinkedHashMap<SocialNetworkUser,Integer[]>();//SocialNetUser, [neutrals][positives][negatives]
-    
+    boolean isSocialTopic = false;
+    SocialTopic st = null;
     if (semObj.getGenericInstance() instanceof Stream) {
         Stream stream = (Stream) semObj.getGenericInstance();
         title = stream.getTitle();
@@ -41,6 +42,8 @@
         title = socialTopic.getTitle();
         usersByStream = SWBSocialUtil.sparql.getSocialUsersInSocialTopic(socialTopic);
         //itObjPostIns = PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, socialTopic.getSocialSite());
+        isSocialTopic = true;
+        st = socialTopic;
     }
     
     Iterator usersToCount =  usersByStream.entrySet().iterator();
@@ -50,10 +53,18 @@
         Map.Entry pair = (Map.Entry)usersToCount.next();
         SocialNetworkUser snetu= (SocialNetworkUser)((SemanticObject)pair.getKey()).createGenericInstance();
         
-        Iterator posts = snetu.listPostInInvs();//Lists user posts
+        Iterator posts = snetu.listPostInInvs();//Lists user posts        
         Integer[] sentimentCounter = {0,0,0};//array of posts number [neutrals][positive][neagtive]
         while(posts.hasNext()){
             PostIn postIn = (PostIn)posts.next();
+            if(isSocialTopic){
+                if(postIn.getSocialTopic() == null){
+                    continue;
+                }
+                if(!postIn.getSocialTopic().equals(st)){
+                    continue;
+                }
+            }
             //adds 1 depending what is the post sentiment
             if(postIn.getPostSentimentalType() >= 0 &&postIn.getPostSentimentalType() <=2 ){
                 sentimentCounter[postIn.getPostSentimentalType()]++;
