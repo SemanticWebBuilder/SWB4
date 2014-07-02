@@ -1,6 +1,9 @@
-    - Soporte a papelera de tipos de recursos
-    - Corrección de doble codificacion en menus de url con caracter &amp; (jei)
-  4.5.5
+  4.5.6.0 02/07/14
+    - Firmado de Applets (Jei)
+    - Correccion de bug de Cache al crear recursos (Jei)
+    - Soporte a papelera de tipos de recursos (Jei)
+    - Corrección de doble codificacion en menus de url con caracter &amp; (Jei)
+  4.5.5.0
     - Soporte a nuevo SWBTripleStore, (levelDB, Kyoto Cabinet, MongoDB, Memory)(Jei)
   4.5.2.1
     - Se agregó al captcha para formas automáticas la posibilidad de usar audio (serch)
