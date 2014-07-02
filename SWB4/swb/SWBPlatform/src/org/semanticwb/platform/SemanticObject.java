@@ -226,6 +226,7 @@ public class SemanticObject
             m_cachepropsrel.clear();
             init(m_res.listProperties());
         }
+        //System.out.println("reloadProps");
     }
     
     public void reloadInvProps()
@@ -1192,7 +1193,9 @@ public class SemanticObject
                     }
                 }                 
             }
-        }        
+        }  
+        
+        m_cachepropsrel.remove(stmt.getPredicate().getURI());
     }
 
 //************************************************************** RDF Inv ***********************************************************   
@@ -1350,7 +1353,8 @@ public class SemanticObject
                 dom=SWBUtils.XML.getNewDocument();
             }
             m_cachepropsrel.put(prop.getURI(), dom);
-        }
+            //System.out.println("getDomProperty");
+        }        
         return dom;
     }
 
