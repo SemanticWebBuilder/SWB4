@@ -887,6 +887,7 @@ public class SWBPortal {
      * Load admin files.
      */
     public void loadAdminFiles() {
+        log.event("Loading Admin Files...");
         admFiles = new ConcurrentHashMap();
         try {
             log.debug("Loading admin Files from: /WEB-INF/lib/SWBAdmin.jar");
