@@ -22,7 +22,6 @@
  */
 package org.semanticwb.triplestore.ext;
 
-import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.Triple;
 import com.hp.hpl.jena.graph.TripleMatch;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
@@ -33,6 +32,7 @@ import java.sql.SQLException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.rdf.GraphExt;
 import org.semanticwb.triplestore.SWBTSGraph;
 import org.semanticwb.triplestore.SWBTSUtil;
 
