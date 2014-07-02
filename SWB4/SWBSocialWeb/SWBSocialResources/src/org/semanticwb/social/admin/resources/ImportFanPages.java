@@ -217,14 +217,15 @@ public class ImportFanPages extends GenericResource{
                             continue;
                         }
                         
-                        FacePageTab tmpffp = FacePageTab.ClassMgr.getFacePageTab(id, wsite);
-                        if(tmpffp == null){
-                            tmpffp = FacePageTab.ClassMgr.createFacePageTab(id, wsite);
+                        FacePageTab tmpftp = FacePageTab.ClassMgr.getFacePageTab(id, wsite);
+                        if(tmpftp == null){
+                            tmpftp = FacePageTab.ClassMgr.createFacePageTab(id, wsite);
                         }
-                        tmpffp.setTitle(name);
-                        tmpffp.setFace_appid(appId);
-                        tmpffp.setSortName(position);
-                        tmpffp.setParent(fp);
+                        tmpftp.setTitle(name);
+                        tmpftp.setFace_appid(appId);
+                        tmpftp.setSortName(position);
+                        //set the social account!!
+                        tmpftp.setParent(fp);
                         /*if(tmp.has("application")){
                             JSONObject app = tmp.getJSONObject("application");
                             if(app.has("id")){

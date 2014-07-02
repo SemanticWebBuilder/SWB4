@@ -49,7 +49,7 @@
     SocialNetwork sn = (SocialNetwork) SemanticObject.createSemanticObject(suri).createGenericInstance();
     Facebook fb = null;
     if(!(sn instanceof Facebook)){return;}else{fb = (Facebook)sn;}
-    
+    String wsite = fb.getSemanticObject().getModel().getName();
     try{        
         HashMap<String, String> params = new HashMap<String, String>(2);
         
@@ -91,40 +91,7 @@
        </td>
    </tr>
 </table>
-    
-<div class="swbform" style="width:50%;">
-<div id="pub-detalle">
-
-<table width="100%" border="0px">            
-   <tr>
-       <td colspan="3" style="text-align: center;" class="titulo">Importar en el sitio:</td>
-   </tr>
-   <tr>
-       <td colspan="3" style="text-align: center;">&nbsp;</td>        
-   </tr>
-   <tr>
-        <td style="text-align: center;">
-            <select name="site" id="site"> 
-                 <option value="" selected="selected">Seleccione un sitio...</option>
-                 <%
-                    Iterator<WebSite> sites = SWBContext.listWebSites();
-                    while(sites.hasNext()){
-                        WebSite site = sites.next();
-                        if(!(site instanceof SocialSite)){
-                            if(!site.equals(SWBContext.getAdminWebSite()) && !site.equals(SWBContext.getGlobalWebSite()) && site.getHomePage()!=null){
-                                %>
-                                <option value="<%=site.getId()%>" selected="selected"><%=site.getTitle()%></option>
-                                <%
-                            }
-                        }
-                    }
-                 %>
-            </select>
-        </td>
-   </tr>
-</table>
-</div>
-</div>
+<input type="hidden" name="site" id="site" value="<%=wsite%>"/>
             
 <div style="width:50%;" align="center">
     <button dojoType="dijit.form.Button" type="submit">Importar</button>
