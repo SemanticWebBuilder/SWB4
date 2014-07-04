@@ -2020,10 +2020,41 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return msgText;
     }
 
+    
+    private boolean updateSortName(FacePageTab fp, FacebookFanPage f){
+        //Poner el nombre de ordenamiento
+        boolean success = false;
+        String sortName = fp.getSortName();
+        System.out.println("Ordenando los tabs: " + sortName);
+        int sortNameInt = 0;
+        try{
+            sortNameInt = Integer.parseInt(sortName);
+        }catch(NumberFormatException nfe){}
+        
+        if(sortNameInt > 0 ){
+            HashMap<String, String> params = new HashMap<String, String>(2);
+            params.put("access_token", f.getPageAccessToken());
+            params.put("position", String.valueOf(sortNameInt));
+            try{
+                String responseSort = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + fp.getId().substring(fp.getId().lastIndexOf("_") + 1),
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+                if(responseSort != null && !responseSort.trim().isEmpty()){
+                    if(responseSort.equals("true")){
+                        success = true;
+                    }
+                }
+                System.out.println("Updating sort name: " + responseSort);
+            }catch(Exception e){
+                log.error("Unable to update the order of the tab ", e);
+            }
+        }
+        return success;
+    }
+    
     @Override
     public boolean createPageTab(PageTab pageTab) {
         boolean success = false;
-
+        System.out.println("CREATING  page tab!!! " + pageTab.getTitle());
         if (pageTab != null) {
             try {
                 FacePageTab fp = (FacePageTab) pageTab;
@@ -2038,7 +2069,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 }
                 
                 if(isAppActiveInPage(f, fp.getFace_appid()) == true){//La pagina ya esta activa
-                    return true;
+                    //solo hay que actualizar el nombre de ordenamiento
+                    return updateSortName(fp,f);
                 }
 
                 HashMap<String, String> params = new HashMap<String, String>(2);
@@ -2047,13 +2079,13 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 String response = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                 if(response != null && !response.trim().isEmpty()){
-                    if(response.equals("true")){
-                        success = true;
+                    if(response.equals("true")){//Si el tab se agrego bien
+                        //actualizar el nombre de ordenamiento
+                        success = updateSortName(fp,f);
                     }
                 }                
             } catch (Exception ex) {
                 log.error("Problem creating the page tab: " + ex.getMessage());
-                return success;
             }
         }
         //System.out.println("success**********");
@@ -2064,7 +2096,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     public boolean removePageTab(PageTab pageTab) {
         //System.out.println("REMOVING page tab!!!");
         boolean sucess = false;
-        FacePageTab fp = (FacePageTab) pageTab;
+        FacePageTab fp = (FacePageTab) pageTab;        
         FacebookFanPage f = (FacebookFanPage) fp.getParent();
         sucess = removePageTab(f, fp.getFace_appid());
         return sucess;
@@ -2073,8 +2105,8 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean removePageTab(FanPage fanPage, String app_id) {
-        
-        boolean sucess = false;
+        System.out.println("REMOVING page tab!!! " + fanPage.getTitle());
+        boolean success = false;
 
         try {
 
@@ -2095,17 +2127,21 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             HashMap<String, String> params = new HashMap<String, String>(2);
             params.put("access_token", f.getPageAccessToken());
             params.put("app_id", app_id);
-            String user = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + app_id,
+            String removed = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + app_id,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
-
-            sucess = true;
+            System.out.println("removed:" + removed);
+            if(removed != null && removed.isEmpty()){
+                if(removed.equalsIgnoreCase("true")){
+                    success = true;
+                }
+            }
+            
 
         } catch (Exception ex) {
             log.error("Problem removing tab: " + ex.getMessage());
-            return sucess;
         }
         //System.out.println("removed actually page tab!!!");
-        return sucess;
+        return success;
     }
 
     public String getPageAccessTokenFromFB(String pageId) {
