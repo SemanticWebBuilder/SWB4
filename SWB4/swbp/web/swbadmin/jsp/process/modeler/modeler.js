@@ -2659,15 +2659,25 @@
             
             obj.setText = function(text) {
                 if(obj.text && obj.text !== null)obj.text.remove();
+                obj.title = text;
                 obj.text = document.createElementNS(ToolKit.svgNS, "text");
+                //obj.text.value = text;
                 obj.text.setAttributeNS(null,"text-anchor","middle");
                 obj.text.setAttributeNS(null,"font-size","11");
                 obj.text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                 obj.text.setAttributeNS(null,"class","textLabel");
                 
                 obj.text.update = function() {
-                    var p1=obj.pathSegList.getItem(1);
-                    var p2=obj.pathSegList.getItem(2);
+                    var child = null;
+                    while((child=obj.text.firstChild)!=null) {
+                        obj.text.removeChild(child);
+                    }
+                
+                    var txt = document.createTextNode(obj.title);
+                    obj.text.appendChild(txt);
+                    
+                    var p1 = obj.pathSegList.getItem(1);
+                    var p2 = obj.pathSegList.getItem(2);
                     var _x = p1.x;
                     var _y = p1.y;
                     
@@ -2684,9 +2694,14 @@
                     ToolKit.svg.appendChild(obj.text);
                 };
                 
-                var txt = document.createTextNode(text);
+                obj.text.ondblclick = function(evt) {
+                    var txt = prompt("Título:",obj.title);                  
+                    if(txt && txt !== null) {
+                        obj.title = txt;
+                        obj.text.update();
+                    }
+                };
                 
-                obj.text.appendChild(txt);
                 obj.text.update();
             };
             
