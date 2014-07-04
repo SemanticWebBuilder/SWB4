@@ -2644,9 +2644,14 @@
                 return false;
             };
             
+            obj.ondblclick = function(evt) {
+                obj.text.ondblclick(evt);
+            };
+            
             obj.subLine.onmousedown = obj.onmousedown;
             obj.subLine.onmousemove = obj.onmousemove;
             obj.subLine.onmouseup = obj.onmouseup;
+            obj.subLine.ondblclick = obj.ondblclick;
             obj.subLine.hide = function() {
                 obj.subLine.style.display="none";
                 obj.subLine.hidden=true;
@@ -2784,6 +2789,7 @@
             
             obj.remove=function() {
                 obj.subLine.remove();
+                if (obj.text) ToolKit.svg.removeChild(obj.text);
                 fRemove();
             };
             
@@ -3764,6 +3770,7 @@
             }
             if(type=='ConditionalFlow') {
                 ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
+                ret.setText("");
                 ret.eoff=10;
                 ret.soff=10;
             }
