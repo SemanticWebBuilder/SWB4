@@ -2557,17 +2557,17 @@
             obj.subLine = ToolKit.createConnectionPath(0,0,0,0,null, null, null, null, null);
             obj.subLine.setStyleClass=function(cls) {
                 obj.subLine.setAttributeNS(null,"class",cls);
-            }            
+            };   
             obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");            
             
             obj.pressed = false;
             obj.hidden = false;
             obj.setArrowType= function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
-            }
+            };
             obj.setTailType= function(type) {
                 obj.setAttributeNS(null, "marker-start", "url(#"+type+")");
-            }
+            };
             obj.soff=0;
             obj.eoff=0;
 //            obj.xs=0;
@@ -2587,7 +2587,7 @@
                 if(!obj.ye)obj.ye=y;                
                 obj.updateInterPoints();
                 obj.pressed = false;
-            }
+            };
                     
             obj.setEndPoint=function(x,y) {
                 obj.xe=x;
@@ -2595,7 +2595,7 @@
                 obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
                 obj.updateInterPoints();
                 obj.pressed = false;
-            }
+            };
             
             obj.onmousedown = function (evt) {
                 if (Modeler.mode === "view") return false;
@@ -2650,12 +2650,45 @@
             obj.subLine.hide = function() {
                 obj.subLine.style.display="none";
                 obj.subLine.hidden=true;
-            }
+            };
             obj.subLine.show=function()
             {
                 obj.subLine.style.display="";
                 obj.subLine.hidden=false;
-            }
+            };
+            
+            obj.setText = function(text) {
+                if(obj.text && obj.text !== null)obj.text.remove();
+                obj.text = document.createElementNS(ToolKit.svgNS, "text");
+                obj.text.setAttributeNS(null,"text-anchor","middle");
+                obj.text.setAttributeNS(null,"font-size","11");
+                obj.text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                obj.text.setAttributeNS(null,"class","textLabel");
+                
+                obj.text.update = function() {
+                    var p1=obj.pathSegList.getItem(1);
+                    var p2=obj.pathSegList.getItem(2);
+                    var _x = p1.x;
+                    var _y = p1.y;
+                    
+                    if (p1.x !== p2.x) {
+                        _x += (p2.x - p1.x)/2;
+                    }
+                    
+                    if (p1.y !== p2.y) {
+                        _y += (p2.y - p1.y)/2;
+                    }
+                    
+                    obj.text.setAttributeNS(null, "x", _x);
+                    obj.text.setAttributeNS(null, "y", _y);
+                    ToolKit.svg.appendChild(obj.text);
+                };
+                
+                var txt = document.createTextNode(text);
+                
+                obj.text.appendChild(txt);
+                obj.text.update();
+            };
             
             obj.updateInterPoints=function()
             {
@@ -2715,6 +2748,9 @@
                     }                                        
                 }
                 obj.updateSubLine();
+                if (obj.text) {
+                    obj.text.update();
+                }
             };
             
             var fHide = obj.hide;
@@ -3301,6 +3337,9 @@
                 if (obj.connectionPoints && obj.connectionPoints !== undefined) {
                     ret.connectionPoints = obj.connectionPoints;
                 }
+                if (obj.title && obj.title !== undefined) {
+                    ret.title = obj.title;
+                }
             }
             return ret;
         },
@@ -3453,8 +3492,16 @@
                             obj.removeAttribute("marker-start");
                             obj.soff = 0;
                         }
+                        
                         start.addOutConnection(obj);
                         end.addInConnection(obj);
+                        
+                        if (obj.elementType === "ConditionalFlow" || obj.elementType === "DefaultFlow") {
+                            obj.title = tmp.title;
+                            if (obj.setText && typeof obj.setText === "function") {
+                                obj.setText(tmp.title);
+                            } 
+                        }
                     }
                 }
 
