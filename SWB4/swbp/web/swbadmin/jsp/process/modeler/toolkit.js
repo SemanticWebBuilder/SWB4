@@ -632,7 +632,9 @@
         {
             var _this=ToolKit;
             //console.log(_this);
-            var obj = document.createElementNS(_this.svgNS,"path"); 
+            var obj = document.createElementNS(_this.svgNS,"path");
+            obj.autoAdjust = false;
+            obj.lineHandlers = [];
 
             obj.fixed=false;
             obj.fromObject=null;
@@ -946,7 +948,7 @@
                 if(y+obj.getHeight()/2>_this.getHeight())
                 {
                     _this.setHeight(y+obj.getHeight()/2);
-                }    
+                }
                 
                 if(obj.canSelect==true)
                 {
