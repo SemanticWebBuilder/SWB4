@@ -116,6 +116,7 @@ public class UserProfile extends GenericAdmResource
         formMgr.addProperty(ContactWork.bsc_chief);
         formMgr.setType(SWBFormMgr.TYPE_DOJO);
         formMgr.setMode(SWBFormMgr.MODE_EDIT);
+        formMgr.setLang(lang);
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT);
 
         //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////
