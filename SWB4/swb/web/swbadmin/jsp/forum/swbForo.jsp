@@ -239,6 +239,7 @@ a:hover {text-decoration: underline;}
                                 urlRemovePost.setAction("removePost");
                                 urlthread.setMode("replyPost");
                                 urlthread.setParameter("postUri", post.getURI());
+                                urlthread.setParameter("threadUri", thread.getURI());
                                 %>
                                 <p class="pull-right"> 
                                 <%
