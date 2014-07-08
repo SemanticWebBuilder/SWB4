@@ -3,14 +3,33 @@
     Created on : 25/03/2013, 11:31:50 am
     Author     : Jorge.Jimenez
 --%>
+<%@page import="org.semanticwb.model.AdminFilter"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.social.SocialSite,java.util.*,org.semanticwb.social.SocialTopic,org.semanticwb.model.WebSite,org.semanticwb.model.User,org.semanticwb.platform.SemanticObject,org.semanticwb.model.SWBComparator"%>
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 
 <%    
+        ArrayList<SocialSite> aListSites=new ArrayList(); 
         User user=paramRequest.getUser(); 
         SWBResourceURL url = paramRequest.getRenderUrl();   
+        Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
+        while(itSocialSites.hasNext())
+        {
+            SocialSite socialSite=itSocialSites.next();
+            if(socialSite.isValid())
+            {
+                Iterator<AdminFilter> userAdmFilters=user.listAdminFilters();
+                while(userAdmFilters.hasNext())
+                {
+                    AdminFilter userAdmFilter=userAdmFilters.next();
+                    if(userAdmFilter.haveTreeAccessToSemanticObject(socialSite.getSemanticObject()))
+                    {
+                        aListSites.add(socialSite);
+                    }
+                }
+            }
+        }
 %>
 
 
@@ -27,18 +46,15 @@
        <tr>
             <td style="text-align: center;">
                 <select name="socialSite" id="socialSite" onchange="javascript:postHtml('<%=url.setMode("afterChooseSite")%>?socialSite='+escape(document.formSites.socialSite[document.formSites.socialSite.selectedIndex].value), 'socialTopics');"> 
-                     <option value="" selected="selected">Seleccione una marca...</option>
+                     <option value="" selected="selected">Seleccione una marca</option>
                     <%
-                        Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
-                        while(itSocialSites.hasNext())
+                        Iterator<SocialSite> itSocialSites2=aListSites.iterator();
+                        while(itSocialSites2.hasNext())
                         {
-                            SocialSite socialSite=itSocialSites.next(); 
-                            if(socialSite.isValid())
-                            {    
-                                %>
-                                    <option value="<%=socialSite.getURI()%>"><%=socialSite.getDisplayTitle(user.getLanguage())%></option>
-                                <%
-                            }
+                            SocialSite socialSite=itSocialSites2.next();  
+                            %>
+                                <option value="<%=socialSite.getURI()%>"><%=socialSite.getDisplayTitle(user.getLanguage())%></option>
+                            <%
                         }
                     %>
                 </select>
