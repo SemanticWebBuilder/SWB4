@@ -558,7 +558,7 @@
             if (ToolKit.layer === null) {
                 msg = "Este evento no puede usarse en un proceso de nivel superior";
                 ret = false;
-            } else if (ret && ToolKit.layer != null) {
+            } else if (ret && ToolKit.layer !== null) {
                 if (ToolKit.layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
@@ -793,7 +793,7 @@
             
             if (ret && link.elementType==="SequenceFlow" && link.fromObject.elementType==="ExclusiveIntermediateEventGateway") {
                 for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].elementType==="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType=="ReceiveTask") {
+                    if (link.fromObject.outConnections[i].elementType==="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType==="ReceiveTask") {
                         ret = false;
                         break;
                     }
@@ -1112,7 +1112,7 @@
             var msg = null;
             
             if (ret) {
-                if (ToolKit.layer != null && ToolKit.layer.parent.elementType==="AdhocSubProcess") {
+                if (ToolKit.layer !== null && ToolKit.layer.parent.elementType==="AdhocSubProcess") {
                     msg = "Un subproceso ad-hoc no puede tener eventos finales";
                     ret = false;
                 }
