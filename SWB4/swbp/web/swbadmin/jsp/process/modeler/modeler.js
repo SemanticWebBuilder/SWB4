@@ -2672,6 +2672,14 @@
                 obj.text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                 obj.text.setAttributeNS(null,"class","textLabel");
                 
+                obj.text.show = function() {
+                    obj.text.style.display="";
+                };
+
+                obj.text.hide = function() {
+                    obj.text.style.display="none";  
+                };
+                
                 obj.text.update = function() {
                     var child = null;
                     while((child=obj.text.firstChild)!=null) {
@@ -2780,11 +2788,17 @@
             obj.hide = function() {
                 fHide();
                 obj.subLine.hide();
+                if (obj.text) {
+                    obj.text.hide();
+                }
             };
             
             obj.show = function() {
                 fShow();
                 obj.subLine.show();
+                if (obj.text) {
+                    obj.text.show();
+                }
             };
             
             obj.remove=function() {
