@@ -11,6 +11,7 @@ import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.InitiativeAssignable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
@@ -133,17 +134,23 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
 //            status = appraisal.getStatus();
 //        }
         status = getMaximumState();
+System.out.println("0 periodo="+period.getTitle());
+System.out.println("1 status="+status.getTitle());
         
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
             Indicator indicator = indicators.next();
+System.out.println("  indicador="+indicator.getTitle());
             Series star = indicator.getStar();
             if(star==null || star.getMeasure(period)==null || star.getMeasure(period).getEvaluation().getStatus()==null) {
                 continue;
             }
+System.out.println("  star="+indicator.getStar().getTitle());
+System.out.println("estado de star para periodo="+star.getMeasure(period).getEvaluation().getStatus().getTitle());
             if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
                 res = Boolean.TRUE;
+System.out.println("cambia valor estado.........");
             }
         }
         appraisal.setStatus(status);
@@ -336,9 +343,9 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     public String getStatusIconClass(Period period) {
         String iconClass;
         try{
-            iconClass = getPeriodStatus().getStatus().getIconClass();
-        }catch(NullPointerException npe) {
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
+        }catch(NullPointerException npe) {
+            iconClass = getMinimumState().getIconClass();
         }
         return iconClass;
     }
@@ -375,5 +382,4 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         }
         return false;
     }
-    
 }
