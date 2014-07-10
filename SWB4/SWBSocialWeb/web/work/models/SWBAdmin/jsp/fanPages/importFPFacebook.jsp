@@ -58,7 +58,7 @@
         params.put("access_token", fb.getAccessToken());
         String respFanPage = postRequest(params, "https://graph.facebook.com/me/accounts",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-        //System.out.println("pageAccessToken:" + respFanPage);
+        System.out.println("pageAccessToken:" + respFanPage);
         JSONObject responseFP = new JSONObject(respFanPage);        
         if(!responseFP.isNull("data")){
             if(responseFP.getJSONArray("data").length()>0){
@@ -100,8 +100,22 @@
 
 <span id="csLoading<%=fb.getFacebookUserId()%>" style="width: 100px; display: none" align="center"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/loading.gif"/></span>
 <%
+            }else{
+%>
+            <div id="configuracion_redes">
+            La cuenta no tiene asociadas p&aacute;ginas de fans.
+            </p>
+            </div>
+<%
             }
-        }
+    }else{
+%>
+            <div id="configuracion_redes">
+            La cuenta no tiene asociadas p&aacute;ginas de fans.
+            </p>
+            </div>
+<%
+    }
 %>
     <%
         }catch(Exception e){
