@@ -182,7 +182,7 @@ public class ImportFanPages extends GenericResource{
         out.println("Las páginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.");
         out.println("<script type=\"text/javascript\">");
         out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
-        out.println("alert('done');");
+        //out.printl("alert('done');");
         out.println("</script>");
 
     }
