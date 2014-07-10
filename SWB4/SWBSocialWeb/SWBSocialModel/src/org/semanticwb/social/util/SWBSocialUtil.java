@@ -910,7 +910,7 @@ public class SWBSocialUtil {
                         {
                             String tag=tags[i];
                             tag=tag.trim();
-                            //System.out.println("tag:"+tag);
+                            //System.out.println("tag-1:"+tag);
 
                             //Elimino Caracteres especiales (acentuados)
                             tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
@@ -921,7 +921,7 @@ public class SWBSocialUtil {
                             //
                             //Si una de las palabras clave de un tema esta en el mensaje de entrada, entonces se agrega al postIn ese tema 
                             //y ya no se continua iterando en los temas
-                            if(externalMsgTMP.toLowerCase().indexOf(tag.toLowerCase())>-1)  //No tendría que hacerlo sobre las palabras, sino sobre todo el texto del mensaje, ya que puedo tener frases de mas de 1 palabra en las palabras clave del tema.
+                            if(externalMsgTMP.toLowerCase().indexOf(tag.toLowerCase())>-1)  
                             {
                                 //System.out.println("tag SI esta contenido en las palabras:"+tag);
                                //Hice que un msg de entrada solo se pudiera asignar a un tema debido a que si fuera a mas, entonces sería revisado el mismo msg por 
@@ -955,6 +955,7 @@ public class SWBSocialUtil {
                 org.semanticwb.social.SocialTopic socialTopic=itSocialTopics.next();
                 if(!socialTopic.listStreams2ApplyInvs().hasNext() &&  socialTopic.isActive() && !socialTopic.isDeleted())  //Si el SocialTopic esta activo y no borrado
                 {
+                    //System.out.println("socialTopic-2:"+socialTopic);
                     String sTags=socialTopic.getTags();
                     boolean existWord=false;
                     if(sTags!=null && sTags.length()>0)
@@ -964,7 +965,7 @@ public class SWBSocialUtil {
                         {
                             String tag=tags[i];
                             tag=tag.trim();
-                            //System.out.println("tag:"+tag);
+                            //System.out.println("tag-2:"+tag);
 
                             //Elimino Caracteres especiales (acentuados)
                             tag=SWBSocialUtil.Strings.replaceSpecialCharacters(tag);
@@ -983,6 +984,7 @@ public class SWBSocialUtil {
                                // y si se clasificó a un tema que no debia de ser (por no colocar correctamente las palabras clave), las personas en un flujo podrían
                                //reclasificar en cualquier momento el mensaje, para que se vaya a otro tema y por consiguiente a otro flujo.
                                //System.out.println("Al post se le asocial SocialTopic:"+socialTopic.getURI());
+                               //System.out.println("Al post in:"+postIn.getMsg_Text()+", se le pone el topico:"+ socialTopic);
                                postIn.setSocialTopic(socialTopic);    
                                socialTopicResult=socialTopic;
                                if(sendEmail2Users)
@@ -1180,7 +1182,7 @@ public class SWBSocialUtil {
                 text=((String)hmapValues.get("text"));
 
 
-                //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont);
+                //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont+", text:"+text);
 
                 //Elimino Caracteres especiales (acentuados)
                 text=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
@@ -1189,7 +1191,7 @@ public class SWBSocialUtil {
 
 
                 //System.out.println("ANALISIS-5:sentimentalTweetValue:"+externalString2Clasify);
-
+                
                 ArrayList<String> aListWords=new ArrayList();
                 StringTokenizer st = new StringTokenizer(text);
                 while (st.hasMoreTokens())
@@ -1239,7 +1241,7 @@ public class SWBSocialUtil {
                         sentimentalTweetValue+=sentimentalWordObj.getSentimentalValue();
                     }
                 }
-
+                
                 ////
                 if(sentimentalTweetValue>0) //Se revisa de acuerdo al promedio de sentimentalTweetValue/wordsCont, que valor sentimental posee el tweet
                 {
@@ -1316,6 +1318,7 @@ public class SWBSocialUtil {
             }
            
             HashMap hmapValuesReturn=new HashMap();
+            //System.out.println("promSentimentalValue Final:"+promSentimentalValue+",sentimentalTweetValueType" +sentimentalTweetValueType);
             hmapValuesReturn.put("promSentimentalValue", promSentimentalValue);
             hmapValuesReturn.put("sentimentalTweetValueType", sentimentalTweetValueType);
             hmapValuesReturn.put("promIntensityValue", promIntensityValue);
@@ -1410,6 +1413,7 @@ public class SWBSocialUtil {
            
            //System.out.println("result k:"+result);
            //Reglas
+           //System.out.println("Result:"+result);
            if(result>0)    //Es positivo
            {
                sentimentalTweetValue=7*contPositive;   //El 7 yo lo propongo dado que la númeración va de 0-9 considero que un 7 es la media para los positivos

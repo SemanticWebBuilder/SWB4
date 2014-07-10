@@ -42,17 +42,19 @@ public class SentimentalLearningPhrase extends org.semanticwb.social.base.Sentim
                     SentimentalLearningPhrase sLPhrase = (SentimentalLearningPhrase) obj.createGenericInstance();
                     if(sLPhrase.getOriginalPhrase()!=null)
                     {
+                        /*
                         System.out.println("sLPhrase:"+sLPhrase);
                         System.out.println("semProp:"+semProp);
                         System.out.println("Original Phrase:"+sLPhrase.getOriginalPhrase());
                         System.out.println("Phrase:"+sLPhrase.getPhrase());
+                        * */
                         String phrase=sLPhrase.getOriginalPhrase();
                         phrase = phrase.toLowerCase().trim();
                         phrase=SWBSocialUtil.Strings.removePrepositions(phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
                         phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        System.out.println("Prase a Grabar:"+phrase);
+                        //System.out.println("Prase a Grabar:"+phrase);
                         sLPhrase.setPhrase(phrase);
                     }
                 }

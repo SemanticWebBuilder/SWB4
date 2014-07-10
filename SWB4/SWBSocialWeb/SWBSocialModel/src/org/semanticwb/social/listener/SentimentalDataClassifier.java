@@ -522,6 +522,8 @@ public class SentimentalDataClassifier {
                     {
                         //Se elimina nuevo postIn, ya que por alguna razón no se le asoció un SocialNetworkUser
                         post.remove();
+                    }else{  //
+                        
                     }
                 }
             }

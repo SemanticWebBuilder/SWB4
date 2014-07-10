@@ -71,22 +71,23 @@ public class Test {
         TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
         twitterStream.addListener(listener);
         
+        
         FilterQuery query = new FilterQuery();
         {
-            String[] tr = {"infotec"};
-            query.track(tr);
+            //String[] tr = {"infotec"};
+            //query.track(tr);
         }
         
-        double[][] boundingBox2FindTweets = {{19.048220, -99.364067}, 
-            {19.591579, -98.940193}};
+        //double[][] boundingBox2FindTweets = {{19.048220, -99.364067}, 
+        //    {19.591579, -98.940193}};
         
-        query.locations(boundingBox2FindTweets);
+        //query.locations(boundingBox2FindTweets);
         
         twitterStream.filter(query);
         
         
         // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-        //twitterStream.sample();
+        twitterStream.sample();
        
     }
     
