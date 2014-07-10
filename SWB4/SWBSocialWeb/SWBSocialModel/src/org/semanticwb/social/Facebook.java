@@ -2036,7 +2036,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             params.put("access_token", f.getPageAccessToken());
             params.put("position", String.valueOf(sortNameInt));
             try{
-                String responseSort = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + fp.getId().substring(fp.getId().lastIndexOf("_") + 1),
+                String responseSort = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + fp.getFace_appid(),
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
                 if(responseSort != null && !responseSort.trim().isEmpty()){
                     if(responseSort.equals("true")){
@@ -2105,7 +2105,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean removePageTab(FanPage fanPage, String app_id) {
-        System.out.println("REMOVING page tab!!! " + fanPage.getTitle());
+        System.out.println("REMOVING page tab " + fanPage.getTitle() + " -->" + app_id);
         boolean success = false;
 
         try {
@@ -2121,6 +2121,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
             
             if(isAppActiveInPage((FacebookFanPage)fanPage, app_id) == false){//La pagina ya esta eliminada
+                //System.out.println("El tab no existia");
                 return true;
             }
 
@@ -2224,6 +2225,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             params.put("access_token", fp.getPageAccessToken());
             String pageTabs = postRequestParams(params, "https://graph.facebook.com/" + fp.getPage_id() +"/tabs",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            //System.out.println("pageTabs:" + pageTabs);
             JSONObject jsonObject = new JSONObject(pageTabs);
             do{
                 if(jsonObject.has("data")){
@@ -2263,7 +2265,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     }
                 }
             }while(keepSearching);
-            //System.out.println("SE ENCUENTRA ACTIVO EL TAB: " + isActive);
+            System.out.println("Is Active: " + isActive);
             return isActive;
         } catch (Exception ex) {
             log.error("Problem getting list of current tabs from page ", ex );
