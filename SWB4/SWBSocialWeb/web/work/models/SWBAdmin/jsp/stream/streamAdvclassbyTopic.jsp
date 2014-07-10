@@ -4,6 +4,7 @@
     Author     : jorge.jimenez
 --%>
 
+<%@page import="org.semanticwb.SWBPlatform"%>
 <%@page import="org.semanticwb.platform.SemanticObject"%>
 <%@page contentType="text/html" pageEncoding="ISO-8859-1"%>
 <%@page import="org.semanticwb.social.*"%>
@@ -40,12 +41,15 @@
 <div class="swbform swbpopup retema-pop">   
     <p><h1>Stream a Reclasificar: <b><%=stream.getTitle()%></b></h1></p>
     <p class="chooseHowtoClassify"><%=paramRequest.getLocaleString("chooseHowtoClassify")%>: </p>
-    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/advClassbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/advClassbTopicForm');return false;"> 
+    <form id="<%=semObjPost.getSemanticClass().getClassId()%>/advClassbTopicForm" dojoType="dijit.form.Form" class="swbform" method="post" action="<%=actionUrl%>" method="post" onsubmit="submitForm('<%=semObjPost.getSemanticClass().getClassId()%>/advClassbTopicForm'); try{document.getElementById('csLoading<%=stream.getId()%>').style.display='inline';}catch(noe){}; return false;"> 
         <p>
             <input type="radio" name="advClassChoose" value="WithOut"> <%=paramRequest.getLocaleString("withOutTopic")%><br>
             <input type="radio" name="advClassChoose" value="All"> <%=paramRequest.getLocaleString("all")%><br>
         </p>
         <button dojoType="dijit.form.Button" type="submit" ><%=paramRequest.getLocaleString("btnSend")%></button>
         <button dojoType="dijit.form.Button" onclick="hideDialog(); return false;"><%=paramRequest.getLocaleString("btnCancel")%></button>
-    </form>
+    </form>    
+    <div align="center">
+        <span id="csLoading<%=stream.getId()%>" style="width: 100px; display: none"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/loading.gif"/></span>
+    </div>
 </div>
