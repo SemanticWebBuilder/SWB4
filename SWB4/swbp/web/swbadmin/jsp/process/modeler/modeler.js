@@ -2644,9 +2644,16 @@
                 return false;
             };
             
+            obj.ondblclick = function(evt) {
+                if (obj.text && obj.text !== null) {
+                    obj.text.ondblclick(evt);
+                }
+            };
+            
             obj.subLine.onmousedown = obj.onmousedown;
             obj.subLine.onmousemove = obj.onmousemove;
             obj.subLine.onmouseup = obj.onmouseup;
+            obj.subLine.ondblclick = obj.ondblclick;
             obj.subLine.hide = function() {
                 obj.subLine.style.display="none";
                 obj.subLine.hidden=true;
@@ -2655,6 +2662,80 @@
             {
                 obj.subLine.style.display="";
                 obj.subLine.hidden=false;
+            };
+            
+            obj.createText = function() {
+                obj.text = document.createElementNS(ToolKit.svgNS, "text");
+                obj.text.setAttributeNS(null,"text-anchor","middle");
+                obj.text.setAttributeNS(null,"font-size","11");
+                obj.text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
+                obj.text.setAttributeNS(null,"class","textLabel");
+                
+                obj.text.removeNodes = function() {
+                    var child = null;
+                    while((child=obj.text.firstChild)!==null) {
+                        obj.text.removeChild(child);
+                    }
+                };
+                
+                obj.text.show = function() {
+                    obj.text.style.display="";
+                };
+
+                obj.text.hide = function() {
+                    obj.text.style.display="none";  
+                };
+                
+                obj.text.update = function () {
+                    obj.text.removeNodes();
+                    
+                    var txt = document.createTextNode(obj.title);
+                    obj.text.appendChild(txt);
+                    obj.text.updateLocation();
+                };
+                
+                obj.text.updateLocation = function() {
+                    var p1 = obj.pathSegList.getItem(1);
+                    var p2 = obj.pathSegList.getItem(2);
+                    var _x = p1.x;
+                    var _y = p1.y;
+                    
+                    if (p1.x !== p2.x) {
+                        _x += (p2.x - p1.x)/2;
+                    }
+                    
+                    if (p1.y !== p2.y) {
+                        _y += (p2.y - p1.y)/2;
+                    }
+                    
+                    obj.text.setAttributeNS(null, "x", _x);
+                    obj.text.setAttributeNS(null, "y", _y);
+                    ToolKit.svg.appendChild(obj.text);
+                };
+                
+                obj.text.ondblclick = function(evt) {
+                    var txt = prompt("Título:",obj.title);                  
+                    if(txt && txt !== null) {
+                        obj.title = txt;
+                        obj.text.update();
+                    }
+                };
+            };
+            
+            obj.updateText = function() {
+                if (obj.title && obj.title.length) {
+                    if (!obj.text) {
+                        obj.createText();
+                    }
+                    obj.text.update();
+                }
+            };
+            
+            obj.setLabel = function(label) {
+                if (obj.title !== label) {
+                    obj.title = label;
+                    obj.updateText();
+                }
             };
             
             obj.updateInterPoints=function()
@@ -2715,6 +2796,9 @@
                     }                                        
                 }
                 obj.updateSubLine();
+                if (obj.text) {
+                    obj.text.updateLocation();
+                }
             };
             
             var fHide = obj.hide;
@@ -2724,15 +2808,22 @@
             obj.hide = function() {
                 fHide();
                 obj.subLine.hide();
+                if (obj.text) {
+                    obj.text.hide();
+                }
             };
             
             obj.show = function() {
                 fShow();
                 obj.subLine.show();
+                if (obj.text) {
+                    obj.text.show();
+                }
             };
             
             obj.remove=function() {
                 obj.subLine.remove();
+                if (obj.text) ToolKit.svg.removeChild(obj.text);
                 fRemove();
             };
             
@@ -3460,9 +3551,8 @@
                         end.addInConnection(obj);
                         
                         if (obj.elementType === "ConditionalFlow" || obj.elementType === "DefaultFlow") {
-                            obj.title = tmp.title;
-                            if (obj.setText && typeof obj.setText === "function") {
-                                obj.setText(tmp.title);
+                            if (obj.setLabel && typeof obj.setLabel === "function") {
+                                obj.setLabel(tmp.title);
                             }
                         }
                     }
@@ -3714,7 +3804,7 @@
             }
             if(type==='ConditionalFlow') {
                 ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
-                ret.setText("");
+                ret.setLabel("");
                 ret.eoff=10;
                 ret.soff=10;
             }
