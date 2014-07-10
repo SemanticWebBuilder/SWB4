@@ -43,7 +43,7 @@ public class FacePageTab extends org.semanticwb.social.base.FacePageTabBase
                                     SemanticProperty semProp = (SemanticProperty) prop;
                                     //System.out.println("FacePageTab-5:"+action+",semProp:"+semProp.getName()+",semPropValue:"+obj.getProperty(semProp)+"Activeble:"+Activeable.swb_active.getName());
                                     if((action.equalsIgnoreCase("SET") && semProp!=null && (semProp.getName().equals(Activeable.swb_active.getName()) ||
-                                            semProp.getName().equals(FacePageTab.social_face_appid.getName()))))
+                                            semProp.getName().equals(FacePageTab.social_face_appid.getName()) || semProp.getName().equals(WebPage.swb_webPageSortName.getName()))))
                                     {
                                         if(semProp.getName().equals(Activeable.swb_active.getName()))   //Si la propiedad es Active
                                         {
@@ -83,6 +83,11 @@ public class FacePageTab extends org.semanticwb.social.base.FacePageTabBase
                                                     //System.out.println("Va crear x propiedad K-2");
                                                     facePageTab.setFace_old_appid(facePageTab.getFace_appid());
                                                 }
+                                            }
+                                        }else {
+                                            if(semProp.getName().equals(WebPage.swb_webPageSortName.getName()))   //Se desea reordenar un PageTab
+                                            {
+                                                pageable.updateSortName(faceFanPage, facePageTab);
                                             }
                                         }
                                     }else if((action.equalsIgnoreCase("REMOVE") && semProp.getName().equals(FacePageTab.social_face_appid.getName()))) //Set a null la propiedad app_id
