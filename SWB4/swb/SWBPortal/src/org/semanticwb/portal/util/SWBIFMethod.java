@@ -82,6 +82,12 @@ public class SWBIFMethod
 
     /** The instanceOf. */
     private ArrayList<SemanticClass> typeOfs=null;
+    
+    /** The notids. */
+    private boolean notids=false;
+    
+    /** The instanceOf. */
+    private ArrayList<String> ids=null;    
 
     /**
      * Instantiates a new sWBIF method.
@@ -110,14 +116,34 @@ public class SWBIFMethod
         String device=tag.getParam("device");
         String instanceOf=tag.getParam("instanceof");
         String typeOf=tag.getParam("typeof");
+        String id=tag.getParam("id");
         //System.out.println("lang:"+lang);
         //System.out.println("device:"+lang);
         //System.out.println("instanceof:"+instanceOf);
         langs=new ArrayList();
         devices=new ArrayList();
         instanceOfs=new ArrayList();
-        typeOfs=new ArrayList();
+        typeOfs=new ArrayList();        
+        ids=new ArrayList();        
 
+        try
+        {
+            if(id!=null)
+            {
+                if(id.startsWith("!"))
+                {
+                    id=id.substring(1);
+                    notids=true;
+                }
+                StringTokenizer st=new StringTokenizer(id,"|");
+                while(st.hasMoreTokens())
+                {
+                    String tx=st.nextToken();
+                    ids.add(tx);
+                }
+            }
+        }catch(Exception e){log.error("Error reading if ids...",e);}                
+        
         try
         {
             if(lang!=null)
@@ -214,13 +240,22 @@ public class SWBIFMethod
      * @param webpage the webpage
      * @return the string
      */
-    public ArrayList eval(User user, WebPage webpage)
+    public ArrayList eval(User user, WebPage webpage, Template template)
     {
         //System.out.println("type:"+type);
         //System.out.println("parts:"+parts);
         ArrayList ret=parts;
         if(type.equals("if:user"))
         {
+            if(!ids.isEmpty())
+            {
+                boolean cont=ids.contains(user.getId());
+                if((!cont && !notids)||(cont && notids))
+                {
+                    return null;
+                }
+            }
+            
             if(!langs.isEmpty())
             {
                 boolean cont=langs.contains(user.getLanguage());
@@ -249,6 +284,15 @@ public class SWBIFMethod
             }
         }else if(type.equals("if:topic") || type.equals("if:webpage"))
         {
+            if(!ids.isEmpty())
+            {
+                boolean cont=ids.contains(webpage.getId());
+                if((!cont && !notids)||(cont && notids))
+                {
+                    return null;
+                }
+            }            
+            
             //System.out.println("instanceOfs:"+instanceOfs);
             if(!instanceOfs.isEmpty())
             {
@@ -289,8 +333,67 @@ public class SWBIFMethod
                     return null;
                 }
             }
+        }else if(type.equals("if:website"))
+        {
+            if(!ids.isEmpty())
+            {
+                boolean cont=ids.contains(webpage.getWebSite().getId());
+                if((!cont && !notids)||(cont && notids))
+                {
+                    return null;
+                }
+            }            
+            
+            //System.out.println("instanceOfs:"+instanceOfs);
+            if(!instanceOfs.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<SemanticClass> it=instanceOfs.iterator();
+                while(it.hasNext())
+                {
+                    SemanticClass cls=it.next();
+                    //System.out.println("cls:"+cls);
+                    if(webpage.getWebSite().getSemanticObject().instanceOf(cls))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !notinstanceOfs)||(cont && notinstanceOfs))
+                {
+                    return null;
+                }
+            }
+            //System.out.println("typeOfs:"+typeOfs);
+            if(!typeOfs.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<SemanticClass> it=typeOfs.iterator();
+                while(it.hasNext())
+                {
+                    SemanticClass cls=it.next();
+                    //System.out.println("cls:"+cls);
+                    if(webpage.getWebSite().getSemanticObject().getSemanticClass().equals(cls))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !nottypeOfs)||(cont && nottypeOfs))
+                {
+                    return null;
+                }
+            }
         }else if(type.equals("if:template"))
         {
+            if(!ids.isEmpty())
+            {
+                boolean cont=ids.contains(template.getId());
+                if((!cont && !notids)||(cont && notids))
+                {
+                    return null;
+                }
+            }            
             //TODO:
         }
         return ret;
