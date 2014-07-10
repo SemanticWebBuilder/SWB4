@@ -84,7 +84,13 @@ public class ImportFanPages extends GenericResource{
             Facebook facebook = (Facebook) SemanticObject.createSemanticObject(suri).createGenericInstance();
             WebSite wsite = WebSite.ClassMgr.getWebSite(site);
             
-            WebPage homePage = wsite.getHomePage();
+            //WebPage homePage = wsite.getHomePage();
+            WebPage homePage = WebPage.ClassMgr.getWebPage("Fan_Pages", wsite);
+            if(homePage == null){
+                homePage = WebPage.ClassMgr.createWebPage("Fan_Pages", wsite);
+                homePage.setTitle("Fan Pages");
+                homePage.setParent(wsite.getHomePage());
+            }
             WebPage rootFP = WebPage.ClassMgr.getWebPage(facebook.getFacebookUserId(), wsite);
             if(rootFP == null){
                 rootFP = WebPage.ClassMgr.createWebPage(facebook.getFacebookUserId(), wsite);
@@ -178,8 +184,10 @@ public class ImportFanPages extends GenericResource{
         System.out.println("--->" + request.getParameter("homePageSuri"));
         System.out.println("------>" + SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))));
         WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
-        
-        out.println("Las páginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.");
+                
+        out.println("<div id=\"configuracion_redes\">");
+        out.println("<p>Las p&aacute;ginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.</p>");
+        out.println("</div>");
         out.println("<script type=\"text/javascript\">");
         out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
         //out.printl("alert('done');");
