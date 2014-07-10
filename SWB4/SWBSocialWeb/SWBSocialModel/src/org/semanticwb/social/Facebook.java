@@ -2020,9 +2020,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return msgText;
     }
 
-    
-    private boolean updateSortName(FacePageTab fp, FacebookFanPage f){
-        //Poner el nombre de ordenamiento
+    @Override
+    public boolean updateSortName(FanPage fanPage, PageTab pageTab){
+        FacePageTab fp = (FacePageTab) pageTab;
+        FacebookFanPage f = (FacebookFanPage) fp.getParent();
+        
         boolean success = false;
         String sortName = fp.getSortName();
         System.out.println("Ordenando los tabs: " + sortName);
@@ -2051,6 +2053,36 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         return success;
     }
     
+    /*private boolean updateSortName(FacePageTab fp, FacebookFanPage f){
+        //Poner el nombre de ordenamiento
+        boolean success = false;
+        String sortName = fp.getSortName();
+        System.out.println("Ordenando los tabs: " + sortName);
+        int sortNameInt = 0;
+        try{
+            sortNameInt = Integer.parseInt(sortName);
+        }catch(NumberFormatException nfe){}
+        
+        if(sortNameInt > 0 ){
+            HashMap<String, String> params = new HashMap<String, String>(2);
+            params.put("access_token", f.getPageAccessToken());
+            params.put("position", String.valueOf(sortNameInt));
+            try{
+                String responseSort = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + fp.getFace_appid(),
+                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "POST");
+                if(responseSort != null && !responseSort.trim().isEmpty()){
+                    if(responseSort.equals("true")){
+                        success = true;
+                    }
+                }
+                System.out.println("Updating sort name: " + responseSort);
+            }catch(Exception e){
+                log.error("Unable to update the order of the tab ", e);
+            }
+        }
+        return success;
+    }*/
+    
     @Override
     public boolean createPageTab(PageTab pageTab) {
         boolean success = false;
@@ -2070,7 +2102,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 
                 if(isAppActiveInPage(f, fp.getFace_appid()) == true){//La pagina ya esta activa
                     //solo hay que actualizar el nombre de ordenamiento
-                    return updateSortName(fp,f);
+                    return updateSortName((FanPage)fp.getParent(),pageTab);
                 }
 
                 HashMap<String, String> params = new HashMap<String, String>(2);
@@ -2081,7 +2113,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 if(response != null && !response.trim().isEmpty()){
                     if(response.equals("true")){//Si el tab se agrego bien
                         //actualizar el nombre de ordenamiento
-                        success = updateSortName(fp,f);
+                        success = updateSortName((FanPage)fp.getParent(),pageTab);
                     }
                 }                
             } catch (Exception ex) {
