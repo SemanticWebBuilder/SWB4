@@ -10,4 +10,6 @@ public interface Pageable extends org.semanticwb.social.base.PageableBase
     public boolean removePageTab(PageTab pageTab);
     
     public boolean removePageTab(FanPage fanPage, String app_id);
+    
+    public boolean updateSortName(FanPage fanPage,PageTab pageTab);
 }
