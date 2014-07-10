@@ -1396,7 +1396,7 @@ public class StreamInBox extends GenericResource {
         } else if (action.equals("reValue")) {
             SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
             PostIn post = (PostIn) semObj.createGenericInstance();
-            Stream stOld = post.getPostInStream();
+            Stream postInStream = post.getPostInStream();
             try {
                 String inputTextValue = request.getParameter("fw");
 
@@ -1413,7 +1413,8 @@ public class StreamInBox extends GenericResource {
                     //System.out.println("Entra a processA/reValue-4:"+dpth);
                     SentimentalLearningPhrase slp;
                     for (String phrase : phrases) {
-                        phrase = phrase.toLowerCase().trim();
+                        String originalPhrase=phrase.toLowerCase().trim();
+                        phrase = originalPhrase;
                         //System.out.println("Entra a processA/reValue-4.1:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
                         //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
@@ -1424,27 +1425,68 @@ public class StreamInBox extends GenericResource {
                         //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
                         //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
                         //sitios.
-                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBContext.getAdminWebSite());
+                        //System.out.println("phrase:"+phrase);
+                        slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBSocialUtil.getConfigWebSite());
                         if (slp == null) {
                             //phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
                             //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                             //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
-                            //System.out.println("Guarda Frase J:"+phrase);
+                            slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBSocialUtil.getConfigWebSite());
+                            System.out.println("Guarda Frase J:"+phrase);
+                            slp.setOriginalPhrase(originalPhrase);
                             slp.setPhrase(phrase);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
                         } else {
-                            //System.out.println("Modifica Frase:"+slp);
+                            System.out.println("Modifica Frase:"+slp+",sentiment:"+nv+",Intensity:"+dpth);
+                            slp.setOriginalPhrase(originalPhrase);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
                         }
                     }
-                    response.setMode(Mode_EMPTYRESPONSE);
-                    //response.setRenderParameter("dialog", "close");
-                    response.setRenderParameter("statusMsg", response.getLocaleString("phrasesAdded"));
-                    //response.setRenderParameter("reloadTap","1");
-                    response.setRenderParameter("suri", stOld.getURI());
+                    
+                    boolean reclasifiedMsgs=false;
+                    if(request.getParameter("reclasify")!=null && !request.getParameter("reclasify").equals("0"))//Reclasificar
+                    {
+                        reclasifiedMsgs=true;
+                        if(request.getParameter("reclasify").equals("1"))
+                        {
+                            Iterator<PostIn> itStreamPostIns=postInStream.listPostInStreamInvs();
+                            while(itStreamPostIns.hasNext())
+                            {
+                                PostIn postIn=itStreamPostIns.next();
+                                //System.out.println("postIn:"+postIn.getMsg_Text());
+                                HashMap hmapValues = SWBSocialUtil.Classifier.classifyText(postIn.getMsg_Text());
+                                float promSentimentalValue = ((Float) hmapValues.get("promSentimentalValue")).floatValue();
+                                int sentimentalTweetValueType = ((Integer) hmapValues.get("sentimentalTweetValueType")).intValue();
+                                float promIntensityValue = ((Float) hmapValues.get("promIntensityValue")).floatValue();
+                                int intensityTweetValueType = ((Integer) hmapValues.get("intensityTweetValueType")).intValue();
+
+                                //Guarda valores sentimentales en el PostIn (mensaje de entrada)
+                                postIn.setPostSentimentalValue(promSentimentalValue);
+                                postIn.setPostSentimentalType(sentimentalTweetValueType);
+
+                                //Guarda valores sentimentales en el PostIn (mensaje de entrada)
+                                postIn.setPostIntensityValue(promIntensityValue);
+                                postIn.setPostIntesityType(intensityTweetValueType);
+                            }
+                        }else if(request.getParameter("reclasify").equals("2")) //Revisar permisos de usuario para ver si tiene permiso a reclasificar por Marca o Por todas las  marcas
+                        {//Reclasificación para todos los mensajes de todos los streams de la marca en la que se encuentra
+
+                        }else if(request.getParameter("reclasify").equals("3"))
+                        {//Reclasificación para todos los mensajes de todos los streams de todas las marcas.
+
+                        }
+                    }
+                    
+                    //response.setMode(Mode_EMPTYRESPONSE);
+                    response.setMode(SWBActionResponse.Mode_EDIT);
+                    response.setRenderParameter("dialog", "close");
+                    String statusMsg=response.getLocaleString("phrasesAdded");
+                    if(reclasifiedMsgs) statusMsg+=" " +response.getLocaleString("reclasifiedMsg");
+                    response.setRenderParameter("statusMsg", statusMsg);
+                    response.setRenderParameter("reloadTap","1");
+                    response.setRenderParameter("suri", postInStream.getURI());
                 }
             } catch (Exception e) {
                 log.error(e);
@@ -1587,6 +1629,7 @@ public class StreamInBox extends GenericResource {
                     Iterator<PostIn> itPostIns = stream.listPostInStreamInvs();
                     while (itPostIns.hasNext()) {
                         PostIn postIn = itPostIns.next();
+                        if(postIn.getSocialTopic()!=null) postIn.removeSocialTopic();
                         SocialTopic socialTopic = SWBSocialUtil.Classifier.clasifyMsgbySocialTopic(stream, postIn, postIn.getMsg_Text(), false);
                         if (socialTopic != null) //El sistema si pudo clasificar el postIn en uno de los SocialTopic del website
                         {
