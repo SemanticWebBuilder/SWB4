@@ -98,7 +98,7 @@
 </div>
 </form>
 
-<span id="csLoading<%=fb.getFacebookUserId()%>" style="width: 100px; display: none" align="center"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/loading.gif"/></span>
+<div align="center"><span id="csLoading<%=fb.getFacebookUserId()%>" style="width: 100px; display: none" align="center"><img src="<%=SWBPlatform.getContextPath()%>/swbadmin/images/loading.gif"/></span></div>
 <%
             }else{
 %>
