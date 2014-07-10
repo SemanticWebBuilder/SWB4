@@ -120,6 +120,7 @@ public class TemplateImp extends Template
         objects.put("if:user", SWBIFMethod.class);
         objects.put("if:topic", SWBIFMethod.class);
         objects.put("if:webpage", SWBIFMethod.class);
+        objects.put("if:website", SWBIFMethod.class);
         objects.put("if:template", SWBIFMethod.class);
         
 
@@ -1378,7 +1379,7 @@ public class TemplateImp extends Template
                     }
                 }else if (obj instanceof SWBIFMethod)
                 {
-                    ArrayList subparts=((SWBIFMethod)obj).eval(user, topic);
+                    ArrayList subparts=((SWBIFMethod)obj).eval(user, topic, this);
                     //System.out.println("subparts:"+subparts);
                     build(request, response, out, user, topic, savelog, content, distparams, subparts, resbuf);
                 }
