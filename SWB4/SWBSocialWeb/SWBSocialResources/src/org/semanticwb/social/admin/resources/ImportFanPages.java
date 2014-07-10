@@ -15,6 +15,7 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
@@ -66,7 +67,7 @@ public class ImportFanPages extends GenericResource{
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
         System.out.println("process action:" + action);
-        
+        WebPage rootPage = null;
         if(action.equals(IMPORT_FB_PAGES)){
             String suri = request.getParameter("suri") == null ? "" : request.getParameter("suri");
             String site = request.getParameter("site") == null ? "" : request.getParameter("site");
@@ -84,12 +85,11 @@ public class ImportFanPages extends GenericResource{
             WebSite wsite = WebSite.ClassMgr.getWebSite(site);
             
             WebPage homePage = wsite.getHomePage();
-            
             WebPage rootFP = WebPage.ClassMgr.getWebPage(facebook.getFacebookUserId(), wsite);
             if(rootFP == null){
                 rootFP = WebPage.ClassMgr.createWebPage(facebook.getFacebookUserId(), wsite);
             }
-            
+            rootPage = rootFP;
             rootFP.setTitle(facebook.getTitle() + " Fan Pages");
             rootFP.setParent(homePage);
             HashMap<String, String> params = new HashMap<String, String>(2);
@@ -135,7 +135,7 @@ public class ImportFanPages extends GenericResource{
                                     ffp.setTitle(name);
                                     ffp.setPageAccessToken(token);
                                     ffp.setParent(rootFP);
-
+                                    ffp.setSn_socialNet(facebook);
                                     createFPTabs(facebook, ffp, wsite);
                                 }
                             }                            
@@ -167,14 +167,24 @@ public class ImportFanPages extends GenericResource{
                 
             }*/
             response.setRenderParameter("accountName", facebook.getTitle());
+            response.setRenderParameter("homePageSuri", rootPage.getEncodedURI());
             response.setMode(SWBResourceURL.Mode_HELP);
         }
     }
 
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        PrintWriter out = response.getWriter();
+        PrintWriter out = response.getWriter();        
+        System.out.println("--->" + request.getParameter("homePageSuri"));
+        System.out.println("------>" + SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))));
+        WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
+        
         out.println("Las páginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.");
+        out.println("<script type=\"text/javascript\">");
+        out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
+        out.println("alert('done');");
+        out.println("</script>");
+
     }
     
     private boolean createFPTabs(Facebook facebook, FacebookFanPage fp, WebSite wsite){
@@ -199,10 +209,16 @@ public class ImportFanPages extends GenericResource{
                         String name = "";
                         String position = "";
                         String appId = "";
+                        
+                        if(tmp.isNull("application")){
+                            continue;
+                        }
+                        
                         if(!tmp.isNull("id")){
                             id = tmp.getString("id");
                             id = id.replace('/', '_');
-                            appId = id.substring(id.lastIndexOf("_") + 1);
+                            //appId = id.substring(id.lastIndexOf("_") + 1);
+                            appId = tmp.getJSONObject("application").getString("id");
                         }
                         if(!tmp.isNull("name")){
                             name = tmp.getString("name");
