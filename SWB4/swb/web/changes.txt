@@ -1,3 +1,4 @@
+    - Se agregó tag para plantilals (if:website) y el parametro (id) para todos los swbtags (Jei)
   4.5.6.0 02/07/14
     - Firmado de Applets (Jei)
     - Correccion de bug de Cache al crear recursos (Jei)
