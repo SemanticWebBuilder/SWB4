@@ -5,7 +5,7 @@
 
     <xsl:template match="/">
 
-        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.9.1/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
         <!-- script TYPE="text/javascript" SRC="{blog/@webpath}/swbadmin/js/dojo/dojo/dojo.js"></script -->
         <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojo/resources/dojo.css" type="text/css" media="screen" id="themeCss"></link>
 		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/dijit.css" type="text/css" media="screen" id="themeCss"></link>
