@@ -173,7 +173,7 @@ public class ImportFanPages extends GenericResource{
                 
             }*/
             response.setRenderParameter("accountName", facebook.getTitle());
-            response.setRenderParameter("homePageSuri", rootPage.getEncodedURI());
+            response.setRenderParameter("homePageSuri", wsite.getHomePage().getEncodedURI());
             response.setMode(SWBResourceURL.Mode_HELP);
         }
     }
@@ -182,14 +182,15 @@ public class ImportFanPages extends GenericResource{
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();        
         System.out.println("--->" + request.getParameter("homePageSuri"));
-        System.out.println("------>" + SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))));
-        WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
+        System.out.println("------>" + URLDecoder.decode(request.getParameter("homePageSuri")));
+        //WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
                 
         out.println("<div id=\"configuracion_redes\">");
         out.println("<p>Las p&aacute;ginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.</p>");
         out.println("</div>");
         out.println("<script type=\"text/javascript\">");
-        out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
+        out.println("updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+        //out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
         //out.printl("alert('done');");
         out.println("</script>");
 
