@@ -29,6 +29,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 import org.jdom.CDATA;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -89,7 +90,19 @@ public class Blog
      */
     public Blog(long blogID, User user,String format,String deleteimage,String editimage,String addimage)
     {
-        iso8601dateFormat = new SimpleDateFormat(format);
+        String lang="es";
+        if(user!=null && user.getLanguage()!=null)
+        {
+            lang=user.getLanguage();
+        }
+        try
+        {
+            iso8601dateFormat = new SimpleDateFormat(format,new Locale(lang));        
+        }
+        catch(Exception e)
+        {
+            iso8601dateFormat = new SimpleDateFormat(format,new Locale("es"));        
+        }
         this.blogID = blogID;        
         this.deleteimage=deleteimage;
         this.editimage=editimage;
