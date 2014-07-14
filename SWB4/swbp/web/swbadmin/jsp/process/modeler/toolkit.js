@@ -1417,30 +1417,26 @@
             obj.select=function(down)
             {
                 //desc(obj.getBBox(),true);
-                var _this=ToolKit;
-                if(down)
-                {
-                    var i=_this.selected.indexOf(obj);
-                    if(i<0)
-                    {
-                        if(!_this.cmdkey) //deselect all
-                        {
+                var _this=ToolKit,
+                    selected = _this.selected;
+            
+                if(down) {
+                    var i = selected.indexOf(obj);
+                    if(i < 0) {
+                        if(!_this.cmdkey) {//deselect all
                             _this.unSelectAll();
                         }
                         //select one
                         _this.selectObj(obj);
-                    }else 
-                    {
+                    } else {
                         //can unselect
-                        _this.selected.unselect=true;
+                        selected.unselect=true;
                     }
-                }else
-                {
-                    if(_this.cmdkey && _this.selected.unselect) //unselect one
-                    {
+                } else {
+                    if(_this.cmdkey && selected.unselect) {//unselect one
                         _this.unSelectObj(obj);
                     }                                 
-                    _this.selected.unselect=false;
+                    selected.unselect=false;
                 }
             };
 
@@ -1452,7 +1448,6 @@
 
             obj.onmouseup=function(evt)
             {
-                _this=ToolKit;
                 if(obj.mouseup(evt))
                 {
                     obj.select(false);
