@@ -2644,10 +2644,29 @@
                 return false;
             };
             
+            obj.removeText = function() {
+                if (obj.text) {
+                    ToolKit.svg.removeChild(obj.text);
+                    obj.text = undefined;
+                }
+            };
+            
             obj.ondblclick = function(evt) {
                 if (obj.elementType==="ConditionalFlow" || obj.elementType==="DefaultFlow") {
-                    if (obj.text && obj.text !== null) {
-                        obj.text.ondblclick(evt);
+                    var txt = prompt("Título:",obj.title);
+                    if (txt !== null) {
+                        if (txt.length) {
+                            obj.title = txt;
+                            if (!obj.text) {
+                                obj.createText();
+                                obj.updateText();
+                            }
+                        } else {
+                            obj.title = "";
+                            if (obj.text) {
+                                obj.removeText();
+                            }
+                        }
                     }
                 }
             };
@@ -2715,13 +2734,13 @@
                     ToolKit.svg.appendChild(obj.text);
                 };
                 
-                obj.text.ondblclick = function(evt) {
-                    var txt = prompt("Título:",obj.title);                  
-                    if(txt && txt !== null) {
-                        obj.title = txt;
-                        obj.text.update();
-                    }
-                };
+//                obj.text.ondblclick = function(evt) {
+//                    var txt = prompt("Título:",obj.title);                  
+//                    if(txt && txt !== null) {
+//                        obj.title = txt;
+//                        obj.text.update();
+//                    }
+//                };
             };
             
             obj.updateText = function() {
