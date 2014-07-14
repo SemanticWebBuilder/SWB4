@@ -41,8 +41,7 @@
                 _contents = _this.contents || [];
             
             _this.layer = layer;
-            for (var i = _contents.length; i--;)
-            {
+            for (var i = _contents.length; i--;) {
                 _contents[i].layer===layer ? _contents[i].show() : _contents[i].hide();
             }
         },
@@ -53,10 +52,8 @@
                 _contents = _this.contents || [];
         
             _this.layer=layer;
-            for (var i = _contents.length; i--;) 
-            {
-                if(_contents[i].layer===layer)
-                {
+            for (var i = _contents.length; i--;) {
+                if(_contents[i].layer===layer) {
                     _contents[i].remove();
                 }
             }
@@ -65,20 +62,12 @@
         /*Revisar*/
         getWidth:function()
         {
-            if (this.svg.width.baseVal) {
-                return this.svg.width.baseVal.value;
-            } else {
-                return this.svg.width;
-            }
+            return this.svg.width.baseVal ? this.svg.width.baseVal.value : this.svg.width;
         },
 
         getHeight:function()
         {
-            if (this.svg.height.baseVal) {
-                return this.svg.height.baseVal.value;
-            } else {
-                return this.svg.height;
-            }
+            return this.svg.height.baseVal ? this.svg.height.baseVal.value : this.svg.height;
         },
 
         setWidth:function(width)
@@ -291,21 +280,18 @@
                     for (i = nodes.length; i-- && i>=0;)
                     {
                         var obj = nodes[i];
-                        if(obj && obj.contents)
+                        if(obj && obj.contents && obj===dragObject)
                         {   
-                            if(obj===dragObject)
+                            for (;i-- && i>=0;)
                             {
-                                for (;i-- && i>=0;)
+                                obj = nodes[i];
+                                if(obj.hidden===false && obj.inBounds && obj.inBounds(dragObject.getX(), dragObject.getY()))
                                 {
-                                    obj = nodes[i];
-                                    if(obj.hidden===false && obj.inBounds && obj.inBounds(dragObject.getX(), dragObject.getY()))
+                                    if(selected.indexOf(obj) < 0)
                                     {
-                                        if(selected.indexOf(obj) < 0)
-                                        {
-                                            obj.onDropObjects(selected);
-                                            i = 0;
-                                            droped=true;
-                                        }
+                                        obj.onDropObjects(selected);
+                                        i = 0;
+                                        droped=true;
                                     }
                                 }
                             }
