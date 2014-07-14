@@ -244,7 +244,6 @@
                     }
                 }
                 _this.loaded = true;
-
             };
             
             _this.svg.onmousedown=function(evt)
@@ -254,20 +253,21 @@
                 //SelectBox
                 if(_this.svg.dragObject===null)
                 {
+                    var evtX = _this.getEventX(evt),
+                        evtY = _this.getEventY(evt);
+                
                     if(!_this.cmdkey)_this.unSelectAll();
-                    if(_this.selectBox===null)
-                    {
-                        _this.selectBox=document.createElementNS(_this.svgNS,"rect");
-                        _this.selectBox.setAttributeNS(null,"class","selectBox");
-                        _this.selectBox.setAttributeNS(null,"x",_this.getEventX(evt));
-                        _this.selectBox.setAttributeNS(null,"y",_this.getEventY(evt));
-                        _this.selectBox.setAttributeNS(null,"width",0);
-                        _this.selectBox.setAttributeNS(null,"height",0);
-                        //_this.selectBox.setAttributeNS(null,"stroke-dasharray","4,4");
-                        _this.svg.appendChild(_this.selectBox);
-                        _this.svg.dragOffsetX=_this.getEventX(evt);
-                        _this.svg.dragOffsetY=_this.getEventY(evt);                                    
-                    }
+                    
+                    _this.selectBox = _this.selectBox || document.createElementNS(_this.svgNS,"rect");
+                    _this.selectBox.setAttributeNS(null,"class","selectBox");
+                    _this.selectBox.setAttributeNS(null,"x",evtX);
+                    _this.selectBox.setAttributeNS(null,"y",evtY);
+                    _this.selectBox.setAttributeNS(null,"width",0);
+                    _this.selectBox.setAttributeNS(null,"height",0);
+                    //_this.selectBox.setAttributeNS(null,"stroke-dasharray","4,4");
+                    _this.svg.appendChild(_this.selectBox);
+                    _this.svg.dragOffsetX = evtX;
+                    _this.svg.dragOffsetY = evtY;
                 }
                 evt.preventDefault();
             };                         
