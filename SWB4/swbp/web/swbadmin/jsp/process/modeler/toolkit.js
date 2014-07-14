@@ -276,30 +276,34 @@
             {
                 if(!_this.onmouseup(evt))return;
                 
+                var dragObject = _this.svg.dragObject;
                 //Drop
-                if(_this.svg.dragObject!==null)
+                if(dragObject!==null)
                 {
                     //alert(_this.selected);
                     //_this.selected
                     //desc(_this.svg.childNodes[0],true);
-                    var droped=false;
+                    var droped=false,
+                        selected = _this.selected || [],
+                        i;
                     
-                    for (var i = _this.svg.childNodes.length; i-- && i>=0;)
+                    var nodes = _this.svg.childNodes;
+                    for (i = nodes.length; i-- && i>=0;)
                     {
-                        var obj=_this.svg.childNodes[i];
+                        var obj = nodes[i];
                         if(obj && obj.contents)
                         {   
-                            if(obj===_this.svg.dragObject)
+                            if(obj===dragObject)
                             {
                                 for (;i-- && i>=0;)
                                 {
-                                    obj=_this.svg.childNodes[i];
-                                    if(obj.hidden===false && obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
+                                    obj = nodes[i];
+                                    if(obj.hidden===false && obj.inBounds && obj.inBounds(dragObject.getX(), dragObject.getY()))
                                     {
-                                        if(_this.selected.indexOf(obj)===-1)
+                                        if(selected.indexOf(obj) < 0)
                                         {
-                                            obj.onDropObjects(_this.selected);
-                                            i=0;
+                                            obj.onDropObjects(selected);
+                                            i = 0;
                                             droped=true;
                                         }
                                     }
@@ -309,20 +313,20 @@
                     }
                     if(!droped)
                     {
-                        for (var i = _this.selected.length; i--;)
+                        for (i = selected.length; i--;)
                         {
-                            if(_this.selected.indexOf(_this.selected[i].parent)===-1)
+                            if(selected.indexOf(selected[i].parent) < 0)
                             {
-                                _this.selected[i].setParent(null);
+                                selected[i].setParent(null);
                             }
                         }
                     }
                     
                     if(_this.snap2Grid)
                     {
-                        for (var i = _this.selected.length; i--;)
+                        for (i = selected.length; i--;)
                         {
-                            _this.selected[i].snap2Grid();
+                            selected[i].snap2Grid();
                         }                          
                         _this.updateResizeBox();
                     }                                                            
