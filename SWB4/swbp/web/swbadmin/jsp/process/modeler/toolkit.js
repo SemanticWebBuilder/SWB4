@@ -641,19 +641,19 @@
             obj.toObject=null;
             
             obj.setAttributeNS(null, "d", "M0 0");
-            if (dash_array && dash_array != null) {
+            if (dash_array && dash_array !== null) {
                 obj.setAttributeNS(null, "stroke-dasharray", dash_array);
             }
-            if (marker_start && marker_start != null) {
+            if (marker_start && marker_start !== null) {
                 obj.setAttributeNS(null, "marker-start", "url(#"+marker_start+")");
             }
-            if (marker_mid && marker_mid != null) {
+            if (marker_mid && marker_mid !== null) {
                 obj.setAttributeNS(null, "marker-mid", "url(#"+marker_mid+")");
             }
-            if (marker_end && marker_end != null) {
+            if (marker_end && marker_end !== null) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+marker_end+")");
             }
-            if (styleClass && styleClass != null) {
+            if (styleClass && styleClass !== null) {
                 obj.setAttributeNS(null, "class", styleClass);
             }
             //obj.resizeable=false;
@@ -661,34 +661,34 @@
             obj.addPoint = function (x,y) {
                 var seg = obj.createSVGPathSegLinetoAbs(x, y);
                 obj.pathSegList.appendItem(seg);
-            }
+            };
             
             obj.setStartPoint=function(x,y) {
                 obj.setPoint(0,x,y);
-            }
+            };
                     
             obj.setEndPoint=function(x,y) {
                 obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
-            }            
+            };
             
             obj.setPoint = function(p,x,y)
             {
                 //alert(p+" "+x+" "+y);
                 obj.pathSegList.getItem(p).x=x;
                 obj.pathSegList.getItem(p).y=y;
-            }
+            };
                     
             obj.listSegments=function() {
                 for (var i=0; i < obj.pathSegList.numberOfItems; i++) {
                     //desc(obj.pathSegList.getItem(i),true);
                     var segment=obj.pathSegList.getItem(i);
-                    if (segment.pathSegType==SVGPathSeg.PATHSEG_LINETO_ABS) {
+                    if (segment.pathSegType===SVGPathSeg.PATHSEG_LINETO_ABS) {
                        //console.log("lineto "+segment);
-                    } else if (segment.pathSegType==SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                    } else if (segment.pathSegType===SVGPathSeg.PATHSEG_MOVETO_ABS) {
                        //console.log("moveto "+segment);
                     }
                 }
-            }
+            };
             
             obj.translate=function(x,y) 
             {
@@ -698,7 +698,7 @@
                     segment.x=segment.x+x;
                     segment.y=segment.y+y;
                 }                
-            }
+            };
             
             obj.remove=function()
             {
@@ -806,7 +806,7 @@
             obj.hidden=false;
             obj.layer=_this.layer;
 
-            if(id && id!=null)obj.setAttributeNS(null,"id",id);       
+            if(id && id!==null)obj.setAttributeNS(null,"id",id);       
             
             obj.canAddToDiagram=function() {
                 return true;
@@ -843,18 +843,18 @@
             {
                 var _this=ToolKit;
                 var l=obj.getAttributeNS(_this.xlink,"href");
-                if(l && l!=null)
+                if(l && l!==null)
                 {
                     var o=document.getElementById(l.substring(1));
-                    if(o!=null)
+                    if(o!==null)
                     {
                         var s=o.getAttributeNS(null, param);
-                        if(s && s!=null)obj.setAttributeNS(null,"class",s);
+                        if(s && s!==null)obj.setAttributeNS(null,"class",s);
                     }
                 }else
                 {
                     var s=obj.getAttributeNS(null, param);
-                    if(s!=null)obj.setAttributeNS(null,"class",s);                                
+                    if(s!==null)obj.setAttributeNS(null,"class",s);                                
                 }
             };                        
 
@@ -905,7 +905,7 @@
                 var ox=obj.getX();
                 var oy=obj.getY();
                 obj.move(ox+dx, oy+dy);
-            }
+            };
 
             obj.resize=function(w,h)
             {
@@ -923,7 +923,7 @@
                 }
 
                 //Cambiar tamaño del texto
-                if(obj.text!=null)obj.text.update();      
+                if(obj.text && obj.text!==null)obj.text.update();      
                 
                 //Move InConnections
                 for(var i = obj.inConnections.length; i--;)
@@ -950,7 +950,7 @@
                     _this.setHeight(y+obj.getHeight()/2);
                 }
                 
-                if(obj.canSelect==true)
+                if(obj.canSelect)
                 {
                     //Validamos bordes
                     if(x-obj.getWidth()/2<0)
@@ -972,7 +972,7 @@
                 //Move Childs
                 for (var i = obj.contents.length; i--;) 
                 {
-                    if(obj.contents[i].selected!=true)
+                    if(!obj.contents[i].selected)
                     {
                         obj.contents[i].traslate(offx,offy);
                     }
@@ -984,7 +984,7 @@
                 }
 
                 //Move Text
-                if(obj.text!=null)
+                if(obj.text && obj.text!==null)
                 {
                     //obj.text.traslate(offx,offy);
                     obj.text.PX=offx;
@@ -1014,7 +1014,7 @@
                 {
                     //En algunos casos, el parent es nulo, es decir, el canvas
                     var parent = obj.parent;
-                    if (parent && parent != null) 
+                    if (parent && parent !== null) 
                     {
                         while ((ax = parent.contents.indexOf(obj)) !== -1) {
                             parent.contents.splice(ax, 1);
@@ -1040,7 +1040,7 @@
                     }
                 }
                 //Elimina Texto
-                if(obj.text!=null)obj.text.remove();
+                if(obj.text && obj.text!==null)obj.text.remove();
                 
                 //Eliminar Conexiones
                 //Move InConnections
@@ -1087,7 +1087,7 @@
                     }
                 }
                 //Elimina Texto
-                if(obj.text!=null)obj.text.hide();
+                if(obj.text && obj.text!==null)obj.text.hide();
                 
                 //Eliminar Conexiones
                 //Move InConnections
@@ -1129,7 +1129,7 @@
                     }
                 }
                 //Elimina Texto
-                if(obj.text!=null)obj.text.show();
+                if(obj.text && obj.text!==null)obj.text.show();
                 
                 //Eliminar Conexiones
                 //Move InConnections
@@ -1151,33 +1151,36 @@
             {
                 //alert("obj:"+obj.icons.length);
                 _this.svg.appendChild(obj);
+                var icons = obj.icons || [],
+                    contents = obj.contents || [],
+                    inConnections = obj.inConnections || [],
+                    outConnections = obj.outConnections || [],
+                    i;
                 
                 //mueve Iconos
-                if(obj.icons)
+                for (i = icons.length; i--;)
                 {
-                    for (var i = obj.icons.length; i--;)
-                    {
-                        obj.icons[i].obj.moveFirst();
-                    }
+                    icons[i].obj.moveFirst();
                 }
+                
                 //mueve texto
-                if(obj.text!=null)obj.text.moveFirst();
+                if(obj.text && obj.text!==null)obj.text.moveFirst();
                 
                 //mueve contenidos
-                for (var i = obj.contents.length; i--;)
+                for (i = contents.length; i--;)
                 {
-                    obj.contents[i].moveFirst();
+                    contents[i].moveFirst();
                 }
                 
                 //mueve conexiones
-                for (var i = obj.inConnections.length; i--;)
+                for (i = inConnections.length; i--;)
                 {
-                    obj.inConnections[i].moveFirst();
+                    inConnections[i].moveFirst();
                 }
                 
-                for (var i = obj.outConnections.length; i--;)
+                for (i = outConnections.length; i--;)
                 {
-                    obj.outConnections[i].moveFirst();
+                    outConnections[i].moveFirst();
                 }
             };
             
