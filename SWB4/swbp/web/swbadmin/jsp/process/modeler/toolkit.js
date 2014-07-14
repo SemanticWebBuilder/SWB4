@@ -807,8 +807,8 @@
 
         createBaseObject:function(constructor, id, parent)
         {
-            var _this=ToolKit;
-            var obj=constructor();
+            var _this = ToolKit;
+            var obj = constructor();
             
             obj.elementType="BaseObject";
             obj.text=null;
@@ -855,20 +855,23 @@
 
             obj.setParamClass=function(param)
             {
-                var _this=ToolKit;
-                var l=obj.getAttributeNS(_this.xlink,"href");
+                var l = obj.getAttributeNS(_this.xlink,"href");
                 if(l && l!==null)
                 {
-                    var o=document.getElementById(l.substring(1));
-                    if(o!==null)
+                    var o = document.getElementById(l.substring(1));
+                    if(o !== null)
                     {
-                        var s=o.getAttributeNS(null, param);
-                        if(s && s!==null)obj.setAttributeNS(null,"class",s);
+                        var s = o.getAttributeNS(null, param);
+                        if(s && s !== null) { 
+                            obj.setAttributeNS(null, "class", s);
+                        }
                     }
                 }else
                 {
-                    var s=obj.getAttributeNS(null, param);
-                    if(s!==null)obj.setAttributeNS(null,"class",s);                                
+                    var s = obj.getAttributeNS(null, param);
+                    if(s !== null) {
+                        obj.setAttributeNS(null,"class",s);
+                    }
                 }
             };                        
 
@@ -928,27 +931,36 @@
                 obj.setHeight(h);        
 
                 //Move Icons
-                for (var i = obj.icons.length; i--;) 
+                var icons = obj.icons,
+                    newX = obj.getX(),
+                    newY = obj.getY(),    
+                    i;
+            
+                for (i = icons.length; i--;) 
                 {
-                    var icon=obj.icons[i];
-                    var pw=w/2*icon.posx;
-                    var ph=h/2*icon.posy;
-                    icon.obj.move(obj.getX()+pw+icon.offx,obj.getY()+ph+icon.offy);
+                    var icon = icons[i];
+                    var pw = w / 2 * icon.posx;
+                    var ph = h / 2 * icon.posy;
+                    icon.obj.move(newX + pw + icon.offx, newY + ph + icon.offy);
                 }
 
                 //Cambiar tamaño del texto
                 if(obj.text && obj.text!==null)obj.text.update();      
                 
                 //Move InConnections
-                for(var i = obj.inConnections.length; i--;)
+                var inConnections = obj.inConnections,
+                    outConnections = obj.outConnections,
+                    i;
+                
+                for(i = inConnections.length; i--;)
                 {
-                    obj.inConnections[i].updateInterPoints();
+                    inConnections[i].updateInterPoints();
                 }                
                 
                 //Move OutConnections
-                for(var i = obj.outConnections.length; i--;)
+                for(i = outConnections.length; i--;)
                 {
-                    obj.outConnections[i].updateInterPoints();
+                    outConnections[i].updateInterPoints();
                 }                 
             };                        
 
