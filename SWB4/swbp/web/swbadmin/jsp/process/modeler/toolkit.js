@@ -1115,38 +1115,36 @@
                 obj.style.display="none";
                 obj.hidden=true;
                 
-                for (var i = obj.contents.length; i--;)
-                {
-                    obj.contents[i].hide();
+                var contents = obj.contents || [],
+                    icons = obj.icons || [],
+                    inConnections = obj.inConnections || [],
+                    outConnections = obj.outConnections || [],
+                    i;
+            
+                for (i = contents.length; i--;) {
+                    contents[i].hide();
                 }
                 
                 //Elimina Iconos
-                if(obj.icons)
-                {
-                    for (var i = obj.icons.length; i--;)
-                    {
-                        obj.icons[i].obj.hide();
-                    }
+                for (i = icons.length; i--;) {
+                    icons[i].obj.hide();
                 }
                 //Elimina Texto
                 if(obj.text && obj.text!==null)obj.text.hide();
                 
                 //Eliminar Conexiones
                 //Move InConnections
-                for(var i = obj.inConnections.length; i--;)
-                {
-                    obj.inConnections[i].hide();
+                for(i = inConnections.length; i--;) {
+                    inConnections[i].hide();
                 }                
                 
                 //Move OutConnections
-                for(var i = obj.outConnections.length; i--;)
-                {
-                    obj.outConnections[i].hide();
+                for(i = outConnections.length; i--;) {
+                    outConnections[i].hide();
                 }                  
                 
                 //_this.unSelectObj(obj);
-                if(_this.selected.indexOf(obj)>-1)
-                {
+                if(_this.selected.indexOf(obj)>-1) {
                     _this.hideResizeBoxes();               
                 }
                 return this;
