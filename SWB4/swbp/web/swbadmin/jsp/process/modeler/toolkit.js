@@ -1484,17 +1484,15 @@
 
         createText:function(text,parent)
         {
-            var _this=ToolKit;
-            var constructor=function()
-            {
+            var _this = ToolKit;
+            var obj=_this.createBaseObject(function(){
                 var tx = document.createElementNS(_this.svgNS,"text"); //to create a circle, for rectangle use rectangle
                 //tx.appendChild(document.createTextNode(text));
                 tx.setAttributeNS(null,"text-anchor","middle");
                 tx.setAttributeNS(null,"font-size","11");
                 tx.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                 return tx;
-            };
-            var obj=_this.createBaseObject(constructor,null,null);                  
+            }, null, null);                  
             obj.value=text;                                     //Valor de la caja de texto
             obj.canSelect=false;
             obj.setAttributeNS(null,"class","textLabel");
@@ -1504,28 +1502,20 @@
                 parent.onmousedown(evt);
             }; 
             
-            obj.onmouseup=function(evt)
-            {
-                //desc(evt,true);
-                if(parent.onmouseup)
-                    parent.onmouseup(evt);
+            obj.onmouseup=function(evt) {
+                parent.onmouseup && parent.onmouseup(evt);
             };  
             
-            obj.onmousemove=function(evt)
-            {
-                //desc(evt,true);
-                if(parent.onmousemove)
-                    parent.onmousemove(evt);
+            obj.onmousemove=function(evt) {
+                parent.onmousemove && parent.onmousemove(evt);
             };              
 
-            parent.ondblclick=function(evt)
-            {
+            parent.ondblclick=function(evt) {
                 obj.ondblclick(evt);
             };
 
-            obj.ondblclick=function(evt)
-            {
-                var txt=prompt("Texto:",obj.value);                  
+            obj.ondblclick=function(evt) {
+                var txt = prompt("Texto:",obj.value);                  
                 if(txt && txt!==null)
                 {
                     obj.value=txt;
