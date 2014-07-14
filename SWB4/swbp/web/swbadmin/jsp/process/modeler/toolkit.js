@@ -37,31 +37,29 @@
 
         setLayer:function(layer)
         {
-            var _this=ToolKit;
-            _this.layer=layer;
-            for (var i = _this.contents.length; i--;)
+            var _this = ToolKit,
+                _contents = _this.contents || [];
+            
+            _this.layer = layer;
+            for (var i = _contents.length; i--;)
             {
-                if(_this.contents[i].layer===layer)
-                {
-                    _this.contents[i].show();
-                }else
-                {
-                    if(_this.contents[i].hide)_this.contents[i].hide();
-                }
+                _contents[i].layer===layer ? _contents[i].show() : _contents[i].hide();
             }
         },
                 
         removeLayer:function(layer)
         {
-            var _this=ToolKit;
+            var _this=ToolKit,
+                _contents = _this.contents || [];
+        
             _this.layer=layer;
-            for (var i = _this.contents.length; i--;) 
+            for (var i = _contents.length; i--;) 
             {
-                if(_this.contents[i].layer===layer)
+                if(_contents[i].layer===layer)
                 {
-                    _this.contents[i].remove();
+                    _contents[i].remove();
                 }
-            } 
+            }
         },                
 
         /*Revisar*/
@@ -103,24 +101,14 @@
         
         getEventX:function(evt)
         {
-            if(ToolKit.svg.offsetLeft)
-            {
-                return evt.pageX-ToolKit.svg.offsetLeft;
-            }else
-            {
-                return evt.pageX-60;
-            }
+            var offLeft = ToolKit.svg.offsetLeft;
+            return offLeft ? evt.pageX - offLeft : evt.pageX - 60;
         },
         
         getEventY:function(evt)
         {
-            if(ToolKit.svg.offsetTop)
-            {
-                return evt.pageY-ToolKit.svg.offsetTop;
-            }else
-            {
-                return evt.pageY-10;
-            }
+            var offTop = ToolKit.svg.offsetTop;
+            return offTop ? evt.pageY - offTop : evt.pageY - 10;
         },
 
         init:function(svgid)
@@ -136,28 +124,49 @@
 
             _this.svg.onmousemove=function(evt)
             {
-                if(!_this.onmousemove(evt))return;
-                _this.svg.mouseX=_this.getEventX(evt);
-                _this.svg.mouseY=_this.getEventY(evt);
+                var resizeObj = _this.svg.resizeObject,
+                    dragObj = _this.svg.dragObject,
+                    selectBox = _this.selectBox,
+                    evtX = _this.getEventX(evt),
+                    evtY = _this.getEventY(evt),
+                    dragOffX = _this.svg.dragOffsetX,
+                    dragOffY = _this.svg.dragOffsetY,
+                    i;
+                    
+                
+                if(!_this.onmousemove(evt)) return;
+                _this.svg.mouseX = evtX;
+                _this.svg.mouseY = evtY;
 
-                if(_this.svg.resizeObject!==null)
+                if(resizeObj !== null)
                 {
-                    x=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                    y=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                    tx=x-_this.svg.resizeObject.parent.getX();
-                    ty=y-_this.svg.resizeObject.parent.getY();
-                    w=Math.abs(_this.svg.resizeObject.startW+tx*2*_this.svg.resizeObject.ix);
-                    h=Math.abs(_this.svg.resizeObject.startH+ty*2*_this.svg.resizeObject.iy); 
-                    if((_this.svg.resizeObject.parent.getX()-w/2)<0)w=_this.svg.resizeObject.parent.getX()*2;
-                    if((_this.svg.resizeObject.parent.getY()-h/2)<0)h=_this.svg.resizeObject.parent.getY()*2;
-                    _this.svg.resizeObject.parent.resize(w,h);
+                    var p = resizeObj.parent,
+                        sW = resizeObj.startW,
+                        sH = resizeObj.startH,
+                        ix = resizeObj.ix,
+                        iy = resizeObj.iy;
+                
+                    x = evtX - dragOffX;
+                    y = evtY - dragOffY;
+                    
+                    tx = x - p.getX();
+                    ty = y - p.getY();
+                    w = Math.abs(sW + tx * 2 * ix);
+                    h = Math.abs(sH + ty * 2 * iy);
+                    if((p.getX() - w / 2) < 0){
+                        w = p.getX() * 2;
+                    }
+                    if((p.getY() - h / 2) < 0){
+                        h = p.getY() * 2;
+                    }
+                    p.resize(w,h);
                     _this.updateResizeBox();
 
-                }else if(_this.svg.dragObject!==null)  //dragObjects
+                }else if(dragObj!==null)  //dragObjects
                 {
                     _this.selected.unselect=false; //si hace drag no deselecciona
-                    x=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                    y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                    x= evtX - dragOffX;
+                    y= evtY - dragOffY;
 
 //                    if(_this.snap2Grid)
 //                    {
@@ -167,56 +176,57 @@
 
                     if(_this.cmdkey) //Drag one
                     {
-                        _this.svg.dragObject.move(x,y);
+                        dragObj.move(x,y);
                         _this.updateResizeBox();
                     }else //drag selecteds
                     {
-                        tx=x-_this.svg.dragObject.getX();
-                        ty=y-_this.svg.dragObject.getY();
+                        tx = x - dragObj.getX();
+                        ty = y - dragObj.getY();
 
-                        for (var i = _this.selected.length; i--;) 
+                        var _selected = _this.selected || [];
+                        for (i = _selected.length; i--;) 
                         {                                
-                            _this.selected[i].traslate(tx, ty);
+                            _selected[i].traslate(tx, ty);
                         }
                         _this.updateResizeBox();
                     }
-                }else if(_this.selectBox!==null) //SelectBox
+                }else if(selectBox!==null) //SelectBox
                 {
-                    var w=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                    var h=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                    var x=_this.svg.dragOffsetX;
-                    var y=_this.svg.dragOffsetY;
+                    var w = evtX - dragOffX,
+                        h = evtY - dragOffY,
+                        x = dragOffX,
+                        y = dragOffY;
 
-                    if(w<0)
+                    if(w < 0)
                     {
-                        x=_this.svg.dragOffsetX+w;
-                        w=-w;                                    
+                        x = dragOffX + w;
+                        w = -w;
                     }
-                    if(h<0)
+                    if(h < 0)
                     {
-                        y=_this.svg.dragOffsetY+h;
-                        h=-h;                                        
+                        y = dragOffY + h;
+                        h = -h;                                        
                     }
 
-                    _this.selectBox.setAttributeNS(null,"x",x);
-                    _this.selectBox.setAttributeNS(null,"width",w);
-                    _this.selectBox.setAttributeNS(null,"y",y);
-                    _this.selectBox.setAttributeNS(null,"height",h);
+                    selectBox.setAttributeNS(null,"x",x);
+                    selectBox.setAttributeNS(null,"width",w);
+                    selectBox.setAttributeNS(null,"y",y);
+                    selectBox.setAttributeNS(null,"height",h);
                     //_this.svg.appendChild(_this.selectBox);
 
                     var nodes=_this.svg.childNodes;
-                    for(i=0;i<nodes.length;i++)
+                    for(i=0 ; i < nodes.length ; i++)
                     {
-                        var obj=nodes.item(i);
+                        var obj = nodes.item(i); 
                         if(obj.contents && obj.canSelect===true && !obj.hidden)    //Es un objeto grafico
                         {
-                            var ox=obj.getX();
-                            var oy=obj.getY();
-                            var bb = _this.selectBox.getBBox();
+                            var ox = obj.getX();
+                            var oy = obj.getY();
+                            var bb = selectBox.getBBox();
                             if ((ox-obj.getWidth()/2 > bb.x && ox+obj.getWidth()/2 < (bb.x+bb.width)) && (oy-obj.getHeight()/2 > bb.y && oy+obj.getHeight()/2 < bb.y+bb.height))
                             //if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
                             {
-                                if(obj.selected!==true)
+                                if(!obj.selected)
                                 {                                                
                                     _this.selectObj(obj);
                                 }
@@ -224,7 +234,7 @@
                             {
                                 if(!_this.cmdkey)
                                 {
-                                    if(obj.selected===true)
+                                    if(obj.selected)
                                     {
                                         _this.unSelectObj(obj);
                                     }
