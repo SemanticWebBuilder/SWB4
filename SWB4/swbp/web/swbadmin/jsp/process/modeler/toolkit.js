@@ -1211,10 +1211,10 @@
             
             obj.isChild = function(parent)
             {
-                if(obj.parent!=null)
+                if(obj.parent!==null)
                 {
-                    if(obj.parent==parent)return true;
-                    else 
+                    if(obj.parent===parent)return true;
+                    else
                     {
                         if(obj.parent.isChild)
                         {
@@ -1256,7 +1256,7 @@
             //pos validas del 1 al 9, 1=esquina superior izquierda, 5=centro, 9=esquina inferior derecha
             obj.setText=function(text,posx,posy,width,orientation)
             {
-                if(obj.text!=null)obj.text.remove();
+                if(obj.text && obj.text!==null)obj.text.remove();
                 obj.text=_this.createText(text,obj);
                 obj.text.textPX=posx;
                 obj.text.textPY=posy;
@@ -1269,11 +1269,9 @@
             {
                 for (var i = objs.length; i--;)
                 {
-                    if(objs.indexOf(objs[i].parent)==-1)
+                    if(objs.indexOf(objs[i].parent)<0 && objs[i].canAttach(obj))
                     {
-                        if (objs[i].canAttach(obj)) {
-                            objs[i].setParent(obj);
-                        }
+                        objs[i].setParent(obj);
                     }
                 }
             };
@@ -1300,7 +1298,7 @@
                     connectionPath.toObject = null;
                     obj.inConnections.splice(idx);
                 }
-            }
+            };
             
             obj.addOutConnection=function(connectionPath)
             {
@@ -1318,7 +1316,7 @@
                     connectionPath.fromObject = null;
                     obj.outConnections.splice(idx);
                 }
-            }
+            };
             
             obj.snap2Grid=function()
             {
@@ -1326,14 +1324,14 @@
                 {
                     obj.move(Math.round(obj.getX()/_this.snap2GridSize)*_this.snap2GridSize,Math.round(obj.getY()/_this.snap2GridSize)*_this.snap2GridSize);
                 }
-            }
+            };
             
             obj.setParent(parent);
             if(_this.svg)
             {
                 _this.svg.appendChild(obj);
             }
-            if(obj.getWidth()==0 && obj.getHeight()==0)
+            if(obj.getWidth()===0 && obj.getHeight()===0)
             {
                 var bb=obj.getBBox();
                 obj.setWidth(bb.width);
