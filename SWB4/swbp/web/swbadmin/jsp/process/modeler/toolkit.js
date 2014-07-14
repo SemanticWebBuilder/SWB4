@@ -6,7 +6,7 @@
     {
         var ret="";
         for (property in obj) {
-            if(content && content==true)
+            if(content && content===true)
             {
                 ret+="-->"+property+"="+obj[property]+"\r\n";
             }else
@@ -136,11 +136,11 @@
 
             _this.svg.onmousemove=function(evt)
             {
-                if(_this.onmousemove(evt)==false)return;
+                if(!_this.onmousemove(evt))return;
                 _this.svg.mouseX=_this.getEventX(evt);
                 _this.svg.mouseY=_this.getEventY(evt);
 
-                if(_this.svg.resizeObject!=null)
+                if(_this.svg.resizeObject!==null)
                 {
                     x=_this.getEventX(evt)-_this.svg.dragOffsetX;
                     y=_this.getEventY(evt)-_this.svg.dragOffsetY;
@@ -153,7 +153,7 @@
                     _this.svg.resizeObject.parent.resize(w,h);
                     _this.updateResizeBox();
 
-                }else if(_this.svg.dragObject!=null)  //dragObjects
+                }else if(_this.svg.dragObject!==null)  //dragObjects
                 {
                     _this.selected.unselect=false; //si hace drag no deselecciona
                     x=_this.getEventX(evt)-_this.svg.dragOffsetX;
@@ -165,7 +165,7 @@
 //                        y=Math.round(y/_this.snap2GridSize)*_this.snap2GridSize;
 //                    }
 
-                    if(_this.cmdkey==true) //Drag one
+                    if(_this.cmdkey) //Drag one
                     {
                         _this.svg.dragObject.move(x,y);
                         _this.updateResizeBox();
@@ -180,7 +180,7 @@
                         }
                         _this.updateResizeBox();
                     }
-                }else if(_this.selectBox!=null) //SelectBox
+                }else if(_this.selectBox!==null) //SelectBox
                 {
                     var w=_this.getEventX(evt)-_this.svg.dragOffsetX;
                     var h=_this.getEventY(evt)-_this.svg.dragOffsetY;
@@ -208,7 +208,7 @@
                     for(i=0;i<nodes.length;i++)
                     {
                         var obj=nodes.item(i);
-                        if(obj.contents && obj.canSelect==true && !obj.hidden)    //Es un objeto grafico
+                        if(obj.contents && obj.canSelect===true && !obj.hidden)    //Es un objeto grafico
                         {
                             var ox=obj.getX();
                             var oy=obj.getY();
@@ -216,7 +216,7 @@
                             if ((ox-obj.getWidth()/2 > bb.x && ox+obj.getWidth()/2 < (bb.x+bb.width)) && (oy-obj.getHeight()/2 > bb.y && oy+obj.getHeight()/2 < bb.y+bb.height))
                             //if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
                             {
-                                if(obj.selected!=true)
+                                if(obj.selected!==true)
                                 {                                                
                                     _this.selectObj(obj);
                                 }
@@ -224,7 +224,7 @@
                             {
                                 if(!_this.cmdkey)
                                 {
-                                    if(obj.selected==true)
+                                    if(obj.selected===true)
                                     {
                                         _this.unSelectObj(obj);
                                     }
@@ -239,13 +239,13 @@
             
             _this.svg.onmousedown=function(evt)
             {
-                if(_this.onmousedown(evt)==false)return;
+                if(!_this.onmousedown(evt))return;
                 
                 //SelectBox
-                if(_this.svg.dragObject==null)
+                if(_this.svg.dragObject===null)
                 {
                     if(!_this.cmdkey)_this.unSelectAll();
-                    if(_this.selectBox==null)
+                    if(_this.selectBox===null)
                     {
                         _this.selectBox=document.createElementNS(_this.svgNS,"rect");
                         _this.selectBox.setAttributeNS(null,"class","selectBox");
@@ -264,10 +264,10 @@
 
             _this.svg.onmouseup=function(evt)
             {
-                if(_this.onmouseup(evt)==false)return;
+                if(!_this.onmouseup(evt))return;
                 
                 //Drop
-                if(_this.svg.dragObject!=null)
+                if(_this.svg.dragObject!==null)
                 {
                     //alert(_this.selected);
                     //_this.selected
@@ -279,14 +279,14 @@
                         var obj=_this.svg.childNodes[i];
                         if(obj && obj.contents)
                         {   
-                            if(obj==_this.svg.dragObject)
+                            if(obj===_this.svg.dragObject)
                             {
                                 for (;i-- && i>=0;)
                                 {
                                     obj=_this.svg.childNodes[i];
-                                    if(obj.hidden==false && obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
+                                    if(obj.hidden===false && obj.inBounds && obj.inBounds(_this.svg.dragObject.getX(), _this.svg.dragObject.getY()))
                                     {
-                                        if(_this.selected.indexOf(obj)==-1)
+                                        if(_this.selected.indexOf(obj)===-1)
                                         {
                                             obj.onDropObjects(_this.selected);
                                             i=0;
@@ -297,11 +297,11 @@
                             }
                         }
                     }
-                    if(droped==false)
+                    if(!droped)
                     {
                         for (var i = _this.selected.length; i--;)
                         {
-                            if(_this.selected.indexOf(_this.selected[i].parent)==-1)
+                            if(_this.selected.indexOf(_this.selected[i].parent)===-1)
                             {
                                 _this.selected[i].setParent(null);
                             }
@@ -322,7 +322,7 @@
                 _this.svg.resizeObject=null;
 
                 //SelectBox
-                if(_this.selectBox!=null)
+                if(_this.selectBox!==null)
                 {
                     _this.svg.removeChild(_this.selectBox);
                     _this.selectBox=null;
