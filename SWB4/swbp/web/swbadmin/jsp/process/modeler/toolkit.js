@@ -777,41 +777,32 @@
         createResizeObject:function(id, parent)
         {
             var _this=ToolKit;
-            //console.log(_this);
-            var constructor=function()
-            {
+            return _this.createObject(function(){
                 var obj = document.createElementNS(_this.svgNS,"rect"); //to create a circle, for rectangle use rectangle
                 obj.resizeable=true;
                 //obj.setAttributeNS(_this.xlink,"href",type);
                 return obj;
-            };
-            return _this.createObject(constructor,id,parent);
+            }, id, parent);
         },                    
 
         createUseObject:function(type, id, parent)
         {
             var _this=ToolKit;
-            //console.log(_this);
-            var constructor=function()
-            {
+            return _this.createObject(function(){
                 var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
                 obj.setAttributeNS(_this.xlink,"href",type);
                 return obj;
-            };
-            return _this.createObject(constructor,id,parent);
+            }, id, parent);
         },
 
         createUseBaseObject:function(type, id, parent)
         {
             var _this=ToolKit;
-            //console.log(_this);
-            var constructor=function()
-            {
+            return _this.createBaseObject(function(){
                 var obj = document.createElementNS(_this.svgNS,"use"); //to create a circle, for rectangle use rectangle
                 obj.setAttributeNS(_this.xlink,"href",type);
                 return obj;
-            };
-            return _this.createBaseObject(constructor,id,parent);
+            }, id, parent);
         },                    
 
         createBaseObject:function(constructor, id, parent)
