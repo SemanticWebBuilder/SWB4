@@ -1304,7 +1304,7 @@
             {
                 for (var i = objs.length; i--;)
                 {
-                    if(objs.indexOf(objs[i].parent)<0 && objs[i].canAttach(obj))
+                    if(objs.indexOf(objs[i].parent) < 0 && objs[i].canAttach(obj))
                     {
                         objs[i].setParent(obj);
                     }
@@ -1318,9 +1318,10 @@
             
             obj.addInConnection=function(connectionPath)
             {
-                if (obj.inConnections.indexOf(connectionPath) === -1) {
+                var conns = obj.inConnections;
+                if (conns.indexOf(connectionPath) === -1) {
                     connectionPath.layer = obj.layer;
-                    obj.inConnections.push(connectionPath);
+                    conns.push(connectionPath);
                     connectionPath.toObject=obj;
                     connectionPath.setEndPoint(obj.getX(),obj.getY());
                 }
@@ -1328,34 +1329,37 @@
             };
             
             obj.removeInConnection=function(connectionPath) {
-                var idx = obj.inConnections.indexOf(connectionPath);
-                if (idx !== -1) {
+                var conns = obj.inConnections;
+                var idx = conns.indexOf(connectionPath);
+                if (idx > -1) {
                     connectionPath.toObject = null;
-                    obj.inConnections.splice(idx);
+                    conns.splice(idx);
                 }
             };
             
             obj.addOutConnection=function(connectionPath)
             {
-                if (obj.outConnections.indexOf(connectionPath) === -1) {
+                var conns = obj.outConnections;
+                if (conns.indexOf(connectionPath) === -1) {
                     connectionPath.layer = obj.layer;
-                    obj.outConnections.push(connectionPath);
+                    conns.push(connectionPath);
                     connectionPath.fromObject=obj;
                     connectionPath.setStartPoint(obj.getX(),obj.getY());
                 }
             };
             
             obj.removeOutConnection=function(connectionPath) {
-                var idx = obj.outConnections.indexOf(connectionPath);
+                var conns = obj.outConnections;
+                var idx = conns.indexOf(connectionPath);
                 if (idx !== -1) {
                     connectionPath.fromObject = null;
-                    obj.outConnections.splice(idx);
+                    conns.splice(idx);
                 }
             };
             
             obj.snap2Grid=function()
             {
-                if(ToolKit.snap2Grid)
+                if(_this.snap2Grid)
                 {
                     obj.move(Math.round(obj.getX()/_this.snap2GridSize)*_this.snap2GridSize,Math.round(obj.getY()/_this.snap2GridSize)*_this.snap2GridSize);
                 }
