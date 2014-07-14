@@ -476,7 +476,7 @@
                 
         hideToolTip:function() {
             var _this=ToolKit;
-            if (_this.tooltip != null) {
+            if (_this.tooltip !== null) {
                 _this.tooltip.hide();
                 //_this.svg.removeChild(_this.tooltip);
             }
@@ -485,7 +485,7 @@
         showResizeBoxes:function()
         {
             var _this=ToolKit;
-            if(_this.selected.length==1 && _this.selected[0].resizeable)
+            if(_this.selected.length===1 && _this.selected[0].resizeable)
             {
                 var obj=_this.selected[0];
                 _this.createResizeBox(obj,-1,-1,"nw-resize");
@@ -498,7 +498,7 @@
                 _this.createResizeBox(obj,1,1,"se-resize");
             }else
             {
-                _this.hideResizeBoxes()
+                _this.hideResizeBoxes();
 
             }
         },
@@ -556,7 +556,7 @@
         {
             //desc(evt,true);
             var _this=ToolKit;
-            if((evt.keyCode==8 && evt.which==8) || evt.keyCode==46 && evt.which==46)
+            if((evt.keyCode===8 && evt.which===8) || evt.keyCode===46 && evt.which===46)
             //if(evt.keyCode==32 && evt.which==32)
             {
                 try
@@ -566,13 +566,13 @@
                         _this.selected[i].remove();
                     }                             
                     _this.unSelectAll();
-                }catch(e){console.log(e)};
+                }catch(e){console.log(e);};
                 _this.stopPropagation(evt);
-            }else if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
+            }else if((evt.keyCode===91 && evt.which===91) || (evt.keyCode===224 && evt.which===224))
             {
                 _this.cmdkey=true;
                 _this.stopPropagation(evt);
-            }else if(evt.keyCode==17 && evt.which==17)
+            }else if(evt.keyCode===17 && evt.which===17)
             {
                 _this.ctrlkey=true;
                 
@@ -591,7 +591,7 @@
 //                    } 
 //                }
                 _this.stopPropagation(evt);
-            }else if(evt.keyCode==65 && evt.which==65)
+            }else if(evt.keyCode===65 && evt.which===65)
             {
                 if(_this.cmdkey)
                 {
@@ -599,10 +599,10 @@
                     {
                         if(!_this.contents[i].hidden && _this.contents[i].canSelect)
                         {
-                            _this.selectObj(_this.contents[i])
+                            _this.selectObj(_this.contents[i]);
                         }
-                        
-                    }                 }
+                    }
+                }
             }
         },
 
@@ -610,11 +610,11 @@
         {
             //alert("hola");
             var _this=ToolKit;
-            if((evt.keyCode==91 && evt.which==91) || (evt.keyCode==224 && evt.which==224))
+            if((evt.keyCode===91 && evt.which===91) || (evt.keyCode===224 && evt.which===224))
             {
                 _this.cmdkey=false;
                 _this.stopPropagation(evt);
-            }else if(evt.keyCode==17 && evt.which==17)
+            }else if(evt.keyCode===17 && evt.which===17)
             {
                 _this.ctrlkey=false;
                 _this.stopPropagation(evt);
