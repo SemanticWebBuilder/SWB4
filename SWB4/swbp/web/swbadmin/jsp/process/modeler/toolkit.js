@@ -650,9 +650,9 @@
         
         createConnectionPath:function(x1, y1, x2, y2, marker_start, marker_mid, marker_end, dash_array, styleClass) 
         {
-            var _this=ToolKit;
-            //console.log(_this);
-            var obj = document.createElementNS(_this.svgNS,"path");
+            var _this = ToolKit,
+                obj = document.createElementNS(_this.svgNS,"path");
+        
             obj.autoAdjust = false;
             obj.lineHandlers = [];
 
@@ -699,12 +699,14 @@
             };
                     
             obj.listSegments=function() {
-                for (var i=0; i < obj.pathSegList.numberOfItems; i++) {
+                var segments = obj.pathSegList,
+                    i;
+                for (i = 0; i < segments.numberOfItems; i++) {
                     //desc(obj.pathSegList.getItem(i),true);
-                    var segment=obj.pathSegList.getItem(i);
-                    if (segment.pathSegType===SVGPathSeg.PATHSEG_LINETO_ABS) {
+                    var segment = segments.getItem(i);
+                    if (segment.pathSegType === SVGPathSeg.PATHSEG_LINETO_ABS) {
                        //console.log("lineto "+segment);
-                    } else if (segment.pathSegType===SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                    } else if (segment.pathSegType === SVGPathSeg.PATHSEG_MOVETO_ABS) {
                        //console.log("moveto "+segment);
                     }
                 }
@@ -712,9 +714,11 @@
             
             obj.translate=function(x,y) 
             {
-                for (var i=0; i < obj.pathSegList.numberOfItems; i++) 
+                var segments = obj.pathSegList,
+                    i;
+                for (i = 0; i < segments.numberOfItems; i++) 
                 {
-                    var segment=obj.pathSegList.getItem(i);
+                    var segment=segments.getItem(i);
                     segment.x=segment.x+x;
                     segment.y=segment.y+y;
                 }                
@@ -723,19 +727,18 @@
             obj.remove=function()
             {
                 //remove fromObject
-                if (obj.fromObject && obj.fromObject.outConnections) {
-                    ax = obj.fromObject.outConnections.indexOf(obj);
-                    if(obj.fromObject!==null && ax !== -1) {
-                        obj.fromObject.outConnections.splice(ax, 1);
-                    }
+                var outConns = (obj.fromObject && obj.fromObject.outConnections) || [];
+                var inConns = (obj.toObject && obj.toObject.inConnections) || [];
+                
+                ax = outConns.indexOf(obj);
+                if(obj.fromObject!==null && ax !== -1) {
+                    outConns.splice(ax, 1);
                 }
                 
                 //remove toObject
-                if (obj.toObject && obj.toObject.inConnections) {
-                    ax = obj.toObject.inConnections.indexOf(obj);
-                    if(obj.toObject!==null && ax !== -1) {
-                        obj.toObject.inConnections.splice(ax, 1);
-                    }
+                ax = inConns.indexOf(obj);
+                if(obj.toObject!==null && ax !== -1) {
+                    inConns.splice(ax, 1);
                 }
                 
                 try
