@@ -384,17 +384,21 @@
 
         updateResizeBox:function()
         {
-            var _this=ToolKit;
-            for(i=0;i<_this.resizeBox.length;i++)
+            var _this=ToolKit,
+                i,
+                resizeBox = _this.resizeBox || [];
+        
+            for(i=0; i < resizeBox.length; i++)
             {
-                _this.resizeBox[i].update();
+                resizeBox[i].update();
             }
         },
 
         createResizeBox:function(obj, ix, iy, cursor)
         {
-            var _this=ToolKit;
-            var b=document.createElementNS(_this.svgNS,"use");
+            var _this = ToolKit,
+                b = document.createElementNS(_this.svgNS,"use");
+        
             b.setAttributeNS(_this.xlink,"href","#resizeBox");
             b.setAttributeNS(null,"style","cursor:"+cursor);
             b.init=function(_ix,_iy)
