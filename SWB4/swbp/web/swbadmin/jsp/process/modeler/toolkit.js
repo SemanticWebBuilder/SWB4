@@ -1154,34 +1154,32 @@
                 
                 obj.style.display="";
                 obj.hidden=false;
+                var contents = obj.contents || [],
+                    icons = obj.icons || [],
+                    inConnections = obj.inConnections || [],
+                    outConnections = obj.outConnections || [],
+                    i;
                 
-                for (var i = obj.contents.length; i--;)
-                {
-                    obj.contents[i].show();
+                for (i = contents.length; i--;) {
+                    contents[i].show();
                 }
                 
                 //Elimina Iconos
-                if(obj.icons)
-                {
-                    for (var i = obj.icons.length; i--;)
-                    {
-                        obj.icons[i].obj.show();
-                    }
+                for (i = icons.length; i--;) {
+                    icons[i].obj.show();
                 }
                 //Elimina Texto
                 if(obj.text && obj.text!==null)obj.text.show();
                 
                 //Eliminar Conexiones
                 //Move InConnections
-                for(var i = obj.inConnections.length; i--;)
-                {
-                    obj.inConnections[i].show();
+                for(i = inConnections.length; i--;) {
+                    inConnections[i].show();
                 }                
                 
                 //Move OutConnections
-                for(var i = obj.outConnections.length; i--;)
-                {
-                    obj.outConnections[i].show();
+                for(i = outConnections.length; i--;) {
+                    outConnections[i].show();
                 }                  
                 return this;
             };               
