@@ -1196,8 +1196,7 @@
                     i;
                 
                 //mueve Iconos
-                for (i = icons.length; i--;)
-                {
+                for (i = icons.length; i--;) {
                     icons[i].obj.moveFirst();
                 }
                 
@@ -1205,19 +1204,16 @@
                 if(obj.text && obj.text!==null)obj.text.moveFirst();
                 
                 //mueve contenidos
-                for (i = contents.length; i--;)
-                {
+                for (i = contents.length; i--;) {
                     contents[i].moveFirst();
                 }
                 
                 //mueve conexiones
-                for (i = inConnections.length; i--;)
-                {
+                for (i = inConnections.length; i--;) {
                     inConnections[i].moveFirst();
                 }
                 
-                for (i = outConnections.length; i--;)
-                {
+                for (i = outConnections.length; i--;) {
                     outConnections[i].moveFirst();
                 }
             };
@@ -1239,7 +1235,7 @@
                     }
                 }else
                 {
-                    if (_this.contents.indexOf(obj) === -1) {
+                    if (_this.contents.indexOf(obj) < 0) {
                         _this.contents.push(obj);
                         //obj.parent=_this;
                     }
@@ -1249,14 +1245,15 @@
             
             obj.isChild = function(parent)
             {
-                if(obj.parent!==null)
+                var p = obj.parent;
+                if(p !== null)
                 {
-                    if(obj.parent===parent)return true;
+                    if(p === parent)return true;
                     else
                     {
-                        if(obj.parent.isChild)
+                        if(p.isChild)
                         {
-                            return obj.parent.isChild(parent);
+                            return p.isChild(parent);
                         }
                         return false;
                     }
