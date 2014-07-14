@@ -439,13 +439,13 @@
         },
                 
         createToolTip:function() {
-            var _this=ToolKit;
-            var constructor = function() {
-                var obj = document.createElementNS(_this.svgNS,"rect");
-                obj.setAttributeNS(null, "rx", "10");
-                obj.setAttributeNS(null, "ry", "10");
-                return obj;
-            };
+            var _this = ToolKit,
+                constructor = function() {
+                    var obj = document.createElementNS(_this.svgNS,"rect");
+                    obj.setAttributeNS(null, "rx", "10");
+                    obj.setAttributeNS(null, "ry", "10");
+                    return obj;
+                };
             
             var msgBox = _this.createBaseObject(constructor, null, null);
             msgBox.setAttributeNS(null,"class","toolTip");
@@ -462,7 +462,7 @@
         },
 
         showTooltip:function(pos, tooltipText, width, tooltipType) {
-            var _this=ToolKit;
+            var _this = ToolKit;
             
             if (_this.tmHandler && _this.tmHandler !== null) {
                 clearTimeout(_this.tmHandler);
@@ -503,30 +503,28 @@
         showResizeBoxes:function()
         {
             var _this=ToolKit;
-            if(_this.selected.length===1 && _this.selected[0].resizeable)
-            {
-                var obj=_this.selected[0];
-                _this.createResizeBox(obj,-1,-1,"nw-resize");
-                _this.createResizeBox(obj,0,-1,"n-resize");
-                _this.createResizeBox(obj,1,-1,"ne-resize");
-                _this.createResizeBox(obj,-1,0,"w-resize");
-                _this.createResizeBox(obj,1,0,"e-resize");
-                _this.createResizeBox(obj,-1,1,"sw-resize");
-                _this.createResizeBox(obj,0,1,"s-resize");
-                _this.createResizeBox(obj,1,1,"se-resize");
-            }else
-            {
-                _this.hideResizeBoxes();
-
+            if (_this.selected.length === 1) {
+                var obj = _this.selected[0].resizeable && _this.selected[0];
+                if (obj) {
+                    _this.createResizeBox(obj,-1,-1,"nw-resize");
+                    _this.createResizeBox(obj,0,-1,"n-resize");
+                    _this.createResizeBox(obj,1,-1,"ne-resize");
+                    _this.createResizeBox(obj,-1,0,"w-resize");
+                    _this.createResizeBox(obj,1,0,"e-resize");
+                    _this.createResizeBox(obj,-1,1,"sw-resize");
+                    _this.createResizeBox(obj,0,1,"s-resize");
+                    _this.createResizeBox(obj,1,1,"se-resize");
+                }
             }
         },
                 
         hideResizeBoxes:function()
         {
-            var _this=ToolKit;
+            var _this=ToolKit,
+                svg = _this.svg;
             while((o=_this.resizeBox.pop())!=null)
             {
-                _this.svg.removeChild(o);
+                svg.removeChild(o);
             } 
         },
 
@@ -579,9 +577,11 @@
             {
                 try
                 {
-                    for (var i = _this.selected.length; i--;) 
+                    var selected = _this.selected,
+                        i;
+                    for (i = selected.length; i--;) 
                     {
-                        _this.selected[i].remove();
+                        selected[i].remove();
                     }                             
                     _this.unSelectAll();
                 }catch(e){console.log(e);};
@@ -613,11 +613,13 @@
             {
                 if(_this.cmdkey)
                 {
-                    for (var i = _this.contents.length; i--;) 
+                    var contents = _this.contents,
+                        i;
+                    for (i = contents.length; i--;) 
                     {
-                        if(!_this.contents[i].hidden && _this.contents[i].canSelect)
+                        if(!contents[i].hidden && contents[i].canSelect)
                         {
-                            _this.selectObj(_this.contents[i]);
+                            _this.selectObj(contents[i]);
                         }
                     }
                 }
