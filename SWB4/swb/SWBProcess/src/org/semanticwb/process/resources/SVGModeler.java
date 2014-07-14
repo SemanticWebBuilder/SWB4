@@ -202,7 +202,7 @@ public class SVGModeler extends GenericAdmResource {
             response.setContentType("text/html");
             String json = processFile(request);
             if (json == null) {
-                json =  ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError"));
+                json = ERRORSTRING.replace("_JSONERROR_", paramRequest.getLocaleString("msgJSONPError"));
             }
             outs.write(json.getBytes("UTF-8"));
         } else if (ACT_STOREPROCESS.equals(action)) { //Persistir modelo del proceso
@@ -497,7 +497,7 @@ public class SVGModeler extends GenericAdmResource {
                         y = json.getInt(PROP_Y);
                         w = json.getInt(PROP_W);
                         h = json.getInt(PROP_H);
-                        
+
                         parent = json.optString(PROP_PARENT);
                         container = json.optString(PROP_CONTAINER);
                         labelSize = json.getInt(PROP_labelSize);
@@ -507,8 +507,7 @@ public class SVGModeler extends GenericAdmResource {
                             //System.out.println("revisando si el elemento existe");
                             go = ont.getGenericObject(uri);
 
-                            if (go instanceof GraphicalElement) 
-                            {
+                            if (go instanceof GraphicalElement) {
                                 // actualizando datos en elemento existente
                                 ge = (GraphicalElement) go;
                                 if (!ge.getTitle().equals(title)) {
@@ -657,16 +656,15 @@ public class SVGModeler extends GenericAdmResource {
                                 if (bupdate) {
                                     hmnew.put(uri, go.getURI());
                                 }
-                                
+
                             }
-                            
+
                             //System.out.println("go:"+go);
                             //System.out.println("lindex:"+json.has("lindex"));
-                            if(go instanceof Lane && json.has("lindex"))
-                            {
+                            if (go instanceof Lane && json.has("lindex")) {
                                 //System.out.println("val:"+json.getInt("lindex")+" "+json.get("lindex"));
-                                ((Lane)go).setLindex(json.getInt("lindex"));
-                            }                            
+                                ((Lane) go).setLindex(json.getInt("lindex"));
+                            }
                             // se quita elemento que ha sido actualizado
                             if (bupdate) {
                                 hmori.remove(uri);
@@ -779,15 +777,13 @@ public class SVGModeler extends GenericAdmResource {
                             if (bupdate) {
                                 hmnew.put(uri, gi.getURI());
                             }
-                            
-                            
+
                             //System.out.println("ge:"+ge);
                             //System.out.println("lindex:"+json.has("lindex"));
-                            if(ge instanceof Lane && json.has("lindex"))
-                            {
+                            if (ge instanceof Lane && json.has("lindex")) {
                                 //System.out.println("val:"+json.getInt("lindex")+" "+json.get("lindex"));
-                                ((Lane)ge).setLindex(json.getInt("lindex"));
-                            }  
+                                ((Lane) ge).setLindex(json.getInt("lindex"));
+                            }
 
                             ///////////////////////////////////////
 //                        if(semclass.isSubClass(Task.swp_Task))
@@ -872,7 +868,9 @@ public class SVGModeler extends GenericAdmResource {
                             if (go_ge != null && go_ge instanceof GraphicalElement) {
                                 ge.setParent((GraphicalElement) go_ge);
                             }
-                        }else if(ge.getParent()!=null)ge.removeParent();
+                        } else if (ge.getParent() != null) {
+                            ge.removeParent();
+                        }
                     }
                 }
             }
@@ -1025,6 +1023,7 @@ public class SVGModeler extends GenericAdmResource {
         OutputStream outs = response.getOutputStream();
         String format = request.getParameter("output_format");
         String data = request.getParameter("data");
+        String viewBox = request.getParameter("viewBox");
 
         Process p = (Process) SWBPlatform.getSemanticMgr().getOntology().getGenericObject(request.getParameter("suri"));
         response.setHeader("Cache-Control", "no-cache");
@@ -1071,14 +1070,14 @@ public class SVGModeler extends GenericAdmResource {
 //            } catch (TranscoderException e) {
 //                e.printStackTrace();
 //            }
-
+            String[] values = viewBox != null ? viewBox.split("\\ ") : "0 0 3800 2020".split("\\ ");
             InputStream strStream = new ByteArrayInputStream(data.getBytes("ISO-8859-1"));
             TranscoderInput ti = new TranscoderInput(strStream/*svgFile.toURI().toString()*/);
             TranscoderOutput to = new TranscoderOutput(outs);
 
             PNGTranscoder t = new PNGTranscoder();
-            t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(3840));
-            t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(2160));
+            t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(values[2]) + 2048);
+            t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(values[3]) + 1292);
             t.addTranscodingHint(PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE, Boolean.TRUE);
             try {
                 t.transcode(ti, to);
@@ -1237,10 +1236,10 @@ public class SVGModeler extends GenericAdmResource {
                     }
                     //System.out.println("===>"+colble.isCollection());
                 }
-                
-                if( obj instanceof Lane) {
-                     //System.out.println("put index:"+obj+" "+((Lane)obj).getLindex());
-                     ele.put("lindex", ((Lane)obj).getLindex());
+
+                if (obj instanceof Lane) {
+                    //System.out.println("put index:"+obj+" "+((Lane)obj).getLindex());
+                    ele.put("lindex", ((Lane) obj).getLindex());
                 }
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
                 while (it.hasNext()) {
@@ -1346,9 +1345,9 @@ public class SVGModeler extends GenericAdmResource {
                     }
                     //System.out.println("===>"+colble.isCollection());
                 }
-                
-                if( obj instanceof Lane) {
-                     ele.put("lindex", ((Lane)obj).getLindex());
+
+                if (obj instanceof Lane) {
+                    ele.put("lindex", ((Lane) obj).getLindex());
                 }
 
                 Iterator<ConnectionObject> it = obj.listOutputConnectionObjects();
