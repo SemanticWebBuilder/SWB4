@@ -2645,8 +2645,10 @@
             };
             
             obj.ondblclick = function(evt) {
-                if (obj.text && obj.text !== null) {
-                    obj.text.ondblclick(evt);
+                if (obj.elementType==="ConditionalFlow" || obj.elementType==="DefaultFlow") {
+                    if (obj.text && obj.text !== null) {
+                        obj.text.ondblclick(evt);
+                    }
                 }
             };
             
