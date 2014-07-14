@@ -1064,33 +1064,37 @@
                     }
                 }
                 
-                for (var i = obj.contents.length; i--;)
+                var contents = obj.contents || [],
+                    icons = obj.icons || [],
+                    inConnections = obj.inConnections || [],
+                    outConnections = obj.outConnections || [],
+                    i;
+            
+                for (i = contents.length; i--;)
                 {
-                    obj.contents[i].remove(true);
+                    contents[i].remove(true);
                 }
                 
                 //Elimina Iconos
-                if(obj.icons)
+                for (i = icons.length; i--;)
                 {
-                    for (var i = obj.icons.length; i--;)
-                    {
-                        obj.icons[i].obj.remove();
-                    }
+                    icons[i].obj.remove();
                 }
+
                 //Elimina Texto
                 if(obj.text && obj.text!==null)obj.text.remove();
                 
                 //Eliminar Conexiones
                 //Move InConnections
-                for(var i = obj.inConnections.length; i--;)
+                for(i = inConnections.length; i--;)
                 {
-                    obj.inConnections[i].remove();
+                    inConnections[i].remove();
                 }                
                 
                 //Move OutConnections
-                for(var i = obj.outConnections.length; i--;)
+                for(i = outConnections.length; i--;)
                 {
-                    obj.outConnections[i].remove();
+                    outConnections[i].remove();
                 }                  
                 
                 try
