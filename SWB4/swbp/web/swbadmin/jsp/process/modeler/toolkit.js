@@ -966,26 +966,35 @@
 
             obj.move=function(x,y)
             {
+                var objW = obj.getWidth(),
+                    objH = obj.getHeight(),
+                    thisW = _this.getWidth(),
+                    thisH = _this.getHeight(),
+                    contents = obj.contents || [],
+                    icons = obj.icons || [],
+                    inConnections = obj.inConnections || [],
+                    outConnections = obj.outConnections || [],
+                    i;
                 //Crecemos pantalla
-                if(x+obj.getWidth()/2>_this.getWidth())
+                if(x + objW / 2 > thisW)
                 {
-                    _this.setWidth(x+obj.getWidth()/2);
+                    _this.setWidth(x + objW / 2);
                 }
-                if(y+obj.getHeight()/2>_this.getHeight())
+                if(y + objH / 2 > thisH)
                 {
-                    _this.setHeight(y+obj.getHeight()/2);
+                    _this.setHeight(y + objH / 2);
                 }
                 
                 if(obj.canSelect)
                 {
                     //Validamos bordes
-                    if(x-obj.getWidth()/2<0)
+                    if(x - objW / 2 < 0)
                     {
-                        x=obj.getWidth()/2;
+                        x = objW / 2;
                     }
-                    if(y-obj.getHeight()/2<0)
+                    if(y - objH / 2 < 0)
                     {
-                        y=obj.getHeight()/2;
+                        y=objH / 2;
                     }                    
                 }
                 
@@ -996,17 +1005,17 @@
                 obj.setY(y);
 
                 //Move Childs
-                for (var i = obj.contents.length; i--;) 
+                for (i = contents.length; i--;) 
                 {
-                    if(!obj.contents[i].selected)
+                    if(!contents[i].selected)
                     {
-                        obj.contents[i].traslate(offx,offy);
+                        contents[i].traslate(offx,offy);
                     }
                 }  
                 //Move Icons
-                for (var i = obj.icons.length; i--;) 
+                for (i = icons.length; i--;) 
                 {
-                    obj.icons[i].obj.traslate(offx,offy);
+                    icons[i].obj.traslate(offx,offy);
                 }
 
                 //Move Text
@@ -1016,22 +1025,25 @@
                     obj.text.PX=offx;
                     obj.text.PY=offy;
                     obj.text.update();
-                    for (var i = obj.text.childNodes.length; i--;)
+                    var spans = obj.text.childNodes,
+                        _text = obj.text;
+                    
+                    for (i = spans.length; i--;)
                     {
-                        obj.text.childNodes[i].setAttributeNS(null,"x",obj.text.getX());
+                        spans[i].setAttributeNS(null,"x",_text.getX());
                     }
                 }
                 
                 //Move InConnections
-                for(var i = obj.inConnections.length; i--;)
+                for(i = inConnections.length; i--;)
                 {
-                    obj.inConnections[i].setEndPoint(x,y);
+                    inConnections[i].setEndPoint(x,y);
                 }                
                 
                 //Move OutConnections
-                for(var i = obj.outConnections.length; i--;)
+                for(i = outConnections.length; i--;)
                 {
-                    obj.outConnections[i].setStartPoint(x,y);
+                    outConnections[i].setStartPoint(x,y);
                 }
             };    
 
