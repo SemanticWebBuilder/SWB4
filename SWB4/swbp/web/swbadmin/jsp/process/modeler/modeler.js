@@ -5,7 +5,7 @@
 /***************************Elementos genéricos**************************/
     var _GraphicalElement = function(obj) {
         var _this = obj;
-        _this.types = new Array();
+        _this.types = [];
         _this.id = ":"+Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
@@ -20,14 +20,7 @@
         };
         
         _this.typeOf = function(typeName) {
-            var ret = false;
-            for (var i = 0; i < _this.types.length; i++) {
-                if(_this.types[i] === typeName) {
-                    ret = true;
-                    break;
-                }
-            }
-            return ret;
+            return _this.types.indexOf(typeName) > -1;
         };
         
         _this.canStartLink=function(link) {
@@ -97,14 +90,7 @@
         };
         
         _this.typeOf = function(typeName) {
-            var ret = false;
-            for (var i = 0; i < _this.types.length; i++) {
-                if(_this.types[i] === typeName) {
-                    ret = true;
-                    break;
-                }
-            }
-            return ret;
+            return _this.types.indexOf(typeName) > -1;
         };
         
       _this.setElementType("ConnectionObject");
