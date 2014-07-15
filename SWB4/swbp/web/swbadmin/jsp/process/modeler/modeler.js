@@ -601,18 +601,15 @@
     
     /***************************Eventos intermedios**************************/
     var _IntermediateCatchEvent = function (obj) {
-        var _this = new _CatchEvent(obj);
-        var fCanAttach = _this.canAttach;
-        var fCanEnd = _this.canEndLink;
-        var fCanStart = _this.canStartLink;
+        var _this = new _CatchEvent(obj),
+            fCanAttach = _this.canAttach,
+            fCanEnd = _this.canEndLink,
+            fCanStart = _this.canStartLink;
+    
         _this.cssClass = "intermediateEvent";
         
         _this.setInterruptor = function(interrupt) {
-            if (interrupt) {
-                _this.cssClass = "intermediateInterruptingEvent";
-            } else {
-                _this.cssClass = "intermediateEvent";
-            }
+            _this.class = interrupt ? "intermediateInterruptingEvent" : "intermediateEvent";
             _this.setBaseClass();
         };
 
@@ -627,8 +624,8 @@
         _this.setElementType("IntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
-            var ret = fCanAttach(parent);
-            var msg = null;
+            var ret = fCanAttach(parent),
+                msg = null;
             
             if (ret || (parent.typeOf && parent.typeOf("Activity") && _this.inConnections.length===0)) {
                 ret = true;
@@ -645,24 +642,29 @@
         };
         
         _this.canEndLink = function (link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null,
+                etype = link.elementType,
+                p = _this.parent;
             
             if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
                 ret = false;
-            } else if (ret && link.elementType==="MessageFlow") {
+            } else if (ret && etype==="MessageFlow") {
                 msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
                 ret = false;
             }
             
-            if (ret && link.elementType==="SequenceFlow") {
-                if (ret && _this.parent && _this.parent !== null && _this.parent.typeOf("Activity")) {
+            if (ret && etype==="SequenceFlow") {
+                if (ret && p && p !== null && p.typeOf("Activity")) {
                     msg = "Un evento adherido no puede tener flujos de secuencia entrantes";
                     ret = false;
                 } else {
-                    var c = 0;
-                    for (var i = 0; i < _this.inConnections.length; i++) {
-                        if (_this.inConnections[i].elementType==="SequenceFlow") {
+                    var c = 0,
+                        i,
+                        inConnections = _this.inConnections || [];
+                
+                    for (i = 0; i < inConnections.length; i++) {
+                        if (inConnections[i].elementType==="SequenceFlow") {
                             c++;
                         }
                     }
