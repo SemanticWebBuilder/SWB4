@@ -750,16 +750,18 @@
         };
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var c = 0;
+            var ret = fCanStart(link),
+                c = 0, i,
+                etype = link.elementType;
             
             var msg = null;
-            if (link.elementType==="MessageFlow") {
+            if (etype==="MessageFlow") {
                 ToolKit.hideToolTip();
             }
-            if (ret && link.elementType==="SequenceFlow") {
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.outConnections[i].elementType==="SequenceFlow") {
+            if (ret && etype==="SequenceFlow") {
+                var outConnections = _this.outConnections || [];
+                for (i = 0; i < outConnections.length; i++) {
+                    if (outConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
                 }
@@ -777,30 +779,34 @@
     };
     
     var _MessageIntermediateCatchEvent = function(obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanEnd = _this.canEndLink;
-        var fCanStart = _this.canStartLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanEnd = _this.canEndLink,
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("MessageIntermediateCatchEvent");
         
         _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null,
+                etype = link.elementType,
+                i;
             
-            if (ret && link.elementType==="SequenceFlow" && link.fromObject.elementType==="ExclusiveIntermediateEventGateway") {
-                for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].elementType==="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType==="ReceiveTask") {
+            if (ret && etype==="SequenceFlow" && etype==="ExclusiveIntermediateEventGateway") {
+                var outConnections = link.fromObject.outConnections || [];
+                for (i = 0; i < outConnections.length; i++) {
+                    if (outConnections[i].elementType==="SequenceFlow" && outConnections[i].toObject && outConnections[i].toObject.elementType==="ReceiveTask") {
                         ret = false;
                         break;
                     }
                 }
-            } else if (ret || link.elementType==="MessageFlow") {
+            } else if (ret || etype==="MessageFlow") {
                 msg = null;
                 ToolKit.hideToolTip();
                 
-                var c = 0;
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (_this.inConnections[i].elementType==="MessageFlow") {
+                var c = 0,
+                    inConnections = _this.inConnections || [];
+                for (i = 0; i < inConnections.length; i++) {
+                    if (inConnections[i].elementType==="MessageFlow") {
                         c++;
                     }
                 }
@@ -820,8 +826,8 @@
         };
         
         _this.canStartLink = function (link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null;
             
             if (link.elementType==="MessageFlow") {
                 msg = "Un evento intermedio receptor de mensaje no puede tener flujos de mensaje salientes";
