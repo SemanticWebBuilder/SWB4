@@ -2162,8 +2162,9 @@
             
             //Override passed options
             if (options && options !== null) {
-                if (options.mode && options.mode !== null && options.mode.length > 0) {
-                    Modeler.options.mode = options.mode;
+                var mode = options.mode;
+                if (mode && mode !== null && mode.length > 0) {
+                    Modeler.options.mode = mode;
                 }
                 
                 if (options.layerNavigation && options.layerNavigation !== null) {
@@ -2210,17 +2211,19 @@
             //Sobreescritura del método showResizeBoxes para considerar Pools con lanes y lanes
             var fShowBoxes = ToolKit.showResizeBoxes;
             ToolKit.showResizeBoxes = function() {
-                var _this=ToolKit;
-                if(_this.selected.length===1 && _this.selected[0].resizeable)
-                {
-                    if (_this.selected[0].elementType==="Pool" && _this.selected[0].hasLanes()) {
-                        var obj=_this.selected[0];
-                        for (var i = 0; i < obj.lanes.length; i++) {
-                            _this.createResizeBox(obj.lanes[i],0,1,"s-resize");
+                var _this = ToolKit;
+                if(_this.selected.length===1 && _this.selected[0].resizeable) {
+                    var sel = _this.selected[0];
+                    if (sel.elementType==="Pool" && sel.hasLanes()) {
+                        var i, obj = sel,
+                            lanes = obj.lanes,
+                            llength = obj.lanes.length;
+                        for (i = 0; i < llength; i++) {
+                            _this.createResizeBox(lanes[i],0,1,"s-resize");
                         }
                         _this.createResizeBox(obj,-1,0,"w-resize");
                         _this.createResizeBox(obj,1,0,"e-resize");
-                    } else if (_this.selected[0].elementType==="Lane") {
+                    } else if (sel.elementType==="Lane") {
                         _this.createResizeBox(obj,0,-1,"n-resize");
                         _this.createResizeBox(obj,0,1,"s-resize");
                     } else {
