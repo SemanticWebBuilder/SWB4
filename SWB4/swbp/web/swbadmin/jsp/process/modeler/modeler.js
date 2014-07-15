@@ -1572,8 +1572,8 @@
     };
     
     var _ParallelGateway = function (obj) {
-        var _this = new _Gateway(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _Gateway(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("ParallelGateway");
         
@@ -1586,30 +1586,33 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = true;
-            var msg = null;
-            var co = 0;
-            var ci = 0;
+            var ret = true, msg = null, co = 0, ci = 0,
+                from = link.fromObject;
             
             if (ret && link.elementType==="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType==="Pool")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (from.typeOf("FlowNode") || from.elementType==="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                 ret = false;
-            } else if (ret && link.fromObject.typeOf("DataObject")) {
+            } else if (ret && from.typeOf("DataObject")) {
                 ret = false;
-            } else if (link.fromObject.typeOf("EventBasedGateway")) {
+            } else if (from.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos";
                 ret = false;
             } else {
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                var i,
+                    inConnections = _this.inConnections || [],
+                    outConnections = _this.outConnections || [],
+                    ilength = inConnections.length,
+                    olength = outConnections.length;
+                for (i = 0; i < olength; i++) {
+                    if (!outConnections[i].typeOf("AssociationFlow")) {
                         co++;
                     }
                 }
 
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                for (i = 0; i < ilength; i++) {
+                    if (!inConnections[i].typeOf("AssociationFlow")) {
                         ci++;
                     }
                 }
@@ -1628,11 +1631,11 @@
     
     /***************************Objetos de datos*******************************/
     var _DataObject = function(obj) {
-        var _this = new _GraphicalElement(obj);
-        var fCanAttach = _this.canAttach;
-        var fCanEnd = _this.canEndLink;
-        var fCanStart = _this.canStartLink;
-        var fSetText = _this.setText;
+        var _this = new _GraphicalElement(obj),
+            fCanAttach = _this.canAttach,
+            fCanEnd = _this.canEndLink,
+            fCanStart = _this.canStartLink,
+            fSetText = _this.setText;
         
         _this.setElementType("DataObject");
         
@@ -1653,8 +1656,8 @@
         };
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null;
             
             if (!link.typeOf("AssociationFlow")) {
                 msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
@@ -1667,8 +1670,8 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null;
             
             if (ret && !link.typeOf("AssociationFlow")) {
                 msg ="Un objeto de datos sólo puede conectarse usando flujos de asociación";
@@ -1705,9 +1708,9 @@
     
     /***************************Artefactos*******************************/
     var _Artifact = function(obj) {
-        var _this = new _GraphicalElement(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
+        var _this = new _GraphicalElement(obj),
+            fCanStart = _this.canStartLink,
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("Artifact");
         
@@ -1740,9 +1743,9 @@
     };
     
     var _AnnotationArtifact = function(obj) {
-        var _this = new _Artifact(obj);
-        var fCanStart = _this.canStartLink;
-        var fSetText = _this.setText;
+        var _this = new _Artifact(obj),
+            fCanStart = _this.canStartLink,
+            fSetText = _this.setText;
         
         _this.setElementType("AnnotationArtifact");
         
