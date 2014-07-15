@@ -28,11 +28,7 @@
         };
         
         _this.canEndLink=function(link) {
-            if(link.fromObject!==_this) {
-                return true;
-            } else {
-                return false;
-            }
+            return link.fromObject !== _this;
         };
         
         _this.canAddToDiagram=function() {
@@ -48,20 +44,12 @@
         };
         
         _this.getFirstGraphParent = function() {
-            var ret = _this.parent;
-            if (ret === null) {
-                return _this;
-            } else {
-                return ret.getFirstGraphParent();
-            }
+            return _this.parent === null ? _this : _this.parent.getFirstGraphParent();
         };
         
         _this.getPool = function() {
-            var ret = _this.getFirstGraphParent();
-            if (ret !== null && ret.elementType==="Pool") {
-                return ret;
-            }
-            return null;
+            var p = _this.getFirstGraphParent();
+            return (p !== null && p.elementType==="Pool") ? p : null;
         };
         
         _this.getContainer = function() {
