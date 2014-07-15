@@ -279,14 +279,14 @@
     };
     
     var _StartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("StartEvent");
         
         _this.canAddToDiagram=function() {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null;
             
             if (ret && ToolKit.layer !== null) {
                 if (ToolKit.layer.parent.elementType==="EventSubProcess") {
@@ -304,9 +304,9 @@
     };
     
     var _MessageStartEvent = function (obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanEnd = _this.canEndLink;
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanEnd = _this.canEndLink,
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("MessageStartEvent");
         
@@ -329,11 +329,12 @@
         };
         
         _this.canAddToDiagram=function() {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType!=="EventSubProcess") {
+            if (ret && layer !== null) {
+                if (layer.parent.elementType!=="EventSubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
@@ -347,22 +348,23 @@
     };
     
     var _TimerStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("TimerStartEvent");
         
         _this.canAddToDiagram = function () {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
+            if (ret && layer !== null) {
                 ret = false;
                 
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+                if (layer.parent.elementType==="SubProcess") {
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     msg = "Un subproceso de evento no puede iniciar con un evento temporizado";
                 }
             }
@@ -377,22 +379,23 @@
     };
     
     var _RuleStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("RuleStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
 
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     ret = true;
                 }
             }
