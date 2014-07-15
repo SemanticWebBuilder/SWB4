@@ -1216,10 +1216,10 @@
     
     /******************************Compuertas*******************************/
     var _Gateway = function (obj) {
-        var _this = new _FlowNode(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
-        var fSetText = _this.setText;
+        var _this = new _FlowNode(obj),
+            fCanStart = _this.canStartLink,
+            fCanEnd = _this.canEndLink,
+            fSetText = _this.setText;
         
         _this.setElementType("Gateway");
         
@@ -1228,20 +1228,23 @@
         };
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var ci = 0; 
-            var co = 0;
-            var msg = null;
+            var ret = fCanStart(link),
+                ci = 0, co = 0,
+                msg = null;
             
             if (ret && link.elementType==="SequenceFlow") {
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (_this.inConnections[i].elementType==="SequenceFlow") {
+                var inConnections = _this.inConnections || [],
+                    outConnections = _this.outConnections || [],
+                    i;
+                
+                for (i = 0; i < inConnections.length; i++) {
+                    if (inConnections[i].elementType==="SequenceFlow") {
                         ci++;
                     }
                 }
                 
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.outConnections[i].elementType==="SequenceFlow") {
+                for (i = 0; i < outConnections.length; i++) {
+                    if (outConnections[i].elementType==="SequenceFlow") {
                         co++;
                     }
                 }
@@ -1258,28 +1261,33 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            var ci = 0; 
-            var co = 0;
-            var msg = null;
+            var ret = fCanEnd(link),
+                ci = 0, co = 0,
+                msg = null,
+                etype = link.elementType,
+                from = link.fromObject;
             
-            if (ret && link.elementType==="MessageFlow") {
+            if (ret && etype==="MessageFlow") {
                 ret = false;
-            } else if (ret && link.fromObject.typeOf("DataObject")) {
+            } else if (ret && from.typeOf("DataObject")) {
                 ret = false;
-            } else if (ret && link.elementType==="SequenceFlow") {
-                if (link.fromObject.typeOf("EventBasedGateway")) {
+            } else if (ret && etype==="SequenceFlow") {
+                if (from.typeOf("EventBasedGateway")) {
                     msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos";
                     ret = false;
                 } else {
-                    for (var i = 0; i < _this.inConnections.length; i++) {
-                        if (_this.inConnections[i].elementType==="SequenceFlow") {
+                    var inConnections = _this.inConnections || [],
+                        outConnections = _this.outConnections || [],
+                        i;
+                
+                    for (i = 0; i < inConnections.length; i++) {
+                        if (inConnections[i].elementType==="SequenceFlow") {
                             ci++;
                         }
                     }
 
-                    for (var i = 0; i < _this.outConnections.length; i++) {
-                        if (_this.outConnections[i].elementType==="SequenceFlow") {
+                    for (i = 0; i < outConnections.length; i++) {
+                        if (outConnections[i].elementType==="SequenceFlow") {
                             co++;
                         }
                     }
