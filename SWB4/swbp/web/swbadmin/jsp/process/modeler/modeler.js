@@ -905,16 +905,17 @@
     };
     
     var _CompensationIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("CompensationIntermediateCatchEvent");
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                p = _this.parent;
             
-            if (ret && _this.parent && _this.parent !== null && _this.parent.typeOf("Activity") && link.elementType !== "DirectionalAssociation") {
+            if (ret && p && p !== null && p.typeOf("Activity") && link.elementType !== "DirectionalAssociation") {
                 msg = "Este evento adherido sólo puede conectarse mediante asociaciones direccionales";
                 ret = false;
             }
@@ -927,8 +928,8 @@
     };
     
     var _LinkIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanAttach = _this.canAttach;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanAttach = _this.canAttach;
         
         _this.setElementType("LinkIntermediateCatchEvent");
         
@@ -951,7 +952,6 @@
     var _SignalIntermediateCatchEvent = function (obj) {
         var _this = new _IntermediateCatchEvent(obj);
         _this.setElementType("SignalIntermediateCatchEvent");
-        
         return _this;
     };
     
@@ -962,8 +962,8 @@
     };
     
     var _ScalationIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanEnd = _this.canEndLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("ScalationIntermediateCatchEvent");
         
