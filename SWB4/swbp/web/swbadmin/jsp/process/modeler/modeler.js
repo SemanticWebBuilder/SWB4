@@ -501,25 +501,26 @@
     };
     
     var _ScalationStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fcanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fcanAdd = _this.canAddToDiagram;
         
         _this.setElementType("ScalationStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fcanAdd();
-            var msg = null;
+            var ret = fcanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ToolKit.layer === null) {
+            if (layer === null) {
                 msg = "Este evento no puede usarse en un proceso de nivel superior";
                 ret = false;
-            } else if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            } else if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
                 
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     ret = true;
                 }
             }
@@ -533,25 +534,26 @@
     };
     
     var _ErrorStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fcanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fcanAdd = _this.canAddToDiagram;
         
         _this.setElementType("ErrorStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fcanAdd();
-            var msg = null;
+            var ret = fcanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ToolKit.layer === null) {
+            if (layer === null) {
                 msg = "Este evento no puede usarse en un proceso de nivel superior";
                 ret = false;
-            } else if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            } else if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
 
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     ret = true;
                 }
             }
@@ -565,25 +567,26 @@
     };
     
     var _CompensationStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fcanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fcanAdd = _this.canAddToDiagram;
         
         _this.setElementType("CompensationStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fcanAdd();
-            var msg = null;
+            var ret = fcanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ToolKit.layer === null) {
+            if (layer === null) {
                 msg = "Este evento no puede usarse en un proceso de nivel superior";
                 ret = false;
-            } else if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            } else if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
 
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     ret = true;
                 }
             }
