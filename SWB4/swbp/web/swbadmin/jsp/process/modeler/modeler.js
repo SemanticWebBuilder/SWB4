@@ -681,15 +681,17 @@
             return ret;
         };
         
-        
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null;
             
             if (ret && link.elementType==="SequenceFlow") {
-                var c = 0;
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.outConnections[i].elementType==="SequenceFlow") {
+                var c = 0,
+                    i,
+                    outConnections = _this.outConnections || [];
+                
+                for (i = 0; i < outConnections.length; i++) {
+                    if (outConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
                 }
@@ -708,27 +710,29 @@
     };
     
     var _IntermediateThrowEvent = function (obj) {
-        var _this = new _ThrowEvent(obj);
-        var fCanEnd = _this.canEndLink;
-        var fCanStart = _this.canStartLink;
+        var _this = new _ThrowEvent(obj),
+            fCanEnd = _this.canEndLink,
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("IntermediateThrowEvent");
         
         _this.canEndLink = function (link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null,
+                etype = link.elementType;
             
             if (ret && link.typeOf("AssociationFlow") && link.fromObject.typeOf("DataObject")) {
                 ret = false;
-            } else if (ret && link.elementType==="MessageFlow") {
+            } else if (ret && etype==="MessageFlow") {
                 msg = "Un evento intermedio no puede tener flujos de mensaje entrantes";
                 ret = false;
             }
             
-            if (ret && link.elementType === "SequenceFlow") {
-                var c = 0;
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (_this.inConnections[i].elementType==="SequenceFlow") {
+            if (ret && etype === "SequenceFlow") {
+                var c = 0, i,
+                    inConnections = _this.inConnections || [];
+                for (i = 0; i < inConnections.length; i++) {
+                    if (inConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
                 }
