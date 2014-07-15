@@ -841,14 +841,14 @@
     };
     
     var _ErrorIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanEnd = _this.canEndLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("ErrorIntermediateCatchEvent");
         
         _this.canEndLink = function (link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null;
             
             if (ret) {
                 msg = "Un evento intermedio de error no puede tener flujos de secuencia entrantes";
@@ -869,15 +869,15 @@
     };
     
     var _CancelationIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanAttach = _this.canAttach;
-        var fCanEnd = _this.canEndLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanAttach = _this.canAttach,
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("CancelationIntermediateCatchEvent");
         
         _this.canAttach = function(parent) {
-            var ret = fCanAttach(parent);
-            var msg = null;
+            var ret = fCanAttach(parent),
+                msg = null;
             
             if (ret && parent.elementType!=="TransactionSubProcess") {
                 msg = "Un evento de cancelación sólo puede adherirse a una Transacción";
@@ -890,8 +890,8 @@
         };
         
         _this.canEndLink = function (link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null;
             
             if (ret) {
                 msg = "Un evento intermedio de cancelación no puede tener flujos de secuencia entrantes";
@@ -901,7 +901,6 @@
             }
             return false;
         };
-        
         return _this;
     };
     
