@@ -409,22 +409,23 @@
     };
     
     var _SignalStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("SignalStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType!=="EventSubProcess") {
+            if (ret && layer !== null) {
+                if (layer.parent.elementType!=="EventSubProcess") {
                     msg = "Un subproceso debe iniciar con un evento normal";
                     ret = false;
                 }
 
-                if (ToolKit.layer.parent.elementType==="AdhocSubProcess") {
+                if (layer.parent.elementType==="AdhocSubProcess") {
                     ret = false;
                     msg = "Un subproceso ad-hoc no debe tener eventos de inicio";
                 }
@@ -439,22 +440,23 @@
     };
     
     var _MultipleStartEvent = function (obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("MultipleStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
 
-                if (ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (layer.parent.elementType==="EventSubProcess") {
                     ret = true;
                 }
             }
@@ -468,22 +470,23 @@
     };
     
     var _ParallelStartEvent = function(obj) {
-        var _this = new _StartEventNode(obj);
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _StartEventNode(obj),
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("ParallelStartEvent");
 
         _this.canAddToDiagram = function () {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null,
+                layer = ToolKit.layer;
             
-            if (ret && ToolKit.layer !== null) {
-                if (ToolKit.layer.parent.elementType==="SubProcess") {
+            if (ret && layer !== null) {
+                if (layer.parent.elementType==="SubProcess") {
                     ret = false;
                     msg = "Un subproceso debe iniciar con un evento normal";
                 }
                 
-                if (ret && ToolKit.layer.parent.elementType==="EventSubProcess") {
+                if (ret && layer.parent.elementType==="EventSubProcess") {
                     msg = "Un subproceso de evento no puede contener un evento de inicio paralelo";
                     ret = false;
                 }
