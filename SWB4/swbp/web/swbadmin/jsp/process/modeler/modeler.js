@@ -1784,10 +1784,10 @@
     
     /******************************Swimlanes*******************************/
     var _Pool = function (obj) {
-        var _this = new _GraphicalElement(obj);
-        var fCanAdd = _this.canAddToDiagram;
-        var fSetText = _this.setText;
-        var fUpdateText = null;
+        var _this = new _GraphicalElement(obj),
+            fCanAdd = _this.canAddToDiagram,
+            fSetText = _this.setText,
+            fUpdateText = null;
         
         _this.setElementType("Pool");
         
@@ -1863,9 +1863,9 @@
     
     var _Lane = function (obj) {
         var _this = new _GraphicalElement(obj);
-        var fCanAdd = _this.canAddToDiagram;
-        var fSetText = _this.setText;
-        var fUpdateText = null;
+        //var fCanAdd = _this.canAddToDiagram;
+        //var fSetText = _this.setText;
+        //var fUpdateText = null;
         _this.lindex = -1;
         
         _this.setElementType("Lane");
@@ -1879,11 +1879,11 @@
     
     /******************************Actividades*******************************/
     var _Activity = function(obj) {
-        var _this = new _FlowNode(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canEndLink;
-        var fSetText = _this.setText;
-        var fMoveFirst = _this.moveFirst;
+        var _this = new _FlowNode(obj),
+            fCanStart = _this.canStartLink,
+            fCanEnd = _this.canEndLink,
+            fSetText = _this.setText,
+            fMoveFirst = _this.moveFirst;
         
         _this.setElementType("Activity");
         
@@ -1901,9 +1901,11 @@
         
         _this.moveFirst = function() {
             fMoveFirst();
-            for(var i = 0; i< _this.contents.length; i++) {
-                if (_this.contents[i].moveFirst) {
-                    _this.contents[i].moveFirst();
+            var i, contents = _this.contents || [],
+                length = contents.length;
+            for(i = 0; i < length; i++) {
+                if (contents[i].moveFirst) {
+                    contents[i].moveFirst();
                 }
             }
         };
@@ -1997,8 +1999,8 @@
     };
     
     var _SendTask = function(obj) {
-        var _this = new _Task(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _Task(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("SendTask");
         
@@ -2014,8 +2016,8 @@
     };
     
     var _ReceiveTask = function(obj) {
-        var _this = new _Task(obj);
-        var fCanEnd = _this.canEndLink;
+        var _this = new _Task(obj),
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("ReceiveTask");
         
@@ -2026,8 +2028,11 @@
             }
             if (link.elementType==="SequenceFlow" && link.fromObject.elementType==="ExclusiveIntermediateEventGateway") {
                 ret = true;
-                for (var i = 0; i < link.fromObject.outConnections.length; i++) {
-                    if (link.fromObject.outConnections[i].elementType==="SequenceFlow" && link.fromObject.outConnections[i].toObject && link.fromObject.outConnections[i].toObject.elementType==="MessageIntermediateCatchEvent") {
+                var i, outConnections = link.fromObject.outConnections || [],
+                    length = outConnections.length;
+            
+                for (i = 0; i < length; i++) {
+                    if (outConnections[i].elementType==="SequenceFlow" && outConnections[i].toObject && outConnections[i].toObject.elementType==="MessageIntermediateCatchEvent") {
                         ret = false;
                         break;
                     }
@@ -2063,9 +2068,9 @@
     };
     
     var _EventSubProcess = function(obj) {
-        var _this = new _SubProcess(obj);
-        var fCanStart = _this.canStartLink;
-        var fCanEnd = _this.canStartLink;
+        var _this = new _SubProcess(obj),
+            fCanStart = _this.canStartLink,
+            fCanEnd = _this.canStartLink;
         
         _this.setElementType("EventSubProcess");
         
