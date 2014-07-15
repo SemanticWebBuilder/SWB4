@@ -1423,16 +1423,17 @@
     };
     
     var _EventBasedGateway = function(obj) {
-        var _this = new _Gateway(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _Gateway(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("EventBasedGateway");
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                etype = link.elementType;
             
-            if (ret && (link.elementType==="ConditionalFlow" || link.elementType==="DefaultFlow")) {
+            if (ret && (etype==="ConditionalFlow" || etype==="DefaultFlow")) {
                 msg = "Una compuerta basada en eventos no puede conectarse usando flujos condicionales";
                 ret = false;
             }
@@ -1451,8 +1452,8 @@
     };
     
     var _InclusiveGateway = function(obj) {
-        var _this = new _Gateway(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _Gateway(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("InclusiveGateway");
         
@@ -1461,30 +1462,33 @@
         };
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                etype = link.elementType;
             
-            if (ret && !(link.elementType==="ConditionalFlow" || link.elementType==="DefaultFlow" || link.typeOf("AssociationFlow"))) {
+            if (ret && !(etype==="ConditionalFlow" || etype==="DefaultFlow" || link.typeOf("AssociationFlow"))) {
                 msg = "Una compuerta inclusiva sólo puede conectarse usando flujos condicionales, flujos por defecto o asociaciones";
                 ret = false;
-            } else if (ret && (link.elementType==="DefaultFlow" || link.elementType==="ConditionalFlow")) {
-                var dou = 0;
-                var co = 0;
-                var ci = 0;
+            } else if (ret && (etype==="DefaultFlow" || etype==="ConditionalFlow")) {
+                var i, dou = 0, co = 0, ci = 0,
+                    outConnections = _this.outConnections || [],
+                    inConnections = _this.inConnections || [],
+                    olength = outConnections.length,
+                    ilength = inConnections.length;
                 
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.outConnections[i].elementType==="DefaultFlow") {
+                for (i = 0; i < olength; i++) {
+                    if (outConnections[i].elementType==="DefaultFlow") {
                         dou++;
                     }
-                    if (_this.outConnections[i].elementType==="ConditionalFlow") {
+                    if (outConnections[i].elementType==="ConditionalFlow") {
                         co++;
                     }
                 }
                 
                 co = co+dou;
                 
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                for (i = 0; i < ilength; i++) {
+                    if (!inConnections[i].typeOf("AssociationFlow")) {
                         ci++;
                     }
                 }
