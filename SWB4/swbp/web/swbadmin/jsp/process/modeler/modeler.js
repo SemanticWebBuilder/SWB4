@@ -63,7 +63,7 @@
     
     var _ConnectionObject = function(obj) {
         var _this = obj;
-        _this.types = new Array();
+        _this.types = [];
         _this.id = ":"+Modeler.itemsCount++;
         
         _this.setElementType = function(typeName) {
@@ -86,21 +86,18 @@
     };
     
     var _FlowNode = function (obj) {
-        var _this = new _GraphicalElement(obj);
-        var fCanEnd = _this.canEndLink;
+        var _this = new _GraphicalElement(obj),
+            fCanEnd = _this.canEndLink;
+    
         _this.setElementType("FlowNode");
 
         _this.canAttach = function(parent) {
-            var ret = false;
-            if (parent.elementType==="Pool" || parent.elementType==="Lane") {
-                ret = true;
-            }
-            return ret;
+            return parent.elementType==="Pool" || parent.elementType==="Lane";
         };
         
         _this.canStartLink = function (link) {
-            var ret = true;
-            var msg = null;
+            var ret = true,
+                msg = null;
             
             if (link.elementType==="MessageFlow") {
                 msg = "Un nodo de flujo no puede tener flujos de mensaje salientes";
@@ -114,25 +111,30 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = fCanEnd(link);
-            var msg = null;
+            var ret = fCanEnd(link),
+                msg = null,
+                from = link.fromObject,
+                etype = link.elementType,
+                fromtype = from.elementType,
+                fromPool = from.getPool(),
+                thisPool = _this.getPool();
             
-            if (link.elementType==="SequenceFlow") {
-                if (link.fromObject.getContainer() === null && link.fromObject.getPool() !== _this.getPool()) {
+            if (etype==="SequenceFlow") {
+                if (from.getContainer() === null && fromPool !== thisPool) {
                     msg = "Un flujo de secuencia no puede cruzar los límites del Pool";
                     ret = false;
                 }
             }
             
-            if (link.elementType==="AssociationFlow" && link.fromObject.elementType!=="AnnotationArtifact") {
-                if (!(link.fromObject.elementType==="Artifact" || link.fromObject.elementType==="DataObject") && !(link.fromObject.elementType==="CompensationIntermediateCatchEvent" && link.fromObject.parent && link.fromObject.parent.typeOf("Activity"))) {
+            if (etype==="AssociationFlow" && fromtype!=="AnnotationArtifact") {
+                if (!(fromtype==="Artifact" || fromtype==="DataObject") && !(fromtype==="CompensationIntermediateCatchEvent" && from.parent && from.parent.typeOf("Activity"))) {
                     msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                     ret = false;
                 }
             }
             
-            if (link.elementType==="MessageFlow") {
-                if (link.fromObject.getPool() === _this.getPool()) {
+            if (etype==="MessageFlow") {
+                if (fromPool === thisPool) {
                     msg = "Un flujo de mensage sólo puede darse entre pools";
                     ret = false;
                 }
