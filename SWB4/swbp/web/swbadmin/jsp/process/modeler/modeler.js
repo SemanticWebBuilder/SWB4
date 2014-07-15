@@ -661,9 +661,10 @@
                 } else {
                     var c = 0,
                         i,
-                        inConnections = _this.inConnections || [];
+                        inConnections = _this.inConnections || [],
+                        length = inConnections.length;
                 
-                    for (i = 0; i < inConnections.length; i++) {
+                    for (i = 0; i < length; i++) {
                         if (inConnections[i].elementType==="SequenceFlow") {
                             c++;
                         }
@@ -688,9 +689,10 @@
             if (ret && link.elementType==="SequenceFlow") {
                 var c = 0,
                     i,
-                    outConnections = _this.outConnections || [];
+                    outConnections = _this.outConnections || [],
+                    length = outConnections.length;
                 
-                for (i = 0; i < outConnections.length; i++) {
+                for (i = 0; i < length; i++) {
                     if (outConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
@@ -730,8 +732,9 @@
             
             if (ret && etype === "SequenceFlow") {
                 var c = 0, i,
-                    inConnections = _this.inConnections || [];
-                for (i = 0; i < inConnections.length; i++) {
+                    inConnections = _this.inConnections || [],
+                    length = inConnections.length;
+                for (i = 0; i < length; i++) {
                     if (inConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
@@ -759,8 +762,9 @@
                 ToolKit.hideToolTip();
             }
             if (ret && etype==="SequenceFlow") {
-                var outConnections = _this.outConnections || [];
-                for (i = 0; i < outConnections.length; i++) {
+                var outConnections = _this.outConnections || [],
+                    length = outConnections.length;
+                for (i = 0; i < length; i++) {
                     if (outConnections[i].elementType==="SequenceFlow") {
                         c++;
                     }
@@ -792,8 +796,9 @@
                 i;
             
             if (ret && etype==="SequenceFlow" && etype==="ExclusiveIntermediateEventGateway") {
-                var outConnections = link.fromObject.outConnections || [];
-                for (i = 0; i < outConnections.length; i++) {
+                var outConnections = link.fromObject.outConnections || [],
+                    length = outConnections.length;
+                for (i = 0; i < length; i++) {
                     if (outConnections[i].elementType==="SequenceFlow" && outConnections[i].toObject && outConnections[i].toObject.elementType==="ReceiveTask") {
                         ret = false;
                         break;
@@ -804,8 +809,9 @@
                 ToolKit.hideToolTip();
                 
                 var c = 0,
-                    inConnections = _this.inConnections || [];
-                for (i = 0; i < inConnections.length; i++) {
+                    inConnections = _this.inConnections || [],
+                    length = inConnections.length;
+                for (i = 0; i < length; i++) {
                     if (inConnections[i].elementType==="MessageFlow") {
                         c++;
                     }
@@ -1025,8 +1031,9 @@
             if (ret || etype==="MessageFlow") {
                 if (etype==="MessageFlow") {
                     var c = 0, i,
-                        outConnections = _this.outConnections;
-                    for (i = 0; i < outConnections.length; i++) {
+                        outConnections = _this.outConnections || [],
+                        length = outConnections.length;
+                    for (i = 0; i < length; i++) {
                         if (outConnections[i].elementType==="MessageFlow") {
                             c++;
                         }
@@ -1150,9 +1157,10 @@
                     ToolKit.hideToolTip();
                     ret = true;
                     var c = 0, i,
-                        outConnections = _this.outConnections || [];
+                        outConnections = _this.outConnections || [],
+                        length = outConnections.length;
 
-                    for (i = 0; i < outConnections.length; i++) {
+                    for (i = 0; i < length; i++) {
                         if (outConnections[i].elementType==="MessageFlow") {
                             c++;
                         }
@@ -1235,15 +1243,17 @@
             if (ret && link.elementType==="SequenceFlow") {
                 var inConnections = _this.inConnections || [],
                     outConnections = _this.outConnections || [],
+                    ilength = inConnections.length,
+                    olength = outConnections.length,
                     i;
                 
-                for (i = 0; i < inConnections.length; i++) {
+                for (i = 0; i < ilength; i++) {
                     if (inConnections[i].elementType==="SequenceFlow") {
                         ci++;
                     }
                 }
                 
-                for (i = 0; i < outConnections.length; i++) {
+                for (i = 0; i < olength; i++) {
                     if (outConnections[i].elementType==="SequenceFlow") {
                         co++;
                     }
@@ -1278,15 +1288,17 @@
                 } else {
                     var inConnections = _this.inConnections || [],
                         outConnections = _this.outConnections || [],
+                        ilength = inConnections.length,
+                        olength = outConnections.length,
                         i;
                 
-                    for (i = 0; i < inConnections.length; i++) {
+                    for (i = 0; i < ilength; i++) {
                         if (inConnections[i].elementType==="SequenceFlow") {
                             ci++;
                         }
                     }
 
-                    for (i = 0; i < outConnections.length; i++) {
+                    for (i = 0; i < olength; i++) {
                         if (outConnections[i].elementType==="SequenceFlow") {
                             co++;
                         }
@@ -1307,8 +1319,8 @@
     };
     
     var _ExclusiveGateway = function (obj) {
-        var _this = new _Gateway(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _Gateway(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("ExclusiveGateway");
         
@@ -1317,35 +1329,38 @@
         };
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                etype = link.elementType;
             
-            if (ret && !(link.elementType==="ConditionalFlow" || link.elementType==="DefaultFlow" || link.typeOf("AssociationFlow"))) {
+            if (ret && !(etype==="ConditionalFlow" || etype==="DefaultFlow" || link.typeOf("AssociationFlow"))) {
                 msg = "Una compuerta exclusiva sólo puede conectarse usando flujos condicionales, flujos por defecto o asociaciones";
                 ret = false;
-            } else if (ret && (link.elementType==="DefaultFlow" || link.elementType==="ConditionalFlow")) {
-                var dou = 0;
-                var co = 0;
-                var ci = 0;
+            } else if (ret && (etype==="DefaultFlow" || etype==="ConditionalFlow")) {
+                var dou = 0, co = 0, ci = 0, i,
+                    outConnections = _this.outConnections || [],
+                    inConnections = _this.inConnections || [],
+                    ilength = inConnections.length,
+                    olength = outConnections.length;
                 
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (_this.outConnections[i].elementType==="DefaultFlow") {
+                for (i = 0; i < olength; i++) {
+                    if (outConnections[i].elementType==="DefaultFlow") {
                         dou++;
                     }
-                    if (_this.outConnections[i].elementType==="ConditionalFlow") {
+                    if (outConnections[i].elementType==="ConditionalFlow") {
                         co++;
                     }
                 }
                 
                 co = co+dou;
                 
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                for (i = 0; i < ilength; i++) {
+                    if (!inConnections[i].typeOf("AssociationFlow")) {
                         ci++;
                     }
                 }
 
-                if (link.elementType==="DefaultFlow" && dou > 0) {
+                if (etype==="DefaultFlow" && dou > 0) {
                     msg = "Una compuerta exclusiva sólo puede tener un flujo por defecto saliente";
                     ret = false;
                 } else if (ci > 1 && co !== 0) {
@@ -1360,30 +1375,37 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = true;
-            var msg = null;
-            var co = 0;
-            var ci = 1;
+            var ret = true,
+                msg = null,
+                co = 0, ci = 1,
+                etype = link.elementType,
+                from = link.fromObject;
             
-            if (ret && link.elementType==="MessageFlow") {
+            if (ret && etype==="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType==="Pool")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (from.typeOf("FlowNode") || from.elementType==="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                 ret = false;
-            } else if (ret && link.fromObject.typeOf("DataObject")) {
+            } else if (ret && from.typeOf("DataObject")) {
                 ret = false;
-            } else if (link.fromObject.typeOf("EventBasedGateway")) {
+            } else if (from.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos";
                 ret = false;
             } else {
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                var i,
+                    outConnections = _this.outConnections || [],
+                    inConnections = _this.inConnections || [],
+                    ilength = inConnections.length,
+                    olength = outConnections.length;
+                    
+                for (i = 0; i < olength; i++) {
+                    if (!outConnections[i].typeOf("AssociationFlow")) {
                         co++;
                     }
                 }
 
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                for (i = 0; i < ilength; i++) {
+                    if (!inConnections[i].typeOf("AssociationFlow")) {
                         ci++;
                     }
                 }
