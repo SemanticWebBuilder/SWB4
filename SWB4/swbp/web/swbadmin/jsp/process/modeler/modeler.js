@@ -1508,30 +1508,35 @@
         };
         
         _this.canEndLink = function(link) {
-            var ret = true;
-            var msg = null;
-            var co = 0;
-            var ci = 0;
+            var ret = true,
+                msg = null, co = 0, ci = 0,
+                from = link.fromObject;
             
             if (ret && link.elementType==="MessageFlow") {
                 ret = false;
-            } else if (ret && link.typeOf("AssociationFlow") && (link.fromObject.typeOf("FlowNode") || link.fromObject.elementType==="Pool")) {
+            } else if (ret && link.typeOf("AssociationFlow") && (from.typeOf("FlowNode") || from.elementType==="Pool")) {
                 msg = "Un flujo de asociación no puede conectar dos nodos de flujo";
                 ret = false;
-            } else if (ret && link.fromObject.typeOf("DataObject")) {
+            } else if (ret && from.typeOf("DataObject")) {
                 ret = false;
-            } else if (link.fromObject.typeOf("EventBasedGateway")) {
+            } else if (from.typeOf("EventBasedGateway")) {
                 msg = "Esta compuerta no puede conectarse con una compuerta basada en eventos";
                 ret = false;
             } else {
-                for (var i = 0; i < _this.outConnections.length; i++) {
-                    if (!_this.outConnections[i].typeOf("AssociationFlow")) {
+                var i,
+                    outConnections = _this.outConnections || [],
+                    inConnections = _this.inConnections || [],
+                    ilength = inConnections.length,
+                    olength = outConnections.length;
+                    
+                for (i = 0; i < olength; i++) {
+                    if (!outConnections[i].typeOf("AssociationFlow")) {
                         co++;
                     }
                 }
 
-                for (var i = 0; i < _this.inConnections.length; i++) {
-                    if (!_this.inConnections[i].typeOf("AssociationFlow")) {
+                for (i = 0; i < ilength; i++) {
+                    if (!inConnections[i].typeOf("AssociationFlow")) {
                         ci++;
                     }
                 }
