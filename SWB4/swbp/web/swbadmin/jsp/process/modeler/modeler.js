@@ -188,9 +188,9 @@
     
     /***************************Eventos iniciales****************************/
     var _Event = function (obj) {
-        var _this = new _FlowNode(obj);
-        var fCanStart = _this.canStartLink;
-        var fSetText = _this.setText;
+        var _this = new _FlowNode(obj),
+            fCanStart = _this.canStartLink,
+            fSetText = _this.setText;
         
         _this.setElementType("Event");
 
@@ -199,8 +199,10 @@
         };
 
         _this.canStartLink=function(link) {
-            var ret = fCanStart(link);
-            if (ret && (link.elementType==="ConditionalFlow" || link.elementType==="DefaultFlow")) {
+            var ret = fCanStart(link),
+                etype = link.elementType;
+        
+            if (ret && (etype==="ConditionalFlow" || etype==="DefaultFlow")) {
                 ToolKit.showTooltip(0, "Un evento no puede tener flujos condicionales de salida", 200, "Error");
                 ret = false;
             }
