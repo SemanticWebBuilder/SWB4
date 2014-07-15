@@ -2269,42 +2269,57 @@
             //Sobreescritura de mousemove en SVG padre para manejar redimensionamiento de Lanes
             ToolKit.svg.onmousemove=function(evt)
             {
-                var _this = ToolKit;
-                var resizeObj = _this.svg.resizeObject || null;
-                if(_this.onmousemove(evt)===false)return;
-                _this.svg.mouseX=_this.getEventX(evt);
-                _this.svg.mouseY=_this.getEventY(evt);
+                var _this = ToolKit,
+                    resizeObj = _this.svg.resizeObject || null,
+                    offX = _this.svg.dragOffsetX,
+                    offY = _this.svg.dragOffsetY,
+                    evtX = _this.getEventX(evt),
+                    evtY = _this.getEventY(evt);
+            
+                if(_this.onmousemove(evt)===false) {
+                    return;
+                }
+                _this.svg.mouseX = evtX;
+                _this.svg.mouseY = evtY;
 
-                if(resizeObj && resizeObj!==null)
-                {
-                    if (resizeObj.parent.elementType==="Lane") {
-                        var w = resizeObj.parent.getWidth();
-                        y=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                        ty=y-resizeObj.parent.getY();
-                        h=Math.abs(resizeObj.startH+ty*resizeObj.iy); 
-                        if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
-                        resizeObj.parent.resize(w,h);
+                if(resizeObj && resizeObj!==null) {
+                    var parent = resizeObj.parent,
+                        objix = resizeObj.ix,
+                        objiy = resizeObj.iy;
+                    if (parent.elementType==="Lane") {
+                        var w = parent.getWidth();
+                        y = evtY - offY;
+                        ty = y - parent.getY();
+                        h = Math.abs(resizeObj.startH + ty * objiy);
+                        if((parent.getY() - h / 2) < 0) {
+                            h = parent.getY() * 2;
+                        }
+                        parent.resize(w,h);
                        
-                        resizeObj.parent.parent.updateLanes();
+                        parent.parent.updateLanes();
                         _this.updateResizeBox();
                     } else {
-                        x=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                        y=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                        tx=x-resizeObj.parent.getX();
-                        ty=y-resizeObj.parent.getY();
-                        w=Math.abs(resizeObj.startW+tx*2*resizeObj.ix);
-                        h=Math.abs(resizeObj.startH+ty*2*resizeObj.iy); 
-                        if((resizeObj.parent.getX()-w/2)<0)w=resizeObj.parent.getX()*2;
-                        if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
-                        resizeObj.parent.resize(w,h);
+                        x = evtX - offX;
+                        y = evtY - offY;
+                        tx = x - parent.getX();
+                        ty = y - parent.getY();
+                        w = Math.abs(resizeObj.startW + tx * 2 * objix);
+                        h = Math.abs(resizeObj.startH + ty * 2 * objiy); 
+                        if((parent.getX() - w / 2) < 0) {
+                            w = parent.getX() * 2;
+                        }
+                        if((parent.getY() - h / 2) < 0) {
+                            h = parent.getY() * 2;
+                        }
+                        parent.resize(w,h);
                         _this.updateResizeBox();
                     }
 
                 }else if(_this.svg.dragObject && _this.svg.dragObject!==null)  //dragObjects
                 {
-                    _this.selected.unselect=false; //si hace drag no deselecciona
-                    x=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                    y=_this.getEventY(evt)-_this.svg.dragOffsetY;
+                    _this.selected.unselect = false; //si hace drag no deselecciona
+                    x = evtX - offX;
+                    y = evtY - offY;
 
 //                    if(_this.snap2Grid)
 //                    {
@@ -2312,37 +2327,33 @@
 //                        y=Math.round(y/_this.snap2GridSize)*_this.snap2GridSize;
 //                    }
 
-                    if(_this.cmdkey===true) //Drag one
-                    {
+                    if(_this.cmdkey) {//Drag one
                         _this.svg.dragObject.move(x,y);
                         _this.updateResizeBox();
-                    }else //drag selecteds
-                    {
-                        tx=x-_this.svg.dragObject.getX();
-                        ty=y-_this.svg.dragObject.getY();
+                    } else {//drag selecteds
+                        tx = x - _this.svg.dragObject.getX();
+                        ty = y - _this.svg.dragObject.getY();
 
-                        for (var i = _this.selected.length; i--;) 
-                        {                                
-                            _this.selected[i].traslate(tx, ty);
+                        var i, selected = _this.selected || [];
+                        for (i = selected.length; i--;) {
+                            selected[i].traslate(tx, ty);
                         }
                         _this.updateResizeBox();
                     }
-                }else if(_this.selectBox && _this.selectBox!==null) //SelectBox
+                } else if(_this.selectBox && _this.selectBox!==null) //SelectBox
                 {
-                    var w=_this.getEventX(evt)-_this.svg.dragOffsetX;
-                    var h=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                    var x=_this.svg.dragOffsetX;
-                    var y=_this.svg.dragOffsetY;
+                    var w = evtX - offX;
+                    var h = evtY - offY;
+                    var x = offX;
+                    var y = offY;
 
-                    if(w<0)
-                    {
-                        x=_this.svg.dragOffsetX+w;
-                        w=-w;                                    
+                    if(w < 0) {
+                        x = offX + w;
+                        w = -w;
                     }
-                    if(h<0)
-                    {
-                        y=_this.svg.dragOffsetY+h;
-                        h=-h;                                        
+                    if(h < 0) {
+                        y = offY + h;
+                        h = -h;
                     }
 
                     _this.selectBox.setAttributeNS(null,"x",x);
@@ -2351,30 +2362,25 @@
                     _this.selectBox.setAttributeNS(null,"height",h);
                     //_this.svg.appendChild(_this.selectBox);
 
-                    var nodes=_this.svg.childNodes;
-                    for(i=0;i<nodes.length;i++)
-                    {
-                        var obj=nodes.item(i);
-                        if(obj.contents && obj.canSelect===true && !obj.hidden)    //Es un objeto grafico
-                        {
-                            var ox=obj.getX();
-                            var oy=obj.getY();
-                            var bb = _this.selectBox.getBBox();
-                            if ((ox-obj.getWidth()/2 > bb.x && ox+obj.getWidth()/2 < (bb.x+bb.width)) && (oy-obj.getHeight()/2 > bb.y && oy+obj.getHeight()/2 < bb.y+bb.height))
+                    var i, nodes = _this.svg.childNodes, length = nodes.length;
+                    for(i = 0; i < length; i++) {
+                        var obj = nodes.item(i), ox, oy, bb, owidth, oheight;
+                        if(obj.contents && obj.canSelect && !obj.hidden) {    //Es un objeto grafico
+                            ox = obj.getX();
+                            oy = obj.getY();
+                            bb = _this.selectBox.getBBox();
+                            owidth = obj.getWidth();
+                            oheight = obj.getHeight();
+                    
+                            if ((ox - owidth / 2 > bb.x && ox + owidth / 2 < (bb.x + bb.width)) && (oy - oheight / 2 > bb.y && oy + oheight / 2 < bb.y + bb.height))
                             //if(ox>=x && ox<=x+w && oy>=y && oy<=y+h)
                             {
-                                if(obj.selected!==true)
-                                {                                                
+                                if(!obj.selected) {
                                     _this.selectObj(obj);
                                 }
-                            }else
-                            {
-                                if(!_this.cmdkey)
-                                {
-                                    if(obj.selected===true)
-                                    {
-                                        _this.unSelectObj(obj);
-                                    }
+                            } else {
+                                if(!_this.cmdkey && obj.selected) {
+                                    _this.unSelectObj(obj);
                                 }
                             }
                         }
