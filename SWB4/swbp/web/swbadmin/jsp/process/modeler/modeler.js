@@ -219,10 +219,10 @@
     };
     
     var _ThrowEvent = function(obj) {
-        var _this = new _Event(obj);
+        var _this = new _Event(obj),
+            fCanEnd = _this.canEndLink;
+        
         _this.setElementType("ThrowEvent");
-
-        var fCanEnd = _this.canEndLink;
         _this.canEndLink = function(link) {
             var ret = fCanEnd(link);
             if (ret && link.fromObject.typeOf("EventBasedGateway")) {
@@ -245,13 +245,16 @@
         };
         
         _this.canAddToDiagram = function() {
-            var ret = true;
-            var c = 0;
-            var msg = null;
+            var ret = true,
+                c = 0,
+                msg = null,
+                contents = ToolKit.contents,
+                i, t;
             
             if (ToolKit.layer !== null) {
-                for (var i = ToolKit.contents.length; i--;)  {
-                    if(ToolKit.contents[i].layer===_this.layer && ToolKit.contents[i].typeOf && ToolKit.contents[i].typeOf("StartEventNode")) {
+                for (i = contents.length; i--;)  {
+                    t = contents[i];
+                    if(t.layer===_this.layer && t.typeOf && t.typeOf("StartEventNode")) {
                         c++;
                     }
                 }
