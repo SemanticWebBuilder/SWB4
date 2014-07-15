@@ -979,9 +979,9 @@
     };
     
     var _ParallelIntermediateCatchEvent = function (obj) {
-        var _this = new _IntermediateCatchEvent(obj);
-        var fCanAttach = _this.canAttach;
-        var fCanEnd = _this.canEndLink;
+        var _this = new _IntermediateCatchEvent(obj),
+            fCanAttach = _this.canAttach,
+            fCanEnd = _this.canEndLink;
         
         _this.setElementType("ParallelIntermediateCatchEvent");
         
@@ -1012,20 +1012,22 @@
     };
     
     var _MessageIntermediateThrowEvent = function(obj) {
-        var _this = new _IntermediateThrowEvent(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _IntermediateThrowEvent(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("MessageIntermediateThrowEvent");
         
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                etype = link.elementType;
             
-            if (ret || link.elementType==="MessageFlow") {
-                if (link.elementType==="MessageFlow") {
-                    var c = 0;
-                    for (var i = 0; i < _this.outConnections.length; i++) {
-                        if (_this.outConnections[i].elementType==="MessageFlow") {
+            if (ret || etype==="MessageFlow") {
+                if (etype==="MessageFlow") {
+                    var c = 0, i,
+                        outConnections = _this.outConnections;
+                    for (i = 0; i < outConnections.length; i++) {
+                        if (outConnections[i].elementType==="MessageFlow") {
                             c++;
                         }
                     }
@@ -1085,9 +1087,9 @@
     
     /***************************Eventos finales****************************/
     var _EndEventNode = function(obj) {
-        var _this = new _ThrowEvent(obj);
-        var fCanEnd = _this.canEndLink;
-        var fCanAdd = _this.canAddToDiagram;
+        var _this = new _ThrowEvent(obj),
+            fCanEnd = _this.canEndLink,
+            fCanAdd = _this.canAddToDiagram;
         
         _this.setElementType("EndEventNode");
         
@@ -1109,8 +1111,8 @@
         };
         
         _this.canAddToDiagram = function() {
-            var ret = fCanAdd();
-            var msg = null;
+            var ret = fCanAdd(),
+                msg = null;
             
             if (ret) {
                 if (ToolKit.layer !== null && ToolKit.layer.parent.elementType==="AdhocSubProcess") {
@@ -1133,23 +1135,25 @@
     };
     
     var _MessageEndEvent = function (obj) {
-        var _this = new _EndEvent(obj);
-        var fCanStart = _this.canStartLink;
+        var _this = new _EndEvent(obj),
+            fCanStart = _this.canStartLink;
         
         _this.setElementType("MessageEndEvent");
 
         _this.canStartLink = function(link) {
-            var ret = fCanStart(link);
-            var msg = null;
+            var ret = fCanStart(link),
+                msg = null,
+                etype = link.elementType;
 
-            if (ret || link.elementType==="MessageFlow") {
-                if (link.elementType==="MessageFlow") {
+            if (ret || etype==="MessageFlow") {
+                if (etype==="MessageFlow") {
                     ToolKit.hideToolTip();
                     ret = true;
-                    var c = 0;
+                    var c = 0, i,
+                        outConnections = _this.outConnections || [];
 
-                    for (var i = 0; i < _this.outConnections.length; i++) {
-                        if (_this.outConnections[i].elementType==="MessageFlow") {
+                    for (i = 0; i < outConnections.length; i++) {
+                        if (outConnections[i].elementType==="MessageFlow") {
                             c++;
                         }
                     }
