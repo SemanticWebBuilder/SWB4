@@ -2821,59 +2821,62 @@
             };
             
             obj.updateInterPoints=function() {
-                var p0=obj.pathSegList.getItem(0);
-                var p3=obj.pathSegList.getItem(3);
+                var p1, p2, p0 = obj.pathSegList.getItem(0),
+                    p3 = obj.pathSegList.getItem(3),
+                    fw = 0, fh = 0, tw = 0, th = 0,
+                    from = obj.fromObject,
+                    to = obj.toObject, dx = obj.xe - obj.xs,
+                    dy = obj.ye - obj.ys,
+                    segments = obj.pathSegList;
                 
-                var fw=0;if(obj.fromObject!==null)fw=obj.fromObject.getWidth()/2;
-                var fh=0;if(obj.fromObject!==null)fh=obj.fromObject.getHeight()/2;
-                var tw=0;if(obj.toObject!==null)tw=obj.toObject.getWidth()/2;
-                var th=0;if(obj.toObject!==null)th=obj.toObject.getHeight()/2;
+                fw = from !== null ? from.getWidth() / 2 : 0;
+                fh = from !== null ? from.getHeight() / 2 : 0;
+                tw = to !== null ? to.getWidth() / 2 : 0;
+                th = to !== null ? to.getHeight() / 2 : 0;
                 
-                var dx=obj.xe-obj.xs;
-                var dy=obj.ye-obj.ys;
-                
-                //console.log("updateInterPoints:"+obj.pathSegList.numberOfItems+" "+p1.fixed+" "+p2.fixed);
-                if((Math.abs(dx)-fw-tw)>=(Math.abs(dy)-fh-th))  //Caso X
-                {
-                    if(dx>0)dx=1;
-                    else if(dx<0)dx=-1;
+                if((Math.abs(dx) - fw - tw) >= (Math.abs(dy) - fh - th))  {//Caso X
+                    if(dx > 0) {
+                        dx = 1;
+                    } else if(dx < 0){
+                        dx = -1;
+                    }
                     
-                    p0.x=obj.xs+dx*(fw+obj.soff);
-                    p3.x=obj.xe-dx*(tw+obj.eoff);
-                    p3.y=obj.ye;
-                    p0.y=obj.ys;
+                    p0.x = obj.xs + dx * (fw + obj.soff);
+                    p3.x = obj.xe - dx * (tw + obj.eoff);
+                    p3.y = obj.ye;
+                    p0.y = obj.ys;
                     
                     
-                    if(obj.pathSegList.numberOfItems===4 && obj.fixed===false)
+                    if(segments.numberOfItems===4 && !obj.fixed)
                     {
-                        var p1=obj.pathSegList.getItem(1);
-                        var p2=obj.pathSegList.getItem(2);
+                        p1 = segments.getItem(1);
+                        p2 = segments.getItem(2);
                         
-                        p1.x=(p3.x-p0.x)/2+p0.x;
-                        p2.x=p1.x;
-                        p1.y=p0.y;
-                        p2.y=p3.y;
-                    }                    
+                        p1.x = (p3.x - p0.x) / 2 + p0.x;
+                        p2.x = p1.x;
+                        p1.y = p0.y;
+                        p2.y = p3.y;
+                    }
+                } else {   //Caso Y
+                    if(dy > 0){
+                        dy = 1;
+                    } else if(dy < 0){
+                        dy = -1;
+                    }
                     
-                }else   //Caso Y
-                {
-                    if(dy>0)dy=1;
-                    else if(dy<0)dy=-1;
+                    p0.y = obj.ys + dy * (fh + obj.soff);
+                    p3.y = obj.ye - dy * (th + obj.eoff);
+                    p3.x = obj.xe;
+                    p0.x = obj.xs;
                     
-                    p0.y=obj.ys+dy*(fh+obj.soff);
-                    p3.y=obj.ye-dy*(th+obj.eoff);
-                    p3.x=obj.xe;
-                    p0.x=obj.xs;
+                    if(segments.numberOfItems===4 && !obj.fixed) {
+                        p1 = segments.getItem(1);
+                        p2 = segments.getItem(2);
                     
-                    if(obj.pathSegList.numberOfItems===4 && obj.fixed===false)
-                    {
-                        p1=obj.pathSegList.getItem(1);
-                        p2=obj.pathSegList.getItem(2);
-                    
-                        p1.y=(p3.y-p0.y)/2+p0.y;
-                        p2.y=p1.y;
-                        p1.x=p0.x;
-                        p2.x=p3.x;
+                        p1.y = (p3.y - p0.y) / 2 + p0.y;
+                        p2.y = p1.y;
+                        p1.x = p0.x;
+                        p2.x = p3.x;
                     }                                        
                 }
                 obj.updateSubLine();
