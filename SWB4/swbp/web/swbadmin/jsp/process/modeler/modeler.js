@@ -2396,8 +2396,7 @@
         },
         
         keydown:function(evt) {
-            if(evt.keyCode===8 && evt.which===8)
-            {
+            if(evt.keyCode===8 && evt.which===8) {
                 if (Modeler.selectedPath && Modeler.selectedPath !== null) {
                     Modeler.selectedPath.remove();
                     Modeler.selectedPath = null;
@@ -2406,86 +2405,78 @@
             }
         },
                 
-        onmousedown:function(evt)
-        {
-            if (Modeler.mode === "view") return false;
+        onmousedown:function(evt) {
+            if (Modeler.mode === "view") {
+                return false;
+            }
+            
+            var cId = Modeler.creationId || null,
+                obj = Modeler.mapObject(cId) || false,
+                dropObj = Modeler.creationDropObject || null,
+                selectedPath = Modeler.selectedPath || null;
+        
             modeler.window.focus();
-            if (Modeler.selectedPath && Modeler.selectedPath !== null) {
-                Modeler.selectedPath.select(false);
+            if (selectedPath !== null) {
+                selectedPath.select(false);
                 Modeler.selectedPath = null;
             }
-            if (!Modeler.creationDropObject) Modeler.creationDropObject = null;
+        
+            if (!obj) {
+                return true;
+            }
             
-            if(Modeler.creationId && Modeler.creationId!==null)
-            {
-                var obj=Modeler.mapObject(Modeler.creationId);
-                if(obj.move) //es un FlowNode
-                {
-                    if (obj.canAddToDiagram()) {
-                        if (Modeler.creationId === "Lane") {
-                            if (Modeler.creationDropObject === null) {
-                                obj.remove();//Lane sobre nada
-                            } else if (Modeler.creationDropObject.elementType === "Pool") {
-                                Modeler.creationDropObject.addLane(obj);
-                                ToolKit.unSelectAll();
-                            }
-                        } else {
-                            obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
-                            obj.snap2Grid();
-                            
-                            //link parents
-                            for (var i = ToolKit.svg.childNodes.length; i-- && i>=0;)
-                            {
-                                var tobj=ToolKit.svg.childNodes[i];
-                                if(tobj && tobj.contents)
-                                {   
-                                    if(tobj===obj)
-                                    {
-                                        for (;i-- && i>=0;)
-                                        {
-                                            tobj=ToolKit.svg.childNodes[i];
-                                            if(tobj.hidden===false && tobj.inBounds && tobj.inBounds(obj.getX(), obj.getY()))
-                                            {
-                                                if(ToolKit.selected.indexOf(tobj)===-1)
-                                                {
-                                                    tobj.onDropObjects([obj]);
-                                                    i=0;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }                            
-                            
-                            
-                        }
-                        if (obj.typeOf("GraphicalElement")) {
-                            Modeler.fadeInObject(obj);
-                        }
-                        obj.layer = ToolKit.layer;
+            if (obj.move) { //FlowNode
+                if (!obj.canAddToDiagram()) {
+                    obj.remove();
+                } else if (cId === "Lane") {
+                    if (dropObj && dropObj.elementType === "Pool") {
+                        dropObj.addLane(obj);
                     } else {
                         obj.remove();
                     }
-                }else   //Es un ConnectionObject
-                {
-                    if(Modeler.creationDropObject && Modeler.creationDropObject!==null)
-                    {
-                        Modeler.dragConnection=obj;//Modeler.mapObject(Modeler.creationId);
-                        if (Modeler.creationDropObject.canStartLink(Modeler.dragConnection)) {
-                            Modeler.creationDropObject.addOutConnection(Modeler.dragConnection);
-                            Modeler.dragConnection.setEndPoint(Modeler.creationDropObject.getX(),Modeler.creationDropObject.getY());                        
-                        } else {
-                            Modeler.dragConnection.remove();
-                            Modeler.dragConnection = null;
+                    ToolKit.unSelectAll();
+                } else {
+                    obj.move(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                    obj.snap2Grid();
+                    obj.layer = ToolKit.layer;
+                    Modeler.fadeInObject(obj);
+                    
+                    var i, nodes = ToolKit.svg.childNodes || [],
+                        length = nodes.length,
+                        ox = obj.getX(), oy = obj.getY(),
+                        selected = ToolKit.selected,
+                        tobj;
+                
+                    //link parents
+                    for (i = length; i-- && i >= 0;) {
+                        tobj = nodes[i];
+                        if(tobj && tobj.contents && tobj === obj) {
+                            for (;i-- && i >= 0;) {
+                                tobj = nodes[i];
+                                if(!tobj.hidden && tobj.inBounds && tobj.inBounds(ox, oy)) {
+                                    if(selected.indexOf(tobj) < 0) {
+                                        tobj.onDropObjects([obj]);
+                                        i = 0;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-                Modeler.creationId=null;
-                Modeler.creationDropObject=null;
-                ToolKit.stopPropagation(evt);
-                return false;
+            } else { //ConnectionObject
+                Modeler.dragConnection = obj;
+                if (dropObj !== null && dropObj.canStartLink(obj)) {
+                    dropObj.addOutConnection(obj);
+                    obj.setEndPoint(dropObj.getX(), dropObj.getY());
+                } else {
+                    obj.remove();
+                    Modeler.dragConnection = null;
+                }
             }
-            return true;
+            Modeler.creationId=null;
+            Modeler.creationDropObject=null;
+            ToolKit.stopPropagation(evt);
+            return false;
         },    
                 
         onmousemove:function(evt)
@@ -3872,8 +3863,11 @@
             return ret;
         },
 
-        mapObject:function(type)
-        {
+        mapObject:function(type) {
+            if (!type) {
+                return null;
+            }
+            
             var ret = null;
             if(type==='SequenceFlow') {
                 ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
