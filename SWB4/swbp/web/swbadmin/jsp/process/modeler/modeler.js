@@ -3611,27 +3611,30 @@
                 }
 
                 //Crear objetos de conexión
-                for (i = 0; i < connObjects.length; i++) {
-                    var tmp = connObjects[i];
-                    var start = Modeler.getGraphElementByURI(null, tmp.start);
-                    var end = Modeler.getGraphElementByURI(null, tmp.end);
+                length = connObjects.length;
+                for (i = 0; i < length; i++) {
+                    var tmp = connObjects[i],
+                        start = Modeler.getGraphElementByURI(null, tmp.start) || null,
+                        end = Modeler.getGraphElementByURI(null, tmp.end) || null,
+                        obj, etype;
                     
-                    if (start && start !== null && end && end !== null) {
-                        var obj = Modeler.mapObject(tmp.class);
+                    if (start !== null && end !== null) {
+                        obj = Modeler.mapObject(tmp.class);
+                        etype = obj.elementType;
                         obj.setURI(tmp.uri);
                     
-                        if (tmp.connectionPoints && tmp.connectionPoints !== undefined) {
+                        if (tmp.connectionPoints) {
                             obj.connectionPoints = tmp.connectionPoints;
                         }
                     
-                        if (obj.elementType === "ConditionalFlow" && start.typeOf("Gateway")) {
+                        if (etype === "ConditionalFlow" && start.typeOf("Gateway")) {
                             obj.removeAttribute("marker-start");
                             obj.soff = 0;
                         }
                         start.addOutConnection(obj);
                         end.addInConnection(obj);
                         
-                        if (obj.elementType === "ConditionalFlow" || obj.elementType === "DefaultFlow") {
+                        if (etype === "ConditionalFlow" || etype === "DefaultFlow") {
                             if (obj.setLabel && typeof obj.setLabel === "function") {
                                 obj.setLabel(tmp.title);
                             }
