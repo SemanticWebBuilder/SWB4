@@ -3008,65 +3008,62 @@
             return obj;
         },
         
-        createPool:function(id, parent)
-        {
+        createPool:function(id, parent) {
             //Revisar ID
-            var obj=ToolKit.createResizeObject(id,parent);
+            var obj = ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"bclass","swimlane");
             obj.setAttributeNS(null,"oclass","swimlane_o");
             obj.setBaseClass();
             
-            var constructor=function()
-            {
-                var tx = document.createElementNS(ToolKit.svgNS,"path");
-                return tx;
-            };
-            
-            var line=ToolKit.createBaseObject(constructor,null,null);
+            var line=ToolKit.createBaseObject(function() {
+                return document.createElementNS(ToolKit.svgNS,"path");
+            },null,null);
             obj.headerLine = line;
             obj.lanes = [];
             
-            obj.mousedown=function(evt)
-            {
-                if (Modeler.mode === "view") return false;
-                if (Modeler.creationId === null) {
-                    if(ToolKit.getEventX(evt)<obj.getX()-obj.getWidth()/2+obj.headerLine.lineOffset+5)
-                    {
+            obj.mousedown=function(evt) {
+                if (Modeler.mode === "view") {
+                    return false;
+                }
+                
+                var cId = Modeler.creationId || null;
+                if (cId === null) {
+                    if(ToolKit.getEventX(evt) < obj.getX() - obj.getWidth() / 2 + obj.headerLine.lineOffset + 5) {
                         return Modeler.objectMouseDown(evt,obj);
                     }
-                } else if (Modeler.creationId === "Lane") {
+                } else if (cId === "Lane") {
                     return Modeler.objectMouseDown(evt,obj);
                 }
                 return false;
             };
             
-            obj.onmousemove=function(evt)
-            {
-                if (Modeler.mode === "view") return false;
-                if(Modeler.dragConnection && Modeler.dragConnection!==null)  //Valida no conectar objetos hijos del pool
-                {
-                    if(Modeler.dragConnection.fromObject.isChild(obj))
-                    {
-                        return false;
-                    }
-                }                                
+            obj.onmousemove=function(evt) {
+                var dragCon = Modeler.dragConnection || null;
+                if (Modeler.mode === "view" || (dragCon !== null && dragCon.fromObject.isChild(obj))) {
+                    return false;
+                }
                 return Modeler.objectMouseMove(evt,obj);
             };
             
             var fMove = obj.move;
             var fResize = obj.resize;
             var fRemove = obj.remove;
-            var fMoveFirst = obj.moveFirst;
+            //var fMoveFirst = obj.moveFirst;
             
             obj.updateHeaderLine=function() {
-                obj.headerLine.lineOffset = obj.text.getBoundingClientRect().width+5;
+                var hline = obj.headerLine,
+                    x = obj.getX(),
+                    y = obj.getY(),
+                    w = obj.getWidth(),
+                    h = obj.getHeight();
+                hline.lineOffset = obj.text.getBoundingClientRect().width+5;
                 //console.log("Text info - width: "+obj.text.getBBox().width+", height: "+obj.text.getBBox().height);
-                obj.headerLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + obj.text.getBoundingClientRect().width+5)+" "+(obj.getY()-obj.getHeight()/2) +" L"+(obj.getX()-obj.getWidth()/2 + obj.text.getBoundingClientRect().width +5)+" "+(obj.getY()+obj.getHeight()/2));
-                obj.headerLine.setAttributeNS(null,"bclass","swimlane");
-                obj.headerLine.setAttributeNS(null,"oclass","swimlane_o");
-                obj.headerLine.setBaseClass();
+                hline.setAttributeNS(null, "d", "M"+(x - w / 2 + obj.text.getBoundingClientRect().width+5)+" "+(y - h / 2) +" L"+(x - w / 2 + obj.text.getBoundingClientRect().width +5)+" "+(y + h / 2));
+                hline.setAttributeNS(null,"bclass","swimlane");
+                hline.setAttributeNS(null,"oclass","swimlane_o");
+                hline.setBaseClass();
                 if (obj.nextSibling) {
-                    ToolKit.svg.insertBefore(obj.headerLine, obj.nextSibling);
+                    ToolKit.svg.insertBefore(hline, obj.nextSibling);
                 }
             };
             
