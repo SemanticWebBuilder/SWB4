@@ -2913,8 +2913,9 @@
             
             obj.updateSubLine= function() {
                 obj.subLine.pathSegList.clear();
-                for (var i=0; i<obj.pathSegList.numberOfItems; i++) {
-                    var segment = obj.pathSegList.getItem(i);
+                var segments = obj.pathSegList, i, items = segments.numberOfItems;
+                for (i = 0; i < items; i++) {
+                    var segment = segments.getItem(i);
                     if (segment.pathSegType===SVGPathSeg.PATHSEG_LINETO_ABS) {
                         obj.subLine.pathSegList.appendItem(obj.subLine.createSVGPathSegLinetoAbs(segment.x, segment.y));
                     } else if (segment.pathSegType===SVGPathSeg.PATHSEG_MOVETO_ABS) {
@@ -2928,14 +2929,13 @@
         },
                 
         createLane: function(id, parent) {
-            var con = function() {
+            var obj = ToolKit.createObject(function() {
                 var obj = document.createElementNS(ToolKit.svgNS, "rect");
                 obj.setAttributeNS(null, "bclass", "swimlane");
                 obj.setAttributeNS(null, "oclass", "swimlane_o");
                 return obj;
-            };
-                            
-            var obj = ToolKit.createObject(con, id, parent);
+            }, id, parent);
+            
             obj.canSelect = false;
             obj.resizeable = true;
             
@@ -2951,20 +2951,19 @@
             
             obj.remove=function() {
                 fRemove();
-                
+                var parentLanes = obj.parent.lanes, totHeight = 0, i;
                 //elimina el objeto de contents
-                while ((ax = obj.parent.lanes.indexOf(obj)) !== -1) {
-                    obj.parent.lanes.splice(ax, 1);
+                while ((ax = parentLanes.indexOf(obj)) !== -1) {
+                    parentLanes.splice(ax, 1);
                 }
                 
                 //calcula el nuevo tamaño en height
-                var totHeight = 0;
-                for (var i = 0; i < obj.parent.lanes.length; i++) {
-                    var l = obj.parent.lanes[i];
+                var length = parentLanes.length;
+                for (i = 0; i < length; i++) {
+                    var l = parentLanes[i];
                     totHeight += l.getHeight();
                 }                
-                obj.parent.resize(obj.parent.getWidth(), totHeight);                
-                
+                obj.parent.resize(obj.parent.getWidth(), totHeight);
                 obj.parent.updateLanes();
             };
             
@@ -2974,9 +2973,7 @@
                 fSetText(text,0,0,obj.getHeight(),1);
                 fUpdateText = obj.text.update;
                 
-                obj.text.onclick=function(evt)
-                {
-                    //alert(evt);
+                obj.text.onclick=function(evt) {
                     ToolKit.selectObj(obj,true);
                 };
 
@@ -2996,8 +2993,9 @@
                         fUpdateText();
                         //console.log("width: "+_this.text.getBoundingClientRect().width+", height: "+_this.text.getBoundingClientRect().height);
                         //console.log("cwidth: "+_this.text.getBBox().width+", cheight: "+_this.text.getBBox().height);
-                        var x = (obj.getX() - obj.getWidth()/2) + obj.text.getBoundingClientRect().width/2;
-                        var y = obj.getY();
+                        var x = (obj.getX() - obj.getWidth()/2) + obj.text.getBoundingClientRect().width/2,
+                            y = obj.getY();
+                    
                         if (obj.text.childElementCount === 1) {
                             x += 5;
                         }
