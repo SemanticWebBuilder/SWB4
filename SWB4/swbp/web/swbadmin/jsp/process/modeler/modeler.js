@@ -2479,19 +2479,20 @@
             return false;
         },    
                 
-        onmousemove:function(evt)
-        {
+        onmousemove:function(evt) {
             var _this = ToolKit;
-            if (Modeler.mode === "view") return false;
-            if(Modeler.dragConnection && Modeler.dragConnection!==null)
-            {
-                Modeler.dragConnection.show();
-                if(Modeler.dragConnection.toObject && Modeler.dragConnection.toObject!==null)
-                {
-                    Modeler.dragConnection.toObject=null;
+            if (Modeler.mode === "view") {
+                return false;
+            }
+            
+            var dragCon = Modeler.dragConnection || null;
+            if (dragCon !== null) {
+                dragCon.show();
+                if(dragCon.toObject && dragCon.toObject !== null) {
+                    dragCon.toObject = null;
                     _this.unSelectAll();
                 }
-                Modeler.dragConnection.setEndPoint(_this.getEventX(evt), _this.getEventY(evt));
+                dragCon.setEndPoint(_this.getEventX(evt), _this.getEventY(evt));
                 return false;
             }
             return true;
@@ -2500,32 +2501,32 @@
         onmouseup:function(evt)
         {
             var _this = ToolKit;
-            var resizeObj = _this.svg.resizeObject || null;
-            if (Modeler.mode === "view") return false;
-            if(Modeler.dragConnection && Modeler.dragConnection!==null)
-            {
-                if(Modeler.dragConnection.toObject===null)
-                {
-                    Modeler.dragConnection.remove();
-                }else
-                {
-                    if (Modeler.dragConnection.toObject.canEndLink(Modeler.dragConnection)) {
-                        Modeler.dragConnection.toObject.addInConnection(Modeler.dragConnection);
-                    } else {
-                        Modeler.dragConnection.remove();
-                    }
-                }
-                Modeler.dragConnection=null;
+            var resizeObj = _this.svg.resizeObject || null,
+                dragCon = Modeler.dragConnection || null,
+                toObj = dragCon && dragCon.toObject,
+                p = resizeObj && resizeObj.parent;
+        
+            if (Modeler.mode === "view") {
+                return false;
             }
             
-            if (resizeObj && resizeObj !== null && resizeObj.parent.elementType==="Lane") {
-                var oldH = ty;
-                y=_this.getEventY(evt)-_this.svg.dragOffsetY;
-                ty=y-resizeObj.parent.getY();
-                h=Math.abs(resizeObj.startH+ty*resizeObj.iy);
-                if((resizeObj.parent.getY()-h/2)<0)h=resizeObj.parent.getY()*2;
+            if(dragCon !== null) {
+                toObj === null ? dragCon.remove() :
+                        toObj.canEndLink(dragCon) ? toObj.addInConnection(dragCon) : dragCon.remove();
                 
-                resizeObj.parent.parent.resize(resizeObj.parent.parent.getWidth(), resizeObj.parent.parent.getHeight() + oldH);
+                dragCon = Modeler.dragConnection = null;
+            }
+            
+            if (resizeObj !== null && p.elementType==="Lane") {
+                var oldH = ty, py = p.getY();
+                y = _this.getEventY(evt) - _this.svg.dragOffsetY;
+                ty = y - py;
+                h = Math.abs(resizeObj.startH + ty * resizeObj.iy);
+                if((p.y - h / 2 ) < 0) {
+                    h = py * 2;
+                }
+                
+                p.parent.resize(p.parent.getWidth(), p.parent.getHeight() + oldH);
                 _this.updateResizeBox();
             }
             return true;
