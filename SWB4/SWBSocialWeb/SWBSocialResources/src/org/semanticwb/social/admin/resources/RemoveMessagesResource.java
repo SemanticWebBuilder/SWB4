@@ -305,6 +305,7 @@ public class RemoveMessagesResource extends GenericResource {
                         PostIn postIn=itPostIn.next();
                         postIn.remove();
                     }
+                    stream.setPromPostNumber(0); //Se envía a 0 el promedio de mensajes de entrada en el Stream, TODO: Ver si debo hacerlo para las demas opciones de abajo
                 }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
                 {
                     Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
@@ -368,7 +369,7 @@ public class RemoveMessagesResource extends GenericResource {
                         }
                         //System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
                     }
-                }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los streams de una red
+                }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los postIns de una red en el Stream
                 {
                     String[] selectedNetworks = request.getParameterValues("networks");
                     ArrayList<SocialNetwork> networks = new ArrayList<SocialNetwork>();
