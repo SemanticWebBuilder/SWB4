@@ -3694,15 +3694,16 @@
             if (layer === null) {
                 return null;
             }
-            var ret = [];
-            var currentLayer = layer;
+            var p, ret = [],
+                currentLayer = layer;
+        
             do {
-                var pid = "";
-                if (currentLayer.parent && currentLayer.parent !== null) {
-                    pid = currentLayer.parent.id;
+                p = currentLayer.parent || null;
+                var pid = p !== null ? p.id : "";
+                if (pid !== "") {
+                    ret.push({label:p.text.value, layer:pid});
+                    currentLayer = p.layer;
                 }
-                ret.push({label:currentLayer.parent.text.value, layer:pid});
-                currentLayer = currentLayer.parent.layer;
             } while (currentLayer !== null);
             ret.push({label:"Principal", layer:""});
             return ret;
