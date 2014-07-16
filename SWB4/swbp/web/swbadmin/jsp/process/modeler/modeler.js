@@ -3658,10 +3658,12 @@
                 }
 
                  //Asignar padres de los flowNodes
-                for (i = 0; i < flowNodes.length; i++) {
-                    var tmp = flowNodes[i];
-                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                    var cont = Modeler.getGraphElementByURI(null, tmp.container);
+                length = flowNodes.length;
+                for (i = 0; i < length; i++) {
+                    var tmp = flowNodes[i],
+                        obj = Modeler.getGraphElementByURI(null, tmp.uri),
+                        cont = Modeler.getGraphElementByURI(null, tmp.container);
+                
                     if (tmp.parent && tmp.parent !== null) {
                         var par = Modeler.getGraphElementByURI(null, tmp.parent);
                         if (par !== null && obj !== null) {
