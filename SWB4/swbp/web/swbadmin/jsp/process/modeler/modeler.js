@@ -3236,26 +3236,28 @@
         },
         
         createGroupArtifact:function(id,parent) {
-            var obj= ToolKit.createResizeObject(id,parent);
+            var obj = ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"oclass","group_o");
             obj.setAttributeNS(null,"bclass","group");
             obj.setBaseClass();
             obj.setAttributeNS(null,"stroke-dasharray","20,5,3,5");
             
-            var rect=document.createElementNS(ToolKit.svgNS,"rect");
-            obj.subLine = rect;
+            obj.subLine = document.createElementNS(ToolKit.svgNS,"rect");
             obj.subLine.onmousedown=obj.onmousedown;
             obj.subLine.onmouseup=obj.onmouseup;
             obj.subLine.onmousemove=obj.onmousemove;
             
             obj.updateSubLine=function() {
-                if (obj.subLine && obj.subLine!==null) {
-                    obj.subLine.setAttributeNS(null,"x",obj.getX()-obj.getWidth()/2);
-                    obj.subLine.setAttributeNS(null,"y",obj.getY()-obj.getHeight()/2);
-                    obj.subLine.setAttributeNS(null,"width",obj.getWidth());
-                    obj.subLine.setAttributeNS(null,"height",obj.getHeight());
-                    ToolKit.svg.insertBefore(obj.subLine, obj);
-                    obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
+                var subLine = obj.subLine || null;
+                if (subLine !== null) {
+                    var w = obj.getWidth(),
+                        h = obj.getHeight();
+                    subLine.setAttributeNS(null,"x", obj.getX() - w / 2);
+                    subLine.setAttributeNS(null,"y", obj.getY() - h / 2);
+                    subLine.setAttributeNS(null,"width", w);
+                    subLine.setAttributeNS(null,"height", h);
+                    ToolKit.svg.insertBefore(subLine, obj);
+                    subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
                 }
             };
             
