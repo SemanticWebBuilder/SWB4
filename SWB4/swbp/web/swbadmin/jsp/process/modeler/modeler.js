@@ -3478,7 +3478,8 @@
                 var json = JSON.parse(jsonString),
                     jsarr = json.nodes,
                     i = 0,
-                    swimlanes = [],
+                    pools = [],
+                    lanes = [],
                     connObjects = [],
                     flowNodes = [];
 
@@ -3489,8 +3490,10 @@
                     
                     switch(cls) {
                         case "Lane":
+                            lanes.push(tmp);
+                            break;
                         case "Pool":
-                            swimlanes.push(tmp);
+                            pools.push(tmp);
                             break;
                         case "SequenceFlow":
                         case "ConditionalFlow":
@@ -3508,58 +3511,57 @@
                 }
 
                 //Construir pools
-                var length = swimlanes.length;
+                var length = pools.length;
                 for (i = 0; i < length; i++) {
-                    var tmp = swimlanes[i];
-                    if (tmp.class==="Pool") {
-                        var obj = Modeler.mapObject("Pool");
-                        obj.setURI(tmp.uri);
+                    var tmp = pools[i],
+                        obj = Modeler.mapObject("Pool");
+                
+                    obj.setURI(tmp.uri);
 
-                        if (tmp.title && tmp.title !== null) {
-                            obj.setText(tmp.title);
-                        }
-                        obj.layer = null;
-                        obj.resize(tmp.w, tmp.h);
-                        obj.move(tmp.x, tmp.y);
-                        obj.snap2Grid();
-                        
-                        //Evitar edición de texto
-                        if (Modeler.mode === "view") {
-                            if (obj.text && obj.text !== null) {
-                                obj.text.ondblclick = function(evt) {
-                                    return false;
-                                };
-                            }
+                    if (tmp.title && tmp.title !== null) {
+                        obj.setText(tmp.title);
+                    }
+                    obj.layer = null;
+                    obj.resize(tmp.w, tmp.h);
+                    obj.move(tmp.x, tmp.y);
+                    obj.snap2Grid();
+
+                    //Evitar edición de texto
+                    if (Modeler.mode === "view") {
+                        if (obj.text && obj.text !== null) {
+                            obj.text.ondblclick = function(evt) {
+                                return false;
+                            };
                         }
                     }
                 }
 
                 //Construir lanes
-                for (i = 0; i < swimlanes.length; i++) {
-                    var tmp = swimlanes[i];
-                    if (tmp.class==="Lane") {
-                        var obj = Modeler.mapObject("Lane");
-                        obj.setURI(tmp.uri);
-                        if (tmp.title && tmp.title !== null) {
-                            obj.setText(tmp.title);
-                        }
-                        if (tmp.lindex && tmp.lindex !== null) {
-                            obj.setIndex(tmp.lindex);
-                        }
-                        obj.resize(tmp.w, tmp.h);
-                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                        par.addLane(obj);
-                        obj.setParent(par);
-                        obj.layer = null;
-                        par.move(par.getX(), par.getY());
-                        
-                        //Evitar edición de texto
-                        if (Modeler.mode === "view") {
-                            if (obj.text && obj.text !== null) {
-                                obj.text.ondblclick = function(evt) {
-                                    return false;
-                                };
-                            }
+                length = lanes.length;
+                for (i = 0; i < length; i++) {
+                    var tmp = lanes[i],
+                        obj = Modeler.mapObject("Lane");
+                
+                    obj.setURI(tmp.uri);
+                    if (tmp.title && tmp.title !== null) {
+                        obj.setText(tmp.title);
+                    }
+                    if (tmp.lindex && tmp.lindex !== null) {
+                        obj.setIndex(tmp.lindex);
+                    }
+                    obj.resize(tmp.w, tmp.h);
+                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                    par.addLane(obj);
+                    obj.setParent(par);
+                    obj.layer = null;
+                    par.move(par.getX(), par.getY());
+
+                    //Evitar edición de texto
+                    if (Modeler.mode === "view") {
+                        if (obj.text && obj.text !== null) {
+                            obj.text.ondblclick = function(evt) {
+                                return false;
+                            };
                         }
                     }
                 }
