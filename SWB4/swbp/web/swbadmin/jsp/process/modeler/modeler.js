@@ -3475,32 +3475,41 @@
             ToolKit.setLayer(null);
             
             try {
-                var json = JSON.parse(jsonString);
-                var jsarr = json.nodes;
-                var i = 0;
-                var swimlanes = [];
-                var connObjects = [];
-                var flowNodes = [];
+                var json = JSON.parse(jsonString),
+                    jsarr = json.nodes,
+                    i = 0,
+                    swimlanes = [],
+                    connObjects = [],
+                    flowNodes = [];
 
                 Modeler.clearCanvas();
                 while(i < jsarr.length) {
-                    var tmp = jsarr[i];
-                    var cls = tmp.class;
-                    //console.log(cls);
-                    if (cls === "Lane" || cls === "Pool") {
-                        swimlanes.push(tmp);
-                    } else if (cls === "SequenceFlow" || cls === "ConditionalFlow" 
-                            || cls === "DefaultFlow" || cls === "AssociationFlow" 
-                            || cls === "DirectionalAssociation" || cls === "MessageFlow") {
-                        connObjects.push(tmp);
-                    } else {
-                        flowNodes.push(tmp);
+                    var tmp = jsarr[i],
+                        cls = tmp.class;
+                    
+                    switch(cls) {
+                        case "Lane":
+                        case "Pool":
+                            swimlanes.push(tmp);
+                            break;
+                        case "SequenceFlow":
+                        case "ConditionalFlow":
+                        case "DefaultFlow":
+                        case "AssociationFlow":
+                        case "DirectionalAssociation":
+                        case "MessageFlow":
+                            connObjects.push(tmp);
+                            break;
+                        default:
+                            flowNodes.push(tmp);
+                            break;
                     }
                     i++;
                 }
 
                 //Construir pools
-                for (i = 0; i < swimlanes.length; i++) {
+                var length = swimlanes.length;
+                for (i = 0; i < length; i++) {
                     var tmp = swimlanes[i];
                     if (tmp.class==="Pool") {
                         var obj = Modeler.mapObject("Pool");
