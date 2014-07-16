@@ -958,8 +958,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         if (filePathExists) {
                             writer = new FileWriter(file);
                             writer.write(configuration);
-//                            writer.flush();
-//                            writer.close();
                         }
                     } catch (IOException ioe) {
                         DetailViewManager.log.error("Al escribir el contenido de la plantilla", ioe);
