@@ -3567,43 +3567,45 @@
                 }
 
                 //Construir flowNodes
-                for (i = 0; i < flowNodes.length; i++) {
-                    var tmp = flowNodes[i];
-                    var obj = Modeler.mapObject(tmp.class);
-                    if (obj !== null) {
-                        obj.setURI(tmp.uri);
+                length = flowNodes.length;
+                for (i = 0; i < length; i++) {
+                    var tmp = flowNodes[i],
+                        obj = Modeler.mapObject(tmp.class);
+                
+                    if (obj === null || !obj.typeOf("GraphicalElement")) {
+                        continue;
+                    }
 
-                        if (obj.typeOf("GraphicalElement")) {
-                        if (tmp.title && tmp.title !== null) {
-                            obj.setText(tmp.title);
-                        }
-                        if (obj.resizeable && obj.resizeable !== null && obj.resizeable) {
-                            obj.resize(tmp.w, tmp.h);
-                        }
-                        
-                        if (tmp.index !== null && tmp.index) {
-                            obj.index = tmp.index;
-                        }
+                    obj.setURI(tmp.uri);
+                    if (tmp.title && tmp.title !== null) {
+                        obj.setText(tmp.title);
+                    }
+                    if (obj.resizeable && obj.resizeable !== null) {
+                        obj.resize(tmp.w, tmp.h);
+                    }
 
-                        if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting && tmp.isInterrupting !== null) {
-                            var par = Modeler.getGraphElementByURI(null, tmp.parent);
-                            if (par && par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
-                                obj.setInterruptor(false);
-                            }
-                                }
-                            obj.move(tmp.x, tmp.y);
-                            if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
-                                obj.snap2Grid();
-                            }
+                    if (tmp.index !== null && tmp.index) {
+                        obj.index = tmp.index;
+                    }
 
-                            //Evitar edición de texto
-                            if (Modeler.mode === "view") {
-                                if (obj.text && obj.text !== null) {
-                                    obj.text.ondblclick = function(evt) {
-                                        return false;
-                                    };
-                                }
-                            }
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.isInterrupting && tmp.isInterrupting !== null) {
+                        var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                        if (par && par!==null && par.typeOf("Activity") && !tmp.isInterrupting) {
+                            obj.setInterruptor(false);
+                        }
+                    }
+
+                    obj.move(tmp.x, tmp.y);
+                    if (obj.typeOf("IntermediateCatchEvent") && tmp.parent === "") {
+                        obj.snap2Grid();
+                    }
+
+                    //Evitar edición de texto
+                    if (Modeler.mode === "view") {
+                        if (obj.text && obj.text !== null) {
+                            obj.text.ondblclick = function(evt) {
+                                return false;
+                            };
                         }
                     }
                 }
