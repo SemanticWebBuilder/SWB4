@@ -3710,18 +3710,14 @@
         },
                 
         createNavPath: function() {
-            if (Modeler.navPath && Modeler.navPath !== null) {
-                Modeler.navPath.bar.remove();
-            }
+            Modeler.navPath && Modeler.navPath !== null && Modeler.navPath.bar.remove();
             
-            var constr = function() {
+            var bar = ToolKit.createBaseObject(function() {
                 var obj = document.createElementNS(ToolKit.svgNS, "rect");
                 obj.setAttributeNS(null, "rx", "10");
                 obj.setAttributeNS(null, "ry", "10");
                 return obj;
-            };
-            
-            var bar = ToolKit.createBaseObject(constr, null, null);
+            }, null, null);
             bar.setAttributeNS(null,"class","navPath");
             bar.resize(500, 50);
             bar.moveFirst();
@@ -3751,20 +3747,22 @@
                     text.setAttributeNS(null,"font-size","12");
                     text.setAttributeNS(null,"font-family","Verdana, Geneva, sans-serif");
                     
-                    for (var i = 0; i < links.length; i++) {
-                        var tspan = document.createElementNS(ToolKit.svgNS, "tspan");
-                        var tspanSeparator = null;
-                        var l = links[i].label;
+                    var i, length = links.length;
+                    for (i = 0; i < length; i++) {
+                        var tspan = document.createElementNS(ToolKit.svgNS, "tspan"),
+                            tspanSeparator = null,
+                            link = links[i],
+                            l = link.label;
                         
                         tspan.appendChild(document.createTextNode(l));
-                        if (links[i].layer === layer.parent.id) {
+                        if (link.layer === layer.parent.id) {
                             tspan.setAttributeNS(null,"font-weight","bold");
                         } else {
-                            tspan.setAttributeNS(null,"onclick","if (Modeler.getGraphElementByURI(null,'"+links[i].layer+"') != null) {ToolKit.setLayer(Modeler.getGraphElementByURI(null,'"+links[i].layer+"').subLayer);} else {ToolKit.setLayer(null);}");
+                            tspan.setAttributeNS(null,"onclick","if (Modeler.getGraphElementByURI(null,'"+link.layer+"') != null) {ToolKit.setLayer(Modeler.getGraphElementByURI(null,'"+link.layer+"').subLayer);} else {ToolKit.setLayer(null);}");
                         }
                         
-                        if (i+1 < links.length) {
-                            var tspanSeparator = document.createElementNS(ToolKit.svgNS, "tspan");
+                        if (i+1 < length) {
+                            tspanSeparator = document.createElementNS(ToolKit.svgNS, "tspan");
                             tspanSeparator.appendChild(document.createTextNode(" > "));
                         }
                         
