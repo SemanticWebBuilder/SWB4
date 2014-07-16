@@ -3072,23 +3072,24 @@
             };
             
             obj.addLane = function(ob) {
+                var lanes = obj.lanes, i, totHeight = 0, l;
                 ob.setParent(obj);
-                obj.lanes.push(ob);
+                lanes.push(ob);
                 
                 if (ob.lindex === -1) {
                     var mindex=0;
                     
-                    for (var i = 0; i < obj.lanes.length; i++) 
-                    {
-                        var l = obj.lanes[i];
-                        if(l.lindex>mindex)mindex=l.lindex;
+                    for (i = 0; i < lanes.length; i++) {
+                        l = lanes[i];
+                        if(l.lindex > mindex) {
+                            mindex = l.lindex;
+                        }
                     }                    
-                    ob.lindex = mindex+1; //obj.lanes.length;
+                    ob.lindex = mindex + 1; //obj.lanes.length;
                 }
                 
-                var totHeight = 0;
-                for (var i = 0; i < obj.lanes.length; i++) {
-                    var l = obj.lanes[i];
+                for (i = 0; i < lanes.length; i++) {
+                    l = obj.lanes[i];
                     totHeight += l.getHeight();
                 }
                 
