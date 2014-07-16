@@ -4,8 +4,12 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.social.Geolocable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
 {
+   /**
+   * Número de Iteraciones que se ha tenido el Stream. Este dato se utiliza en conjunto con el de la propiedad "promPostNumber" para poder determinar si el número de mensajes que accesaron al Stream amerita que se envíe una notificación (alerta) indicando que llegaron mas mensajes al Stream que los que se tiene en promedio en un tiempo determinado.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_streamIterations=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#streamIterations");
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
    */
@@ -59,6 +63,10 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_maxDays=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_maxDays");
    /**
+   * Propiedad para escribir correos electronicos de los usuarios que recibiran alertas. Si entran mas mensajes (listener) a un Stream del promedio.
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_streamEmail2Alerts=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#streamEmail2Alerts");
+   /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.
    */
     public static final org.semanticwb.platform.SemanticClass social_PostIn=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#PostIn");
@@ -83,9 +91,13 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
    /**
-   * Temas en los que se clasificaran los mensajes
+   * Topics to classify messages
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasTopics2Apply=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasTopics2Apply");
+   /**
+   * Porcentaje de aumento en el promedio de los PostIns de entrada en el Stream. Si se llega a este porcentaje o mas en una nueva iteración del Stream, se envía notificación (alerta).
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_streamPercentageAlert=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#streamPercentageAlert");
    /**
    * Propiedad que indica si en el stream se desea aceptar que entren los mensajes que sean clasificados con intensidad baja
    */
@@ -107,13 +119,13 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticProperty social_filterIntensityMedium=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#filterIntensityMedium");
    /**
+   * Número de post en el periodo de tiempo determinado en la propiedad stream_PoolTime
+   */
+    public static final org.semanticwb.platform.SemanticProperty social_promPostNumber=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#promPostNumber");
+   /**
    * Busca todas las palabras definidas en este campo
    */
     public static final org.semanticwb.platform.SemanticProperty social_stream_allPhrases=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_allPhrases");
-   /**
-   * Número de resultados que se despliegan en las páginas de los reportes, ver si lo ocuparía o despues lo quito
-   */
-    public static final org.semanticwb.platform.SemanticProperty social_stream_resultPagnum=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#stream_resultPagnum");
    /**
    * Clase que contendra los streams que configurados para cada usuario
    */
@@ -390,6 +402,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public StreamBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the StreamIterations property
+* @return int with the StreamIterations
+*/
+    public int getStreamIterations()
+    {
+        return getSemanticObject().getIntProperty(social_streamIterations);
+    }
+
+/**
+* Sets the StreamIterations property
+* @param value long with the StreamIterations
+*/
+    public void setStreamIterations(int value)
+    {
+        getSemanticObject().setIntProperty(social_streamIterations, value);
     }
 
 /**
@@ -752,6 +782,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     {
         getSemanticObject().setIntProperty(social_stream_maxDays, value);
     }
+
+/**
+* Gets the StreamEmail2Alerts property
+* @return String with the StreamEmail2Alerts
+*/
+    public String getStreamEmail2Alerts()
+    {
+        return getSemanticObject().getProperty(social_streamEmail2Alerts);
+    }
+
+/**
+* Sets the StreamEmail2Alerts property
+* @param value long with the StreamEmail2Alerts
+*/
+    public void setStreamEmail2Alerts(String value)
+    {
+        getSemanticObject().setProperty(social_streamEmail2Alerts, value);
+    }
    /**
    * Gets all the org.semanticwb.social.PostIn
    * @return A GenericIterator with all the org.semanticwb.social.PostIn
@@ -963,6 +1011,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the StreamPercentageAlert property
+* @return int with the StreamPercentageAlert
+*/
+    public int getStreamPercentageAlert()
+    {
+        return getSemanticObject().getIntProperty(social_streamPercentageAlert);
+    }
+
+/**
+* Sets the StreamPercentageAlert property
+* @param value long with the StreamPercentageAlert
+*/
+    public void setStreamPercentageAlert(int value)
+    {
+        getSemanticObject().setIntProperty(social_streamPercentageAlert, value);
+    }
+
+/**
 * Gets the Updated property
 * @return java.util.Date with the Updated
 */
@@ -1068,24 +1134,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
-* Gets the GeoDistanceUnit property
-* @return String with the GeoDistanceUnit
-*/
-    public String getGeoDistanceUnit()
-    {
-        return getSemanticObject().getProperty(social_geoDistanceUnit);
-    }
-
-/**
-* Sets the GeoDistanceUnit property
-* @param value long with the GeoDistanceUnit
-*/
-    public void setGeoDistanceUnit(String value)
-    {
-        getSemanticObject().setProperty(social_geoDistanceUnit, value);
-    }
-
-/**
 * Gets the GeoCenterLatitude property
 * @return float with the GeoCenterLatitude
 */
@@ -1101,6 +1149,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setGeoCenterLatitude(float value)
     {
         getSemanticObject().setFloatProperty(social_geoCenterLatitude, value);
+    }
+
+/**
+* Gets the GeoDistanceUnit property
+* @return String with the GeoDistanceUnit
+*/
+    public String getGeoDistanceUnit()
+    {
+        return getSemanticObject().getProperty(social_geoDistanceUnit);
+    }
+
+/**
+* Sets the GeoDistanceUnit property
+* @param value long with the GeoDistanceUnit
+*/
+    public void setGeoDistanceUnit(String value)
+    {
+        getSemanticObject().setProperty(social_geoDistanceUnit, value);
     }
 
 /**
@@ -1279,6 +1345,24 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     }
 
 /**
+* Gets the PromPostNumber property
+* @return float with the PromPostNumber
+*/
+    public float getPromPostNumber()
+    {
+        return getSemanticObject().getFloatProperty(social_promPostNumber);
+    }
+
+/**
+* Sets the PromPostNumber property
+* @param value long with the PromPostNumber
+*/
+    public void setPromPostNumber(float value)
+    {
+        getSemanticObject().setFloatProperty(social_promPostNumber, value);
+    }
+
+/**
 * Gets the Stream_allPhrases property
 * @return String with the Stream_allPhrases
 */
@@ -1294,24 +1378,6 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
     public void setStream_allPhrases(String value)
     {
         getSemanticObject().setProperty(social_stream_allPhrases, value);
-    }
-
-/**
-* Gets the Stream_resultPagnum property
-* @return int with the Stream_resultPagnum
-*/
-    public int getStream_resultPagnum()
-    {
-        return getSemanticObject().getIntProperty(social_stream_resultPagnum);
-    }
-
-/**
-* Sets the Stream_resultPagnum property
-* @param value long with the Stream_resultPagnum
-*/
-    public void setStream_resultPagnum(int value)
-    {
-        getSemanticObject().setIntProperty(social_stream_resultPagnum, value);
     }
 
    /**

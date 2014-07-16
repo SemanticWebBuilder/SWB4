@@ -19,7 +19,7 @@ public abstract class SentimentalLearningPhraseBase extends org.semanticwb.model
    */
     public static final org.semanticwb.platform.SemanticProperty social_SentimentType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#SentimentType");
    /**
-   * Valor que le dan los usuarios al clasificar una palabra o secuencia de palabra. 1=Alto;2=Bajo;0=Medio
+   * Valor que le dan los usuarios al clasificar una palabra o secuencia de palabras. 2=Alto;1=Medio;0=Bajo;
    */
     public static final org.semanticwb.platform.SemanticProperty social_IntensityType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#IntensityType");
    /**
