@@ -3646,8 +3646,7 @@
                 length = flowNodes.length;
                 for (i = 0; i < length; i++) {
                     var tmp = flowNodes[i],
-                        obj = Modeler.getGraphElementByURI(null, tmp.uri),
-                        par = Modeler.getGraphElementByURI(null, tmp.parent);
+                        obj = Modeler.getGraphElementByURI(null, tmp.uri);
                 
                     if (tmp.container && tmp.container !== null) {
                         var cont = Modeler.getGraphElementByURI(null, tmp.container);
@@ -3671,14 +3670,10 @@
                                 obj.setParent(null);
                             } else {
                                 obj.setParent(par);
+                                if (obj.typeOf("IntermediateCatchEvent") && obj.parent.typeOf("Task")) {
+                                    obj.moveFirst();
+                                }
                             }
-                            obj.moveFirst();
-                        }
-                        
-                        if (obj !== null) {
-                            ToolKit.svg.dragObject = obj;
-                            ToolKit.selectObj(obj, false);
-                            ToolKit.svg.onmouseup();
                         }
                     }
                 }
