@@ -34,6 +34,9 @@ public abstract class SocialNetworkUserBase extends org.semanticwb.model.SWBClas
    * Propiedad en la que se graba un thirdPartyId que tiene una red social para el usuario. Facebook tiene un third party id para c/usuario, ese id es el que utiliza Klout para medir la influencia de ese usuario en esa red social.
    */
     public static final org.semanticwb.platform.SemanticProperty social_snu_third_party_id=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#snu_third_party_id");
+   /**
+   * Define las diferentes etapas de la vida de una persona.
+   */
     public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");
    /**
    * Etapa de vida del usuario de la red social

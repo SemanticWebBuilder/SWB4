@@ -15,6 +15,7 @@ import org.semanticwb.base.SWBAppObject;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.KeepAliveListenerable;
+import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SocialNetStreamSearch;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialSite;
@@ -207,6 +208,10 @@ public class ListenerMgr implements SWBAppObject {
             {
                 boolean isThereNoListenAliveNets=false;
                 //System.out.println("Ejecuta Timer:"+stream);
+                //int oldStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
+                int streamIterations=stream.getStreamIterations();
+                //int oldStreamPostInAvg=oldStreamPostIns/streamIterations;
+                float oldStreamPostInAvg=stream.getPromPostNumber();
                 Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
                 while(itSocialNets.hasNext())
                 {
@@ -250,6 +255,27 @@ public class ListenerMgr implements SWBAppObject {
                         isThereNoListenAliveNets=true;
                     }
                 }
+                int newStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream)); 
+                stream.setStreamIterations(streamIterations+1); //Se graba la nueva iteración en el stream
+                int newStreamPostInAvg=newStreamPostIns/stream.getStreamIterations();
+                
+                float difAvgs=((newStreamPostInAvg*100)/oldStreamPostInAvg)-100;
+                stream.setPromPostNumber(difAvgs);   //Se graba el nuevo promedio en el Stream
+                if(difAvgs>0 && difAvgs>=(stream.getStreamPercentageAlert()))
+                {//Si se cumple, entonces envía alerta
+                    String messageBody="Notificación:\n";
+                    messageBody+="El Stream con nombre:"+stream.getDisplayTitle("es")+", perteneciente a la marca:"+stream.getSemanticObject().getModel().getName()+"\n";
+                    messageBody+="Ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+" definido para el stream en cada iteración";
+                    String emails=stream.getStreamEmail2Alerts();
+                    System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
+                    try{
+                        SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes mas del promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
+                    }catch(Exception e)
+                    {
+                        e.printStackTrace();
+                        log.error(e);
+                    }
+                }                
                 //Si no existen redes sociales que NO sean ListenAlive, entonces elimina ese timer
                 
                 if(!isThereNoListenAliveNets)
@@ -439,6 +465,21 @@ public class ListenerMgr implements SWBAppObject {
     }
     
     
+    private static String getAllPostInStream_Query(Stream stream) {
+        String query =
+                "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
+                + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
+                + "\n";
+        query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        query +=
+                "where {\n"
+                + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
+                + "  }\n";
+        System.out.println("query:"+query);
+        WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
+        query = SWBSocial.executeQuery(query, wsite);
+        return query;
+    }
     
 
     /*

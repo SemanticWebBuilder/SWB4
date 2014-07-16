@@ -1,6 +1,9 @@
 package org.semanticwb.social.base;
 
 
+   /**
+   * Define las diferentes etapas de la vida de una persona. 
+   */
 public abstract class LifeStageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
@@ -11,6 +14,9 @@ public abstract class LifeStageBase extends org.semanticwb.model.SWBClass implem
    * Minima edad que debe de cumplir un usuario para estar en una determinada etapa de la vida
    */
     public static final org.semanticwb.platform.SemanticProperty social_ls_minAge=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#ls_minAge");
+   /**
+   * Define las diferentes etapas de la vida de una persona.
+   */
     public static final org.semanticwb.platform.SemanticClass social_LifeStage=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#LifeStage");
    /**
    * The semantic class that represents the currentObject
