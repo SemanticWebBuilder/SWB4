@@ -2603,9 +2603,8 @@
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);};
             return obj;
         },
-                
-        createConnectionPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) 
-        {
+
+        createConnectionPath:function(marker_start, marker_mid, marker_end, dash_array, styleClass) {
             var obj = ToolKit.createConnectionPath(0,0,0,0,marker_start, marker_mid, marker_end, dash_array, styleClass);
             obj.subLine = ToolKit.createConnectionPath(0,0,0,0,null, null, null, null, null);
             obj.subLine.setStyleClass=function(cls) {
@@ -2615,7 +2614,7 @@
             
             obj.pressed = false;
             obj.hidden = false;
-            obj.setArrowType= function(type) {
+            obj.setArrowType = function(type) {
                 obj.setAttributeNS(null, "marker-end", "url(#"+type+")");
             };
             obj.setTailType= function(type) {
@@ -2651,10 +2650,13 @@
             };
             
             obj.onmousedown = function (evt) {
-                if (Modeler.mode === "view") return false;
+                if (Modeler.mode === "view") {
+                    return false;
+                }
+                var selectedPath = Modeler.selectedPath || null;
                 obj.pressed = true;
-                if (Modeler.selectedPath && Modeler.selectedPath !== null) {
-                    Modeler.selectedPath.select(false);
+                if (selectedPath !== null) {
+                    selectedPath.select(false);
                 }
                 obj.select(true);
                 Modeler.selectedPath = obj;
@@ -2663,22 +2665,24 @@
             };
             
             obj.select = function(selected) {
-                if (selected) {
-                    obj.setAttributeNS(null, "class", "sequenceFlowLine_o");
-                } else {
-                    obj.setAttributeNS(null, "class", "sequenceFlowLine");
-                }
+                obj.setAttributeNS(null, "class", selected ? "sequenceFlowLine_o" : "sequenceFlowLine");
             };
             
             obj.onmousemove = function (evt) {
-                if (Modeler.mode === "view") return false;
-                if (Modeler.selectedPath && Modeler.selectedPath !== null && Modeler.selectedPath === obj) {
+                if (Modeler.mode === "view") {
+                    return false;
+                }
+                
+                var selectedPath = Modeler.selectedPath || null;
+                if (selectedPath !== null && selectedPath === obj) {
                     obj.select(false);
                     Modeler.selectedPath = null;
                 }
                 if (obj.pressed) {
-                    var idx = obj.toObject.inConnections.indexOf(obj);
-                    obj.toObject.inConnections.splice(idx);
+                    var inConnections = obj.toObject.inConnections,
+                        idx = inConnections.indexOf(obj);
+                
+                    inConnections.splice(idx);
                     obj.toObject = null;
                     Modeler.dragConnection = obj;
                     obj.pressed = false;
