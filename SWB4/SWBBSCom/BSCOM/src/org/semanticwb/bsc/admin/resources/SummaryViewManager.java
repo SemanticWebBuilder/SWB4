@@ -204,7 +204,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                         perStat = obj.getPeriodStatus(thisPeriod);
                     } else if (generic instanceof Indicator) {
                         Indicator indicator = (Indicator) generic;
-                        Measure measure = indicator != null && indicator.getStar() != null
+                        Measure measure = indicator.getStar() != null
                                 ? indicator.getStar().getMeasure(thisPeriod) : null;
                         if (measure != null && measure.getEvaluation() != null) {
                             perStat = measure.getEvaluation();
@@ -286,23 +286,25 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             if (viewPropertiesList != null) {
                 while (viewPropertiesList.hasNext()) {
                     PropertyListItem propListItem = viewPropertiesList.next();
-                    SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
-                    int arrayIndex = propListItem.getPropertyOrder();
-                    if (addStatus) { //Si se agrego la columna de status, las demas se recorren
-                        arrayIndex++;
-                    }
+                    if (propListItem != null) {
+                        SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                        int arrayIndex = propListItem.getPropertyOrder();
+                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                            arrayIndex++;
+                        }
 
-                    if (propListItem != null && property != null) {
-                        String[] heading = {
-                            property.getName(),
-                            property.getLabel(lang),
-                            (filters != null && filters.contains(property.getName()))
-                            ? "true" : "false"
-                        };
-                        headingsArray.add(heading);
-                        headings2Show.put(new Integer(arrayIndex), heading);
-                        if (filters != null && filters.contains(property.getName())) {
-                            showFiltering = true;
+                        if (property != null) {
+                            String[] heading = {
+                                property.getName(),
+                                property.getLabel(lang),
+                                (filters != null && filters.contains(property.getName()))
+                                ? "true" : "false"
+                            };
+                            headingsArray.add(heading);
+                            headings2Show.put(Integer.valueOf(arrayIndex), heading);
+                            if (filters != null && filters.contains(property.getName())) {
+                                showFiltering = true;
+                            }
                         }
                     }
                 }
@@ -530,8 +532,6 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
             WebSite website = this.getResourceBase().getWebSite();
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
-            String identifier = null; //de los elementos del grid
-            String filters = null;
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
             boolean addStatus = false;
 
@@ -549,17 +549,9 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
 
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
             if (semWorkClass.equals(Objective.bsc_Objective)) {
-                identifier = paramRequest.getLocaleString("value_ObjectiveId");
                 addStatus = true;
             } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
-                identifier = paramRequest.getLocaleString("value_IndicatorId");
                 addStatus = true;
-            } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
-                identifier = paramRequest.getLocaleString("value_InitiativeId");
-            } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
-                identifier = paramRequest.getLocaleString("value_DeliverableId");
-            } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
-                identifier = paramRequest.getLocaleString("value_AgreementId");
             }
             //Comienza a armar el html a regresar
             output.append("<html>");
@@ -589,19 +581,21 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             if (viewPropertiesList != null) {
                 while (viewPropertiesList.hasNext()) {
                     PropertyListItem propListItem = viewPropertiesList.next();
-                    SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
-                    int arrayIndex = propListItem.getPropertyOrder();
-                    if (addStatus) { //Si se agrego la columna de status, las demas se recorren
-                        arrayIndex++;
-                    }
+                    if (propListItem != null) {
+                        SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                        int arrayIndex = propListItem.getPropertyOrder();
+                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                            arrayIndex++;
+                        }
 
-                    if (propListItem != null && property != null) {
-                        String[] heading = {
-                            property.getName(),
-                            property.getLabel(lang)
-                        };
-                        headingsArray.add(heading);
-                        headings2Show.put(new Integer(arrayIndex), heading);
+                        if (property != null) {
+                            String[] heading = {
+                                property.getName(),
+                                property.getLabel(lang)
+                            };
+                            headingsArray.add(heading);
+                            headings2Show.put(Integer.valueOf(arrayIndex), heading);
+                        }
                     }
                 }
             }
@@ -612,7 +606,9 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                 Integer thisKey = (Integer) thisHeading.getKey();
                 String[] heading = (String[]) thisHeading.getValue();
                 thisHeading = headings2Show.higherEntry(thisKey);
-                output.append("<th>" + heading[1] + "</th>");
+                output.append("<th>");
+                output.append(heading[1]);
+                output.append("</th>");
             }
             output.append("</tr>");
 
@@ -644,7 +640,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                         perStat = obj.getPeriodStatus(thisPeriod);
                     } else if (generic instanceof Indicator) {
                         Indicator indicator = (Indicator) generic;
-                        Measure measure = indicator != null && indicator.getStar() != null
+                        Measure measure = indicator.getStar() != null
                                 ? indicator.getStar().getMeasure(thisPeriod) : null;
                         if (measure != null && measure.getEvaluation() != null) {
                             perStat = measure.getEvaluation();
@@ -675,19 +671,21 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                 if (viewPropertiesList1 != null) {
                     while (viewPropertiesList1.hasNext()) {
                         PropertyListItem propListItem = viewPropertiesList1.next();
-                        SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
-                        String propertyValue = renderPropertyValue(request, semObj, property.getURI(), lang);
-                        int arrayIndex = propListItem.getPropertyOrder();
-                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
-                            arrayIndex++;
-                        }
-                        if (propListItem != null && property != null) {
-                            String[] heading = {
-                                property.getName(),
-                                propertyValue
-                            };
-                            headingsArray.add(heading);
-                            headings2Show.put(new Integer(arrayIndex), heading);
+                        if (propListItem != null) {
+                            SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                            int arrayIndex = propListItem.getPropertyOrder();
+                            if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                                arrayIndex++;
+                            }
+                            if (property != null) {
+                                String propertyValue = renderPropertyValue(request, semObj, property.getURI(), lang);
+                                String[] heading = {
+                                    property.getName(),
+                                    propertyValue
+                                };
+                                headingsArray.add(heading);
+                                headings2Show.put(Integer.valueOf(arrayIndex), heading);
+                            }
                         }
                     }
                 }
@@ -791,30 +789,30 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
      */
     private String replaceHtml(StringBuilder sb) {
         String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&aacute;", "á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&eacute;", "é");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iacute;", "í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uacute;", "ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Aacute;", "Á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Eacute;", "É");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Iacute;", "Í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Oacute;", "Ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uacute;", "Ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&nbsp;", " ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&lt;", "<");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&gt;", ">");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&amp;", "&");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&quot;", "\"");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iexcl;", "¡");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iquest;", "¿");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&reg;", "®");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&copy;", "©");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&euro;", "€");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&ntilde;", "ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uuml", "ü");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Ntilde;", "Ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uuml;", "Ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
         return sbStr;
     }
 
@@ -942,11 +940,11 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                     String optionData = selectedOptions.get(i);
                     if (optionData != null) {
                         viewListHtml.append("                        <option value=\"");
-                        viewListHtml.append(optionData.indexOf("|") > 0
+                        viewListHtml.append(optionData.indexOf("|") != -1
                                 ? optionData.substring(0, optionData.indexOf("|"))
                                 : optionData);
                         viewListHtml.append("\">");
-                        viewListHtml.append(optionData.indexOf("|") > 0
+                        viewListHtml.append(optionData.indexOf("|") != -1
                                 ? optionData.substring(optionData.indexOf("|") + 1)
                                 : optionData);
                         viewListHtml.append("</option>\n");
@@ -1303,7 +1301,9 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             statusMsg = paramRequest.getLocaleString(statusMsg);
             output.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
             output.append("    <script type=\"dojo/method\">\n");
-            output.append("        showStatus('" + statusMsg + "');\n");
+            output.append("        showStatus('");
+            output.append(statusMsg);
+            output.append("');\n");
             output.append("    </script>\n");
             output.append("</div>\n");
         }

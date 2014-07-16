@@ -372,94 +372,90 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             if (listOfViews != null && listOfViews.hasNext()) {
                 listOfViews = SWBComparator.sortByDisplayName(listOfViews, lang);
 
-                try {
-                    //Se agrega al listado cada vista creada
-                    while (listOfViews.hasNext()) {
-                        DetailView view = (DetailView) listOfViews.next();
+                //Se agrega al listado cada vista creada
+                while (listOfViews.hasNext()) {
+                    DetailView view = (DetailView) listOfViews.next();
 
-                        SWBResourceURL urlEdit = paramRequest.getRenderUrl();
-                        urlEdit.setParameter("operation", "edit");
-                        urlEdit.setParameter("viewUri", view.getURI());
-                        urlEdit.setMode("editTemplate");
+                    SWBResourceURL urlEdit = paramRequest.getRenderUrl();
+                    urlEdit.setParameter("operation", "edit");
+                    urlEdit.setParameter("viewUri", view.getURI());
+                    urlEdit.setMode("editTemplate");
 
-                        SWBResourceURL urlDelete = paramRequest.getActionUrl();
-                        urlDelete.setAction("deleteView");
-                        urlDelete.setParameter("svUri", view.getURI());
+                    SWBResourceURL urlDelete = paramRequest.getActionUrl();
+                    urlDelete.setAction("deleteView");
+                    urlDelete.setParameter("svUri", view.getURI());
 
-                        SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
-                        urlMakeActive.setAction("makeActive");
-                        urlMakeActive.setParameter("svUri", view.getURI());
+                    SWBResourceURL urlMakeActive = paramRequest.getActionUrl();
+                    urlMakeActive.setAction("makeActive");
+                    urlMakeActive.setParameter("svUri", view.getURI());
 
-                        //Se genera el HTML para las opciones de edición, eliminación
-                        listCode.append("        <tr>\n");
-                        listCode.append("          <td>\n");
-                        listCode.append("            <a href=\"void(0);\" title=\"");
-                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                    //Se genera el HTML para las opciones de edición, eliminación
+                    listCode.append("        <tr>\n");
+                    listCode.append("          <td>\n");
+                    listCode.append("            <a href=\"void(0);\" title=\"");
+                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                    listCode.append("\" onclick=\"submitUrl('");
+                    listCode.append(urlEdit);
+                    listCode.append("', this);return false;\"><img src=\"");
+                    listCode.append(SWBPlatform.getContextPath());
+                    listCode.append("/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"");
+                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                    listCode.append("\"></a>\n");
+                    listCode.append("            <a href=\"void(0);\" title=\"");
+                    listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
+                    listCode.append("\" onclick=\"if (confirm('");
+                    listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
+                    listCode.append(SWBUtils.TEXT.scape4Script(view.getTitle() != null ? view.getTitle() : "xxx"));
+                    listCode.append("?')){submitUrl('");
+                    listCode.append(urlDelete);
+                    listCode.append("', this);}return false;\"><img src=\"");
+                    listCode.append(SWBPlatform.getContextPath());
+                    listCode.append("/swbadmin/images/delete.gif\" border=\"0\" alt=\"");
+                    listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
+                    listCode.append("\"></a>\n");
+                    listCode.append("          </td>\n");
+                    listCode.append("          <td>");
+                    listCode.append("            <a href=\"void(0);\" title=\"");
+                    listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
+                    listCode.append("\" onclick=\"submitUrl('");
+                    listCode.append(urlEdit);
+                    listCode.append("', this);return false;\">");
+                    listCode.append(view.getTitle() != null ? view.getTitle() : "xxx");
+                    listCode.append("</a>\n");
+                    listCode.append("          </td>\n");
+                    listCode.append("          <td>");
+                    listCode.append(view.getModifiedBy() != null ? view.getModifiedBy().getFullName() : "xxx");
+                    listCode.append("          </td>\n");
+                    listCode.append("          <td>");
+                    listCode.append(view.getUpdated() != null ? view.getUpdated() : "xxx");
+                    listCode.append("          </td>\n");
+                    listCode.append("          <td align=\"center\">");
+
+                    if (this.getActiveDetailView() == null || (this.getActiveDetailView() != null
+                            && !this.getActiveDetailView().getURI().equals(view.getURI()))) {
+                        //Código HTML para asignación como contenido
+                        listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                        listCode.append("name=\"asContent\" id=\"asContent");
+                        listCode.append(view.getId());
+                        listCode.append("\" value=\"");
+                        listCode.append(view.getId());
                         listCode.append("\" onclick=\"submitUrl('");
-                        listCode.append(urlEdit);
-                        listCode.append("', this);return false;\"><img src=\"");
-                        listCode.append(SWBPlatform.getContextPath());
-                        listCode.append("/swbadmin/icons/editar_1.gif\" border=\"0\" alt=\"");
-                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
-                        listCode.append("\"></a>\n");
-                        listCode.append("            <a href=\"void(0);\" title=\"");
-                        listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
-                        listCode.append("\" onclick=\"if (confirm('");
-                        listCode.append(paramRequest.getLocaleString("msg_confirmRemove"));
-                        listCode.append(SWBUtils.TEXT.scape4Script(view.getTitle() != null ? view.getTitle() : "xxx"));
-                        listCode.append("?')){submitUrl('");
-                        listCode.append(urlDelete);
-                        listCode.append("', this);}return false;\"><img src=\"");
-                        listCode.append(SWBPlatform.getContextPath());
-                        listCode.append("/swbadmin/images/delete.gif\" border=\"0\" alt=\"");
-                        listCode.append(paramRequest.getLocaleString("ttl_lnkDelete"));
-                        listCode.append("\"></a>\n");
-                        listCode.append("          </td>\n");
-                        listCode.append("          <td>");
-                        listCode.append("            <a href=\"void(0);\" title=\"");
-                        listCode.append(paramRequest.getLocaleString("ttl_lnkEdit"));
-                        listCode.append("\" onclick=\"submitUrl('");
-                        listCode.append(urlEdit);
-                        listCode.append("', this);return false;\">");
-                        listCode.append(view.getTitle() != null ? view.getTitle() : "xxx");
-                        listCode.append("</a>\n");
-                        listCode.append("          </td>\n");
-                        listCode.append("          <td>");
-                        listCode.append(view.getModifiedBy() != null ? view.getModifiedBy().getFullName() : "xxx");
-                        listCode.append("          </td>\n");
-                        listCode.append("          <td>");
-                        listCode.append(view.getUpdated() != null ? view.getUpdated() : "xxx");
-                        listCode.append("          </td>\n");
-                        listCode.append("          <td align=\"center\">");
-
-                        if (this.getActiveDetailView() == null || (this.getActiveDetailView() != null
-                                && !this.getActiveDetailView().getURI().equals(view.getURI()))) {
-                            //Código HTML para asignación como contenido
-                            listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
-                            listCode.append("name=\"asContent\" id=\"asContent");
-                            listCode.append(view.getId());
-                            listCode.append("\" value=\"");
-                            listCode.append(view.getId());
-                            listCode.append("\" onclick=\"submitUrl('");
-                            listCode.append(urlMakeActive);
-                            listCode.append("', this.domNode);return false;\">");
-                        } else if (this.getActiveDetailView() != null
-                                && this.getActiveDetailView().getURI().equals(view.getURI())) {
-                            listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
-                            listCode.append("name=\"asContent\" id=\"asContent");
-                            listCode.append(view.getId());
-                            listCode.append("\" value=\"");
-                            listCode.append(view.getId());
-                            listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
-                            listCode.append(urlMakeActive);
-                            listCode.append("', this.domNode);return false;\">");
-                        }
-                        listCode.append("          </td>\n");
-                        listCode.append("        </tr>\n");
-
+                        listCode.append(urlMakeActive);
+                        listCode.append("', this.domNode);return false;\">");
+                    } else if (this.getActiveDetailView() != null
+                            && this.getActiveDetailView().getURI().equals(view.getURI())) {
+                        listCode.append("          <input type=\"radio\" dojoType=\"dijit.form.RadioButton\" ");
+                        listCode.append("name=\"asContent\" id=\"asContent");
+                        listCode.append(view.getId());
+                        listCode.append("\" value=\"");
+                        listCode.append(view.getId());
+                        listCode.append("\" checked=\"checked\" onclick=\"submitUrl('");
+                        listCode.append(urlMakeActive);
+                        listCode.append("', this.domNode);return false;\">");
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    listCode.append("          </td>\n");
+                    listCode.append("        </tr>\n");
+
                 }
             }
             listCode.append("      </tbody>\n");
@@ -520,7 +516,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
-        String templateContent = new String();
+        String templateContent = "";
         String viewUri = request.getParameter("viewUri") != null
                 ? request.getParameter("viewUri") : "";
         String propertiesUrl = paramRequest.getRenderUrl().setMode("getPropertiesInfo").setCallMethod(SWBResourceURLImp.Call_DIRECT).toString();
@@ -758,12 +754,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
-            PeriodStatus periodStatus = null;
+            
+            //periodStatus dejo de servir al introducir Detailed
+            //PeriodStatus periodStatus = null;
 
             UserGroup collaboration = null;
-
             GenericObject generic = semObj.createGenericInstance();
-            Detailed d = (Detailed)generic;
+            Detailed d = (Detailed) generic;
             statusStyleClass = d.getStatusIconClass(period);
 
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
@@ -778,6 +775,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             output.append(" class=\"");
             output.append(statusStyleClass);
             output.append("\">");
+            //secondStatusStyleClass dejo de asignarse desde el 17/06/14 con el uso de Detailed
             if (secondStatusStyleClass != null) {
                 output.append("<span class=\"");
                 output.append(secondStatusStyleClass);
@@ -820,14 +818,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
         SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-        ArrayList<SemanticProperty> propsList =
-                (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
-        Collections.sort(propsList, new PropertiesComparator());
-        Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
         JSONArray array = new JSONArray();
-        String structure = null;
+        String structure = "";
 
         if (semWorkClass != null) {
+            ArrayList<SemanticProperty> propsList =
+                    (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
+            Collections.sort(propsList, new PropertiesComparator());
+            Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
             try {
                 while (basePropertiesList.hasNext()) {
                     SemanticProperty prop = basePropertiesList.next();
@@ -945,23 +943,32 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 if (!configuration.isEmpty()) {
                     //Almacenar en el archivo asociado el contenido de la configuración
                     viewFilePath = SWBPortal.getWorkPath() + detailView.getWorkPath();
+                    FileWriter writer = null;
                     try {
+                        boolean filePathExists = true;
                         File filePath = new File(viewFilePath);
                         if (!filePath.exists()) {
-                            filePath.mkdirs();
+                            filePathExists = filePath.mkdirs();
                         }
                         viewFilePath += DetailViewManager.TEMPLATE_FILENAME;
                         File file = new File(viewFilePath);
                         if (detailView.getViewFilePath() == null) {
                             storePath = true;
                         }
-                        FileWriter writer = new FileWriter(file);
-                        writer.write(configuration);
-                        writer.flush();
-                        writer.close();
+                        if (filePathExists) {
+                            writer = new FileWriter(file);
+                            writer.write(configuration);
+//                            writer.flush();
+//                            writer.close();
+                        }
                     } catch (IOException ioe) {
                         DetailViewManager.log.error("Al escribir el contenido de la plantilla", ioe);
                         errorMsg = "msg_FileNotWriten";
+                    } finally {
+                        if (writer != null) {
+                            writer.flush();
+                            writer.close();
+                        }
                     }
                     if (storePath) {
                         detailView.setViewFilePath(viewFilePath);
@@ -982,6 +989,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
             if (detailView != null) {
                 try {
+                    boolean viewFileDeleted = false;
                     if (this.getActiveDetailView() != null && this.getActiveDetailView() == detailView) {
                         this.setActiveDetailView(null);
                     }
@@ -989,11 +997,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                     if (detailView.getViewFilePath() != null) {
                         File toDelete = new File(detailView.getViewFilePath());
                         if (toDelete.canWrite()) {
-                            toDelete.delete();
+                            viewFileDeleted = toDelete.delete();
                         }
                     }
-                    DetailView.ClassMgr.removeDetailView(detailView.getId(), bscModel);
-                    statusMsg = "msg_ViewDeleted";
+                    if (viewFileDeleted) {
+                        DetailView.ClassMgr.removeDetailView(detailView.getId(), bscModel);
+                        statusMsg = "msg_ViewDeleted";
+                    } else {
+                        errorMsg = "msg_ViewNotDeleted";
+                    }
                 } catch (Exception e) {
                     errorMsg = "msg_ViewNotDeleted";
                     DetailViewManager.log.error("Al eliminar una vista detalle", e);
@@ -1482,7 +1494,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 ? true : formElement.getBooleanProperty(TextAreaElement.bsc_editable);
     }
 
-    /**
+    /*
      * Revisa si el usuario en sesi&oacute;n pertenece al grupo de usuarios
      * recibido, devolviendo el resultado de esa revisi&oacute;n
      *
@@ -1491,11 +1503,11 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return {@literal true} si el usuario en sesi&oacutee;n pertenece al
      * grupo indicado, {@literal false} de lo contrario
      */
-    private boolean userCanCollaborate(final UserGroup collaboration) {
-        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
-        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
-        return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
-    }
+//    private boolean userCanCollaborate(final UserGroup collaboration) {
+//        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+//        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+//        return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
+//    }
 
     /**
      * Obtiene el valor de las propiedades tipo fecha en la declaraci&oacute;n
@@ -1634,30 +1646,30 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     private String replaceHtml(StringBuilder sb) {
         String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&aacute;", "á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&eacute;", "é");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iacute;", "í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uacute;", "ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Aacute;", "Á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Eacute;", "É");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Iacute;", "Í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Oacute;", "Ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uacute;", "Ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&nbsp;", " ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&lt;", "<");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&gt;", ">");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&amp;", "&");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&quot;", "\"");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iexcl;", "¡");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iquest;", "¿");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&reg;", "®");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&copy;", "©");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&euro;", "€");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&ntilde;", "ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uuml", "ü");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Ntilde;", "Ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uuml;", "Ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
         return sbStr;
     }
 
@@ -1820,7 +1832,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 statusStyleClass = periodStatus.getStatus().getIconClass();
             } else if (generic != null && generic instanceof Indicator) {
                 Indicator indicator = (Indicator) generic;
-                Measure measure = indicator != null && indicator.getStar() != null
+                Measure measure = indicator.getStar() != null
                         ? indicator.getStar().getMeasure(period) : null;
                 if (measure != null && measure.getEvaluation() != null) {
                     periodStatus = measure.getEvaluation();
