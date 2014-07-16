@@ -2691,11 +2691,15 @@
             };
                 
             obj.onmouseup = function (evt) {
-                if (Modeler.mode === "view") return false;
+                if (Modeler.mode === "view") {
+                    return false;
+                }
+                
+                var dragCon = Modeler.dragConnection || null;
                 if (obj.pressed) {
                     obj.pressed = false;
                 }
-                if (Modeler.dragConnection && Modeler.dragConnection !== null && Modeler.dragConnection === obj) {
+                if (dragCon !== null && dragCon === obj) {
                     Modeler.dragConnection = null;
                 }
                 return false;
@@ -2773,10 +2777,10 @@
                 };
                 
                 obj.text.updateLocation = function() {
-                    var p1 = obj.pathSegList.getItem(1);
-                    var p2 = obj.pathSegList.getItem(2);
-                    var _x = p1.x;
-                    var _y = p1.y;
+                    var p1 = obj.pathSegList.getItem(1),
+                        p2 = obj.pathSegList.getItem(2),
+                        _x = p1.x,
+                        _y = p1.y;
                     
                     if (p1.x !== p2.x) {
                         _x += (p2.x - p1.x)/2;
@@ -2816,8 +2820,7 @@
                 }
             };
             
-            obj.updateInterPoints=function()
-            {
+            obj.updateInterPoints=function() {
                 var p0=obj.pathSegList.getItem(0);
                 var p3=obj.pathSegList.getItem(3);
                 
