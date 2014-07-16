@@ -2498,8 +2498,7 @@
             return true;
         },
                 
-        onmouseup:function(evt)
-        {
+        onmouseup:function(evt) {
             var _this = ToolKit;
             var resizeObj = _this.svg.resizeObject || null,
                 dragCon = Modeler.dragConnection || null,
@@ -2532,33 +2531,34 @@
             return true;
         },                  
                 
-        objectMouseDown:function(evt,obj)
-        {
-            if (Modeler.mode === "view") return false;
-            if(Modeler.creationId && Modeler.creationId!==null)
-            {
-                if (obj.elementType !== "Lane") {
-                    Modeler.creationDropObject=obj;
-                } else {
-                    Modeler.creationDropObject=null;
-                }
+        objectMouseDown:function(evt,obj) {
+            if (Modeler.mode === "view") {
                 return false;
             }
             
-            if(evt.button===2)
-            {
-                Modeler.dragConnection=Modeler.mapObject(obj.getDefaultFlow());
-                Modeler.dragConnection.hide();
-                if (obj.canStartLink(Modeler.dragConnection)) {
-                    obj.addOutConnection(Modeler.dragConnection);
-                    if (Modeler.dragConnection.elementType==="ConditionalFlow" && obj.elementType==="ExclusiveGateway" || obj.elementType==="InclusiveGateway") {
-                        Modeler.dragConnection.removeAttribute("marker-start");
-                        Modeler.dragConnection.soff = 0;
+            var cId = Modeler.creationId || null;
+            if(cId !== null) {
+                Modeler.creationDropObject = obj.elementType !== "Lane" ? obj : null;
+                return false;
+            }
+
+            if(evt.button===2) {
+                var dragCon = Modeler.dragConnection = Modeler.mapObject(obj.getDefaultFlow()),
+                    etype = obj.elementType;
+                
+                if (dragCon !== null){
+                    dragCon.hide();
+                    if (obj.canStartLink(dragCon)) {
+                        if (dragCon.elementType==="ConditionalFlow" && etype==="ExclusiveGateway" || etype==="InclusiveGateway") {
+                            dragCon.removeAttribute("marker-start");
+                            dragCon.soff = 0;
+                        }
+                        obj.addOutConnection(dragCon);
+                        //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                    } else {
+                        dragCon.remove();
+                        Modeler.dragConnection = null;
                     }
-                    //Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
-                } else {
-                    Modeler.dragConnection.remove();
-                    Modeler.dragConnection = null;
                 }
                 
                 //obj.select(true);
