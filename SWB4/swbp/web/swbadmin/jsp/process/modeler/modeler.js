@@ -3643,18 +3643,16 @@
                 }
 
                 //Asignar contenedores de los flowNodes y lineas
-                for (i = 0; i < flowNodes.length; i++) {
-                    var tmp = flowNodes[i];
-                    var obj = Modeler.getGraphElementByURI(null, tmp.uri);
-                    var par = Modeler.getGraphElementByURI(null, tmp.parent);
+                length = flowNodes.length;
+                for (i = 0; i < length; i++) {
+                    var tmp = flowNodes[i],
+                        obj = Modeler.getGraphElementByURI(null, tmp.uri),
+                        par = Modeler.getGraphElementByURI(null, tmp.parent);
+                
                     if (tmp.container && tmp.container !== null) {
                         var cont = Modeler.getGraphElementByURI(null, tmp.container);
                         if (cont !== null && obj !== null) {
-                            if (cont.typeOf("SubProcess")) {
-                                obj.layer = cont.subLayer;
-                            } else {
-                                obj.layer = null;
-                            }
+                            obj.layer = cont.typeOf("SubProcess") ? cont.subLayer : null;
                         }
                     }
                 }
