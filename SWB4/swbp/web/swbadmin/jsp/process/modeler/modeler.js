@@ -3106,15 +3106,16 @@
             
             obj.updateLanes = function() {
                 //console.log("lineOffset:"+obj.headerLine.lineOffset);
-                var totWidth = obj.getWidth()-obj.headerLine.lineOffset;
-                obj.lanes.sort(function(a,b){return a.lindex-b.lindex;});
-                if (obj.lanes.length > 0) {
-                    var ypos = obj.getY() - obj.getHeight()/2;
-                    for (var i = 0; i < obj.lanes.length; i++) {
-                        obj.lanes[i].resize(totWidth, obj.lanes[i].getHeight());
-                        obj.lanes[i].move(obj.getX()+obj.headerLine.lineOffset/2, ypos + obj.lanes[i].getHeight()/2);
-                        ypos = ypos + obj.lanes[i].getHeight();
-                    }
+                var totWidth = obj.getWidth() - obj.headerLine.lineOffset;
+                obj.lanes.sort(function(a,b) {
+                    return a.lindex - b.lindex;
+                });
+                
+                var lanes = obj.lanes, i, ypos = obj.getY() - obj.getHeight() / 2;
+                for (i = 0; i < lanes.length; i++) {
+                    lanes[i].resize(totWidth, lanes[i].getHeight());
+                    lanes[i].move(obj.getX() + obj.headerLine.lineOffset / 2, ypos + lanes[i].getHeight() / 2);
+                    ypos = ypos + obj.lanes[i].getHeight();
                 }
                 obj.updateHeaderLine();
             };
