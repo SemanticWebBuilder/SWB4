@@ -3285,95 +3285,85 @@
         },
         
         createSubProcess: function(id, parent, type) {
-            var obj=Modeler.createTask(id,parent);
-            var icon=obj.addIcon("#subProcessMarker",0,1,-1,-12);
+            var obj = Modeler.createTask(id,parent),
+                icon = obj.addIcon("#subProcessMarker",0,1,-1,-12),
+                options = Modeler.options || {};
+        
             obj.subLayer={parent:obj};
             
-            if (Modeler.options && Modeler.options !== null && Modeler.options.layerNavigation) {
-                icon.obj.ondblclick=function(evt)
-                {
+            if (options.layerNavigation) {
+                icon.obj.ondblclick=function(evt) {
                     ToolKit.setLayer(obj.subLayer);
                 };
             }
             
-            if (type==="eventsubProcess") {
-                obj.setAttributeNS(null,"bclass","eventSubTask");
-                obj.setAttributeNS(null,"oclass","eventSubTask_o");
-                obj.setBaseClass();                        
-            } else if (type === "callSubProcess") {
-                obj.setAttributeNS(null,"bclass","callActivity");
-                obj.setAttributeNS(null,"oclass","callActivity_o");
-                obj.setBaseClass();
-            }
-            else if (type==="transactionsubProcess")
-            {
-                if (obj.subSquare && obj.subSquare !== null) {
-                    obj.subSquare.remove();
-                } else {
-                    var constructor=function()
-                    {
+            switch(type) {
+                case "eventsubProcess":
+                    obj.setAttributeNS(null,"bclass","eventSubTask");
+                    obj.setAttributeNS(null,"oclass","eventSubTask_o");
+                    obj.setBaseClass();
+                    break;
+                case "callSubProcess":
+                    obj.setAttributeNS(null,"bclass","callActivity");
+                    obj.setAttributeNS(null,"oclass","callActivity_o");
+                    obj.setBaseClass();
+                    break;
+                case "transactionsubProcess":
+                    obj.subSquare && obj.subSquare.remove();
+                    
+                    var subsquare = obj.subSquare = ToolKit.createBaseObject(function() {
                         var tx = document.createElementNS(ToolKit.svgNS,"rect");
                         tx.setAttributeNS(null,"rx",10);
                         tx.setAttributeNS(null,"ry",10);
+                        tx.setAttributeNS(null,"class","transactionSquare");
                         return tx;
-                    };
-                    var square=ToolKit.createBaseObject(constructor,null,null);
-                    obj.subSquare = square;
-                    obj.subSquare.setAttributeNS(null,"class","transactionSquare");
-                    obj.subSquare.canSelect=false;
+                    }, null, null);
                     
-                    obj.subSquare.onmousedown=function(evt)
-                    {
+                    subsquare.canSelect = false;
+                    subsquare.onmousedown=function(evt) {
                         obj.onmousedown(evt);
                     };
-                    obj.subSquare.onmouseup=function(evt)
-                    {
+                    subsquare.onmouseup=function(evt) {
                         obj.onmouseup(evt);
                     };      
-                    obj.subSquare.onmousemove=function(evt)
-                    {
+                    subsquare.onmousemove=function(evt) {
                         obj.onmousemove(evt);
                     };
-                    obj.subSquare.ondblclick=function(evt)
-                    {
+                    subsquare.ondblclick=function(evt) {
                         obj.ondblclick(evt);
                     };
-                    
-                    obj.subSquare.onDropObjects=function(objs) {
+                    subsquare.onDropObjects=function(objs) {
                         obj.onDropObjects(objs);
                     };
-                    
+
                     obj.updateSubSquare=function() {
-                        obj.subSquare.move(obj.getX(),obj.getY());
-                        obj.subSquare.resize(obj.getWidth()-8,obj.getHeight()-8);
+                        var subsquare = obj.subSquare;
+                        subsquare.move(obj.getX(),obj.getY());
+                        subsquare.resize(obj.getWidth()-8,obj.getHeight()-8);
                         if (obj.nextSibling) {
-                            ToolKit.svg.insertBefore(obj.subSquare, obj.nextSibling);
+                            ToolKit.svg.insertBefore(subsquare, obj.nextSibling);
                         }
                     };
-                }
-                
-                var fMove=obj.move;
-                var fResize=obj.resize;
-                var fMoveFirst=obj.moveFirst;
-                
-                obj.move=function(x,y) {
-                    fMove(x,y);
-                    if(obj.subSquare && obj.subSquare!==null) {
+                    
+                    var fMove=obj.move;
+                    var fResize=obj.resize;
+                    var fMoveFirst=obj.moveFirst;
+
+                    obj.move=function(x,y) {
+                        fMove(x,y);
+                        obj.subSquare && obj.subSquare!==null && obj.updateSubSquare();
+                    };
+
+                    obj.resize=function(w,h) {
+                        fResize(w,h);
+                        obj.subSquare && obj.subSquare!==null && obj.updateSubSquare();
+                    };
+
+                    obj.moveFirst=function() {
+                        fMoveFirst();
                         obj.updateSubSquare();
-                    }
-                };
-                
-                obj.resize=function(w,h) {
-                    fResize(w,h);
-                    if(obj.subSquare && obj.subSquare!==null) {
-                        obj.updateSubSquare();
-                    }
-                };
-                
-                obj.moveFirst=function() {
-                    fMoveFirst();
-                    obj.updateSubSquare();
-                };
+                    };
+                    break;
             }
             return obj;
         },
