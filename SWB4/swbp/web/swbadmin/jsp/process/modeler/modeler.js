@@ -2569,22 +2569,22 @@
             return true;            
         },      
                 
-        objectMouseMove:function(evt,obj)
-        {
-            if (Modeler.mode === "view") return false;
-            //console.log("objectMouseOver:"+evt+" "+obj);
-            if(Modeler.dragConnection && Modeler.dragConnection!==null)
-            {
-                if(Modeler.dragConnection.fromObject!==obj && Modeler.dragConnection.toObject!==obj)
-                {
-                    if (obj.canEndLink(Modeler.dragConnection)) {
+        objectMouseMove:function(evt,obj) {
+            if (Modeler.mode === "view") {
+                return false;
+            }
+            
+            var dragCon = Modeler.dragConnection || null;
+            if(dragCon !== null) {
+                if(dragCon.fromObject !== obj && dragCon.toObject !== obj) {
+                    if (obj.canEndLink(dragCon)) {
                         ToolKit.unSelectAll();
                         ToolKit.selectObj(obj,true);
                         //obj.addInConnection(Modeler.dragConnection);
-                        Modeler.dragConnection.toObject=obj;
-                        Modeler.dragConnection.setEndPoint(obj.getX(),obj.getY());
+                        dragCon.toObject=obj;
+                        dragCon.setEndPoint(obj.getX(),obj.getY());
                     } else {
-                        Modeler.dragConnection.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
+                        dragCon.setEndPoint(ToolKit.getEventX(evt), ToolKit.getEventY(evt));
                     }
                 }
                 ToolKit.stopPropagation(evt);
