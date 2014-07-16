@@ -3791,14 +3791,14 @@
         },
 
         getGraphElementByURI:function(parent, uri) {
-            var par = parent;
-            if (par === null) {
-                par = ToolKit;
-            }
+            var i, par = parent === null ? ToolKit : parent,
+                contents = par.contents || [],
+                length = contents.length, c;
             
-            for (var i = 0; i< par.contents.length; i++) {
-                if (par.contents[i].id && par.contents[i].id === uri) {
-                    return par.contents[i];
+            for (i = 0; i < length; i++) {
+                c = contents[i];
+                if (c.id && c.id === uri) {
+                    return c;
                 }
             }
             return null;
