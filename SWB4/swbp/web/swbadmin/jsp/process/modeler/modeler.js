@@ -3145,18 +3145,15 @@
             return obj;
         },
     
-        createTask:function(id, parent)
-        {
+        createTask:function(id, parent) {
             //Revisar ID
-            var obj=ToolKit.createResizeObject(id,parent);
+            var obj = ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"bclass","task");
             obj.setAttributeNS(null,"oclass","task_o");
             obj.setAttributeNS(null,"rx",10);
             obj.setAttributeNS(null,"ry",10);
             obj.setBaseClass();                        
-            obj.mouseup=function(x,y)
-            {
-                //alert("hola1");
+            obj.mouseup=function(x,y) {
                 return true;
             };
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);};
@@ -3165,10 +3162,9 @@
             return obj;
         },
         
-        createCallTask:function(id, parent)
-        {
+        createCallTask:function(id, parent) {
             //Revisar ID
-            var obj=Modeler.createTask(id,parent);
+            var obj = Modeler.createTask(id,parent);
             obj.setAttributeNS(null,"bclass","callactivity");
             obj.setAttributeNS(null,"oclass","callactivity_o");
             obj.setBaseClass();                        
@@ -3176,37 +3172,36 @@
         },
         
         createAnnotationArtifact:function(id, parent) {
-            var obj= ToolKit.createResizeObject(id,parent);
+            var obj = ToolKit.createResizeObject(id,parent);
             obj.setAttributeNS(null,"oclass","annotationArtifactRect_o");
             obj.setAttributeNS(null,"bclass","annotationArtifactRect");
             obj.setBaseClass();
             
-            var constructor=function()
-            {
-                var tx = document.createElementNS(ToolKit.svgNS,"path");
-                return tx;
-            };
+            var line = ToolKit.createBaseObject(function(){
+                return document.createElementNS(ToolKit.svgNS,"path");
+            }, null, null);
             
-            var line=ToolKit.createBaseObject(constructor,null,null);
             obj.subLine = line;
             obj.subLine.canSelect=false;
             obj.subLine.setAttributeNS(null,"bclass","annotationArtifact");
             obj.subLine.setAttributeNS(null,"oclass","annotationArtifact");
             obj.subLine.setBaseClass();
-            obj.mouseup=function(x,y)
-            {
-                if (Modeler.mode === "view") return false;
-                return true;
+            obj.mouseup=function(x,y) {
+                return Modeler.mode === "view" ? false : true;
             };
             obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);};
             //obj.mousedown=function(evt){return Modeler.objectMouseDown(evt,obj);}
             obj.onmousemove=function(evt){return Modeler.objectMouseMove(evt,obj);};
             
             obj.updateSubLine=function() {
-                obj.subLine.setAttributeNS(null, "d", "M"+(obj.getX()-obj.getWidth()/2 + 20)+" "+(obj.getY()-obj.getHeight()/2) 
-                    +" L"+(obj.getX()-obj.getWidth()/2)+" "+(obj.getY()-obj.getHeight()/2) 
-                    +" L"+(obj.getX()-obj.getWidth()/2)+" "+(obj.getY()+obj.getHeight()/2)
-                    +" L"+(obj.getX()-obj.getWidth()/2+20)+" "+(obj.getY()+obj.getHeight()/2));
+                var x = obj.getX(),
+                    y = obj.getY(),
+                    dx = x - obj.getWidth() / 2,
+                    dy = y - obj.getWidth() / 2;
+                obj.subLine.setAttributeNS(null, "d", "M" + (dx + 20) + " " + dy
+                    +" L" + dx + " "+ dy
+                    +" L" + dx + " "+ dy
+                    +" L" + (dx + 20) + " "+ (y + obj.getHeight() / 2));
                 if (obj.nextSibling) {
                     ToolKit.svg.insertBefore(obj.subLine, obj.nextSibling);
                 }
