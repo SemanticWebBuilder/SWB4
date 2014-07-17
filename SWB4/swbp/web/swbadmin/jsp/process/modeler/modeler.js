@@ -3805,13 +3805,10 @@
         },
 
         submitCommand:function(url, data, callbackHandler) {
-            var param = {jsonString:data};
-            var xhqr = $.post(url, param)
+            var xhqr = $.post(url, {jsonString:data})
                 .done(function(data) {
-                    console.log("done!");
                     ToolKit.hideToolTip();
                     callbackHandler(data);
-                    console.log(data);
                     return data;
                 }).fail(function(error) {
                     ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación: ", 200, "Error");
@@ -3820,11 +3817,11 @@
         },
                 
         clearCanvas: function() {
-            for (var i = ToolKit.contents.length; i--;) {
-                if (ToolKit.contents[i] && ToolKit.contents[i].remove) {
-                    ToolKit.contents[i].remove(true);
-                    ToolKit.contents[i] = null;
-                }
+            var i, contents = ToolKit.contents || [];
+        
+            for (i = contents.length; i--;) {
+                contents[i] && contents[i].remove && contents[i].remove(true);
+                contents[i] = null;
             }
             
             ToolKit.contents = [];
