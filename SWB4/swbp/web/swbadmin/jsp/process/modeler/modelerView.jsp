@@ -27,10 +27,6 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
     <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/jquery/jquery.js"></script>
-    <!--
-    <script src="/swbadmin/js/swb_admin.js"></script>
-    <script src="/swbadmin/js/swb.js"></script>
-    -->
     <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/toolkit.js" charset="utf-8"></script>
     <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
     <link href="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
