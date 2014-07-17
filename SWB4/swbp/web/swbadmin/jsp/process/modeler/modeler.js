@@ -3196,12 +3196,12 @@
             obj.updateSubLine=function() {
                 var x = obj.getX(),
                     y = obj.getY(),
-                    dx = x - obj.getWidth() / 2,
-                    dy = y - obj.getWidth() / 2;
-                obj.subLine.setAttributeNS(null, "d", "M" + (dx + 20) + " " + dy
-                    +" L" + dx + " "+ dy
-                    +" L" + dx + " "+ dy
-                    +" L" + (dx + 20) + " "+ (y + obj.getHeight() / 2));
+                    hw = obj.getWidth() / 2,
+                    hh = obj.getHeight() / 2;
+                obj.subLine.setAttributeNS(null, "d", "M" + (x - hw + 20) + " " + (y - hh)
+                    +" L" + (x - hw) + " "+ (y - hh)
+                    +" L" + (x - hw) + " "+ (y + hh)
+                    +" L" + (x - hw + 20) + " "+ (y + hh));
                 if (obj.nextSibling) {
                     ToolKit.svg.insertBefore(obj.subLine, obj.nextSibling);
                 }
