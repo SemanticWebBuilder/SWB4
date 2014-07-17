@@ -3867,6 +3867,16 @@
             
             var ret = null;
             switch(type) {
+                case 'Pool':
+                    ret = new _Pool(Modeler.createPool(null, null));
+                    ret.setText("Pool");
+                    ret.resize(600,200);
+                    break;
+                case 'Lane':
+                    ret = new _Lane(Modeler.createLane(null, null));
+                    ret.setText("Lane");
+                    ret.resize(600,200);
+                    break;
                 case 'SequenceFlow':
                     ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
                     ret.eoff = 10;
@@ -3931,275 +3941,264 @@
                     ret = new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
                     ret.setText("Inicio por compensación");
                     break;
-            }
-            
-            if(type==='MessageIntermediateCatchEvent') {
-                ret=new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de mensaje");
-            }
-            else if(type==='MessageIntermediateThrowEvent') {
-                ret= new _MessageIntermediateThrowEvent(Modeler.createObject("#messageIntermediateThrowEvent",null,null));
-                ret.setText("Envío de mensaje");
-            }
-            else if(type==='TimerIntermediateCatchEvent') {
-                ret= new _TimerIntermediateCatchEvent(Modeler.createObject("#timerIntermediateEvent",null,null));
-                ret.setText("Temporizador");
-            }
-            else if(type==='ErrorIntermediateCatchEvent') {
-                ret= new _ErrorIntermediateCatchEvent(Modeler.createObject("#errorIntermediateEvent",null,null));
-                ret.setText("Recepción de error");
-            }
-            else if(type==='CancelationIntermediateCatchEvent') {
-                ret= new _CancelationIntermediateCatchEvent(Modeler.createObject("#cancelIntermediateEvent",null,null));
-                ret.setText("Cancelación");
-            }
-            else if(type==='CompensationIntermediateCatchEvent') {
-                ret= new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de compensación");
-            }
-            else if(type==='CompensationIntermediateThrowEvent') {
-                ret= new _CompensationIntermediateThrowEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de compensación");
-            }
-            else if(type==='RuleIntermediateCatchEvent') {
-                ret= new _RuleIntermediateCatchEvent(Modeler.createObject("#ruleIntermediateEvent",null,null));
-                ret.setText("Regla de negocio");
-            }
-            else if(type==='LinkIntermediateCatchEvent') {
-                ret= new _LinkIntermediateCatchEvent(Modeler.createObject("#linkIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de enlace");
-            }
-            else if(type==='LinkIntermediateThrowEvent') {
-                ret= new _LinkIntermediateThrowEvent(Modeler.createObject("#linkIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de enlace");
-            }
-            else if(type==='SignalIntermediateCatchEvent') {
-                ret= new _SignalIntermediateCatchEvent(Modeler.createObject("#signalIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de señal");
-            }
-            else if(type==='SignalIntermediateThrowEvent') {
-                ret= new _SignalIntermediateThrowEvent(Modeler.createObject("#signalIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de señal");
-            }
-            else if(type==='MultipleIntermediateCatchEvent') {
-                ret= new _MultipleIntermediateCatchEvent(Modeler.createObject("#multipleIntermediateCatchEvent",null,null));
-                ret.setText("Recepción múltiple");
-            }
-            else if(type==='MultipleIntermediateThrowEvent') {
-                ret= new _MultipleIntermediateThrowEvent(Modeler.createObject("#multipleIntermediateThrowEvent",null,null));
-                ret.setText("Disparo múltiple");
-            }
-            else if(type==='ScalationIntermediateCatchEvent') {
-                ret= new _ScalationIntermediateCatchEvent(Modeler.createObject("#scalationIntermediateCatchEvent",null,null));
-                ret.setText("Recepción de escalamiento");
-            }
-            else if(type==='ScalationIntermediateThrowEvent') {
-                ret= new _ScalationIntermediateThrowEvent(Modeler.createObject("#scalationIntermediateThrowEvent",null,null));
-                ret.setText("Disparo de escalamiento");
-            }
-            else if(type==='ParallelIntermediateCatchEvent') {
-                ret= new _ParallelIntermediateCatchEvent(Modeler.createObject("#parallelIntermediateEvent",null,null));
-                ret.setText("Paralelo");
-            }
-            else if(type==='EndEvent') {
-                ret= new _EndEvent(Modeler.createObject("#endEvent",null,null));
-                ret.setText("Fin normal");
-            }
-            else if(type==='MessageEndEvent') {
-                ret= new _MessageEndEvent(Modeler.createObject("#messageEndEvent",null,null));
-                ret.setText("Fin con mensaje");
-            }
-            else if(type==='ErrorEndEvent') {
-                ret= new _ErrorEndEvent(Modeler.createObject("#errorEndEvent",null,null));
-                ret.setText("Fin con error");
-            }
-            else if(type==='CancelationEndEvent') {
-                ret= new _CancelationEndEvent(Modeler.createObject("#cancelationEndEvent",null,null));
-                ret.setText("Fin con cancelación");
-            }
-            else if(type==='CompensationEndEvent') {
-                ret= new _CompensationEndEvent(Modeler.createObject("#compensationEndEvent",null,null));
-                ret.setText("Fin con compensación");
-            }
-            else if(type==='SignalEndEvent') {
-                ret= new _SignalEndEvent(Modeler.createObject("#signalEndEvent",null,null));
-                ret.setText("Fin con señal");
-            }
-            else if(type==='MultipleEndEvent') {
-                ret= new _MultipleEndEvent(Modeler.createObject("#multipleEndEvent",null,null));
-                ret.setText("Fin múltiple");
-            }
-            else if(type==='ScalationEndEvent') {
-                ret= new _ScalationEndEvent(Modeler.createObject("#scalationEndEvent",null,null));
-                ret.setText("Fin con escalamiento");
-            }
-            else if(type==='TerminationEndEvent') {
-                ret= new _TerminationEndEvent(Modeler.createObject("#terminationEndEvent",null,null));
-                ret.setText("Terminación");
-            }
-            else if(type==='ExclusiveGateway') {
-                ret= new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
-                ret.setText("Exclusiva (datos)");
-            }
-            else if(type==='InclusiveGateway') {
-                ret= new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
-                ret.setText("Inclusiva (datos)");
-            }
-            else if(type==='ExclusiveStartEventGateway') {
-                ret= new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
-                ret.setText("Exclusiva (evetos iniciales)");
-            }
-            else if(type==='ExclusiveIntermediateEventGateway') {
-                ret= new _ExclusiveIntermediateEventGateway(Modeler.createObject("#eventGateway",null,null));
-                ret.setText("Exclusiva (evetos intermedios)");
-            }
-            else if(type==='ParallelGateway') {
-                ret= new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
-                ret.setText("Paralela");
-            }
-            else if(type==='ParallelStartEventGateway') {
-                ret= new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
-                ret.setText("Paralela (eventos iniciales)");
-            }
-            else if(type==='ComplexGateway') {
-                ret= new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
-                ret.setText("Compleja");
-            }
-            else if(type==='GroupArtifact') {
-                ret= new _Group(Modeler.createGroupArtifact(null,null));
-                ret.resize(300,300);
-            }
-            else if(type==='AnnotationArtifact'){
-                ret= new _AnnotationArtifact(Modeler.createAnnotationArtifact(null, null));
-                ret.setText("Anotación de texto");
-                ret.resize(200,60);
-            }
-            else if(type==='DataObject') {
-                ret= new _DataObject(Modeler.createObject("#data",null,null));
-                ret.setText("Dato");
-            }
-            else if(type==='DataInput') {
-                ret= new _DataInput(Modeler.createObject("#dataInput",null,null));
-                ret.setText("Dato de entrada");
-            }
-            else if(type==='DataOutput') {
-                ret= new _DataOutput(Modeler.createObject("#dataOutput",null,null));
-                ret.setText("Dato de salida");
-            }
-            else if(type==='DataStore') {
-                ret= new _DataStore(Modeler.createObject("#dataStore",null,null));
-                ret.setText("Almacén de datos");
-            }
-            else if(type==='UserTask') {
-                ret = new _UserTask(Modeler.createTask(null,null));
-                ret.addIcon("#userMarker",-1,-1,13,8);
-                ret.setText("Tarea de Usuario");
-                ret.resize(100,60);
-            }
-            else if(type==='ServiceTask') {
-                ret = new _ServiceTask(Modeler.createTask(null,null));
-                ret.addIcon("#serviceMarker",-1,-1,13,8);
-                ret.setText("Tarea de Servicio");
-                ret.resize(100,60);
-            }
-            else if(type==='ScriptTask') {
-                ret = new _ScriptTask(Modeler.createTask(null,null));
-                ret.addIcon("#scriptMarker",-1,-1,7,13);
-                ret.setText("Tarea de Script");
-                ret.resize(100,60);
-            }
-            else if(type==='BusinessRuleTask') {
-                ret = new _BusinessRuleTask(Modeler.createTask(null,null));
-                ret.addIcon("#taskRuleMarker",-1,-1,12,12);
-                ret.setText("Tarea de regla de negocio");
-                ret.resize(100,60);
-            }
-            else if(type==='ManualTask') {
-                ret = new _ManualTask(Modeler.createTask(null,null));
-                ret.addIcon("#manualMarker",-1,-1,9,6);
-                ret.setText("Tarea Manual");
-                ret.resize(100,60);
-            }
-            else if(type==='SendTask') {
-                ret = new _SendTask(Modeler.createTask(null,null));
-                ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
-                ret.setText("Tarea de envío de mensaje");
-                ret.resize(100,60);
-            }
-            else if(type==='ReceiveTask') {
-                ret = new _ReceiveTask(Modeler.createTask(null,null));
-                ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
-                ret.setText("Tarea de recepción de mensaje");
-                ret.resize(100,60);
-            }
-            else if(type==='Task') {
-                ret = new _Task(Modeler.createTask(null,null));
-                ret.setText("Tarea abstracta");
-                ret.resize(100,60);
-            }
-            else if(type==='CallTask') {
-                ret = new _CallTask(Modeler.createCallTask(null,null));
-                ret.setText("Tarea reusada");
-                ret.resize(100,60);
-            }
-            else if(type==='CallManualTask') {
-                ret = new _CallManualTask(Modeler.createCallTask(null,null));
-                ret.addIcon("#manualMarker",-1,-1,9,6);
-                ret.setText("Tarea manual reusada");
-                ret.resize(100,60);
-            }
-            else if(type==='CallBusinessRuleTask') {
-                ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
-                ret.addIcon("#taskRuleMarker",-1,-1,12,12);
-                ret.setText("Tarea de regla de negocio reusada");
-                ret.resize(100,60);
-            }
-            else if(type==='CallScriptTask') {
-                ret = new _CallScriptTask(Modeler.createCallTask(null,null));
-                ret.addIcon("#scriptMarker",-1,-1,7,13);
-                ret.setText("Tarea de script reusada");
-                ret.resize(100,60);
-            }
-            else if(type==='CallUserTask') {
-                ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
-                ret.addIcon("#userMarker",-1,-1,13,8);
-                ret.setText("Tarea de usuario reusada");
-                ret.resize(100,60);
-            }
-            else if(type==='SubProcess') {
-                ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
-                ret.setText("Subproceso");
-                ret.resize(100,60);
-            }
-            else if(type==='CallSubProcess') {
-                ret = new _CallSubProcess(Modeler.createSubProcess(null, null, "callSubProcess"));
-                ret.setText("Subproceso");
-                ret.resize(100,60);
-            }
-            else if(type==='AdhocSubProcess') {
-                ret = new _AdhocSubProcess(Modeler.createSubProcess(null, null, ""));
-                ret.setText("Subproceso adhoc");
-                ret.resize(100,60);
-            }
-            else if(type==='EventSubProcess') {
-                ret = new _EventSubProcess(Modeler.createSubProcess(null, null, "eventsubProcess"));
-                ret.setText("Subproceso de evento");
-                ret.resize(100,60);
-            }
-            else if(type==='TransactionSubProcess') {
-                ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
-                ret.setText("Transacción");
-                ret.resize(100,60);
-            }
-            else if (type==="Pool") {
-                ret = new _Pool(Modeler.createPool(null, null));
-                ret.setText("Pool");
-                ret.resize(600,200);
-            }
-            else if (type==="Lane") {
-                ret = new _Lane(Modeler.createLane(null, null));
-                ret.setText("Lane");
-                ret.resize(600,200);
+                case 'MessageIntermediateCatchEvent':
+                    ret = new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción de mensaje");
+                    break;
+                case 'MessageIntermediateThrowEvent':
+                    ret = new _MessageIntermediateThrowEvent(Modeler.createObject("#messageIntermediateThrowEvent",null,null));
+                    ret.setText("Envío de mensaje");
+                    break;
+                case 'TimerIntermediateCatchEvent':
+                    ret = new _TimerIntermediateCatchEvent(Modeler.createObject("#timerIntermediateEvent",null,null));
+                    ret.setText("Temporizador");
+                    break;
+                case 'ErrorIntermediateCatchEvent':
+                    ret = new _ErrorIntermediateCatchEvent(Modeler.createObject("#errorIntermediateEvent",null,null));
+                    ret.setText("Recepción de error");
+                    break;
+                case 'CancelationIntermediateCatchEvent':
+                    ret = new _CancelationIntermediateCatchEvent(Modeler.createObject("#cancelIntermediateEvent",null,null));
+                    ret.setText("Cancelación");
+                    break;
+                case 'CompensationIntermediateCatchEvent':
+                    ret = new _CompensationIntermediateCatchEvent(Modeler.createObject("#compensationIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción de compensación");
+                    break;
+                case 'CompensationIntermediateThrowEvent':
+                    ret = new _CompensationIntermediateThrowEvent(Modeler.createObject("#compensationIntermediateThrowEvent",null,null));
+                    ret.setText("Disparo de compensación");
+                    break;
+                case 'RuleIntermediateCatchEvent':
+                    ret = new _RuleIntermediateCatchEvent(Modeler.createObject("#ruleIntermediateEvent",null,null));
+                    ret.setText("Regla de negocio");
+                    break;
+                case 'LinkIntermediateCatchEvent':
+                    ret = new _LinkIntermediateCatchEvent(Modeler.createObject("#linkIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción de enlace");
+                    break;
+                case 'LinkIntermediateThrowEvent':
+                    ret = new _LinkIntermediateThrowEvent(Modeler.createObject("#linkIntermediateThrowEvent",null,null));
+                    ret.setText("Disparo de enlace");
+                    break;
+                case 'SignalIntermediateCatchEvent':
+                    ret = new _SignalIntermediateCatchEvent(Modeler.createObject("#signalIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción de señal");
+                    break;
+                case 'SignalIntermediateThrowEvent':
+                    ret = new _SignalIntermediateThrowEvent(Modeler.createObject("#signalIntermediateThrowEvent",null,null));
+                    ret.setText("Disparo de señal");
+                    break;
+                case 'MultipleIntermediateCatchEvent':
+                    ret = new _MultipleIntermediateCatchEvent(Modeler.createObject("#multipleIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción múltiple");
+                    break;
+                case 'MultipleIntermediateThrowEvent':
+                    ret = new _MultipleIntermediateThrowEvent(Modeler.createObject("#multipleIntermediateThrowEvent",null,null));
+                    ret.setText("Disparo múltiple");
+                    break;
+                case 'ScalationIntermediateCatchEvent':
+                    ret = new _ScalationIntermediateCatchEvent(Modeler.createObject("#scalationIntermediateCatchEvent",null,null));
+                    ret.setText("Recepción de escalamiento");
+                    break;
+                case 'ScalationIntermediateThrowEvent':
+                    ret = new _ScalationIntermediateThrowEvent(Modeler.createObject("#scalationIntermediateThrowEvent",null,null));
+                    ret.setText("Disparo de escalamiento");
+                    break;
+                case 'ParallelIntermediateCatchEvent':
+                    ret = new _ParallelIntermediateCatchEvent(Modeler.createObject("#parallelIntermediateEvent",null,null));
+                    ret.setText("Paralelo");
+                    break;
+                case 'EndEvent':
+                    ret = new _EndEvent(Modeler.createObject("#endEvent",null,null));
+                    ret.setText("Fin normal");
+                    break;
+                case 'MessageEndEvent':
+                    ret = new _MessageEndEvent(Modeler.createObject("#messageEndEvent",null,null));
+                    ret.setText("Fin con mensaje");
+                    break;
+                case 'ErrorEndEvent':
+                    ret = new _ErrorEndEvent(Modeler.createObject("#errorEndEvent",null,null));
+                    ret.setText("Fin con error");
+                    break;
+                case 'CancelationEndEvent':
+                    ret = new _CancelationEndEvent(Modeler.createObject("#cancelationEndEvent",null,null));
+                    ret.setText("Fin con cancelación");
+                    break;
+                case 'CompensationEndEvent':
+                    ret = new _CompensationEndEvent(Modeler.createObject("#compensationEndEvent",null,null));
+                    ret.setText("Fin con compensación");
+                    break;
+                case 'SignalEndEvent':
+                    ret = new _SignalEndEvent(Modeler.createObject("#signalEndEvent",null,null));
+                    ret.setText("Fin con señal");
+                    break;
+                case 'MultipleEndEvent':
+                    ret = new _MultipleEndEvent(Modeler.createObject("#multipleEndEvent",null,null));
+                    ret.setText("Fin múltiple");
+                    break;
+                case 'ScalationEndEvent':
+                    ret = new _ScalationEndEvent(Modeler.createObject("#scalationEndEvent",null,null));
+                    ret.setText("Fin con escalamiento");
+                    break;
+                case 'TerminationEndEvent':
+                    ret= new _TerminationEndEvent(Modeler.createObject("#terminationEndEvent",null,null));
+                    ret.setText("Terminación");
+                    break;
+                case 'ExclusiveGateway':
+                    ret = new _ExclusiveGateway(Modeler.createObject("#exclusiveDataGateway",null,null));
+                    ret.setText("Exclusiva (datos)");
+                    break;
+                case 'InclusiveGateway':
+                    ret = new _InclusiveGateway(Modeler.createObject("#inclusiveDataGateway",null,null));
+                    ret.setText("Inclusiva (datos)");
+                    break;
+                case 'ExclusiveStartEventGateway':
+                    ret = new _ExclusiveStartEventGateway(Modeler.createObject("#exclusiveStartGateway",null,null));
+                    ret.setText("Exclusiva (evetos iniciales)");
+                    break;
+                case 'ExclusiveIntermediateEventGateway':
+                    ret = new _ExclusiveIntermediateEventGateway(Modeler.createObject("#eventGateway",null,null));
+                    ret.setText("Exclusiva (evetos intermedios)");
+                    break;
+                case 'ParallelGateway':
+                    ret = new _ParallelGateway(Modeler.createObject("#parallelGateway",null,null));
+                    ret.setText("Paralela");
+                    break;
+                case 'ParallelStartEventGateway':
+                    ret = new _ParallelStartEventGateway(Modeler.createObject("#parallelStartGateway",null,null));
+                    ret.setText("Paralela (eventos iniciales)");
+                    break;
+                case 'ComplexGateway':
+                    ret = new _ComplexGateway(Modeler.createObject("#complexGateway",null,null));
+                    ret.setText("Compleja");
+                    break;
+                case 'GroupArtifact':
+                    ret = new _Group(Modeler.createGroupArtifact(null,null));
+                    ret.resize(300,300);
+                    break;
+                case 'AnnotationArtifact':
+                    ret = new _AnnotationArtifact(Modeler.createAnnotationArtifact(null, null));
+                    ret.setText("Anotación de texto");
+                    ret.resize(200,60);
+                    break;
+                case 'DataObject':
+                    ret = new _DataObject(Modeler.createObject("#data",null,null));
+                    ret.setText("Dato");
+                    break;
+                case 'DataInput':
+                    ret = new _DataInput(Modeler.createObject("#dataInput",null,null));
+                    ret.setText("Dato de entrada");
+                    break;
+                case 'DataOutput':
+                    ret = new _DataOutput(Modeler.createObject("#dataOutput",null,null));
+                    ret.setText("Dato de salida");
+                    break;
+                case 'DataStore':
+                    ret = new _DataStore(Modeler.createObject("#dataStore",null,null));
+                    ret.setText("Almacén de datos");
+                    break;
+                case 'UserTask':
+                    ret = new _UserTask(Modeler.createTask(null,null));
+                    ret.addIcon("#userMarker",-1,-1,13,8);
+                    ret.setText("Tarea de Usuario");
+                    ret.resize(100,60);
+                    break;
+                case 'ServiceTask':
+                    ret = new _ServiceTask(Modeler.createTask(null,null));
+                    ret.addIcon("#serviceMarker",-1,-1,13,8);
+                    ret.setText("Tarea de Servicio");
+                    ret.resize(100,60);
+                    break;
+                case 'ScriptTask':
+                    ret = new _ScriptTask(Modeler.createTask(null,null));
+                    ret.addIcon("#scriptMarker",-1,-1,7,13);
+                    ret.setText("Tarea de Script");
+                    ret.resize(100,60);
+                    break;
+                case 'BusinessRuleTask':
+                    ret = new _BusinessRuleTask(Modeler.createTask(null,null));
+                    ret.addIcon("#taskRuleMarker",-1,-1,12,12);
+                    ret.setText("Tarea de regla de negocio");
+                    ret.resize(100,60);
+                    break;
+                case 'ManualTask':
+                    ret = new _ManualTask(Modeler.createTask(null,null));
+                    ret.addIcon("#manualMarker",-1,-1,9,6);
+                    ret.setText("Tarea Manual");
+                    ret.resize(100,60);
+                    break;
+                case 'SendTask':
+                    ret = new _SendTask(Modeler.createTask(null,null));
+                    ret.addIcon("#taskMessageThrowMarker",-1,-1,13,10);
+                    ret.setText("Tarea de envío de mensaje");
+                    ret.resize(100,60);
+                    break;
+                case 'ReceiveTask':
+                    ret = new _ReceiveTask(Modeler.createTask(null,null));
+                    ret.addIcon("#taskMessageCatchMarker",-1,-1,13,10);
+                    ret.setText("Tarea de recepción de mensaje");
+                    ret.resize(100,60);
+                    break;
+                case 'Task':
+                    ret = new _Task(Modeler.createTask(null,null));
+                    ret.setText("Tarea abstracta");
+                    ret.resize(100,60);
+                    break;
+                case 'CallTask':
+                    ret = new _CallTask(Modeler.createCallTask(null,null));
+                    ret.setText("Tarea reusada");
+                    ret.resize(100,60);
+                    break;
+                case 'CallManualTask':
+                    ret = new _CallManualTask(Modeler.createCallTask(null,null));
+                    ret.addIcon("#manualMarker",-1,-1,9,6);
+                    ret.setText("Tarea manual reusada");
+                    ret.resize(100,60);
+                    break;
+                case 'CallBusinessRuleTask':
+                    ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
+                    ret.addIcon("#taskRuleMarker",-1,-1,12,12);
+                    ret.setText("Tarea de regla de negocio reusada");
+                    ret.resize(100,60);
+                    break;
+                case 'CallScriptTask':
+                    ret = new _CallScriptTask(Modeler.createCallTask(null,null));
+                    ret.addIcon("#scriptMarker",-1,-1,7,13);
+                    ret.setText("Tarea de script reusada");
+                    ret.resize(100,60);
+                    break;
+                case 'CallUserTask':
+                    ret = new _CallBusinessRuleTask(Modeler.createCallTask(null,null));
+                    ret.addIcon("#userMarker",-1,-1,13,8);
+                    ret.setText("Tarea de usuario reusada");
+                    ret.resize(100,60);
+                    break;
+                case 'SubProcess':
+                    ret = new _SubProcess(Modeler.createSubProcess(null, null, ""));
+                    ret.setText("Subproceso");
+                    ret.resize(100,60);
+                    break;
+                case 'CallSubProcess':
+                    ret = new _CallSubProcess(Modeler.createSubProcess(null, null, "callSubProcess"));
+                    ret.setText("Subproceso");
+                    ret.resize(100,60);
+                    break;
+                case 'AdhocSubProcess':
+                    ret = new _AdhocSubProcess(Modeler.createSubProcess(null, null, ""));
+                    ret.setText("Subproceso adhoc");
+                    ret.resize(100,60);
+                    break;
+                case 'EventSubProcess':
+                    ret = new _EventSubProcess(Modeler.createSubProcess(null, null, "eventsubProcess"));
+                    ret.setText("Subproceso de evento");
+                    ret.resize(100,60);
+                    break;
+                case 'TransactionSubProcess':
+                    ret = new _TransactionSubProcess(Modeler.createSubProcess(null, null, "transactionsubProcess"));
+                    ret.setText("Transacción");
+                    ret.resize(100,60);
+                    break;
             }
             return ret;
         }
