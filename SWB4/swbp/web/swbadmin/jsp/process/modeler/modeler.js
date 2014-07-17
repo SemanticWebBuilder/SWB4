@@ -3805,31 +3805,18 @@
         },
 
         submitCommand:function(url, data, callbackHandler) {
-            //reemplazar dojo por invocaciones directas por ajax
-            dojo.xhrPost({
-                url: url,
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                content: {jsonString: data},
-                load: function(response, ioArgs) {
-                    //console.log(response);
+            var param = {jsonString:data};
+            var xhqr = $.post(url, param)
+                .done(function(data) {
+                    console.log("done!");
                     ToolKit.hideToolTip();
-//                    if(response && response.indexOf("{error:")==0)
-//                    {
-//                        console.log(response);
-//                        ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación", 200, "Error");
-//                    }else
-                    {                        
-                        callbackHandler(response);
-                    }
-                    return response;
-                },
-                error: function(response, ioArgs) {
-                    //console.log("error");
-                    ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación: "+ioArgs.xhr.status, 200, "Error");
-                    return response;
-                },
-                handleAs: "text"
-            });
+                    callbackHandler(data);
+                    console.log(data);
+                    return data;
+                }).fail(function(error) {
+                    ToolKit.showTooltip(0,"Ocurrió un problema al ejecutar la operación: ", 200, "Error");
+                    return error;
+                });
         },
                 
         clearCanvas: function() {
