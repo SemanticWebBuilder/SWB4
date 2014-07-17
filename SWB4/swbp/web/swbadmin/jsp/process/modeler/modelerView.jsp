@@ -1095,7 +1095,6 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
                 commandUrl.setParameter("suri", suri);
         %>
         function loadProcess() {
-            console.log("loading process");
             if (ToolKit && ToolKit !== null) {
                 ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("loading")%>", 200, "Warning");
             }
