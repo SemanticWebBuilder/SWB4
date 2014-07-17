@@ -26,7 +26,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
 %>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
-    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/jquery/jquery.js"></script>
     <!--
     <script src="/swbadmin/js/swb_admin.js"></script>
     <script src="/swbadmin/js/swb.js"></script>
@@ -1099,6 +1099,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
                 commandUrl.setParameter("suri", suri);
         %>
         function loadProcess() {
+            console.log("loading process");
             if (ToolKit && ToolKit !== null) {
                 ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("loading")%>", 200, "Warning");
             }
