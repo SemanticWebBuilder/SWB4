@@ -73,20 +73,20 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
         
         SemanticObject value = null;
         
-        if(dojo) {
-            if(imsg == null) {
-                if(required) {
-                    imsg = label + ("en".equals(lang)?" is required.":" is required.");
-                }else {
-                    imsg = "en".equals(lang)?"Invalid data.":"Dato incorrecto.";
+        if (dojo) {
+            if (imsg == null) {
+                if (required) {
+                    imsg = label + ("en".equals(lang) ? " is required." : " obligatorio.");
+                } else {
+                    imsg = "en".equals(lang) ? "Invalid data." : "Dato incorrecto.";
                 }
             }
-            if(pmsg == null) {
-                pmsg = ("en".equals(lang)?"Enter ":"Captura ") + label + ".";
+            if (pmsg == null) {
+                pmsg = ("en".equals(lang) ? "Enter " : "Captura ") + label + ".";
             }
         }
         
-        String ext = disabled?" disabled=\"disabled\"":"";
+        String ext = disabled ? " disabled=\"disabled\"" : "";
         
         String valueAux = request.getParameter(propName);
         if (valueAux != null) {
@@ -104,22 +104,32 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
         
         if (mode.equals("edit") || mode.equals("create") || mode.equals("filter")) {
             
-            ret.append("<select name=\"" + name + "\"");
+            ret.append("<select name=\"");
+            ret.append(name);
+            ret.append("\"");
             if (dojo) {
-                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" promptMessage=\""+pmsg+"\" invalidMessage=\""
-                           + imsg + "\"" + " value=\"" + parentObjUri + "\"");
+                ret.append(" dojoType=\"dijit.form.FilteringSelect\" autoComplete=\"true\" promptMessage=\"");
+                ret.append(pmsg);
+                ret.append("\" invalidMessage=\"");
+                ret.append(imsg);
+                ret.append("\" value=\"");
+                ret.append(parentObjUri);
+                ret.append("\"");
             }
             if (!mode.equals("filter")) {
-                ret.append(" required=\"" + required + "\"");
+                ret.append(" required=\"");
+                ret.append(required);
+                ret.append("\"");
             }
             if ((mode.equals("filter") || isBlankSuport()) && 
                     ((parentObjUri == null) || (parentObjUri.length() == 0))) {
                 ret.append(" displayedvalue=\"\"");
             }
-            ret.append(" " + ext + ">");
+            ret.append(" ");
+            ret.append(ext);
+            ret.append(">");
             if ((mode.equals("filter") || isBlankSuport())) {
-                ret.append("<option");
-                ret.append(" value=\"\"></option>");
+                ret.append("<option value=\"\"></option>");
             }
             
             Objective sonObjective = (Objective) obj.createGenericInstance();
@@ -170,9 +180,16 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
                     //TODO: Eliminar despues la linea siguiente, porque la liga debe indicar el website correspondiente
                     objectType = null;
                 }
-                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\">");
+                ret.append("<span _id=\"");
+                ret.append(name);
+                ret.append("\" name=\"");
+                ret.append(name);
+                ret.append("\">");
                 if (objectType != null) {
-                    ret.append("<a href=\"" + objectType + "?suri=" + genObj.getURI());
+                    ret.append("<a href=\"");
+                    ret.append(objectType);
+                    ret.append("?suri=");
+                    ret.append(genObj.getURI());
                     ret.append("\">");
                 }
                 ret.append(displayedValue);
@@ -181,7 +198,11 @@ public class ObjectiveAlignment extends ObjectiveAlignmentBase {
                 }
                 ret.append("</span>");
             } else {
-                ret.append("<span _id=\"" + name + "\" name=\"" + name + "\"></span>");
+                ret.append("<span _id=\"");
+                ret.append(name);
+                ret.append("\" name=\"");
+                ret.append(name);
+                ret.append("\"></span>");
             }
         }
         return ret.toString();
