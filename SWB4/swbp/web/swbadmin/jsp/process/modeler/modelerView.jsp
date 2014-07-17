@@ -183,7 +183,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
     </div>
     <div id="calltasksBar" class="subbarHidden" style="width: 237px;">
         <span class="subbarStart"></span>
-        <span class="callTask" cId ="CallTask" onmouseover="ToolBar.overToolBar();" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTask")%>" onclick="Modeler.creationStart(this)"></span>
+        <span class="callTask" cId ="CallTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTask")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callmanualTask" cId ="CallManualTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskManual")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callruleTask" cId ="CallBusinessRuleTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskRule")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callscriptTask" cId ="CallScriptTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskScript")%>" onclick="Modeler.creationStart(this)"></span>
