@@ -3829,26 +3829,34 @@
         },
                 
         getProcessJSON:function() {
-            var ret = {uri:"test", nodes:[]};
-            var uris = "";
-            for (var i = 0; i < ToolKit.contents.length; i++) {
-                if (ToolKit.contents[i]!==null && ToolKit.contents[i].typeOf && (ToolKit.contents[i].typeOf("GraphicalElement") || ToolKit.contents[i].typeOf("ConnectionObject"))) {
-                    var json = Modeler.getJSONObject(ToolKit.contents[i]);
+            var i, j, ret = {uri:"test", nodes:[]},
+                uris = "", contents = ToolKit.contents || [],
+                length = contents.length,
+                ele, json, nodes = [], outConnections, clength;
+        
+            for (i = 0; i < length; i++) {
+                ele = contents[i];
+                if (ele !== null && ele.typeOf && (ele.typeOf("GraphicalElement") || ele.typeOf("ConnectionObject"))) {
+                    json = Modeler.getJSONObject(ele);
                     if (json !== null) {
-                        ret.nodes.push(json);
+                        nodes.push(json);
                     }
-                    for (var j = 0; j < ToolKit.contents[i].outConnections.length; j++) {
-                        if (uris.indexOf(ToolKit.contents[i].outConnections[j].id) === -1) {
-                            json = Modeler.getJSONObject(ToolKit.contents[i].outConnections[j]);
+                    
+                    outConnections = ele.outConnections;
+                    clength = outConnections.length;
+                    for (j = 0; j < clength; j++) {
+                        if (uris.indexOf(outConnections[j].id) < 0) {
+                            json = Modeler.getJSONObject(outConnections[j]);
                             if (json !== null) {
-                                ret.nodes.push(json);
+                                nodes.push(json);
                             }
                             uris += "|";
-                            uris += ToolKit.contents[i].outConnections[j].id;
+                            uris += outConnections[j].id;
                         }
                     }
                 }
             }
+            ret.nodes = nodes;
             return ret;
         },
 
