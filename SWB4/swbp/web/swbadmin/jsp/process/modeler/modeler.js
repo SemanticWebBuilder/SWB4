@@ -3866,74 +3866,74 @@
             }
             
             var ret = null;
-            if(type==='SequenceFlow') {
-                ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
-                ret.eoff=10;
+            switch(type) {
+                case 'SequenceFlow':
+                    ret = new _SequenceFlow(Modeler.createConnectionPath(null, null, "sequenceArrow", null,"sequenceFlowLine"));
+                    ret.eoff = 10;
+                    break;
+                case 'MessageFlow':
+                    ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
+                    ret.eoff = ret.soff = 0;
+                    break;
+                case 'ConditionalFlow':
+                    ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
+                    ret.setLabel("");
+                    ret.eoff = ret.soff = 10;
+                    break;
+                case 'DefaultFlow':
+                    ret = new _DefaultFlow(Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine"));
+                    ret.eoff = 10;
+                    break;
+                case 'AssociationFlow':
+                    ret = new _AssociationFlow(Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine"));
+                    break;
+                case 'DirectionalAssociation':
+                    ret = new _DirectionalAssociation(Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine"));
+                    ret.eoff = 10;
+                    break;
+                case 'StartEvent':
+                    ret = new _StartEvent(Modeler.createObject("#startEvent",null,null));
+                    ret.setText("Inicio Normal");
+                    break;
+                case 'MessageStartEvent':
+                    ret = new _MessageStartEvent(Modeler.createObject("#messageStartEvent",null,null));
+                    ret.setText("Inicio por mensaje");
+                    break;
+                case 'TimerStartEvent':
+                    ret = new _TimerStartEvent(Modeler.createObject("#timerStartEvent",null,null));
+                    ret.setText("Inicio temporizado");
+                    break;
+                case 'RuleStartEvent':
+                    ret = new _RuleStartEvent(Modeler.createObject("#ruleStartEvent",null,null));
+                    ret.setText("Inicio por regla de negocio");
+                    break;
+                case 'SignalStartEvent':
+                    ret = new _SignalStartEvent(Modeler.createObject("#signalStartEvent",null,null));
+                    ret.setText("Inicio por señal");
+                    break;
+                case 'MultipleStartEvent':
+                    ret = new _MultipleStartEvent(Modeler.createObject("#multipleStartEvent",null,null));
+                    ret.setText("Inicio múltiple");
+                    break;
+                case 'ParallelStartEvent':
+                    ret = new _ParallelStartEvent(Modeler.createObject("#parallelStartEvent",null,null));
+                    ret.setText("Inicio paralelo");
+                    break;
+                case 'ScalationStartEvent':
+                    ret = new _ScalationStartEvent(Modeler.createObject("#scalationStartEvent",null,null));
+                    ret.setText("Inicio por escalamiento");
+                    break;
+                case 'ErrorStartEvent':
+                    ret = new _ErrorStartEvent(Modeler.createObject("#errorStartEvent",null,null));
+                    ret.setText("Inicio por error");
+                    break;
+                case 'CompensationStartEvent':
+                    ret = new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
+                    ret.setText("Inicio por compensación");
+                    break;
             }
-            if(type==='MessageFlow') {
-                ret = new _MessageFlow(Modeler.createConnectionPath("messageTail", null, "messageArrow", "5,5", "sequenceFlowLine"));
-                ret.eoff=0;
-                ret.soff=0;
-            }
-            if(type==='ConditionalFlow') {
-                ret = new _ConditionalFlow(Modeler.createConnectionPath("conditionTail", null, "sequenceArrow", null, "sequenceFlowLine"));
-                ret.setLabel("");
-                ret.eoff=10;
-                ret.soff=10;
-            }
-            if(type==='DefaultFlow') {
-                ret = new _DefaultFlow(Modeler.createConnectionPath("defaultTail", null, "sequenceArrow", null, "sequenceFlowLine"));
-                ret.eoff=10;
-            }
-            if(type==='AssociationFlow') {
-                ret = new _AssociationFlow(Modeler.createConnectionPath(null, null, null, "5,5", "sequenceFlowLine"));
-            }
-            if(type==='DirectionalAssociation') {
-                ret = new _DirectionalAssociation(Modeler.createConnectionPath(null, null, "messageArrow", "5,5", "sequenceFlowLine"));
-                ret.eoff=10;
-            }
-            else if(type==='StartEvent')
-            {
-                ret=new _StartEvent(Modeler.createObject("#startEvent",null,null));
-                ret.setText("Inicio Normal");
-            }
-            else if(type==='MessageStartEvent'){
-                ret=new _MessageStartEvent(Modeler.createObject("#messageStartEvent",null,null));
-                ret.setText("Inicio por mensaje");
-            }
-            else if(type==='TimerStartEvent'){
-                ret=new _TimerStartEvent(Modeler.createObject("#timerStartEvent",null,null));
-                ret.setText("Inicio temporizado");
-            }
-            else if(type==='RuleStartEvent') {
-                ret=new _RuleStartEvent(Modeler.createObject("#ruleStartEvent",null,null));
-                ret.setText("Inicio por regla de negocio");
-            }
-            else if(type==='SignalStartEvent') {
-                ret=new _SignalStartEvent(Modeler.createObject("#signalStartEvent",null,null));
-                ret.setText("Inicio por señal");
-            }
-            else if(type==='MultipleStartEvent') {
-                ret=new _MultipleStartEvent(Modeler.createObject("#multipleStartEvent",null,null));
-                ret.setText("Inicio múltiple");
-            }
-            else if(type==='ParallelStartEvent') {
-                ret=new _ParallelStartEvent(Modeler.createObject("#parallelStartEvent",null,null));
-                ret.setText("Inicio paralelo");
-            }
-            else if(type==='ScalationStartEvent') {
-                ret= new _ScalationStartEvent(Modeler.createObject("#scalationStartEvent",null,null));
-                ret.setText("Inicio por escalamiento");
-            }
-            else if(type==='ErrorStartEvent') {
-                ret= new _ErrorStartEvent(Modeler.createObject("#errorStartEvent",null,null));
-                ret.setText("Inicio por error");
-            }
-            else if(type==='CompensationStartEvent') {
-                ret= new _CompensationStartEvent(Modeler.createObject("#compensationStartEvent",null,null));
-                ret.setText("Inicio por compensación");
-            }
-            else if(type==='MessageIntermediateCatchEvent') {
+            
+            if(type==='MessageIntermediateCatchEvent') {
                 ret=new _MessageIntermediateCatchEvent(Modeler.createObject("#messageIntermediateCatchEvent",null,null));
                 ret.setText("Recepción de mensaje");
             }
