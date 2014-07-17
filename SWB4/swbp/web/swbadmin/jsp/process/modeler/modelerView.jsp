@@ -1099,8 +1099,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
                 ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("loading")%>", 200, "Warning");
             }
             Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
-        }
-        ;
+        };
         <%
             }
             if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
