@@ -3676,6 +3676,11 @@
                             }
                         }
                     }
+                    if (obj !== null) {
+                        ToolKit.svg.dragObject = obj;
+                        ToolKit.selectObj(obj, false);
+                        ToolKit.svg.onmouseup();
+                    }
                 }
                 ToolKit.unSelectAll();
                 ToolKit.setLayer(null);
