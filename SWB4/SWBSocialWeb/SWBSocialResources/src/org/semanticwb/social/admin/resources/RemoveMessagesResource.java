@@ -306,6 +306,7 @@ public class RemoveMessagesResource extends GenericResource {
                         postIn.remove();
                     }
                     stream.setPromPostNumber(0); //Se envía a 0 el promedio de mensajes de entrada en el Stream, TODO: Ver si debo hacerlo para las demas opciones de abajo
+                    stream.setStreamIterations(0); //Se envía a 0 el número de iteraciones de mensajes de entrada en el Stream, TODO: Ver si debo hacerlo para las demas opciones de abajo
                 }else if(mode.equals(Action_REMOVEWOTOPIC)) //Elimina PostIn que se encuentren en un cierto stream y que no tengan un SocialTopic asociado.
                 {
                     Iterator<PostIn> itPostIn = PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
