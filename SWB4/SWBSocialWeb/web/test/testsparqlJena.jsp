@@ -65,7 +65,7 @@
 <%
     try
     {
-        WebSite site=SWBContext.getWebSite("Jore");
+        WebSite site=SWBContext.getWebSite("Infotec");
         
         long time=System.currentTimeMillis();
         //QueryExecution qe=new SWBQueryExecution(site.getSemanticModel().getRDFModel(), query);
