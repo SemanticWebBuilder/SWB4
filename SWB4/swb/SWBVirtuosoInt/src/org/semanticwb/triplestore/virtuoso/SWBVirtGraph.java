@@ -49,7 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.triplestore.ext.GraphExt;
+import org.semanticwb.rdf.GraphExt;
 import virtuoso.sql.ExtendedString;
 import virtuoso.sql.RdfBox;
 
