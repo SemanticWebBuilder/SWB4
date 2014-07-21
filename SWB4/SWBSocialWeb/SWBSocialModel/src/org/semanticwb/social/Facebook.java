@@ -112,7 +112,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             log.error("Not authenticated network: " + getTitle() + "!!!");
             return;
         }
-        System.out.println("Listening from FACEBOOK");
+        //System.out.println("Listening from FACEBOOK");
         HashMap<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
         boolean canGetMoreResults = true;
@@ -1437,11 +1437,11 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
                     String app_token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id=" + getAppKey() + "&client_secret=" + getSecretKey() + "&grant_type=client_credentials";
                     String appToken = Facebook.graphRequest(app_token_url, request.getHeader("user-agent"));
-                    System.out.println("APPTOKEN:" + appToken);
+                    //System.out.println("APPTOKEN:" + appToken);
                     if (appToken != null) {
                         if (appToken.startsWith("access_token")) {
                             appToken = appToken.substring(appToken.indexOf("=") + 1);
-                            System.out.println("THA APP TOKEN-->" + appToken);
+                            //System.out.println("THA APP TOKEN-->" + appToken);
                             setAppAccessToken(appToken);
                         }
                     }
@@ -1972,7 +1972,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                 PostOutNet postoutnet = ponets.next();
                 if (postoutnet.getSocialNetwork().equals(socialNet)) {//PostOut enviado de la red social
                     if (postoutnet.getStatus() == 1) {//publicado
-                        System.out.println("1va a borrar!");
+                        //System.out.println("1va a borrar!");
                         if (postoutnet.getPo_socialNetMsgID() != null) {//Tiene id
                             HashMap<String, String> params = new HashMap<String, String>(2);
                             params.put("access_token", this.getAccessToken());
@@ -1982,7 +1982,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
                             if (fbResponse.equalsIgnoreCase("true")) {
                                 removed = true;
-                                System.out.println("borrado de FB");
+                                //System.out.println("borrado de FB");
                             }
                         }
                     }
@@ -2027,7 +2027,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         
         boolean success = false;
         String sortName = fp.getSortName();
-        System.out.println("Ordenando los tabs: " + sortName);
+        //System.out.println("Ordenando los tabs: " + sortName);
         int sortNameInt = 0;
         try{
             sortNameInt = Integer.parseInt(sortName);
@@ -2045,7 +2045,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                         success = true;
                     }
                 }
-                System.out.println("Updating sort name: " + responseSort);
+                //System.out.println("Updating sort name: " + responseSort);
             }catch(Exception e){
                 log.error("Unable to update the order of the tab ", e);
             }
@@ -2086,7 +2086,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     @Override
     public boolean createPageTab(PageTab pageTab) {
         boolean success = false;
-        System.out.println("CREATING  page tab!!! " + pageTab.getTitle());
+        //System.out.println("CREATING  page tab!!! " + pageTab.getTitle());
         if (pageTab != null) {
             try {
                 FacePageTab fp = (FacePageTab) pageTab;
@@ -2137,7 +2137,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public boolean removePageTab(FanPage fanPage, String app_id) {
-        System.out.println("REMOVING page tab " + fanPage.getTitle() + " -->" + app_id);
+        //System.out.println("REMOVING page tab " + fanPage.getTitle() + " -->" + app_id);
         boolean success = false;
 
         try {
@@ -2162,7 +2162,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             params.put("app_id", app_id);
             String removed = postRequestParams(params, "https://graph.facebook.com/" + f.getPage_id() + "/tabs/app_" + app_id,
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
-            System.out.println("removed:" + removed);
+            //System.out.println("removed:" + removed);
             if(removed != null && removed.isEmpty()){
                 if(removed.equalsIgnoreCase("true")){
                     success = true;
@@ -2297,7 +2297,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     }
                 }
             }while(keepSearching);
-            System.out.println("Is Active: " + isActive);
+            //System.out.println("Is Active: " + isActive);
             return isActive;
         } catch (Exception ex) {
             log.error("Problem getting list of current tabs from page ", ex );

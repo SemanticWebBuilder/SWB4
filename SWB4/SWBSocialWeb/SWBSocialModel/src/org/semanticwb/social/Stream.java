@@ -30,7 +30,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                 {
                     Stream stream = (Stream) obj.createGenericInstance();
                     SemanticProperty semProp = (SemanticProperty) prop;;
-                    System.out.println("Stream/Accion:"+action+", streamUri:"+stream.getURI()+",semProp:"+semProp+",A ver k pex:"+Stream.social_keepAliveManager.getURI());
+                    //System.out.println("Stream/Accion:"+action+", streamUri:"+stream.getURI()+",semProp:"+semProp+",A ver k pex:"+Stream.social_keepAliveManager.getURI());
                     if(action.equalsIgnoreCase("CREATE"))   //Quiere decir que se esta creando una instancia de la clase nueva
                     {
                         //System.out.println("Entra a Stream/Create...");
@@ -75,7 +75,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                     }
                     if(action.equalsIgnoreCase("REMOVE") && semProp==null)  //Quiere decir que se esta eliminando una instancia de clase completa, no una propiedad
                     {
-                        System.out.println("Entra a Stream/Remove...");
+                        //System.out.println("Entra a Stream/Remove...");
                         ListenerMgr.removeTimer(stream, true);
                         
                         //Si se elimina el stream, se supone que por la ontología(removeDependency=true), se borrarían los objetos SocialNetStreamSearch
@@ -85,7 +85,7 @@ public class Stream extends org.semanticwb.social.base.StreamBase
                         while(itSocialNetStreamSearch.hasNext())
                         {
                             SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
-                            System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                            //System.out.println("Remueve en Stream:"+socialNetStreamSearch);
                             socialNetStreamSearch.remove();
                         }
                         

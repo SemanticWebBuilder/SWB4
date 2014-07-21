@@ -398,7 +398,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                         canGetMoreTweets = false;
                     }else{
                         for(Status status : result.getTweets()){
-                            System.out.println("Current ID:" + status.getId() + " stored ID:" + lastTweetID);
+                            //System.out.println("Current ID:" + status.getId() + " stored ID:" + lastTweetID);
                             if(status.getId() <= lastTweetID){ //If value is ZERO then get all tweets available,
                                 canGetMoreTweets = false;      //If it's greater than ZERO, get tweets posted since the tweet with id lastTweetID
                                 //System.out.println("SINCEID LIMIT REACHED!!!");
@@ -408,7 +408,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                             if(!status.isRetweet())
                             {
                                 if(status.getUser() != null){
-                                    System.out.println("Twitter status/Source:"+status.getSource());
+                                    //System.out.println("Twitter status/Source:"+status.getSource());
                                     ExternalPost external = new ExternalPost();
                                     external.setPostId(String.valueOf(status.getId())); 
                                     external.setCreatorId(String.valueOf(status.getUser().getId()));
@@ -601,7 +601,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     //@Override
     
     public void stopListenAlive(Stream stream) {
-        System.out.println("Entra a stopListenAlive");
+        //System.out.println("Entra a stopListenAlive");
         if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI()))
         {
             TwitterStream twitterStream=ListenAlives.get(stream.getURI()+"|"+this.getURI());
@@ -611,7 +611,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //twitterStream.shutdown(); //Este tumba todos los threads y ya no vuelve a levantar otro para ninguno-->No ponerlo
                 twitterStream=null;
                 ListenAlives.remove(stream.getURI()+"|"+this.getURI());
-                System.out.println("DETUVO LA CONEXION EN stopListenAliveGeorge:"+this.getId());
+                //System.out.println("DETUVO LA CONEXION EN stopListenAliveGeorge:"+this.getId());
             }
         }
         
@@ -775,7 +775,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             url=url+"?key="+key;
             URLConnection conex = null;
             try {
-                System.out.println("Url a enviar a Klout:"+url);
+                //System.out.println("Url a enviar a Klout:"+url);
                 URL pagina = new URL(url);
 
                 String host = pagina.getHost();
@@ -792,7 +792,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
                 conex.setConnectTimeout(20000); //15 segundos maximo, si no contesta la red Klout, cortamos la conexión
             } catch (Exception nexc) {
-                System.out.println("nexc Error:"+nexc.getMessage());
+                //System.out.println("nexc Error:"+nexc.getMessage());
                 conex = null;
             }
             //System.out.println("Twitter Klout/conex:"+conex);
@@ -841,7 +841,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
     @Override
     public void stopListen(Stream stream) {
-        System.out.println("Entra a Twitter/stopListen");
+        //System.out.println("Entra a Twitter/stopListen");
     }
 
     
@@ -917,14 +917,14 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 PostOutNet postoutnet = ponets.next();
                 if(postoutnet.getSocialNetwork().equals(socialNet)){//PostOut enviado de la red social
                     if(postoutnet.getStatus() == 1){//publicado
-                        System.out.println("1va a borrar!");
+                        //System.out.println("1va a borrar!");
                         if(postoutnet.getPo_socialNetMsgID() != null){//Tiene id
-                            System.out.println("2va a borrar!");
+                            //System.out.println("2va a borrar!");
                             Status removedSt = twitter.destroyStatus(Long.parseLong(postoutnet.getPo_socialNetMsgID()));
                             if(removedSt != null){
-                                System.out.println("3va a borrar!");
+                                //System.out.println("3va a borrar!");
                                 if(removedSt.getId() == Long.parseLong(postoutnet.getPo_socialNetMsgID())){
-                                    System.out.println("4va a borrar!");
+                                    //System.out.println("4va a borrar!");
                                     removed = true;
                                 }
                             }
@@ -1082,7 +1082,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }
         }
         
-        System.out.println("Final String-->" + parsedPhrases + "<-");        
+        //System.out.println("Final String-->" + parsedPhrases + "<-");        
         return parsedPhrases;
     }
     private DevicePlatform getDevicePlatform(ArrayList<DevicePlatform> dp, String source){
@@ -1116,7 +1116,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
         }
         if(validDP != null){
-            System.out.println("validDP:" +validDP.getId());
+            //System.out.println("validDP:" +validDP.getId());
         }
         
         return validDP;

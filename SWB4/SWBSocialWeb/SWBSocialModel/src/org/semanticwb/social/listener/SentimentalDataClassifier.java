@@ -446,7 +446,7 @@ public class SentimentalDataClassifier {
                             post.setMsg_lang(language);
                         }
                     }
-                    System.out.println("Lang Puesto:"+post.getMsg_lang());    
+                    //System.out.println("Lang Puesto:"+post.getMsg_lang());    
                     //Guarda valores sentimentales en el PostIn (mensaje de entrada)
                     post.setPostSentimentalValue(promSentimentalValue);
                     post.setPostSentimentalType(sentimentalTweetValueType);
@@ -527,7 +527,7 @@ public class SentimentalDataClassifier {
             }
         }
         long tfin = System.currentTimeMillis() - tini;
-        System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
+        //System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
     }
 
     /*
