@@ -70,7 +70,7 @@ public class SWBTripleStore implements AbstractStore
         //Nothing
     }
 
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return null;
     }
