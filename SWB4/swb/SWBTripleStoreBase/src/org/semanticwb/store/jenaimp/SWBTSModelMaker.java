@@ -45,7 +45,7 @@ public class SWBTSModelMaker
 {
     private static Logger log=SWBUtils.getLogger(SWBTSModelMaker.class);
     
-    protected HashMap<String, org.semanticwb.store.Graph> map;
+    protected HashMap<String, Model> map;
     
     private String path=null;
     
@@ -78,58 +78,59 @@ public class SWBTSModelMaker
 
     public Model getModel(String name)
     {
-        if(listModelNames().contains(name))
-        {
+//        if(listModelNames().contains(name))
+//        {
             return createModel(name);
-        }else
-        {
-            return null;
-        }
+//        }else
+//        {
+//            return null;
+//        }
     }
 
     public Model createModel(String name)
     {
-        Model model=null;
-        org.semanticwb.store.Graph g=map.get(name);
-        if(g==null || g.isClosed())
+        //System.out.println("SWBTSModelMaker->createModel:"+name);
+        Model model=map.get(name);
+        //System.out.println("SWBTSModelMaker->createModel->map:"+map.size());
+        if(model==null || model.isClosed())
         {
             try
             {
                 Class cls=Class.forName(clsname);
                 Constructor c=cls.getConstructor(String.class, Map.class);                
-                HashMap map=new HashMap();
-                map.put("path", path);
-                g=(org.semanticwb.store.Graph)c.newInstance(name,map);
-                map.put(name, g);
-            }catch(Exception e2)
+                HashMap map2=new HashMap();
+                map2.put("path", path);
+                Graph g=(org.semanticwb.store.Graph)c.newInstance(name,map2);
+
+                int size=Integer.parseInt(SWBPlatform.getEnv("swb/tripleStoreResourceCache","0"));
+
+                if(size>0)
+                {
+                    model=new ModelCom(new SWBTSGraphCache(new SWBTSGraph(g),size));
+                }else if(size==0)
+                {
+                    model=new ModelCom(new SWBTSGraph(g));
+                }else if(size<0)
+                {
+                    model=new ModelCom(new GraphCached(new SWBTSGraph(g)));
+                }
+                map.put(name, model);
+            }catch(Throwable e2)
             {
                 log.error(e2);
             }
-        }
-        
-        int size=Integer.parseInt(SWBPlatform.getEnv("swb/tripleStoreResourceCache","0"));
-
-        if(size>0)
-        {
-            model=new ModelCom(new SWBTSGraphCache(new SWBTSGraph(g),size));
-        }else if(size==0)
-        {
-            model=new ModelCom(new SWBTSGraph(g));
-        }else if(size<0)
-        {
-            model=new ModelCom(new GraphCached(new SWBTSGraph(g)));
         }
         return model;
     }
 
     public void removeModel(String name)
     {
-        org.semanticwb.store.Graph g=map.get(name);
-        if(g!=null)
+        Model model=map.get(name);
+        if(model!=null)
         {
             try
             {
-                g.close();                
+                model.close();                
                 SWBUtils.IO.removeDirectory(path+name);                
                 map.remove(name);
             }catch(Exception e2)
@@ -141,11 +142,11 @@ public class SWBTSModelMaker
    
     public void close()
     {
-        Iterator<org.semanticwb.store.Graph> it=map.values().iterator();
+        Iterator<Model> it=map.values().iterator();
         while (it.hasNext())
         {
-            Graph graph = it.next();
-            graph.close();
+            Model model = it.next();
+            model.close();
         }
     }
 

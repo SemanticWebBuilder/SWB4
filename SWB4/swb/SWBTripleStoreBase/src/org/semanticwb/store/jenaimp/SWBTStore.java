@@ -73,9 +73,9 @@ public abstract class SWBTStore implements AbstractStore
     }
 
     @Override
-    public Dataset getDataset()
+    public Dataset getDataset(final String defaultName)
     {
-        return null;
+        return new SWBDataset(this,defaultName);
     }
 
     public SWBTSModelMaker getMaker()
