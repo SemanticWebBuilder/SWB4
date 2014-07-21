@@ -211,28 +211,29 @@ public class ListenerMgr implements SWBAppObject {
                 //////////////////////Agregado para alerta de cantidad de mensajes inusuales en un Stream
                 int streamIterations=stream.getStreamIterations();
                 System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations);
-                if(streamIterations>0 && stream.getStreamPercentageAlert()>0) //Si los usuarios escribieron un porcentaje en el dato del Stream, entonces se revisa
+                if(streamIterations>0 && stream.getStreamPercentageAlert()>0 && stream.getStreamEmail2Alerts().trim().length()>0) //Si los usuarios escribieron un porcentaje en el dato del Stream, entonces se revisa
                 {
                     float oldStreamPostInAvg=stream.getPromPostNumber();
                     int newStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream)); 
                     float newStreamPostInAvg=newStreamPostIns/streamIterations;
                     stream.setPromPostNumber(newStreamPostInAvg);   //Se graba el nuevo promedio en el Stream
-                    System.out.println("oldStreamPostInAvg:"+oldStreamPostInAvg+",newStreamPostInAvg:"+newStreamPostInAvg);    
+                    //System.out.println("oldStreamPostInAvg:"+oldStreamPostInAvg+",newStreamPostInAvg:"+newStreamPostInAvg);    
                     if(oldStreamPostInAvg>0)
                     {
                         float difAvgs=((newStreamPostInAvg*100)/oldStreamPostInAvg)-100;
-                        System.out.println("difAvgs:"+difAvgs);
+                        //System.out.println("difAvgs:"+difAvgs);
                         if(difAvgs>0 && difAvgs>=(stream.getStreamPercentageAlert()))
                         {//Si se cumple, entonces envía alerta
-                            System.out.println("Entra a Notificar por correo:"+difAvgs);
-                            String messageBody="Notificación:\n";
-                            messageBody+="El Stream con nombre:"+stream.getDisplayTitle("es")+", perteneciente a la marca:"+stream.getSemanticObject().getModel().getName()+"\n";
-                            messageBody+="Ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+" definido para el stream en cada iteración";
+                            //System.out.println("Entra a Notificar por correo:"+difAvgs);
+                            String messageBody="Notificación:<br/><br/>";
+                            messageBody+="El Stream con nombre:"+stream.getDisplayTitle("es")+", perteneciente a la marca:"+stream.getSemanticObject().getModel().getName()+",<br/><br/>";
+                            messageBody+="ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+"% definido para el stream en cada iteración.<br/><br/><br/><br/><br/><br/><br/><br/>";
+                            messageBody+="<b>Atte. Servicio de Notificaciones de SWBSocial</b>";
                             String emails=stream.getStreamEmail2Alerts();
                             System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
                             try{
-                                SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes mas del promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
-                                System.out.println("Envió correo:"+difAvgs);
+                                SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes sobrepasó promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
+                                //System.out.println("Envió correo:"+difAvgs);
                             }catch(Exception e)
                             {
                                 e.printStackTrace();
