@@ -43,6 +43,6 @@ public interface AbstractStore
 
     public void close();
 
-    public Dataset getDataset();
+    public Dataset getDataset(String defaultName);
 
 }

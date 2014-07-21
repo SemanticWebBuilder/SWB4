@@ -131,7 +131,7 @@ public class RDBStore implements AbstractStore
         }
     }
 
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return null;
     }

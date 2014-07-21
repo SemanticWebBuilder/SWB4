@@ -635,7 +635,7 @@ public class SemanticMgr implements SWBInstanceObject
             String name = it.next();
             log.trace("LoadingModel:" + name);
             SemanticModel model = loadDBModel(name);
-            model.setDataset(store.getDataset());
+            model.setDataset(store.getDataset(name));
             
             if ((semobjCache || semobjModelCache.contains(name)) && !(model.getRDFModel().getGraph() instanceof GraphCached)) 
             {
