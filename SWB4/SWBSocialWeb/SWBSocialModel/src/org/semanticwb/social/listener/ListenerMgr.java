@@ -12,8 +12,10 @@ import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.SWBAppObject;
+import org.semanticwb.model.DisplayObject;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.social.Facebook;
 import org.semanticwb.social.KeepAliveListenerable;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SocialNetStreamSearch;
@@ -95,15 +97,15 @@ public class ListenerMgr implements SWBAppObject {
      */
     public static boolean createUpdateTimers(Stream stream)
     {
-        System.out.println("createUpdateTimers/STREAM:"+stream);
+        //System.out.println("createUpdateTimers/STREAM:"+stream);
         try
         {
             synchronized(stream)
             {
-              System.out.println("createUpdateTimers-1");  
+              //System.out.println("createUpdateTimers-1");  
               if(canEnter)
               {
-                  System.out.println("createUpdateTimers-2");  
+                  //System.out.println("createUpdateTimers-2");  
                   canEnter=false;
                   createUpdateTimersReBind(stream);
               }
@@ -135,18 +137,18 @@ public class ListenerMgr implements SWBAppObject {
             try
             {
                 //System.out.println("Entra a Listener/createUpdateTimers-2:"+stream.getURI());
-                System.out.println("ListerJ1");
+                //System.out.println("ListerJ1");
                 //Se revisa si el timer del stream puede ser creado, esto es, si el stream esta activo, si hay palabras a buscar, etc., si no es así, se elimina
                 if(!createTimer(stream))    
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-3:"+stream.getURI());
-                    System.out.println("ListerJ1.1");
+                    //System.out.println("ListerJ1.1");
                     removeTimer(stream, true);
                     //System.out.println("Elimino timer k");
                 }else
                 {
                     //System.out.println("Entra a Listener/createUpdateTimers-4:"+stream.getURI());
-                    System.out.println("ListerJ2");
+                    //System.out.println("ListerJ2");
                     Timer timer=removeTimer(stream, true);
                     timer=new Timer();
                     int time=stream.getPoolTime();
@@ -165,11 +167,11 @@ public class ListenerMgr implements SWBAppObject {
             }
         }else
         {
-            System.out.println("ListerJ3");
+            //System.out.println("ListerJ3");
             if(createTimer(stream))
             {
                 //Se arranca un timer que se ejecutara cada tantos segundos configurados en el stream
-                System.out.println("Levanta Timer:"+stream.getPoolTime());
+                //System.out.println("Levanta Timer:"+stream.getPoolTime());
                 Timer timer = new Timer();
                 int time=stream.getPoolTime();
                 //Este número es por defecto, ya que si el stream maneja solo una red tipo listenAlive, es posible que no le hayan puesto un 
@@ -206,12 +208,43 @@ public class ListenerMgr implements SWBAppObject {
             }
             if(createTimer(stream))
             {
-                boolean isThereNoListenAliveNets=false;
-                //System.out.println("Ejecuta Timer:"+stream);
-                //int oldStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
+                //////////////////////Agregado para alerta de cantidad de mensajes inusuales en un Stream
                 int streamIterations=stream.getStreamIterations();
-                //int oldStreamPostInAvg=oldStreamPostIns/streamIterations;
-                float oldStreamPostInAvg=stream.getPromPostNumber();
+                System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations);
+                if(streamIterations>0 && stream.getStreamPercentageAlert()>0) //Si los usuarios escribieron un porcentaje en el dato del Stream, entonces se revisa
+                {
+                    float oldStreamPostInAvg=stream.getPromPostNumber();
+                    int newStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream)); 
+                    float newStreamPostInAvg=newStreamPostIns/streamIterations;
+                    stream.setPromPostNumber(newStreamPostInAvg);   //Se graba el nuevo promedio en el Stream
+                    System.out.println("oldStreamPostInAvg:"+oldStreamPostInAvg+",newStreamPostInAvg:"+newStreamPostInAvg);    
+                    if(oldStreamPostInAvg>0)
+                    {
+                        float difAvgs=((newStreamPostInAvg*100)/oldStreamPostInAvg)-100;
+                        System.out.println("difAvgs:"+difAvgs);
+                        if(difAvgs>0 && difAvgs>=(stream.getStreamPercentageAlert()))
+                        {//Si se cumple, entonces envía alerta
+                            System.out.println("Entra a Notificar por correo:"+difAvgs);
+                            String messageBody="Notificación:\n";
+                            messageBody+="El Stream con nombre:"+stream.getDisplayTitle("es")+", perteneciente a la marca:"+stream.getSemanticObject().getModel().getName()+"\n";
+                            messageBody+="Ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+" definido para el stream en cada iteración";
+                            String emails=stream.getStreamEmail2Alerts();
+                            System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
+                            try{
+                                SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes mas del promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
+                                System.out.println("Envió correo:"+difAvgs);
+                            }catch(Exception e)
+                            {
+                                e.printStackTrace();
+                                log.error(e);
+                            }
+                        }
+                    }
+                }
+                stream.setStreamIterations(streamIterations+1); //Grava la primera iteración
+                System.out.println("Iteración:"+stream.getStreamIterations());
+                ///////////////////// Termina Agregado para alerta de cantidad de mensajes inusuales en un Stream
+                boolean isThereNoListenAliveNets=false;
                 Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();
                 while(itSocialNets.hasNext())
                 {
@@ -255,27 +288,6 @@ public class ListenerMgr implements SWBAppObject {
                         isThereNoListenAliveNets=true;
                     }
                 }
-                int newStreamPostIns = Integer.parseInt(getAllPostInStream_Query(stream)); 
-                stream.setStreamIterations(streamIterations+1); //Se graba la nueva iteración en el stream
-                int newStreamPostInAvg=newStreamPostIns/stream.getStreamIterations();
-                
-                float difAvgs=((newStreamPostInAvg*100)/oldStreamPostInAvg)-100;
-                stream.setPromPostNumber(difAvgs);   //Se graba el nuevo promedio en el Stream
-                if(difAvgs>0 && difAvgs>=(stream.getStreamPercentageAlert()))
-                {//Si se cumple, entonces envía alerta
-                    String messageBody="Notificación:\n";
-                    messageBody+="El Stream con nombre:"+stream.getDisplayTitle("es")+", perteneciente a la marca:"+stream.getSemanticObject().getModel().getName()+"\n";
-                    messageBody+="Ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+" definido para el stream en cada iteración";
-                    String emails=stream.getStreamEmail2Alerts();
-                    System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
-                    try{
-                        SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes mas del promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
-                    }catch(Exception e)
-                    {
-                        e.printStackTrace();
-                        log.error(e);
-                    }
-                }                
                 //Si no existen redes sociales que NO sean ListenAlive, entonces elimina ese timer
                 
                 if(!isThereNoListenAliveNets)
@@ -296,10 +308,10 @@ public class ListenerMgr implements SWBAppObject {
      */
     private static boolean createTimer(Stream stream)
     {
-        System.out.println("ListerJ5");
+        //System.out.println("ListerJ5");
         if(stream!=null && stream.getSocialSite().isValid()  && stream.isActive() && !stream.isDeleted()  && stream.listSocialNetworks().hasNext())
         {
-            System.out.println("ListerJ5.1:"+stream.getPhrase());
+            //System.out.println("ListerJ5.1:"+stream.getPhrase());
             if(stream.getPhrase()!=null || stream.getStream_allPhrases()!=null || stream.getStream_exactPhrase()!=null || stream.getStream_fromAccount()!=null)
             {
                 Iterator<SocialNetwork> itNets=stream.listSocialNetworks();
@@ -308,17 +320,17 @@ public class ListenerMgr implements SWBAppObject {
                     SocialNetwork socialNets=itNets.next();
                     if(!socialNets.isActive() || socialNets.isDeleted())
                     {
-                        System.out.println("ListerJ6-FALSE");
+                        //System.out.println("ListerJ6-FALSE");
                         return false;
                     }
                 }
                 
                 //Si es isKeepAliveManager==true, no importaría si no le ponen un tiempo para que este llamandose el thread, 
                 //ya que este es llamado internamente desde cada red social que maneje esta caracteristica
-                System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
+                //System.out.println("IsKeppAlive:"+stream.isKeepAliveManager()+",poolTime:"+stream.getPoolTime());
                 if(stream.isKeepAliveManager() || stream.getPoolTime() > 0)
                 {
-                    System.out.println("ListerJ7-True");
+                    //System.out.println("ListerJ7-True");
                     return true;
                 }
                 //Revisa si en el Stream esta indicado (Active) si se va a manejar KeepAlive en las redes sociales que así lo permitan y que esten
@@ -475,7 +487,7 @@ public class ListenerMgr implements SWBAppObject {
                 "where {\n"
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
                 + "  }\n";
-        System.out.println("query:"+query);
+        //System.out.println("query:"+query);
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         query = SWBSocial.executeQuery(query, wsite);
         return query;
@@ -486,8 +498,8 @@ public class ListenerMgr implements SWBAppObject {
      * Metodo de prueba
      */
     public static void main(String args[]) {
-        System.out.println("About to schedule task.");
+        //System.out.println("About to schedule task.");
         new ListenerMgr(); //C/cuantos segundos se ejecutara la tarea
-        System.out.println("Task scheduled.");
+        //System.out.println("Task scheduled.");
     }
 }

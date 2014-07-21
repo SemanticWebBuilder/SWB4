@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que almacenara las diferentes cuentas de una organización para la red social Facebook. 
    */
-public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.social.SocialNetPostable,org.semanticwb.social.Relationable,org.semanticwb.social.Listenerable,org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Pageable,org.semanticwb.model.Trashable,org.semanticwb.social.Videoable,org.semanticwb.social.Secreteable,org.semanticwb.social.Photoable,org.semanticwb.social.Messageable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableNode
+public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork implements org.semanticwb.model.FilterableClass,org.semanticwb.social.Secreteable,org.semanticwb.model.Filterable,org.semanticwb.social.Oauthable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.social.Pageable,org.semanticwb.social.SocialNetPostable,org.semanticwb.social.PostOutMonitorable,org.semanticwb.social.Messageable,org.semanticwb.social.Listenerable,org.semanticwb.social.Relationable,org.semanticwb.social.Photoable,org.semanticwb.model.Activeable,org.semanticwb.model.Trashable,org.semanticwb.social.Videoable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Access token de la aplicación. Esta propiedad se utiliza para poder obtener la propiedad Third_party_id de facebook y esta a su vez, para poder obtener el klout de facebook en la red Klout.
@@ -345,6 +345,29 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
             org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_haspopr_socialNetworkInv,value.getSemanticObject(),sclass));
             return it;
         }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined FanPage
+       * @param value FanPage of the type org.semanticwb.social.SocialNetwork
+       * @param model Model of the org.semanticwb.social.Facebook
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByFanPage(org.semanticwb.social.SocialNetwork value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(social_hasFanPage, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.social.Facebook with a determined FanPage
+       * @param value FanPage of the type org.semanticwb.social.SocialNetwork
+       * @return Iterator with all the org.semanticwb.social.Facebook
+       */
+
+        public static java.util.Iterator<org.semanticwb.social.Facebook> listFacebookByFanPage(org.semanticwb.social.SocialNetwork value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.social.Facebook> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(social_hasFanPage,value.getSemanticObject(),sclass));
+            return it;
+        }
     }
 
     public static FacebookBase.ClassMgr getFacebookClassMgr()
@@ -434,6 +457,24 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     }
 
 /**
+* Gets the IsFanPage property
+* @return boolean with the IsFanPage
+*/
+    public boolean isIsFanPage()
+    {
+        return getSemanticObject().getBooleanProperty(social_isFanPage);
+    }
+
+/**
+* Sets the IsFanPage property
+* @param value long with the IsFanPage
+*/
+    public void setIsFanPage(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(social_isFanPage, value);
+    }
+
+/**
 * Gets the AccessTokenSecret property
 * @return String with the AccessTokenSecret
 */
@@ -449,5 +490,70 @@ public abstract class FacebookBase extends org.semanticwb.social.SocialNetwork i
     public void setAccessTokenSecret(String value)
     {
         getSemanticObject().setProperty(social_accessTokenSecret, value);
+    }
+   /**
+   * Gets all the org.semanticwb.social.SocialNetwork
+   * @return A GenericIterator with all the org.semanticwb.social.SocialNetwork
+   */
+
+    public org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork> listFanPages()
+    {
+        return new org.semanticwb.model.GenericIterator<org.semanticwb.social.SocialNetwork>(getSemanticObject().listObjectProperties(social_hasFanPage));
+    }
+
+   /**
+   * Gets true if has a FanPage
+   * @param value org.semanticwb.social.SocialNetwork to verify
+   * @return true if the org.semanticwb.social.SocialNetwork exists, false otherwise
+   */
+    public boolean hasFanPage(org.semanticwb.social.SocialNetwork value)
+    {
+        boolean ret=false;
+        if(value!=null)
+        {
+           ret=getSemanticObject().hasObjectProperty(social_hasFanPage,value.getSemanticObject());
+        }
+        return ret;
+    }
+   /**
+   * Adds a FanPage
+   * @param value org.semanticwb.social.SocialNetwork to add
+   */
+
+    public void addFanPage(org.semanticwb.social.SocialNetwork value)
+    {
+        getSemanticObject().addObjectProperty(social_hasFanPage, value.getSemanticObject());
+    }
+   /**
+   * Removes all the FanPage
+   */
+
+    public void removeAllFanPage()
+    {
+        getSemanticObject().removeProperty(social_hasFanPage);
+    }
+   /**
+   * Removes a FanPage
+   * @param value org.semanticwb.social.SocialNetwork to remove
+   */
+
+    public void removeFanPage(org.semanticwb.social.SocialNetwork value)
+    {
+        getSemanticObject().removeObjectProperty(social_hasFanPage,value.getSemanticObject());
+    }
+
+   /**
+   * Gets the FanPage
+   * @return a org.semanticwb.social.SocialNetwork
+   */
+    public org.semanticwb.social.SocialNetwork getFanPage()
+    {
+         org.semanticwb.social.SocialNetwork ret=null;
+         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(social_hasFanPage);
+         if(obj!=null)
+         {
+             ret=(org.semanticwb.social.SocialNetwork)obj.createGenericInstance();
+         }
+         return ret;
     }
 }
