@@ -136,13 +136,26 @@
         <p>
             <label for="dpth">
                 <em>*</em>
-                <%=paramRequest.getLocaleString("intensity")%>
+                <%=paramRequest.getLocaleString("intensity2")%>
             </label>
 
             <select name="dpth" id="dpth" value="0">
                 <option value="0" selected="selected"><%=paramRequest.getLocaleString("low")%></option>
                 <option value="1"><%=paramRequest.getLocaleString("medium")%></option>
                 <option value="2"><%=paramRequest.getLocaleString("high")%></option>
+            </select>
+        </p>
+        <p>
+            <label for="reclasify">
+                <em>*</em>
+                <%=paramRequest.getLocaleString("reclasify")%>
+            </label>
+
+            <select name="reclasify" id="reclasify" value="0">
+                <option value="0" selected="selected"><%=paramRequest.getLocaleString("no")%></option>
+                <option value="1"><%=paramRequest.getLocaleString("allStream")%></option>
+                <!--option value="2"><%=paramRequest.getLocaleString("allBrand")%></option-->
+                <!--option value="3"><%=paramRequest.getLocaleString("allBrands")%></option-->
             </select>
         </p>
         <p>

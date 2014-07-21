@@ -27,15 +27,16 @@
 
 
 
-<%!    private static int positivesGlobal = 0;
+<%!    
+    private static int positivesGlobal = 0;
     private static int negativesGlobal = 0;
     private static int neutralsGlobal = 0;
 
     JSONArray getObject(SemanticObject semObj, String lang, String idModel, String fi) throws Exception {
-        ArrayList<PostIn> list = new ArrayList<PostIn>();
+        //ArrayList<PostIn> list = new ArrayList<PostIn>();
 
         HashMap map = new HashMap();
-        WebSite ss = SWBSocialUtil.getConfigWebSite();
+        //WebSite ss = SWBSocialUtil.getConfigWebSite();
         Iterator i = null;
 
         i = CountryState.ClassMgr.listCountryStates();
@@ -54,7 +55,8 @@
 
 
 
-        int neutrals = 0, positives = 0, negatives = 0, totalPost = 0;
+        //int neutrals = 0, positives = 0, negatives = 0;
+        int totalPost = 0;
         Iterator<PostIn> itObjPostIns = null;
 
         if (semObj.getGenericInstance() instanceof Stream) {
@@ -66,15 +68,15 @@
         }
 
         SWBModel model = WebSite.ClassMgr.getWebSite(idModel);
-        Iterator c = CountryState.ClassMgr.listCountryStates(model);
-        Iterator coun = Country.ClassMgr.listCountries(model);
+        //Iterator c = CountryState.ClassMgr.listCountryStates(model);
+        //Iterator coun = Country.ClassMgr.listCountries(model);
 
         // HashMap mapCountry = new HashMap();
         // while (coun.hasNext()) {
         //   Country cou = (Country) coun.next();
         // mapCountry.put(cou.getTitle(), mapCountry.containsKey(cou.getTitle()) ? (Integer.parseInt(mapCountry.get(cou.getTitle()).toString()) + 1) : 0);
         // }
-
+        /*
         int size = 1;
 
         Country country = Country.ClassMgr.getCountry("MX", SWBSocialUtil.getConfigWebSite());
@@ -84,11 +86,11 @@
             CountryState state = itStates.next();
             //state.
         }
-
+        * */
 
         JSONArray node = new JSONArray();
-        ArrayList<String> geoLocation = new ArrayList<String>();
-        String cad = "1,0,0,0";
+        //ArrayList<String> geoLocation = new ArrayList<String>();
+        //String cad = "1,0,0,0";
 
         while (itObjPostIns.hasNext()) {
 
@@ -161,11 +163,13 @@
         if (intPorcentaje == 0) {
             return node;
         } else {
+            /*
             float porcentajeNeutrals = 0;
             float porcentajePositives = 0;
             float porcentajeNegatives = 0;
+ * */
             int neutrals = 0, positives = 0, negatives = 0, total = 0;
-
+            
             Iterator i = list.iterator();
 
             while (i.hasNext()) {
@@ -182,12 +186,13 @@
 
             positivesGlobal = positivesGlobal + positives;
             negativesGlobal = negativesGlobal + negatives;
-            neutralsGlobal = neutralsGlobal + neutrals;
+            neutralsGlobal = neutralsGlobal + neutrals; 
 
+            /*
             porcentajeNeutrals = ((float) neutrals * 100) / (float) total;
             porcentajePositives = ((float) positives * 100) / (float) total;
             porcentajeNegatives = ((float) negatives * 100) / (float) total;
-
+            */
 
             JSONObject node_ = new JSONObject();
             node_.put("label", "" + nombre);
@@ -223,7 +228,7 @@
     
 
     public JSONArray getJson(JSONArray node, ArrayList list, int totalPost, String nombre, String filter) throws Exception {
-        float intPorcentaje = ((float) list.size() * 100) / (float) totalPost; //total de post de mexico
+        //float intPorcentaje = ((float) list.size() * 100) / (float) totalPost; //total de post de mexico
         float porcentajeNeutrals = 0;
         float porcentajePositives = 0;
         float porcentajeNegatives = 0;
