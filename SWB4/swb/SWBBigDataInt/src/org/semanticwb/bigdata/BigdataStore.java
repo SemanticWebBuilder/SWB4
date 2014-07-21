@@ -90,7 +90,7 @@ public class BigdataStore implements AbstractStore
         //set.close();
     }
 
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return null;
     }
