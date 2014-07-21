@@ -400,7 +400,8 @@ public class EditFilter extends javax.swing.JApplet {
                 findTopic(this.jTree,root);
                 this.jTreeElements.updateUI();
             }
-        }
+        }                
+        this.jTreeElements.expandRow(0);
     }
     private void loadMenus(Topic root,WBTreeNode eroot)
     {
