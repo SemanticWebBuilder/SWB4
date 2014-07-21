@@ -134,7 +134,7 @@ public class SWBTSVirtuoso implements AbstractStore
     }
 
     @Override
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return null;
     }
