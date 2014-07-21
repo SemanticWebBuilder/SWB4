@@ -972,7 +972,7 @@ public class SemanticModel
         log.debug("sparQLQuery:"+queryString);
         QueryExecution ret=null;
         
-        Query query = QueryFactory.create(queryString, Syntax.syntaxARQ);
+        Query query = QueryFactory.create(queryString, Syntax.syntaxSPARQL_11);
         if(m_model.getGraph() instanceof RemoteGraph)
         {
             ret=QueryExecutionFactory.sparqlService(((RemoteGraph)m_model.getGraph()).getUri(), query);

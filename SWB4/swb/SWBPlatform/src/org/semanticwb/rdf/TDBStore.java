@@ -120,7 +120,7 @@ public class TDBStore implements AbstractStore
         set.close();
     }
 
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return set;
     }
