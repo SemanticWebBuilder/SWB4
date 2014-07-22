@@ -163,7 +163,7 @@ if (paramRequest.getUser() != null && paramRequest.getUser().getLanguage() != nu
     </div>
 </div>
 <script type="text/javascript">
-    if ($("#formEdit").length() != 0) {
+    if ($("#formEdit").length() !== 0) {
         $("#formEdit").submit(function(e) {
             $("#modalDialog").modal('hide');
             var postData = $(this).serializeArray();
