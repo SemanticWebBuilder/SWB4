@@ -101,7 +101,7 @@ public class SWBTSMongo implements AbstractStore
     }
 
     @Override
-    public Dataset getDataset()
+    public Dataset getDataset(String defaultName)
     {
         return null;
     }
