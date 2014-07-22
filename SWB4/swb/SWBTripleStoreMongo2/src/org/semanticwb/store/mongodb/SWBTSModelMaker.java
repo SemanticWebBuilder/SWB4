@@ -88,47 +88,48 @@ public class SWBTSModelMaker extends org.semanticwb.store.jenaimp.SWBTSModelMake
     @Override
     public Model createModel(String name)
     {
-        Model model=null;
-        org.semanticwb.store.Graph g=map.get(name);
-        if(g==null || g.isClosed())
+        Model model=map.get(name);
+        if(model==null || model.isClosed())
         {
             try
             {
                 Class cls=Class.forName(clsname);
                 Constructor c=cls.getConstructor(String.class, Map.class);                
                 
-                g=(org.semanticwb.store.Graph)c.newInstance(name,params);
-                map.put(name, g);
+                org.semanticwb.store.Graph g=(org.semanticwb.store.Graph)c.newInstance(name,params);
+                
+                int size=Integer.parseInt(SWBPlatform.getEnv("swb/tripleStoreResourceCache","0"));
+
+                if(size>0)
+                {
+                    model=new ModelCom(new SWBTSGraphCache(new SWBTSGraph(g),size));
+                }else if(size==0)
+                {
+                    model=new ModelCom(new SWBTSGraph(g));
+                }else if(size<0)
+                {
+                    model=new ModelCom(new GraphCached(new SWBTSGraph(g)));
+                }
+                
+                map.put(name, model);
             }catch(Exception e2)
             {
                 log.error(e2);
             }
         }
         
-        int size=Integer.parseInt(SWBPlatform.getEnv("swb/tripleStoreResourceCache","0"));
-
-        if(size>0)
-        {
-            model=new ModelCom(new SWBTSGraphCache(new SWBTSGraph(g),size));
-        }else if(size==0)
-        {
-            model=new ModelCom(new SWBTSGraph(g));
-        }else if(size<0)
-        {
-            model=new ModelCom(new GraphCached(new SWBTSGraph(g)));
-        }
         return model;
     }
 
     @Override
     public void removeModel(String name)
     {
-        org.semanticwb.store.Graph g=map.get(name);
-        if(g!=null)
+        Model m=map.get(name);
+        if(m!=null)
         {
             try
             {
-                g.close();                
+                m.close();                
                 map.remove(name);
  
                 MongoClient mongo = new MongoClient( params.get("swb/tripleremoteserver"), Integer.parseInt(params.get("swb/tripleremoteport")));
