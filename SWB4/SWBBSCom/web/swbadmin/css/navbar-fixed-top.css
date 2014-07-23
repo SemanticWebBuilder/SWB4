@@ -1,0 +1,22 @@
+body {
+	/*min-height: 2000px;*/
+	padding-top: 220px;
+
+	/* Escritorio */
+	@media(min-width: 1200px){
+            padding-top: -15px;
+	}
+	/* Escritorio pequeño o tablet */
+	@media (min-width: 768px) and (max-width: 979px){
+            padding-top: -50px;
+	}
+	/* Tablet o smartphone */
+	@media (min-width: 767px){
+            padding-top: 80px;
+	}	
+	/* Smartphone */
+	@media (min-width: 480px){
+            padding-top: 220px;
+	}
+
+}
