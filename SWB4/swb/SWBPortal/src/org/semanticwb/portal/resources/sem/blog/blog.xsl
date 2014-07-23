@@ -6,7 +6,8 @@
     <!-- Esta plantilla requiere DOJO para su funcionamiento -->
     <xsl:template match="/">
 
-        <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.9.1/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>
+        <!--<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/nihilo/nihilo.css" type="text/css" media="screen" id="themeCss"></link>-->
         <!-- script TYPE="text/javascript" SRC="{blog/@webpath}/swbadmin/js/dojo/dojo/dojo.js"></script -->
         <link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dojo/resources/dojo.css" type="text/css" media="screen" id="themeCss"></link>
 		<link rel="stylesheet" href="{/blog/@webpath}/swbadmin/js/dojo/dijit/themes/dijit.css" type="text/css" media="screen" id="themeCss"></link>
@@ -229,11 +230,11 @@
 		    dojo.addOnLoad(
 		    function() { 
 		    
-		    new dijit.Editor(
+		    /*new dijit.Editor(
 		    	            			{  
 		    	            			
 		    	            				plugins:['bold','italic','underline', 'strikethrough','|','insertUnorderedList','insertOrderedList','|','createLink','unlink']},
-	            				'editor');
+	            				'editor');*/
 	            				
 	            var _title=new dijit.form.TextBox({			            						
 		    	            				required:"true",
@@ -303,11 +304,13 @@
                         <input type="hidden" id="title" name="title" value=""></input>
                         <fieldset>
                             <div class="nihilo" id="text">
-                                <input type="text" id="_title"  name="title" size="80" maxlength="255" value="Título de la entrada"></input>
+                                Título de la entrada: <input type="text" id="_title"  name="title" size="80" maxlength="255" value="Título de la entrada"></input>
                             </div>
+                            <br></br><br></br>
                             <div class="nihilo" id="editor3"  >
-                                <textarea id="editor" name="editor" rows="50" cols="30">Nueva entrada del blog
-                                </textarea>
+      <!--                          <textarea id="editor" name="editor" rows="50" cols="30">Nueva entrada del blog
+                                </textarea> -->
+                                <div data-dojo-type="dijit/Editor" id="editor"> <p>Nueva entrada del blog</p></div>
                             </div>
                             <div class="nihilo">
                                 <button id="buttonsubmit" type="button" onClick="javascript:validaForma()">
