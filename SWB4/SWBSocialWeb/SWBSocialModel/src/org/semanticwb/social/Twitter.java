@@ -196,7 +196,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
                 }else{
-                    System.out.println("Twitter Photo SEGUNDA OPCION..."+messageText.length());
+                    //System.out.println("Twitter Photo SEGUNDA OPCION..."+messageText.length());
                     if(messageText.length()>125) messageText=messageText.substring(0, 90)+"...";
                     messageText = messageText + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
                     sup = new StatusUpdate(new String((messageText).getBytes(), "ISO-8859-1"));
