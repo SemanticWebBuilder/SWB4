@@ -168,7 +168,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 log.error("No photo(s) found!");
                 //System.out.println("No Photos FOUND");
                 return;
-            }else if (photoNumber > 1){
+            }else if (photoNumber > 1 || messageText.length()>140){
                 String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                 additionalPhotos = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + photo.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                 additionalPhotos = SWBSocialUtil.Util.shortSingleUrl(additionalPhotos);
@@ -196,7 +196,8 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                     sup.setMedia(new File(photoToPublish));
                     stat = twitter.updateStatus(sup.inReplyToStatusId(Long.parseLong(photo.getPostInSource().getSocialNetMsgId())));
                 }else{
-                    //System.out.println("Twitter Photo SEGUNDA OPCION...");
+                    System.out.println("Twitter Photo SEGUNDA OPCION..."+messageText.length());
+                    if(messageText.length()>125) messageText=messageText.substring(0, 90)+"...";
                     messageText = messageText + (additionalPhotos.trim().length() > 0 ? " " + additionalPhotos : "" ); //
                     sup = new StatusUpdate(new String((messageText).getBytes(), "ISO-8859-1"));
                     //sup.setMedia(new File(photoSend));
@@ -554,7 +555,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     public void listenAlive(Stream stream) {
         try {
-            //System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
+            System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
             if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) {
                 stopListenAlive(stream);
             }
@@ -571,7 +572,18 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             
             
             //Palabras a monitorear
+            /*
             String words2Monitor=stream.getPhrase();
+            System.out.println("words2Monitor:"+words2Monitor);
+            String[] words2MonitorArray=words2Monitor.split(" ");
+            System.out.println("words2MonitorArray:"+words2MonitorArray);
+            for(int i=0;i<words2MonitorArray.length;i++)
+            {
+                System.out.println("words2MonitorArray["+i+"]="+words2MonitorArray[i]);
+            }
+            * */
+            //String words2Monitor="cerveza,botana, chicas, nenas";   //OR BUENO
+            String words2Monitor="cerveza botana";   // BUENO
             if(words2Monitor!=null && words2Monitor.trim().length()>0)
             {
                 String[] tr = {words2Monitor};
@@ -587,7 +599,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             twitterStream.filter(query);
             
-            //System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
+            System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
             //twitterStream.sample();
             ListenAlives.put(stream.getURI()+"|"+this.getURI(), twitterStream);
             
@@ -601,17 +613,17 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     //@Override
     
     public void stopListenAlive(Stream stream) {
-        //System.out.println("Entra a stopListenAlive");
+        System.out.println("Entra a stopListenAlive");
         if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI()))
         {
             TwitterStream twitterStream=ListenAlives.get(stream.getURI()+"|"+this.getURI());
             if(twitterStream!=null)
             {
                 twitterStream.cleanUp();
-                //twitterStream.shutdown(); //Este tumba todos los threads y ya no vuelve a levantar otro para ninguno-->No ponerlo
+                twitterStream.shutdown(); //Este tumba todos los threads y ya no vuelve a levantar otro para ninguno-->No ponerlo
                 twitterStream=null;
                 ListenAlives.remove(stream.getURI()+"|"+this.getURI());
-                //System.out.println("DETUVO LA CONEXION EN stopListenAliveGeorge:"+this.getId());
+                System.out.println("DETUVO LA CONEXION EN stopListenAliveGeorge:"+this.getId());
             }
         }
         
