@@ -26,7 +26,11 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
 %>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" >
-    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/jquery/jquery.js"></script>
+    <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false, locale: 'es'" ></script>
+    <!--
+    <script src="/swbadmin/js/swb_admin.js"></script>
+    <script src="/swbadmin/js/swb.js"></script>
+    -->
     <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/toolkit.js" charset="utf-8"></script>
     <script type="text/javascript" src="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/modeler.js" charset="utf-8"></script>
     <link href="<%=SWBPortal.getContextPath()%>/swbadmin/jsp/process/modeler/images/modelerFrame.css" rel="stylesheet" type="text/css">
@@ -183,7 +187,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
     </div>
     <div id="calltasksBar" class="subbarHidden" style="width: 237px;">
         <span class="subbarStart"></span>
-        <span class="callTask" cId ="CallTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTask")%>" onclick="Modeler.creationStart(this)"></span>
+        <span class="callTask" cId ="CallTask" onmouseover="ToolBar.overToolBar();" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTask")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callmanualTask" cId ="CallManualTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskManual")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callruleTask" cId ="CallBusinessRuleTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskRule")%>" onclick="Modeler.creationStart(this)"></span>
         <span class="callscriptTask" cId ="CallScriptTask" onmouseover="ToolBar.overToolBar(true);" onmouseout="ToolBar.outToolBar()" title="<%=paramRequest.getLocaleString("itemCallTaskScript")%>" onclick="Modeler.creationStart(this)"></span>
@@ -1052,11 +1056,9 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
          */
         function submit_download_form(output_format) {
             var form = document.getElementById("svgform");
-            //var viewBox = document.getElementById("modeler").getAttribute("viewBox");
             var viewBox = document.getElementById("modeler");
             var element = document.getElementById("viewBox");
-            element.value = viewBox.getAttribute('viewBox');
-            
+            element.value = "0 0 " + viewBox.getAttribute('width') + " " + viewBox.getAttribute('height');
             
             
             if (output_format === "svg" || output_format === "png") {
@@ -1099,7 +1101,8 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
                 ToolKit.showTooltip(0, "<%=paramRequest.getLocaleString("loading")%>", 200, "Warning");
             }
             Modeler.submitCommand('<%=commandUrl%>', null, callbackLoad);
-        };
+        }
+        ;
         <%
             }
             if (SWBContext.getAdminWebSite().equals(paramRequest.getWebPage().getWebSite())) {
