@@ -84,33 +84,33 @@ public class PeriodSelector extends GenericResource {
         String periodId = (String) request.getSession().getAttribute(currentBsc.getId());
         //Verificar que exista el periodo válido en sesión. Si no existe, ponerlo
         Period nearestPeriod = null;
-        if (!Period.ClassMgr.hasPeriod(periodId, currentBsc)) {
+        if (periodId == null || (!Period.ClassMgr.hasPeriod(periodId, currentBsc))) {
             nearestPeriod = getNearestPeriod(periods);
             if (nearestPeriod != null) {
                 periodId = nearestPeriod.getId();
-                request.getSession(true).setAttribute(currentBsc.getId(), nearestPeriod.getId());
+                request.getSession(true).setAttribute(currentBsc.getId(), periodId);
             }
-        } else {
+        } else if (Period.ClassMgr.hasPeriod(periodId, currentBsc)) {
             nearestPeriod = Period.ClassMgr.getPeriod(periodId, currentBsc);
         }
 
-        int periodCount = 0;
         String actionUrl = paramRequest.getActionUrl().setAction("setPeriod").toString();
-        
-        //funcion de javascript para mandar la forma que contiene el select
+        //funcion de javascript para hacer la peticion para consultar el periodo seleccionado
         output.append("<script type=\"text/javascript\">\n");
-        output.append("  function settingPeriod(element) {\n");
-        output.append("      if (element && element[element.selectedIndex].value != \"\") {\n");
-        output.append("        var urlToGo = element.form.action;\n");
-        output.append("        urlToGo += ('?periodId=' + element[element.selectedIndex].value);\n");
+        output.append("  function settingPeriod(value) {\n");
+        output.append("      if (value && value != \"\") {\n");
+        output.append("        var urlToGo = \"");
+        output.append(actionUrl);
+        output.append("\";\n");
+        output.append("        urlToGo += ('?periodId=' + value);\n");
         output.append("        var xmlhttp;\n");
         output.append("        if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari\n");
-        output.append("          xmlhttp=new XMLHttpRequest();\n");
-        output.append("        } else {// code for IE6, IE5\n");
-        output.append("          xmlhttp=new ActiveXObject(\"Microsoft.XMLHTTP\");\n");
+        output.append("          xmlhttp = new XMLHttpRequest();\n");
+        output.append("        } else { // code for IE6, IE5\n");
+        output.append("          xmlhttp = new ActiveXObject(\"Microsoft.XMLHTTP\");\n");
         output.append("        }\n");
-        output.append("        xmlhttp.onreadystatechange=function() {\n");
-        output.append("          if (xmlhttp.readyState==4 && xmlhttp.status==200) {\n");
+        output.append("        xmlhttp.onreadystatechange = function() {\n");
+        output.append("          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n");
         output.append("            location.reload(true);\n");
         output.append("          }\n");
         output.append("        }\n");
@@ -119,27 +119,36 @@ public class PeriodSelector extends GenericResource {
         output.append("      }\n");
         output.append("  }\n");
         output.append("</script>\n");
-        //armar despliegue del select a mostrar
-        output.append("<form method=\"post\" action=\"" + actionUrl + "\">\n");
-        output.append("  <select name=\"periodId\" onChange=\"settingPeriod(this);\">\n");
-        if (!periods.isEmpty()) {
-        //Recorrer el listado de Scorecards
-            for(Period nextPeriod:periods) {
-                periodCount++;
-                String optionValue = nextPeriod != nearestPeriod ? nextPeriod.getId() : "";
-                output.append("    <option value=\"");
-                output.append(optionValue);
-                output.append("\"");
-                output.append((nextPeriod != nearestPeriod ? "" : " selected=\"selected\""));
-                output.append(">");
-                output.append(nextPeriod.getTitle());
-                output.append("</option>\n");
-            }
-        } else {
-            output.append("    <option value=\"\">No hay otros Per&iacute;odos</option>\n");
+        //armar despliegue del selector de periodos
+        output.append("<ul id=\"");
+        output.append(paramRequest.getLocaleString("elementId"));
+        output.append("\" class=\"nav nav-pills navbar-right\">\n");
+        output.append("  <li class=\"dropdown\">\n");
+        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
+        output.append(paramRequest.getLocaleString("lbl_title"));
+        output.append(": ");
+        output.append(nearestPeriod != null ? nearestPeriod.getTitle() : "");
+        if (periods.size() > 1) {
+            output.append("<span class=\"caret\"></span>");
         }
-        output.append("  </select>\n");
-        output.append("</form>\n");
+        output.append("</a>\n");
+        output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
+        
+        if (!periods.isEmpty()) {
+        //Recorrer el listado de periodos
+            for(Period nextPeriod:periods) {
+                if (nextPeriod != nearestPeriod) {
+                    output.append("      <li><a href=\"#\" onclick=\"settingPeriod(");
+                    output.append(nextPeriod.getId());
+                    output.append(");\">");
+                    output.append(nextPeriod.getTitle());
+                    output.append("</a></li>\n");
+                }
+            }
+        }
+        output.append("    </ul>\n");
+        output.append("  </li>\n");
+        output.append("</ul>\n");
         out.println(output.toString());
     }
 
