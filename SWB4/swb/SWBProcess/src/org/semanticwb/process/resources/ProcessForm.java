@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
 import java.security.GeneralSecurityException;
 import java.security.Signature;
 import java.security.cert.Certificate;
@@ -696,6 +695,7 @@ public class ProcessForm extends GenericResource {
     
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=UTF-8");
         String jsp = "/swbadmin/jsp/process/formsBuilder/admin.jsp";
         RequestDispatcher rd = request.getRequestDispatcher(jsp);
         Resource base = getResourceBase();
