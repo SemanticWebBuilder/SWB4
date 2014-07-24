@@ -27,6 +27,7 @@
         selectBox:null,
         cmdkey:false,
         ctrlkey:false,
+        shiftKey:false,
         snap2Grid:true,
         snap2GridSize:10,
         layer:null,
@@ -609,6 +610,9 @@
                         }
                     }
                 }
+            } else if (evt.keyCode===16 && evt.which===16) {
+                _this.shiftKey=true;
+                _this.stopPropagation(evt);
             }
         },
 
@@ -623,6 +627,9 @@
             }else if(evt.keyCode===17 && evt.which===17)
             {
                 _this.ctrlkey=false;
+                _this.stopPropagation(evt);
+            } else if (evt.keyCode===16 && evt.which===16) {
+                _this.shiftKey=false;
                 _this.stopPropagation(evt);
             }
         },                                        
