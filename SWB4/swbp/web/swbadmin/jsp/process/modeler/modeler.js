@@ -2720,8 +2720,8 @@
                             obj.title = txt;
                             if (!obj.text) {
                                 obj.createText();
-                                obj.updateText();
                             }
+                            obj.updateText();
                         } else {
                             obj.title = "";
                             if (obj.text) {
