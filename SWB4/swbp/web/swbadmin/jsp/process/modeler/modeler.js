@@ -3675,8 +3675,7 @@
                                 }
                             }
                         }
-                    }
-                    if (obj !== null) {
+                    } else if (obj !== null && cont === null) {
                         ToolKit.svg.dragObject = obj;
                         ToolKit.selectObj(obj, false);
                         ToolKit.svg.onmouseup();
