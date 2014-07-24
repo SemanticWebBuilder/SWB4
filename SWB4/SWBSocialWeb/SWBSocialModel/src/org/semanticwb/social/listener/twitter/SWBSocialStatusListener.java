@@ -5,11 +5,16 @@
 package org.semanticwb.social.listener.twitter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticObject;
+import org.semanticwb.social.DevicePlatform;
 import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.SocialNetStreamSearch;
 import org.semanticwb.social.SocialNetwork;
@@ -41,6 +46,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     int  tweetsReceived = 0;
     long currentTweetID = 0L;
     ArrayList aListExternalPost=new ArrayList();
+    ArrayList<DevicePlatform> devicePlatform = new ArrayList<DevicePlatform>();
 
     /*
      * Metodo constructor el cual recibe como parametros
@@ -57,6 +63,11 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         this.model = wsite;
         this.ListenAlives = ListenAlives;
+        Iterator<DevicePlatform> dpTmp = DevicePlatform.ClassMgr.listDevicePlatforms(SWBContext.getGlobalWebSite());
+        while(dpTmp.hasNext()){
+            DevicePlatform dp = dpTmp.next();
+            devicePlatform.add(dp);
+        }
         System.out.println("Entra a crear SWBSocialStatusListener...");
     }
 
@@ -69,7 +80,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
     @Override
     public void onStatus(Status status) {
         try {
-            System.out.println("Entra a SWBSocialStatusListener/onStatus-0:" + socialNetwork);
+            //System.out.println("Entra a SWBSocialStatusListener/onStatus-0:" + socialNetwork);
             //El siguiente bloque de código (if) es NECESARIO, sirve para detener este thread de la librería twitter4J (onStatus), por si en algún momento
             //se cambia el stream en la propiedad "keepAliveManager" de true a false o si se elimina la instancia de red social la cual se esta
             //monitoreando, este thread nunca lo sabría y no se tiene manera de detenerlo desde el LitenerMgr, es por eso que se agrega aquí
@@ -88,21 +99,32 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             //Termina Bloque de código que debemos agregar, De manera personalizada para c/red social, cuando soporten Listener de tipo KeepAlive.
             
             //Empieza a generar objetos de tipo ExternalPost con c/tweet que llega
+            //System.out.println("Entra a SWBSocialStatusListener/onStatus-1");
             if(!status.isRetweet())
             {
+                //System.out.println("Entra a SWBSocialStatusListener/onStatus-2");
                 if(status.getUser() != null){
+                    //System.out.println("Entra a SWBSocialStatusListener/onStatus-3");
                     ExternalPost external = new ExternalPost();
                     external.setPostId(String.valueOf(status.getId())); 
                     external.setCreatorId(String.valueOf(status.getUser().getId()));
                     external.setCreatorName("@"+status.getUser().getScreenName());
-                    external.setCreationTime(status.getCreatedAt());
+                    external.setPostUrl("https://twitter.com/" + status.getUser().getScreenName() + "/status/" + String.valueOf(status.getId()));
+                    external.setUserUrl("https://twitter.com/" + status.getUser().getScreenName());
+                    if(status.getCreatedAt().before(new Date())){
+                        external.setCreationTime(status.getCreatedAt());
+                    }else{
+                        external.setCreationTime(new Date());
+                    }
                     //external.setDevice(status.getSource());
                     if (status.getText()!=null) {
                        external.setMessage(status.getText());
                     }                            
-                    external.setPostType(SWBSocialUtil.MESSAGE);   
+                    external.setCreatorPhotoUrl(status.getUser().getBiggerProfileImageURL());
+                    external.setPostType(SWBSocialUtil.MESSAGE);   //TODO:VER SI SIEMPRE EN TWITTER LE DEBO DE PONER ESTE TIPO O TAMBIÉN LE PUDIERA PONER QUE ES DE TIPO FOTO
                     external.setFollowers(status.getUser().getFollowersCount());
                     external.setFriendsNumber(status.getUser().getFriendsCount());
+                    external.setDevicePlatform(getDevicePlatform(devicePlatform, status.getSource()));
                     //System.out.println("status.getUser().getLocation()----->"+status.getUser().getLocation());
                     
                     if(status.getPlace()!=null)
@@ -115,7 +137,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             double latCenterPoint=((boundingBox[3].getLatitude()-boundingBox[0].getLatitude())/2)+boundingBox[0].getLatitude();
                             double lngCenterPoint=((boundingBox[1].getLongitude()-boundingBox[0].getLongitude())/2)+boundingBox[0].getLongitude();
 
-                            //System.out.println("Punto 5--JJ:["+latCenterPoint+"," +lngCenterPoint+"]");
+                            //System.out.println("Punto 5:["+latCenterPoint+"," +lngCenterPoint+"]");
 
                             external.setLatitude(latCenterPoint);
                             external.setLongitude(lngCenterPoint);
@@ -126,7 +148,6 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                             }
                         }
                     }else if(status.getUser().getLocation()!=null && !status.getUser().getLocation().isEmpty()){
-                        //System.out.println("Pone en External UserGeo:"+status.getUser().getLocation());
                         external.setUserGeoLocation(status.getUser().getLocation());
                     }
                     
@@ -141,7 +162,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     //System.out.println("TweetNumber:"+tweetsReceived+",User: @" + status.getUser().getScreenName() + "\tID:" + status.getId() + "\tTime:" + status.getCreatedAt() + "\tText:" + status.getText());
                     
                     if(tweetsReceived>=1 && aListExternalPost.size()>0){
-                        //System.out.println("Va a enviar a Clasificador--1");
+                        //System.out.println("Entra a SWBSocialStatusListener/onStatus-4-Clasificar..");
                         new Classifier(aListExternalPost, stream, socialNetwork, true);
                         setLastTweetID(currentTweetID, stream);//Save
                         tweetsReceived=0;
@@ -190,5 +211,42 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    
+    private DevicePlatform getDevicePlatform(ArrayList<DevicePlatform> dp, String source){
+        DevicePlatform validDP = null;
+        
+        if(source != null && !source.trim().isEmpty()){
+            source = source.toLowerCase();
+            for(int i = 0; i < dp.size(); i++){
+                if(validDP != null){
+                    break;
+                }
+
+                String tags = dp.get(i).getTags();
+                if(tags != null && !tags.trim().isEmpty()){
+                    String tagsArray[] = tags.toLowerCase().split(",");
+                    if(tagsArray.length > 0){
+                        for(int j = 0; j < tagsArray.length; j++){
+                            if(source.contains(tagsArray[j])){
+                                //validDP = dp.get(i);
+                                validDP = (DevicePlatform)SemanticObject.createSemanticObject(dp.get(i).getURI()).createGenericInstance();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(validDP == null){
+            validDP = DevicePlatform.ClassMgr.getDevicePlatform("other", SWBContext.getGlobalWebSite());
+            validDP = (DevicePlatform)SemanticObject.createSemanticObject(validDP.getURI()).createGenericInstance();
+            
+        }
+        if(validDP != null){
+            //System.out.println("validDP:" +validDP.getId());
+        }
+        
+        return validDP;
+    }
    
 }
