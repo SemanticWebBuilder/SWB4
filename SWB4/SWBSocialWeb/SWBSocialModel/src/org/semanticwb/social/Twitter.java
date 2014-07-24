@@ -11,14 +11,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import javaQuery.j2ee.tinyURL;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.validator.routines.UrlValidator;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
@@ -26,7 +25,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.SWBContext;
-import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -555,7 +553,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     
     public void listenAlive(Stream stream) {
         try {
-            System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
+            //System.out.println("Entra a Twitter listenAlive-1:"+stream.getURI()+"|"+this.getURI());
             if(ListenAlives.containsKey(stream.getURI()+"|"+this.getURI())) {
                 stopListenAlive(stream);
             }
@@ -569,26 +567,126 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             */
             /*create filterQuery*/
             FilterQuery query = new FilterQuery();
+            //Filtado de Idioma
+            //if(stream.getGeoLanguage()!=null) query.language(stream.getGeoLanguage().split(" ")); //Para filtrar por lenguaje-->Descomentar despues
             
             
-            //Palabras a monitorear
-            /*
-            String words2Monitor=stream.getPhrase();
-            System.out.println("words2Monitor:"+words2Monitor);
-            String[] words2MonitorArray=words2Monitor.split(" ");
-            System.out.println("words2MonitorArray:"+words2MonitorArray);
-            for(int i=0;i<words2MonitorArray.length;i++)
+            //Filtrado de Palabras a monitorear
+            
+            String words2Monitor="";
+            if(stream.getPhrase()!=null && !stream.getPhrase().isEmpty())
             {
-                System.out.println("words2MonitorArray["+i+"]="+words2MonitorArray[i]);
+                words2Monitor=stream.getPhrase().trim().replaceAll("\\s+", ",");
             }
-            * */
-            //String words2Monitor="cerveza,botana, chicas, nenas";   //OR BUENO
-            String words2Monitor="cerveza botana";   // BUENO
+            if(stream.getStream_allPhrases()!=null && !stream.getStream_allPhrases().isEmpty())
+            {
+                if(words2Monitor.trim().length()>0) words2Monitor+=",";
+                words2Monitor+=stream.getStream_allPhrases().trim().replaceAll("\\s+", " ");
+            }
+            
+            //String words2Monitor="cerveza chica,marcha,reforma";   //OR BUENO
+            //System.out.println("George-2_words2Monitor:"+words2Monitor);
+            
             if(words2Monitor!=null && words2Monitor.trim().length()>0)
             {
                 String[] tr = {words2Monitor};
                 query.track(tr);
                 //System.out.println("words2Monitor--1:"+words2Monitor);
+            }
+            //Filtrado de Cuentas de Usuario
+            if(stream.getStream_fromAccount()!=null && !stream.getStream_fromAccount().isEmpty())   
+            {   //Filtrar solo por ciertas cuentas de usuario, al parecer no  funciona el filtro, trae de todos los usuarios.
+                /*
+                String fromAccounts = stream.getStream_fromAccount();
+                fromAccounts = SWBSocialUtil.Strings.replaceSpecialCharacters(fromAccounts);
+                fromAccounts = fromAccounts.trim().replaceAll("\\s+", " "); //this code replaces multiple spaces beetwen words for just one
+                String words[] = fromAccounts.split(" ");
+                String tmpString = "";
+                for (int i = 0; i < words.length; i++) {
+                    if(!words[i].trim().isEmpty()){
+                        tmpString += ( i>0 ? "," : "") + words[i];      
+                    }                
+                }
+                List<String> users = Arrays.asList(tmpString.split("\\s*,\\s*"));
+                String[] usersArr = new String[users.size()];
+                usersArr = users.toArray(usersArr);
+               
+                long jorge=47531700; 
+                long ana=601109263;
+                long usersIds[] = {
+                        jorge,ana
+                    };
+                ArrayList<Long> follow = new ArrayList<Long>();
+                follow.add(Long.parseLong("47531700"));
+                follow.add(Long.parseLong("601109263"));
+                long[] followArray = new long[follow.size()];
+                for (int i = 0; i < follow.size(); i++) {
+                    followArray[i] = follow.get(i);
+                }
+                
+                System.out.println("Se filtra a usuariosJorge:"+usersIds);
+                query.follow(followArray); //-->Parece ser que no funciona, no filtra por estos usuarioss, si lo pongo antes del parametro track NO trae nada.
+                * */
+            }
+            
+            //Idioma
+            if(stream.getGeoLanguage()!=null && !stream.getGeoLanguage().isEmpty())
+            {
+                String langs2Monitor=stream.getGeoLanguage().trim().replaceAll("\\s+", ",");
+                String[] langsArray = {langs2Monitor};
+                query.language(langsArray);
+                /* Formato de idiomas -->http://tools.ietf.org/html/bcp47 ----https://twitter.com/search-advanced
+                <option value="am">Amharic (አማርኛ)</option>
+                <option value="ar">Arabic (العربية)</option>
+                <option value="bg">Bulgarian (Български)</option>
+                <option value="bn">Bengali (বাংলা)</option>
+                <option value="bo">Tibetan (བོད་སྐད)</option>
+                <option value="chr">Cherokee (ᏣᎳᎩ)</option>
+                <option value="da">Danish (Dansk)</option>
+                <option value="de">German (Deutsch)</option>
+                <option value="dv">Maldivian (ދިވެހި)</option>
+                <option value="el">Greek (Ελληνικά)</option>
+                <option value="en">English (English)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="fa">Persian (فارسی)</option>
+                <option value="fi">Finnish (Suomi)</option>
+                <option value="fr">French (Français)</option>
+                <option value="gu">Gujarati (ગુજરાતી)</option>
+                <option value="iw">Hebrew (עברית)</option>
+                <option value="hi">Hindi (हिंदी)</option>
+                <option value="hu">Hungarian (Magyar)</option>
+                <option value="hy">Armenian (Հայերեն)</option>
+                <option value="in">Indonesian (Bahasa Indonesia)</option>
+                <option value="is">Icelandic (Íslenska)</option>
+                <option value="it">Italian (Italiano)</option>
+                <option value="iu">Inuktitut (ᐃᓄᒃᑎᑐᑦ)</option>
+                <option value="ja">Japanese (日本語)</option>
+                <option value="ka">Georgian (ქართული)</option>
+                <option value="km">Khmer (ខ្មែរ)</option>
+                <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                <option value="ko">Korean (한국어)</option>
+                <option value="lo">Lao (ລາວ)</option>
+                <option value="lt">Lithuanian (Lietuvių)</option>
+                <option value="ml">Malayalam (മലയാളം)</option>
+                <option value="my">Myanmar (မြန်မာဘာသာ)</option>
+                <option value="ne">Nepali (नेपाली)</option>
+                <option value="nl">Dutch (Nederlands)</option>
+                <option value="no">Norwegian (Norsk)</option>
+                <option value="or">Oriya (ଓଡ଼ିଆ)</option>
+                <option value="pa">Panjabi (ਪੰਜਾਬੀ)</option>
+                <option value="pl">Polish (Polski)</option>
+                <option value="pt">Portuguese (Português)</option>
+                <option value="ru">Russian (Русский)</option>
+                <option value="si">Sinhala (සිංහල)</option>
+                <option value="sv">Swedish (Svenska)</option>
+                <option value="ta">Tamil (தமிழ்)</option>
+                <option value="te">Telugu (తెలుగు)</option>
+                <option value="th">Thai (ไทย)</option>
+                <option value="tl">Tagalog (Tagalog)</option>
+                <option value="tr">Turkish (Türkçe)</option>
+                <option value="ur">Urdu (ﺍﺭﺩﻭ)</option>
+                <option value="vi">Vietnamese (Tiếng Việt)</option>
+                <option value="zh">Chinese (中文)</option>*/
             }
             
             TwitterStream twitterStream = new TwitterStreamFactory(configureOAuth().build()).getInstance();
@@ -599,7 +697,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
 
             twitterStream.filter(query);
             
-            System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
+           // twitterStream.filter(new FilterQuery(0, followArray, tr));
+            
+            //System.out.println("Entra a Twitter listenAlive-3G1:"+stream.getURI()+"|"+this.getURI());
             //twitterStream.sample();
             ListenAlives.put(stream.getURI()+"|"+this.getURI(), twitterStream);
             
