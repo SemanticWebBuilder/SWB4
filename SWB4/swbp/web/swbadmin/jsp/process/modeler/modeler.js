@@ -2660,6 +2660,9 @@
                 }
                 obj.select(true);
                 Modeler.selectedPath = obj;
+                /*if (evt.button===2) {
+                    obj.createLineHandlers();
+                }*/
                 ToolKit.stopPropagation(evt);
                 return false;
             };
@@ -3345,9 +3348,12 @@
                         }
                     };
                     
-                    var fMove=obj.move;
-                    var fResize=obj.resize;
-                    var fMoveFirst=obj.moveFirst;
+                    var fMove=obj.move,
+                        fResize=obj.resize,
+                        fMoveFirst=obj.moveFirst,
+                        fShow = obj.show,
+                        fHide = obj.hide,
+                        fRemove = obj.remove;
 
                     obj.move=function(x,y) {
                         fMove(x,y);
@@ -3363,6 +3369,27 @@
                         fMoveFirst();
                         obj.updateSubSquare();
                     };
+                    
+                    obj.show = function() {
+                        fShow();
+                        if (obj.subSquare) {
+                            obj.subSquare.show();
+                        }
+                    };
+                    
+                    obj.hide = function() {
+                        fHide();
+                        if (obj.subSquare) {
+                            obj.subSquare.hide();
+                        }
+                    };
+                    
+                    obj.remove = function(all) {
+                        fRemove(all);
+                        if (obj.subSquare) {
+                            obj.subSquare.remove();
+                        }
+                    }
                     break;
             }
             return obj;
