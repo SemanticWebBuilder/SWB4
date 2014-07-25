@@ -527,7 +527,7 @@ public class SentimentalDataClassifier {
             }
         }
         long tfin = System.currentTimeMillis() - tini;
-        //System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
+        System.out.println("\n<!--Total Time to Classify: " + tfin + "ms - SWBSocial--> ");
     }
 
     /*
