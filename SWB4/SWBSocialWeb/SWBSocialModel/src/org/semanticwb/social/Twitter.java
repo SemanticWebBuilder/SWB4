@@ -87,6 +87,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         if (message != null && message.getMsg_Text() != null && message.getMsg_Text().trim().length() > 1) {
             String messageText = this.shortMsgText(message);
             //message.setMsg_Text(messageText);
+            
             twitter4j.Twitter twitter = new TwitterFactory().getInstance();
             try {
                 twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
@@ -97,7 +98,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 Status sup = null;
                 String urlLocalPost = "";
                 Iterator<String> files = message.listFiles();
-                if(files.hasNext()){//If at least one file found
+                if(files.hasNext() || messageText.length()>140){//If at least one file found
                     String absolutePath = SWBPortal.getEnv("swbsocial/absolutePath") == null ? "" : SWBPortal.getEnv("swbsocial/absolutePath");
                     urlLocalPost = absolutePath + "/es/SWBAdmin/ViewPostFiles?uri=" + message.getEncodedURI() + "&neturi=" + this.getEncodedURI();
                     urlLocalPost = SWBSocialUtil.Util.shortSingleUrl(urlLocalPost);
@@ -113,6 +114,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 }else{
                     //System.out.println("Twitter Msg SEGUNDA OPCION...");
                     if(!urlLocalPost.isEmpty()){
+                        if(messageText.length()>125) messageText=messageText.substring(0, 90)+"...";
                         sup = twitter.updateStatus(new StatusUpdate(new String((messageText + " " + urlLocalPost).getBytes(), "ISO-8859-1")));
                     }else{
                         sup = twitter.updateStatus(new StatusUpdate(new String((messageText).getBytes(), "ISO-8859-1")));
