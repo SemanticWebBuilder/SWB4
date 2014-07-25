@@ -3,7 +3,12 @@
  * and open the template in the editor.
  */
 /***************************Elementos genéricos**************************/
-    var _GraphicalElement = function(obj) {
+/**
+ * GraphicalElement
+ * @param {type} obj
+ * @returns {_GraphicalElement._this}
+ */
+var _GraphicalElement = function(obj) {
         var _this = obj;
         _this.types = [];
         _this.id = ":"+Modeler.itemsCount++;
@@ -150,6 +155,11 @@
     
     /***************************Objetos de conexión**************************/
     
+    /**
+     * SequenceFlow
+     * @param {type} obj
+     * @returns {_ConnectionObject|_SequenceFlow._this}
+     */
     var _SequenceFlow = function(obj) {
       var _this = new _ConnectionObject(obj);
       _this.setElementType("SequenceFlow");
@@ -187,6 +197,11 @@
     };
     
     /***************************Eventos iniciales****************************/
+    /**
+     * Event
+     * @param {type} obj
+     * @returns {_Event._this|_FlowNode}
+     */
     var _Event = function (obj) {
         var _this = new _FlowNode(obj),
             fCanStart = _this.canStartLink,
@@ -600,6 +615,11 @@
     };
     
     /***************************Eventos intermedios**************************/
+    /**
+     * IntermediateCatchEvent
+     * @param {type} obj
+     * @returns {_CatchEvent|_IntermediateCatchEvent._this}
+     */
     var _IntermediateCatchEvent = function (obj) {
         var _this = new _CatchEvent(obj),
             fCanAttach = _this.canAttach,
@@ -1093,6 +1113,11 @@
     };
     
     /***************************Eventos finales****************************/
+    /**
+     * EndEventNode
+     * @param {type} obj
+     * @returns {_ThrowEvent|_EndEventNode._this}
+     */
     var _EndEventNode = function(obj) {
         var _this = new _ThrowEvent(obj),
             fCanEnd = _this.canEndLink,
@@ -1101,7 +1126,7 @@
         _this.setElementType("EndEventNode");
         
         _this.canStartLink = function(link) {
-            ToolKit.showTooltip(0,"Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error")
+            ToolKit.showTooltip(0,"Un evento final sólo puede tener flujos de secuencia entrantes", 250, "Error");
             return false;
         };
         
@@ -1223,6 +1248,11 @@
     };
     
     /******************************Compuertas*******************************/
+    /**
+     * Gateway
+     * @param {type} obj
+     * @returns {_Gateway._this|_FlowNode}
+     */
     var _Gateway = function (obj) {
         var _this = new _FlowNode(obj),
             fCanStart = _this.canStartLink,
@@ -1630,6 +1660,11 @@
     };
     
     /***************************Objetos de datos*******************************/
+    /**
+     * DataObject
+     * @param {type} obj
+     * @returns {_DataObject._this|_GraphicalElement}
+     */
     var _DataObject = function(obj) {
         var _this = new _GraphicalElement(obj),
             fCanAttach = _this.canAttach,
@@ -1707,6 +1742,11 @@
     };
     
     /***************************Artefactos*******************************/
+    /**
+     * Artifact
+     * @param {type} obj
+     * @returns {_Artifact._this|_GraphicalElement}
+     */
     var _Artifact = function(obj) {
         var _this = new _GraphicalElement(obj),
             fCanStart = _this.canStartLink,
@@ -1783,6 +1823,11 @@
     };
     
     /******************************Swimlanes*******************************/
+    /**
+     * Pool
+     * @param {type} obj
+     * @returns {_Pool._this|_GraphicalElement}
+     */
     var _Pool = function (obj) {
         var _this = new _GraphicalElement(obj),
             fCanAdd = _this.canAddToDiagram,
@@ -1878,6 +1923,11 @@
     };
     
     /******************************Actividades*******************************/
+    /**
+     * Activity
+     * @param {type} obj
+     * @returns {_FlowNode|_Activity._this}
+     */
     var _Activity = function(obj) {
         var _this = new _FlowNode(obj),
             fCanStart = _this.canStartLink,
@@ -3389,12 +3439,17 @@
                         if (obj.subSquare) {
                             obj.subSquare.remove();
                         }
-                    }
+                    };
                     break;
             }
             return obj;
         },
 /***********Utilerías para manipular la información de los procesos*************/
+    /**
+     * fadeInObject
+     * @param {type} obj
+     * @returns {undefined}
+     */
         fadeInObject: function (obj) {
             var animation = document.createElementNS(ToolKit.svgNS, 'animate');
             animation.setAttributeNS(null, 'attributeName', 'fill-opacity');
