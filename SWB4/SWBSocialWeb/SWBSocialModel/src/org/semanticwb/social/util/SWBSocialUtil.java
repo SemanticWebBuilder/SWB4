@@ -244,7 +244,7 @@ public class SWBSocialUtil {
             }
         }
         */
-        System.out.println("SWBContext.getAdminWebSite():"+SWBContext.getAdminWebSite());
+        //System.out.println("SWBContext.getAdminWebSite():"+SWBContext.getAdminWebSite());
         File profileDir=new File(SWBPortal.getWorkPath()+"/models/"+SWBContext.getAdminWebSite().getId()+"/config/profiles/"); 
         if(profileDir.exists() && profileDir.isDirectory())
         {
@@ -1163,7 +1163,7 @@ public class SWBSocialUtil {
         public static HashMap classifyText(String text)
         {
             String lang=SWBSocialUtil.Util.getStringLanguage(text);
-            //System.out.println("LENGUAJE DETECTADO:"+lang);
+            //System.out.println("classifyText-->LENGUAJE DETECTADO:"+lang);
             
             float sentimentalTweetValue;
             float IntensiveTweetValue;
@@ -1173,23 +1173,23 @@ public class SWBSocialUtil {
             float promIntensityValue=0;     
             if(lang!=null && lang.equals("es"))
             {    
-                System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
+                //System.out.println("Va a Clasificar mensaje para Lenguage ESPAÑOL");
                 int wordsCont=0;
                 //Normalizo
-                System.out.println("ANALISIS-0:"+text);
+                //System.out.println("ANALISIS-0:"+text);
                 //String text_tmp=text;
                 text=SWBSocialUtil.Classifier.normalizer(text).getNormalizedPhrase();
 
-                System.out.println("ANALISIS-1-NORMALIZADO:"+text);
+                //System.out.println("ANALISIS-1-NORMALIZADO:"+text);
                 //Se cambia toda la frase a su modo raiz
                 text=SWBSocialUtil.Classifier.getRootWord(text);
 
-                System.out.println("ANALISIS-2-ENRAIZADO:"+text);
+                //System.out.println("ANALISIS-2-ENRAIZADO:"+text);
 
                 //Fonetizo
                 text=SWBSocialUtil.Classifier.phonematize(text);
 
-                System.out.println("ANALISIS-3-FONETIZADO:"+text);
+                //System.out.println("ANALISIS-3-FONETIZADO:"+text);
 
                 //Busco frases en objeto de aprendizaje (SentimentalLearningPhrase)
 
@@ -1200,24 +1200,24 @@ public class SWBSocialUtil {
                 text=((String)hmapValues.get("text"));
 
 
-                System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont+", text:"+text);
+                //System.out.println("ANALISIS-4:sentimentalTweetValue:"+sentimentalTweetValue+", IntensiveTweetValue:+"+IntensiveTweetValue+", wordsCont:"+wordsCont+", text:"+text);
 
                 //Elimino Caracteres especiales (acentuados)
                 text=SWBSocialUtil.Strings.replaceSpecialCharacters(text);
                 
-                System.out.println("ANALISIS-5-SIN CARACTERES ESPECIALES:"+text);
+                //System.out.println("ANALISIS-5-SIN CARACTERES ESPECIALES:"+text);
 
                 text=SWBSocialUtil.Strings.removePuntualSigns(text, CONFIG_WEBSITE);
 
 
-                System.out.println("ANALISIS-6-SIN SIGNOS DE PUNTUACION:"+text);
+                //System.out.println("ANALISIS-6-SIN SIGNOS DE PUNTUACION:"+text);
                 
                 ArrayList<String> aListWords=new ArrayList();
                 StringTokenizer st = new StringTokenizer(text);
                 while (st.hasMoreTokens())
                 {
                     String word2Find=st.nextToken();
-                    System.out.println("Palabra monitorear:"+word2Find);
+                    //System.out.println("Palabra monitorear:"+word2Find);
 
                     if(aPrepositions.contains(word2Find)) //Elimino preposiciones
                     {
@@ -1239,7 +1239,7 @@ public class SWBSocialUtil {
                     if(aSentimentWords.contains(word2Find)) //La palabra en cuestion ha sido encontrada en la BD
                     {   
                         SentimentWords sentimentalWordObj=SentimentWords.ClassMgr.getSentimentWords(word2Find, CONFIG_WEBSITE);
-                        System.out.println("Palabra Encontrada:"+word2Find);
+                        //System.out.println("Palabra Encontrada:"+word2Find);
                         wordsCont++;
                         IntensiveTweetValue+=sentimentalWordObj.getIntensityValue();
                         //Veo si la palabra cuenta con mas de dos caracteres(Normalmente el inicial de la palabra y talvez otro que
@@ -1292,7 +1292,7 @@ public class SWBSocialUtil {
                 }
             }else if(lang!=null && lang.equals("en"))
             {
-                System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
+                //System.out.println("Va a Clasificar mensaje para Lenguage INGLES");
                 String[] words = text.split("\\s+"); 
                 double totalScore = 0, averageScore;
                 for(String word : words) {                    
@@ -1537,13 +1537,14 @@ public class SWBSocialUtil {
          * realizada internamente en el área.
          */
         public static String phonematize(String phase) {
+            //System.out.println("phonematize--1");
             if (phase == null || phase.isEmpty()) {
                 return phase;
             }
             String tmp = "";
             String out_word = "";
             phase = phase.toLowerCase();
-
+            //System.out.println("phonematize--1:"+phase);
             char[] in_wordArray = phase.toCharArray();
             for (int i = 0; i < in_wordArray.length; i++) {
                 String in_wordChar = String.valueOf(in_wordArray[i]);
@@ -1588,12 +1589,13 @@ public class SWBSocialUtil {
                     tmp = "";
                     continue;
                 }
+                //System.out.println("phonematize--2/tmp:"+tmp+",out_word:"+out_word);
             }
             if (tmp.length() > 0) {
                 out_word += tmp;
                 tmp = "";
             }
-
+            //System.out.println("phonematize--3/out_word_RETURN:"+out_word);
             return out_word;
         }
 

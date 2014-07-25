@@ -389,6 +389,7 @@ public class SpanishAnalizer extends Analyzer {
     //Según Octavio, tomadas como base de  http://members.unine.ch/jacques.savoy/clef/spanishSmart.txt
     private String SPANISH_STOP_WORDS[] = {
     "él",
+    "es",
         "ésta",
         "éstas",
         "éste",
