@@ -34,7 +34,7 @@
         tooltip:null,
         loaded:false,
         tmHandler:null,
-        lineHandler:null,
+        lineHandlers:[],
 
         setLayer:function(layer)
         {
@@ -127,7 +127,7 @@
                 if(!_this.onmousemove(evt)) return;
                 _this.svg.mouseX = evtX;
                 _this.svg.mouseY = evtY;
-
+                
                 if(resizeObj !== null)
                 {
                     var p = resizeObj.parent,
@@ -239,7 +239,7 @@
             _this.svg.onmousedown=function(evt)
             {
                 if(!_this.onmousedown(evt))return;
-                
+                _this.removeLineHandlers();
                 //SelectBox
                 if(_this.svg.dragObject===null)
                 {
@@ -267,6 +267,7 @@
                 if(!_this.onmouseup(evt))return;
                 
                 var dragObject = _this.svg.dragObject;
+                _this.svg.activeHandler = null;
                 //Drop
                 if(dragObject!==null)
                 {
@@ -378,6 +379,66 @@
             for(i=0; i < resizeBox.length; i++)
             {
                 resizeBox[i].update();
+            }
+        },
+        
+        createLineHandlers:function(obj) {
+            var _this = ToolKit,
+                segments = obj.pathSegList,
+                i, items = segments.numberOfItems;
+
+            _this.removeLineHandlers();
+            if (items > 3) {
+                for (i = 1; i < items - 1; i++) {
+                    var segment = segments.getItem(i),
+                    handler = document.createElementNS(_this.svgNS, "use");
+            
+                    handler.setAttributeNS(_this.xlink,"href","#lineHandler");
+                    handler.setAttributeNS(null,"style","fill:red;cursor:move;");
+//                    handler.setAttributeNS(null,"x", (segment.x-4));
+//                    handler.setAttributeNS(null,"y", (segment.y-4));
+                    handler.layer = _this.layer;
+                    handler.parent = obj;
+                    handler.segment = segment;
+                    
+                    handler.onmousedown = function(evt) {
+                        _this.svg.dragOffsetX = _this.svg.mouseX - this.segment.x;
+                        _this.svg.dragOffsetY = _this.svg.mouseY - this.segment.y;
+                        _this.svg.activeHandler = this;
+                        _this.stopPropagation(evt);
+                    };
+                    
+                    handler.move = function(x, y) {
+                        var _x, _y;
+                        try {
+                            _x = parseFloat(""+x);
+                            _y = parseFloat(""+y);
+                        } catch (error) {
+                            _x = _y = null;
+                        }
+                        if (_x !== null && _y !== null) {
+                            this.setAttributeNS(null,"x", (_x - 4));
+                            this.setAttributeNS(null,"y", (_y - 4));
+                        }
+                    };
+                    handler.move(segment.x, segment.y);
+                    _this.lineHandlers.push(handler);
+                    _this.svg.appendChild(handler);
+                }
+            }
+        },
+
+        removeLineHandlers:function() {
+            var _this = ToolKit;
+            if (_this.lineHandlers && _this.lineHandlers.length) {
+                var i, handlers = _this.lineHandlers,
+                    nHandlers = _this.lineHandlers.length;
+
+                for (i = nHandlers - 1; i >= 0; i--) {
+                    _this.svg.removeChild(handlers[i]);
+                    //_this.lineHandlers[i].remove();
+                }
+                _this.lineHandlers = [];
             }
         },
 
@@ -762,7 +823,7 @@
             obj.moveFirst = function() {
                 _this.svg.appendChild(obj);
             };
-
+            
             _this.svg.appendChild(obj);
             return obj;
         },
