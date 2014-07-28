@@ -395,8 +395,6 @@
             
                     handler.setAttributeNS(_this.xlink,"href","#lineHandler");
                     handler.setAttributeNS(null,"style","fill:red;cursor:move;");
-//                    handler.setAttributeNS(null,"x", (segment.x-4));
-//                    handler.setAttributeNS(null,"y", (segment.y-4));
                     handler.layer = _this.layer;
                     handler.parent = obj;
                     handler.segment = segment;
@@ -420,6 +418,13 @@
                             this.setAttributeNS(null,"x", (_x - 4));
                             this.setAttributeNS(null,"y", (_y - 4));
                         }
+                    };
+                    
+                    handler.getX = function() {
+                        return parseFloat(this.getAttributeNS(null,"x"));
+                    };
+                    handler.getY = function() {
+                        return parseFloat(this.getAttributeNS(null,"y"));
                     };
                     handler.move(segment.x, segment.y);
                     _this.lineHandlers.push(handler);
