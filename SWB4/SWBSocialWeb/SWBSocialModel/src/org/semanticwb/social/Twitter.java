@@ -598,7 +598,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //System.out.println("words2Monitor--1:"+words2Monitor);
             }
             //Filtrado de Cuentas de Usuario
-            if(stream.getStream_fromAccount()!=null && !stream.getStream_fromAccount().isEmpty())   
+            //if(stream.getStream_fromAccount()!=null && !stream.getStream_fromAccount().isEmpty())   
             {   //Filtrar solo por ciertas cuentas de usuario, al parecer no  funciona el filtro, trae de todos los usuarios.
                 /*
                 String fromAccounts = stream.getStream_fromAccount();
