@@ -2619,14 +2619,14 @@ public class SWBSocialUtil {
          */
        public static CountryState getCountryState(Country country, double lat, double lng)
        {           
-           long startTime = System.currentTimeMillis();
+           //long startTime = System.currentTimeMillis();
            
            //Iterar dentro de los estados de un pais
            //System.out.println("BUSCANDO EN EL PAÍS:" + country.getTitle());
            if(statesPolygons.get(country) != null){
                 for (Map.Entry<CountryState, double[][]> entryState : statesPolygons.get(country).entrySet()) {
                     if(pnpoly(entryState.getValue(), lat, lng)){
-                        long endTime = System.currentTimeMillis(); 
+                        //long endTime = System.currentTimeMillis(); 
                         //System.out.println("Post: " +lat+","+lng+" is in:" + entryState.getKey().getTitle() + " Time:" + (endTime-startTime) +"ms");
                          return entryState.getKey();
                      }            
