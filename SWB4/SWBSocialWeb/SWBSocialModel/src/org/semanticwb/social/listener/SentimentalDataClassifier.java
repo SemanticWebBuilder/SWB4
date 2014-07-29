@@ -273,7 +273,6 @@ public class SentimentalDataClassifier {
          System.out.println("SentimentalData../intensityTweetValueType:"+intensityTweetValueType);
     */    
 
-        //////////////////////////////////ESTO (PARA ABAJO) SI FUNCIONA BIEN ------10 - Julio - 2013//////////////////////////////////
         boolean filterPositives = stream.isFilterSentimentalPositive();
         boolean filterNegatives = stream.isFilterSentimentalNegative();
         boolean filterNeutrals = stream.isFilterSentimentalNeutral();
@@ -672,7 +671,7 @@ public class SentimentalDataClassifier {
                         //Para categorias de youtube, si despues se manejan mas categorias para otras redes sociales de video, sería un bloque similar al siguiente
                         //Si despues se manejan mas categorias en otras redes sociales que no sean de tipo Video, tendría que quitar la propiedad category que se encuentra
                         //en este momento en la interfaz PostVideoable y ponerselas a las de mas redes sociales, talvez a la clase SocialNetwork directamenre
-                        if (externalPost.getSocialNetwork() instanceof Youtube) {
+                        if (externalPost.getSocialNetwork() instanceof Youtube && externalPost.getCategory()!=null) {
                             YouTubeCategory youTubeCate = YouTubeCategory.ClassMgr.getYouTubeCategory(externalPost.getCategory(), SWBSocialUtil.getConfigWebSite());
                             //System.out.println("youTubeCate-1:"+youTubeCate);
                             if (youTubeCate != null) {
@@ -788,7 +787,7 @@ public class SentimentalDataClassifier {
 
                     //System.out.println("socialNetUser-1:"+socialNetUser);
 
-                    if (socialNetUser == null) //Si el usuario no existe en la red social, Twitter, Faebook, etc, entonces crealo
+                    if (socialNetUser == null) //Si el usuario no existe en la red social, Twitter, Facebook, etc, entonces crealo
                     {
                         //Si no existe el id del usuario para esa red social, lo crea.
                         socialNetUser = SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);
@@ -805,7 +804,7 @@ public class SentimentalDataClassifier {
                         {
                             socialNetUser.setCreated(externalPost.getUsercreation());
                         }
-                        socialNetUser.setSnu_klout(0);  //Valor por defecto, sirve para que si el usuario no cumple con Klout, sirva de cualquier foma el ordenamiento
+                        socialNetUser.setSnu_klout(0);  //Valor por defecto, sirve para que si el usuario no cumple con Klout, sirva de cualquier forma el ordenamiento
                         if(userKloutScore>0)
                         {
                             socialNetUser.setSnu_klout(userKloutScore);
