@@ -745,6 +745,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
         Map<String, String> params = new HashMap<String, String>(2);
         params.put("access_token", this.getAccessToken());
+        
+        addExtraParams(message.getMsg_Text(), params);        
+        
         if (urlLocalPost.isEmpty()) {
             //params.put("message", message.getMsg_Text());
             params.put("message", messageText);
@@ -819,6 +822,39 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             }
             log.error("La operacion no se pudo realizar, objeto JSON mal formado debido a la respuesta de Facebook: "
                     + facebookResponse, jsone);
+        }
+    }
+    
+    
+    private void addExtraParams(String messageText, Map<String, String> params)
+    {
+        if(messageText.indexOf("http://www.youtube.com/")>-1 || messageText.indexOf("https://www.youtube.com/")>-1)
+        {
+            int pos=-1;
+            pos=messageText.indexOf("https://www.youtube.com/");
+            if(pos==-1) pos=messageText.indexOf("http://www.youtube.com/");
+            if(pos>-1)
+            {
+                int pos1=-1;
+                pos1=messageText.indexOf(" ", pos);
+                if(pos1>-1 && messageText.indexOf("\n", pos)>-1 && messageText.indexOf("\n", pos)<pos1){
+                    pos1=messageText.indexOf("\n", pos);
+                }
+                if(pos1==-1) messageText.indexOf("\n", pos);
+                if(pos1==-1) messageText.indexOf(pos);
+                if(pos1>-1)
+                {
+                    String url=messageText.substring(pos, pos1);
+                    params.put("link", url);
+                    int postSource=url.lastIndexOf("=");
+                    if(postSource>-1)
+                    {
+                        String code=url.substring(postSource+1);
+                        params.put("source", "https://www.youtube.com/v/"+code);
+                        params.put("picture", "http://img.youtube.com/vi/"+code+"/0.jpg");
+                    }
+                }
+            }
         }
     }
 
