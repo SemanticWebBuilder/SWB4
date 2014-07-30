@@ -137,15 +137,19 @@ public class SocialWebResource extends GenericAdmResource
                     out.println("<div id=\"autenticacion\">");
                     out.println("<p>" + paramRequest.getLocaleString("authenticated") + "</p>");
                     out.println("</div>");
-                    out.println("<div id=\"refrescar_cred\">");                    
-                    out.println("   <form type=\"dijit.form.Form\" id=\"authenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('authenticate/" + objUri +  "'); return false;\">");
-                    out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
-                    out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
-                    out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
-                    out.println("       <a href=\"#\" onclick=\"submitForm('authenticate/" + objUri +  "'); return false;\" title=\"" + paramRequest.getLocaleString("refreshCredentials") +"\"><span>" + paramRequest.getLocaleString("refreshCredentials") + "</span></a>");
-                    out.println("   </form>");
-                    out.println("</div>");
-                    out.println("</div>");
+                    if(socialNetwork instanceof Facebook && ((Facebook)socialNetwork).isIsFanPage()){//for facebook nets
+                        //If the social network is a fan page DO NOT authenticate manually
+                    }else{
+                        out.println("<div id=\"refrescar_cred\">");                    
+                        out.println("   <form type=\"dijit.form.Form\" id=\"authenticate/" + objUri + "\" action=\"" +  paramRequest.getRenderUrl().setMode(OAUTH_MODE) + "\" method=\"post\" onsubmit=\"submitForm('authenticate/" + objUri +  "'); return false;\">");
+                        out.println("       <input type=\"hidden\"  name=\"suri\" value=\"" + objUri +"\">");
+                        out.println("       <input type=\"hidden\"  name=\"wsid\" value=\"" + socialNetwork.getSemanticObject().getModel().getName()+"\">");
+                        out.println("       <input type=\"hidden\"  name=\"fromDoView\" value=\"true\">");
+                        out.println("       <a href=\"#\" onclick=\"submitForm('authenticate/" + objUri +  "'); return false;\" title=\"" + paramRequest.getLocaleString("refreshCredentials") +"\"><span>" + paramRequest.getLocaleString("refreshCredentials") + "</span></a>");
+                        out.println("   </form>");
+                        out.println("</div>");
+                        out.println("</div>");
+                    }
                   
                 /*
                 //System.out.println("Ya esta autenticada, puede refrescar tokens");
