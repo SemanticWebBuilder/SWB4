@@ -16,26 +16,26 @@ html, body{
 	/*font-weight: bolder;*/
 }
 
-#main-menu.nav-pills>li.active>a,
-#main-menu.nav-pills>li.active>a:hover,
-#main-menu.nav-pills>li.active>a:focus,
-#main-menu.nav-pills>li>a,
-#main-menu.nav-pills>li>a:hover,
-#main-menu.nav-pills>li>a:focus
+#main-menu.nav-pills > li.active > a,
+#main-menu.nav-pills > li.active > a:hover,
+#main-menu.nav-pills > li.active > a:focus,
+#main-menu.nav-pills > li > a,
+#main-menu.nav-pills > li > a:hover,
+#main-menu.nav-pills > li > a:focus
  {
 	background-color: #2e1645;
 	/*background: none;*/
 }
 
-#main-menu.nav-pills>li.active>a:hover,
-#main-menu.nav-pills>li.active>a:focus,
-#main-menu.nav-pills>li>a:hover,
-#main-menu.nav-pills>li>a:focus {
+#main-menu.nav-pills > li.active > a:hover,
+#main-menu.nav-pills > li.active > a:focus,
+#main-menu.nav-pills > li > a:hover,
+#main-menu.nav-pills > li > a:focus {
 	color: #b7a8c7;
 }
 
-#main-menu.nav-pills>li>a,
-#main-menu.nav-pills>li.active>a {
+#main-menu.nav-pills > li>a,
+#main-menu.nav-pills > li.active>a {
 	color: #fff;
 }
 
@@ -47,11 +47,15 @@ background-color: #2e1645;*/
 	background: none;
 }*/
 
-#main-menu.nav-pills>li.open>a,
-#main-menu.nav-pills>li.open>a:hover,
-#main-menu.nav-pills>li.open>a:focus {
+#main-menu.nav-pills > li.open>a,
+#main-menu.nav-pills > li.open>a:hover,
+#main-menu.nav-pills > li.open>a:focus {
     background-color: #2e1645;
     border-color: #947cab;
+}
+
+#main-menu.nav-pills > li {
+    margin-left: 6px;
 }
 
 #main-menu.nav-pills > li + li {
