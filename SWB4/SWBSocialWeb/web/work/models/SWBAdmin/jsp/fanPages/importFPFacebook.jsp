@@ -50,6 +50,27 @@
     Facebook fb = null;
     if(!(sn instanceof Facebook)){return;}else{fb = (Facebook)sn;}
     String wsite = fb.getSemanticObject().getModel().getName();
+    
+    WebSite website = WebSite.ClassMgr.getWebSite(wsite);
+    SemanticObject sobj = SemanticObject.createSemanticObject(website.getURI());
+    SWBResourceURL formAction = paramRequest.getActionUrl();
+    
+    if(website instanceof SocialSite){
+        formAction = formAction.setAction(IMPORT_FB_PAGES_FOR_ADMIN).setParameter("suri", suri);
+        //System.out.println("---->SOCIALSITE");
+    }else if(sobj.createGenericInstance() instanceof WebSite){
+        formAction = formAction.setAction(IMPORT_FB_PAGES).setParameter("suri", suri);
+        //System.out.println("<----WEBSITE");
+    }
+        
+    if(fb.isIsFanPage()){        
+%>
+    <div id="configuracion_redes">
+    <p>Tu cuenta actual es una Fan Page, no puedes ejecutar esta acci&oacute;n.</p>
+    </div>
+<%
+        return;
+    }
     try{        
         HashMap<String, String> params = new HashMap<String, String>(2);
         
@@ -66,7 +87,7 @@
 %>
 
 
-<form name="formSites<%=fb.getFacebookUserId()%>" id="formSites<%=fb.getFacebookUserId()%>" action="<%=paramRequest.getActionUrl().setAction(IMPORT_FB_PAGES).setParameter("suri", suri)%>" onsubmit="submitForm('formSites<%=fb.getFacebookUserId()%>'); try{document.getElementById('csLoading<%=fb.getFacebookUserId()%>').style.display='inline';}catch(noe){}; return false;">
+<form name="formSites<%=fb.getFacebookUserId()%>" id="formSites<%=fb.getFacebookUserId()%>" action="<%=formAction%>" onsubmit="submitForm('formSites<%=fb.getFacebookUserId()%>'); try{document.getElementById('csLoading<%=fb.getFacebookUserId()%>').style.display='inline';}catch(noe){}; return false;">
 <table width="50%" border="0px">            
    <tr>
        <td colspan="3" style="text-align: center;" class="titulo">
