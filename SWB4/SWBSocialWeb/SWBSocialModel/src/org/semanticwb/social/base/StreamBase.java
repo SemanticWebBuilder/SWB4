@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.social.Geolocable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.Descriptiveable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable
 {
    /**
    * Número de Iteraciones que se ha tenido el Stream. Este dato se utiliza en conjunto con el de la propiedad "promPostNumber" para poder determinar si el número de mensajes que accesaron al Stream amerita que se envíe una notificación (alerta) indicando que llegaron mas mensajes al Stream que los que se tiene en promedio en un tiempo determinado.
@@ -91,7 +91,7 @@ public abstract class StreamBase extends org.semanticwb.model.SWBClass implement
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialTopic=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialTopic");
    /**
-   * Topics to classify messages
+   * Temas en los que se clasificaran los mensajes
    */
     public static final org.semanticwb.platform.SemanticProperty social_hasTopics2Apply=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/social#hasTopics2Apply");
    /**

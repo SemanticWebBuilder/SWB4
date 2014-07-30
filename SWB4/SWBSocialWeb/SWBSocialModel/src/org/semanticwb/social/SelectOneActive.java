@@ -195,7 +195,6 @@ public class SelectOneActive extends org.semanticwb.social.base.SelectOneActiveB
                         SemanticObject sob = it.next();
                         boolean deleted=false;
                         boolean active=false;
-                        boolean pageable=false;
                         if(sob.instanceOf(Trashable.swb_Trashable))
                         {
                             deleted=sob.getBooleanProperty(Trashable.swb_deleted);
@@ -204,7 +203,6 @@ public class SelectOneActive extends org.semanticwb.social.base.SelectOneActiveB
                         {
                             active=sob.getBooleanProperty(Activeable.swb_active);
                         }
-                        
                         if(filterObject(request, sobj, sob, prop, propName, type, mode, lang))continue;
 
                         if(sob.instanceOf(Pageable.social_Pageable) && !deleted && active)
