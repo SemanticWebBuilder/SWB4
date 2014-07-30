@@ -210,8 +210,17 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                     {
                         active=sob.getBooleanProperty(Activeable.swb_active);
                     }
+                    boolean socialNetIsFanPage=false;
+                    if(sob.getGenericInstance() instanceof Pageable)
+                    {
+                        Pageable pageAble=(Pageable)sob.getGenericInstance();
+                        if(pageAble.isIsFanPage())
+                        {
+                            socialNetIsFanPage=true;
+                        }
+                    }
 
-                    if(!deleted && active)
+                    if(!deleted && active && !socialNetIsFanPage)
                     {                    
 
                         if (sob.getURI() != null) {
@@ -265,8 +274,17 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                     {
                         active=sob.getBooleanProperty(Activeable.swb_active);
                     }
+                    boolean socialNetIsFanPage=false;
+                    if(sob.getGenericInstance() instanceof Pageable)
+                    {
+                        Pageable pageAble=(Pageable)sob.getGenericInstance();
+                        if(pageAble.isIsFanPage())
+                        {
+                            socialNetIsFanPage=true;
+                        }
+                    }
 
-                    if(!deleted && active)
+                    if(!deleted && active && !socialNetIsFanPage)
                     {                    
                         if (sob.getURI() != null) {
                             if (vals.contains(sob.getURI())) {
