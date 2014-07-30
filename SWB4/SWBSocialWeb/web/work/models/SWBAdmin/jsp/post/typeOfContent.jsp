@@ -414,10 +414,12 @@
                         <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                             <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                             <%
-                                for (int i = 0; i < selectFacebook.size(); i++) {
+                                if(!((Facebook)socialNetwork).isIsFanPage()){
+                                    for (int i = 0; i < selectFacebook.size(); i++) {
                             %>                            
                             <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>                            
                             <%
+                                    }
                                 }
                             %>
                         </select>
@@ -705,11 +707,13 @@
                             <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                                 <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                                 <%
+                                if(!((Facebook)socialNetwork).isIsFanPage()){
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
                                 <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
+                                }
                                 %>
                             </select>
                             <%
@@ -1134,11 +1138,13 @@
                             <select id="postoutPrivacy" name="postoutPrivacy" style="display:none;" disabled="disabled">
                                 <option value="<%=socialNetwork.getURI() + "|PUBLIC"%>">Público</option>
                                 <%
+                                if(!((Facebook)socialNetwork).isIsFanPage()){
                                     for (int i = 0; i < selectFacebook.size(); i++) {
                                 %>
                                 <option value="<%=socialNetwork.getURI() + "|" + selectFacebook.get(i).getId()%>"><%=selectFacebook.get(i).getDisplayTitle(user.getLanguage())%></option>
                                 <%
                                     }
+                                }
                                 %>
                             </select>
                             <%
