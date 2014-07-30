@@ -362,16 +362,17 @@ border-color: #81659f;
 .clear {
 clear: both;
 }
+
 .footer{
-background-color: #787878;
-color: #fff;
-font-size: 10px;
-bottom: 0;
-max-width: 1024px;
-height: 46px;
-margin-left: -16px;
-margin-right: -16px;
-padding-top: 15px;
+    background-color: #787878;
+    color: #fff;
+    font-size: 10px;
+    bottom: 0;
+    max-width: 100%;
+    height: 46px;
+    /*margin-left: -16px;
+    margin-right: -16px;*/
+    padding-top: 15px;
 }
 
 .dropdown-menu-item{
