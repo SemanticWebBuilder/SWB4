@@ -95,7 +95,8 @@ public class PeriodSelector extends GenericResource {
         }
 
         String actionUrl = paramRequest.getActionUrl().setAction("setPeriod").toString();
-        //funcion de javascript para hacer la peticion para consultar el periodo seleccionado
+        
+        output.append("  <li class=\"dropdown\">\n");
         output.append("<script type=\"text/javascript\">\n");
         output.append("  function settingPeriod(value) {\n");
         output.append("      if (value && value != \"\") {\n");
@@ -119,23 +120,16 @@ public class PeriodSelector extends GenericResource {
         output.append("      }\n");
         output.append("  }\n");
         output.append("</script>\n");
-        //armar despliegue del selector de periodos
-//        output.append("<ul id=\"");
-//        output.append(paramRequest.getLocaleString("elementId"));
-//        output.append("\" class=\"nav nav-pills navbar-right\">\n");
-        output.append("  <li class=\"dropdown\">\n");
-        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
+        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"hidden-xs\">");
         output.append(paramRequest.getLocaleString("lbl_title"));
-        output.append(": ");
+        output.append(":&nbsp;</span>");
         output.append(nearestPeriod != null ? nearestPeriod.getTitle() : "");
         if (periods.size() > 1) {
             output.append("<span class=\"caret\"></span>");
         }
         output.append("</a>\n");
-        output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
-        
         if (!periods.isEmpty()) {
-        //Recorrer el listado de periodos
+            output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
             for(Period nextPeriod:periods) {
                 if (nextPeriod != nearestPeriod) {
                     output.append("      <li><a href=\"#\" onclick=\"settingPeriod(");
@@ -145,10 +139,9 @@ public class PeriodSelector extends GenericResource {
                     output.append("</a></li>\n");
                 }
             }
+            output.append("    </ul>\n");
         }
-        output.append("    </ul>\n");
         output.append("  </li>\n");
-//        output.append("</ul>\n");
         out.println(output.toString());
     }
 

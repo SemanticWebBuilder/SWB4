@@ -46,7 +46,7 @@ public class BSCSelector extends GenericResource {
             //Recorrer el listado de Scorecards
             while (todosBsc.hasNext()) {
                 BSC nextBsc = (BSC) todosBsc.next();
-                if (nextBsc.isActive() && user.haveAccess(nextBsc)) {
+                if( nextBsc.isValid() && user.haveAccess(nextBsc) && user.getUserRepository()==nextBsc.getUserRepository() ) {
                     boolean nextIsNotCurrent = !(nextBsc == currentBsc);
                     String optionValue = nextIsNotCurrent
                             ? nextBsc.getId() + "," + nextBsc.getHomePage().getId()
@@ -64,8 +64,7 @@ public class BSCSelector extends GenericResource {
             }
         }
         
-        
-        //funcion de javascript para mandar la forma que contiene el select
+        output.append("  <li class=\"dropdown\">\n");
         output.append("<script type=\"text/javascript\">\n");
         output.append("function showScorecard(value) {\n");
         output.append("  var thisBsc = \"");
@@ -79,26 +78,21 @@ public class BSCSelector extends GenericResource {
         output.append("  }\n");
         output.append("}\n");
         output.append("</script>\n");
-        //armar despliegue de opciones a mostrar de acuerdo a diseño grafico
-//        output.append("<ul id=\"");
-//        output.append(paramRequest.getLocaleString("elementId"));
-//        output.append("\" class=\"nav nav-pills navbar-right\">\n");
-        output.append("  <li class=\"dropdown\">\n");
-        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
+        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"hidden-xs\">");
         output.append(paramRequest.getLocaleString("lbl_title"));
-        output.append(": ");
+        output.append(":&nbsp;</span>");
         output.append(currentBsc.getTitle());
         if (bscCount > 0) {
             output.append("<span class=\"caret\"></span>");
         }
         output.append("</a>\n");
-        output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
-        //se incluye la lista de scorecards encontrados
-        output.append(aux);
-        output.append("    </ul>\n");
+        if(!aux.toString().isEmpty()) {        
+            output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
+            //se incluye la lista de scorecards encontrados
+            output.append(aux);
+            output.append("    </ul>\n");
+        }
         output.append("  </li>\n");
-//        output.append("</ul>\n");
-        
         out.println(output.toString());
     }
     
