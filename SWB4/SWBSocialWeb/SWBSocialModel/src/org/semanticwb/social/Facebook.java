@@ -754,7 +754,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             params.put("message", messageText + " " + urlLocalPost);
             //message.setMsg_Text(messageWithLink);//Save the message with link
         }
-        params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
+        //privacy settings don't apply to fan pages        
+        if(!this.isIsFanPage()){
+            params.put("privacy", "{'value':'" + privacyValue(message) + "'}");
+        }
         String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/feed";
         JSONObject jsonResponse = null;
         String facebookResponse = "";
@@ -831,7 +834,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
 
         Map<String, String> params = new HashMap<String, String>(2);
-        params.put("privacy", "{'value':'" + privacyValue(photo) + "'}");
+        //privacy settings don't apply to fan pages        
+        if(!this.isIsFanPage()){
+            params.put("privacy", "{'value':'" + privacyValue(photo) + "'}");
+        }
         if (this.getAccessToken() != null) {
             params.put("access_token", this.getAccessToken());
         }
@@ -962,7 +968,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         if (video.getMsg_Text() != null) {
             params.put("description", messageText);
         }
-        params.put("privacy", "{'value':'" + privacyValue(video) + "'}");
+        //privacy settings don't apply to fan pages        
+        if(!this.isIsFanPage()){
+            params.put("privacy", "{'value':'" + privacyValue(video) + "'}");
+        }
         //String url = Facebook.FACEBOOKGRAPH + this.getFacebookUserId() + "/videos";
         String url = Facebook.FACEBOOKGRAPH_VIDEO + this.getFacebookUserId() + "/videos";
         JSONObject jsonResponse = null;
