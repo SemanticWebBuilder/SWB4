@@ -54,6 +54,10 @@ background-color: #2e1645;*/
     border-color: #947cab;
 }
 
+.nav-pills > li + li {
+    margin-left: 8px;
+}
+
 
 .header {
 	position: fixed;;
@@ -115,7 +119,7 @@ background-color: #2e1645;*/
 			@media (min-width: 1200px){
 			        /*body{color: red;}*/
 			}
-			/* Escritorio pequeño o tablet */
+			/* Escritorio pequeï¿½o o tablet */
 			@media (min-width: 768px) and (max-width: 979px){
 			        /*body{color: green;}*/
 			}
