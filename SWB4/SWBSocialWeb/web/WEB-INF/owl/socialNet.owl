@@ -3089,6 +3089,8 @@
         <swbxf:propGroup rdf:resource="#grp_Filters"/>
         <swbxf:formElement>
           <swbxf:Text rdf:ID="dp_streamKloutValueFE">
+            <swbxf:textRegExp rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >^[1-9]?[0-9]{1}$|^100$</swbxf:textRegExp>
             <swb:maxLength rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
             >3</swb:maxLength>
           </swbxf:Text>
