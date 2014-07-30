@@ -80,7 +80,7 @@ public class BSCSelector extends GenericResource {
         output.append("}\n");
         output.append("</script>\n");
         //armar despliegue de opciones a mostrar de acuerdo a diseño grafico
-        output.append("<ul id=\"");
+//        output.append("<ul id=\"");
         output.append(paramRequest.getLocaleString("elementId"));
         output.append("\" class=\"nav nav-pills navbar-right\">\n");
         output.append("  <li class=\"dropdown\">\n");
@@ -97,7 +97,7 @@ public class BSCSelector extends GenericResource {
         output.append(aux);
         output.append("    </ul>\n");
         output.append("  </li>\n");
-        output.append("</ul>\n");
+//        output.append("</ul>\n");
         
         out.println(output.toString());
     }
