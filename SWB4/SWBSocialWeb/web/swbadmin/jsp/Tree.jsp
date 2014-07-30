@@ -651,8 +651,8 @@
         {
             Pageable pagableObj=(Pageable)obj.getGenericInstance(); 
             if(pagableObj.isIsFanPage()){
-                //icon+="_flag";
-                icon="swbIconStream";
+                icon+="_fp"; //icono indicador de que es una FanPage
+                //icon="swbIconStream";
             }
         }
         ///Termina Agregado x Jorge Jiménez para manejo de Iconos para FanPages - 16/Julio/2014
