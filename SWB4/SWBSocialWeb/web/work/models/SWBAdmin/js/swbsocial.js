@@ -551,6 +551,7 @@ function validateExtention(uri,required){
         var ima =  image.toString().substring(0 ,position);
         var size =parseInt(image.toString().substring(position+1, image.toString().length));
         var imgExt = ima.substring(ima.lastIndexOf("."));  //     var imgExt = ima.substring(ima.lastIndexOf(".") + 1);
+        imgExt = imgExt.toLowerCase();
         if(typeFileValid.indexOf(imgExt) >= 0){   //si lo contiene
             count++;   
         }else{             
