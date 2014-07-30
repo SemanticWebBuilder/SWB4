@@ -62,7 +62,15 @@
         formAction = formAction.setAction(IMPORT_FB_PAGES).setParameter("suri", suri);
         //System.out.println("<----WEBSITE");
     }
-        
+    
+    if(!fb.isSn_authenticated()){        
+%>
+    <div id="configuracion_redes">
+    <p>La cuenta no ha sido autenticada correctamente.</p>
+    </div>
+<%
+        return;
+    }       
     if(fb.isIsFanPage()){        
 %>
     <div id="configuracion_redes">
