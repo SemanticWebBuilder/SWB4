@@ -120,9 +120,9 @@ public class PeriodSelector extends GenericResource {
         output.append("  }\n");
         output.append("</script>\n");
         //armar despliegue del selector de periodos
-        output.append("<ul id=\"");
-        output.append(paramRequest.getLocaleString("elementId"));
-        output.append("\" class=\"nav nav-pills navbar-right\">\n");
+//        output.append("<ul id=\"");
+//        output.append(paramRequest.getLocaleString("elementId"));
+//        output.append("\" class=\"nav nav-pills navbar-right\">\n");
         output.append("  <li class=\"dropdown\">\n");
         output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
         output.append(paramRequest.getLocaleString("lbl_title"));
@@ -148,7 +148,7 @@ public class PeriodSelector extends GenericResource {
         }
         output.append("    </ul>\n");
         output.append("  </li>\n");
-        output.append("</ul>\n");
+//        output.append("</ul>\n");
         out.println(output.toString());
     }
 
