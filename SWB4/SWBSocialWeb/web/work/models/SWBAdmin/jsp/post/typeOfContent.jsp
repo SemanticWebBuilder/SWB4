@@ -396,7 +396,11 @@
                                 if (socialNetwork instanceof Youtube) {
                                     typeClass = "ico-ytb";
                                 } else if (socialNetwork instanceof Facebook) {
-                                    typeClass = "ico-fcb";
+                                    if(((Facebook)socialNetwork).isIsFanPage()){
+                                        typeClass = "ico-ffp";
+                                    }else{
+                                        typeClass = "ico-fcb";
+                                    }
                                 } else if (socialNetwork instanceof Twitter) {
                                     typeClass = "ico-twt";
                                 }
@@ -688,7 +692,11 @@
                                     if (socialNetwork instanceof Youtube) {
                                         typeClass = "ico-ytb";
                                     } else if (socialNetwork instanceof Facebook) {
-                                        typeClass = "ico-fcb";
+                                        if(((Facebook)socialNetwork).isIsFanPage()){
+                                            typeClass = "ico-ffp";
+                                        }else{
+                                            typeClass = "ico-fcb";
+                                        }
                                     } else if (socialNetwork instanceof Twitter) {
                                         typeClass = "ico-twt";
                                     }
@@ -1094,7 +1102,11 @@
                                     if (socialNetwork instanceof Youtube) {
                                         typeClass = "ico-ytb";
                                     } else if (socialNetwork instanceof Facebook) {
-                                        typeClass = "ico-fcb";
+                                        if(((Facebook)socialNetwork).isIsFanPage()){
+                                            typeClass = "ico-ffp";
+                                        }else{
+                                            typeClass = "ico-fcb";
+                                        }
                                     } else if (socialNetwork instanceof Twitter) {
                                         typeClass = "ico-twt";
                                     }

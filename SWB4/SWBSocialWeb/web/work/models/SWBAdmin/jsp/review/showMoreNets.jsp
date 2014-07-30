@@ -46,6 +46,12 @@
         String netIcon = "";
         if(socialNet instanceof Youtube){
             netIcon = "<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+        }else if(socialNet instanceof Facebook){
+            if(((Facebook)socialNet).isIsFanPage()){
+                netIcon = "<img class=\"swbIconFacebook_fp\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+            }else{
+                netIcon = "<img class=\"swbIconFacebook\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
+            }
         }else{
             netIcon = "<img class=\"swbIcon" + socialNet.getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
         }
