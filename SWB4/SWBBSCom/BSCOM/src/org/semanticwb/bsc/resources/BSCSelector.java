@@ -81,8 +81,8 @@ public class BSCSelector extends GenericResource {
         output.append("</script>\n");
         //armar despliegue de opciones a mostrar de acuerdo a diseño grafico
 //        output.append("<ul id=\"");
-        output.append(paramRequest.getLocaleString("elementId"));
-        output.append("\" class=\"nav nav-pills navbar-right\">\n");
+//        output.append(paramRequest.getLocaleString("elementId"));
+//        output.append("\" class=\"nav nav-pills navbar-right\">\n");
         output.append("  <li class=\"dropdown\">\n");
         output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">");
         output.append(paramRequest.getLocaleString("lbl_title"));
