@@ -40,6 +40,7 @@ import org.semanticwb.portal.api.SWBResourceURL;
 import org.semanticwb.social.FacePageTab;
 import org.semanticwb.social.Facebook;
 import org.semanticwb.social.FacebookFanPage;
+import org.semanticwb.social.SocialSite;
 
 /**
  *
@@ -48,6 +49,7 @@ import org.semanticwb.social.FacebookFanPage;
 public class ImportFanPages extends GenericResource{
     public static Logger log = SWBUtils.getLogger(ImportFanPages.class);
     public static String IMPORT_FB_PAGES = "importFBPages";
+    public static String IMPORT_FB_PAGES_FOR_ADMIN = "importFBPagesForAdmin";
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -175,6 +177,78 @@ public class ImportFanPages extends GenericResource{
             response.setRenderParameter("accountName", facebook.getTitle());
             response.setRenderParameter("homePageSuri", wsite.getHomePage().getEncodedURI());
             response.setMode(SWBResourceURL.Mode_HELP);
+        }else if(action.equals(IMPORT_FB_PAGES_FOR_ADMIN)){
+            String suri = request.getParameter("suri") == null ? "" : request.getParameter("suri");
+            String site = request.getParameter("site") == null ? "" : request.getParameter("site");
+            String pages[] = request.getParameterValues("pages") == null ? null : request.getParameterValues("pages");
+            //System.out.println("suri:" + suri);
+            //System.out.println("site:" + site);
+            //System.out.println("pages[]:" + pages);
+            //add facebook pages
+            if(suri.isEmpty() || site.isEmpty() || pages == null){
+                response.setMode(SWBResourceURL.Mode_HELP);
+                return;
+            }
+            Facebook facebook = (Facebook) SemanticObject.createSemanticObject(suri).createGenericInstance();
+            SocialSite wsite = SocialSite.ClassMgr.getSocialSite(site);
+            HashMap<String, String> params = new HashMap<String, String>(2);
+            params.put("access_token", facebook.getAccessToken());
+            
+            String respFanPage = postRequest(params, "https://graph.facebook.com/me/accounts",
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+            //System.out.println("respFanPage:" + respFanPage);
+            try{
+                JSONObject responseFP = new JSONObject(respFanPage);
+                if(!responseFP.isNull("data")){
+                    if(responseFP.getJSONArray("data").length()>0){
+                        JSONArray jarr = responseFP.getJSONArray("data");
+                        for(int i = 0 ; i <  jarr.length() ; i++){                            
+                            JSONObject entryFP = jarr.getJSONObject(i);
+                            boolean selectedFanPage = false;
+                            for(int j = 0; j < pages.length; j++){//check if the page was selected
+                                if(pages[j].equals(entryFP.getString("id"))){
+                                    selectedFanPage = true;
+                                    break;
+                                }
+                            }
+                            
+                            if(selectedFanPage){//import this page                                
+                                String id = "";
+                                String name = "";
+                                String token = "";
+                                
+                                if(!entryFP.isNull("id")){
+                                    id = entryFP.getString("id");
+                                }
+                                if(!entryFP.isNull("name")){
+                                    name = entryFP.getString("name");
+                                }
+                                if(!entryFP.isNull("access_token")){
+                                    token = entryFP.getString("access_token");
+                                }
+                                if(!id.isEmpty() && !token.isEmpty()){//Add the Fan Pages
+                                    Facebook fanpage = Facebook.ClassMgr.createFacebook(wsite);
+                                    fanpage.setAccessToken(token);
+                                    fanpage.setSn_authenticated(true);
+                                    fanpage.setTitle(name);
+                                    fanpage.setActive(true);
+                                    fanpage.setFacebookUserId(id);
+                                    fanpage.setIsFanPage(true);
+                                }
+                            }                            
+                        }
+                    }
+                }
+                response.setRenderParameter("accountName", facebook.getTitle());
+                if(wsite.getHomePage() != null){
+                    response.setRenderParameter("homePageSuri", wsite.getHomePage().getEncodedURI());
+                }else{
+                    response.setRenderParameter("homePageSuri", "root");
+                }
+                response.setMode(SWBResourceURL.Mode_HELP);
+            }catch(JSONException jsone){
+                log.error("Unable to add facebook pages", jsone);
+            }
         }
     }
 
@@ -190,6 +264,8 @@ public class ImportFanPages extends GenericResource{
         out.println("</div>");
         out.println("<script type=\"text/javascript\">");
         out.println("updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+        out.println("parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+        out.println("parent.parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
         //out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
         //out.printl("alert('done');");
         out.println("</script>");
