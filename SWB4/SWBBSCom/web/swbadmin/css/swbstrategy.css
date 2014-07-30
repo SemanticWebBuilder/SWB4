@@ -54,8 +54,8 @@ background-color: #2e1645;*/
     border-color: #947cab;
 }
 
-.nav-pills > li + li {
-    margin-left: 8px;
+#main-menu.nav-pills > li + li {
+    margin-left: 6px;
 }
 
 
