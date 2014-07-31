@@ -277,8 +277,8 @@ public class StrategicMap extends GenericResource
             htm.append("        </li>\n");
             
             htm.append("        <li class=\"swbform-li\">\n");
-            htm.append("          <label for=\"parentTagId\" class=\"swbform-label\">Identificador de la etiqueta padre </label>\n");
-            htm.append("          <input type=\"text\" id=\"parentTagId\" name=\"parentTagId\" dojoType=\"dijit.form.TextBox\" value=\""+base.getAttribute("anchorId")+"\" />\n");
+            htm.append("          <label for=\"parentId\" class=\"swbform-label\">Identificador de la etiqueta padre </label>\n");
+            htm.append("          <input type=\"text\" id=\"parentId\" name=\"parentId\" dojoType=\"dijit.form.TextBox\" value=\""+base.getAttribute("parentId","")+"\" />\n");
             htm.append("        </li>\n");
             
             htm.append("</ul>\n");
@@ -339,6 +339,7 @@ public class StrategicMap extends GenericResource
             base.setAttribute("width", request.getParameter("width"));
             base.setAttribute("height", request.getParameter("height"));
             base.setAttribute("viewBox", request.getParameter("viewBox"));
+            base.setAttribute("parentId", request.getParameter("parentId"));
             try {
                 base.updateAttributesToDB();
                 response.setAction(Action_UPDATE);
@@ -564,10 +565,24 @@ System.out.println("2. period="+period.getTitle());
         SVGjs.append(" svg.setAttributeNS(null,'height','" + height + "');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'viewBox','"+base.getAttribute("viewBox","0 0 1024 1400")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
-        SVGjs.append(" document.body.appendChild(svg);").append("\n");
+        
+        
+        
+        String parentId = base.getAttribute("parentId");
+        if(parentId==null) {
+            SVGjs.append(" document.body.appendChild(svg);").append("\n");
+        }else {
+            SVGjs.append(" var parentId = dojo.byId('"+parentId+"');").append("\n");
+            SVGjs.append(" if(parentId) {").append("\n");
+            SVGjs.append("   parentId.appendChild(svg);").append("\n");
+            SVGjs.append(" }else {").append("\n");
+            SVGjs.append("   document.body.appendChild(svg);").append("\n");
+            SVGjs.append(" }").append("\n");
+        }
+        
+        
 
         SVGjs.append(" var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');").append("\n");
-        
         // cabeza de flecha para las relaciones causa/efecto
         SVGjs.append(" var marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'id', 'arrow_1');").append("\n");
