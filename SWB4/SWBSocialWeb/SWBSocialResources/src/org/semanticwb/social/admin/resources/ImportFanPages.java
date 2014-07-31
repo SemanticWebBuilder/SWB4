@@ -19,6 +19,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -92,10 +93,12 @@ public class ImportFanPages extends GenericResource{
                 homePage = WebPage.ClassMgr.createWebPage("Fan_Pages", wsite);
                 homePage.setTitle("Fan Pages");
                 homePage.setParent(wsite.getHomePage());
+                homePage.setActive(true);
             }
             WebPage rootFP = WebPage.ClassMgr.getWebPage(facebook.getFacebookUserId(), wsite);
             if(rootFP == null){
                 rootFP = WebPage.ClassMgr.createWebPage(facebook.getFacebookUserId(), wsite);
+                rootFP.setActive(true);
             }
             rootPage = rootFP;
             rootFP.setTitle(facebook.getTitle() + " Fan Pages");
@@ -138,6 +141,7 @@ public class ImportFanPages extends GenericResource{
                                     FacebookFanPage ffp = FacebookFanPage.ClassMgr.getFacebookFanPage(id, wsite);
                                     if(ffp == null){
                                         ffp = FacebookFanPage.ClassMgr.createFacebookFanPage(id, wsite);
+                                        ffp.setActive(true);
                                     }
                                     ffp.setPage_id(id);
                                     ffp.setTitle(name);
@@ -295,7 +299,11 @@ public class ImportFanPages extends GenericResource{
                         String position = "";
                         String appId = "";
                         
-                        if(tmp.isNull("application")){
+                        //Do not import page if is not an application
+                        //or its the likes/photos tab.
+                        if(tmp.isNull("application") ||
+                                tmp.getString("name").equalsIgnoreCase("likes") ||
+                                tmp.getString("name").equalsIgnoreCase("photos")){
                             continue;
                         }
                         
@@ -320,20 +328,29 @@ public class ImportFanPages extends GenericResource{
                         
                         FacePageTab tmpftp = FacePageTab.ClassMgr.getFacePageTab(id, wsite);
                         if(tmpftp == null){
-                            tmpftp = FacePageTab.ClassMgr.createFacePageTab(id, wsite);
-                        }
+                            //Search a facebook tab defined manually inside the fan page
+                            Iterator<WebPage> tabs = fp.listChilds();
+                            while(tabs.hasNext()){
+                                FacePageTab tab = (FacePageTab)tabs.next();
+                                if(tab.getFace_appid() != null){
+                                    if(tab.getFace_appid().equals(appId)){
+                                        tmpftp = tab;
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            //If no fan page tab found then create it!
+                            if( tmpftp == null){
+                                tmpftp = FacePageTab.ClassMgr.createFacePageTab(id, wsite);
+                                tmpftp.setActive(true);
+                            }
+                        }                       
                         tmpftp.setTitle(name);
                         tmpftp.setFace_appid(appId);
                         tmpftp.setSortName(position);
                         //set the social account!!
                         tmpftp.setParent(fp);
-                        /*if(tmp.has("application")){
-                            JSONObject app = tmp.getJSONObject("application");
-                            if(app.has("id")){
-                                String appId = app.getString("id");                            
-                                ///do something here
-                            }
-                        }*/
                     }
                 }
             }
