@@ -27,17 +27,17 @@
     initialize();
 
     //Elimina todos los objetos(instancias) de la clase SentimentWords
-    /*
+    
     Iterator <SentimentWords> itSentimentWords2Remove=SentimentWords.ClassMgr.listSentimentWordses(wsite);
     while(itSentimentWords2Remove.hasNext())
     {
         SentimentWords sentimentWord=itSentimentWords2Remove.next();
         out.println("sentimentWord Eliminado:"+sentimentWord);
         sentimentWord.remove();
-    }*/
+    }
 
     //Inserta detos en la clase SentimentWords
-    BufferedReader bf = null;
+    BufferedReader bf = null; 
     try {
         //ARCHIVO QUE CONTIENE LAS PALABRAS CON SENTIMIENTO ACTUALIZADAS ES UN ARCHIVO .CSV--------SIN ACENTROS--------
         bf = new BufferedReader(new FileReader(SWBPortal.getWorkPath()+"/models/"+admWsite.getId()+"/config/sentimentalWords2Process_SinAcentos.csv"));
@@ -48,7 +48,7 @@
     boolean isFirstLine=true;
     try {
         while ((line = bf.readLine())!=null) {
-            if(isFirstLine){isFirstLine=false; continue;}
+            if(isFirstLine || line.startsWith("#")){isFirstLine=false; continue;}
             int colum=0;
             SentimentWords sentimentWord=null;
             StringTokenizer tokens = new StringTokenizer(line, ";");
