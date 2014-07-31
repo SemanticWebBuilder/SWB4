@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
  * encarga de visualizar Perspectivas, Temas, Grupo de diferenciadores,
  * Objectivos y Diferenciadores.
  *
- * @author Martha Elvia Jim&eacute;nez Salgado
+ * @author Carlos Ramos
  * @version %I%, %G%
  * @since 1.0
  */
@@ -158,7 +158,7 @@ public class StrategicMap extends GenericResource
             String SVGjs = null;
             try {
                 SVGjs = getSvg(request);
-            } catch (XPathExpressionException xpe) {
+            }catch (XPathExpressionException xpe) {
                 System.out.println(xpe.toString());
             }
             out.println(SVGjs);
@@ -250,6 +250,7 @@ public class StrategicMap extends GenericResource
             htm.append("<script type=\"text/javascript\">\n");
             htm.append("  dojo.require('dijit.layout.ContentPane');\n");
             htm.append("  dojo.require('dijit.form.Form');\n");
+            htm.append("  dojo.require('dijit.form.TextBox');\n");
             htm.append("  dojo.require('dijit.form.ValidationTextBox');\n");
             htm.append("  dojo.require('dijit.form.Button');\n");
             htm.append("</script>\n");
@@ -275,18 +276,18 @@ public class StrategicMap extends GenericResource
             htm.append("          <input type=\"text\" id=\"viewBox\" name=\"viewBox\" regExp=\"\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("viewBox","0,0,1024,1400")+"\" />\n");
             htm.append("        </li>\n");
             
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"parentTagId\" class=\"swbform-label\">Identificador de la etiqueta padre </label>\n");
+            htm.append("          <input type=\"text\" id=\"parentTagId\" name=\"parentTagId\" dojoType=\"dijit.form.TextBox\" value=\""+base.getAttribute("anchorId")+"\" />\n");
+            htm.append("        </li>\n");
+            
             htm.append("</ul>\n");
             htm.append("</fieldset>\n");
             htm.append("</div>\n");
 
             htm.append("<fieldset>\n");
-//            htm.append("   <legend></legend>\n");
-//            htm.append("   <ul class=\"swbform-ul\">\n");
-//            htm.append("      <li>\n");
-            htm.append("         <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>\n");
-            htm.append("         <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
-//            htm.append("      </li>\n");
-//            htm.append("   </ul>\n");
+            htm.append("    <button type=\"submit\" dojoType=\"dijit.form.Button\">Guardar</button>\n");
+            htm.append("    <button type=\"reset\" dojoType=\"dijit.form.Button\">Reestablecer</button>\n");
             htm.append("</fieldset>\n");
             htm.append("</form>\n");
             htm.append("</div>\n");        
@@ -359,13 +360,14 @@ public class StrategicMap extends GenericResource
     private Period getPeriod(HttpServletRequest request) {
         WebSite model = getResourceBase().getWebSite();
         Period period = null;
-
+System.out.println("model="+model+", id="+model.getId());
         HttpSession session = request.getSession(true);
         final String pid = (String) session.getAttribute(model.getId());
+System.out.println("pid="+pid);
         if (Period.ClassMgr.hasPeriod(pid, model)) {
             period = Period.ClassMgr.getPeriod(pid, model);
         }
-        
+System.out.println("1. period="+period);
         if(period == null) {
             BSC scorecard = (BSC)model;
             try {
@@ -373,6 +375,7 @@ public class StrategicMap extends GenericResource
             }catch(NoSuchElementException nsee) {
             }
         }
+System.out.println("2. period="+period.getTitle());
         return period;
     }
     private String urlBase = null;
@@ -564,6 +567,8 @@ public class StrategicMap extends GenericResource
         SVGjs.append(" document.body.appendChild(svg);").append("\n");
 
         SVGjs.append(" var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');").append("\n");
+        
+        // cabeza de flecha para las relaciones causa/efecto
         SVGjs.append(" var marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'id', 'arrow_1');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'viewBox', '0 0 10 10');").append("\n");
@@ -573,14 +578,15 @@ public class StrategicMap extends GenericResource
         SVGjs.append(" marker.setAttributeNS(null,'markerWidth', '4');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'markerHeight', '4');").append("\n");
         SVGjs.append(" marker.setAttributeNS(null,'orient', 'auto');").append("\n");
-        SVGjs.append(" var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'d', 'M0 0 L10 5 L0 10 z');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'fill', '#FF0099');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'stroke', '#FF0099');").append("\n");
-        SVGjs.append(" path.setAttributeNS(null,'stroke-width', '0');").append("\n");
-        SVGjs.append(" marker.appendChild(path);").append("\n");
+        SVGjs.append(" var arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');").append("\n");
+        SVGjs.append(" arrow.setAttributeNS(null,'d', 'M0 0 L10 5 L0 10 z');").append("\n");
+        SVGjs.append(" arrow.setAttributeNS(null,'fill', '#FF0099');").append("\n");
+        SVGjs.append(" arrow.setAttributeNS(null,'stroke', '#FF0099');").append("\n");
+        SVGjs.append(" arrow.setAttributeNS(null,'stroke-width', '0');").append("\n");
+        SVGjs.append(" marker.appendChild(arrow);").append("\n");
         SVGjs.append(" defs.appendChild(marker);").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
+        // cabeza de flecha. Fin
 
         SVGjs.append(" var stat;").append("\n");    // figura para representar el estatus de objetivo
         SVGjs.append(" var r;").append("\n");       // relación causa/efecto
@@ -947,38 +953,79 @@ public class StrategicMap extends GenericResource
         SVGjs.append("  return a;").append("\n");
         SVGjs.append("}").append("\n");
 
+        
+        
+        
+SVGjs.append("var percent_=0;").append("\n");
+SVGjs.append("function brightness(hex, percent) {").append("\n");
+SVGjs.append("  // strip the leading # if it's there").append("\n");
+SVGjs.append("  hex = hex.replace(/^\\s*#|\\s*$/g, '');").append("\n");
+SVGjs.append("  // convert 3 char codes --> 6, e.g. `E0F` --> EE00FF").append("\n");
+SVGjs.append("  if(hex.length == 3) {").append("\n");
+SVGjs.append("    hex = hex.replace(/(.)/g, '$1$1');").append("\n");
+SVGjs.append("  }").append("\n");
+SVGjs.append("  var r = parseInt(hex.substr(0, 2), 16),").append("\n");
+SVGjs.append("      g = parseInt(hex.substr(2, 2), 16),").append("\n");
+SVGjs.append("      b = parseInt(hex.substr(4, 2), 16);").append("\n");
+SVGjs.append("  return '#' +").append("\n");
+SVGjs.append("       ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +").append("\n");
+SVGjs.append("       ((0|(1<<8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +").append("\n");
+SVGjs.append("       ((0|(1<<8) + b + (256 - b) * percent / 100).toString(16)).substr(1);").append("\n");
+SVGjs.append("}").append("\n");
+        
+        
         SVGjs.append("function createArrow(id,x1,y1,x2,y2) {").append("\n");
-        SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2);").append("\n");
+        //SVGjs.append("  var color = '#'+Math.floor(Math.random()*16777215).toString(16);").append("\n");
+        SVGjs.append("  percent_+=15;").append("\n");
+        SVGjs.append("  var color = brightness('#c40076',percent_);").append("\n");
+        SVGjs.append("  console.log('color='+color);");
+        SVGjs.append("  var arrow = createPath(id,x1,y1,x2,y2,color);").append("\n");
         SVGjs.append("  arrow.setAttributeNS(null, 'marker-end', 'url(#arrow_1)');").append("\n");
-        SVGjs.append("  arrow.setAttributeNS(null, 'stroke-opacity', 0.2);").append("\n");
+        SVGjs.append("  arrow.setAttributeNS(null, 'stroke-opacity', 1);").append("\n");
         SVGjs.append("  arrow.addEventListener('mouseover', fadeout, false);").append("\n");
-        SVGjs.append("  arrow.addEventListener('mouseout', fadein, false);").append("\n");
+        SVGjs.append("  arrow.addEventListener('mouseout', fadein, false);").append("\n");        
         SVGjs.append("  return arrow;").append("\n");
         SVGjs.append("}").append("\n");
 
         SVGjs.append("function fadeout(evt) {").append("\n");
-        SVGjs.append("    evt.target.style.stroke = '#0000FF';").append("\n");
+        //SVGjs.append("    evt.target.style.stroke = '#0000FF';").append("\n");
         SVGjs.append("    evt.target.style.strokeWidth = '7';").append("\n");
         SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',1);").append("\n");
         SVGjs.append("}").append("\n");
         SVGjs.append("function fadein(evt) {").append("\n");
-        SVGjs.append("    evt.target.style.stroke = '#FF0099';").append("\n");
-        SVGjs.append("    evt.target.style.strokeWidth = '3';").append("\n");
-        SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',0.2);").append("\n");
+        //SVGjs.append("    evt.target.style.stroke = '#FF0099';").append("\n");
+        SVGjs.append("    evt.target.style.strokeWidth = '2';").append("\n");
+        SVGjs.append("    evt.target.setAttributeNS(null,'stroke-opacity',1);").append("\n");
         SVGjs.append("}").append("\n");
 
+        
+SVGjs.append("var rp_=new Array();").append("\n");        
         SVGjs.append("var offset_v = 0;").append("\n");
         SVGjs.append("var offset_h = 5;").append("\n");
-        SVGjs.append("function createPath(id,x1,y1,x2,y2) {").append("\n");
+        SVGjs.append("function createPath(id,x1,y1,x2,y2,color) {").append("\n");
+        SVGjs.append("  if( srch(x1,y1) ) {").append("\n");
+        SVGjs.append("    offset_h+=3;").append("\n");
+        SVGjs.append("    x1-=3;").append("\n");
+        SVGjs.append("  }else {").append("\n");
+        SVGjs.append("    offset_h = 5;").append("\n");
+        SVGjs.append("    rp_.push(new Array(x1,y1));").append("\n");
+        SVGjs.append("  }").append("\n");
+        
+        SVGjs.append("  if( srch(x2,y2) ) {").append("\n");
+        SVGjs.append("    y2-=3;").append("\n");
+        SVGjs.append("  }else {").append("\n");
+        SVGjs.append("    rp_.push(new Array(x2,y2));").append("\n");
+        SVGjs.append("  }").append("\n");
+        
         SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
         SVGjs.append("  var d = 'M'+x1+','+y1+' L'+(x1)+','+(y1-offset_h)+' L'+(width-offset_v)+','+(y1-offset_h)+' L'+(width-offset_v)+','+y2+' L'+x2+','+y2;").append("\n");
         SVGjs.append("  offset_v+=8;").append("\n");
-        SVGjs.append("  //offset_h+=3;").append("\n");
         SVGjs.append("  path.setAttributeNS(null, 'id', id);").append("\n");
         SVGjs.append("  path.setAttributeNS(null, 'd', d);").append("\n");
         SVGjs.append("  path.style.fill = 'none';").append("\n");
-        SVGjs.append("  path.style.stroke = '#FF0099';").append("\n");
-        SVGjs.append("  path.style.strokeWidth = '3';").append("\n");
+        SVGjs.append("  path.style.stroke = color;").append("\n");
+        SVGjs.append("  path.style.strokeWidth = '2';").append("\n");
+        //SVGjs.append("  rp_.push(new Array(x1,y1));").append("\n");
         SVGjs.append("  return path;").append("\n");
         SVGjs.append("}").append("\n");
 
@@ -991,6 +1038,18 @@ public class StrategicMap extends GenericResource
         SVGjs.append("  txt.textContent=text;").append("\n");
         SVGjs.append("  return txt;").append("\n");
         SVGjs.append("}").append("\n");
+        
+        
+SVGjs.append("function srch(x,y) {").append("\n");
+SVGjs.append("  for(var i=0; i<rp_.length; i++) {").append("\n");
+SVGjs.append("    if(rp_[i][0]==x && rp_[i][1]==y) {").append("\n");
+SVGjs.append("      return true;").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("  }").append("\n");
+SVGjs.append("  return false;").append("\n");
+SVGjs.append("}").append("\n");
+
+        
 
         SVGjs.append("function createCircle(id,cx,cy,r,fill,fillopacity,stroke,strokewidth, strokeopacity) {").append("\n");
         SVGjs.append("  var circle = document.createElementNS(SVG_,'circle');").append("\n");
