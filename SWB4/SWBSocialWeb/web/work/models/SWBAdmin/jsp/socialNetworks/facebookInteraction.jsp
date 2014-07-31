@@ -981,26 +981,26 @@
             
             Collections.sort(jsonValues, new OrderByCommentsComparator());
             for(int i = 0; i < jsonValues.size(); i++){
-                out.print("<p>");
+                //out.print("<p>");
                 boolean likes = false;
                 if(!jsonValues.get(i).isNull("comments")){            
                     if(!jsonValues.get(i).getJSONObject("comments").isNull("summary")){
                         if(!jsonValues.get(i).getJSONObject("comments").getJSONObject("summary").isNull("total_count")){
                             likes =true;
-                            out.print("\nComments:" + jsonValues.get(i).getJSONObject("comments").getJSONObject("summary").getInt("total_count"));                            
+                            //out.print("\nComments:" + jsonValues.get(i).getJSONObject("comments").getJSONObject("summary").getInt("total_count"));                            
                         }
                     }
                 }
                 if(likes== false){
-                    out.print("\nComments:0 ");
+                    //out.print("\nComments:0 ");
                 }
-                out.print( jsonValues.get(i).getString("created_time") );
+                //out.print( jsonValues.get(i).getString("created_time") );
                 if(!jsonValues.get(i).isNull("message")){
-                    out.print(jsonValues.get(i).getString("message") + "</p>");
+                   // out.print(jsonValues.get(i).getString("message") + "</p>");
                 }else{
-                    out.print( jsonValues.get(i) +"</p>");
+                    //out.print( jsonValues.get(i) +"</p>");
                 }
-                if(i==0)out.print("<p>" + jsonValues.get(i) + "</p>");
+                //if(i==0)out.print("<p>" + jsonValues.get(i) + "</p>");
                 if(i == 9)break;
             }
         }
@@ -1100,8 +1100,10 @@ svg {
 }
 
 </style>
-<body>
 
+    <div align="center" style="width:100%">
+        ACTIVIDAD DEL &Uacute;LTIMO MES EN LA RED SOCIAL.
+    </div>
   <div id="chart1">
     <svg></svg>
   </div>
@@ -1171,27 +1173,7 @@ nv.addGraph(function() {
 
 
 </script>
-<style type="text/css">         
-    @import  "/swbadmin/css/swbsocial.css";          
-    html, body, #main{
-        overflow: auto;
-    }
-</style>
-<%
-    String loading="<BR/><center><img src='"+SWBPlatform.getContextPath()+"/swbadmin/images/loading.gif'/><center>";
-    
-    out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
-    //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
-    out.println("<div class=\"swbform timelineCont\" style=\" width : 800px; overflow-y: hidden; height:500px;\">");
 
-    
-   
-    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\"topLikes\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("timelineLabel")+"\" refreshOnShow=\""+"false"+"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
-    out.println("</div>");
-
-    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\"topComments\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("mentionsLabel")+"\" refreshOnShow=\""+"false"+"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
-    out.println("</div>");
-    
-    out.println("</div><!-- end Bottom TabContainer -->");
-    out.println("</div><!-- end Bottom TabContainer -->");
-%>
+<div align="center" style="width:100%">
+    <p>ACTIVIDAD RECIENTE POR LIKES Y COMENTARIOS.</p>
+</div>
