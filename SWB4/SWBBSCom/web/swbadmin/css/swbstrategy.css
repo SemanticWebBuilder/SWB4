@@ -55,11 +55,12 @@ background-color: #2e1645;*/
 }
 
 #main-menu.nav-pills > li {
-    margin-left: 6px;
+    margin-right: 6px;
+    margin-bottom: 1px;
 }
 
 #main-menu.nav-pills > li + li {
-    margin-left: 6px;
+    margin-left: 0px;
 }
 
 
