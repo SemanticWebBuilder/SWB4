@@ -3622,16 +3622,17 @@ nv.models.discreteBarChart = function() {
     , rightAlignYAxis = false
     , staggerLabels = false
     , tooltips = true
-    , tooltip = function(key, x, y, e, graph) {
-        return '<h3>' + x + '</h3>' +
-               '<p>' +  y + '</p>'
+    , tooltip = function(key, x, y, dayOfMonth, e, graph) {
+        return '<h3>' + e.point.dayOfMonth + '</h3>' +
+               '<p>' +  y +' mensajes</p>'
       }
     , x
     , y
     , noData = "No Data Available."
-    , dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'beforeUpdate')
+    , dispatch = d3.dispatch('tooltipShow', 'tooltipHide', 'beforeUpdate', 'elementClick')
     , transitionDuration = 250
     ;
+    //dispatch = d3.dispatch('chartClick', 'elementClick', 'elementDblClick', 'elementMouseover', 'elementMouseout')      
 
   xAxis
     .orient('bottom')
@@ -3656,8 +3657,9 @@ nv.models.discreteBarChart = function() {
         top = e.pos[1] + ( offsetElement.offsetTop || 0),
         x = xAxis.tickFormat()(discretebar.x()(e.point, e.pointIndex)),
         y = yAxis.tickFormat()(discretebar.y()(e.point, e.pointIndex)),
-        content = tooltip(e.series.key, x, y, e, chart);
-
+        dayOfMonth = e.point.dayOfMonth,
+        content = tooltip(e.series.key, x, y, dayOfMonth, e, chart);
+        
     nv.tooltip.show([left, top], content, e.value < 0 ? 'n' : 's', null, offsetElement);
   };
 
@@ -3820,7 +3822,7 @@ nv.models.discreteBarChart = function() {
       dispatch.on('tooltipShow', function(e) {
         if (tooltips) showTooltip(e, that.parentNode);
       });
-
+      
       //============================================================
 
 
@@ -3844,6 +3846,13 @@ nv.models.discreteBarChart = function() {
 
   dispatch.on('tooltipHide', function() {
     if (tooltips) nv.tooltip.cleanup();
+  });
+  
+  discretebar.dispatch.on("elementClick",function(e) {
+    //alert('wot!');
+    
+    console.log('value of e: ' + e.toSource());
+    console.log( e.series.key + " --- " + e.pointIndex);
   });
 
   //============================================================
