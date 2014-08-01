@@ -378,8 +378,14 @@
         
         try{
             do{
-                String fbResponse = postRequest(paramsFb, "https://graph.facebook.com/SemanticWebBuilder/posts",
+                String fbResponse = postRequest(paramsFb, "https://graph.facebook.com/me/posts",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+                try{
+                    new JSONObject(fbResponse);
+                }catch(Exception e){
+                    endOfMonth = true;
+                    break;
+                }                
                 JSONObject myPosts = new JSONObject(fbResponse);
                 //System.out.println(myPosts);
                 if(!myPosts.isNull("data")){
@@ -471,6 +477,7 @@
             Calendar monthPost = GregorianCalendar.getInstance();
             try{
                 Date postTime = formatter.parse(data.getJSONObject(0).getString("created_time"));                
+                System.out.println("EL POST CIENTE:" + postTime);
                 monthPost.setTime(postTime);  
                 currentCalendar = monthPost;
                 postsByDay = new int[monthPost.getActualMaximum(Calendar.DAY_OF_MONTH)];
@@ -920,6 +927,9 @@
     <%
     int chartCurrentMonth[] = null;
     Calendar currentCalendar = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    Date currentDate = sdf.parse("" + currentCalendar.get(Calendar.YEAR) + "-" + (currentCalendar.get(Calendar.MONTH)) + "-" + currentCalendar.get(Calendar.DAY_OF_MONTH));
+    
     try{
         String suri = request.getParameter("suri");
         SocialNetwork sn = (SocialNetwork) SemanticObject.createSemanticObject(suri).createGenericInstance();
@@ -929,10 +939,10 @@
         JSONArray historicData = new JSONArray();
         JSONArray monthlyData = getAllPostFromLastMonth(fb, historicData);        
         chartCurrentMonth = getChartValues(monthlyData, out, currentCalendar);
-        System.out.println("EL CALENDARIO ACTUAL: " + currentCalendar);
+        ///System.out.println("EL CALENDARIO ACTUAL: " + currentCalendar);
         //System.out.println("---->" + historicData);
         System.out.println("Entries recovered::::" + historicData.length());
-        
+        try{
         Calendar recentPost = Calendar.getInstance();
         Calendar olderPost = Calendar.getInstance();
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSz");
@@ -947,8 +957,8 @@
                 Date postTime = formatter.parse(historicData.getJSONObject(historicData.length()-1).getString("created_time"));
                 olderPost.setTime(postTime);
             }
-            System.out.println("RECENTE POST::" + recentPost.getTime());
-            System.out.println("OLDEST POST::" + olderPost.getTime());
+            ///System.out.println("RECENTE POST::" + recentPost.getTime());
+            ///System.out.println("OLDEST POST::" + olderPost.getTime());
             
             ArrayList<JSONObject> jsonValues = new ArrayList<JSONObject>();
             for (int i = 0; i < historicData.length(); i++){
@@ -957,24 +967,24 @@
 
             Collections.sort(jsonValues, new OrderByLikesComparator());
             for(int i = 0; i < jsonValues.size(); i++){
-                out.print("<p>");
+                ///out.print("<p>");
                 boolean likes = false;
                 if(!jsonValues.get(i).isNull("likes")){            
                     if(!jsonValues.get(i).getJSONObject("likes").isNull("summary")){
                         if(!jsonValues.get(i).getJSONObject("likes").getJSONObject("summary").isNull("total_count")){
                             likes =true;
-                            out.print("\nLikes:" + jsonValues.get(i).getJSONObject("likes").getJSONObject("summary").getInt("total_count"));                            
+                            ///out.print("\nLikes:" + jsonValues.get(i).getJSONObject("likes").getJSONObject("summary").getInt("total_count") + "-->");                            
                         }
                     }
                 }
                 if(likes== false){
-                    out.print("\nlikes:0 ");
+                    ///out.print("\nlikes:0 ");
                 }
-                out.print( jsonValues.get(i).getString("created_time") );
+                ///out.print( jsonValues.get(i).getString("created_time") );
                 if(!jsonValues.get(i).isNull("message")){
-                    out.print(jsonValues.get(i).getString("message") + "</p>");
+                    ///out.print(jsonValues.get(i).getString("message") + "</p>");
                 }else{
-                    out.print("</p>");
+                    ///out.print("</p>");
                 }
                 if(i == 9)break;
             }
@@ -1004,6 +1014,10 @@
                 if(i == 9)break;
             }
         }
+               }catch(Exception e){
+               System.out.println("\n\n\n\n" + "EEEERRRRORRRR");
+                   e.printStackTrace();
+               }
         //if(1==1)return;
         /*String wsite = fb.getSemanticObject().getModel().getName();
         
@@ -1100,13 +1114,16 @@ svg {
 }
 
 </style>
-
+<div>
     <div align="center" style="width:100%">
         ACTIVIDAD DEL &Uacute;LTIMO MES EN LA RED SOCIAL.
     </div>
   <div id="chart1">
     <svg></svg>
   </div>
+</div>
+
+<div class="clear"></div>
 
 <script src="/work/models/SWBAdmin/js/d3.v3.js"></script>
 <script src="/work/models/SWBAdmin/js/nv.d3.js"></script>
@@ -1119,15 +1136,21 @@ svg {
 historicalBarChart = [ 
   {
     //key is year_month(1-12)
-    key: "<%=currentCalendar.get(Calendar.YEAR) +"_" + (currentCalendar.get(Calendar.MONTH)+1) %>",
+    key: "<%=currentCalendar.get(Calendar.YEAR) +"_" + (currentCalendar.get(Calendar.MONTH)) %>",
     values: [
         <%
         SimpleDateFormat month = new SimpleDateFormat("MMMM", new Locale("es", "MX"));
+        try{
+            System.out.println("chartCurrentMonth.length_____::" + chartCurrentMonth.length);
+        }catch(Exception e){
+            System.out.println("ERRRORR OHOHOHO");
+            e.printStackTrace();
+        }
         for(int i = 0; i <chartCurrentMonth.length; i++ ){
             Calendar byDay = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");            
+            //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");            
             //Dia del mes actual
-            Date date = sdf.parse("" + currentCalendar.get(Calendar.YEAR) + "-" + (currentCalendar.get(Calendar.MONTH)+1) + "-" + (i+1));
+            Date date = sdf.parse("" + currentCalendar.get(Calendar.YEAR) + "-" + (currentCalendar.get(Calendar.MONTH)) + "-" + (i+1));
             byDay.setTime(date);
             //String dayStr = getDayOfWeek(byDay.get(Calendar.DAY_OF_WEEK));
             SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy", new Locale("es", "MX"));
@@ -1156,9 +1179,9 @@ nv.addGraph(function() {
       .showValues(true)
       .transitionDuration(250)
       .margin({top: 30, right: 20, bottom: 60, left: 80})
-      
+      <%System.out.println("CURRREEEEEEENT:" + currentDate);%>
       chart.yAxis.axisLabel("Numero de posts")
-      chart.xAxis.axisLabel("Actividad por dia del mes de <%=month.format(currentCalendar.getTime())%>")
+      chart.xAxis.axisLabel("Actividad por dia del mes de <%=month.format(currentDate)%>")
       chart.valueFormat(d3.format('d'))
       chart.yAxis.tickFormat(d3.format('d'))
       
@@ -1173,7 +1196,40 @@ nv.addGraph(function() {
 
 
 </script>
-
+<div class="clear"></div>
 <div align="center" style="width:100%">
     <p>ACTIVIDAD RECIENTE POR LIKES Y COMENTARIOS.</p>
 </div>
+<div class="clear"></div>
+<style type="text/css">
+
+        @import "/swbadmin/js/dojo/dojo/resources/dojo.css";
+        @import "/swbadmin/css/swbsocial.css";          
+        html, body, #main{
+            overflow: auto;
+        }
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/schedule.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
+
+
+<%
+        /*out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
+
+        out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" style_=\"border:0px; width:100%; height:100%\" id=\"tabs/twitter\" _tabPosition=\"bottom\" nested_=\"true\" _selectedChild=\"btab1\" onButtonClick_=\"alert('click');\" onLoad_=\"alert('Hola');\">");        
+        //out.println("<div class=\"timelineTab-title\" style=\"width: 620px !important;\"><p style=\"width:620px\"><strong>" + "Mis Videos" + "</strong>" + semanticYoutube.getTitle() + "</p></div>");
+        out.println("<div id=\"toplikes\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Home"+"\" refreshOnShow=\""+"false"+"\" _loadingMessage=\"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div class=\"timelineTab\" style=\"padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px; margin-left:25%\">");
+        out.println("<div class=\"timelineTab-title\" style=\"width: 50% !important;\"><p style=\"width:50%\"><strong>" + "Top Ten Likes" + "</strong>Mensajes con m&aacute;s likes</p></div>");
+        out.println("</div>");
+        
+        out.println("<div id=\"topComments\" dojoType=\"dijit.layout.ContentPane\" title=\""+"Home"+"\" refreshOnShow=\""+"false"+"\" _loadingMessage=\"\" style_=\"border:0px; width:100%; height:100%\">");
+        out.println("<div class=\"timelineTab\" style=\"padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;\">");
+        out.println("<div class=\"timelineTab-title\"><p><strong>" + "Top Ten Comments" + "</strong>Mensajes con m&aacute;s comentarios</p></div>");        
+        out.println("</div>");
+        
+        out.println("</div><!-- end Bottom TabContainer -->");*/
+%>
