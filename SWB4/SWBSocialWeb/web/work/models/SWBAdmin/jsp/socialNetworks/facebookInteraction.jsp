@@ -380,6 +380,7 @@
             do{
                 String fbResponse = postRequest(paramsFb, "https://graph.facebook.com/me/posts",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
+                //System.out.println("fbResponse_:_:_:_:_:_:_:" + fbResponse);
                 try{
                     new JSONObject(fbResponse);
                 }catch(Exception e){
