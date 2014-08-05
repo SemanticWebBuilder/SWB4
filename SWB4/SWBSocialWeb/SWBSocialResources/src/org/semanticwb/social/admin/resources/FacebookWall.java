@@ -815,6 +815,7 @@ public class FacebookWall extends GenericResource {
         String currentTab = request.getParameter("currentTab");
         actionURL.setParameter("suri", request.getParameter("suri"));
         renderURL.setParameter("suri", request.getParameter("suri"));
+        SimpleDateFormat df = new SimpleDateFormat();
         //System.out.println("mode:" + mode);
         PrintWriter out = response.getWriter();
         if (mode != null && mode.equals("getMorePosts")) {//Gets older posts
@@ -861,7 +862,7 @@ public class FacebookWall extends GenericResource {
                 Date likeTime = formatter.parse(facebookDate);
 
                 //out.write("<em>" + facebookHumanFriendlyDate(likeTime, paramRequest) + "</em>");
-                out.write("<em title=\"" + facebookHumanFriendlyDate(likeTime, paramRequest) +"\">&nbsp;</em>");
+                out.write(df.format(likeTime) +"&nbsp;");
                 //IMPRIMIR EL CREATED Y LOS NUEVOS LIKES
                 boolean iLikedPost = false;
                 if (likeResp.has("likes")) {
@@ -1451,7 +1452,7 @@ public class FacebookWall extends GenericResource {
         String after = request.getParameter("after");
         String currentTab = request.getParameter("currentTab");
         PrintWriter out = response.getWriter();
-
+        SimpleDateFormat df = new SimpleDateFormat();
         if (postId == null || objUri == null || after == null || objUri == null) {//If error don't show 'View more comments'
             return;
         }
@@ -1492,7 +1493,7 @@ public class FacebookWall extends GenericResource {
                     //out.write("<div id=\"" + facebook.getId() + comments.getJSONObject(k).getString("id") + "_" + postId + "\" dojoType=\"dojox.layout.ContentPane\">");
                     out.write("<p class=\"timelinedate\">");
                     out.write("<span style=\"width:150px;\" dojoType=\"dojox.layout.ContentPane\">");
-                    out.write("<em title=\"" + facebookHumanFriendlyDate(commentTime, paramRequest) +"\">&nbsp;</em>");
+                    out.write(df.format(commentTime) +"&nbsp;");
                     if (comments.getJSONObject(k).has("like_count")) {
                         out.write("<strong>");
                         out.write("<span> Likes: " + comments.getJSONObject(k).getInt("like_count") + "</span>");
@@ -1614,7 +1615,7 @@ public class FacebookWall extends GenericResource {
     public static String picture(String response, Writer out, boolean includeSinceParam, HttpServletRequest request, SWBParamRequest paramRequest, SWBModel model) {
 
         String createdTime = null;
-
+        
         String objUri = (String) request.getParameter("suri");
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Facebook facebook = (Facebook) semanticObject.createGenericInstance();
@@ -1927,6 +1928,7 @@ public class FacebookWall extends GenericResource {
     }
 
     public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEveryting, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
+        SimpleDateFormat df = new SimpleDateFormat();
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -2282,7 +2284,7 @@ public class FacebookWall extends GenericResource {
 
                         //writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
                         //out.write("<em title=\"" + facebookHumanFriendlyDate(commentTime, paramRequest) +"\">&nbsp;</em>");
-                        writer.write("<em title=\"" + facebookHumanFriendlyDate(commentTime, paramRequest) +"\">&nbsp;</em>");
+                        writer.write("" + df.format(commentTime) +"&nbsp;");
                         if (comments.getJSONObject(k).has("like_count")) {
                             writer.write("<strong>");
                             writer.write("<span>Likes:</span> " + comments.getJSONObject(k).getInt("like_count"));
@@ -2324,8 +2326,8 @@ public class FacebookWall extends GenericResource {
                 writer.write("<img src=\"" + postsData.getString("icon") + "\"/>");
             }
             writer.write("<span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("id") + INFORMATION + tabSuffix + "\" dojoType=\"dojox.layout.ContentPane\">");
-            //writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
-            writer.write("<em title=\"" + facebookHumanFriendlyDate(postTime, paramRequest) +"\">&nbsp;</em>");
+            //writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");            
+            writer.write("" + df.format(postTime) +"&nbsp;");
             boolean iLikedPost = false;
             writer.write("<strong><span> Likes: </span>");
             if (postsData.has("likes")) {
@@ -2447,7 +2449,7 @@ public class FacebookWall extends GenericResource {
 
     public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
       String createdTime = "";
-
+      SimpleDateFormat df = new SimpleDateFormat();
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("suri", request.getParameter("suri"));
@@ -2557,7 +2559,7 @@ public class FacebookWall extends GenericResource {
                         //writer.write("<span id=\"" + comments.getJSONObject(k).getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write("<span style=\"width:150px;\" dojoType=\"dojox.layout.ContentPane\">");
                         //writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
-                        writer.write("<em title=\"" + facebookHumanFriendlyDate(commentTime, paramRequest) +"\">&nbsp;</em>");
+                        writer.write(df.format(commentTime) +"&nbsp;");
                         //writer.write("<a href=\"\" onMouseOver=\"dijit.Tooltip.defaultPosition=['above', 'below']\" id=\"TooltipButton\" onclick=\"return false;\"> LIKE/UNLIKE</a>");
                         //writer.write("<div class=\"dijitHidden\"><span data-dojo-type=\"dijit.Tooltip\" data-dojo-props=\"connectId:'TooltipButton'\">I am <strong>above</strong> the button</span></div>");
                         if (comments.getJSONObject(k).has("like_count")) {
@@ -2599,7 +2601,7 @@ public class FacebookWall extends GenericResource {
 
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + INFORMATION + PICTURES_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
             //writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
-            writer.write("<em title=\"" + facebookHumanFriendlyDate(postTime, paramRequest) +"\">&nbsp;</em>");
+            writer.write(df.format(postTime) + "&nbsp;");
 
             if (postsData.has("like_info")) {
                 likeInfo = postsData.getJSONObject("like_info");
@@ -2676,6 +2678,7 @@ public class FacebookWall extends GenericResource {
 
     public static String doPrintVideo(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespongMsg, boolean userCanRemoveMsg) {
         String createdTime = "";
+        SimpleDateFormat df = new SimpleDateFormat();
         try {
             if (postsData.getInt("type") != 128) {//Only print published videos
                 return null;
@@ -2769,7 +2772,7 @@ public class FacebookWall extends GenericResource {
                         //writer.write("<span id=\"" + comments.getJSONObject(k).getString("id") + "\" dojoType=\"dojox.layout.ContentPane\">");
                         writer.write("<span style=\"width:150px;\" dojoType=\"dojox.layout.ContentPane\">");
                         //writer.write("<em>" + facebookHumanFriendlyDate(commentTime, paramRequest) + "</em>");
-                        writer.write("<em title=\"" + facebookHumanFriendlyDate(commentTime, paramRequest) +"\">&nbsp;</em>");
+                        writer.write("" + df.format(commentTime) + "&nbsp;");
 
                         if (comments.getJSONObject(k).has("like_count")) {
                             writer.write("<strong>");
@@ -2809,7 +2812,7 @@ public class FacebookWall extends GenericResource {
 
             writer.write("   <span class=\"inline\" id=\"" + facebook.getId() + postsData.getString("post_id") + INFORMATION + VIDEOS_TAB + "\" dojoType=\"dojox.layout.ContentPane\">");
             //writer.write("<em>" + facebookHumanFriendlyDate(postTime, paramRequest) + "</em>");
-            writer.write("<em title=\"" + facebookHumanFriendlyDate(postTime, paramRequest) +"\">&nbsp;</em>");
+            writer.write(df.format(postTime) + "&nbsp;");
 
             if (!postsData.isNull("like_info")) {
                 likeInfo = postsData.getJSONObject("like_info");
