@@ -525,7 +525,12 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 external.setPostId(postsData.getJSONObject(k).getString("id"));
                                 external.setCreatorId(postsData.getJSONObject(k).getJSONObject("from").getString("id"));
                                 external.setCreatorName(postsData.getJSONObject(k).getJSONObject("from").getString("name"));
-                                external.setCreationTime(formatter.parse(postsData.getJSONObject(k).getString("created_time")));
+                                Date postDate = formatter.parse(postsData.getJSONObject(k).getString("created_time"));
+                                if(postDate.after(new Date())){
+                                    external.setCreationTime(new Date());
+                                }else{
+                                    external.setCreationTime(postDate);
+                                }
                                 external.setUpdateTime(formatter.parse(postsData.getJSONObject(k).getString("updated_time")));
                                 external.setCreatorPhotoUrl("http://graph.facebook.com/" + postsData.getJSONObject(k).getJSONObject("from").getString("id") + "/picture?width=150&height=150");
                                 if(!postsData.getJSONObject(k).isNull("application")){
