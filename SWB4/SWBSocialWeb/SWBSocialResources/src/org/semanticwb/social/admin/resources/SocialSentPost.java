@@ -1087,16 +1087,43 @@ public class SocialSentPost extends GenericResource {
             out.println(postOut.getCreator() != null ? "<a href=\"#\" onclick=\"showDialog('" + urlshowUsrHistory.setParameter("swbAdminUser", postOut.getCreator().getURI()) + "','" + paramRequest.getLocaleString("userHistory") + "'); return false;\">" + postOut.getCreator().getFullName() + "</a>" : paramRequest.getLocaleString("withoutUser"));
             out.println("</td>");
 
-
             //PostOut creation
             out.println("<td>");
+            SimpleDateFormat df = new SimpleDateFormat();
+            SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+            if (postOut.getCreated() != null) {
+                Date postDate = postOut.getCreated();
+                if(postDate.after(new Date())){
+                    postDate= new Date();
+                }
+                out.println("<span title=\"" + output.format(postDate) + "\">" + df.format(postDate) + "</span>");
+            } else {
+                out.println("<span title=\"" + output.format(new Date()) + "\">" + df.format(new Date()) + "</span>");
+            }
+            out.println("</td>");
+
+            //PostOut lastUpdate
+            out.println("<td>");
+            if (postOut.getUpdated() != null) {
+                Date postDate = postOut.getUpdated();
+                if(postDate.after(new Date())){
+                    postDate= new Date();
+                }
+                out.println("<span title=\"" + output.format(postDate) + "\">" + df.format(postDate) + "</span>");
+            } else {
+                out.println("<span title=\"" + output.format(new Date()) + "\">" + df.format(new Date()) + "</span>");
+            }
+            out.println("</td>");
+            
+            //PostOut creation
+            /*out.println("<td>");
             out.println(SWBUtils.TEXT.getTimeAgo(postOut.getCreated(), lang));
             out.println("</td>");
 
             //PostOut lastUpdate
             out.println("<td>");
             out.println(SWBUtils.TEXT.getTimeAgo(postOut.getUpdated(), lang));
-            out.println("</td>");
+            out.println("</td>");*/
 
             if (classifyBySentiment) {
                 //Sentiment
@@ -2316,9 +2343,31 @@ public class SocialSentPost extends GenericResource {
                 }
 
 
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
+                SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+                if (postIn.getCreated() != null) {
+                    Date postDate = postIn.getCreated();
+                    if(postDate.after(new Date())){
+                        postDate= new Date();
+                    }
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(postDate));
+                } else {
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(new Date()));
+                }
+                
+                //PostOut lastUpdate
+                if (postIn.getUpdated() != null) {
+                    Date postDate = postIn.getUpdated();
+                    if(postDate.after(new Date())){
+                        postDate= new Date();
+                    }
+                    createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(postDate));
+                } else {
+                    createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(new Date()));
+                }
 
-                createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang));
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getCreated(), lang));
+
+                //createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getUpdated(), lang));
 
 
                 if (classifyBySentiment != null && classifyBySentiment.equalsIgnoreCase("true")) {

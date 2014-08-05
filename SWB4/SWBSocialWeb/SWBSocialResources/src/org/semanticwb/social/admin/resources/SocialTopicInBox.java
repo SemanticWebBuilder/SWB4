@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -1342,7 +1343,18 @@ public class SocialTopicInBox extends GenericResource {
                 } else {
                     createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                 }
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet() == null ? new Date() : postIn.getPi_createdInSocialNet(), lang));
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
+                SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+                if (postIn.getPi_createdInSocialNet() != null) {
+                    Date postDate = postIn.getPi_createdInSocialNet();
+                    if(postDate.after(new Date())){
+                        postDate= new Date();
+                    }
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(postDate));
+                } else {
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(new Date()));
+                }
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet() == null ? new Date() : postIn.getPi_createdInSocialNet(), lang));
 
                 if (postIn.getPostSentimentalType() == 0) {
                     createCell(cellStyle, wb, troww, 5, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "----");
@@ -2518,8 +2530,22 @@ public class SocialTopicInBox extends GenericResource {
 
         //created
         out.println("<td>");
-        out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet() == null ? new Date() : postIn.getPi_createdInSocialNet(), lang));
+        //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
+        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+        if (postIn.getPi_createdInSocialNet() != null) {
+            Date postDate = postIn.getPi_createdInSocialNet();
+            if(postDate.after(new Date())){
+                postDate= new Date();
+            }
+            out.println("<span title=\"" + output.format(postDate) + "\">" + df.format(postDate) + "</span>");
+        } else {
+            out.println("<span title=\"" + output.format(new Date()) + "\">" + df.format(new Date()) + "</span>");
+        }
         out.println("</td>");
+        //out.println("<td>");
+        //out.println(SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet() == null ? new Date() : postIn.getPi_createdInSocialNet(), lang));
+        //out.println("</td>");
 
         //Sentiment
         //Sentiment
