@@ -6,6 +6,7 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1817,7 +1819,8 @@ public class Timeline extends GenericResource{
                 writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + dm.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");                
-                writer.write("<em>" + twitterHumanFriendlyDate(dm.getCreatedAt(), paramRequest) + "</em> ");
+                SimpleDateFormat df = new SimpleDateFormat();
+                writer.write(df.format(dm.getCreatedAt()) + " ");
                 writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span style=\"width:60px;\">Responder</span></a>  ");
                 writer.write("   </span>");
                 
@@ -1992,7 +1995,21 @@ public class Timeline extends GenericResource{
             if(retweets == 1){
                 times = paramRequest.getLocaleString("rtime");
             }
-            out.write("<em title=\"" + twitterHumanFriendlyDate(originalStatus.getCreatedAt(), paramRequest) + "\">&nbsp;</em> <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() + " " + times + " </strong>");
+            SimpleDateFormat df = new SimpleDateFormat();
+            //SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+            /*if (postIn.getPi_createdInSocialNet() != null) {
+                Date postDate = postIn.getPi_createdInSocialNet();
+                if(postDate.after(new Date())){
+                    postDate= new Date();
+                }
+                out.println("<span title=\"" + output.format(postDate) + "\">" + df.format(postDate) + "</span>");
+            } else {
+                out.println("<span title=\"" + output.format(new Date()) + "\">" + df.format(new Date()) + "</span>");
+            }
+            out.println("</td>");*/
+        
+            out.write("" + df.format(originalStatus.getCreatedAt()) + "&nbsp; <strong><span>Retweeted: </span>" + originalStatus.getRetweetCount() +  "</strong>");
+            
             
             if(userCanRespondMsg || userCanDoEverything){
             out.write("<a href=\"#\" title=\"Responder\" class=\"answ\" onclick=\"showDialog('" + renderURL.setMode("replyTweet").setParameter("id", originalStatus.getId()+"").setParameter("userName", "@" +
