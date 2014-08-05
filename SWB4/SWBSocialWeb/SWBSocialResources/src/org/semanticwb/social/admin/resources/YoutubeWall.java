@@ -144,7 +144,8 @@ public class YoutubeWall extends GenericResource{
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
         System.out.println("\n\n\nModo: " + mode);        
-        String objUri = request.getParameter("suri");        
+        String objUri = request.getParameter("suri");
+        SimpleDateFormat df = new SimpleDateFormat();
         //System.out.println("suri in processRequest:" + objUri);
         PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("commentVideoSent")){//Feedback of commented video
@@ -184,7 +185,7 @@ public class YoutubeWall extends GenericResource{
                     if(nNode.getNodeName().equals("published")){
                         System.out.println("published:" + nNode.getTextContent());
                         Date date = formatter.parse(nNode.getTextContent());
-                        out.write("<em>" + humanFriendlyDate(date, paramRequest) + "</em>");
+                        out.write(df.format(date) + "&nbsp; ");
                     }else if(nNode.getNodeName().equals("yt:statistics")){                        
                         out.println( paramRequest.getLocaleString("views") +":" + nNode.getAttributes().getNamedItem("viewCount").getTextContent() + " ");
                         System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
@@ -617,6 +618,7 @@ public class YoutubeWall extends GenericResource{
         String objUri = request.getParameter("suri");
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
+        SimpleDateFormat df = new SimpleDateFormat();
         System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
         
         try{
@@ -670,7 +672,7 @@ public class YoutubeWall extends GenericResource{
                     //out.write("<span dojoType=\"dojox.layout.ContentPane\">");
                     out.write("<span>");
                     Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
-                    out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
+                    out.write(df.format(date) + "&nbsp; ");
                     out.write("</span>");
                     String comentarioId = comment.getJSONObject("id").getString("$t");
                     out.write("   <span class=\"inline\">");
@@ -1202,6 +1204,7 @@ public class YoutubeWall extends GenericResource{
      public static void doPrintVideo(HttpServletRequest request, HttpServletResponse response, 
              SWBParamRequest paramRequest, java.io.Writer out, String postURI, JSONObject video, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) throws SWBResourceException, IOException {
         //out.write("VIDEO:" + video);
+        SimpleDateFormat df = new SimpleDateFormat();
         HashMap<String, String> paramsComments = new HashMap<String, String>(3);
         paramsComments.put("v", "2");
         paramsComments.put("max-results", "5");
@@ -1308,7 +1311,7 @@ public class YoutubeWall extends GenericResource{
                             out.write("<span class=\"inline\">");
 
                             Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
-                            out.write("<em>" + humanFriendlyDate(date, paramRequest) +  "</em>");
+                            out.write(df.format(date) + "&nbsp; ");
                             out.write("</span>");
                             String comentarioId = comment.getJSONObject("id").getString("$t");
                             out.write("   <span class=\"inline\">");
@@ -1332,7 +1335,7 @@ public class YoutubeWall extends GenericResource{
                 out.write("<div class=\"timelineresume\" dojoType=\"dijit.layout.ContentPane\">");//timelineresume
                 out.write("<span id=\"" + semanticYoutube.getId() + video.getString("id") + INFORMATION + "\" class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
                 Date date = formatter.parse(video.getString("uploaded"));
-                out.write("<em>" + humanFriendlyDate(date, paramRequest) + "</em>");
+                out.write(df.format(date) + "&nbsp; ");
                 
                 
                 if(video.has("viewCount")){
