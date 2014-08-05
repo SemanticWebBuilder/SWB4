@@ -36,6 +36,7 @@ boolean btnReject = base.getAttribute("btnReject") != null;
 boolean btnCancel = base.getAttribute("btnCancel") != null;
 boolean btnSave = base.getAttribute("btnSave") != null;
 boolean useSign = base.getAttribute("useSign") != null;
+boolean showFooter = btnAccept || btnReject || btnCancel || btnSave;
 
 if (user != null && user.getLanguage() != null) lang = user.getLanguage();
 
@@ -174,7 +175,7 @@ String admMode = base.getAttribute(ProcessForm.PARAM_ADMMODE, ProcessForm.ADM_MO
                         } else {
                             %><br><%
                         }
-                        if (baseProps != null && !baseProps.isEmpty()) {
+                        if ((baseProps != null && !baseProps.isEmpty()) || showFooter) {
                             Iterator<String> props = baseProps.iterator();
                             %>
                             <div class="panel panel-default">
