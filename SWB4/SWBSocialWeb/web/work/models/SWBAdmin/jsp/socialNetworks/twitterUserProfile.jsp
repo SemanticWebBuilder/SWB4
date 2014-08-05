@@ -78,9 +78,9 @@
             <td align="center">
                 Following: <b><%=twitterUser.getFriendsCount()%></b>
             </td>          
-            <td align="center">
-                Tweets: <b><%=twitterUser.getStatusesCount()%></b>
-            </td>
+            <!--<td align="center">
+                Tweets: <b><%//=twitterUser.getStatusesCount()%></b>
+            </td>-->
         </tr>
         
         <tr>
