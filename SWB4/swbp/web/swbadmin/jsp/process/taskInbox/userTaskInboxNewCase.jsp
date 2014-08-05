@@ -23,8 +23,6 @@ if (user != null && user.getLanguage() != null) {
     lang = user.getLanguage();
 }
 
-response.setCharacterEncoding("utf-8");
-
 Map<String, ArrayList<Process>> groups = new TreeMap<String, ArrayList<Process>>();
 SWBResourceURL createUrl = paramRequest.getActionUrl().setAction(UserTaskInboxResource.ACT_CREATE);
 ArrayList<Process> pccs = null;
