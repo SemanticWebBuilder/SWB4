@@ -1202,8 +1202,18 @@ public class StreamInBox extends GenericResource {
                 } else {
                     createCell(cellStyle, wb, troww, 3, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, "---");
                 }
-                createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
-
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
+                SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
+                if (postIn.getPi_createdInSocialNet() != null) {
+                    Date postDate = postIn.getPi_createdInSocialNet();
+                    if(postDate.after(new Date())){
+                        postDate= new Date();
+                    }
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(postDate));
+                } else {
+                    createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, output.format(new Date()));
+                }
+                //createCell(cellStyle, wb, troww, 4, CellStyle.ALIGN_CENTER, CellStyle.VERTICAL_CENTER, SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang));
                 String path = "";
 
                 if (postIn.getPostSentimentalType() == 0) {
@@ -2762,10 +2772,15 @@ public class StreamInBox extends GenericResource {
         out.println("<td>");
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
         SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
         if (postIn.getPi_createdInSocialNet() != null) {
-            out.println("<span title=\"" + df.format(postIn.getPi_createdInSocialNet()) + "\">" + SWBUtils.TEXT.getTimeAgo(postIn.getPi_createdInSocialNet(), lang) + "</span>");
+            Date postDate = postIn.getPi_createdInSocialNet();
+            if(postDate.after(new Date())){
+                postDate= new Date();
+            }
+            out.println("<span title=\"" + output.format(postDate) + "\">" + df.format(postDate) + "</span>");
         } else {
-            out.println(SWBUtils.TEXT.getTimeAgo(new Date(), lang));
+            out.println("<span title=\"" + output.format(new Date()) + "\">" + df.format(new Date()) + "</span>");
         }
         out.println("</td>");
 
