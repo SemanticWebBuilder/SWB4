@@ -585,6 +585,7 @@ SWBParamRequest paramRequest = (SWBParamRequest)request.getAttribute("paramReque
         <stop offset="100%" style="stop-color:#afbac7;stop-opacity:1" />
         </linearGradient>
         <circle id="resizeBox" cx="0" cy="0" r="5" class="resizeBox"/>
+        <rect id="lineHandler" x="0" y="0" width="10" height="10" class="lineHandler"/>
         <!--definición de marcadores para las figuras-->
         <path id="errorMarker" d="m 0.5,1051.8622 17.0774,-39.6847 15.0444,21.9792 19.5171,-27.474 L 34.8582,1048.199 19.8137,1029.6795 0.5,1051.8622 z" transform="scale(0.35,0.35) translate(-26, -1030)" />
         <g id="ruleMarker">
