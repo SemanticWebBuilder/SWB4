@@ -353,7 +353,7 @@ try{
                         //var tmpIcon = getSentimentIcon("sad");
                         batch.push(new google.maps.Marker({
                             position: new google.maps.LatLng(<%=countryState.getCapitalLatitude()%>,<%=countryState.getCapitalLongitude()%>),
-                            icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/yellowPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
+                            icon: new google.maps.MarkerImage('<%=SWBPortal.getContextPath()%>/swbadmin/css/images/grayPoint.png', new google.maps.Size(15, 15), new google.maps.Point(15,15)),
                             title: '<%=stateMsg%>:<%=countryState.getDisplayTitle(user.getLanguage())%>, <%=positivesMsg%>:'+<%=positiveNumber%>+', <%=negativesMsg%>:<%=negativeNumber%>'+', <%=neutralMsg%>:<%=neutralNumber%>'
                         })
                         );
