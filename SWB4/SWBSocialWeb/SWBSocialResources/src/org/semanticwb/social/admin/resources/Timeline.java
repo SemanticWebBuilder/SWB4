@@ -1819,7 +1819,7 @@ public class Timeline extends GenericResource{
                 writer.write("<div class=\"timelineresume\">");
                 /*creates isolated spans to identify and update only the elemente where the action affects*/
                 writer.write("   <span class=\"inline\" id=\"" + dm.getId() + "\" dojoType=\"dojox.layout.ContentPane\">");                
-                SimpleDateFormat df = new SimpleDateFormat();
+                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
                 writer.write(df.format(dm.getCreatedAt()) + " ");
                 writer.write("<a class=\"clasifica\" href=\"#\" onclick=\"showDialog('" + renderURL.setMode("replyDM").setParameter("userId", dm.getSenderId()+"") + "','DM to @" + dm.getSenderScreenName()+ "');return false;\"><span style=\"width:60px;\">Responder</span></a>  ");
                 writer.write("   </span>");
@@ -1995,7 +1995,7 @@ public class Timeline extends GenericResource{
             if(retweets == 1){
                 times = paramRequest.getLocaleString("rtime");
             }
-            SimpleDateFormat df = new SimpleDateFormat();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
             //SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
             /*if (postIn.getPi_createdInSocialNet() != null) {
                 Date postDate = postIn.getPi_createdInSocialNet();

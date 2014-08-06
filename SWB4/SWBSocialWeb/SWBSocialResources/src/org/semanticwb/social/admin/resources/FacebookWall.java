@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -815,7 +816,7 @@ public class FacebookWall extends GenericResource {
         String currentTab = request.getParameter("currentTab");
         actionURL.setParameter("suri", request.getParameter("suri"));
         renderURL.setParameter("suri", request.getParameter("suri"));
-        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         //System.out.println("mode:" + mode);
         PrintWriter out = response.getWriter();
         if (mode != null && mode.equals("getMorePosts")) {//Gets older posts
@@ -1452,7 +1453,7 @@ public class FacebookWall extends GenericResource {
         String after = request.getParameter("after");
         String currentTab = request.getParameter("currentTab");
         PrintWriter out = response.getWriter();
-        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         if (postId == null || objUri == null || after == null || objUri == null) {//If error don't show 'View more comments'
             return;
         }
@@ -1928,7 +1929,7 @@ public class FacebookWall extends GenericResource {
     }
 
     public static void doPrintPost(Writer writer, JSONObject postsData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEveryting, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
-        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -2449,7 +2450,7 @@ public class FacebookWall extends GenericResource {
 
     public static String printPicture(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespondMsg, boolean userCanRemoveMsg) {
       String createdTime = "";
-      SimpleDateFormat df = new SimpleDateFormat();
+      SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         try {
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             actionURL.setParameter("suri", request.getParameter("suri"));
@@ -2678,7 +2679,7 @@ public class FacebookWall extends GenericResource {
 
     public static String doPrintVideo(Writer writer, JSONObject postsData, JSONObject commentsData, JSONObject profileData, HttpServletRequest request, SWBParamRequest paramRequest, String tabSuffix, Facebook facebook, SWBModel model, boolean userCanDoEverything, boolean userCanRetopicMsg, boolean userCanRespongMsg, boolean userCanRemoveMsg) {
         String createdTime = "";
-        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         try {
             if (postsData.getInt("type") != 128) {//Only print published videos
                 return null;
