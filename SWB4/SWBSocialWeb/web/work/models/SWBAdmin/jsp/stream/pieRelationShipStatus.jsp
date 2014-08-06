@@ -192,7 +192,7 @@
             } else if (negativesSingle > neutralsSingle) {
                 node1.put("color", "#FF0000");
             } else {
-                node1.put("color", "#FFD700");
+                node1.put("color", "#838383");
             }
             node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("single", lang) + ": " + single + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesSingle + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsSingle);
             node1.put("chartclass", "possClass");
@@ -220,7 +220,7 @@
             } else if (negativesMarried > neutralsMarried) {
                 node2.put("color", "#FF0000");
             } else {
-                node2.put("color", "#FFD700");
+                node2.put("color", "#838383");
             }
             node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("married", lang) + ": " + married + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesMarried + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesMarried + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMarried);
             node2.put("chartclass", "possClass");
@@ -245,7 +245,7 @@
             } else if (negativesWidowed > neutralsWidowed) {
                 node4.put("color", "#FF0000");
             } else {
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
             }
             node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("widowed", lang) + ": " + widowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesWidowed + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsWidowed);
             node4.put("chartclass", "possClass");
@@ -268,7 +268,7 @@
             } else if (negativesDivorced > neutralsDivorced) {
                 node3.put("color", "#FF0000");
             } else {
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
             }
             node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("divorced", lang) + ": " + divorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesDivorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesDivorced + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsDivorced);
             node3.put("chartclass", "possClass");
@@ -294,7 +294,7 @@
             } else if (negativesUndefined > neutralsUndefined) {
                 node5.put("color", "#FF0000");
             } else {
-                node5.put("color", "#FFD700");
+                node5.put("color", "#838383");
             }
             node5.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedRelation", lang) + ": " + undefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesUndefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesUndefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsUndefined);
             node5.put("chartclass", "possClass");
@@ -355,7 +355,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsSingle);
                 node3.put("value2", "" + round(intPorcentajeSingleNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);
@@ -415,7 +415,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsMarried);
                 node3.put("value2", "" + round(intPorcentajeMarriedNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);
@@ -475,7 +475,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsDivorced);
                 node3.put("value2", "" + round(intPorcentajeDivorcedNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);
@@ -535,7 +535,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsWidowed);
                 node3.put("value2", "" + round(intPorcentajeWidowedNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);
@@ -598,7 +598,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsUndefined);
                 node3.put("value2", "" + round(intPorcentajeUndefinedNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);

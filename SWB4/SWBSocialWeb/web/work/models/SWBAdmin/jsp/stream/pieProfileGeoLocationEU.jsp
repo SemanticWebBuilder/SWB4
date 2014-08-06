@@ -208,7 +208,7 @@
             } else if (negatives > neutrals) {
                 node_.put("color", "#FF0000");
             } else {
-                node_.put("color", "#FFD700");
+                node_.put("color", "#838383");
             }
             node_.put("label2", "" + nombre + ": " + total + " -     Positivos : " + positives + "  Negativos: " + negatives + "  Neutros : " + neutrals);
             node_.put("chartclass", "possClass");
@@ -271,7 +271,7 @@
             node4.put("label", "Neutros");
             node4.put("value1", "" + neutrals);
             node4.put("value2", "" + round(porcentajeNeutrals));
-            node4.put("color", "#FFD700");
+            node4.put("color", "#838383");
             node4.put("label2", "");
             node4.put("chartclass", "possClass");
             node4.put("label3", "Total de Post: " + totalPost);
@@ -321,7 +321,7 @@
         } else if (negatives > neutrals) {
             node_.put("color", "#FF0000");
         } else {
-            node_.put("color", "#FFD700");
+            node_.put("color", "#838383");
         }
         node_.put("label2", "" + label + ": " + total + " -     Positivos : " + positives + "  Negativos: " + negatives + "  Neutros : " + neutrals);
         node_.put("chartclass", "possClass");
@@ -363,7 +363,7 @@
             node4.put("value1", "" + neutrals);
             node4.put("value2", "" + round(intPorcentajeNeutrals));
             node4.put("label2", "" + filter + "Positivos" + positives + " Negativos" + negatives + " Neutros : " + neutrals);
-            node4.put("color", "#FFD700");
+            node4.put("color", "#838383");
             node4.put("chartclass", "possClass");
             node.put(node4);
         }

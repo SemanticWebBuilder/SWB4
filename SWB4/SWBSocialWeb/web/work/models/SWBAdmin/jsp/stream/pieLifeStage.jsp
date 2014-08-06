@@ -243,7 +243,7 @@
             } else if (negativesChild > neutralsChild) {
                 node1.put("color", "#FF0000");
             } else {
-                node1.put("color", "#FFD700");
+                node1.put("color", "#838383");
             }
             node1.put("label2", childTitle + " " + child + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesChild + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsChild);
             node1.put("chartclass", "possClass");
@@ -271,7 +271,7 @@
             } else if (negativesteenAge > neutralsteenAge) {
                 node3.put("color", "#FF0000");
             } else {
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
             }
             node3.put("label2", teenTitle + " " + teenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesteenAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsteenAge);
             node3.put("chartclass", "possClass");
@@ -296,7 +296,7 @@
             } else if (negativesYoung > neutralsYoung) {
                 node2.put("color", "#FF0000");
             } else {
-                node2.put("color", "#FFD700");
+                node2.put("color", "#838383");
             }
             node2.put("label2", youngTitle + " " + young + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesYoung + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsYoung);
             node2.put("chartclass", "possClass");
@@ -321,7 +321,7 @@
             } else if (negativesyoungAdult > neutralsyoungAdult) {
                 node4.put("color", "#990000");
             } else {
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
             }
             node4.put("label2", youngAdultTitle + "  " + youngAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesyoungAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesyoungAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsyoungAdult);
             node4.put("chartclass", "possClass");
@@ -346,7 +346,7 @@
             } else if (negativesAdult > neutralsAdult) {
                 node5.put("color", "#FF0000");
             } else {
-                node5.put("color", "#FFD700");
+                node5.put("color", "#838383");
             }
             node5.put("label2", adultTitle + " " + adult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesAdult + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsAdult);
             node5.put("chartclass", "possClass");
@@ -371,7 +371,7 @@
             } else if (negativesthirdAge > neutralsthirdAge) {
                 node6.put("color", "#FF0000");
             } else {
-                node6.put("color", "#FFD700");
+                node6.put("color", "#838383");
             }
             node6.put("label2", thirdTitle + " " + thirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesthirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesthirdAge + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsthirdAge);
             node6.put("chartclass", "possClass");
@@ -395,7 +395,7 @@
             } else if (negativesnoDefine > neutralsnoDefine) {
                 node7.put("color", "#FF0000");
             } else {
-                node7.put("color", "#FFD700");
+                node7.put("color", "#838383");
             }
 
             String label2 = SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang) + ": " + nodefined + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesnoDefine + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesnoDefine + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsnoDefine;
@@ -436,7 +436,7 @@
                 node4.put("value1", "" + neutralsChild);
                 node4.put("value2", "" + round(intPorcentajeChildNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -495,7 +495,7 @@
                 node4.put("value1", "" + neutralsYoung);
                 node4.put("value2", "" + round(intPorcentajeYoungNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -555,7 +555,7 @@
                 node4.put("value1", "" + neutralsteenAge);
                 node4.put("value2", "" + round(intPorcentajeTeenAgeNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -615,7 +615,7 @@
                 node4.put("value1", "" + totalYoungAdult);
                 node4.put("value2", "" + round(intPorcentajeYoungAdultNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -675,7 +675,7 @@
                 node4.put("value1", "" + neutralsAdult);
                 node4.put("value2", "" + round(intPorcentajeAdultNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -734,7 +734,7 @@
                 node4.put("value1", "" + neutralsthirdAge);
                 node4.put("value2", "" + round(intPorcentajeThirdNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -793,7 +793,7 @@
                 node4.put("value1", "" + neutralsnoDefine);
                 node4.put("value2", "" + round(intPorcentajenoDefineNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);

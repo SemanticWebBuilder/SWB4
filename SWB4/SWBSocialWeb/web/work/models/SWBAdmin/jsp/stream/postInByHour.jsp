@@ -198,11 +198,11 @@
             }
 
             .bar_neutrals {
-                fill: #FFD700;
+                fill: #838383;
             }
 
             .bar_neutrals:hover {
-                fill: #FFD700 ;
+                fill: #838383 ;
             }
 
             .bar_negatives {

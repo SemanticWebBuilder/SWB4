@@ -156,7 +156,7 @@
             } else if (negativesF > neutralsF) {
                 node1.put("color", "#FF0000");
             } else {
-                node1.put("color", "#FFD700");
+                node1.put("color", "#838383");
             }
             node1.put("label2", "");
             node1.put("chartclass", "possClass");
@@ -218,7 +218,7 @@
                 node3.put("label", "Neutros");
                 node3.put("value1", "" + neutralsF);
                 node3.put("value2", "" + round(intPorcentajeNeutrals));
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
                 node3.put("label2", "");
                 node3.put("chartclass", "possClass");
                 node3.put("label3", "Total de Post: " + totalPost);

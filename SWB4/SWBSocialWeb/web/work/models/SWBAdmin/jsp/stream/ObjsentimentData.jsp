@@ -97,7 +97,7 @@
             node3.put("label", "" + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang));
             node3.put("value1", "" + neutrals);
             node3.put("value2", "" + round(intPorcentajeNeutral));
-            node3.put("color", "#FFD700");
+            node3.put("color", "#838383");
             node3.put("chartclass", "neuClass");
             JSONObject joc = new JSONObject();
             joc.put("positivos", "" + positives);

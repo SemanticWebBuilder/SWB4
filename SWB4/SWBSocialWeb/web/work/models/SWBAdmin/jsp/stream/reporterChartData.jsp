@@ -152,7 +152,7 @@
             node3.put("label", "Neutros");
             node3.put("value1", "" + neutrals);
             node3.put("value2", "" + round(intPorcentajeNeutral));
-            node3.put("color", "#FFD700");
+            node3.put("color", "#838383");
             node3.put("chartclass", "neuClass");
             node.put(node3);
         }
