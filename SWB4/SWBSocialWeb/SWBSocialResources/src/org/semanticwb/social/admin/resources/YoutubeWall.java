@@ -670,7 +670,7 @@ public class YoutubeWall extends GenericResource{
 
                     out.write("<p class=\"timelinedate\">");
                     //out.write("<span dojoType=\"dojox.layout.ContentPane\">");
-                    out.write("<span>");
+                    out.write("<span class=\"inline\">");
                     Date date = formatter.parse(comment.getJSONObject("published").getString("$t"));
                     out.write(df.format(date) + "&nbsp; ");
                     out.write("</span>");
@@ -1244,6 +1244,9 @@ public class YoutubeWall extends GenericResource{
                     out.write("      <a href=\"#\" onclick=\"showDialog('"+ paramRequest.getRenderUrl().setMode("displayVideo").setParameter("videoUrl", URLEncoder.encode("http://www.youtube.com/v/" +video.getString("id"), "UTF-8")) +
                             "','" + video.getString("title") + "'); return false;\"><img src=\"" + imgPath + "\" style=\"position: relative;\" onerror=\"this.src ='" + imgPath + "'\" onload=\"imageLoad(" + "this, 'img" + semanticYoutube.getId() + video.getString("id") + "');\"/></a>");
                     out.write("      </span>");
+                //out.write("<div align=\"center\">");
+                //out.write("<embed src=\"" + BASE_VIDEO_URL + video.getString("id") + "\" width=\"250\" height=\"195\" autostart=\"false\" type=\"application/x-shockwave-flash\"/>");
+                //out.write("</div>");
                 out.write(" </span>");
                 
                 out.write("<p class=\"imgtitle\">");
