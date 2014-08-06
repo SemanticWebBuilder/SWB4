@@ -243,12 +243,8 @@ public class ImportFanPages extends GenericResource{
                         }
                     }
                 }
-                response.setRenderParameter("accountName", facebook.getTitle());
-                if(wsite.getHomePage() != null){
-                    response.setRenderParameter("homePageSuri", wsite.getHomePage().getEncodedURI());
-                }else{
-                    response.setRenderParameter("homePageSuri", "root");
-                }
+                response.setRenderParameter("accountName", facebook.getTitle());                
+                response.setRenderParameter("reloadGroup", wsite.getEncodedURI());
                 response.setMode(SWBResourceURL.Mode_HELP);
             }catch(JSONException jsone){
                 log.error("Unable to add facebook pages", jsone);
@@ -259,17 +255,24 @@ public class ImportFanPages extends GenericResource{
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();        
-        System.out.println("--->" + request.getParameter("homePageSuri"));
-        System.out.println("------>" + URLDecoder.decode(request.getParameter("homePageSuri")));
+        //System.out.println("--->" + request.getParameter("homePageSuri"));
+        //System.out.println("------>" + URLDecoder.decode(request.getParameter("homePageSuri")));
+        String brandSuri = request.getParameter("reloadGroup") == null ? null : URLDecoder.decode(request.getParameter("reloadGroup"));
         //WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
                 
         out.println("<div id=\"configuracion_redes\">");
         out.println("<p>Las p&aacute;ginas de Fans de la cuenta <b>" + request.getParameter("accountName") + "</b> fueron importadas correctamente.</p>");
         out.println("</div>");
-        out.println("<script type=\"text/javascript\">");
-        out.println("updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
-        out.println("parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
-        out.println("parent.parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+        out.println("<script type=\"text/javascript\">");        
+        if(brandSuri != null){
+            out.println("try{");
+            out.println("reloadTreeNodeByURI(\"HN|" + brandSuri + "|http://www.semanticwebbuilder.org/swb4/social#hn_Facebook\");");
+            out.println("}catch(e){}");
+        }else{
+            out.println("updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+            out.println("parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+            //out.println("parent.parent.updateTreeNodeByURI('"+ URLDecoder.decode(request.getParameter("homePageSuri"))+"');");
+        }
         //out.println("addItemByURI(mtreeStore, null, '" + reloadPage.getURI() + "');");
         //out.printl("alert('done');");
         out.println("</script>");
