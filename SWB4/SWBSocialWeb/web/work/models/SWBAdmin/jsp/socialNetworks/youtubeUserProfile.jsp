@@ -99,7 +99,7 @@
     </fieldset>
     
     <fieldset>
-        <div align="center"><%=name%></div>
+        <div align="center"><a title="Ver en YouTube" target="_blank" href="https://www.youtube.com/channel/<%=target%>"><%=name%></a></div>
     </fieldset>
 <%
     if(!aboutMe.isEmpty()){
