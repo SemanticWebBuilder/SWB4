@@ -588,13 +588,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (operation.equals("edit") && viewSemObject != null) {
             output.append(
                     formMgr.getFormElement(DetailView.swb_title).renderElement(
-                    request, viewSemObject.getSemanticObject(), DetailView.swb_title,
-                    DetailView.swb_title.getName(), "dojo", modeUsed, lang));
+                            request, viewSemObject.getSemanticObject(), DetailView.swb_title,
+                            DetailView.swb_title.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
             output.append(
                     formMgr.getFormElement(DetailView.swb_title).renderElement(
-                    request, null, DetailView.swb_title, DetailView.swb_title.getName(),
-                    "dojo", modeUsed, lang));
+                            request, null, DetailView.swb_title, DetailView.swb_title.getName(),
+                            "dojo", modeUsed, lang));
         }
         output.append("                </td>\n");
         output.append("            </tr>\n");
@@ -608,13 +608,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (operation.equals("edit") && viewSemObject != null) {
             output.append(
                     formMgr.getFormElement(DetailView.swb_description).renderElement(
-                    request, viewSemObject.getSemanticObject(), DetailView.swb_description,
-                    DetailView.swb_description.getName(), "dojo", modeUsed, lang));
+                            request, viewSemObject.getSemanticObject(), DetailView.swb_description,
+                            DetailView.swb_description.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
             output.append(
                     formMgr.getFormElement(DetailView.swb_description).renderElement(
-                    request, null, DetailView.swb_description, DetailView.swb_description.getName(),
-                    "dojo", modeUsed, lang));
+                            request, null, DetailView.swb_description, DetailView.swb_description.getName(),
+                            "dojo", modeUsed, lang));
         }
         output.append("                </td>\n");
         output.append("            </tr>\n");
@@ -754,10 +754,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
-            
+
             //periodStatus dejo de servir al introducir Detailed
             //PeriodStatus periodStatus = null;
-
             UserGroup collaboration = null;
             GenericObject generic = semObj.createGenericInstance();
             Detailed d = (Detailed) generic;
@@ -822,8 +821,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String structure = "";
 
         if (semWorkClass != null) {
-            ArrayList<SemanticProperty> propsList =
-                    (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
+            ArrayList<SemanticProperty> propsList
+                    = (ArrayList<SemanticProperty>) SWBUtils.Collections.copyIterator(semWorkClass.listSortProperties());
             Collections.sort(propsList, new PropertiesComparator());
             Iterator<SemanticProperty> basePropertiesList = propsList.iterator();
             try {
@@ -919,7 +918,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         if (!"addView".equals(action)) {
             detailView = SemanticObject.getSemanticObject(detailViewUri) != null
                     ? ((DetailView) SemanticObject.getSemanticObject(
-                    detailViewUri).createGenericInstance())
+                            detailViewUri).createGenericInstance())
                     : null;
         }
         if ("addView".equals(action)
@@ -1313,14 +1312,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         //Codigo para obtener el displayElement
         Statement st = semProp.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                        "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
             //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
             SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
             if (soDisplayElement != null) {
                 SemanticObject formElement = soDisplayElement.getObjectProperty(
                         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
-                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                                "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
@@ -1375,7 +1374,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
         Statement st = property.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                        "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
             exists = true;
         }
@@ -1397,7 +1396,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
-        if (user!=null && user.isSigned()) {
+        if (user != null && user.isSigned()) {
             if (str_role != null) {
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 GenericObject gobj = null;
@@ -1506,7 +1505,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 //        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 //        return (collaboration != null && user != null) ? collaboration.hasUser(user) : false;
 //    }
-
     /**
      * Obtiene el valor de las propiedades tipo fecha en la declaraci&oacute;n
      * de una variable de javascript. En caso de que la propiedad indicada no
@@ -1535,14 +1533,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //Codigo para obtener el displayElement
             Statement st = semProp.getRDFProperty().getProperty(
                     SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                    "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                            "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
             if (st != null) {
                 //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
                 SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
                 if (soDisplayElement != null) {
                     SemanticObject formElement = soDisplayElement.getObjectProperty(
                             org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
-                            "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                                    "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                     if (formElement != null) {
                         FormElement fe = (FormElement) formElement.createGenericInstance();
                         //Solo se consideran los form elements de tipo bsc.formelement.DateElement
@@ -1618,15 +1616,15 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
             String uniqueImage = request.getParameter("uniqueImage");
             String path = org.semanticwb.SWBPortal.getWorkPath() + "/models/"
-                        + paramRequest.getWebPage().getWebSiteId()
-                        + "/ganttChart_" + uniqueImage + ".jpg";
+                    + paramRequest.getWebPage().getWebSiteId()
+                    + "/ganttChart_" + uniqueImage + ".jpg";
             File fileChart = new File(path);
             if (fileChart.exists()) {
                 fileChart.delete();
             }
             path = org.semanticwb.SWBPortal.getWorkPath() + "/models/"
-                        + paramRequest.getWebPage().getWebSiteId()
-                        + "/graphics_" + uniqueImage + ".jpg";
+                    + paramRequest.getWebPage().getWebSiteId()
+                    + "/graphics_" + uniqueImage + ".jpg";
             fileChart = new File(path);
             if (fileChart.exists()) {
                 fileChart.delete();
@@ -1799,8 +1797,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         StringBuilder output = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
         output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
-        String statusStyleClass = "indefinido";
-        String secondStatusStyleClass = null;
 
         if (message == null) {
             FileReader reader = retrieveTemplate();
@@ -1811,6 +1807,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String periodId = request.getSession().getAttribute(modelName) != null
                     ? (String) request.getSession().getAttribute(modelName)
                     : null;
+            String statusStyleClass = "indefinido";
+            String secondStatusStyleClass = null;
             //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
@@ -1819,31 +1817,34 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
-            PeriodStatus periodStatus = null;
+//            PeriodStatus periodStatus = null;
 
+//            UserGroup collaboration = null;
+            GenericObject generic = semObj.createGenericInstance();
+            Detailed d = (Detailed) generic;
+            statusStyleClass = d.getStatusIconClass(period);
 
             //Si el semObj es hijo de PeriodStatusAssignable se debe:
-            GenericObject generic = semObj.createGenericInstance();
-            if (generic != null && generic instanceof Objective) {
-                Objective objective = (Objective) generic;
-                periodStatus = objective.getPeriodStatus(period);
-                statusStyleClass = periodStatus.getStatus().getIconClass();
-            } else if (generic != null && generic instanceof Indicator) {
-                Indicator indicator = (Indicator) generic;
-                Measure measure = indicator.getStar() != null
-                        ? indicator.getStar().getMeasure(period) : null;
-                if (measure != null && measure.getEvaluation() != null) {
-                    periodStatus = measure.getEvaluation();
-                    statusStyleClass = periodStatus.getStatus().getIconClass();
-                }
-            } else if (generic != null && generic instanceof Deliverable) {
-                Deliverable deliverable = (Deliverable) generic;
-                statusStyleClass = deliverable.getStatusAssigned() != null
-                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
-                secondStatusStyleClass = deliverable.getAutoStatus() != null
-                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
-            }
-
+//            GenericObject generic = semObj.createGenericInstance();
+//            if (generic != null && generic instanceof Objective) {
+//                Objective objective = (Objective) generic;
+//                periodStatus = objective.getPeriodStatus(period);
+//                statusStyleClass = periodStatus.getStatus().getIconClass();
+//            } else if (generic != null && generic instanceof Indicator) {
+//                Indicator indicator = (Indicator) generic;
+//                Measure measure = indicator.getStar() != null
+//                        ? indicator.getStar().getMeasure(period) : null;
+//                if (measure != null && measure.getEvaluation() != null) {
+//                    periodStatus = measure.getEvaluation();
+//                    statusStyleClass = periodStatus.getStatus().getIconClass();
+//                }
+//            } else if (generic != null && generic instanceof Deliverable) {
+//                Deliverable deliverable = (Deliverable) generic;
+//                statusStyleClass = deliverable.getStatusAssigned() != null
+//                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
+//                secondStatusStyleClass = deliverable.getAutoStatus() != null
+//                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
+//            }
             //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
@@ -1879,7 +1880,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
             output.append(semObj.getDisplayName());
             output.append("</h2>\n");
-
 
             if (reader != null) {
                 output.append(generateDisplayPDF(request, paramRequest, reader, semObj));
@@ -1975,14 +1975,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         //Codigo para obtener el displayElement
         Statement st = semProp.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                        "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         if (st != null) {
             //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
             SemanticObject soDisplayElement = SemanticObject.createSemanticObject(st.getResource());
             if (soDisplayElement != null) {
                 SemanticObject formElement = soDisplayElement.getObjectProperty(
                         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
-                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                                "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     if (fe != null) {
@@ -2029,8 +2029,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setParameter("suri", suri);
 
-        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
-
+//        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
         StringBuilder ret = new StringBuilder();
         ret.append("<script type=\"text/javascript\">").append("\n");
         ret.append(" function getFile() {").append("\n");
@@ -2044,15 +2043,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append(" };").append("\n");
         ret.append("</script>").append("\n");
 
-        ret.append("<a href=\"javascript:getFile();");
-        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-        ret.append(title);
-        ret.append("\" >");
-        ret.append(title);
-        ret.append("</a>").append("\n");
+//        ret.append("<a href=\"javascript:getFile();");
+//        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+//        ret.append(title);
+//        ret.append("\" >");
+//        ret.append(title);
+//        ret.append("</a>").append("\n");
+        ret.append("<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:getFile()\"><span class=\"glyphicon glyphicon-export\"></span></button>");
+
         ret.append("<form id=\"frmDetail\" method=\"post\" accept-charset=\"utf-8\" action=\"");
         ret.append(url);
-        ret.append("\">").append("\n");
+        ret.append("\" style=\"display:none\">").append("\n");
         ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
         ret.append("   <input type=\"hidden\" id=\"uniqueImage\" name=\"uniqueImage\" value=\"");
         ret.append(UploaderFileCacheUtils.uniqueCad());
@@ -2061,18 +2062,21 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
         return ret.toString();
     }
-    
+
     /**
-     * Eval&uacute;a si {@code object} es una instancia de alg&uacute;n {@code BSCElement} que no requiere de
-     * mediciones en per&iacute;odos.
+     * Eval&uacute;a si {@code object} es una instancia de alg&uacute;n
+     * {@code BSCElement} que no requiere de mediciones en per&iacute;odos.
+     *
      * @param object el objeto a evaluar
-     * @return si el objeto es una instancia de alg&uacute;n {@code BSCElement} al que no es necesario realizar
-     *      mediciones peri&oacute;dicas, devuelve {@literal true}, de lo contrario devuelve {@false}
+     * @return si el objeto es una instancia de alg&uacute;n {@code BSCElement}
+     * al que no es necesario realizar mediciones peri&oacute;dicas, devuelve
+     * {@literal true}, de lo contrario devuelve {
+     * @false}
      */
     private boolean isNonMeasurableElement(SemanticObject object) {
-        
-        GenericObject generic = object.createGenericInstance(); 
-        return (generic instanceof Initiative || generic instanceof Deliverable ||
-                generic instanceof Agreement || generic instanceof Risk);
+
+        GenericObject generic = object.createGenericInstance();
+        return (generic instanceof Initiative || generic instanceof Deliverable
+                || generic instanceof Agreement || generic instanceof Risk);
     }
 }

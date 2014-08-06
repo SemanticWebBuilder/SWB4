@@ -1751,14 +1751,18 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode(Mode_StreamPDF);
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
-        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
-        ret.append("<a href=\"");
+//        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+//        ret.append("<a href=\"");
+//        ret.append(url);
+//        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
+//        ret.append(title);
+//        ret.append("\">");
+//        ret.append(title);
+//        ret.append("</a>");
+        ret.append("<button type=\"button\" class=\"btn btn-default\" onclick=\"location.href='");
         ret.append(url);
-        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-        ret.append(title);
-        ret.append("\">");
-        ret.append(title);
-        ret.append("</a>");
+        ret.append("'\"><span class=\"glyphicon glyphicon-export\"></span></button>");
+        
         return ret.toString();
     }
 }
