@@ -1,4 +1,3 @@
-
 package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
@@ -18,24 +17,24 @@ import org.semanticwb.portal.api.SWBResource;
 import org.semanticwb.portal.api.SWBResourceException;
 
 /**
- * Recurso que consiste en la redirecci&oacute;n de la exprtaci&oacute;n de un 
+ * Recurso que consiste en la redirecci&oacute;n de la exprtaci&oacute;n de un
  * elemento del BSC.
- * 
+ *
  * @author Martha Elvia Jim&eacute;nez Salgado
  * @version %I%, %G%
  * @since 1.0
  */
-public class ResourceExportPDF extends GenericResource
-{
+public class ResourceExportPDF extends GenericResource {
+
     /**
      * Realiza operaciones en la bitacora de eventos.
      */
     private static final Logger log = SWBUtils.getLogger(ResourceExportPDF.class);
 
     /**
-     * Permite redireccionar a la exportaci&oacute;n del elemento 
-     * actual. Los elementos que puedan ser administrados por el recurso 
-     * deber&aacute;n implementar la interface PDFExportable.
+     * Permite redireccionar a la exportaci&oacute;n del elemento actual. Los
+     * elementos que puedan ser administrados por el recurso deber&aacute;n
+     * implementar la interface PDFExportable.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
@@ -50,21 +49,18 @@ public class ResourceExportPDF extends GenericResource
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         PrintWriter out = response.getWriter();
-        
+
         WebPage wp = paramRequest.getWebPage();
         GenericIterator<Resource> listRes = wp.listResources();
-        
+
         while (listRes.hasNext()) {
             Resource resource = listRes.next();
             SWBResource base = SWBPortal.getResourceMgr().getResource(resource.getURI());
-            try {
+            if (base instanceof PDFExportable) {
                 PDFExportable pdf = (PDFExportable) base;
                 out.println(pdf.doIconExportPDF(request, paramRequest));
-            }catch(ClassCastException cce) {
-            }catch(NullPointerException npe) {
-                log.error(npe);
             }
         }
     }

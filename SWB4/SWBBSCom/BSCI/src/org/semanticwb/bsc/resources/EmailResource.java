@@ -227,13 +227,20 @@ public class EmailResource extends GenericResource {
         out.println("}");
         out.println("</script>");
 
-        out.print("<a href=\"#\" class=\"swbstgy-toolbar-mail\" onclick=\"showEmailDialog('");
+//        out.print("<a href=\"#\" class=\"swbstgy-toolbar-mail\" onclick=\"showEmailDialog('");
+//        out.print(url);
+//        out.print("', '");
+//        out.print(paramRequest.getLocaleString("lbl_addTitle"));
+//        out.print("');\">");
+//        out.print(paramRequest.getLocaleString("lbl_addTitle"));
+//        out.println("</a>");
+        out.print("<button type=\"button\" class=\"btn btn-default\" onclick=\"showEmailDialog('");
         out.print(url);
         out.print("', '");
         out.print(paramRequest.getLocaleString("lbl_addTitle"));
-        out.print("');\">");
-        out.print(paramRequest.getLocaleString("lbl_addTitle"));
-        out.println("</a>");
+        out.print("');\"><span class=\"glyphicon glyphicon-envelope\"></span></button>");
+//                  "location.href='" + url 
+//                + "'\"><span class=\"glyphicon glyphicon-th-large\"></span></button>");
 
         out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"emailDialog\" ");
         out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");

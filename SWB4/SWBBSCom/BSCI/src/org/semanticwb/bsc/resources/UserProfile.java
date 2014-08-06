@@ -40,13 +40,12 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
  *
  * @author ana.garcias
  */
-public class UserProfile extends GenericAdmResource
-{
+public class UserProfile extends GenericAdmResource {
+
     private static final org.semanticwb.Logger log = SWBUtils.getLogger(GenericSemResource.class);
     
     private final String Mode_CHANGEPASSWORD = "changePassword";
     private final String Action_CHANGEPASSWORD = "savePassword";
-    
 
     /**
      * Genera el despliegue la actualización del perfil de usuario.
@@ -63,23 +62,21 @@ public class UserProfile extends GenericAdmResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+        
         final User user = paramRequest.getUser();
         
-        if(!user.isSigned()){
+        if (!user.isSigned()) {
             UserProfile.log.error("El usuario no esta logueado.");
             response.sendError(403);
             return;
         }
-        
-        
         
         final String lang = user.getLanguage();
         PrintWriter out = response.getWriter();
         StringBuilder toReturn = new StringBuilder();
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
-
+        
         String img = "";
         request.setAttribute("UserProfile", true);
         ContactWork cw = ContactWork.ClassMgr.getContactWork(user.getId(), wsite);
@@ -131,8 +128,8 @@ public class UserProfile extends GenericAdmResource
             toReturn.append("<p>");
             toReturn.append(
                     formMgrPhoto.getFormElement(prop1).renderElement(
-                    request, user.getSemanticObject(), prop1,
-                    prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
+                            request, user.getSemanticObject(), prop1,
+                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
             toReturn.append("</p>");
         }
         toReturn.append("<p><button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviarPhoto\" >");
@@ -144,16 +141,16 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("</script>");
         toReturn.append("</button></p>");
         toReturn.append("</div>");
-
+        
         toReturn.append("<div id=\"data\">");
         toReturn.append("<p><strong><font size=\"13\">" + user.getFullName() + "</font></strong></p>");
-        boolean canChangePw = Boolean.parseBoolean(base.getAttribute("canChangePassword","false"));
+        boolean canChangePw = Boolean.parseBoolean(base.getAttribute("canChangePassword", "false"));
         if (canChangePw) {
             StringBuilder toReturn1 = new StringBuilder();
             StringBuilder toReturn2 = new StringBuilder();
             SWBResourceURL urlChangePass = paramRequest.getRenderUrl().setMode(Mode_CHANGEPASSWORD);
             urlChangePass.setCallMethod(SWBResourceURL.Call_DIRECT);
-
+            
             toReturn1.append("<script type=\"text/javascript\">\n");
             toReturn1.append("  dojo.require('dojo.parser');\n");
             toReturn1.append("  dojo.require(\"dijit.Dialog\");\n");
@@ -161,7 +158,7 @@ public class UserProfile extends GenericAdmResource
             toReturn1.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
             toReturn1.append("  dojo.require('dijit.form.ValidationTextBox');\n");
             toReturn1.append("  dojo.require('dijit.form.TextBox');\n");
-
+            
             toReturn1.append("  function checkData() {\n");
             if (request.getParameter("msg") != null) {
                 toReturn1.append("   alert('");
@@ -176,12 +173,12 @@ public class UserProfile extends GenericAdmResource
                 }
             }
             toReturn1.append("   }\n");
-
+            
             toReturn1.append("dojo.addOnLoad( function(){\n");
             toReturn1.append("checkData(\"\");}\n");
             toReturn1.append(");\n");
             toReturn1.append("</script>\n");
-
+            
             toReturn2.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
             toReturn2.append("style=\"display:width:380px;height:170px;\" ");
             toReturn2.append("id=\"swbDialog\" title=\"Agregar\" >\n");
@@ -191,7 +188,7 @@ public class UserProfile extends GenericAdmResource
             toReturn2.append("    Cargando...\n");
             toReturn2.append("  </div>\n");
             toReturn2.append("</div>\n");
-
+            
             toReturn2.append("<a href=\"#\" onclick=\"showDialog('");
             toReturn2.append(urlChangePass);
             toReturn2.append("', '");
@@ -199,11 +196,11 @@ public class UserProfile extends GenericAdmResource
             toReturn2.append("')\">\n");
             toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
             toReturn2.append("\n</a>");
-
+            
             out.println(toReturn1.toString());
             out.println(toReturn2.toString());
         }
-
+        
         toReturn.append("<p>" + user.getEmail() + "</p>");
         toReturn.append("</div>");
         toReturn.append("</form>\n");
@@ -231,8 +228,8 @@ public class UserProfile extends GenericAdmResource
             toReturn.append("                <td>\n");
             toReturn.append(
                     formMgr.getFormElement(prop1).renderElement(
-                    request, cw.getSemanticObject(), prop1,
-                    prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
+                            request, cw.getSemanticObject(), prop1,
+                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
             toReturn.append("                </td>\n");
             toReturn.append("                </tr>\n");
         }
@@ -240,7 +237,7 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("<td align=\"center\" colspan=\"2\">");
         toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"button\" name=\"enviar\" >");
         toReturn.append(paramRequest.getLocaleString("lbl_Save"));
-
+        
         toReturn.append("    <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
         toReturn.append("require([\"dojo/dom\"], function(dom){");
         toReturn.append("if(dom.byId(\"area_\").value!=''){");
@@ -259,7 +256,7 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("<div id=\"chiefDIV\"></div>");
         out.println(toReturn.toString());
     }
-
+    
     public void uploadPhoto(HttpServletRequest request, SemanticObject obj, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final User user = paramRequest.getUser();
         SWBFormMgr mgr = new SWBFormMgr(User.sclass, user.getSemanticObject(), null);
@@ -287,7 +284,7 @@ public class UserProfile extends GenericAdmResource
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-
+        
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             doViewStrategy(request, response, paramRequest);
         } else if (paramRequest.getMode().equalsIgnoreCase("add")) {
@@ -324,7 +321,7 @@ public class UserProfile extends GenericAdmResource
         SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(),
                 paramRequest.getWebPage(), SWBResourceURLImp.UrlType_ACTION);
         url.setAction(Action_CHANGEPASSWORD);
-
+        
         toReturn.append("\n<script language=\"JavaScript\" >");
         toReturn.append("\nfunction jsValidate(form) {");
         toReturn.append("\n var obj = dojo.byId(form);");
@@ -334,7 +331,7 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("');");
         toReturn.append("\n           return false;");
         toReturn.append("\n     }");
-
+        
         toReturn.append("\n       if(dojo.byId('newPassword').value != ");
         toReturn.append("           dojo.byId('rePassword').value) {");
         toReturn.append("\n           alert('");
@@ -357,7 +354,7 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("\n       }");
         toReturn.append("\n}");
         toReturn.append("\n</script>");
-
+        
         toReturn.append("\n<form id=\"");
         toReturn.append(User.swb_User.getClassName());
         toReturn.append("/edit\" dojoType=\"dijit.form.Form\" class=\"swbform\" action=\"");
@@ -422,7 +419,7 @@ public class UserProfile extends GenericAdmResource
         toReturn.append("\n</td>");
         toReturn.append("\n</tr>");
         toReturn.append("\n</tbody>");
-
+        
         toReturn.append("\n</table>");
         toReturn.append("\n</form>");
         out.println(toReturn.toString());
@@ -498,10 +495,10 @@ public class UserProfile extends GenericAdmResource
     }
 
     /**
-     *  
-     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que 
+     *
+     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que
      * muestra la informaci&oacute;n del usuario.
-     * 
+     *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
@@ -510,10 +507,9 @@ public class UserProfile extends GenericAdmResource
      * utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         User user = paramRequest.getUser();
-        if(!user.isSigned()) {
+        if (!user.isSigned()) {
             UserProfile.log.error("El usuario no esta logueado.");
             response.sendError(403);
             return;
@@ -532,8 +528,28 @@ public class UserProfile extends GenericAdmResource
         
         PrintWriter out = response.getWriter();
         String title = paramRequest.getLocaleString("msgProfile");
-        out.println("<a href=\"" + surl + "\" class=\"swbstgy-toolbar-profile\" title=\""+title+"\">");
+//        out.println("<a href=\"" + surl + "\" class=\"swbstgy-toolbar-profile\" title=\""+title+"\">");
+//        out.println(user.getFullName());
+//        out.println("</a>");
+        out.println("<li>");
+        out.println("<a href=\"" + surl + "\" class=\"swbstgy-toolbar-profile\" title=\"" + title + "\">");
         out.println(user.getFullName());
         out.println("</a>");
+        out.println("</li>");
+        if (user.getEmail() != null) {
+            out.println("<li class=\"dropdown-header\">");
+            out.println(user.getEmail());
+            out.println("</li>");
+        }
+        out.println("<li>");
+        out.println("<a href=\"" + surl + "\" class=\"swbstgy-toolbar-profile\" title=\"" + title + "\">");
+        out.println(paramRequest.getLocaleString("lbl_myAccount"));
+        out.println("<span class=\"glyphicon glyphicon-user\"></a>");
+        out.println("</li>");
+        /*
+         <li><a href="">Carlos Ramos Inch?tegui</a></li>
+         <li class="dropdown-header">carlos.ramos@infotec.com.mx</li>
+         <li><a href="#">Mi cuenta <span class="glyphicon glyphicon-user"></span></a></li>
+         */
     }
 }
