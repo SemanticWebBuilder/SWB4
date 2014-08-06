@@ -1,6 +1,7 @@
 package org.semanticwb.social;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
@@ -96,7 +97,21 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
         if (type.equals("dojo")) {
             DOJO = true;
         }
-
+        
+        String frmname = null;
+        if (mode.equals("create")) {
+            frmname = prop.getDomainClass().getURI();
+        } else {
+            frmname = obj.getURI();
+        }
+        frmname = frmname + "/form";
+        
+        System.out.println("frmname_George:"+frmname);
+        
+        
+        String formName = (String) request.getAttribute("formName");
+        System.out.println("formName:"+formName);
+                
         StringBuffer   ret          = new StringBuffer();
         String         name         = propName;
         String         label        = prop.getDisplayName(lang);
@@ -149,6 +164,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
         }
 
         if (prop.isObjectProperty()) {
+            System.out.println("ES OBJECTTYPE");
             ArrayList<String> vals   = new ArrayList();
             String            auxs[] = request.getParameterValues(propName);
 
@@ -172,6 +188,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
             //String value = obj.getDisplayName(lang);
 
             if (mode.equals("edit") || mode.equals("create")) {
+                System.out.println("ENTRA SELECT 1");
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
                 ret.append(" style=\"width:300px;\"");
 
@@ -229,7 +246,11 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                             if (vals.contains(sob.getURI())) {
                                 ret.append("selected=\"selected\"");
                             }
-
+                            //if(sob.getGenericInstance() instanceof Twitter) ret.append(" data-image=\"/swbadmin/css/images/config-tw.png\""); //ret.append(" style=\"background-image:url(/swbadmin/css/images/config-tw.png);\" ");
+                            //if(sob.getGenericInstance() instanceof Facebook) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-fb.png) right no-repeat;\" ");
+                            //else if(sob.getGenericInstance() instanceof Youtube) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-yt.png);\" ");
+                            //else if(sob.getGenericInstance() instanceof Instagram) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-in.png);\" ");
+                            
                             ret.append(">" + sob.getDisplayName(lang) + "</option>");
                         }
                     }
@@ -237,6 +258,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
 
                 ret.append("</select>");
             } else if (mode.equals("view")) {
+                System.out.println("ENTRA SELECT 2");
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
                 ret.append(" style=\"width:300px;\"");
 
@@ -297,7 +319,9 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 ret.append("</select>");
             }
         } else {
+            System.out.println("ES DATATYPE");
             if (selectValues != null) {
+                System.out.println("ENTRA SELECT DATA-1");
                 ArrayList<String> vals   = new ArrayList();
                 String            auxs[] = request.getParameterValues(propName);
 
