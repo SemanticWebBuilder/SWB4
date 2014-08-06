@@ -2539,7 +2539,7 @@ public class StreamInBoxNoTopic extends GenericResource {
 
        //Show Creation Time
        out.println("<td>");
-       SimpleDateFormat df = new SimpleDateFormat();
+       SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
        SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
        if (postIn.getPi_createdInSocialNet() != null) {
            Date postDate = postIn.getPi_createdInSocialNet();

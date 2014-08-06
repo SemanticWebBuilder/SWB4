@@ -2531,7 +2531,7 @@ public class SocialTopicInBox extends GenericResource {
         //created
         out.println("<td>");
         //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
-        SimpleDateFormat df = new SimpleDateFormat();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
         if (postIn.getPi_createdInSocialNet() != null) {
             Date postDate = postIn.getPi_createdInSocialNet();

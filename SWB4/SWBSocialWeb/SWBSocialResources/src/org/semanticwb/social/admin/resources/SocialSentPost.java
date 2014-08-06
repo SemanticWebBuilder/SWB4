@@ -1089,7 +1089,7 @@ public class SocialSentPost extends GenericResource {
 
             //PostOut creation
             out.println("<td>");
-            SimpleDateFormat df = new SimpleDateFormat();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
             SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
             if (postOut.getCreated() != null) {
                 Date postDate = postOut.getCreated();
