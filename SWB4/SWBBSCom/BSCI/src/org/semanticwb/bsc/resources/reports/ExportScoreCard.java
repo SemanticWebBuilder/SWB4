@@ -149,12 +149,10 @@ public class ExportScoreCard extends GenericResource {
         
         PrintWriter out = response.getWriter();
         
-        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
+        //String title = paramRequest.getLocaleString("msgPrintPDFDocument");
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode(Mode_StreamPDF);
-        out.print("<a href=\"" + url + "\" class=\"swbstgy-toolbar-sc\" title=\""+title+"\">");
-        out.print(title);
-        out.println("</a>");
+        out.print("<button type=\"button\" class=\"btn btn-default\" onclick=\"location.href='" + url + "'\"><span class=\"glyphicon glyphicon-th-large\"></span></button>");
     }
 }
