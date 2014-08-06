@@ -61,7 +61,7 @@ public class BSCSelector extends GenericResource {
             html.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"hidden-xs\">");
             html.append(paramRequest.getLocaleString("lbl_title"));
             html.append(":&nbsp;</span>");
-            html.append(currentBsc.getTitle());
+            html.append(currentBsc.getTitle(lang));
             if (bscCount > 0) {
                 html.append("<span class=\"caret\"></span>");
             }
