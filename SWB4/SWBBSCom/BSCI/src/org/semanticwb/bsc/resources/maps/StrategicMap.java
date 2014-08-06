@@ -1109,12 +1109,33 @@ SVGjs.append("var rp_=new Array();").append("\n");
         SVGjs.append("    rp_.push(new Array(x1,y1));").append("\n");
         SVGjs.append("  }").append("\n");
         
-        SVGjs.append("  if( srch(x2,y2) ) {").append("\n");
-        SVGjs.append("    y2-=6;").append("\n");
-        SVGjs.append("  }else {").append("\n");
-        SVGjs.append("    rp_.push(new Array(x2,y2));").append("\n");
-        SVGjs.append("    y2-=2;").append("\n");
-        SVGjs.append("  }").append("\n");
+
+        
+        
+SVGjs.append("  for(var i=0; i<rp_.length; i++) {").append("\n");
+SVGjs.append("    if(rp_[i][0]==x2 && rp_[i][1]==y2) {").append("\n");
+SVGjs.append("      y2-=6;").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("    if(rp_[i][0]!=x2 && rp_[i][1]==y2) {").append("\n");
+SVGjs.append("      y2-=6;").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("    if(rp_[i][1]==y1 && y1==y2) {").append("\n");
+SVGjs.append("      y2-=6;").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("  }").append("\n");        
+SVGjs.append("  rp_.push(new Array(x2,y2));").append("\n");
+SVGjs.append("  y2-=2;").append("\n");        
+        
+        
+//SVGjs.append("  if( srch(x2,y2) ) {").append("\n");
+//SVGjs.append("    y2-=6;").append("\n");
+//SVGjs.append("  }").append("\n");
+//SVGjs.append("  if(srch_(x2,y2)) {").append("\n");
+//SVGjs.append("    y2-=4;").append("\n");
+//SVGjs.append("  }else {").append("\n");
+//SVGjs.append("    rp_.push(new Array(x2,y2));").append("\n");
+//SVGjs.append("    y2-=2;").append("\n");
+//SVGjs.append("  }").append("\n");
         
         SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
         SVGjs.append("  var d = 'M'+x1+','+y1+' L'+(x1)+','+(y1-offset_h)+' L'+(width-offset_v)+','+(y1-offset_h)+' L'+(width-offset_v)+','+y2+' L'+x2+','+y2;").append("\n");
@@ -1142,6 +1163,15 @@ SVGjs.append("var rp_=new Array();").append("\n");
 SVGjs.append("function srch(x,y) {").append("\n");
 SVGjs.append("  for(var i=0; i<rp_.length; i++) {").append("\n");
 SVGjs.append("    if(rp_[i][0]==x && rp_[i][1]==y) {").append("\n");
+SVGjs.append("      return true;").append("\n");
+SVGjs.append("    }").append("\n");
+SVGjs.append("  }").append("\n");
+SVGjs.append("  return false;").append("\n");
+SVGjs.append("}").append("\n");
+
+SVGjs.append("function srch_(x,y) {").append("\n");
+SVGjs.append("  for(var i=0; i<rp_.length; i++) {").append("\n");
+SVGjs.append("    if(rp_[i][0]!=x && rp_[i][1]==y) {").append("\n");
 SVGjs.append("      return true;").append("\n");
 SVGjs.append("    }").append("\n");
 SVGjs.append("  }").append("\n");
