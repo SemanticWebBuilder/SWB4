@@ -51,7 +51,7 @@ public class BSCSelector extends GenericResource {
                         continue;
                     }
                     bscCount++;
-                    aux.append(" <li><a href=\""+nextBsc.getHomePage().getUrl(lang)+"\" target=\"_blank\" class=\"dropdown-menu-item\"");
+                    aux.append(" <li><a href=\""+nextBsc.getHomePage().getUrl(lang)+"\" target=\""+nextBsc.getId()+"\" class=\"dropdown-menu-item\"");
                     aux.append(">");
                     aux.append(nextBsc.getTitle(lang)==null?nextBsc.getTitle():nextBsc.getTitle(lang));
                     aux.append("</a></li>\n");
