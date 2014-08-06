@@ -32,7 +32,7 @@ public class LinksRedirector extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a LinksRedirector/doView/uri:"+request.getParameter("uri"));
+        System.out.println("Entra a LinksRedirector/doView/uri:"+request.getParameter("uri")+", neturi:"+request.getParameter("neturi")+", code:"+request.getParameter("code"));
         if(request.getParameter("uri")!=null && request.getParameter("neturi")!=null && request.getParameter("code")!=null)
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("uri"));
@@ -44,31 +44,35 @@ public class LinksRedirector extends GenericResource {
                 {
                     SemanticObject semObjNet=SemanticObject.createSemanticObject(request.getParameter("neturi"));
                     SocialNetwork socialNetwork=(SocialNetwork)semObjNet.createGenericInstance();
-                    WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
-                    Iterator<PostOutLinksHits> itLinks=PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, wsite);
-                    while(itLinks.hasNext())
+                    if(socialNetwork!=null)
                     {
-                        PostOutLinksHits link=itLinks.next();
-                        System.out.println("Entra a LinksRedirector/doView/link:"+link);
-                        if(link.getSocialNet()!=null && link.getSocialNet().getURI().equals(socialNetwork.getURI()) && link.getPol_code().equals(request.getParameter("code")))
+                        WebSite wsite=WebSite.ClassMgr.getWebSite(semObj.getModel().getName());
+                        Iterator<PostOutLinksHits> itLinks=PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut, wsite);
+                        while(itLinks.hasNext())
                         {
-                            link.setPol_hits(link.getPol_hits()+1);
-                            //Ver si guardo o no la ip de cada usuario que da click en una liga en cada red, pudieran ser millones de triples a generar
-                            //pero por otro lado puede ser un buen dato, despues revisar si la red social me puede enviar el user de la red social
-                            //y yo pueda extraer sus datos, esto sería mas valioso, pero no lo tengo por el momento.
-                            //Por el momento con la ip de los usuarios podría saber su ubicación y talvez ubicarlos en un mapa de google maps. (No esta por el mpmento)
-                            if(SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true"))
+                            PostOutLinksHits link=itLinks.next();
+                            System.out.println("Entra a LinksRedirector/doView/link:"+link);
+                            if(link.getSocialNet()!=null && link.getSocialNet().getURI().equals(socialNetwork.getURI()) && link.getPol_code().equals(request.getParameter("code")))
                             {
-                                PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
-                                postOutHitIp.setUserIP(request.getRemoteAddr());
-                                link.addUserIp(postOutHitIp);
-                            }
-                            
-                            PrintWriter out=response.getWriter(); 
-                            System.out.println("Entra a LinksRedirector/doView/REDIRECT A:"+link.getTargetUrl());
-                            out.println("<meta http-equiv=\"refresh\" content=\"0;url="+link.getTargetUrl()+"\">");
-                            break;
-                       }
+                                link.setPol_hits(link.getPol_hits()+1);
+                                //Ver si guardo o no la ip de cada usuario que da click en una liga en cada red, pudieran ser millones de triples a generar
+                                //pero por otro lado puede ser un buen dato, despues revisar si la red social me puede enviar el user de la red social
+                                //y yo pueda extraer sus datos, esto sería mas valioso, pero no lo tengo por el momento.
+                                //Por el momento con la ip de los usuarios podría saber su ubicación y talvez ubicarlos en un mapa de google maps. (No esta por el mpmento)
+                                if(SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true"))
+                                {
+                                    PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
+                                    System.out.println("Remote Addres:"+request.getRemoteAddr());
+                                    postOutHitIp.setUserIP(request.getRemoteAddr());
+                                    link.addUserIp(postOutHitIp);
+                                }
+
+                                PrintWriter out=response.getWriter(); 
+                                System.out.println("Entra a LinksRedirector/doView/REDIRECT A:"+link.getTargetUrl());
+                                out.println("<meta http-equiv=\"refresh\" content=\"0;url="+link.getTargetUrl()+"\">");
+                                break;
+                           }
+                        }
                     }
                 }
             }

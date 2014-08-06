@@ -102,6 +102,7 @@ import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.Twitter;
 import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
+import org.semanticwb.social.PostOutMonitorable;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
 
 /**
@@ -968,10 +969,25 @@ public class SocialSentPost extends GenericResource {
                 out.println("<a class=\"swbIconCA\" href=\"#\"  onclick=\"addNewTab('" + postOut.getURI() + "','" + SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + msgText + "');return false;\" title=\"" + paramRequest.getLocaleString("globalCalendar") + "\"></a>");
             }
 
+            
             if (postOut.getPostInSource() == null && postOut.getNumTotNewResponses() >= 0L) {
-                SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
-                out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgComments") + "\" class=\"msgComments\" onclick=\"showDialog('" + postOutCommentsUrl + "','" + paramRequest.getLocaleString("msgComments")
-                        + "'); return false;\">" + Math.round(postOut.getNumTotNewResponses()) + "</a>");
+                boolean showPostOutCommentsIcon=false;
+                Iterator<SocialNetwork> itSocialNets=postOut.listSocialNetworks();
+                while(itSocialNets.hasNext())
+                {
+                    SocialNetwork socialNet=itSocialNets.next();
+                    if(socialNet.getSemanticObject().instanceOf(PostOutMonitorable.social_PostOutMonitorable))
+                    {
+                        showPostOutCommentsIcon=true;
+                        break;
+                    }
+                }
+                if(showPostOutCommentsIcon)
+                {
+                    SWBResourceURL postOutCommentsUrl = paramRequest.getRenderUrl().setMode(Mode_MsgComments).setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
+                    out.println("<a href=\"#\" title=\"" + paramRequest.getLocaleString("msgComments") + "\" class=\"msgComments\" onclick=\"showDialog('" + postOutCommentsUrl + "','" + paramRequest.getLocaleString("msgComments")
+                            + "'); return false;\">" + Math.round(postOut.getNumTotNewResponses()) + "</a>");
+                }
             }
 
             if (PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut).hasNext()) //if postOut has Links in PostOutLinksHits
