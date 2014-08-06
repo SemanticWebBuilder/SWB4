@@ -167,7 +167,7 @@
             } else if (negativeshighSchool > neutralshighSchool) {
                 node1.put("color", "#FF0000");
             } else {
-                node1.put("color", "#FFD700");
+                node1.put("color", "#838383");
             }
             node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("highSchool", lang) + " :" + highSchool + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " :" + positiveshighSchool + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativeshighSchool + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + "  :" + neutralshighSchool);
             JSONObject joTotal = new JSONObject();
@@ -194,7 +194,7 @@
             } else if (negativescollege > neutralscollege) {
                 node2.put("color", "#FF0000");
             } else {
-                node2.put("color", "#FFD700");
+                node2.put("color", "#838383");
             }
             node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("college", lang) + " :" + college + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " :" + positivescollege + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativescollege + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + "  :" + neutralscollege);
             node2.put("chartclass", "possClass");
@@ -219,7 +219,7 @@
             } else if (negativesgraduate > neutralsgraduate) {
                 node3.put("color", "#FF0000");
             } else {
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
             }
             node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("graduate", lang) + " :" + graduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " :" + positivesgraduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " : " + negativesgraduate + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + "  :" + neutralsgraduate);
             node3.put("chartclass", "possClass");
@@ -243,7 +243,7 @@
             } else if (negativesundefined > neutralsundefined) {
                 node4.put("color", "#FF0000");
             } else {
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
             }
             node4.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("undefinedEducation", lang) + " :" + undefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + ":" + positivesundefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesundefined + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " :" + neutralsundefined);
             node4.put("chartclass", "possClass");
@@ -290,7 +290,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralshighSchool);
                 node4.put("value2", "" + round(intPorcentajehighSchoolNeutrals));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
@@ -351,7 +351,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralscollege);
                 node4.put("value2", "" + round(intPorcentajecollegeNeutrals));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
@@ -416,7 +416,7 @@
                 node4.put("value1", "" + neutralsgraduate);
                 node4.put("value2", "" + round(intPorcentajegraduateNeutrals));
                 node4.put("label2", "");
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);
                 node.put(node4);
@@ -477,7 +477,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralsundefined);
                 node4.put("value2", "" + round(intPorcentajeundefineNeutrals));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "Total de Post: " + totalPost);

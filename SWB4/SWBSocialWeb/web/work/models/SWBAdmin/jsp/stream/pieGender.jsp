@@ -148,7 +148,7 @@
             } else if (negativesMale > neutralsMale) {
                 node1.put("color", "#FF0000");
             } else {
-                node1.put("color", "#FFD700");
+                node1.put("color", "#838383");
             }
             node1.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("male", lang) + ": " + male + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesMale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesMale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsMale);
             node1.put("chartclass", "possClass");
@@ -175,7 +175,7 @@
             } else if (negativesFemale > neutralsFemale) {
                 node2.put("color", "#FF0000");
             } else {
-                node2.put("color", "#FFD700");
+                node2.put("color", "#838383");
             }
             node2.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("female", lang) + ": " + female + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + " : " + positivesFemale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + " :" + negativesFemale + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsFemale);
             node2.put("chartclass", "possClass");
@@ -200,7 +200,7 @@
             } else if (negativesOther > neutralsOther) {
                 node3.put("color", "#FF0000");
             } else {
-                node3.put("color", "#FFD700");
+                node3.put("color", "#838383");
             }
             node3.put("label2", SWBSocialResUtil.Util.getStringFromGenericLocale("nodefine", lang) + ": " + other + "     -     " + SWBSocialResUtil.Util.getStringFromGenericLocale("positives", lang) + "  : " + positivesOther + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("negatives", lang) + "  :" + negativesOther + " " + SWBSocialResUtil.Util.getStringFromGenericLocale("neutral", lang) + " : " + neutralsOther);
             node3.put("chartclass", "possClass");
@@ -237,7 +237,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralsMale);
                 node4.put("value2", "" + round(intPorcentajeNeutralsMale));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "");
@@ -296,7 +296,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralsFemale);
                 node4.put("value2", "" + round(intPorcentajeNeutralsFemale));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "");
@@ -356,7 +356,7 @@
                 node4.put("label", "Neutros");
                 node4.put("value1", "" + neutralsOther);
                 node4.put("value2", "" + round(intPorcentajeNeutralsNodefine));
-                node4.put("color", "#FFD700");
+                node4.put("color", "#838383");
                 node4.put("label2", "");
                 node4.put("chartclass", "possClass");
                 node4.put("label3", "");

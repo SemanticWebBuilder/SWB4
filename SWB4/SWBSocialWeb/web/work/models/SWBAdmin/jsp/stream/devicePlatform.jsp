@@ -147,7 +147,7 @@ function getChartData() {
     return[
     <%
         String labels[] = {"Neutros","Positivos","Negativos"};
-        String colors[] = {"#FFD700","#008000","#FF0000"};
+        String colors[] = {"#838383","#008000","#FF0000"};
         for(int i = 0 ; i < 3 ; i++){
     %>
     {

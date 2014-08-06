@@ -154,7 +154,7 @@
         } else if (negatives > neutrals) {
             node_.put("color", "#FF0000");
         } else {
-            node_.put("color", "#FFD700");
+            node_.put("color", "#838383");
         }
         node_.put("label2", "" + nombre + ": " + total + " -     Positivos : " + positives + "  Negativos: " + negatives + "  Neutros : " + neutrals);
         node_.put("chartclass", "possClass");
