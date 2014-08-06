@@ -222,7 +222,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("    </div>\n");
 
         //Para un rol en particular (Estratega) se debe permitir revisar a los Sponsor
-        if (actualUserRole.getId().equalsIgnoreCase(paramRequest.getLocaleString("superUserRole"))) {
+        if (actualUserRole != null && actualUserRole.getId().equalsIgnoreCase(paramRequest.getLocaleString("superUserRole"))) {
             output.append("    <div class=\"\"><label for=\"sponsor\">");
             output.append(paramRequest.getLocaleString("lbl_sponsor"));
             output.append("</label></div>\n");
@@ -1403,30 +1403,30 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
      */
     private String replaceHtml(StringBuilder sb) {
         String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&aacute;", "á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&eacute;", "é");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iacute;", "í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&oacute;", "ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uacute;", "ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Aacute;", "Á");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Eacute;", "É");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Iacute;", "Í");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Oacute;", "Ó");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uacute;", "Ú");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&nbsp;", " ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&lt;", "<");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&gt;", ">");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&amp;", "&");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&quot;", "\"");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iexcl;", "¡");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&iquest;", "¿");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&reg;", "®");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&copy;", "©");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&euro;", "€");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&ntilde;", "ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&uuml", "ü");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Ntilde;", "Ñ");
-        sbStr = SWBUtils.TEXT.replaceAll(sbStr.toString(), "&Uuml;", "Ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iacute;", "í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&oacute;", "ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uacute;", "ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Aacute;", "Á");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Eacute;", "É");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Iacute;", "Í");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Oacute;", "Ó");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uacute;", "Ú");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&nbsp;", " ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&lt;", "<");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&gt;", ">");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&amp;", "&");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&quot;", "\"");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iexcl;", "¡");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&iquest;", "¿");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&reg;", "®");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&copy;", "©");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&euro;", "€");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&ntilde;", "ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&uuml", "ü");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Ntilde;", "Ñ");
+        sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
         return sbStr;
     }
 
@@ -1709,8 +1709,6 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
      * PDF.
      *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
-     * @param response Proporciona funcionalidad especifica HTTP para
-     * envi&oacute; en la respuesta
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @return el objeto String que representa el c&oacute;digo HTML con la liga
      * y el icono correspondiente al elemento a exportar.
@@ -1728,7 +1726,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             SWBResourceURL url = new SWBResourceURLImp(request, base2, paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
             url.setMode(Mode_StreamPDF);
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
-            String alt = paramRequest.getLocaleString("msgPrintPDFDocument");
+//            String alt = paramRequest.getLocaleString("msgPrintPDFDocument");
 
             OntClass claseOnt = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getOntClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
             List<String> elements = new ArrayList<String>();
@@ -1843,15 +1841,19 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             toReturn.append("\n  }");
             toReturn.append("\n </script>");
 
-            toReturn.append("<a href=\"javascript:getCriteria()");
-            toReturn.append("\" class=\"export-stgy\" title=\"");
-            toReturn.append(alt);
-            toReturn.append("\" >");
-            toReturn.append(alt);
-            toReturn.append("</a>");
+//            toReturn.append("<a href=\"javascript:getCriteria()");
+//            toReturn.append("\" class=\"export-stgy\" title=\"");
+//            toReturn.append(alt);
+//            toReturn.append("\" >");
+//            toReturn.append(alt);
+//            toReturn.append("</a>");
+            
+            toReturn.append("<button type=\"button\" class=\"btn btn-default\" onclick=\"javascript:getCriteria();\"><span class=\"glyphicon glyphicon-export\"></span></button>");
+            
+            
             toReturn.append("<form id=\"frmDetail\" method=\"post\" action=\"");
             toReturn.append(url);
-            toReturn.append("\">");
+            toReturn.append("\" style=\"display:none\">");
             toReturn.append("   <input type=\"hidden\" id=\"elementType_\" name=\"elementType_\"/>");
             toReturn.append("   <input type=\"hidden\" id=\"titleSelect_\" name=\"titleSelect_\"/>");
             toReturn.append("   <input type=\"hidden\" id=\"initialPeriod_\" name=\"initialPeriod_\"/>");
