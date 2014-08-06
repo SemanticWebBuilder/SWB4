@@ -33,67 +33,48 @@ public class BSCSelector extends GenericResource {
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         
         PrintWriter out = response.getWriter();
-        StringBuilder output = new StringBuilder(128);
-        //Obtener el Scorecard actual
+        StringBuilder html = new StringBuilder(254);
+        //Obtiene el Scorecard actual
         BSC currentBsc = (BSC) paramRequest.getWebPage().getWebSite();
-        //Obtener listado de instancias de Scorecards
+        //Obtiene el listado de instancias de Scorecards
         Iterator<BSC> todosBsc = BSC.ClassMgr.listBSCs();
         int bscCount = 0;
-        User user = paramRequest.getUser();
-        StringBuilder aux = new StringBuilder(64);
+        final User user = paramRequest.getUser();
         
-        if (todosBsc != null && todosBsc.hasNext()) {
-            //Recorrer el listado de Scorecards
+        if( user.isSigned() && todosBsc != null && todosBsc.hasNext()) {
+            final String lang = user.getLanguage()==null?"es":user.getLanguage();
+            StringBuilder aux = new StringBuilder(254);
             while (todosBsc.hasNext()) {
                 BSC nextBsc = (BSC) todosBsc.next();
                 if( nextBsc.isValid() && user.haveAccess(nextBsc) && user.getUserRepository()==nextBsc.getUserRepository() ) {
-                    boolean nextIsNotCurrent = !(nextBsc == currentBsc);
-                    String optionValue = nextIsNotCurrent
-                            ? nextBsc.getId() + "," + nextBsc.getHomePage().getId()
-                            : "";
-                    if (nextIsNotCurrent) {
-                        bscCount++;
-                        aux.append("      <li><a href=\"#\" class=\"dropdown-menu-item\"");
-                        aux.append(" onclick=\"showScorecard('");
-                        aux.append(optionValue);
-                        aux.append("');\">");
-                        aux.append(nextBsc.getTitle());
-                        aux.append("</a></li>\n");
+                    if(nextBsc == currentBsc) {
+                        continue;
                     }
+                    bscCount++;
+                    aux.append(" <li><a href=\""+nextBsc.getHomePage().getUrl(lang)+"\" target=\"_blank\" class=\"dropdown-menu-item\"");
+                    aux.append(">");
+                    aux.append(nextBsc.getTitle());
+                    aux.append("</a></li>\n");
 		}
+            } //while            
+            html.append("  <li class=\"dropdown\">\n");
+            html.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"hidden-xs\">");
+            html.append(paramRequest.getLocaleString("lbl_title"));
+            html.append(":&nbsp;</span>");
+            html.append(currentBsc.getTitle());
+            if (bscCount > 0) {
+                html.append("<span class=\"caret\"></span>");
             }
-        }
-        
-        output.append("  <li class=\"dropdown\">\n");
-        output.append("<script type=\"text/javascript\">\n");
-        output.append("function showScorecard(value) {\n");
-        output.append("  var thisBsc = \"");
-        output.append(currentBsc.getTitle());
-        output.append("\";\n");
-	output.append("  var path = location.pathname.substring(0, location.pathname.indexOf(thisBsc));\n");
-        output.append("  if (value && value != \"\") {\n");
-        output.append("    var elements = value.split(',');\n");
-        output.append("    path += elements[0] + \"/\" + elements[1];\n");
-        output.append("    window.open(path, 'window' + elements[0]);\n");
-        output.append("  }\n");
-        output.append("}\n");
-        output.append("</script>\n");
-        output.append("    <a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><span class=\"hidden-xs\">");
-        output.append(paramRequest.getLocaleString("lbl_title"));
-        output.append(":&nbsp;</span>");
-        output.append(currentBsc.getTitle());
-        if (bscCount > 0) {
-            output.append("<span class=\"caret\"></span>");
-        }
-        output.append("</a>\n");
-        if(!aux.toString().isEmpty()) {        
-            output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
-            //se incluye la lista de scorecards encontrados
-            output.append(aux);
-            output.append("    </ul>\n");
-        }
-        output.append("  </li>\n");
-        out.println(output.toString());
-    }
+            html.append("</a>\n");
+            if(!aux.toString().isEmpty()) {
+                html.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
+                //se incluye la lista de scorecards encontrados
+                html.append(aux);
+                html.append("    </ul>\n");
+            }
+            html.append("  </li>\n");
+            out.println(html.toString());
+        } //if
+    } //doView
     
 }
