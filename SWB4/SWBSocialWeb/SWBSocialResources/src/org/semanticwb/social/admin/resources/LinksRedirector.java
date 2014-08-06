@@ -28,7 +28,7 @@ import org.semanticwb.social.SocialNetwork;
  */
 public class LinksRedirector extends GenericResource {
 
-    private static Logger log = SWBUtils.getLogger(LinksRedirector.class);
+    //private static Logger log = SWBUtils.getLogger(LinksRedirector.class);
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
