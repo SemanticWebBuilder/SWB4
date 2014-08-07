@@ -266,8 +266,14 @@
             {
                 if(!_this.onmouseup(evt))return;
                 
-                var dragObject = _this.svg.dragObject;
-                _this.svg.activeHandler = null;
+                var dragObject = _this.svg.dragObject,
+                        ah = _this.svg.activeHandler || null;
+                
+                if (ah !== null) {
+                    ah.snap2Grid();
+                    _this.svg.activeHandler = null;
+                }
+                
                 //Drop
                 if(dragObject!==null)
                 {
@@ -388,7 +394,7 @@
                 i, items = segments.numberOfItems;
 
             _this.removeLineHandlers();
-            if (items > 3) {
+            if (items >= 4 ) {
                 for (i = 1; i < items - 1; i++) {
                     var segment = segments.getItem(i),
                     handler = document.createElementNS(_this.svgNS, "use");
@@ -415,8 +421,17 @@
                             _x = _y = null;
                         }
                         if (_x !== null && _y !== null) {
-                            this.setAttributeNS(null,"x", (_x - 4));
-                            this.setAttributeNS(null,"y", (_y - 4));
+                            this.setAttributeNS(null,"x", (_x - 5));
+                            this.setAttributeNS(null,"y", (_y - 5));
+                        }
+                    };
+
+                    handler.snap2Grid=function() {
+                        if(_this.snap2Grid) {
+                            var sx = this.segment.x, sy = this.segment.y;
+                            this.segment.x = Math.round(sx/_this.snap2GridSize)*_this.snap2GridSize;
+                            this.segment.y = Math.round(sy/_this.snap2GridSize)*_this.snap2GridSize;
+                            this.move(this.segment.x, this.segment.y);
                         }
                     };
                     
@@ -635,7 +650,7 @@
                     for (i = selected.length; i--;) 
                     {
                         selected[i].remove();
-                    }                             
+                    }
                     _this.unSelectAll();
                 }catch(e){console.log(e);};
                 _this.stopPropagation(evt);
@@ -756,7 +771,7 @@
                 obj.pathSegList.getItem(p).x=x;
                 obj.pathSegList.getItem(p).y=y;
             };
-                    
+                                
             obj.listSegments=function() {
                 var segments = obj.pathSegList,
                     i;
@@ -982,7 +997,7 @@
                 var oy=obj.getY();
                 obj.move(ox+dx, oy+dy);
             };
-
+            
             obj.resize=function(w,h)
             {
                 obj.setAttributeNS(null,"transform","translate("+(-w/2)+","+(-h/2)+")");
@@ -1013,15 +1028,15 @@
                 
                 for(i = inConnections.length; i--;)
                 {
-                    inConnections[i].updateInterPoints();
-                }                
+                    inConnections[i].updatePoints();
+                }
                 
                 //Move OutConnections
                 for(i = outConnections.length; i--;)
                 {
-                    outConnections[i].updateInterPoints();
-                }                 
-            };                        
+                    outConnections[i].updatePoints();
+                }
+            };
 
             obj.move=function(x,y)
             {
@@ -1093,15 +1108,13 @@
                     }
                 }
                 
-                //Move InConnections
-                for(i = inConnections.length; i--;)
-                {
+                //Recalculate endPoint of inconnections
+                for(i = inConnections.length; i--;) {
                     inConnections[i].setEndPoint(x,y);
-                }                
+                }
                 
-                //Move OutConnections
-                for(i = outConnections.length; i--;)
-                {
+                //Recalculate endPoint of outConnections and translate points acoordingly
+                for(i = outConnections.length; i--;) {
                     outConnections[i].setStartPoint(x,y);
                 }
             };    
