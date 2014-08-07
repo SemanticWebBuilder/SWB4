@@ -911,7 +911,7 @@ SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.heig
                                 x_ = assertValue(attrs.getNamedItem("x").getNodeValue());                               
                                 String color = attrs.getNamedItem("status").getNodeValue();
                                 
-                                // rectángulo objetivo
+                                // objetivo
                                 SVGjs.append(" lnk = createLink('" + href + "');").append("\n");
                                 SVGjs.append(" g.appendChild(lnk);").append("\n");
                                 
@@ -920,7 +920,6 @@ SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.heig
                                 SVGjs.append(" txt.setAttributeNS(null,'y',y_);").append("\n");
                                 SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
                                 SVGjs.append(" txt.setAttributeNS(null,'text-anchor','start');").append("\n");
-                                // objetivo
                                 // prefijo y título de objetivo
                                 info = new StringBuilder();
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/prefix";
@@ -951,14 +950,14 @@ SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.heig
                                 SVGjs.append(" text_node = document.createTextNode('"+info+"');").append("\n");
                                 SVGjs.append(" tspan.appendChild(text_node);").append("\n");
                                 SVGjs.append(" txt.appendChild(tspan);").append("\n");
-                                
+                                // rectángulo objetivo
                                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
                                 SVGjs.append(" framingRect(rect,'" + oid + "'," + w_ + ",0," + x_ + ",y_);").append("\n");
+                                SVGjs.append(" rect.setAttributeNS(null,'style','fill:#dedede;stroke:#c1c1c1;stroke-width:1px;');");
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
                                 SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'"+color+"',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
-
                                 //relaciones causa-efecto con este objetivo
                                 expression = "//theme[@id='" + tid + "']/obj[@id='" + oid + "']/rel";
                                 NodeList nlRels = (NodeList) xPath.compile(expression).evaluate(map, XPathConstants.NODESET);
