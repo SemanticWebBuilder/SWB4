@@ -2324,15 +2324,24 @@ var _GraphicalElement = function(obj) {
                     offX = _this.svg.dragOffsetX,
                     offY = _this.svg.dragOffsetY,
                     evtX = _this.getEventX(evt),
-                    evtY = _this.getEventY(evt);
-            
+                    evtY = _this.getEventY(evt),
+                    ah = _this.svg.activeHandler || null;
                 if(_this.onmousemove(evt)===false) {
                     return;
                 }
                 _this.svg.mouseX = evtX;
                 _this.svg.mouseY = evtY;
 
-                if(resizeObj && resizeObj!==null) {
+                if (ah !== null) {
+                    x = evtX - offX;
+                    y = evtY - offY;
+                    ah.segment.x = x;
+                    ah.segment.y = y;
+                    ah.move(x, y);
+                    ah.parent.updateStartPoint();
+                    ah.parent.updateEndPoint();
+                    ah.parent.updateSubLine();
+                } else if(resizeObj && resizeObj !== null) {
                     var parent = resizeObj.parent,
                         objix = resizeObj.ix,
                         objiy = resizeObj.iy;
@@ -2672,10 +2681,6 @@ var _GraphicalElement = function(obj) {
             };
             obj.soff=0;
             obj.eoff=0;
-//            obj.xs=0;
-//            obj.ys=0;
-//            obj.xe=0;
-//            obj.ye=0;
             
             //obj.addPoint(0,0);
             obj.addPoint(0,0);
@@ -2683,19 +2688,19 @@ var _GraphicalElement = function(obj) {
             
             obj.setStartPoint=function(x,y) {
                 obj.setPoint(0,x,y);
-                obj.xs=x;
-                obj.ys=y;
+                //Se asignan x y y iniciales, puede que no provengan de un objeto, sino de las coordenadas del mouse
                 if(!obj.xe)obj.xe=x;
                 if(!obj.ye)obj.ye=y;                
-                obj.updateInterPoints();
+                obj.updatePoints();
                 obj.pressed = false;
             };
                     
             obj.setEndPoint=function(x,y) {
+                //Se asignan x y y finales, puede que no provengan de un objeto, sino de las coordenadas del mouse
+                obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
                 obj.xe=x;
                 obj.ye=y;
-                obj.setPoint(obj.pathSegList.numberOfItems-1,x,y);
-                obj.updateInterPoints();
+                obj.updatePoints();
                 obj.pressed = false;
             };
             
@@ -2703,16 +2708,27 @@ var _GraphicalElement = function(obj) {
                 if (Modeler.mode === "view") {
                     return false;
                 }
+                ToolKit.unSelectAll();
                 var selectedPath = Modeler.selectedPath || null;
+                if (selectedPath === null) {
+                    ToolKit.removeLineHandlers();
+                }
                 obj.pressed = true;
                 if (selectedPath !== null) {
                     selectedPath.select(false);
                 }
                 obj.select(true);
                 Modeler.selectedPath = obj;
-                /*if (evt.button===2) {
-                    obj.createLineHandlers();
-                }*/
+                if (evt.button === 2) {
+                    obj.fixed = !obj.fixed;
+                }
+                if (obj.fixed) {
+                    ToolKit.createLineHandlers(obj);
+                } else {
+                    ToolKit.removeLineHandlers();
+                    obj.updatePoints();
+                }
+                
                 ToolKit.stopPropagation(evt);
                 return false;
             };
@@ -2830,8 +2846,8 @@ var _GraphicalElement = function(obj) {
                 };
                 
                 obj.text.updateLocation = function() {
-                    var p1 = obj.pathSegList.getItem(1),
-                        p2 = obj.pathSegList.getItem(2),
+                    var p1 = obj.pathSegList.getItem(obj.pathSegList.numberOfItems - 1),
+                        p2 = obj.pathSegList.getItem(obj.pathSegList.numberOfItems - 2),
                         _x = p1.x,
                         _y = p1.y;
                     
@@ -2873,64 +2889,171 @@ var _GraphicalElement = function(obj) {
                 }
             };
             
+            obj.updateEndPoint = function() {
+                var from = this.fromObject || null, pini, pend,
+                    to = this.toObject || null, ini, end, dx, dy,
+                    fw, tw, fh, th, segments = this.pathSegList;
+                
+                if (segments.numberOfItems >= 4) {
+                    pini = segments.getItem(0);
+                    pend = segments.getItem(segments.numberOfItems - 1);
+                    
+                    ini = {
+                        x: from.getX(),
+                        y: from.getY()
+                    };
+                    
+                    //Hay que recalcular si es que es fixed, para tomar de referencia un handler anterior
+                    if (this.fixed) {
+                        ini = {
+                            x: segments.getItem(segments.numberOfItems - 2).x,
+                            y: segments.getItem(segments.numberOfItems - 2).y
+                        };
+                    }
+
+                    end = {
+                        x: this.xe,
+                        y: this.ye
+                    };
+                    
+                    dx = end.x - ini.x;
+                    dy = end.y - ini.y;
+                    
+                    fw = from !== null ? from.getWidth() / 2 : 0;
+                    tw = to !== null ? to.getWidth() / 2 : 0;
+                    fh = from !== null ? from.getHeight() / 2 : 0;
+                    th = to !== null ? to.getHeight() / 2 : 0;
+
+                    if((Math.abs(dx) - fw - tw) >= (Math.abs(dy) - fh - th))  {//Caso X
+                        if(dx > 0) {
+                            dx = 1;
+                        } else if(dx < 0){
+                            dx = -1;
+                        }
+                        pend.x = end.x - dx * (tw + this.eoff);
+                        pend.y = end.y;
+                    } else {
+                        if(dy > 0){
+                            dy = 1;
+                        } else if(dy < 0){
+                            dy = -1;
+                        }
+                        pend.x = end.x;
+                        pend.y = end.y - dy * (th + this.eoff);
+                    }
+
+                    this.updateSubLine();
+                    if (this.text) {
+                        this.text.updateLocation();
+                    }
+                }
+            };
+            
+            obj.snap2Grid = function() {
+                if(ToolKit.snap2Grid) {
+                    var segments = this.pathSegList,
+                    i, gridSize = ToolKit.snap2GridSize, seg;
+            
+                    for (i = 0; i < segments.numberOfItems; i++) {
+                        seg = segments.getItem(i);
+                        seg.x = Math.round(seg.x/gridSize)*gridSize;
+                        seg.y = Math.round(seg.y/gridSize)*gridSize;
+                    }
+                }
+            };
+            
+            obj.updateStartPoint = function() {//Siempre existe un punto inicial cuando se manipula una línea
+                var from = this.fromObject || null, pini, pend,
+                    to = this.toObject || null, ini, end, dx, dy,
+                    fw, tw, fh, th, segments = this.pathSegList;
+                
+                if (segments.numberOfItems >= 4) {
+                    pini = segments.getItem(0);
+                    pend = segments.getItem(segments.numberOfItems - 1);
+                    
+                    ini = {
+                        x: from.getX(),
+                        y: from.getY()
+                    };
+                    
+                    end = {
+                        x: this.xe,
+                        y: this.ye
+                    };
+
+                    //Hay que recalcular si es que es fixed, para tomar de referencia un handler anterior
+                    if (this.fixed) {
+                        end = {
+                            x: segments.getItem(1).x,
+                            y: segments.getItem(1).y
+                        };  
+                    }
+                    
+                    dx = end.x - ini.x;
+                    dy = end.y - ini.y;
+                    
+                    fw = from !== null ? from.getWidth() / 2 : 0;
+                    tw = to !== null ? to.getWidth() / 2 : 0;
+                    fh = from !== null ? from.getHeight() / 2 : 0;
+                    th = to !== null ? to.getHeight() / 2 : 0;
+
+                    if((Math.abs(dx) - fw - tw) >= (Math.abs(dy) - fh - th))  {//Caso X
+                        if(dx > 0) {
+                            dx = 1;
+                        } else if(dx < 0){
+                            dx = -1;
+                        }
+                        pini.x = ini.x + dx * (fw + this.soff);
+                        pini.y = ini.y;
+                    } else {
+                        if(dy > 0){
+                            dy = 1;
+                        } else if(dy < 0){
+                            dy = -1;
+                        }
+                        pini.x = ini.x;
+                        pini.y = ini.y + dy * (fh + this.soff);
+                    }
+                    this.updateSubLine();
+                    if (this.text) {
+                        this.text.updateLocation();
+                    }
+                }
+            };
+            
+            obj.updatePoints = function() {
+                this.updateStartPoint();
+                this.updateEndPoint();
+                this.updateInterPoints();
+            };
+            
             obj.updateInterPoints=function() {
-                var p1, p2, p0 = obj.pathSegList.getItem(0),
+                var segments = obj.pathSegList,
+                    p1 = segments.getItem(1), p2 = segments.getItem(2), 
+                    p0 = obj.pathSegList.getItem(0),
                     p3 = obj.pathSegList.getItem(3),
                     fw = 0, fh = 0, tw = 0, th = 0,
                     from = obj.fromObject,
-                    to = obj.toObject, dx = obj.xe - obj.xs,
-                    dy = obj.ye - obj.ys,
-                    segments = obj.pathSegList;
+                    to = obj.toObject, dx = obj.xe - from.getX(),
+                    dy = obj.ye - from.getY();
                 
                 fw = from !== null ? from.getWidth() / 2 : 0;
                 fh = from !== null ? from.getHeight() / 2 : 0;
                 tw = to !== null ? to.getWidth() / 2 : 0;
                 th = to !== null ? to.getHeight() / 2 : 0;
                 
-                if((Math.abs(dx) - fw - tw) >= (Math.abs(dy) - fh - th))  {//Caso X
-                    if(dx > 0) {
-                        dx = 1;
-                    } else if(dx < 0){
-                        dx = -1;
-                    }
-                    
-                    p0.x = obj.xs + dx * (fw + obj.soff);
-                    p3.x = obj.xe - dx * (tw + obj.eoff);
-                    p3.y = obj.ye;
-                    p0.y = obj.ys;
-                    
-                    
-                    if(segments.numberOfItems===4 && !obj.fixed)
-                    {
-                        p1 = segments.getItem(1);
-                        p2 = segments.getItem(2);
-                        
+                if (segments.numberOfItems >= 4 && !this.fixed) {
+                    if((Math.abs(dx) - fw - tw) >= (Math.abs(dy) - fh - th))  {//Caso X
                         p1.x = (p3.x - p0.x) / 2 + p0.x;
                         p2.x = p1.x;
                         p1.y = p0.y;
                         p2.y = p3.y;
-                    }
-                } else {   //Caso Y
-                    if(dy > 0){
-                        dy = 1;
-                    } else if(dy < 0){
-                        dy = -1;
-                    }
-                    
-                    p0.y = obj.ys + dy * (fh + obj.soff);
-                    p3.y = obj.ye - dy * (th + obj.eoff);
-                    p3.x = obj.xe;
-                    p0.x = obj.xs;
-                    
-                    if(segments.numberOfItems===4 && !obj.fixed) {
-                        p1 = segments.getItem(1);
-                        p2 = segments.getItem(2);
-                    
+                    } else {   //Caso Y
                         p1.y = (p3.y - p0.y) / 2 + p0.y;
                         p2.y = p1.y;
                         p1.x = p0.x;
                         p2.x = p3.x;
-                    }                                        
+                    }
                 }
                 obj.updateSubLine();
                 if (obj.text) {
@@ -2961,6 +3084,7 @@ var _GraphicalElement = function(obj) {
             obj.remove=function() {
                 obj.subLine.remove();
                 if (obj.text) ToolKit.svg.removeChild(obj.text);
+                ToolKit.removeLineHandlers();
                 fRemove();
             };
             
@@ -2977,6 +3101,21 @@ var _GraphicalElement = function(obj) {
                 }
                 //ToolKit.svg.insertBefore(obj.subLine, obj);
                 //obj.subLine.setAttributeNS(null,"class","sequenceFlowSubLine");
+            };
+            
+            obj.getConnectionPoints = function() {
+                var segments = this.pathSegList, i, items = segments.numberOfItems, 
+                    segment, ret = "", from = this.fromObject, sx = from.getX(), sy = from.getY();
+                ret = ret + sx + "," + sy + "|";
+                for (i = 1; i < items - 1; i++) {
+                    segment = segments.getItem(i);
+                    if (segment.pathSegType===SVGPathSeg.PATHSEG_LINETO_ABS || segment.pathSegType===SVGPathSeg.PATHSEG_MOVETO_ABS) {
+                        ret = ret + segment.x + "," + segment.y + "|";
+                    }
+                }
+                
+                ret = ret + obj.xe + "," + obj.ye;
+                return ret;
             };
             return obj;
         },
@@ -3539,9 +3678,11 @@ var _GraphicalElement = function(obj) {
             if (obj.typeOf("ConnectionObject")) { 
                 ret.start=obj.fromObject.id;
                 ret.end = obj.toObject.id;
-                if (obj.connectionPoints && obj.connectionPoints !== undefined) {
-                    ret.connectionPoints = obj.connectionPoints;
+                
+                if (obj.fixed) {
+                    ret.connectionPoints = obj.getConnectionPoints();
                 }
+                
                 if (obj.title && obj.title !== undefined) {
                     ret.title = obj.title;
                 }
@@ -3705,14 +3846,46 @@ var _GraphicalElement = function(obj) {
                         etype = obj.elementType;
                         obj.setURI(tmp.uri);
                     
-                        if (tmp.connectionPoints) {
-                            obj.connectionPoints = tmp.connectionPoints;
+                        if (tmp.connectionPoints && tmp.connectionPoints.length) {
+                            try {
+                                if(tmp.connectionPoints.charAt(tmp.connectionPoints.length-1) === "|") {
+                                    obj.connectionPoints = tmp.connectionPoints.substring(0,tmp.connectionPoints.length-1);
+                                } else {
+                                    obj.connectionPoints = tmp.connectionPoints;
+                                }
+
+                                var _points = obj.connectionPoints.split("|").map(function(item){
+                                    return {
+                                        x: item.split(",")[0],
+                                        y: item.split(",")[1]
+                                    };
+                                });
+                                
+                                if (_points.length >= 4) { //Modeler requiere al menos 4 puntos
+                                    obj.fixed = true;
+                                    obj.pathSegList.clear();
+                                    obj.pathSegList.appendItem(obj.createSVGPathSegMovetoAbs(start.getX(), start.getY()));
+                                    for (var m = 1; m < _points.length - 1; m++) {
+                                        obj.pathSegList.appendItem(obj.createSVGPathSegLinetoAbs(_points[m].x, _points[m].y));
+                                    }
+                                    obj.pathSegList.appendItem(obj.createSVGPathSegLinetoAbs(obj.xe, obj.ye));
+                                    obj.snap2Grid();
+                                    obj.updateSubLine();
+                                }
+                            } catch (error) {
+                                console.log(error);
+                                obj.remove();
+                                obj = Modeler.mapObject(tmp.class);
+                                etype = obj.elementType;
+                                obj.setURI(tmp.uri);
+                            }
                         }
                     
                         if (etype === "ConditionalFlow" && start.typeOf("Gateway")) {
                             obj.removeAttribute("marker-start");
                             obj.soff = 0;
                         }
+                        
                         start.addOutConnection(obj);
                         end.addInConnection(obj);
                         
