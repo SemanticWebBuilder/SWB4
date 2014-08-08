@@ -194,10 +194,6 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 ret.append("<div class=\"swb-redesconfig-info\">");
                 ret.append("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"\">");
 
-                if (DOJO) {
-                    //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
-                }
-
                 //ret.append(" " + ext + ">");
 
                 // onChange="dojo.byId('oc1').value=arguments[0]"
@@ -261,6 +257,16 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                             ret.append("<span>"+sob.getDisplayName(lang)+"</span></label>");
                         }
                     }
+                }
+                
+                if (DOJO) {
+                    //ret.append("dojo.require(\"dojox.validate.check\");");
+                    //ret.append("var profile = {");
+                    //ret.append("required: [ \""+name+"\"],");
+                    //ret.append("constraints: {");
+                    //ret.append(name+": myValidationFunction,"); //Nombre de funcion js que valida los checkboxes
+                    //ret.append("},");
+                    //ret.append("}");
                 }
 
                 //ret.append("</select>");
@@ -383,6 +389,72 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 ret.append("</select>");
             }
         }
+        //Jorge
+        //String enviar = lang.equals("en")?"You have to select at least one social network":"Debe seleccionar por lo menos una red social";
+        //String enviar = "Holass";
+        
+        ret.append("\n<script type=\"text/javascript\">\n");
+        //ret.append("<!--");
+        //ret.append("function loaded(){");
+        //ret.append("document.getElementById(\""+frmname+"\").addEventListener(\"submit\", function(){");
+        //ret.append("function prepareEventHandlers() {");
+        //ret.append("alert('Entra a prepareEventHandlers...');");
+        ret.append("    document.getElementById(\""+frmname+"\").addEventListener(\"submit\", function(){");
+        ret.append("    alert(\"Hicieron Submit\");");
+        //ret.append("    if(document.forms['"+frmname+"\']['"+name+"'].selectedIndex==-1){");
+        //ret.append("        alert(\"Debe seleccionar por lo menos una red social a escuchar\");");
+        //ret.append("    }");
+        //ret.append("if (theForm.MyCheckbox.checked == false) {");
+        //ret.append("if(document.forms['"+frmname+"\']['"+name+"'].checked== false){");
+        ret.append("var grupo = document.getElementById(\"form1\")."+name+";\n");
+        ret.append("alert('grupo:'+grupo);\n");
+        ret.append("if(!checkvalidate(grupo)){\n");
+        ret.append("        alert(\"Debe seleccionar por lo menos una red social a escuchar\");\n");
+        ret.append("        return false;\n");
+        ret.append("}else{\n");
+        ret.append("        return true;\n");
+        ret.append("}\n");
+        
+        ret.append("function checkvalidate(checks) {\n");
+        ret.append("for (i = 0; lcheck = checks[i]; i++) {\n");
+        ret.append("    if (lcheck.checked) {\n");
+        ret.append("         return true;\n");
+        ret.append("    }\n");
+        ret.append("}\n");
+        ret.append("    return false;\n");
+        ret.append("}\n");
+        
+        
+        ret.append("    }, false);");
+        //ret.append("//-->");
+        //ret.append("}");
+        //ret.append("window.setTimeOut(prepareEventHandlers,2000);");
+        //ret.append("window.onload = function() {");
+        //ret.append("alert(\"Entra a Onload\");prepareEventHandlers();");
+        //ret.append("}");
+        
+        //ret.append("window.addEventListener(\"load\", loaded, false);");
+        //ret.append(" //var foo; \nif (typeof(foo) == 'undefined' || foo == null){var foo = new Object();}\n");
+        //ret.append("var canSubmit = true;\n");
+        //ret.append("function canContinue(cad){\n");
+        //ret.append("    foo[cad] = true;\n");
+        //ret.append("}\n");
+        //ret.append("function stopSumbit(cad){\n");
+        //ret.append("    foo[cad] = false;\n");
+        //ret.append("}\n");
+        //ret.append("\n");
+        //ret.append("var myForm = dojo.byId(\"" + frmname + "\");\n");
+        //ret.append("onsubmit=function(){\n");
+        //ret.append("var canSubmit=true;\n");
+        //ret.append("alert('\"+enviar+\"');\\n");
+        //ret.append("for (var test in foo) {\n");
+        //ret.append("canSubmit = canSubmit&&foo[test];}\n");
+        //ret.append(" if (!canSubmit) alert('"+enviar+"');\n");
+        //ret.append("return canSubmit;};\n");
+        //ret.append("\n");
+        ret.append("</script>\n");
+        
+        //Termina Jorge
 
         return ret.toString();
     }
