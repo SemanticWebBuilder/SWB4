@@ -6,12 +6,11 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
-import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericResource;
@@ -61,8 +60,23 @@ public class LinksRedirector extends GenericResource {
                                 //Por el momento con la ip de los usuarios podría saber su ubicación y talvez ubicarlos en un mapa de google maps. (No esta por el mpmento)
                                 if(SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true"))
                                 {
-                                    PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
                                     System.out.println("Remote Addres:"+request.getRemoteAddr());
+                                    /*
+                                    Enumeration<String> enHeaders=request.getHeaderNames();
+                                    while(enHeaders.hasMoreElements())
+                                    {
+                                        String headerName=enHeaders.nextElement();
+                                        System.out.println("headerName:"+headerName+",value:"+request.getHeader(headerName));
+                                    }
+                                    Enumeration<String> enAttrs=request.getAttributeNames();
+                                    while(enAttrs.hasMoreElements())
+                                    {
+                                        String attr=enAttrs.nextElement();
+                                        System.out.println("attr:"+attr+",value:"+request.getAttribute(attr));
+                                    }
+                                    * */
+                                    
+                                    PostOutLinksHitsIp postOutHitIp=PostOutLinksHitsIp.ClassMgr.createPostOutLinksHitsIp(wsite); 
                                     postOutHitIp.setUserIP(request.getRemoteAddr());
                                     link.addUserIp(postOutHitIp);
                                 }
