@@ -189,14 +189,16 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
 
             if (mode.equals("edit") || mode.equals("create")) {
                 System.out.println("ENTRA SELECT 1");
-                ret.append("<select name=\"" + name + "\" multiple=\"true\"");
-                ret.append(" style=\"width:300px;\"");
+                //ret.append("<select name=\"" + name + "\" multiple=\"true\"");
+                //ret.append(" style=\"width:300px;\"");
+                ret.append("<div class=\"swb-redesconfig-info\">");
+                ret.append("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"\">");
 
                 if (DOJO) {
                     //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
                 }
 
-                ret.append(" " + ext + ">");
+                //ret.append(" " + ext + ">");
 
                 // onChange="dojo.byId('oc1').value=arguments[0]"
                 SemanticClass            cls = prop.getRangeClass();
@@ -241,22 +243,29 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                     {                    
 
                         if (sob.getURI() != null) {
-                            ret.append("<option value=\"" + sob.getURI() + "\" ");
+                            //ret.append("<option value=\"" + sob.getURI() + "\" ");
+                            ret.append("<label><input type=\"checkbox\" value=\""+sob.getURI()+"\" name=\""+name+"\" id=\""+name+"\"");
 
                             if (vals.contains(sob.getURI())) {
-                                ret.append("selected=\"selected\"");
+                                //ret.append("selected=\"selected\"");
+                                ret.append(" checked");
                             }
-                            //if(sob.getGenericInstance() instanceof Twitter) ret.append(" data-image=\"/swbadmin/css/images/config-tw.png\""); //ret.append(" style=\"background-image:url(/swbadmin/css/images/config-tw.png);\" ");
-                            //if(sob.getGenericInstance() instanceof Facebook) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-fb.png) right no-repeat;\" ");
-                            //else if(sob.getGenericInstance() instanceof Youtube) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-yt.png);\" ");
-                            //else if(sob.getGenericInstance() instanceof Instagram) ret.append(" style=\"background-image:url(/swbadmin/css/images/config-in.png);\" ");
+                            ret.append("/>");
                             
-                            ret.append(">" + sob.getDisplayName(lang) + "</option>");
+                            if(sob.getGenericInstance() instanceof Twitter) ret.append("<img src=\"/swbadmin/css/images/config-tw.png\">");
+                            if(sob.getGenericInstance() instanceof Facebook) ret.append("<img src=\"/swbadmin/css/images/config-fb.png\">");
+                            if(sob.getGenericInstance() instanceof Youtube) ret.append("<img src=\"/swbadmin/css/images/config-yt.png\">");
+                            if(sob.getGenericInstance() instanceof Instagram) ret.append("<img src=\"/swbadmin/css/images/config-ig.png\">");
+                            
+                            //ret.append(">" + sob.getDisplayName(lang) + "</option>");
+                            ret.append("<span>"+sob.getDisplayName(lang)+"</span></label>");
                         }
                     }
                 }
 
-                ret.append("</select>");
+                //ret.append("</select>");
+                ret.append("</form>");
+                ret.append("</div>");
             } else if (mode.equals("view")) {
                 System.out.println("ENTRA SELECT 2");
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
