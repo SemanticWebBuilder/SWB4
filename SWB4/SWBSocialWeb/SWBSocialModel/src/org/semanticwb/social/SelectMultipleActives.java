@@ -191,6 +191,15 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 System.out.println("ENTRA SELECT 1");
                 //ret.append("<select name=\"" + name + "\" multiple=\"true\"");
                 //ret.append(" style=\"width:300px;\"");
+                
+                //ret.append("\n<script type=\"text/javascript\">\n");
+                //ret.append("function fieldValidation(){\n");
+                //ret.append("alert(\"hola\");");
+                //ret.append("return true;");
+                //ret.append("}\n");
+                //ret.append("\n</script>\n");
+                
+                
                 ret.append("<div class=\"swb-redesconfig-info\">");
                 ret.append("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"\">");
 
@@ -240,7 +249,14 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
 
                         if (sob.getURI() != null) {
                             //ret.append("<option value=\"" + sob.getURI() + "\" ");
-                            ret.append("<label><input type=\"checkbox\" value=\""+sob.getURI()+"\" name=\""+name+"\" id=\""+name+"\"");
+                            ret.append("<label><input type=\"checkbox\" value=\""+sob.getURI()+"\" name=\""+name+"\" id=\""+name+"_"+sob.getURI()+"\"");
+                            
+                            if(DOJO)
+                            {
+                                    //ret.append(" data-dojo-type=\"dijit/form/CheckBox\"");
+                                    //ret.append(" onClick=\"document.getElementById('"+frmname+"').addEventListener('submit',fieldValidation());\"");                                    
+                            }
+                            
 
                             if (vals.contains(sob.getURI())) {
                                 //ret.append("selected=\"selected\"");
@@ -254,6 +270,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                             if(sob.getGenericInstance() instanceof Instagram) ret.append("<img src=\"/swbadmin/css/images/config-ig.png\">");
                             
                             //ret.append(">" + sob.getDisplayName(lang) + "</option>");
+                            //ret.append(" <label for=\""+name+"\">Want</label>");
                             ret.append("<span>"+sob.getDisplayName(lang)+"</span></label>");
                         }
                     }
@@ -399,33 +416,38 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
         //ret.append("document.getElementById(\""+frmname+"\").addEventListener(\"submit\", function(){");
         //ret.append("function prepareEventHandlers() {");
         //ret.append("alert('Entra a prepareEventHandlers...');");
-        ret.append("    document.getElementById(\""+frmname+"\").addEventListener(\"submit\", function(){");
-        ret.append("    alert(\"Hicieron Submit\");");
+        //ret.append("    document.getElementById(\""+frmname+"\").addEventListener(\"submit\", function(){");
+        //ret.append("    alert(\"Hicieron Submit\");");
         //ret.append("    if(document.forms['"+frmname+"\']['"+name+"'].selectedIndex==-1){");
         //ret.append("        alert(\"Debe seleccionar por lo menos una red social a escuchar\");");
         //ret.append("    }");
         //ret.append("if (theForm.MyCheckbox.checked == false) {");
         //ret.append("if(document.forms['"+frmname+"\']['"+name+"'].checked== false){");
-        ret.append("var grupo = document.getElementById(\"form1\")."+name+";\n");
-        ret.append("alert('grupo:'+grupo);\n");
-        ret.append("if(!checkvalidate(grupo)){\n");
-        ret.append("        alert(\"Debe seleccionar por lo menos una red social a escuchar\");\n");
-        ret.append("        return false;\n");
-        ret.append("}else{\n");
-        ret.append("        return true;\n");
-        ret.append("}\n");
+        //ret.append("var grupo = document.getElementById(\"form1\")."+name+";\n");
+        //ret.append("alert('grupo:'+grupo);\n");
+        //ret.append("if(!checkvalidate(grupo)){\n");
+        //ret.append("        alert(\"Debe seleccionar por lo menos una red social a escuchar\");\n");
+        //ret.append("        return false;\n");
+        //ret.append("}else{\n");
+        //ret.append("        return true;\n");
+        //ret.append("}\n");
         
-        ret.append("function checkvalidate(checks) {\n");
-        ret.append("for (i = 0; lcheck = checks[i]; i++) {\n");
-        ret.append("    if (lcheck.checked) {\n");
-        ret.append("         return true;\n");
-        ret.append("    }\n");
-        ret.append("}\n");
-        ret.append("    return false;\n");
+        ret.append("function fieldValidation(){\n");
+        ret.append("alert(\"hola\");");
         ret.append("}\n");
         
         
-        ret.append("    }, false);");
+        //ret.append("function checkvalidate(checks) {\n");
+        //ret.append("for (i = 0; lcheck = checks[i]; i++) {\n");
+        //ret.append("    if (lcheck.checked) {\n");
+        //ret.append("         return true;\n");
+        //ret.append("    }\n");
+        //ret.append("}\n");
+        //ret.append("    return false;\n");
+        //ret.append("}\n");
+        
+        
+        //ret.append("    }, false);");
         //ret.append("//-->");
         //ret.append("}");
         //ret.append("window.setTimeOut(prepareEventHandlers,2000);");
