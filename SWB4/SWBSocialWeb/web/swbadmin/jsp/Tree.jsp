@@ -5,6 +5,7 @@
 <%@page import="com.hp.hpl.jena.ontology.OntClass"%>
 <%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
 <%@page import="org.semanticwb.social.Pageable"%>
+<%@page import="org.semanticwb.social.Stream"%>
 <%@page contentType="text/html" %><%@page pageEncoding="UTF-8" %>
 <%!
     int nullnode=0;
@@ -319,7 +320,12 @@
         if(cls!=null)
         {
             //TODO:Separar en controller
-            if(cls.equals(Language.sclass))
+            if(cls.equals(Stream.sclass))
+            {
+                //Para que el Jsp del dialogo de creación sea propio, yo tengo mas pripiedades obligatorias que no deseo 
+                //que aparezcan en el dialogo de creación, sino hasta la pestaña de "Información" de la clase Stream (en este caso)
+                url+="/work/models/SWBAdmin/jsp/addStream.jsp"; 
+            }else if(cls.equals(Language.sclass))
             {
                 url+="/swbadmin/jsp/addLang.jsp";
             }else if(cls.equals(Country.sclass))
