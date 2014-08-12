@@ -82,7 +82,7 @@ public class EmailResource extends GenericResource {
 
         toReturn.append("<div class=\"panel panel-default\">");
         toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
-        toReturn.append("   <div class=\"panel-heading swb-panel-cabeza\"> Enviar Correo...");
+        toReturn.append("   <div class=\"panel-heading swb-panel-cabeza\">" + paramRequest.getLocaleString("lbl_addTitle") + "");
         toReturn.append("   <a href=\"#\" class=\"btn fa fa-times fa-lg pull-right swb-icon-cerrar\" data-dismiss=\"modal\"></a>");
         toReturn.append("   </div>");
         toReturn.append("     <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">");
@@ -140,7 +140,7 @@ public class EmailResource extends GenericResource {
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("            <label class=\"col-lg-1 control-label\">Adjunto:</label>");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Attach")+"</label>");
         toReturn.append("             <div class=\"col-lg-11\">");
         toReturn.append("             </div>");
         toReturn.append("             <div class=\"col-lg-11  pull-right\">");
