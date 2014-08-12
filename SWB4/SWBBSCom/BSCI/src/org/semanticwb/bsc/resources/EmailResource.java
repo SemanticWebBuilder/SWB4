@@ -135,7 +135,7 @@ public class EmailResource extends GenericResource {
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Subject") + "</label>");
         toReturn.append("             <div class=\"col-lg-11\">");      
-        toReturn.append("               <input name=\"subject\" size=\"50\" type=\"text\"></input>");
+        toReturn.append("               <input name=\"subject\" class=\"form-control\" type=\"text\"></input>");
         toReturn.append("             </div>");
         toReturn.append("           </div>");
         
