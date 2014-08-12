@@ -80,33 +80,94 @@ public class EmailResource extends GenericResource {
         Iterator<User> itCc = wsite.getUserRepository().listUsers();
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
 
-        toReturn.append("<div class=\"swbform\" id=\"EmailSend\">");
+        toReturn.append("<div class=\"panel panel-default\">");
         toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
-        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_From") + "<input id=\"from\" name=\"from\" size=\"30\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input></p>");
-        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_To") + "<select id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
-        toReturn.append("<option value=\"\">Selecciona...</option>");
-        while (itTo.hasNext()) {
-            User usr = itTo.next();
-            toReturn.append("<option value=\"" + usr.getEmail() + "\">" + replaceHtml(usr.getFullName()) + "</option>");
-        }
-        toReturn.append("</select></p>");
-        toReturn.append("<div id=\"divTo\" style=\"display:none;\"><input id=\"toText\" name=\"toText\" size=\"100\" type=\"text\"></div>");
-        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Cc") + "<select id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
-        toReturn.append("<option value=\"\">Selecciona...</option>");
-        while (itCc.hasNext()) {
-            User usr = itCc.next();
-            toReturn.append("<option value=\"" + usr.getEmail() + "\">" + usr.getFullName() + "</option>");
-        }
-        toReturn.append("</select></p>");
-        toReturn.append("<div id=\"divCc\" style=\"display:none;\"><input id=\"ccText\" name=\"ccText\" size=\"100\" type=\"text\"></input></div>");
-        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Subject") + "<input name=\"subject\" size=\"50\" type=\"text\"></input></p>");
-        toReturn.append("<input type=\"file\" name=\"uploadFile\" />");
-        toReturn.append("<input type=\"hidden\" name=\"upload\" value=\"upload\" />");
-        toReturn.append("<p>" + paramRequest.getLocaleString("lbl_Message") + "<textarea name=\"message\" rows=\"10\" cols=\"50\"></textarea></p>");
-        toReturn.append("<p><button type=\"submit\">"
-                + paramRequest.getLocaleString("lbl_Send") + "</button>");
-        toReturn.append("</form>");
-        toReturn.append("</div>");
+        toReturn.append("   <div class=\"panel-heading swb-panel-cabeza\"> Enviar Correo...");
+        toReturn.append("   <a href=\"#\" class=\"btn fa fa-times fa-lg pull-right swb-icon-cerrar\" data-dismiss=\"modal\"></a>");
+        toReturn.append("   </div>");
+        toReturn.append("     <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">");
+        toReturn.append("       <div class=\"row\" style=\"margin: 0px;\">");
+        toReturn.append("         <div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12  swb-fondo-izq\">");
+        toReturn.append("           <form class=\"form-horizontal\" role=\"form\">");// abre form izquierdo
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("           <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_From") + "</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("             <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input>");
+        toReturn.append("             </div>");
+        toReturn.append("           </div>");
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_To") + "</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("              <select class=\"form-control\" id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
+        toReturn.append("              <option value=\"\">Selecciona...</option>");
+                        while (itTo.hasNext()) {
+                        User usr = itTo.next();
+                        toReturn.append("<option value=\"" + usr.getEmail() + "\">" + replaceHtml(usr.getFullName()) + "</option>");
+                        }
+        toReturn.append("              </select>");
+        toReturn.append("            </div>");
+        toReturn.append("            <div class=\"col-lg-11 col-md-12 col-sm-12 col-xs-12 pull-right\" id=\"divTo\" style=\"display:none;\">");
+        toReturn.append("               <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">");
+        toReturn.append("            </div>");
+        toReturn.append("           </div>");
+        
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Cc") + "</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("              <select class=\"form-control\" id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
+        toReturn.append("              <option value=\"\">Selecciona...</option>");
+                        while (itCc.hasNext()) {
+                        User usr = itCc.next();
+                        toReturn.append("<option value=\"" + usr.getEmail() + "\">" + usr.getFullName() + "</option>");
+                        }
+        toReturn.append("              </select>");
+        toReturn.append("             </div>");
+        toReturn.append("           <div class=\"col-lg-11 col-md-12 col-sm-12 col-xs-12 pull-right\" id=\"divCc\" style=\"display:none;\">");
+        toReturn.append("               <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>");
+        toReturn.append("            </div>");
+        toReturn.append("           </div>");
+        toReturn.append("           </form>"); // cierra form izquierdo
+        toReturn.append("         </div>"); // cierra div swb-fondo-izq
+        
+        toReturn.append("         <div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12 swb-fondo-der\">"); // abre div swb-fondo-der 
+        toReturn.append("          <form class=\"form-horizontal\" role=\"form\">");// abre form derecho
+        
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Subject") + "</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");      
+        toReturn.append("               <input name=\"subject\" size=\"50\" type=\"text\"></input>");
+        toReturn.append("             </div>");
+        toReturn.append("           </div>");
+        
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">Adjunto:</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("             </div>");
+        toReturn.append("             <div class=\"col-lg-11  pull-right\">");
+        toReturn.append("               <input type=\"file\" name=\"uploadFile\" />");
+        toReturn.append("               <input type=\"hidden\" name=\"upload\" value=\"upload\" />");
+        toReturn.append("             </div>");
+        toReturn.append("           </div>");
+        
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Message")+"</label>");
+        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("               <textarea class=\"form-control\" name=\"message\" rows=\"3\"></textarea>");
+        toReturn.append("             </div>");
+        toReturn.append("           </div>");
+        
+        toReturn.append("           <div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
+        toReturn.append("           <a href=\"#\" data-dismiss=\"modal\">");
+        toReturn.append("               <button type=\"button\" class=\"btn btn-default pull-right swb-boton-cancelar\" >Cancelar</button>");
+        toReturn.append("           <a>");    
+        toReturn.append("           <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>");
+        toReturn.append("           </div>");
+        toReturn.append("          </form>");// cierra form derecho
+        toReturn.append("         </div>"); // cierra div swb-fondo-der
+        toReturn.append("       </div>"); // cierra div class row
+        toReturn.append("     </div>"); // cierra div class panel body
+        toReturn.append("   </form>");// cierra form formEmail
+        toReturn.append("</div>"); // cierra div panel-default
 
         toReturn.append("\n <script type=\"text/javascript\">");
         toReturn.append("\n function getValidate(){");
