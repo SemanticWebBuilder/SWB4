@@ -119,21 +119,26 @@ public class StrategicMap extends GenericResource
             final String suri = request.getParameter("suri");
             PrintWriter out = response.getWriter();
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-            // impresión PNG
-            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\" ");
-            out.print(" class=\"swbstgy-toolbar-printPng\" title=\"");
-            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
-            out.print("\">");
-            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
-            out.println("</a>");
             
             // impresión PDF
-            out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\" ");
+            /*out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\" ");
             out.print(" class=\"swbstgy-toolbar-printPdf\" title=\"");
             out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
             out.print("\">");
             out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
-            out.println("</a>");
+            out.println("</a>");*/
+            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\"><span class=\"glyphicon glyphicon-export\"></span></button>");
+            //<button type="button" class="btn btn-default" onclick="location.href='{topic@getUrl}/../home'"><span class="glyphicon glyphicon-export"></span></button>
+            
+            // impresión PNG
+            /*out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\" ");
+            out.print(" class=\"swbstgy-toolbar-printPng\" title=\"");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.print("\">");
+            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
+            out.println("</a>");*/
+            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\"><span class=\"glyphicon glyphicon-picture\"></span></button>");
+            //<button type="button" class="btn btn-default" onclick="location.href='{topic@getUrl}/../home'"><span class="glyphicon glyphicon-export"></span></button>
             
             out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
             out.println("  <input type=\"hidden\" name=\"suri\" value=\"" + suri + "\" />");
