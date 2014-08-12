@@ -157,9 +157,9 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                     if ("edit".equals(mode)) {
                         buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
                                 + pname + "_delFile\" name=\""
-                               + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>\n");
+                               + pname + "_delFile\" value=\"" + name + "\" /><a target=\"_blank\" href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>\n");
                     } else {
-                        buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
+                        buffer.append("&nbsp;<a target=\"_blank\" href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
                     }
                 }
             }
@@ -216,7 +216,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                     if (name.startsWith(pname)) {
                         name = name.substring(pname.length() + 1);
                     }
-                    buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
+                    buffer.append("&nbsp;<a target=\"_blank\" href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
                 } else {
                     Iterator<SemanticLiteral> lista = obj.listLiteralProperties(prop);
                     if (lista.hasNext()) {
@@ -227,13 +227,19 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
                             if (fname.startsWith(pname)) {
                                 name = fname.substring(pname.length() + 1);
                             }
-                            buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + fname + "\">" + name + "</a>");
+                            buffer.append("&nbsp;<a target=\"_blank\" href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + fname + "\">" + name + "</a>");
                         }
                     }
                 }
             }
         }
-        //System.out.println("Entra a SocialFileUpload/renderElement-1:" + buffer.toString());
+        
+        if(obj.getGenericInstance() instanceof Stream)
+        {
+            Stream stream=(Stream)obj.getGenericInstance();
+            buffer.append("<br/><image width=\"120\" height=\"120\"  src=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/"+stream.getStream_logo() + "\">");
+        }
+        
         return buffer.toString();
     }
 
