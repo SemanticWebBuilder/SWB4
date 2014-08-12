@@ -120,36 +120,13 @@ public class StrategicMap extends GenericResource
             PrintWriter out = response.getWriter();
             SWBResourceURL url = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
             
-            // impresión PDF
-            /*out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\" ");
-            out.print(" class=\"swbstgy-toolbar-printPdf\" title=\"");
-            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
-            out.print("\">");
-            out.print(paramRequest.getLocaleString("msgPrintPDFDocument"));
-            out.println("</a>");*/
-            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\"><span class=\"glyphicon glyphicon-export\"></span></button>");
-            //<button type="button" class="btn btn-default" onclick="location.href='{topic@getUrl}/../home'"><span class="glyphicon glyphicon-export"></span></button>
             
-            // impresión PNG
-            /*out.print("<a href=\"#\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\" ");
-            out.print(" class=\"swbstgy-toolbar-printPng\" title=\"");
-            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
-            out.print("\">");
-            out.print(paramRequest.getLocaleString("msgPrintPNGImage"));
-            out.println("</a>");*/
-            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\"><span class=\"glyphicon glyphicon-picture\"></span></button>");
-            //<button type="button" class="btn btn-default" onclick="location.href='{topic@getUrl}/../home'"><span class="glyphicon glyphicon-export"></span></button>
-            
-            out.println(" <form id=\"svgform\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
+            out.println(" <form id=\"exportsmfrm\" style=\"display:none;\" accept-charset=\"utf-8\" method=\"post\" action=\"#\">");
             out.println("  <input type=\"hidden\" name=\"suri\" value=\"" + suri + "\" />");
             out.println("  <input type=\"hidden\" id=\"data\" name=\"data\" value=\"\" />");
-            //out.println("  <input type=\"button\" value=\"Imagen\" onclick=\"getFile('" + url.setMode(Mode_PNGImage) + "')\"  />");
-            //out.println("  <input type=\"button\" value=\"PDF\" onclick=\"getFile('" + url.setMode(Mode_PDFDocument) + "')\"  />");
-            out.println(" </form>");
-
             out.println(" <script type=\"text/javascript\">");
             out.println("  function getFile(url) {");
-            out.println("   var form = document.getElementById('svgform');");
+            out.println("   var form = document.getElementById('exportsmfrm');");
             out.println("   var svg = document.getElementsByTagName('svg')[0];");
             out.println("   var svg_xml = (new XMLSerializer).serializeToString(svg);");
             out.println("   form.action = url;");
@@ -157,6 +134,11 @@ public class StrategicMap extends GenericResource
             out.println("   form.submit();");
             out.println("  };");
             out.println(" </script>");
+            out.println(" </form>");
+            // impresión PDF
+            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPDF)+"')\"><span class=\"glyphicon glyphicon-export\"></span></button>");            
+            // impresión PNG
+            out.println("<button type=\"button\" class=\"btn btn-default\" onclick=\"getFile('"+url.setMode(Mode_StreamPNG)+"')\"><span class=\"glyphicon glyphicon-picture\"></span></button>");
         }
         else
         {
