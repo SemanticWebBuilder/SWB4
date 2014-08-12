@@ -2004,6 +2004,30 @@
     <rdfs:label xml:lang="en">None of these words</rdfs:label>
     <rdfs:comment>Descarta estas palabras de la búsqueda</rdfs:comment>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="stream_logo">
+    <rdfs:label>Logo</rdfs:label>
+    <swb:displayProperty>
+      <swbxf:DisplayProperty rdf:ID="dp_stream_logo">
+        <swbxf:formElement>
+          <social:SocialFileUpload rdf:ID="swbSocial_Photo">
+            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgCrop>
+            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
+            >500000</swbxf:fileMaxSize>
+            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
+            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >false</swbxf:imgThumbnail>
+          </social:SocialFileUpload>
+        </swbxf:formElement>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >100</swb:index>
+      </swbxf:DisplayProperty>
+    </swb:displayProperty>
+    <rdfs:comment>Logotipo del Stream</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Stream"/>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="podur_userIds">
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>Propiedad en la que se guardan los identificadores de usuarios de una red social especifica a la que haga referencia cada registro y a la cual se sevía el PostOut.</rdfs:comment>
@@ -2636,18 +2660,7 @@
   <owl:DatatypeProperty rdf:ID="mainPhoto">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_mainPhoto">
-        <swbxf:formElement>
-          <social:SocialFileUpload rdf:ID="swbSocial_Photo">
-            <swbxf:imgCrop rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgCrop>
-            <swbxf:fileMaxSize rdf:datatype="http://www.w3.org/2001/XMLSchema#long"
-            >500000</swbxf:fileMaxSize>
-            <swbxf:fileFilter rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-            >jpg file:*.jpg|jpeg file:*.jpeg|png file:*.png</swbxf:fileFilter>
-            <swbxf:imgThumbnail rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-            >false</swbxf:imgThumbnail>
-          </social:SocialFileUpload>
-        </swbxf:formElement>
+        <swbxf:formElement rdf:resource="#swbSocial_Photo"/>
         <swbxf:propGroup rdf:resource="#pg_socialConfig"/>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >200</swb:index>
@@ -2927,6 +2940,11 @@
     <rdfs:domain rdf:resource="#Facebook"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
   </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="month">
+    <rdfs:domain rdf:resource="#PostOutContainer"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:comment>Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
+  </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="password">
     <rdfs:domain rdf:resource="#Authenticable"/>
     <rdfs:comment>Password o contraseña con la cual una organización se puede conectar a una determinada instancia de Red Social.</rdfs:comment>
@@ -2943,11 +2961,6 @@
     <rdfs:domain rdf:resource="#TextPhrase"/>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     <rdfs:comment>The set of social networks that will be accepted in this property</rdfs:comment>
-  </owl:DatatypeProperty>
-  <owl:DatatypeProperty rdf:ID="month">
-    <rdfs:domain rdf:resource="#PostOutContainer"/>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
-    <rdfs:comment>Mes en el cual es creada una instancia de PostContainer,esta propiedad servira mucho  para buscar los postOut de manera optima, ya que pudieran ser muchos en un corto tiempo.</rdfs:comment>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="rss_URL">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
