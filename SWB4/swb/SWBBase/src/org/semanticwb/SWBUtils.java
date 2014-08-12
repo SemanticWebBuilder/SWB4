@@ -3638,7 +3638,7 @@ public class SWBUtils {
             }
             if (contentType == null)
             {
-                contentType = "HTML";
+                contentType = "text/html";
             }
             if (contentType != null)
             {
