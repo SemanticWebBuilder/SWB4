@@ -31,72 +31,78 @@
         while(itPostOut.hasNext())
         {
             PostOut postOut=itPostOut.next();
-            SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode("preview").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
-            String msgText="";
-            if (postOut.getMsg_Text() != null) {
-                msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
-                msgText = msgText.replaceAll("\n", " ");
-            }
-            %>
-               <table class="postOut">
-                <tr class="msg">
-                    <td>Mensaje Enviado</td>
-                    <td>
-                        <span><a href="#" title="Vista del mensaje" onclick="showDialog('<%=urlPrev%>','Vista del mensaje'); return false;"><%=msgText%></a></span>
-                    </td>
-                </tr>
-            <%
-            HashMap<String, ArrayList> hmap=new HashMap();
             Iterator<PostOutLinksHits> itPostOutsLinkHits=PostOutLinksHits.ClassMgr.listPostOutLinksHitsByPostOut(postOut);
-            while(itPostOutsLinkHits.hasNext())
+            if(itPostOutsLinkHits.hasNext())
             {
-                PostOutLinksHits postOutLinksHit=itPostOutsLinkHits.next();
-                String targetUrl=postOutLinksHit.getTargetUrl();
-                if(!hmap.containsKey(targetUrl))
-                {
-                   ArrayList<PostOutLinksHits> aPostOutLinkHits=new ArrayList();    
-                   aPostOutLinkHits.add(postOutLinksHit);
-                   hmap.put(targetUrl, aPostOutLinkHits);
-                }else{
-                    ArrayList<PostOutLinksHits> aPostOutLinkHits=(ArrayList)hmap.get(targetUrl);
-                    aPostOutLinkHits.add(postOutLinksHit);
-                    hmap.remove(targetUrl);
-                    hmap.put(targetUrl, aPostOutLinkHits);
+                SWBResourceURL urlPrev = paramRequest.getRenderUrl().setMode("preview").setCallMethod(SWBResourceURL.Call_DIRECT).setParameter("postUri", postOut.getURI());
+                String msgText="";
+                if (postOut.getMsg_Text() != null) {
+                    msgText = SWBUtils.TEXT.cropText(SWBUtils.TEXT.scape4Script(postOut.getMsg_Text()), 25);
+                    msgText = msgText.replaceAll("\n", " ");
                 }
-            }
-            SWBResourceURL urlpostOutLinksHits = paramRequest.getRenderUrl().setMode("linkHitsData").setCallMethod(SWBResourceURL.Call_DIRECT); 
-            Iterator<String> itLinkHits=hmap.keySet().iterator();
-            while(itLinkHits.hasNext())
-            {
-                String strLink=itLinkHits.next();
-                Iterator<PostOutLinksHits> itHits=hmap.get(strLink).iterator(); 
                 %>
-                <tr>
-                    <td class="link">
-                        <span><%=strLink%></span>
-                    </td>
-                </tr>
-                    <%
-                        while(itHits.hasNext())
-                        {
-                            PostOutLinksHits postOutLinksHit=itHits.next();
-                            %>
-                            <tr class="socialNetHits">
-                                <td>
-                                    <%=postOutLinksHit.getSocialNet().getDisplayTitle(user.getLanguage())%>
-                                </td>
-                                <td>
-                                    <a href="#" title="Mostrar" onclick="showDialog('<%=urlpostOutLinksHits.setParameter("uri", postOutLinksHit.getURI())%>','Datos de Hits de Link'); return false;"><%=postOutLinksHit.getPol_hits()%></a>
-                                </td>
-                            </tr>
-                            <%
-                        }
+                   <table class="postOut">
+                    <tr class="msg">
+                        <td>
+                            <span><a href="#" title="Vista del mensaje" onclick="showDialog('<%=urlPrev%>','Vista del mensaje'); return false;"><%=msgText%></a></span>
+                        </td>
+                    </tr>
+                <%
+                HashMap<String, ArrayList> hmap=new HashMap();
+                while(itPostOutsLinkHits.hasNext())
+                {
+                    PostOutLinksHits postOutLinksHit=itPostOutsLinkHits.next();
+                    String targetUrl=postOutLinksHit.getTargetUrl();
+                    if(!hmap.containsKey(targetUrl))
+                    {
+                       ArrayList<PostOutLinksHits> aPostOutLinkHits=new ArrayList();    
+                       aPostOutLinkHits.add(postOutLinksHit);
+                       hmap.put(targetUrl, aPostOutLinkHits);
+                    }else{
+                        ArrayList<PostOutLinksHits> aPostOutLinkHits=(ArrayList)hmap.get(targetUrl);
+                        aPostOutLinkHits.add(postOutLinksHit);
+                        hmap.remove(targetUrl);
+                        hmap.put(targetUrl, aPostOutLinkHits);
+                    }
+                }
+                SWBResourceURL urlpostOutLinksHits = paramRequest.getRenderUrl().setMode("linkHitsData").setCallMethod(SWBResourceURL.Call_DIRECT); 
+                Iterator<String> itLinkHits=hmap.keySet().iterator();
+                while(itLinkHits.hasNext())
+                {
+                    String strLink=itLinkHits.next();
+                    Iterator<PostOutLinksHits> itHits=hmap.get(strLink).iterator(); 
                     %>
+                    <tr>
+                        <td class="link">
+                            <span><a target="_blank" href="<%=strLink%>"><%=strLink%></a></span>
+                        </td>
+                    </tr>
+                        <%
+                            while(itHits.hasNext())
+                            {
+                                PostOutLinksHits postOutLinksHit=itHits.next();
+                                %>
+                                <tr class="socialNetHits">
+                                    <td>
+                                        <%=postOutLinksHit.getSocialNet().getDisplayTitle(user.getLanguage())%>
+                                    </td>
+                                    <td>
+                                        <%if(postOutLinksHit.getPol_hits()>0){%>                            
+                                            <a href="#" title="Mostrar" onclick="showDialog('<%=urlpostOutLinksHits.setParameter("uri", postOutLinksHit.getURI())%>','Datos de Hits de Link'); return false;"><%=postOutLinksHit.getPol_hits()%></a>
+                                        <%}else{%>
+                                            <%=postOutLinksHit.getPol_hits()%>
+                                        <%}%>
+                                    </td>
+                                </tr>
+                                <%
+                            }
+                        %>
+                    <%
+                }
+                %>  
+                   </table>
                 <%
             }
-            %>  
-               </table>
-            <%
         }
     }catch(Exception e){
         e.printStackTrace();
