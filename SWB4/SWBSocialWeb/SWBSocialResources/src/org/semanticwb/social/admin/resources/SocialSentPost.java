@@ -59,7 +59,6 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Activeable;
-import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.PFlowInstance;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
@@ -104,6 +103,8 @@ import org.semanticwb.social.VideoIn;
 import org.semanticwb.social.Youtube;
 import org.semanticwb.social.PostOutMonitorable;
 import org.semanticwb.social.admin.resources.util.SWBSocialResUtil;
+import org.semanticwb.social.SocialCalendar;
+import org.semanticwb.social.SocialCalendarRef;
 
 /**
  *
@@ -957,9 +958,9 @@ public class SocialSentPost extends GenericResource {
                 }
             }
             boolean oneCalendarIsActive = false;
-            Iterator<CalendarRef> itCalendarsRefs = postOut.listCalendarRefs();
+            Iterator<SocialCalendarRef> itCalendarsRefs = postOut.listSocialCalendarRefs();
             while (itCalendarsRefs.hasNext()) {
-                CalendarRef calRef = itCalendarsRefs.next();
+                SocialCalendarRef calRef = itCalendarsRefs.next();
                 if (calRef.isValid()) {
                     oneCalendarIsActive = true;
                     break;
