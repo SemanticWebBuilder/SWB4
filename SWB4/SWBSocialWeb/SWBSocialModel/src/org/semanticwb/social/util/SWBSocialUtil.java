@@ -35,7 +35,6 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Language;
 import org.semanticwb.model.ModelProperty;
@@ -43,7 +42,6 @@ import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroupRef;
-import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.SWBFormMgr;
@@ -71,6 +69,8 @@ import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.SocialNetworkUser;
 import org.semanticwb.social.SocialPFlow;
 import org.semanticwb.social.SocialSite;
+import org.semanticwb.social.SocialCalendar;
+import org.semanticwb.social.SocialCalendarRef;
 import org.semanticwb.social.Stream;
 import org.semanticwb.social.Video;
 import org.semanticwb.social.Videoable;
@@ -1878,11 +1878,11 @@ public class SWBSocialUtil {
             if(postOut==null) return;
             WebSite wsite=WebSite.ClassMgr.getWebSite(postOut.getSemanticObject().getModel().getName());
             //Primero se eliminan todas las referencias a CalendarRefs que tenga el PostOut
-            Iterator<CalendarRef> itCalendarRefs=postOut.listCalendarRefs();
+            Iterator<SocialCalendarRef> itCalendarRefs=postOut.listSocialCalendarRefs();
             while(itCalendarRefs.hasNext())
             {
-                CalendarRef calRef=itCalendarRefs.next();
-                postOut.removeCalendarRef(calRef);
+                SocialCalendarRef calRef=itCalendarRefs.next();
+                postOut.removeSocialCalendarRef(calRef);
                 calRef.remove();
             }
             
@@ -1895,13 +1895,13 @@ public class SWBSocialUtil {
                     try
                     {
                         SemanticObject semObjCalendar=SemanticObject.createSemanticObject(semObjUri);
-                        org.semanticwb.model.Calendar calendar=(org.semanticwb.model.Calendar)semObjCalendar.createGenericInstance();
+                        SocialCalendar calendar=(SocialCalendar)semObjCalendar.createGenericInstance();
                         if(calendar!=null)
                         {
-                            CalendarRef calRef=CalendarRef.ClassMgr.createCalendarRef(wsite);
-                            calRef.setCalendar(calendar);
+                            SocialCalendarRef calRef=SocialCalendarRef.ClassMgr.createSocialCalendarRef(wsite);
+                            calRef.setSocialCalendar(calendar);
                             calRef.setActive(true);
-                            postOut.addCalendarRef(calRef);
+                            postOut.addSocialCalendarRef(calRef);
                         }
                     }catch(Exception ignore){}
                 }
@@ -2155,7 +2155,7 @@ public class SWBSocialUtil {
                         if(strMessage==null) strMessage="";
                         SocialLoader.getPFlowManager().sendResourceToAuthorize(postOut, socialPFlow, strMessage);
                         //sendPostOutToAuthorize(postOut, socialPFlow, socialFlowComment);
-                    } else if(postOut.getFastCalendar()==null && !postOut.listCalendarRefs().hasNext()){ //Si no tiene un FastCalendar, ni un Calendar, ya publicalo desde aquí, de lo contrario no lo publiques, en su momento sera publicado desde SWBSocialCalendarMgr
+                    } else if(postOut.getFastCalendar()==null && !postOut.listSocialCalendarRefs().hasNext()){ //Si no tiene un FastCalendar, ni un Calendar, ya publicalo desde aquí, de lo contrario no lo publiques, en su momento sera publicado desde SWBSocialCalendarMgr
                         //Revisa las redes sociales a las cuales se tiene que enviar el Post
                         //String[] socialUris = socialUri.split("\\|");  //Dividir valores
                         //System.out.println("Se publicaJ-3");

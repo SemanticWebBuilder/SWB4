@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Define las diferentes etapas de la vida de una persona. 
    */
-public abstract class LifeStageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
+public abstract class LifeStageBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
 {
    /**
    * Edad Maxima considerada para la etapa de la vida especificada

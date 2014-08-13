@@ -1,7 +1,7 @@
 package org.semanticwb.social.base;
 
 
-public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.social.GeoMapable,org.semanticwb.model.Descriptiveable
+public abstract class CountryBase extends org.semanticwb.social.GeoCatalog implements org.semanticwb.model.Descriptiveable,org.semanticwb.social.GeoMapable
 {
    /**
    * Clase que comprende todos los tipos de Post de entrada (Povientes del Listener)que pueden ir siendo creados en la herramienta.

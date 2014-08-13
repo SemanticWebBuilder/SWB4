@@ -11,11 +11,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.CalendarRef;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.PostOut;
 import org.semanticwb.social.SocialCalendar;
+import org.semanticwb.social.SocialCalendarRef;
 import org.semanticwb.social.SocialFlow.SocialPFlowMgr;
 import org.semanticwb.social.FastCalendar;
 
@@ -75,9 +75,10 @@ public class SWBSocialCalendarMgr {
                 //System.out.println("sCalendar Todos:" + sCalendar);
                 if (wsite.isActive() && !wsite.isDeleted() && sCalendar.isActive()) {
                     //CalendarRefs
-                    Iterator<CalendarRef> itCalRefs = sCalendar.listCalendarRefInvs();
+                    //Iterator<CalendarRef> itCalRefs = sCalendar.listCalendarRefInvs();
+                    Iterator<SocialCalendarRef> itCalRefs = sCalendar.listSocialCalendarRefInvs();
                     while (itCalRefs.hasNext()) {
-                        CalendarRef calRef = itCalRefs.next();
+                        SocialCalendarRef calRef = itCalRefs.next();
                         if(calRef.isActive())
                         {
                             //System.out.println("calRef-Activo:" + calRef);

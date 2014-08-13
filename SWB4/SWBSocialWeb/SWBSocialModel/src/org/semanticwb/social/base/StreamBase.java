@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que contendra los streams que configurados para cada usuario 
    */
-public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.social.Geolocable,org.semanticwb.model.Filterable,org.semanticwb.model.Referensable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable
+public abstract class StreamBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Geolocable,org.semanticwb.model.Activeable,org.semanticwb.model.Referensable,org.semanticwb.social.SocialRuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Traceable
 {
    /**
    * Número de Iteraciones que se ha tenido el Stream. Este dato se utiliza en conjunto con el de la propiedad "promPostNumber" para poder determinar si el número de mensajes que accesaron al Stream amerita que se envíe una notificación (alerta) indicando que llegaron mas mensajes al Stream que los que se tiene en promedio en un tiempo determinado.
