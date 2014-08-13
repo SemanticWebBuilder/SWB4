@@ -234,18 +234,18 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FormElement"/>
   </owl:Class>
   <owl:Class rdf:ID="SocialCalendar">
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
     <rdfs:label xml:lang="es">Calendario</rdfs:label>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Calendar"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:comment>Clase Calendario para SWBSocial</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
     <rdfs:label xml:lang="en">Calendar</rdfs:label>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#Relationable"/>
-    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#XMLable"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_socialCalendar">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1060,6 +1060,10 @@
     <rdfs:comment>Propiedad que lista todas las instancias de PostOutPrivacyRelation que tengan asociada un tipo de privacidad. Si se elimina un tipo de privacidad (Una instancia) se eliminarían todas las instancias de PostOutPrivacyRelation que tengan relacionada ese tipo de Privacidad.</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasPostInDeviceInv"/>
+  <owl:ObjectProperty rdf:ID="hasSocialCalendarRefInv">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasSocialPFlowinstance">
     <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:removeDependency>
@@ -1103,7 +1107,13 @@
     </rdfs:range>
     <rdfs:domain>
       <swb:Class rdf:ID="PostOut">
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#CalendarRefable"/>
+        <rdfs:subClassOf>
+          <swb:Interface rdf:ID="SocialCalendarRefable">
+            <rdfs:comment>Interfaz que define propiedades para elementos que pueden referenciar a calendarios sociales</rdfs:comment>
+            <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Referensable"/>
+            <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+          </swb:Interface>
+        </rdfs:subClassOf>
         <rdfs:comment>Clase que comprende todos los tipos de Post de Salida que pueden ir siendo creados en la herramienta y que seran publicados a partir de esto en las diferentes redes sociales. Esta clase no se relaciona con una red social (con la clase SocialNetwork) porque un post de salida (desde la herramienta) podría ser enviado a diferentes redes sociales, sin embargo, es el mismo post de salida. Donde esta a que red social se envía esta en las instancias de la clase PostContainer.</rdfs:comment>
         <rdfs:subClassOf rdf:resource="#Post"/>
         <swb:classGroupId rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1138,6 +1148,19 @@
     <owl:inverseOf>
       <owl:ObjectProperty rdf:ID="hasPostOutLinksHitsInv"/>
     </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasSocialCalendarRef">
+    <swb:removeDependency rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:removeDependency>
+    <rdfs:range>
+      <swb:Class rdf:ID="SocialCalendarRef">
+        <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</swb:autogenId>
+        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Reference"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+      </swb:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#SocialCalendarRefable"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasTopics2Apply">
     <rdfs:label xml:lang="en">Topics to classify messages</rdfs:label>
@@ -1447,11 +1470,6 @@
     </swb:displayProperty>
     <rdfs:range rdf:resource="#SocialNetwork"/>
   </owl:ObjectProperty>
-  <owl:ObjectProperty rdf:ID="snu_LifeStage">
-    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
-    <rdfs:range rdf:resource="#LifeStage"/>
-    <rdfs:comment>Etapa de vida del usuario de la red social</rdfs:comment>
-  </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="sn_socialNet">
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_sn_socialNet">
@@ -1468,6 +1486,11 @@
     <rdfs:label xml:lang="en">Social Network account</rdfs:label>
     <rdfs:label xml:lang="es">Cuenta de Red Social</rdfs:label>
     <rdfs:domain rdf:resource="#FanPage"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="snu_LifeStage">
+    <rdfs:domain rdf:resource="#SocialNetworkUser"/>
+    <rdfs:range rdf:resource="#LifeStage"/>
+    <rdfs:comment>Etapa de vida del usuario de la red social</rdfs:comment>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="hasYoutubeCategory">
     <rdfs:range>
@@ -1668,6 +1691,11 @@
     <swb:canUsedAsName rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:canUsedAsName>
     <rdfs:domain rdf:resource="#SocialPFlowRef"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="socialCalendar">
+    <owl:inverseOf rdf:resource="#hasSocialCalendarRefInv"/>
+    <rdfs:range rdf:resource="#SocialCalendar"/>
+    <rdfs:domain rdf:resource="#SocialCalendarRef"/>
   </owl:ObjectProperty>
   <owl:ObjectProperty rdf:ID="popr_socialNetwork">
     <owl:inverseOf rdf:resource="#haspopr_socialNetworkInv"/>
