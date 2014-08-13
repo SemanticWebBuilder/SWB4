@@ -89,12 +89,12 @@
             postOutPFlowUri = postOut.getPflowInstance().getPflow().getURI();
             //System.out.println("postOutPFlowUri++G++:" + postOutPFlowUri);
         }
-        if (postOut.listCalendarRefs().hasNext()) {
-            Iterator<CalendarRef> itCalendarRefs = postOut.listCalendarRefs();
+        if (postOut.listSocialCalendarRefs().hasNext()) {
+            Iterator<SocialCalendarRef> itCalendarRefs = postOut.listSocialCalendarRefs();
             while (itCalendarRefs.hasNext()) {
-                CalendarRef calendarRef = itCalendarRefs.next();
-                if (calendarRef.isActive() && calendarRef.getCalendar() != null) {
-                    apostOutCalendars.add(calendarRef.getCalendar().getURI());
+                SocialCalendarRef calendarRef = itCalendarRefs.next();
+                if (calendarRef.isActive() && calendarRef.getSocialCalendar() != null) { 
+                    apostOutCalendars.add(calendarRef.getSocialCalendar().getURI()); 
                 }
             }
         }
