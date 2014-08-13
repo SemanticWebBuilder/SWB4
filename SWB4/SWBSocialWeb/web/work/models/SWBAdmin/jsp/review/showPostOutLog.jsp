@@ -82,7 +82,22 @@
                     <%=postOutNet.getSocialNetwork().getDisplayTitle(user.getLanguage())%>
                 </td>
                 <td>
-                    <%=postOutNet.getPo_socialNetMsgID()!=null?postOutNet.getPo_socialNetMsgID():""%>
+                    <%
+                      if(postOutNet.getPo_socialNetMsgID()!=null)
+                      {
+                          String socialUrl="";
+                          if(postOutNet.getSocialNetwork() instanceof Twitter) socialUrl="http://twitter.com/#!/nannygoats/status/";
+                          else if(postOutNet.getSocialNetwork() instanceof Facebook) socialUrl="http://facebook.com/";
+                          else if(postOutNet.getSocialNetwork() instanceof Youtube) socialUrl="https://www.youtube.com/watch?v="; 
+                          else if(postOutNet.getSocialNetwork() instanceof Instagram) socialUrl="http://instagram.com/p/"; 
+                          if(socialUrl.trim().length()>0)
+                          {
+                          %> 
+                          <a target="_blank" href="<%=socialUrl+postOutNet.getPo_socialNetMsgID()%>"><%=postOutNet.getPo_socialNetMsgID()%></a> 
+                          <%}else{%>
+                          <%=postOutNet.getPo_socialNetMsgID()%> 
+                          <%}%>
+                      <%}%>                            
                 </td>
                 <td>
                 <%
@@ -115,7 +130,6 @@
                 </td>
                 <td>
                     <%
-                        
                         if(postOutNet.getError()!=null)
                         {
                             SWBResourceURL actionUrl=paramRequest.getActionUrl();
