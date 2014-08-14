@@ -74,7 +74,7 @@
                     %>
                     <tr>
                         <td class="link">
-                            <span><a target="_blank" href="<%=strLink%>"><%=strLink%></a></span>
+                            <span>Hola Mundo<a target="_blank" href="<%=strLink%>"><%=strLink%></a></span>
                         </td>
                     </tr>
                         <%
