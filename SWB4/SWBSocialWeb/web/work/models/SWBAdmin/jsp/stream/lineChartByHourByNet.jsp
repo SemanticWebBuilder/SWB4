@@ -93,7 +93,7 @@
         }
         title[socialNet] = postIn.getPostInSocialNetwork().getTitle();
         totalPosts++;        
-    }
+    }    
 
 %>
 
@@ -213,7 +213,7 @@ function getChartData() {
       positivos: positives<%=i%>,
       negativos: negatives<%=i%>,
       neutros: neutrals<%=i%>,
-      key: "<%=title[i]%>",
+      key: "<%=SWBUtils.TEXT.replaceSpecialCharacters(title[i], false)%>",
       color: getRandomColor()
     }
     <%if(i < dataArray.length-1)
