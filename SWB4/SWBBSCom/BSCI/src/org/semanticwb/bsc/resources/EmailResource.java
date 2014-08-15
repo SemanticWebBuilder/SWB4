@@ -79,12 +79,9 @@ public class EmailResource extends GenericResource {
         Iterator<User> itTo = wsite.getUserRepository().listUsers();
         Iterator<User> itCc = wsite.getUserRepository().listUsers();
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
-
+        
         toReturn.append("<div class=\"panel panel-default\">");
         toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
-        toReturn.append("   <div class=\"panel-heading swb-panel-cabeza\">" + paramRequest.getLocaleString("lbl_addTitle") + "");
-        toReturn.append("   <a href=\"#\" class=\"btn fa fa-times fa-lg pull-right swb-icon-cerrar\" data-dismiss=\"modal\"></a>");
-        toReturn.append("   </div>");
         toReturn.append("     <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">");
         toReturn.append("       <div class=\"row\" style=\"margin: 0px;\">");
         toReturn.append("         <div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12  swb-fondo-izq\">");
@@ -157,9 +154,6 @@ public class EmailResource extends GenericResource {
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
-        toReturn.append("           <a href=\"#\" data-dismiss=\"modal\">");
-        toReturn.append("               <button type=\"button\" class=\"btn btn-default pull-right swb-boton-cancelar\" >Cancelar</button>");
-        toReturn.append("           <a>");    
         toReturn.append("           <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>");
         toReturn.append("           </div>");
         toReturn.append("          </form>");// cierra form derecho
@@ -168,7 +162,7 @@ public class EmailResource extends GenericResource {
         toReturn.append("     </div>"); // cierra div class panel body
         toReturn.append("   </form>");// cierra form formEmail
         toReturn.append("</div>"); // cierra div panel-default
-
+        
         toReturn.append("\n <script type=\"text/javascript\">");
         toReturn.append("\n function getValidate(){");
         toReturn.append("\n var form = document.getElementById('formEmail');");
