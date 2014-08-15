@@ -113,10 +113,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script type="text/javascript" src="/swbadmin/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true, isDebug: false"></script>
     <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/schedule.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/fileUpload.js" ></script>
-    <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/jsp/reports/tagcanvas.js" ></script>
+    <script type="text/javascript" charset="utf-8" src="/swbadmin/js/swb_admin.js"></script>    
     <script type="text/javascript" charset="utf-8" src="/work/models/SWBAdmin/js/swbsocial.js" ></script>
     <script type="text/javascript">
         dojo.require("dijit.form.DateTextBox");
@@ -151,46 +148,50 @@
                         <option value="<%=SocialNetworkUser.USER_GENDER_UNDEFINED%>" <%=genderP.containsKey("" + SocialNetworkUser.USER_GENDER_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
                     </select>
                 </div>
+                <%/*
                 <div id="estudios-box" style="height: 70px;">
                     <label for="school">Estudios</label>
                     <select name="schoolGrade" multiple>
-                        <option value="all" <%=schoolGradeP.containsKey("all") || schoolGradeP.size() == 0 ? "selected" : ""%>>Todos</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : ""%>>Secundaria, Preparatoria</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : ""%>>Universidad</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : ""%>>PostGrado</option>
-                        <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED%>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                        <option value="all" <%=schoolGradeP.containsKey("all") || schoolGradeP.size() == 0 ? "selected" : "">>Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_HIGHSCHOOL) ? "selected" : "">>Secundaria, Preparatoria</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_COLLEGE>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_COLLEGE) ? "selected" : "">>Universidad</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_GRADUATE>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_GRADUATE) ? "selected" : "">>PostGrado</option>
+                        <option value="<%=SocialNetworkUser.USER_EDUCATION_UNDEFINED>" <%=schoolGradeP.containsKey("" + SocialNetworkUser.USER_EDUCATION_UNDEFINED) ? "selected" : "">>Indefinido</option>
                     </select>
                 </div>
-                <div id="etapa-box" style="height: 70px;">
+                */%>
+                <%/*<div id="etapa-box" style="height: 70px;">
                     <label for="life">Etapa</label>
                     <select name="lifeStage" multiple>
-                        <option value="all" <%=slifeStageP.containsKey("all") || slifeStageP.size() == 0 ? "selected" : ""%>>Todos</option>
+                        <option value="all" <%=slifeStageP.containsKey("all") || slifeStageP.size() == 0 ? "selected" : "">>Todos</option>
                        
                         <%
                             Iterator<LifeStage> itLifeStages = SWBComparator.sortByCreated(LifeStage.ClassMgr.listLifeStages(SWBContext.getGlobalWebSite()));
                             while (itLifeStages.hasNext()) {
                                 LifeStage lifeStage = itLifeStages.next();
                                 String lifeStageTitle = lifeStage.getTitle(user.getLanguage()) == null ? lifeStage.getTitle() : lifeStage.getTitle(user.getLanguage());
-                        %>
-                        <option value="<%=lifeStage.getId()%>" <%=slifeStageP.containsKey(lifeStage.getId()) ? "selected" : ""%>><%=lifeStageTitle%></option>
+                        
+                        <option value="<%=lifeStage.getId()>" <%=slifeStageP.containsKey(lifeStage.getId()) ? "selected" : "">><%=lifeStageTitle></option>
                         <%
                             }
-                        %>
-                         <option value="noDefinido" <%=slifeStageP.containsKey("noDefinido") ? "selected" : ""%>>No definido</option>
+                        
+                         <option value="noDefinido" <%=slifeStageP.containsKey("noDefinido") ? "selected" : "">>No definido</option>
                     </select>
                 </div>
+                */%>
+                <%/*
                 <div id="statuslove-box" style="height: 70px;">
                     <label for="sentimental">Estado civil</label>
                     <select name="sentimentalRelationShip" multiple>
-                        <option value="all" <%=sentimentalRelationShipP.containsKey("all") || genderP.size() == 0 ? "selected" : ""%>>Todos</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : ""%>>Soltero</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : ""%>>Casado</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : ""%>>Divorciado</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : ""%>>Viudo</option>
-                        <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED%>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : ""%>>Indefinido</option>
+                        <option value="all" <%=sentimentalRelationShipP.containsKey("all") || genderP.size() == 0 ? "selected" : "">>Todos</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_SINGLE>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_SINGLE) ? "selected" : "">>Soltero</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_MARRIED>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_MARRIED) ? "selected" : "">>Casado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_DIVORCED>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_DIVORCED) ? "selected" : "">>Divorciado</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_WIDOWED>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_WIDOWED) ? "selected" : "">>Viudo</option>
+                        <option value="<%=SocialNetworkUser.USER_RELATION_UNDEFINED>" <%=sentimentalRelationShipP.containsKey("" + SocialNetworkUser.USER_RELATION_UNDEFINED) ? "selected" : "">>Indefinido</option>
                     </select>
                 </div>
-
+                */%>
                 <div id="estado-box" style="height: 130px;">
                     <label for="country">Estado</label>
                     <select name="countryState" multiple="" size="8">
@@ -379,6 +380,53 @@
                 d3.select(tooltips[0][i])
                 .style("top", d3.event.pageY-10+"px")
                 .style("left", d3.event.pageX+10+"px")
+            })
+            
+            .on("click", function(d) {
+                if(confirm('øDesea exportar a excel?')){
+                        var acentos = "√¿¡ƒ¬»…À ÃÕœŒ“”÷‘Ÿ⁄‹€„‡·‰‚ËÈÎÍÏÌÔÓÚÛˆÙ˘˙¸˚—Ò«Á";
+                        var original = "AAAAAEEEEIIIIOOOOUUUUaaaaaeeeeiiiioooouuuunncc";
+                        
+                        console.log("data:" + d.data.toSource());
+                        console.log("click");
+                        var genderParams = "";
+                        var countryState = "";
+                        var sinceDate = "";
+                        var toDate = "";
+                        var sentiment = "";
+                        if(d.data.genderParams){                            
+                            for (i = 0; i < d.data.genderParams.length; i++){                                
+                                genderParams = genderParams + "&gender="+d.data.genderParams[i];
+                            }
+                            console.log("GENDER PARAMS:"+genderParams);
+                        }                        
+                        if(d.data.scountryStateParams){
+                            
+                            for (i = 0; i < d.data.scountryStateParams.length; i++){                                
+                                countryState = countryState + "&countryState="+d.data.scountryStateParams[i];
+                            }
+                            console.log("Country PARAMS:"+countryState);
+                        }
+                        if(d.data.sinceDate){
+                            sinceDate = d.data.sinceDate;
+                            console.log("sinceDATE PARAMS:"+sinceDate);
+                        }
+                        if(d.data.toDate){
+                            toDate = d.data.toDate;
+                            console.log("toDate PARAMS:"+toDate);
+                        }
+                        if(d.data.sentiment){
+                            sentiment = d.data.sentiment;
+                            console.log("SENTIMENT:" + sentiment);
+                        }
+                        /*for (var i=0; i<acentos.length; i++) {
+                            filter = filter.replace(acentos.charAt(i), original.charAt(i));
+                        }*/
+                        var url = "<%=paramRequest.getRenderUrl().setMode("export").setParameter("type", "filtered").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("objUri", suri).setParameter("doView", "1").setParameter("lang", lang)%>" + "&sinceDate="+sinceDate+"&toDate="+toDate+"&sentiment="+sentiment+genderParams+countryState;
+                        document.location.href = url;
+                        //document.hrefGeo.href = url;
+                    }
+                
             });
 
             //Create slices
