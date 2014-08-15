@@ -54,7 +54,7 @@
         Date dateSince = null;
         Date dateTo = null;
 
-        if (!sinceDate.equals("") && !toDate.equals("")) {            
+        if (sinceDate != null && !sinceDate.equals("") && toDate != null && !toDate.equals("")) {            
             SimpleDateFormat formatSince = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat formatTo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             toDate += " 23:59:59";
@@ -136,6 +136,16 @@
             node1.put("value2", "" + round(intPorcentajePositive));
             node1.put("color", "#008000");
             node1.put("chartclass", "possClass");
+            node1.put("genderParams", genderParams);
+            //node1.put("schoolGradeParams", schoolGradeParams);
+            //node1.put("slifeStageParams", slifeStageParams);
+            //node1.put("sentimentalRelationShipParams", sentimentalRelationShipParams);
+            node1.put("scountryStateParams", scountryStateParams);
+            if (sinceDate != null && !sinceDate.equals("") && toDate != null && !toDate.equals("")) {
+                node1.put("sinceDate", sinceDate);
+                node1.put("toDate", request.getParameter("toDate"));
+            }
+            node1.put("sentiment","1");//positives
             node.put(node1);
         }
         if (intPorcentajeNegative > 0) {
@@ -145,6 +155,13 @@
             node2.put("value2", "" + round(intPorcentajeNegative));
             node2.put("color", "#FF0000");
             node2.put("chartclass", "negClass");
+            node2.put("genderParams", genderParams);
+            node2.put("scountryStateParams", scountryStateParams);
+            if (sinceDate != null && !sinceDate.equals("") && toDate != null && !toDate.equals("")) {
+                node2.put("sinceDate", sinceDate);
+                node2.put("toDate", request.getParameter("toDate"));
+            }
+            node2.put("sentiment","2");//negatives
             node.put(node2);
         }
         if (intPorcentajeNeutral > 0) {
@@ -154,13 +171,20 @@
             node3.put("value2", "" + round(intPorcentajeNeutral));
             node3.put("color", "#838383");
             node3.put("chartclass", "neuClass");
+            node3.put("genderParams", genderParams);
+            node3.put("scountryStateParams", scountryStateParams);
+            if (sinceDate != null && !sinceDate.equals("") && toDate != null && !toDate.equals("")) {
+                node3.put("sinceDate", sinceDate);
+                node3.put("toDate", request.getParameter("toDate"));
+            }
+            node3.put("sentiment","0");//neutral
             node.put(node3);
         }
 
         if (positives == 0 && negatives == 0 && neutrals == 0) {
             //System.out.println("Entra a ObSentData TODOS 0");
             JSONObject node3 = new JSONObject();
-            node3.put("label", "Neutros");
+            node3.put("label", "Sin datos");
             node3.put("value1", "0");
             node3.put("value2", "100");
             node3.put("color", "#eae8e3");
