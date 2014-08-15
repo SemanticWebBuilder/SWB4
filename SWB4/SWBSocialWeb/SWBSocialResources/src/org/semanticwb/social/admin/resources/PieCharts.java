@@ -348,11 +348,11 @@ public class PieCharts extends GenericResource {
             HashMap map = new HashMap();
             WebSite ss = SWBSocialUtil.getConfigWebSite();
             Iterator i = null;
-
+            
             i = Language.ClassMgr.listLanguages(ss);
             while (i.hasNext()) {
-                Language language = (Language) i.next();
-                map.put(reemplazar(language.getTitle()), new ArrayList<PostIn>());
+                Language language = (Language) i.next();               
+                map.put(reemplazar(language.getDisplayTitle(lang)), new ArrayList<PostIn>());
             }
             map.put("No definido", new ArrayList<PostIn>());
 
@@ -2026,7 +2026,7 @@ public class PieCharts extends GenericResource {
             String title = "";
 
             if (key != null) {
-                title = reemplazar(key.getTitle());
+                title = reemplazar(key.getDisplayTitle(lang));
                 // System.out.println("title " + title);
                 // map.put(title, map.containsKey(title) ? Integer.parseInt(map.get(title).toString()) + 1 : 0);
                 map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostIn>());
