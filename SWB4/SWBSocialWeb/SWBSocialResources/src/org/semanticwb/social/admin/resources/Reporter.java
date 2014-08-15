@@ -120,6 +120,22 @@ public class Reporter extends GenericResource {
         String slifeStageParams[] = getValidParams(request.getParameterValues("lifeStage"));
         String sentimentalRelationShipParams[] = getValidParams(request.getParameterValues("sentimentalRelationShip"));
         String scountryStateParams[] = getValidParams(request.getParameterValues("countryState"));
+        boolean filtered = false;
+        int sentiment = -1;
+        if(request.getParameter("type") != null && request.getParameter("type").equalsIgnoreCase("filtered")){
+            filtered = true;
+        }
+        
+        if(request.getParameter("sentiment") != null){
+            try{
+                if(Integer.parseInt(request.getParameter("sentiment"))>=0 &&
+                        Integer.parseInt(request.getParameter("sentiment")) <=3){
+                    sentiment = Integer.parseInt(request.getParameter("sentiment"));
+                }
+            }catch(NumberFormatException nfe){
+                log.warn("Ignored - wrong filter export");
+            }
+        }
 
         /*for(int i = 0; i < genderParams.length; i++){
             System.out.println("gender___" + genderParams[i]);
@@ -180,8 +196,14 @@ public class Reporter extends GenericResource {
                                     break;
                                 }else{
                                     if(passFilters(postIn, genderParams[genderi], schoolGradeParams[schooli], slifeStageParams[lifei], sentimentalRelationShipParams[sentimenti], scountryStateParams[countryi], dateSince, dateTo)){
-                                        isValid = true;                                        
-                                        postin.add(postIn);
+                                        isValid = true; 
+                                        if(filtered){
+                                            if(sentiment == postIn.getPostSentimentalType()){
+                                                postin.add(postIn);
+                                            }
+                                        }else{
+                                            postin.add(postIn);
+                                        }
                                     }
                                 }                                
                             }
