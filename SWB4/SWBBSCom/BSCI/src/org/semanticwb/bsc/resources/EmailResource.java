@@ -255,61 +255,54 @@ public class EmailResource extends GenericResource {
      * utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+    public void doViewStrategy(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         PrintWriter out = response.getWriter();
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode(Mode_SendMail);
-
-        out.println("<script type=\"text/javascript\">");
-        out.println("  dojo.require('dijit.Dialog');");
-        out.println("  dojo.require('dojox.layout.ContentPane');");
-        out.println("function setDialogTitleEmail(title){");
-        out.println("if (title)");
-        out.println("dijit.byId('emailDialog').titleNode.innerHTML = title;");
-        out.println("}");
         
-        out.println("function showEmailDialog(url, title){");
-        out.println("dojo.xhrGet({");
-        out.println("url: url,");
-        out.println("load: function(response, ioArgs) {");
-        out.println("dijit.byId('emailDialogImp').attr('content', response);"); 
-        out.println("dijit.byId('emailDialog').show();");
-        out.println("    setDialogTitleEmail(title);");
-        out.println("    return response;");
-        out.println("},");
-        out.println("error: function(response, ioArgs) {");
-        out.println("    alert('Error:' + response);");
-        out.println("    return response;");
-        out.println("},");
-        out.println("handleAs: 'text'");
-        out.println("});");
-        out.println("}");
-        out.println("</script>");
+        
+out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"emailDialog\" ");
+out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
+out.println("<script type=\"text/javascript\">");
+out.println("  dojo.require('dijit.Dialog');");
+out.println("  dojo.require('dojox.layout.ContentPane');");
+out.println("  function setDialogTitleEmail(title) {");
+out.println("    if (title) {");
+out.println("      dijit.byId('emailDialog').titleNode.innerHTML = title;");
+out.println("    }");
+out.println("  }");
 
-//        out.print("<a href=\"#\" class=\"swbstgy-toolbar-mail\" onclick=\"showEmailDialog('");
-//        out.print(url);
-//        out.print("', '");
-//        out.print(paramRequest.getLocaleString("lbl_addTitle"));
-//        out.print("');\">");
-//        out.print(paramRequest.getLocaleString("lbl_addTitle"));
-//        out.println("</a>");
+out.println("  function showEmailDialog(url, title) {");
+out.println("    dojo.xhrGet({");
+out.println("      url: url,");
+out.println("      load: function(response, ioArgs) {");
+out.println("        dijit.byId('emailDialogImp').attr('content', response);"); 
+out.println("        dijit.byId('emailDialog').show();");
+out.println("        setDialogTitleEmail(title);");
+out.println("        return response;");
+out.println("      },");
+out.println("      error: function(response, ioArgs) {");
+out.println("        alert('Error:' + response);");
+out.println("        return response;");
+out.println("      },");
+out.println("      handleAs: 'text'");
+out.println("    });");
+out.println("  }");
+out.println("</script>");
+out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"emailDialogImp\" ");
+out.print("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
+out.print("    Cargando...\n");
+out.print("  </div>\n");
+out.print("</div>\n");
+        
         out.print("<button type=\"button\" class=\"btn btn-default\" onclick=\"showEmailDialog('");
         out.print(url);
         out.print("', '");
         out.print(paramRequest.getLocaleString("lbl_addTitle"));
         out.print("');\"><span class=\"glyphicon glyphicon-envelope\"></span></button>");
-//                  "location.href='" + url 
-//                + "'\"><span class=\"glyphicon glyphicon-th-large\"></span></button>");
 
-        out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"emailDialog\" ");
-        out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
-        out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"emailDialogImp\" ");
-        out.print("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
-        out.print("    Cargando...\n");
-        out.print("  </div>\n");
-        out.print("</div>\n");
         out.flush();
     }
 
