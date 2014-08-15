@@ -70,7 +70,7 @@
             cont++;
             SemanticObject semanticObject= (SemanticObject) i.next();
             SocialNetwork s = (SocialNetwork) semanticObject.createGenericInstance();
-
+            //System.out.println("the social net:" + s.getURI());
             //obtenemos los post que estan en un  stream y una red en especifico
             if (semObj.getGenericInstance() instanceof Stream) {
 
@@ -86,7 +86,7 @@
             Iterator ii = postInSocialNetwork.iterator();
             //obtenemos los json del array
 
-            getJsonArray(node, ii, s.getTitle(), totalPost, filter, positives, negatives, neutrals, total);
+            getJsonArray(node, ii, s.getTitle(), s.getURI(), totalPost, filter, positives, negatives, neutrals, total);
 
 
         }
@@ -103,7 +103,7 @@
             node.put(node3);
             //return node;
         }
-
+        //System.out.println("THE NODE:::"  + node);
         return node;
     }
 
@@ -111,9 +111,9 @@
         return Math.rint(number * 100) / 100;
     }
 
-    public JSONArray getJsonArray(JSONArray node, Iterator i, String title, int totalPost, String filter, int positives, int negatives, int neutrals, int total) throws Exception {
+    public JSONArray getJsonArray(JSONArray node, Iterator i, String title, String suri, int totalPost, String filter, int positives, int negatives, int neutrals, int total) throws Exception {
 
-
+        //System.out.println("entrando a getJsonArray:" + filter);
         float intPorcentaje = 0F;
         int positivesF = 0;
         int negativesF = 0;
@@ -123,7 +123,7 @@
             SemanticObject so = (SemanticObject) i.next();
             PostIn pi = (PostIn) so.createGenericInstance();// so.getGenericInstance();
             if(pi != null &&pi.getPostInSocialNetwork()!= null ){
-            if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getTitle())) {
+            if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getURI())) {
                 total++;
                 if (pi.getPostSentimentalType() == 0) {
                     neutralsF++;
@@ -136,14 +136,15 @@
                        }
         }
         
-           positivesGlobal = positivesGlobal + positivesF;
+            positivesGlobal = positivesGlobal + positivesF;
             negativesGlobal = negativesGlobal + negativesF;
             neutralsGlobal = neutralsGlobal + neutralsF;
 
         if (filter.equals("all")) {
             intPorcentaje = ((float) total * 100) / (float) totalPost;
             JSONObject node1 = new JSONObject();
-            node1.put("label", ""+title);
+            node1.put("label", title);
+            node1.put("suri", suri);
             node1.put("value1", "" + total);
             node1.put("value2", "" + round(intPorcentaje));
               JSONObject joChild = new JSONObject();
@@ -192,6 +193,7 @@
             if (positivesF > 0) {
                 JSONObject node1 = new JSONObject();
                 node1.put("label", "Positivos");
+                node1.put("suri", suri);
                 node1.put("value1", "" + positivesF);
                 node1.put("value2", "" + round(intPorcentajePositives));
                 node1.put("color", "#008000");
@@ -204,6 +206,7 @@
             if (negativesF > 0) {
                 JSONObject node2 = new JSONObject();
                 node2.put("label", "Negativos");
+                node2.put("suri", suri);
                 node2.put("value1", "" + negativesF);
                 node2.put("value2", "" + round(intPorcentajeNegatives));
                 node2.put("color", "#FF0000");
@@ -216,6 +219,7 @@
             if (neutralsF > 0) {
                 JSONObject node3 = new JSONObject();
                 node3.put("label", "Neutros");
+                node3.put("suri", suri);
                 node3.put("value1", "" + neutralsF);
                 node3.put("value2", "" + round(intPorcentajeNeutrals));
                 node3.put("color", "#838383");
@@ -236,7 +240,7 @@
 
             SemanticObject so = (SemanticObject) i.next();
             PostIn pi = (PostIn) so.createGenericInstance();//so.getGenericInstance();
-            if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getTitle())) {
+            if (filter.equals("all") || filter.equals(pi.getPostInSocialNetwork().getURI())) {
                 total++;
                 if (pi.getPostSentimentalType() == 0) {
                     neutrals++;
@@ -257,11 +261,12 @@
 
 %>
 <%
-
+    //System.out.println("ENTRANDO A pieSocialNetwork.jsp");
     if (request.getParameter("objUri") != null) {
         SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("objUri"));
         String lang = request.getParameter("lang");
         String filter = request.getParameter("filter");
+        //System.out.println("lang:" + lang + "--" + filter);
         out.println(getObject(semObj, lang, filter));
     }
 %>

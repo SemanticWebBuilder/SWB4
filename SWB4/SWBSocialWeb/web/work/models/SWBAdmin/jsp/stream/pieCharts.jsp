@@ -194,7 +194,7 @@
         }
         function pieGender(parametro, cont, isFirstLoad){   
             document.getElementById('pieGender').innerHTML="";
-            var val = document.querySelector('input[name="gender"]:checked').value;
+            var val = document.querySelector('input[name="gender"]:checked').value;            
 
             document.getElementById("hrefGender").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "gender").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
      
@@ -397,11 +397,11 @@
     
     </script>
 
-
+<%/*
     <div id="pieEducationParent">
         <div class="grafTit">
-            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)%></h1>                
-            <a id="hrefEducation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
+            <h1><=SWBSocialResUtil.Util.getStringFromGenericLocale("education", lang)></h1>                
+            <a id="hrefEducation" href="<=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
 </div>
         <div id="pieEducation" >
         </div>
@@ -440,7 +440,7 @@
         function pieEducation(parametro, cont, isFirstLoad){   
             document.getElementById('pieEducation').innerHTML="";
             var val = document.querySelector('input[name="education"]:checked').value;
-            document.getElementById("hrefEducation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val+"&isFirstLoad"+isFirstLoad ;
+            document.getElementById("hrefEducation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>&filterGeneral="+val+"&isFirstLoad"+isFirstLoad ;
      
             var opciones =  document.getElementsByName("education");//.disabled=false;
             for(var i=0; i<opciones.length; i++) {        
@@ -471,7 +471,7 @@
         
 
                     
-            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieEducation.jsp<%=args%>&filter="+parametro, function(error, data) {
+            d3.json("<%=SWBPlatform.getContextPath()>/work/models/<%=SWBContext.getAdminWebSite().getId()>/jsp/stream/pieEducation.jsp<%=args>&filter="+parametro, function(error, data) {
             
 
                 document.getElementById("pieEducation").removeAttribute("style");
@@ -546,7 +546,7 @@
                 .on("click", function(d) {
                     if(confirm('¿Desea exportar a excel?')){
                         var filter = d.data.label;            
-                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "education").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
                     }
                 })                        
@@ -643,11 +643,13 @@
         pieEducation('all', '0', true);
                 
     </script>
-
-    <div  id="pieRelationParent">
+*/
+%>
+<%/*
+<div  id="pieRelationParent">
         <div class="grafTit">
-            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("statusRelation", lang)%></h1>
-            <a id="hrefRelation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
+            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("statusRelation", lang)></h1>
+            <a id="hrefRelation" href="<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>" onclick="return confirm('¿Desea exportar a excel?')"  class="excel">Exportar excel</a>
         </div> 
         <div id="pieRelationShipStatus">
         </div>        
@@ -691,7 +693,7 @@
         function pieRelation(parametro, cont, isFirstLoad){   
             document.getElementById('pieRelationShipStatus').innerHTML="";
             var val = document.querySelector('input[name="relation"]:checked').value;
-            document.getElementById("hrefRelation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+            document.getElementById("hrefRelation").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>&filterGeneral="+val ;
             var opciones =  document.getElementsByName("relation");//.disabled=false;
             for(var i=0; i<opciones.length; i++) {        
                 opciones[i].disabled = true;
@@ -714,7 +716,7 @@
             .outerRadius(radius - 10)
             .innerRadius(0);
 
-            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieRelationShipStatus.jsp<%=args%>&filter="+parametro, function(error, data) {
+            d3.json("<%=SWBPlatform.getContextPath()>/work/models/<%=SWBContext.getAdminWebSite().getId()>/jsp/stream/pieRelationShipStatus.jsp<%=args>&filter="+parametro, function(error, data) {
             
                 document.getElementById("pieRelationShipStatus").removeAttribute("style");
             
@@ -802,7 +804,7 @@
                 .on("click", function(d) {
                     if(confirm('¿Desea exportar a excel?')){
                         var filter = d.data.label;            
-                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "relation").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
                     }
                 })     
@@ -893,11 +895,13 @@
                 
 
     </script>
-
+*/
+%>
+<%/*
     <div id="lifeStageParent">
         <div class="grafTit">
-            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)%></h1>
-            <a  id="hrefLife" href="<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
+            <h1><%=SWBSocialResUtil.Util.getStringFromGenericLocale("lifeStage", lang)></h1>
+            <a  id="hrefLife" href="<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>" onclick="return confirm('¿Desea exportar a excel?')" class="excel">Exportar excel</a>
         </div> 
         <div id="profileLifeStage">      
         </div>
@@ -954,7 +958,7 @@
             document.getElementById('profileLifeStage').innerHTML="";
 
             var val = document.querySelector('input[name="life"]:checked').value;
-            document.getElementById("hrefLife").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral="+val ;
+            document.getElementById("hrefLife").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>&filterGeneral="+val ;
             var opciones =  document.getElementsByName("life");//.disabled=false;
             for(var i=0; i<opciones.length; i++) {        
                 opciones[i].disabled = true;
@@ -981,7 +985,7 @@
 
      
 
-            d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieLifeStage.jsp<%=args%>&filter="+parametro, function(error, data) {
+            d3.json("<%=SWBPlatform.getContextPath()>/work/models/<%=SWBContext.getAdminWebSite().getId()>/jsp/stream/pieLifeStage.jsp<%=args>&filter="+parametro, function(error, data) {
             
                 document.getElementById("profileLifeStage").removeAttribute("style");
             
@@ -1071,7 +1075,7 @@
                 .on("click", function(d) {
                     if(confirm('¿Desea exportar a excel?')){
                         var filter = d.data.label;            
-                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
+                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "lifeStage").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
                     }
                 })  
@@ -1164,7 +1168,7 @@
     
         pieLifeStage('all', '0',true);
     </script>
-
+*/%>
     <!-- grafica de mexico -->
     <div id="profileGeoLocationParent">
         <div class="grafTit">
@@ -1187,7 +1191,7 @@
                         CountryState c = i.next();
                         if (c != null && c.getCountry().getId().equals("MX")) {
                 %>
-                <input id="bcn<%=c.getTitle()%>" type="radio" name="geo" value="<%=c.getTitle()%>">
+                <input id="bcn<%=c.getTitle()%>" type="radio" name="geo" value="<%=reemplazar(c.getTitle())%>">
                 <label for="bcn<%=c.getTitle()%>"><%=c.getTitle()%></label>
                 <%
                         }
