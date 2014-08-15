@@ -4,17 +4,10 @@
  */
 package org.semanticwb.social.admin.resources;
 
-import java.io.BufferedReader;
-import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,8 +15,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +32,6 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONException;
 import org.semanticwb.Logger;
@@ -207,7 +197,8 @@ public class PieChart extends GenericResource {
 
         String type = request.getParameter("type");
         String filter = request.getParameter("filter");
-        String filterGeneral = request.getParameter("filterGeneral");
+        String filterGeneral = request.getParameter("filterGeneral");        
+        //System.out.println("\nGenerando Reporte: " + type+"-" + filter +"-" + filterGeneral+"-"+request.getParameter("lang"));
         if (filter == null) {
             filter = "";
         }
@@ -311,7 +302,7 @@ public class PieChart extends GenericResource {
         while (itObjPostIns.hasNext()) {
             PostIn postIn = itObjPostIns.next();
             if (postIn != null && postIn.getPostInSocialNetwork() != null) {
-                if ( filter.equals(postIn.getPostInSocialNetwork().getTitle()) ) {
+                if ( filterGeneral.equals(postIn.getPostInSocialNetwork().getURI()) || filterGeneral.equalsIgnoreCase("all") ) {
                     totalArray.add(postIn);
                     if (postIn.getPostSentimentalType() == 0) {
                         neutrals++;
