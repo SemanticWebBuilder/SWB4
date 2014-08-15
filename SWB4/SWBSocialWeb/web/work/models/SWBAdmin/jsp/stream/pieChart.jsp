@@ -450,9 +450,9 @@
                 if (sN instanceof Facebook) {
             %>
             <div>
-                <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafFacebook" value="<%=sN.getTitle()%>" >
+                <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafFacebook" value="<%=sN.getEncodedURI()%>" >
                 <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
-                <div id="<%=sN.getTitle()%>"></div>
+                <div id="<%=sN.getURI()+"p"%>"></div>
             </div>
 
                 <%
@@ -460,25 +460,25 @@
                 } else if (sN instanceof Twitter) {
                 %>     
                 <div>
-                    <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafTwitter" value="<%=sN.getTitle()%>" > 
+                    <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafTwitter" value="<%=sN.getEncodedURI()%>" > 
                     <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
-                    <div id="<%=sN.getTitle()%>"></div>
+                    <div id="<%=sN.getURI()+"p"%>"></div>
                 </div>
                     <%
                     } else if (sN instanceof Youtube) {
                     %>
                     <div>
-                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafYoutube" value="<%=sN.getTitle()%>" > 
+                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafYoutube" value="<%=sN.getEncodedURI()%>" > 
                         <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
-                        <div id="<%=sN.getTitle()%>"></div>
+                        <div id="<%=sN.getURI()+"p"%>"></div>
                     </div>
                     <%
                       }else if (sN instanceof Instagram){
                     %>
                     <div>
-                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafInstagram" value="<%=sN.getTitle()%>" > 
+                        <input type="radio" name="socialNetwork" id="<%=sN.getURI()%>" class="grafInstagram" value="<%=sN.getEncodedURI()%>" > 
                         <label title="<%=sN.getTitle()%>" for="<%=sN.getURI()%>"><%=sN.getTitle()%></label>
-                        <div id="<%=sN.getTitle()%>"></div>
+                        <div id="<%=sN.getURI()+"p"%>"></div>
                     </div>
                     <%  
                       }
@@ -588,6 +588,7 @@
                     d3.selectAll("input[name=socialNetwork]")
                     .on("change", change);
       
+                    //console.log(d3.selectAll("input[name=socialNetwork]"));
                     function change() {
                         var opciones =  document.getElementsByName("socialNetwork");//.disabled=false;
                         for(var i=0; i<opciones.length; i++) {        
@@ -641,7 +642,8 @@
                     .on("click", function(d) {
                                             if(confirm('¿Desea exportar a excel?')){
 
-                        var filter = d.data.label; 
+                        var filter = d.data.label;
+                        //console.log('this is the filter->'+filter);
                         //alert(filter);
                         var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                         document.location.href = url;
@@ -709,6 +711,7 @@
                                 var to;
                                 var to;
                                 if(data[x].valor){
+                                    //console.log('VALOR DE ALL:' + data[x].valor.toSource());
                                     to = data[x].valor;
 
                                     var paraPositives= document.createElement("p");   
@@ -747,7 +750,8 @@
                                     paraNeutrals.appendChild(nodeNeutros);
                                     var element; 
 
-                                    element =   document.getElementById(data[j].label);                            
+                                    element =   document.getElementById(data[j].suri + 'p');
+                                    //console.log("log1:" + data[j].suri + " element:" + element.toSource());
                                     element.appendChild(paraPositive);
                                     element.appendChild(paraNegative);
                                     element.appendChild(paraNeutrals);
