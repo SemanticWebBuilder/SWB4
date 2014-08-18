@@ -12,6 +12,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.SocketException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -78,6 +82,7 @@ import org.semanticwb.social.util.lucene.SpanishAnalizer;
 import org.semanticwb.social.FastCalendar;
 import org.semanticwb.social.PostOutLinksHits;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.util.db.GenericDB;
 
 /**
  *
@@ -284,6 +289,40 @@ public class SWBSocialUtil {
 
         props = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/properties/swbSocial.properties");
         
+        try
+        {
+            System.out.println("Table socialnets_stats will be created now..");
+            GenericDB db = new GenericDB();
+            
+            boolean tableofStatsExist=false;
+            Connection con = null;
+            try {
+                con = SWBUtils.DB.getDefaultConnection("SWBSocialUtil:init");
+                DatabaseMetaData meta = con.getMetaData();
+                ResultSet res = meta.getTables(null, null, null, new String[] {"TABLE"});
+                while (res.next()) {
+                 if(res.getString("TABLE_NAME").equalsIgnoreCase("SOCIALNETS_STATS")) {
+                     tableofStatsExist=true;
+                     break;
+                 }
+                }
+            }catch(Exception sqlCheckExist)
+            {
+              log.error(sqlCheckExist);   
+            }
+            if(!tableofStatsExist)
+            {
+                String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/socialnetsstats.xml");
+                db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
+                System.out.println("socialnets_stats has been created successfully...");
+            }else{
+                System.out.println("Table socialnets_stats already exist...");
+            }
+            
+        }catch(Exception sqlExc)
+        {
+            log.info("La tabla relacional socialnets_stats ya existe, no se creó nuevamente..");
+        }        
       }catch(Exception e){
           log.error(e);
       }
