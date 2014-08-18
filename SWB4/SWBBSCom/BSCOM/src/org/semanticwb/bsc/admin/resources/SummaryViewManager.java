@@ -1658,7 +1658,18 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        switch (paramRequest.getMode()) {
+        final String mode = paramRequest.getMode();
+        if("showForm".equalsIgnoreCase(mode)) {
+            doShowForm(request, response, paramRequest);
+        }else if("viewsList".equalsIgnoreCase(mode)) {
+            doViewsList(request, response, paramRequest);
+        }else if("Mode_StreamPDF".equalsIgnoreCase(mode)) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+        
+        /*switch (paramRequest.getMode()) {
             case "showForm":
                 doShowForm(request, response, paramRequest);
                 break;
@@ -1671,7 +1682,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             default:
                 super.processRequest(request, response, paramRequest);
                 break;
-        }
+        }*/
     }
 
     /**
