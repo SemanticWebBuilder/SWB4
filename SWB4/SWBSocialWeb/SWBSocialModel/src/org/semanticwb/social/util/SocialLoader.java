@@ -46,6 +46,8 @@ public class SocialLoader implements SWBAppObject {
             
             new StreamCleanerMsgbyDays(); //Eliminador automatico por número de días de postIns en streams. Se levanta un thread cada 24 hrs.
             
+            new SocialNetsStatsMonitor(); //SocialNetworks monitor, monitorizes some socialnetworks stats 
+            
             new SWBSocialUtil().createInstance(); //Sin threads
             
             new MonitorPostOutResponsesMgr();
