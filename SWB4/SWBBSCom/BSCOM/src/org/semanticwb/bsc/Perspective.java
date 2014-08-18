@@ -97,7 +97,7 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
     }
     
     public List<Objective> listValidObjectives() {
-        List<Objective> objectives = new ArrayList<>();
+        List<Objective> objectives = new ArrayList();
         List<Objective> objs;
         List<Theme> themes = listValidThemes();
         Collections.sort(themes);
@@ -110,7 +110,7 @@ public class Perspective extends org.semanticwb.bsc.base.PerspectiveBase impleme
     }
     
     public List<Objective> listValidObjectives(Period period) {
-        List<Objective> objectives = new ArrayList<>();
+        List<Objective> objectives = new ArrayList();
         List<Objective> objs;
         List<Theme> themes = listValidThemes();
         Collections.sort(themes);
