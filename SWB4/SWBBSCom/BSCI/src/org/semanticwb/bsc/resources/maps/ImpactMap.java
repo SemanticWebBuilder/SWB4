@@ -35,7 +35,11 @@ public class ImpactMap extends GenericResource {
             request.setAttribute("paramRequest", paramRequest);
             request.setAttribute("this", this);
             dis.include(request, response);
-        }catch (ServletException | IOException | NullPointerException e) {
+        }catch(ServletException e) {
+            log.error(e);
+        }catch(IOException e) {
+            log.error(e);
+        }catch(NullPointerException e) {
             log.error(e);
         }
     }
