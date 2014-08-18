@@ -48,12 +48,12 @@ public class RelatedElement extends org.semanticwb.bsc.formelement.base.RelatedE
         String toReturn = null;
         StringBuilder viewString = new StringBuilder(128);
         
-        switch (mode) {
-            case "create":
-            case "edit":
-            case "inlineEdit":
-            case "view":
-            default:
+//        switch (mode) {
+//            case "create":
+//            case "edit":
+//            case "inlineEdit":
+//            case "view":
+//            default:
                 
                 boolean showLink = false;
                 SemanticClass rangeClass = prop.getRangeClass();
@@ -92,7 +92,7 @@ public class RelatedElement extends org.semanticwb.bsc.formelement.base.RelatedE
                     }
                 }
             
-        }
+//        }
         toReturn = viewString.toString();
         if (toReturn == null) {
             toReturn = "";
