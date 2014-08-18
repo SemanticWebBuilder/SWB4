@@ -35,11 +35,11 @@ public class MenuByBSC extends GenericResource {
         BSC currentBsc = (BSC) paramsRequest.getWebPage().getWebSite();
         WebPage home = currentBsc.getHomePage();
         WebPage currentPage = paramsRequest.getWebPage();
-        String lang = paramsRequest.getUser().getLanguage();
+        final String lang = paramsRequest.getUser().getLanguage()==null?"es":paramsRequest.getUser().getLanguage();
         Iterator<WebPage> children = home.listVisibleChilds(lang);
         MenuItemComparator comp = new MenuItemComparator();
         
-        ArrayList<WebPage> childrenList = new ArrayList<>(16);
+        ArrayList<WebPage> childrenList = new ArrayList(16);
         while (children.hasNext()) {
             childrenList.add(children.next());
         }
@@ -61,11 +61,11 @@ public class MenuByBSC extends GenericResource {
                 if (hasSuboptions) {
                     output.append(" class=\"dropdown\">\n");
                     output.append("    <a class=\"dropdown-toggle\" data-toggle=\"dropdown\" href=\"#\">");
-                    output.append(option.getDisplayTitle(lang));
+                    output.append(option.getDisplayTitle(lang)==null?option.getTitle():option.getDisplayTitle(lang));
                     output.append("<span class=\"caret\"></span></a>\n");
                     output.append("    <ul class=\"dropdown-menu\" role=\"menu\">\n");
                     
-                    ArrayList<WebPage> suboptionsList = new ArrayList<>(16);
+                    ArrayList<WebPage> suboptionsList = new ArrayList(16);
                     while (suboptions.hasNext()) {
                         suboptionsList.add(suboptions.next());
                     }
@@ -78,7 +78,7 @@ public class MenuByBSC extends GenericResource {
                         output.append("      <li><a href=\"");
                         output.append(suboption.getUrl(lang));
                         output.append("\">");
-                        output.append(suboption.getDisplayTitle(lang));
+                        output.append(suboption.getDisplayTitle(lang)==null?suboption.getTitle():suboption.getDisplayTitle(lang));
                         output.append("</a></li>\n");
                     }
                     output.append("    </ul>\n");
@@ -90,7 +90,7 @@ public class MenuByBSC extends GenericResource {
                     output.append("><a href=\"");
                     output.append(option.getUrl(lang));
                     output.append("\">");
-                    output.append(option.getTitle(lang));
+                    output.append(option.getDisplayTitle(lang)==null?option.getTitle():option.getDisplayTitle(lang));
                     output.append("</a></li>\n");
                 }
             }
