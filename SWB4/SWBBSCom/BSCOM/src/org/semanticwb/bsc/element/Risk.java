@@ -9,8 +9,10 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.Factor;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -173,7 +175,7 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
     public Iterator<Factor> listValidFactors() {
         
         Iterator<Factor> facIt = listFactors();
-        ArrayList<Factor> factors = new ArrayList<>();
+        ArrayList<Factor> factors = new ArrayList();
         User user = SWBContext.getSessionUser();
         
         while (facIt != null && facIt.hasNext()) {
