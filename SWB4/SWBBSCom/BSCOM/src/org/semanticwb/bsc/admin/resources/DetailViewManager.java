@@ -863,8 +863,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
-        switch (paramRequest.getMode()) {
+        final String mode = paramRequest.getMode();
+        if("showListing".equalsIgnoreCase(mode)) {
+            doShowListing(request, response, paramRequest);
+        }else if("editTemplate".equalsIgnoreCase(mode)) {
+            doEditTemplate(request, response, paramRequest);
+        }else if("getPropertiesInfo".equalsIgnoreCase(mode)) {
+            doGetPropertiesInfo(request, response, paramRequest);
+        }else if(Mode_StreamPDF.equalsIgnoreCase(mode)) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+        /*switch (paramRequest.getMode()) {
             case "showListing":
                 doShowListing(request, response, paramRequest);
                 break;
@@ -880,7 +891,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             default:
                 super.processRequest(request, response, paramRequest);
                 break;
-        }
+        }*/
     }
 
     /**
@@ -1757,7 +1768,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         output.append("<body>");
         output.append(getHtml(request, paramRequest));
         GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
-        TreeSet<ComponentExportable> ret = new TreeSet<>(new SWBPriorityComparator(true));
+        TreeSet<ComponentExportable> ret = new TreeSet(new SWBPriorityComparator(true));
 
         while (it.hasNext()) {
             Resource resourceIt = it.next();
@@ -1765,7 +1776,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             try {
                 ComponentExportable ce = (ComponentExportable) base;
                 ret.add(ce);
-            } catch (ClassCastException | NullPointerException cce) {
+            }catch (ClassCastException cce) {
+            }catch (NullPointerException cce) {
             }
         }
         Iterator<ComponentExportable> itRes = ret.iterator();
