@@ -83,7 +83,14 @@ public class StrategicMap extends GenericResource
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        switch (mode) {
+        if(Mode_StreamPNG.equalsIgnoreCase(mode)) {
+            doGetPNGImage(request, response, paramRequest);
+        }else if(Mode_StreamPDF.equalsIgnoreCase(mode)) {
+            doGetPDFDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+        /*switch (mode) {
             case Mode_StreamPNG:
                 doGetPNGImage(request, response, paramRequest);
                 break;
@@ -93,7 +100,7 @@ public class StrategicMap extends GenericResource
             default:
                 super.processRequest(request, response, paramRequest);
                 break;
-        }
+        }*/
     }
 
     /**
