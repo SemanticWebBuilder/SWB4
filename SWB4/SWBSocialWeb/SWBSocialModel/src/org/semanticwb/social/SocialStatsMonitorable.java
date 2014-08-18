@@ -5,4 +5,5 @@ package org.semanticwb.social;
    */
 public interface SocialStatsMonitorable extends org.semanticwb.social.base.SocialStatsMonitorableBase
 {
+    public void getSocialNetStats(SocialNetwork socialNet);
 }

@@ -1237,4 +1237,9 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
         
         return validDP;
     }
+
+    @Override
+    public void getSocialNetStats(SocialNetwork socialNet) {
+        System.out.println("Entra a Twitter/getSocialNetStats:"+socialNet);
+    }
 }
