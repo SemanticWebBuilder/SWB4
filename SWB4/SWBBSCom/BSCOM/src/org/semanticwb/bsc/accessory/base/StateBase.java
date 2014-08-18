@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo. 
    */
-public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.Iconable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Help,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable
+public abstract class StateBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Iconable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Sortable
 {
    /**
    * Define el color asociado al estado
