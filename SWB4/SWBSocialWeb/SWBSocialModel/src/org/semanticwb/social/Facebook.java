@@ -2386,4 +2386,9 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
         }
         return validDP;
     }
+
+    @Override
+    public void getSocialNetStats(SocialNetwork socialNet) {
+        System.out.println("Entra a Facebook/getSocialNetStats:"+socialNet);
+    }
 }
