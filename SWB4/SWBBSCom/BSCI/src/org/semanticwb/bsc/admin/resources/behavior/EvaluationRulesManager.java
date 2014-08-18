@@ -169,7 +169,7 @@ public class EvaluationRulesManager extends GenericAdmResource {
 
             // Crear el conjunto de reglas, si 
             // una regla ya está en el conjunto no se agrega de nuevo 
-            HashSet<State> configuredStates = new HashSet<>();            
+            HashSet<State> configuredStates = new HashSet();            
             GenericIterator rules = series.listEvaluationRules();
             List<EvaluationRule> lrules = SWBUtils.Collections.copyIterator(rules);
             Collections.sort(lrules);
