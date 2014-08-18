@@ -1112,8 +1112,19 @@ public class RiskBoard extends GenericResource {
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
-        switch (paramRequest.getMode()) {
+        final String mode = paramRequest.getMode();
+        if("showAddWindow".equalsIgnoreCase(mode)) {
+            doShowAddWindow(request, response, paramRequest);
+        }else if("addElement".equalsIgnoreCase(mode)) {
+            doAddElement(request, response, paramRequest);
+        }else if("editElement".equalsIgnoreCase(mode)) {
+            doEditElement(request, response, paramRequest);
+        }else if("export".equalsIgnoreCase(mode)) {
+            doGetExportedDocument(request, response, paramRequest);
+        }else {
+            super.processRequest(request, response, paramRequest);
+        }
+        /*switch (paramRequest.getMode()) {
             case "showAddWindow":
                 doShowAddWindow(request, response, paramRequest);
                 break;
@@ -1127,7 +1138,7 @@ public class RiskBoard extends GenericResource {
                 doGetExportedDocument(request, response, paramRequest);
                 break;
             default: super.processRequest(request, response, paramRequest);
-        }
+        }*/
     }
     
     /**
