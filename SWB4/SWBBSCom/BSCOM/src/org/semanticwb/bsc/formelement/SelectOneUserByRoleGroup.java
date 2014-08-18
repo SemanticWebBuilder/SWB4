@@ -45,6 +45,7 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
      * @param request the request
      * @param obj the obj
      * @param prop the prop
+     * @param propName
      * @param type the type
      * @param mode the mode
      * @param lang the lang
@@ -284,17 +285,18 @@ public class SelectOneUserByRoleGroup extends org.semanticwb.bsc.formelement.bas
 
         return ret.toString();
     }
-
+    
     @Override
     public boolean filterObject(HttpServletRequest request, SemanticObject base_obj, SemanticObject filter_obj, SemanticProperty prop, String propName, String type, String mode, String lang) {        
-        SWBModel m = (SWBModel) filter_obj.getModel().getModelObject().createGenericInstance();
+        SWBModel m;
+        m = (SWBModel) filter_obj.getModel().getModelObject().createGenericInstance();
         User filterUser = null;
         boolean hasUserGroup = false;
         boolean hasRole = false;
         boolean ret = true;
-        if (filter_obj != null) {
+        //if (filter_obj != null) {
             filterUser = (User) filter_obj.createGenericInstance();
-        }
+        //}
         
         //No se especificó un grupo o roles para filtrar
         if ((getFilterRoleIds() == null || getFilterRoleIds().trim().length() == 0) && (getFilterUserGroupId() == null || getFilterUserGroupId().trim().length() == 0)) {
