@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de una Iniciativa 
    */
-public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.bsc.Schedule,org.semanticwb.model.Roleable,org.semanticwb.bsc.StatusManuallyAssignable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Traceable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Detailed,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Updateable
+public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.bsc.StatusManuallyAssignable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.Status,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Seasonable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Schedule,org.semanticwb.bsc.Detailed,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.PeriodStatusAssignable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_totalInvestment=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#totalInvestment");
     public static final org.semanticwb.platform.SemanticProperty bsc_businessCase=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#businessCase");
@@ -727,71 +727,6 @@ public abstract class InitiativeBase extends org.semanticwb.bsc.element.BSCEleme
          if(obj!=null)
          {
              ret=(org.semanticwb.bsc.tracing.PeriodStatus)obj.createGenericInstance();
-         }
-         return ret;
-    }
-   /**
-   * Gets all the org.semanticwb.bsc.catalogs.Attachment
-   * @return A GenericIterator with all the org.semanticwb.bsc.catalogs.Attachment
-   */
-
-    public org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Attachment> listAttachmentses()
-    {
-        return new org.semanticwb.model.GenericIterator<org.semanticwb.bsc.catalogs.Attachment>(getSemanticObject().listObjectProperties(bsc_hasAttachments));
-    }
-
-   /**
-   * Gets true if has a Attachments
-   * @param value org.semanticwb.bsc.catalogs.Attachment to verify
-   * @return true if the org.semanticwb.bsc.catalogs.Attachment exists, false otherwise
-   */
-    public boolean hasAttachments(org.semanticwb.bsc.catalogs.Attachment value)
-    {
-        boolean ret=false;
-        if(value!=null)
-        {
-           ret=getSemanticObject().hasObjectProperty(bsc_hasAttachments,value.getSemanticObject());
-        }
-        return ret;
-    }
-   /**
-   * Adds a Attachments
-   * @param value org.semanticwb.bsc.catalogs.Attachment to add
-   */
-
-    public void addAttachments(org.semanticwb.bsc.catalogs.Attachment value)
-    {
-        getSemanticObject().addObjectProperty(bsc_hasAttachments, value.getSemanticObject());
-    }
-   /**
-   * Removes all the Attachments
-   */
-
-    public void removeAllAttachments()
-    {
-        getSemanticObject().removeProperty(bsc_hasAttachments);
-    }
-   /**
-   * Removes a Attachments
-   * @param value org.semanticwb.bsc.catalogs.Attachment to remove
-   */
-
-    public void removeAttachments(org.semanticwb.bsc.catalogs.Attachment value)
-    {
-        getSemanticObject().removeObjectProperty(bsc_hasAttachments,value.getSemanticObject());
-    }
-
-   /**
-   * Gets the Attachments
-   * @return a org.semanticwb.bsc.catalogs.Attachment
-   */
-    public org.semanticwb.bsc.catalogs.Attachment getAttachments()
-    {
-         org.semanticwb.bsc.catalogs.Attachment ret=null;
-         org.semanticwb.platform.SemanticObject obj=getSemanticObject().getObjectProperty(bsc_hasAttachments);
-         if(obj!=null)
-         {
-             ret=(org.semanticwb.bsc.catalogs.Attachment)obj.createGenericInstance();
          }
          return ret;
     }

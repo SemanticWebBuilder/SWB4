@@ -7,10 +7,12 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.catalogs.Attachment;
 import static org.semanticwb.bsc.element.Deliverable.names;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.BSCUtils;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
@@ -249,7 +251,4 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase
         }
         return iconClass.toString();
     }
-    
-    
-    
 }
