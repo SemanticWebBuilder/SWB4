@@ -39,6 +39,10 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
    */
     public static final org.semanticwb.platform.SemanticClass social_SocialPFlowInstance=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialPFlowInstance");
    /**
+   * Clase que engloba a las diferentes clases que representan cada una de las redes sociales.
+   */
+    public static final org.semanticwb.platform.SemanticClass social_SocialNetwork=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialNetwork");
+   /**
    * Acción específica mediante la cual se envía un mensaje por defecto a una o varias redes sociales seleccionadas
    */
     public static final org.semanticwb.platform.SemanticClass social_SendPost=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SendPost");
@@ -618,6 +622,36 @@ public abstract class SocialSiteBase extends org.semanticwb.model.WebSite implem
     public boolean hasSocialPFlowInstance(String id)
     {
         return org.semanticwb.social.SocialPFlowInstance.ClassMgr.hasSocialPFlowInstance(id, this);
+    }
+
+    public org.semanticwb.social.SocialNetwork getSocialNetwork(String id)
+    {
+        return org.semanticwb.social.SocialNetwork.ClassMgr.getSocialNetwork(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.social.SocialNetwork> listSocialNetworks()
+    {
+        return org.semanticwb.social.SocialNetwork.ClassMgr.listSocialNetworks(this);
+    }
+
+    public org.semanticwb.social.SocialNetwork createSocialNetwork(String id)
+    {
+        return org.semanticwb.social.SocialNetwork.ClassMgr.createSocialNetwork(id,this);
+    }
+
+    public org.semanticwb.social.SocialNetwork createSocialNetwork()
+    {
+        long id=getSemanticObject().getModel().getCounter(social_SocialNetwork);
+        return org.semanticwb.social.SocialNetwork.ClassMgr.createSocialNetwork(String.valueOf(id),this);
+    } 
+
+    public void removeSocialNetwork(String id)
+    {
+        org.semanticwb.social.SocialNetwork.ClassMgr.removeSocialNetwork(id, this);
+    }
+    public boolean hasSocialNetwork(String id)
+    {
+        return org.semanticwb.social.SocialNetwork.ClassMgr.hasSocialNetwork(id, this);
     }
 
     public org.semanticwb.social.SendPost getSendPost(String id)

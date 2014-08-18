@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que engloba a las diferentes clases que representan cada una de las redes sociales. 
    */
-public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Filterable,org.semanticwb.social.Relationable
+public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.FilterableClass,org.semanticwb.social.Relationable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.Secreteable,org.semanticwb.social.Listenerable,org.semanticwb.model.Filterable
 {
    /**
    * Clase a Cambiar despues por "Relacional".  En esta clase se guardan todos los post que lleguan por el listener, se estima que toda la info. que se guarde en este objeto debe de eliminarse aproximadamente c/mes, siendo este parametro configurable de acuerdo al tiempo que la organización quiera guardar  la información sobre los mensajes que lleguen por el listener. Se almacenan por mes y año, de esta manera sera mucho mas rapido hacer las busquedas sobre las instancias de esta clase. EN ESTE MOMENTO NO SE ESTA UTILIZANDO ESTA CLASE.
@@ -1098,5 +1098,14 @@ public abstract class SocialNetworkBase extends org.semanticwb.model.SWBClass im
     public void setSecretKey(String value)
     {
         getSemanticObject().setProperty(social_secretKey, value);
+    }
+
+   /**
+   * Gets the SocialSite
+   * @return a instance of org.semanticwb.social.SocialSite
+   */
+    public org.semanticwb.social.SocialSite getSocialSite()
+    {
+        return (org.semanticwb.social.SocialSite)getSemanticObject().getModel().getModelObject().createGenericInstance();
     }
 }
