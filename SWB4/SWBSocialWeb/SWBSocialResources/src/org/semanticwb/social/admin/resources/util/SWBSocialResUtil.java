@@ -9,11 +9,16 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
 import java.util.Locale;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.SocialNetwork;
+import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.util.SWBSocialUtil;
 
 /**
@@ -405,6 +410,37 @@ public class SWBSocialResUtil {
             return null;
         }
        
-}
+   }
+   
+   public static class LOG
+   {
+
+       public static boolean logSocialNetStats(SocialSite socialsite, SocialNetwork socialNet, int friends, int followers, int ptat)
+       {
+            Connection con = null;
+            try {
+                Timestamp created = new Timestamp(new java.util.Date().getTime());
+                con = SWBUtils.DB.getDefaultConnection("SWBSocialResUtil:logSocialNetStats");
+
+                String query = "insert into socialnets_stats (socialsite, socialNet, friends, "
+                        + "followers, ptat, date) values "
+                        + "(?,?,?,?,?)";
+                PreparedStatement st = con.prepareStatement(query);
+                st.setString(1, socialsite.getURI());
+                st.setString(2, socialNet.getURI());
+                st.setInt(3, friends);
+                st.setInt(4, followers);
+                st.setInt(5, ptat);
+                st.setTimestamp(6, created);
+                st.executeUpdate();
+                st.close();
+                con.close();
+                return true;
+            } catch (Exception e) {
+                log.error(e);
+            }
+           return false;
+       }
+   } 
     
 }
