@@ -240,7 +240,7 @@ public class StatesManager extends GenericResource {
                 out.println("<tbody>");
                 Status status = (Status)obj.getGenericInstance();
                 Iterator<State> istates = status.listStates();
-                Set<StateGroup> groups = new HashSet<>();
+                Set<StateGroup> groups = new HashSet();
                 while(istates.hasNext()) {
                     State state = istates.next();
                     if(state==null){
