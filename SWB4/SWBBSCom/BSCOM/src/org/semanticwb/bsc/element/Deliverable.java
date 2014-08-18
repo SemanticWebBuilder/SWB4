@@ -9,9 +9,11 @@ import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 
@@ -196,7 +198,7 @@ System.out.println("setProgress. value="+value);
         }
         
         List<Period> periods = sortValidPeriods();        
-        List<Period> measurablesPeriods = new ArrayList<>();
+        List<Period> measurablesPeriods = new ArrayList();
         for(int i=1; i<=periods.size(); i++) {                 
             if(i%f==0) {                
                 measurablesPeriods.add(periods.get(i-1));
