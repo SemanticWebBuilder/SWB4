@@ -63,7 +63,7 @@ public class ExportScoreCard extends GenericResource {
             String indicator = "";
             String scoreCard = "";
 
-            LinkedList<ParamsScoreCard> lista = new LinkedList<>();
+            LinkedList<ParamsScoreCard> lista = new LinkedList();
             Period period = getPeriod(request);
             scoreCard = ws.getTitle();
             JasperTemplates jasperLogo = JasperTemplates.LOGO;
@@ -113,7 +113,9 @@ public class ExportScoreCard extends GenericResource {
                 exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
                 exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
                 exporter.exportReport();
-            } catch (IOException | JRException e) {
+            }catch (IOException e) {
+                log.error(e);
+            }catch (JRException e) {
                 log.error(e);
             }
 
