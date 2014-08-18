@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define las características de un Objetivo estratégico. 
    */
-public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Roleable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Activeable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Causal,org.semanticwb.model.FilterableNode,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Status,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Traceable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Detailed,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Updateable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Serializable,org.semanticwb.bsc.Seasonable
+public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Attachmentable,org.semanticwb.bsc.FixedMeasurable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Seasonable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Detailed,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Status,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Updateable,org.semanticwb.bsc.Causal,org.semanticwb.model.Filterable,org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.PeriodStatusAssignable,org.semanticwb.model.Traceable
 {
    /**
    * Define las características de un Indicador.
@@ -291,6 +291,29 @@ public abstract class ObjectiveBase extends org.semanticwb.bsc.element.BSCElemen
         public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByUserGroup(org.semanticwb.model.UserGroup value)
         {
             org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(swb_hasUserGroup,value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Attachments
+       * @param value Attachments of the type org.semanticwb.bsc.catalogs.Attachment
+       * @param model Model of the org.semanticwb.bsc.element.Objective
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByAttachments(org.semanticwb.bsc.catalogs.Attachment value,org.semanticwb.model.SWBModel model)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(model.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAttachments, value.getSemanticObject(),sclass));
+            return it;
+        }
+       /**
+       * Gets all org.semanticwb.bsc.element.Objective with a determined Attachments
+       * @param value Attachments of the type org.semanticwb.bsc.catalogs.Attachment
+       * @return Iterator with all the org.semanticwb.bsc.element.Objective
+       */
+
+        public static java.util.Iterator<org.semanticwb.bsc.element.Objective> listObjectiveByAttachments(org.semanticwb.bsc.catalogs.Attachment value)
+        {
+            org.semanticwb.model.GenericIterator<org.semanticwb.bsc.element.Objective> it=new org.semanticwb.model.GenericIterator(value.getSemanticObject().getModel().listSubjectsByClass(bsc_hasAttachments,value.getSemanticObject(),sclass));
             return it;
         }
        /**
