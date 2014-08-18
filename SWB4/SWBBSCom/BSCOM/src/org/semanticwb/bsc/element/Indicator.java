@@ -8,6 +8,7 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.tracing.EvaluationRule;
 import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
@@ -27,7 +28,17 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
 {
     public static final String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
     static
-    {        
+    {
+        bsc_analysis.registerObserver(new SemanticObserver() {
+            @Override
+            public void notify(SemanticObject obj, Object prop, String lang, String action)
+            {
+                System.out.println("\n\nIndicator.bsc_Updateable.... action="+action);
+                System.out.println("obj="+obj);
+                System.out.println("prop="+prop);
+            }
+        });
+        
         bsc_hasSeries.registerObserver(new SemanticObserver() {
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action)
@@ -183,7 +194,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         }
         
         List<Period> periods = sortValidPeriods();        
-        List<Period> measurablesPeriods = new ArrayList<>();
+        List<Period> measurablesPeriods = new ArrayList();
         for(int i=1; i<=periods.size(); i++) {                 
             if(i%f==0) {                
                 measurablesPeriods.add(periods.get(i-1));
