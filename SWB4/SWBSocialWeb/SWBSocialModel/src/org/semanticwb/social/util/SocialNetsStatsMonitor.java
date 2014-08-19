@@ -43,7 +43,7 @@ public class SocialNetsStatsMonitor {
 
             Timer timer = new Timer();
 
-            timer.schedule(new monitorSocialNetStats(), 0, (60 * 1000)*10); //Cada 10 minutos
+            timer.schedule(new monitorSocialNetStats(), 0, (60 * 1000)*10); //Cada 10 minuto
 
             //Que empiece hoy a las 11:59 pm y vuelve a iterar un dia despues y así se siga
             log.event("Initializing SocialNetsStatsMonitor, starts in:" + time2Start + "ms, periodicity:" + oneDay + ",ms");
@@ -67,6 +67,7 @@ public class SocialNetsStatsMonitor {
          * Metodo que revisa todos los streams activos en todas las marcas a
          */
         public void run() {
+            //System.out.println("Ejecuta SocialNetsStatsMonitor/run-1");
             Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
             while(itSocialSites.hasNext())
             {
@@ -79,6 +80,7 @@ public class SocialNetsStatsMonitor {
                         SocialNetwork socialNet=itSocialNets.next();
                         if(socialNet instanceof SocialStatsMonitorable && socialNet.isActive() && !socialNet.isDeleted())
                         {
+                            //System.out.println("Ejecuta SocialNetsStatsMonitor/run-2");
                             SocialStatsMonitorable socialStatMonitorable=(SocialStatsMonitorable)socialNet;
                             socialStatMonitorable.getSocialNetStats(socialNet);
                         }
