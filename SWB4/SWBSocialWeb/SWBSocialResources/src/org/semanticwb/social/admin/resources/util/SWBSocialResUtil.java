@@ -411,36 +411,5 @@ public class SWBSocialResUtil {
         }
        
    }
-   
-   public static class LOG
-   {
-
-       public static boolean logSocialNetStats(SocialSite socialsite, SocialNetwork socialNet, int friends, int followers, int ptat)
-       {
-            Connection con = null;
-            try {
-                Timestamp created = new Timestamp(new java.util.Date().getTime());
-                con = SWBUtils.DB.getDefaultConnection("SWBSocialResUtil:logSocialNetStats");
-
-                String query = "insert into socialnets_stats (socialsite, socialNet, friends, "
-                        + "followers, ptat, date) values "
-                        + "(?,?,?,?,?)";
-                PreparedStatement st = con.prepareStatement(query);
-                st.setString(1, socialsite.getURI());
-                st.setString(2, socialNet.getURI());
-                st.setInt(3, friends);
-                st.setInt(4, followers);
-                st.setInt(5, ptat);
-                st.setTimestamp(6, created);
-                st.executeUpdate();
-                st.close();
-                con.close();
-                return true;
-            } catch (Exception e) {
-                log.error(e);
-            }
-           return false;
-       }
-   } 
     
 }
