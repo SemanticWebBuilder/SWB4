@@ -953,6 +953,7 @@ SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.heig
                                 SVGjs.append(" rect.setAttributeNS(null,'style','fill:#dedede;stroke:#c1c1c1;stroke-width:1px;');");
                                 SVGjs.append(" g.insertBefore(rect,lnk);").append("\n");
                                 SVGjs.append(" y_ = y_ + rect.height.baseVal.value + " + BOX_SPACING + ";").append("\n");
+                                // estado del objetivo
                                 SVGjs.append(" stat = createCircle('stts_" + oid + "',rect.x.baseVal.value-6,rect.y.baseVal.value+5,4,'"+color+"',1,'black',1,1);").append("\n");
                                 SVGjs.append(" g.insertBefore(stat,lnk)").append("\n");
                                 //.................
