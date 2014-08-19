@@ -318,6 +318,11 @@ public class RisksMap extends GenericResource {
             htm.append("          <label for=\"viewBox\" class=\"swbform-label\">Atributo viewBox </label>\n");
             htm.append("          <input type=\"text\" id=\"viewBox\" name=\"viewBox\" regExp=\"\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}(\\s|,)\\d{1,4}\" dojoType=\"dijit.form.ValidationTextBox\" value=\""+base.getAttribute("viewBox","0,0,1050,800")+"\" />\n");
             htm.append("        </li>\n");
+            
+            htm.append("        <li class=\"swbform-li\">\n");
+            htm.append("          <label for=\"parentId\" class=\"swbform-label\">Identificador de la etiqueta padre </label>\n");
+            htm.append("          <input type=\"text\" id=\"parentId\" name=\"parentId\" dojoType=\"dijit.form.TextBox\" value=\""+base.getAttribute("parentId","")+"\" />\n");
+            htm.append("        </li>\n");
 
             // cuadrante 1
             htm.append("        <li class=\"swbform-li\">\n");
@@ -1312,6 +1317,7 @@ public class RisksMap extends GenericResource {
             base.setAttribute("width", request.getParameter("width"));
             base.setAttribute("height", request.getParameter("height"));
             base.setAttribute("viewBox", request.getParameter("viewBox"));
+            base.setAttribute("parentId", request.getParameter("parentId"));
             base.setAttribute("quadrant1Color", request.getParameter("quadrant1Color"));
             base.setAttribute("quadrant2Color", request.getParameter("quadrant2Color"));
             base.setAttribute("quadrant3Color", request.getParameter("quadrant3Color"));
@@ -1438,7 +1444,21 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" svg.setAttributeNS(null,'viewBox','"+base.getAttribute("viewBox","0 0 1050 800")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'onload','init(evt)');").append("\n");
-        SVGjs.append(" document.body.appendChild(svg);").append("\n");
+        
+        
+        //SVGjs.append(" document.body.appendChild(svg);").append("\n");
+        String parentId = base.getAttribute("parentId");
+        if(parentId==null) {
+            SVGjs.append(" document.body.appendChild(svg);").append("\n");
+        }else {
+            SVGjs.append(" var parentId = dojo.byId('"+parentId+"');").append("\n");
+            SVGjs.append(" if(parentId) {").append("\n");
+            SVGjs.append("   parentId.appendChild(svg);").append("\n");
+            SVGjs.append(" }else {").append("\n");
+            SVGjs.append("   document.body.appendChild(svg);").append("\n");
+            SVGjs.append(" }").append("\n");
+        }
+        
         
         SVGjs.append(" var defs = document.createElementNS(SVG_, 'defs');").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
