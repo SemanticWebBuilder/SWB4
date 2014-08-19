@@ -237,7 +237,10 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
         if(obj.getGenericInstance() instanceof Stream)
         {
             Stream stream=(Stream)obj.getGenericInstance();
-            buffer.append("<br/><image width=\"120\" height=\"120\"  src=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/"+stream.getStream_logo() + "\">");
+            if(stream.getStream_logo()!=null)
+            {
+                buffer.append("<br/><image width=\"120\" height=\"120\"  src=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/"+stream.getStream_logo() + "\">");
+            }
         }
         
         return buffer.toString();
