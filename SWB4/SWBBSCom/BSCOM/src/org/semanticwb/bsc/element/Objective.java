@@ -345,7 +345,11 @@ System.out.println("cambia valor estado.........");
         try{
             iconClass = getPeriodStatus(period).getStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = getMinimumState().getIconClass();
+            try {
+                iconClass = getMinimumState().getIconClass();
+            }catch(Exception e) {
+                iconClass = "undefined";
+            }
         }
         return iconClass;
     }
