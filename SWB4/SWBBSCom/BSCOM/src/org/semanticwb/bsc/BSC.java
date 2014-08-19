@@ -31,10 +31,12 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
         List<Initiative> validInitiative = SWBUtils.Collections.filterIterator(super.listInitiatives(), new GenericFilterRule<Initiative>() {
                                                                         @Override
                                                                         public boolean filter(Initiative s) {
+                                                                            System.out.println("iniciativa="+s.getTitle());
                                                                             User user = SWBContext.getSessionUser(getUserRepository().getId());
                                                                             if(user==null) {
                                                                                 user = SWBContext.getAdminUser();
                                                                             }
+                                                                            System.out.println("user="+user.getLogin());
                                                                             return !s.isValid() || !user.haveAccess(s);
                                                                         }            
                                                                     });
@@ -368,6 +370,8 @@ System.out.println("2. user="+user);
         e.setAttributeNode(src);
         eroot.appendChild(e);
         
+        boolean existsObjectivesInPeriod;
+        
         // lista de perspectivas
         List<Perspective> perspectives = listValidPerspectives();
         Collections.sort(perspectives);
@@ -386,6 +390,8 @@ System.out.println("2. user="+user);
             e.appendChild(doc.createTextNode(p.getDisplayTitle(lang)==null?(p.getTitle()==null?"Desconocido":p.getTitle().replaceAll("['\n]", "")):p.getDisplayTitle(lang).replaceAll("['\n]", "")));
             ep.appendChild(e);
             
+            existsObjectivesInPeriod = false;
+                        
             // lista de temas por perspectiva
             List<Theme> themes = p.listValidThemes();
             if(!themes.isEmpty()) {
@@ -440,8 +446,10 @@ System.out.println("2. user="+user);
                         if(!o.hasPeriod(period)) {
                             continue;
                         }
+                        existsObjectivesInPeriod = true;
+                        
                         state = o.getState(period);
-                        color = state==null?"#0000ff":(state.getColorHex()==null?"#FE2EF7":state.getColorHex());
+                        color = state==null?"#a6a6a6":(state.getColorHex()==null?"#f912be":state.getColorHex());
                         Element eobj = doc.createElement("obj");
                         eobj.setAttribute("id", o.getURI());
                         eobj.setAttribute("href", o.getEncodedURI());
@@ -499,7 +507,7 @@ System.out.println("2. user="+user);
                 } //lista de temas
             } //temas por perspectiva
             
-            //diffgroup
+            // lista de diferenciadores por perspectiva
             List<DifferentiatorGroup> diffgroups = p.listValidDifferentiatorGroups();
             if(!diffgroups.isEmpty()) {
                 DifferentiatorGroup diffgroup = diffgroups.get(0);
@@ -518,7 +526,11 @@ System.out.println("2. user="+user);
                     }
                 }
             }
-        }
+            
+            if(!existsObjectivesInPeriod) {
+                eroot.removeChild(ep);
+            }
+        } // for perspectives
         
         //riesgos
         List<Risk> risks = listValidRisks();
