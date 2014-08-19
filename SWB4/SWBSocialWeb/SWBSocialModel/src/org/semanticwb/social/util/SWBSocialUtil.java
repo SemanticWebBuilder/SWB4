@@ -319,10 +319,7 @@ public class SWBSocialUtil {
                 System.out.println("Table socialnets_stats already exist...");
             }
             
-        }catch(Exception sqlExc)
-        {
-            log.info("La tabla relacional socialnets_stats ya existe, no se creó nuevamente..");
-        }        
+        }catch(Exception ignore) {}        
       }catch(Exception e){
           log.error(e);
       }
