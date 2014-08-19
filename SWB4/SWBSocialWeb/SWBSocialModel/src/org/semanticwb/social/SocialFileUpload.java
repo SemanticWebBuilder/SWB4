@@ -84,7 +84,7 @@ public String renderElement(HttpServletRequest request, SemanticObject obj,
         String eliminar = lang.equals("en") ? "Chose the files to delete" : "Selecione el(los) archivo(s) a eliminar";
 //        String agregar = lang.equals("en") ? "Add new file upload" : "Agrega un nuevo archivo a cargar";
         String filtros = "";
-        StringBuilder filts = new StringBuilder();
+        //StringBuilder filts = new StringBuilder();
         Set<String> keys = ufq.getFiltros().keySet();
         for (String key : keys) {
             String value = ufq.getFiltros().get(key);
