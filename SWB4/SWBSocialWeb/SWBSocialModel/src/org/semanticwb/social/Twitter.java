@@ -11,11 +11,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
@@ -1241,5 +1239,7 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void getSocialNetStats(SocialNetwork socialNet) {
         System.out.println("Entra a Twitter/getSocialNetStats:"+socialNet);
+        SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
+        SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 1000, 1200, 1500);
     }
 }

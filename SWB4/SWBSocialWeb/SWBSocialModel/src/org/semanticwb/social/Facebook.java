@@ -2390,5 +2390,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
     @Override
     public void getSocialNetStats(SocialNetwork socialNet) {
         System.out.println("Entra a Facebook/getSocialNetStats:"+socialNet);
+        SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
+        SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 1000, 1200, 1500);
     }
 }
