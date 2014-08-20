@@ -3,6 +3,7 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
@@ -1314,10 +1315,10 @@ public class RisksMap extends GenericResource {
         String action = response.getAction();
         if(Action_UPDATE.equals(action)) {
             Resource base = response.getResourceBase();
-            base.setAttribute("width", request.getParameter("width"));
-            base.setAttribute("height", request.getParameter("height"));
-            base.setAttribute("viewBox", request.getParameter("viewBox"));
-            base.setAttribute("parentId", request.getParameter("parentId"));
+            base.setAttribute("width", request.getParameter("width").isEmpty()?null:request.getParameter("width"));
+            base.setAttribute("height", request.getParameter("height").isEmpty()?null:request.getParameter("height"));
+            base.setAttribute("viewBox", request.getParameter("viewBox").isEmpty()?null:request.getParameter("viewBox"));
+            base.setAttribute("parentId", request.getParameter("parentId").isEmpty()?null:request.getParameter("parentId"));
             base.setAttribute("quadrant1Color", request.getParameter("quadrant1Color"));
             base.setAttribute("quadrant2Color", request.getParameter("quadrant2Color"));
             base.setAttribute("quadrant3Color", request.getParameter("quadrant3Color"));
@@ -1437,6 +1438,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var SVG_ = '"+SVG_NS_URI+"';").append("\n");
         SVGjs.append(" var XLINK_ = '"+XLNK_NS_URI+"';").append("\n");
+        SVGjs.append(" window.onload = function() {").append("\n");
         SVGjs.append(" var svg = document.createElementNS(SVG_,'svg'); ").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'id','"+root.getAttribute("id")+"');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'width','"+width+"');").append("\n");
@@ -1445,8 +1447,6 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" svg.setAttributeNS(null,'version','1.1');").append("\n");
         SVGjs.append(" svg.setAttributeNS(null,'onload','init(evt)');").append("\n");
         
-        
-        //SVGjs.append(" document.body.appendChild(svg);").append("\n");
         String parentId = base.getAttribute("parentId");
         if(parentId==null) {
             SVGjs.append(" document.body.appendChild(svg);").append("\n");
@@ -1470,6 +1470,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" var path;").append("\n");    // flecha de la relación causa/efecto
         SVGjs.append(" var lnk;").append("\n");     // liga
         SVGjs.append(" var use;").append("\n");     // etiqueta use
+        SVGjs.append(" var tspan;").append("\n");   // objeto tipo tspan
         
         // Encabezado del mapa
         expression = "/riskmap/header";
@@ -1489,26 +1490,28 @@ public class RisksMap extends GenericResource {
             txt = (String) xPath.compile(expression).evaluate(map, XPathConstants.STRING);
             txt = SWBUtils.TEXT.getLocaleString(bundle, "lblRiskMap", locale)+" "+SWBUtils.TEXT.getLocaleString(bundle, "lblOf", locale)+" "+txt;
             SVGjs.append(" txt = createText('"+txt+"',"+(x+w/2)+","+(y+HEADER_1)+","+HEADER_1+",'Verdana');").append("\n");
+            SVGjs.append(" txt.setAttributeNS(null,'style','fill:#373737;font-weight:bold;font-size:"+HEADER_1+"px;');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             SVGjs.append(" g.appendChild(txt);").append("\n");
             
             // logo mapa
-            expression = "/riskmap/header/logo";
+            expression = "/bsc/header/logo";
             node = (Node) xPath.compile(expression).evaluate(map, XPathConstants.NODE);
             if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
                 if(attrs.getNamedItem("src").getNodeValue().isEmpty()) {
-//                    SVGjs.append(" rect = createRect('"+root.getAttribute("id")+"_lg"+"',"+(w-BOX_SPACING)+","+(h-BOX_SPACING)+","+(x_+w_+PADDING_LEFT)+","+(y_-HEADER_2+PADDING_TOP)+",0,0,'none',1,'red',1,1);").append("\n");
-//                    SVGjs.append(" g.appendChild(rect);").append("\n");
+                    SVGjs.append(" rect = createRect('"+root.getAttribute("id")+"_lg"+"',"+(w-BOX_SPACING)+","+(h-BOX_SPACING)+","+(x+w+PADDING_LEFT)+","+(y-HEADER_2+PADDING_TOP)+",0,0,'none',1,'red',1,1);").append("\n");
+                    SVGjs.append(" g.appendChild(rect);").append("\n");
                 }else {
-//                    SVGjs.append(" var img = document.createElementNS(SVG_,'image');").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(null,'width',"+(w_-BOX_SPACING)+");").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(null,'height',"+(h_-BOX_SPACING)+");").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(null,'x',"+(x_+w_+PADDING_LEFT)+");").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(null,'y',"+(y_-HEADER_2+PADDING_TOP)+");").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(XLINK_,'href', '"+request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+attrs.getNamedItem("src").getNodeValue()+"');").append("\n");
-//                    SVGjs.append(" img.setAttributeNS(null, 'visibility', 'visible');").append("\n");
-//                    SVGjs.append(" g.appendChild(img);").append("\n");
+                    SVGjs.append(" var img = document.createElementNS(SVG_,'image');").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'width',"+(w-BOX_SPACING)+");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'height',"+(h-BOX_SPACING)+");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'x',"+(x+w+PADDING_LEFT)+");").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null,'y',"+(y-HEADER_2+PADDING_TOP)+");").append("\n");
+                    //SVGjs.append(" img.setAttributeNS(XLINK_,'href', '"+request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+attrs.getNamedItem("src").getNodeValue()+"');").append("\n");
+                    //SVGjs.append(" img.setAttributeNS(XLINK_,'href', 'http://localhost:8088"+attrs.getNamedItem("src").getNodeValue()+"');").append("\n");
+                    SVGjs.append(" img.setAttributeNS(null, 'visibility', 'visible');").append("\n");
+                    SVGjs.append(" g.appendChild(img);").append("\n");
                 }
             }
         }
@@ -1606,7 +1609,7 @@ public class RisksMap extends GenericResource {
                 //SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*30)+","+(aux-likehood*30)+",6,'#000000',1,1,1,1);").append("\n");
                 SVGjs.append(" pto = createCircle('"+rid+"',"+(impact*24)+","+(aux-likehood*24)+",5,'#000000',1,'none',1,1);").append("\n");
                 SVGjs.append(" pto.setAttributeNS(null,'id','"+prefix+" ("+impact+","+likehood+")');").append("\n");
-                SVGjs.append(" pto.addEventListener('mousemove', showTooltip, false);").append("\n");
+                SVGjs.append(" pto.addEventListener('mouseover', showTooltip, false);").append("\n");
                 SVGjs.append(" pto.addEventListener('mouseout', hideTooltip, false);").append("\n");
                 SVGjs.append("").append("\n");
                 SVGjs.append(" g.appendChild(pto);").append("\n");
@@ -1620,11 +1623,13 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
         // Leyenda de creación
+        DateFormat dateFormatter;
+        dateFormatter = DateFormat.getDateInstance(DateFormat.LONG, locale);
         SVGjs.append(" pto = svg.createSVGPoint();").append("\n");
         SVGjs.append(" pto.x = rect.x.baseVal.value;").append("\n");
         SVGjs.append(" pto.y = rect.y.baseVal.value + rect.height.baseVal.value + "+(BOX_SPACING_BOTTOM+HEADER_4)+";").append("\n");
         SVGjs.append(" pto = pto.matrixTransform(g.getCTM());").append("\n");
-        SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblCreated", locale)+" "+new Date()+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
+        SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblCreated", locale)+" "+dateFormatter.format(new Date())+"',pto.x,pto.y,"+HEADER_4+",'Verdana');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
                 
         // Tabla de riesgos
@@ -1758,12 +1763,9 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" txt.setAttributeNS(null,'fill','#000000');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'visibility','hidden');").append("\n");
         SVGjs.append(" svg.appendChild(txt);").append("\n");
-//        SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-//        SVGjs.append(" rect.setAttributeNS(null,'id','tooltipbg');").append("\n");
-//        SVGjs.append(" rect.setAttributeNS(null,'visibility','hidden');").append("\n");
-//        SVGjs.append(" framingRect(rect,"+w_+",'#F2F5A9',1,'#F4FA58',1,5,5);").append("\n");
-//        SVGjs.append(" svg.insertBefore(rect,txt);").append("\n");
         
+        
+        SVGjs.append("};").append("\n"); // window.onload
         SVGjs.append("").append("\n");
         SVGjs.append("").append("\n");
         SVGjs.append("//---------------").append("\n");
