@@ -331,10 +331,10 @@ public class StrategicMap extends GenericResource
         String action = response.getAction();
         if(Action_UPDATE.equals(action)) {
             Resource base = response.getResourceBase();
-            base.setAttribute("width", request.getParameter("width"));
-            base.setAttribute("height", request.getParameter("height"));
-            base.setAttribute("viewBox", request.getParameter("viewBox"));
-            base.setAttribute("parentId", request.getParameter("parentId"));
+            base.setAttribute("width", request.getParameter("width").isEmpty()?null:request.getParameter("width"));
+            base.setAttribute("height", request.getParameter("height").isEmpty()?null:request.getParameter("height"));
+            base.setAttribute("viewBox", request.getParameter("viewBox").isEmpty()?null:request.getParameter("viewBox"));
+            base.setAttribute("parentId", request.getParameter("parentId").isEmpty()?null:request.getParameter("parentId"));
             try {
                 base.updateAttributesToDB();
                 response.setAction(Action_UPDATE);
@@ -548,16 +548,16 @@ System.out.println("2. period="+period.getTitle());
         String bundle = getClass().getName();
         Locale locale = new Locale(lang);
         
-        SVGjs.append("<style type=\"text/css\">").append("\n");
-        SVGjs.append("  text.title {").append("\n");
-        SVGjs.append("    fill: #373737;").append("\n");
-        SVGjs.append("    font-size: "+HEADER_1+"px;").append("\n");
-        SVGjs.append("  }").append("\n");
-        SVGjs.append("  text.period {").append("\n");
-        SVGjs.append("    fill: #454545;").append("\n");
-        SVGjs.append("    font-size: "+HEADER_3+"px;").append("\n");
-        SVGjs.append("  }").append("\n");        
-        SVGjs.append("</style>").append("\n");
+//        SVGjs.append("<style type=\"text/css\">").append("\n");
+//        SVGjs.append("  text.title {").append("\n");
+//        SVGjs.append("    fill: #373737;").append("\n");
+//        SVGjs.append("    font-size: "+HEADER_1+"px;").append("\n");
+//        SVGjs.append("  }").append("\n");
+//        SVGjs.append("  text.period {").append("\n");
+//        SVGjs.append("    fill: #454545;").append("\n");
+//        SVGjs.append("    font-size: "+HEADER_3+"px;").append("\n");
+//        SVGjs.append("  }").append("\n");        
+//        SVGjs.append("</style>").append("\n");
 
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var width = " + width + ";").append("\n");
@@ -651,7 +651,7 @@ System.out.println("2. period="+period.getTitle());
             SVGjs.append(" txt.setAttributeNS(null,'font-family','Verdana');").append("\n");
             SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
             // Nombre del scorecard
-            SVGjs.append(" txt.setAttributeNS(null,'class','title');").append("\n");
+//            SVGjs.append(" txt.setAttributeNS(null,'class','title');").append("\n");
             SVGjs.append(" tspan = document.createElementNS(SVG_, 'tspan');").append("\n");
             SVGjs.append(" tspan.setAttributeNS(null,'style','fill:#373737;font-weight:bold;font-size:"+HEADER_1+"px;');").append("\n");
             SVGjs.append(" var text_node = document.createTextNode('"+txt+"');").append("\n");
@@ -1059,7 +1059,7 @@ SVGjs.append(" framingRect(rect,'" + did + "',rect.width.baseVal.value,rect.heig
                 SVGjs.append(" y = y + h_ + " + MARGEN_BOTTOM + ";").append("\n");
             } // perspectiva
         } // lista de perspectivas
-        SVGjs.append("};").append("\n");
+        SVGjs.append("};").append("\n"); // window.onload
 
         // funciones
         SVGjs.append("function createLink(url) {").append("\n");
