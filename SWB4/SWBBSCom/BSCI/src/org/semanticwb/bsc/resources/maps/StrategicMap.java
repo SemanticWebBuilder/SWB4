@@ -547,17 +547,6 @@ System.out.println("2. period="+period.getTitle());
         String lang = user.getLanguage();
         String bundle = getClass().getName();
         Locale locale = new Locale(lang);
-        
-//        SVGjs.append("<style type=\"text/css\">").append("\n");
-//        SVGjs.append("  text.title {").append("\n");
-//        SVGjs.append("    fill: #373737;").append("\n");
-//        SVGjs.append("    font-size: "+HEADER_1+"px;").append("\n");
-//        SVGjs.append("  }").append("\n");
-//        SVGjs.append("  text.period {").append("\n");
-//        SVGjs.append("    fill: #454545;").append("\n");
-//        SVGjs.append("    font-size: "+HEADER_3+"px;").append("\n");
-//        SVGjs.append("  }").append("\n");        
-//        SVGjs.append("</style>").append("\n");
 
         SVGjs.append("<script type=\"text/javascript\">").append("\n");
         SVGjs.append(" var width = " + width + ";").append("\n");
