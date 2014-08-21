@@ -1459,7 +1459,6 @@ public class RisksMap extends GenericResource {
             SVGjs.append(" }").append("\n");
         }
         
-        
         SVGjs.append(" var defs = document.createElementNS(SVG_, 'defs');").append("\n");
         SVGjs.append(" svg.appendChild(defs);").append("\n");
         
@@ -1500,7 +1499,7 @@ public class RisksMap extends GenericResource {
             if(node!=null && node.getNodeType()==Node.ELEMENT_NODE) {
                 attrs = node.getAttributes();
                 if(attrs.getNamedItem("src").getNodeValue().isEmpty()) {
-                    SVGjs.append(" rect = createRect('"+root.getAttribute("id")+"_lg"+"',"+(w-BOX_SPACING)+","+(h-BOX_SPACING)+","+(x+w+PADDING_LEFT)+","+(y-HEADER_2+PADDING_TOP)+",0,0,'none',1,'red',1,1);").append("\n");
+                    SVGjs.append(" rect = createRect('"+root.getAttribute("id")+"_lg"+"',"+(w-BOX_SPACING)+","+(h-BOX_SPACING)+","+(x+w+PADDING_LEFT)+","+(y-HEADER_2+PADDING_TOP)+",0,0,'red',1,'red',1,1);").append("\n");
                     SVGjs.append(" g.appendChild(rect);").append("\n");
                 }else {
                     SVGjs.append(" var img = document.createElementNS(SVG_,'image');").append("\n");
@@ -1774,8 +1773,14 @@ public class RisksMap extends GenericResource {
 
         SVGjs.append(" function showTooltip(evt) {").append("\n");
         SVGjs.append("   var tooltip = evt.target.ownerDocument.getElementById('tooltip');").append("\n");
-        SVGjs.append("   tooltip.setAttributeNS(null,'x',evt.clientX+5);").append("\n");
-        SVGjs.append("   tooltip.setAttributeNS(null,'y',evt.clientY+5);").append("\n");
+        SVGjs.append("   var parent = evt.target.parentNode;").append("\n"); // objeto g
+        SVGjs.append("   matx = parent.getCTM();").append("\n");
+        SVGjs.append("   pto = parent.parentNode.createSVGPoint();").append("\n"); // objeto svg
+        SVGjs.append("   pto.x = evt.target.cx.baseVal.value;").append("\n");
+        SVGjs.append("   pto.y = evt.target.cy.baseVal.value;").append("\n");
+        SVGjs.append("   pto = pto.matrixTransform(matx);").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'x',pto.x+10);").append("\n");
+        SVGjs.append("   tooltip.setAttributeNS(null,'y',pto.y+5);").append("\n");        
         SVGjs.append("   tooltip.textContent = evt.target.getAttribute('id');").append("\n");
         SVGjs.append("   tooltip.setAttributeNS(null,'visibility','visible');").append("\n");
         SVGjs.append(" }").append("\n");
