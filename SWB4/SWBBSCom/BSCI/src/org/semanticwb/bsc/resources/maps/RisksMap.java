@@ -61,7 +61,7 @@ public class RisksMap extends GenericResource {
     public static final int HEADER_3 = 14; // tamaño de fuente para coordenadas
     public static final int HEADER_4 = 12; // tamaño de fuente para texto
     
-    public static final int CELL_WIDTH = 100; // ancho de las celdas de la tabla de riesgos
+    public static final int CELL_WIDTH = 90; // ancho de las celdas de la tabla de riesgos
     
     public static final int BOX_SPACING = 16; // Especifica el espacio entre rectángulos internos de una perspectiva
     public static final int BOX_SPACING_LEFT = 8; // Especifica el espacio entre rectángulos internos de una perspectiva
@@ -1534,6 +1534,7 @@ public class RisksMap extends GenericResource {
         // Etiqueta "Mapa de riesgos XXX"
         SVGjs.append(" txt = createText('"+SWBUtils.TEXT.getLocaleString(bundle, "lblRiskMap", locale)+"',"+w_+","+y_+","+HEADER_2+",'Verdana');").append("\n");
         SVGjs.append(" txt.setAttributeNS(null,'text-anchor','middle');").append("\n");
+        SVGjs.append(" txt.setAttributeNS(null,'style','fill:##373737;font-family:tahoma,verdana,sans-serif');").append("\n");
         SVGjs.append(" g.appendChild(txt);").append("\n");
         //SVGjs.append(" y_ = y_ + "+(HEADER_2+BOX_SPACING_BOTTOM)).append("\n");
         y_ = y_+HEADER_2+PADDING_DOWN;
@@ -1617,7 +1618,7 @@ public class RisksMap extends GenericResource {
         
         // Recuadro de gráfica
         SVGjs.append(" rect = getBBoxAsRectElement(g);").append("\n");
-        SVGjs.append(" framingRect(rect,rect.width.baseVal.value+"+(BOX_SPACING_LEFT+BOX_SPACING_RIGHT)+",'none',1,'#000000',1,0,0);").append("\n");
+        SVGjs.append(" framingRect(rect,rect.width.baseVal.value+"+(BOX_SPACING_LEFT+BOX_SPACING_RIGHT)+",'none',1,'#000000',1,1,3,3);").append("\n");
         SVGjs.append(" rect.x.baseVal.value = rect.x.baseVal.value-"+BOX_SPACING_LEFT+";").append("\n");
         SVGjs.append(" g.appendChild(rect);").append("\n");
         
@@ -1657,7 +1658,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,0,0);").append("\n");
+        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,1,0,0);").append("\n");
         SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         SVGjs.append(" x_ = x_ + rect.width.baseVal.value + "+PADDING_LEFT+";").append("\n");
         SVGjs.append(" h_ = rect.height.baseVal.value;").append("\n");
@@ -1666,7 +1667,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+(4*w_)+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+(4*w_)+",'#9370db',0.3,'#9370db',1,0,0);").append("\n");
+        SVGjs.append(" framingRect(rect,"+(4*w_)+",'#9370db',0.3,'#9370db',1,1,0,0);").append("\n");
         SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         SVGjs.append(" x_ = x_ + rect.width.baseVal.value + "+PADDING_LEFT+";").append("\n");
         SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
@@ -1677,7 +1678,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,0,0);").append("\n");
+        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,1,0,0);").append("\n");
         SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         SVGjs.append(" x_ = x_ + rect.width.baseVal.value + "+PADDING_LEFT+";").append("\n");
         SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
@@ -1688,7 +1689,7 @@ public class RisksMap extends GenericResource {
         SVGjs.append(" g.appendChild(txt);").append("\n");
         SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
         SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,0,0);").append("\n");
+        SVGjs.append(" framingRect(rect,"+w_+",'#9370db',0.3,'#9370db',1,1,0,0);").append("\n");
         SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
         SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
         SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
@@ -1712,7 +1713,8 @@ public class RisksMap extends GenericResource {
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',1,'#ffffff',1,0,0);").append("\n");
+                //framingRect(rect,width, fill, fillOpacity, stroke, strokeOpacity, strokeWidth, rx, ry)   
+                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',0.3,'#ffffff',0.6,1,0,0);").append("\n");
                 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 SVGjs.append(" h_ = rect.height.baseVal.value;").append("\n");
                 // título del riesgo
@@ -1721,7 +1723,7 @@ public class RisksMap extends GenericResource {
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+(4*w_)+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                SVGjs.append(" framingRect(rect,"+(4*w_)+",'#ffffff',1,'#ffffff',1,0,0);").append("\n");
+                SVGjs.append(" framingRect(rect,"+(4*w_)+",'#ffffff',0.3,'#ffffff',0.6,1,0,0);").append("\n");
                 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
                 SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
@@ -1733,7 +1735,7 @@ public class RisksMap extends GenericResource {
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',1,'#ffffff',1,0,0);").append("\n");
+                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',0.3,'#ffffff',0.6,1,0,0);").append("\n");
                 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
                 SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
@@ -1745,7 +1747,7 @@ public class RisksMap extends GenericResource {
                 SVGjs.append(" g.appendChild(txt);").append("\n");
                 SVGjs.append(" fixParagraphToWidth(txt,"+w_+",x_);").append("\n");
                 SVGjs.append(" rect = getBBoxAsRectElement(txt);").append("\n");
-                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',1,'#ffffff',1,0,0);").append("\n");
+                SVGjs.append(" framingRect(rect,"+w_+",'#ffffff',0.3,'#ffffff',0.6,1,0,0);").append("\n");
                 SVGjs.append(" g.insertBefore(rect,txt);").append("\n");
                 SVGjs.append(" if(rect.height.baseVal.value>h_) {").append("\n");
                 SVGjs.append("   h_ = rect.height.baseVal.value;").append("\n");
@@ -1850,15 +1852,15 @@ public class RisksMap extends GenericResource {
         SVGjs.append("  return rect;").append("\n");
         SVGjs.append("}").append("\n");
 
-        SVGjs.append("function framingRect(rect,width, fill, fillOpacity, stroke, strokeOpacity, rx, ry) {").append("\n");
+        SVGjs.append("function framingRect(rect,width, fill, fillOpacity, stroke, strokeOpacity, strokeWidth, rx, ry) {").append("\n");
         SVGjs.append("  rect.width.baseVal.value = width;").append("\n");
         SVGjs.append("  rect.setAttributeNS(null,'fill',fill);").append("\n");
         SVGjs.append("  rect.setAttributeNS(null,'fill-opacity',fillOpacity);").append("\n");
         SVGjs.append("  rect.setAttributeNS(null,'stroke',stroke);").append("\n");
-        SVGjs.append("  rect.setAttributeNS(null, 'stroke-width','1');").append("\n");
-        SVGjs.append("  rect.setAttributeNS(null, 'stroke-opacity',strokeOpacity);").append("\n");
-        SVGjs.append("  rect.setAttributeNS(null, 'rx',rx);").append("\n");
-        SVGjs.append("  rect.setAttributeNS(null, 'ry',ry);").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'stroke-opacity',strokeOpacity);").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'stroke-width',strokeWidth);").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'rx',rx);").append("\n");
+        SVGjs.append("  rect.setAttributeNS(null,'ry',ry);").append("\n");
         SVGjs.append("}").append("\n");
 
         SVGjs.append(" function fixParagraphAtBounding(text_element, width, height, x, y) {").append("\n");
