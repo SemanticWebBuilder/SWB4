@@ -84,63 +84,80 @@ public class EmailResource extends GenericResource {
         toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
         toReturn.append("     <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">");
         toReturn.append("       <div class=\"row\" style=\"margin: 0px;\">");
-        toReturn.append("         <div class=\"col-lg-5 col-md-5 col-sm-5 col-xs-12  swb-fondo-izq\">");
+        toReturn.append("         <div class=\" col-xs-12  swb-fondo-izq\">");
         toReturn.append("           <form class=\"form-horizontal\" role=\"form\">");// abre form izquierdo
-        toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("           <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_From") + "</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");
-        toReturn.append("             <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input>");
-        toReturn.append("             </div>");
-        toReturn.append("           </div>");
-        toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_To") + "</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");
-        toReturn.append("              <select class=\"form-control\" id=\"To\" name=\"To\" onChange=\"javascript:getTo();\">");
-        toReturn.append("              <option value=\"\">Selecciona...</option>");
-                        while (itTo.hasNext()) {
-                        User usr = itTo.next();
-                        toReturn.append("<option value=\"" + usr.getEmail() + "\">" + replaceHtml(usr.getFullName()) + "</option>");
-                        }
-        toReturn.append("              </select>");
-        toReturn.append("            </div>");
-        toReturn.append("            <div class=\"col-lg-11 col-md-12 col-sm-12 col-xs-12 pull-right\" id=\"divTo\" style=\"display:none;\">");
-        toReturn.append("               <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">");
-        toReturn.append("            </div>");
+        
+        toReturn.append("           <div class=\"form-group\">");              
+        toReturn.append("               <div class=\"col-lg-6\">").append("\n");
+        toReturn.append("                   <div class=\"input-group\">").append("\n");
+        toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
+        toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_From") + "</strong></button>").append("\n");
+        toReturn.append("                       </div><!-- /btn-group -->").append("\n");
+        toReturn.append("                   <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input>");
+        toReturn.append("                   </div><!-- /input-group -->").append("\n");
+        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n");      
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Cc") + "</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");
-        toReturn.append("              <select class=\"form-control\" id=\"Cc\" name=\"Cc\" onChange=\"javascript:getCc();\">");
-        toReturn.append("              <option value=\"\">Selecciona...</option>");
+        toReturn.append("               <div class=\"col-lg-6\">").append("\n");
+        toReturn.append("                   <div class=\"input-group\">").append("\n");
+        toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
+        toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_To") + "</strong></button>").append("\n");
+        toReturn.append("                           <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
+        toReturn.append("                           <span class=\"caret\"></span>").append("\n");
+        toReturn.append("                           <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
+        toReturn.append("                           </button>").append("\n");
+        toReturn.append("                       <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
+        while (itTo.hasNext()) {
+        User usr = itTo.next();
+        toReturn.append("                       <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getTo(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
+        }
+        toReturn.append("                       </ul>").append("\n");
+        toReturn.append("                       </div><!-- /btn-group -->").append("\n");
+        toReturn.append("                  <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">");
+        toReturn.append("                  </div><!-- /input-group -->").append("\n");
+        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n");      
+        toReturn.append("           </div>");
+        
+        toReturn.append("           <div class=\"form-group\">");
+        toReturn.append("             <div class=\"col-lg-11\">").append("\n");
+        toReturn.append("                   <div class=\"input-group\">").append("\n");
+        toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
+        toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_Cc") + "</strong></button>");        
+        toReturn.append("                           <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
+        toReturn.append("                           <span class=\"caret\"></span>").append("\n");
+        toReturn.append("                           <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
+        toReturn.append("                           </button>").append("\n");
+        toReturn.append("                       <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
                         while (itCc.hasNext()) {
                         User usr = itCc.next();
-                        toReturn.append("<option value=\"" + usr.getEmail() + "\">" + usr.getFullName() + "</option>");
+        toReturn.append("                       <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getCc(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
                         }
-        toReturn.append("              </select>");
-        toReturn.append("             </div>");
-        toReturn.append("           <div class=\"col-lg-11 col-md-12 col-sm-12 col-xs-12 pull-right\" id=\"divCc\" style=\"display:none;\">");
-        toReturn.append("               <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>");
-        toReturn.append("            </div>");
-        toReturn.append("           </div>");
-        toReturn.append("           </form>"); // cierra form izquierdo
-        toReturn.append("         </div>"); // cierra div swb-fondo-izq
+        toReturn.append("                       </ul>").append("\n");
+        toReturn.append("                       </div><!-- /btn-group -->").append("\n");
+        toReturn.append("                   <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>");
+        toReturn.append("                  </div><!-- /input-group -->").append("\n");
+        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n"); 
+        toReturn.append("           </div>");// cierra form-group
         
-        toReturn.append("         <div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12 swb-fondo-der\">"); // abre div swb-fondo-der 
-        toReturn.append("          <form class=\"form-horizontal\" role=\"form\">");// abre form derecho
+        //toReturn.append("           </form>"); // cierra form izquierdo
+        //toReturn.append("         </div>"); // cierra div swb-fondo-izq
+        
+        //toReturn.append("         <div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12 swb-fondo-der\">"); // abre div swb-fondo-der 
+        //toReturn.append("          <form class=\"form-horizontal\" role=\"form\">");// abre form derecho
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Subject") + "</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");      
+        toReturn.append("             <div class=\"col-lg-6\">");      
         toReturn.append("               <input name=\"subject\" class=\"form-control\" type=\"text\"></input>");
         toReturn.append("             </div>");
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Attach")+"</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");
+        toReturn.append("             <div class=\"col-lg-6\">");
         toReturn.append("             </div>");
-        toReturn.append("             <div class=\"col-lg-11  pull-right\">");
+        toReturn.append("             <div class=\"col-lg-11  pull-left\">");
         toReturn.append("               <input type=\"file\" name=\"uploadFile\" />");
         toReturn.append("               <input type=\"hidden\" name=\"upload\" value=\"upload\" />");
         toReturn.append("             </div>");
@@ -148,16 +165,18 @@ public class EmailResource extends GenericResource {
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Message")+"</label>");
-        toReturn.append("             <div class=\"col-lg-11\">");
-        toReturn.append("               <textarea class=\"form-control\" name=\"message\" rows=\"3\"></textarea>");
+        toReturn.append("             <div class=\"col-lg-6\">");
+        toReturn.append("               <textarea class=\"form-control\" name=\"message\" rows=\"5\"></textarea>");
         toReturn.append("             </div>");
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
         toReturn.append("           <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>");
         toReturn.append("           </div>");
-        toReturn.append("          </form>");// cierra form derecho
-        toReturn.append("         </div>"); // cierra div swb-fondo-der
+        //toReturn.append("          </form>");// cierra form derecho
+        //toReturn.append("         </div>"); // cierra div swb-fondo-der
+        toReturn.append("           </form>"); // cierra form izquierdo
+        toReturn.append("         </div>"); // cierra div swb-fondo-izq
         toReturn.append("       </div>"); // cierra div class row
         toReturn.append("     </div>"); // cierra div class panel body
         toReturn.append("   </form>");// cierra form formEmail
@@ -170,21 +189,19 @@ public class EmailResource extends GenericResource {
         toReturn.append("alert('Debes seleccionar un destinatario.'); return false;};");
         toReturn.append("return true;");
         toReturn.append("}");
-        toReturn.append("\n  function getTo() {");
-        toReturn.append("\n var to = document.getElementById('To').value;");
+        toReturn.append("\n  function getTo(rel) {");
+        toReturn.append("\n  var to = rel;");
         toReturn.append("if (document.getElementById('toText').value.indexOf(to) == -1){ ");
         toReturn.append("\n document.getElementById('toText').value+=to +\";\";");
-        toReturn.append("\n document.getElementById('divTo').style.display =\"\";");
         toReturn.append("}");
-        toReturn.append("\n document.getElementById('To').value = \"\";");
+        //toReturn.append("\n document.getElementById('To').value = \"\";");
         toReturn.append("\n  };");
-        toReturn.append("\n  function getCc() {");
-        toReturn.append("\n var cc = document.getElementById('Cc').value;");
+        toReturn.append("\n  function getCc(rel) {");
+        toReturn.append("\n var cc = rel;");
         toReturn.append("if (document.getElementById('ccText').value.indexOf(cc) == -1){ ");
         toReturn.append("\n document.getElementById('ccText').value+=cc +\";\";");
-        toReturn.append("\n document.getElementById('divCc').style.display =\"\";");
         toReturn.append("}");
-        toReturn.append("\n document.getElementById('Cc').value = \"\";");
+        //toReturn.append("\n document.getElementById('Cc').value = \"\";");
         toReturn.append("\n  };");
         toReturn.append("\n </script>");
 
@@ -318,6 +335,7 @@ out.print("</div>\n");
         WebSite wsite = base.getWebSite();
         final User user = response.getUser();
         if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
+            System.out.println("action ADD!!");
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
             MultipartRequest mrequest = new MultipartRequest(request, path);
             String subject = (String) mrequest.getParameter("subject") == null ? "" : (String) mrequest.getParameter("subject");
