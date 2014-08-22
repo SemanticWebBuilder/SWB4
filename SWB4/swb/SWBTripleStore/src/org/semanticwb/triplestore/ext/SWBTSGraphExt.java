@@ -32,7 +32,6 @@ import java.sql.SQLException;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBRuntimeException;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.rdf.GraphExt;
 import org.semanticwb.triplestore.SWBTSGraph;
 import org.semanticwb.triplestore.SWBTSUtil;
 
