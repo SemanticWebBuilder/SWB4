@@ -22,6 +22,7 @@
  */
 package org.semanticwb.platform;
 
+import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.RDFNode;
@@ -128,6 +129,8 @@ public class SemanticObject
     private List<Statement> m_props=new CopyOnWriteArrayList<Statement>();
     private List<Statement> m_propsInv=null;
     
+    private HashMap<String,Object> m_propertyMap=null;                                  //Cache de propiedades en HashMap, para JS
+    
     /** The lastaccess. */
     private long lastaccess=System.currentTimeMillis();
     
@@ -203,6 +206,7 @@ public class SemanticObject
             }
         }
         if(stit instanceof StmtIterator)((StmtIterator)stit).close();
+        m_propertyMap=null;
     }
         
     private void initInverse(StmtIterator stit)
@@ -264,6 +268,97 @@ public class SemanticObject
             }
         }
         return m_propsInv;
+    }
+    
+    private void addStatementToPropertyMap(Statement statement, Map map)
+    {
+        if(map==null)return;
+        Property rdfprop=statement.getPredicate();
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(rdfprop);
+
+        String name = prop.getPropertyCodeName();
+        if (prop.getCardinality() == 1) {
+            if (prop.isDataTypeProperty()) {
+                Literal lit=statement.getLiteral();
+                if (lit != null) {
+                    map.put(name, lit.getValue());
+                }
+            } else {
+                String value = statement.getObject().toString();
+                if (value != null) {
+                    map.put(name, value);
+                }
+            }
+        } else {
+
+            ArrayList arr = (ArrayList)map.get(name);
+            if(arr==null)
+            {
+                arr = new ArrayList();
+                map.put(name, arr);
+            }                
+            if (prop.isDataTypeProperty()) {
+                Literal lit=statement.getLiteral();
+                if (lit != null) {
+                    arr.add(lit.getValue());
+                }
+            } else {
+                String value = statement.getObject().toString();
+                if (value != null) {
+                    arr.add(value);
+                }
+            }
+        }        
+    }
+    
+    private void removeStatementToPropertyMap(Statement statement, Map map)
+    {
+        if(map==null)return;        
+        Property rdfprop=statement.getPredicate();
+        SemanticProperty prop=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(rdfprop);
+
+        String name = prop.getName();
+        if (prop.getCardinality() == 1) {
+            map.remove(name);
+        } else 
+        {
+            ArrayList arr = (ArrayList)map.get(name);
+            if(arr!=null)
+            {
+                if (prop.isDataTypeProperty()) {
+                    Literal lit=statement.getLiteral();
+                    if (lit != null) {
+                        arr.remove(lit.getValue());
+                    }
+                } else {
+                    String value = statement.getObject().toString();
+                    if (value != null) {
+                        arr.remove(value);
+                    }
+                }
+            }
+        }        
+    }    
+    
+    public Map asPropertyMap()
+    {
+        if(m_propertyMap==null)
+        {
+            synchronized(this)
+            {
+                if(m_propertyMap==null)
+                {
+                    m_propertyMap=new HashMap();
+                    Iterator<Statement> it=m_props.iterator();
+                    while (it.hasNext()) 
+                    {
+                        Statement statement = it.next();
+                        addStatementToPropertyMap(statement, m_propertyMap);
+                    }
+                }
+            }
+        }
+        return m_propertyMap;
     }
     
     /*********************************************** statics ****************************************************************/    
@@ -353,6 +448,7 @@ public class SemanticObject
             {
                cacheSemanticObject(semanticObject);
                if(semanticObject.m_propsInv==null)semanticObject.m_propsInv=Collections.synchronizedList(new ArrayList());
+               semanticObject.m_propertyMap=null;
             }
         }
     }
@@ -1041,6 +1137,7 @@ public class SemanticObject
             if(statement.getPredicate().equals(prop))
             {
                 remove(statement);
+                removeStatementToPropertyMap(statement, m_propertyMap);
             }
         }
     }
@@ -1070,6 +1167,7 @@ public class SemanticObject
         }
             
         ret=getProps().remove(stmt);
+        removeStatementToPropertyMap(stmt, m_propertyMap);
         
         if(ret)
         {
@@ -1164,7 +1262,11 @@ public class SemanticObject
             m.add(stmt);
             //Notify
         }
-        if(!contains)getProps().add(stmt);
+        if(!contains)
+        {
+            getProps().add(stmt);
+            addStatementToPropertyMap(stmt, m_propertyMap);
+        }
         
         if(!m_virtual && !external)
         {
