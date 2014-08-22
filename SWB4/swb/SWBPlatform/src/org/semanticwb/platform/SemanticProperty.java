@@ -305,7 +305,7 @@ public class SemanticProperty
                 //System.out.println("Class:"+m_class+" ->"+className);
                 if (m_propertyCodeName == null)
                 {
-                    m_propertyCodeName = SemanticObject.class.getName();
+                    m_propertyCodeName = getName();
                 }
             }
             catch (Exception pnf)
