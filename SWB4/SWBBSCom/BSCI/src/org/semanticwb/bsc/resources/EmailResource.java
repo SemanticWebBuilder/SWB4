@@ -81,25 +81,22 @@ public class EmailResource extends GenericResource {
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_ADD);
         
         toReturn.append("<div class=\"panel panel-default\">");
-        toReturn.append("<form id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
+        toReturn.append("<form class=\"form-horizontal\" id=\"formEmail\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return getValidate()\">\n");
         toReturn.append("     <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">");
-        toReturn.append("       <div class=\"row\" style=\"margin: 0px;\">");
-        toReturn.append("         <div class=\" col-xs-12  swb-fondo-izq\">");
-        toReturn.append("           <form class=\"form-horizontal\" role=\"form\">");// abre form izquierdo
-        
+        toReturn.append("       <div class=\"row\" style=\"margin: 0px;\">");       
         toReturn.append("           <div class=\"form-group\">");              
-        toReturn.append("               <div class=\"col-lg-6\">").append("\n");
+        toReturn.append("               <div class=\"col-lg-12\">").append("\n");
         toReturn.append("                   <div class=\"input-group\">").append("\n");
         toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
         toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_From") + "</strong></button>").append("\n");
         toReturn.append("                       </div><!-- /btn-group -->").append("\n");
         toReturn.append("                   <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly></input>");
         toReturn.append("                   </div><!-- /input-group -->").append("\n");
-        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n");      
+        toReturn.append("               </div><!-- /.col-lg-12 -->").append("\n");      
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("               <div class=\"col-lg-6\">").append("\n");
+        toReturn.append("               <div class=\"col-lg-12\">").append("\n");
         toReturn.append("                   <div class=\"input-group\">").append("\n");
         toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
         toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_To") + "</strong></button>").append("\n");
@@ -116,11 +113,11 @@ public class EmailResource extends GenericResource {
         toReturn.append("                       </div><!-- /btn-group -->").append("\n");
         toReturn.append("                  <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">");
         toReturn.append("                  </div><!-- /input-group -->").append("\n");
-        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n");      
+        toReturn.append("               </div><!-- /.col-lg-12 -->").append("\n");      
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
-        toReturn.append("             <div class=\"col-lg-11\">").append("\n");
+        toReturn.append("             <div class=\"col-lg-12\">").append("\n");
         toReturn.append("                   <div class=\"input-group\">").append("\n");
         toReturn.append("                       <div class=\"input-group-btn\">").append("\n");
         toReturn.append("                           <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_Cc") + "</strong></button>");        
@@ -137,25 +134,20 @@ public class EmailResource extends GenericResource {
         toReturn.append("                       </div><!-- /btn-group -->").append("\n");
         toReturn.append("                   <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>");
         toReturn.append("                  </div><!-- /input-group -->").append("\n");
-        toReturn.append("               </div><!-- /.col-lg-6 -->").append("\n"); 
+        toReturn.append("               </div><!-- /.col-lg-12 -->").append("\n"); 
         toReturn.append("           </div>");// cierra form-group
         
-        //toReturn.append("           </form>"); // cierra form izquierdo
-        //toReturn.append("         </div>"); // cierra div swb-fondo-izq
-        
-        //toReturn.append("         <div class=\"col-lg-7 col-md-7 col-sm-7 col-xs-12 swb-fondo-der\">"); // abre div swb-fondo-der 
-        //toReturn.append("          <form class=\"form-horizontal\" role=\"form\">");// abre form derecho
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">" + paramRequest.getLocaleString("lbl_Subject") + "</label>");
-        toReturn.append("             <div class=\"col-lg-6\">");      
+        toReturn.append("             <div class=\"col-lg-11\">");      
         toReturn.append("               <input name=\"subject\" class=\"form-control\" type=\"text\"></input>");
         toReturn.append("             </div>");
         toReturn.append("           </div>");
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Attach")+"</label>");
-        toReturn.append("             <div class=\"col-lg-6\">");
+        toReturn.append("             <div class=\"col-lg-11\">");
         toReturn.append("             </div>");
         toReturn.append("             <div class=\"col-lg-11  pull-left\">");
         toReturn.append("               <input type=\"file\" name=\"uploadFile\" />");
@@ -165,7 +157,7 @@ public class EmailResource extends GenericResource {
         
         toReturn.append("           <div class=\"form-group\">");
         toReturn.append("            <label class=\"col-lg-1 control-label\">"+paramRequest.getLocaleString("lbl_Message")+"</label>");
-        toReturn.append("             <div class=\"col-lg-6\">");
+        toReturn.append("             <div class=\"col-lg-11\">");
         toReturn.append("               <textarea class=\"form-control\" name=\"message\" rows=\"5\"></textarea>");
         toReturn.append("             </div>");
         toReturn.append("           </div>");
@@ -173,10 +165,6 @@ public class EmailResource extends GenericResource {
         toReturn.append("           <div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
         toReturn.append("           <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>");
         toReturn.append("           </div>");
-        //toReturn.append("          </form>");// cierra form derecho
-        //toReturn.append("         </div>"); // cierra div swb-fondo-der
-        toReturn.append("           </form>"); // cierra form izquierdo
-        toReturn.append("         </div>"); // cierra div swb-fondo-izq
         toReturn.append("       </div>"); // cierra div class row
         toReturn.append("     </div>"); // cierra div class panel body
         toReturn.append("   </form>");// cierra form formEmail
