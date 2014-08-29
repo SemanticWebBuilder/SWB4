@@ -2871,6 +2871,7 @@ public class SWBSocialUtil {
             long diferencia = fechaFinalMs - fechaInicialMs;
             double dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
             return ((int) dias);
+            //hhxx
         }
 
         /*
