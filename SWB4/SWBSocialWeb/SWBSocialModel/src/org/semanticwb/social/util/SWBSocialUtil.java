@@ -2874,7 +2874,7 @@ public class SWBSocialUtil {
         }
 
         /*
-         * Renplaza tags de emails, documentar este tipo de tags que puede poner el usuario en los mensajes de 
+         * Remplaza tags de emails, documentar este tipo de tags que puede poner el usuario en los mensajes de 
          * correos.
          */
         public static String replaceTags(String message, PostIn postIn, SocialSite socialSite, Stream stream, SocialNetwork socialNetwork) 
@@ -3281,6 +3281,7 @@ public class SWBSocialUtil {
        public static boolean logSocialNetStats(SocialSite socialsite, SocialNetwork socialNet, int friends, int followers, int ptat)
        {
             Connection con = null;
+            PreparedStatement st=null;
             try {
                 Timestamp created = new Timestamp(new java.util.Date().getTime());
                 con = SWBUtils.DB.getDefaultConnection("SWBSocialUtil:logSocialNetStats");
@@ -3288,7 +3289,7 @@ public class SWBSocialUtil {
                 String query = "insert into socialnets_stats (socialsite, socialNet, friends, "
                         + "followers, ptat, date) values "
                         + "(?,?,?,?,?,?)";
-                PreparedStatement st = con.prepareStatement(query);
+                st = con.prepareStatement(query);
                 st.setString(1, socialsite.getURI());
                 st.setString(2, socialNet.getURI());
                 st.setInt(3, friends);
@@ -3302,6 +3303,12 @@ public class SWBSocialUtil {
             } catch (Exception e) {
                 log.error(e);
             }
+            finally{
+                try{
+                    if(con!=null)con.close();
+                    if(st!=null) st.close();
+                }catch(Exception ignore){}
+            }
            return false;
        }
        
@@ -3309,11 +3316,12 @@ public class SWBSocialUtil {
        public static boolean removeSocialNetStats(SocialSite socialsite, SocialNetwork socialNet)
        {
             Connection con = null;
+            PreparedStatement st=null;
             try {
                 con = SWBUtils.DB.getDefaultConnection("SWBSocialUtil:removeSocialNetStats");
                 String query = "delete from socialnets_stats where socialsite=? and socialNet=?";
                         
-                PreparedStatement st = con.prepareStatement(query);
+                st = con.prepareStatement(query);
                 st.setString(1, socialsite.getURI());
                 st.setString(2, socialNet.getURI());
                 st.executeUpdate();
@@ -3323,17 +3331,24 @@ public class SWBSocialUtil {
             } catch (Exception e) {
                 log.error(e);
             }
+            finally{
+                try{
+                    if(con!=null)con.close();
+                    if(st!=null) st.close();
+                }catch(Exception ignore){}
+            }
            return false;
        }
        
        public static boolean removeSocialNetStats(SocialSite socialsite)
        {
             Connection con = null;
+            PreparedStatement st=null;
             try {
                 con = SWBUtils.DB.getDefaultConnection("SWBSocialUtil:removeSocialNetStats");
                 String query = "delete from socialnets_stats where socialsite=?";
                         
-                PreparedStatement st = con.prepareStatement(query);
+                st = con.prepareStatement(query);
                 st.setString(1, socialsite.getURI());
                 st.executeUpdate();
                 st.close();
@@ -3341,6 +3356,12 @@ public class SWBSocialUtil {
                 return true;
             } catch (Exception e) {
                 log.error(e);
+            }
+            finally{
+                try{
+                    if(con!=null)con.close();
+                    if(st!=null) st.close();
+                }catch(Exception ignore){}
             }
            return false;
        }
