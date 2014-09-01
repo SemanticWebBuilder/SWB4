@@ -205,4 +205,20 @@ public interface FormElement extends GenericObject
     public void setModel(SemanticModel model);
 
     //public void setLabel(String label);
+    
+    /**
+     * Gets the FormMgr.
+     * 
+     * @return the SWBFormMgr
+     */
+    public Object getFormMgr();
+
+    /**
+     * Sets the FormMgr.
+     * 
+     * @param formMgr the new SWBFormMgr
+     */
+    public void setFormMgr(Object formMgr);
+
+    //public void setLabel(String label);    
 }
