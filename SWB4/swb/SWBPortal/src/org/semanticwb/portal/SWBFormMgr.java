@@ -1043,6 +1043,7 @@ public class SWBFormMgr implements SWBForms
             else if(m_ref!=null)
                 ele.setModel(m_ref.getModel());
             ((FormElementBase)ele).setFilterHTMLTags(filterHTMLTags);
+            ele.setFormMgr(this);
         }
         return ele;
     }
