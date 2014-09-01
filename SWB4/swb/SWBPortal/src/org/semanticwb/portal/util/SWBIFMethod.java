@@ -31,6 +31,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.*;
 import org.semanticwb.platform.SemanticClass;
+import org.semanticwb.platform.SemanticObject;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -88,6 +89,13 @@ public class SWBIFMethod
     
     /** The instanceOf. */
     private ArrayList<String> ids=null;    
+    
+    /** The notinstanceOf. */
+    private boolean notchildOfs=false;
+
+    /** The instanceOf. */
+    private ArrayList<WebPage> childOfs=null;
+    
 
     /**
      * Instantiates a new sWBIF method.
@@ -115,6 +123,7 @@ public class SWBIFMethod
         String lang=tag.getParam("language");
         String device=tag.getParam("device");
         String instanceOf=tag.getParam("instanceof");
+        String childOf=tag.getParam("childof");
         String typeOf=tag.getParam("typeof");
         String id=tag.getParam("id");
         //System.out.println("lang:"+lang);
@@ -231,6 +240,29 @@ public class SWBIFMethod
                 }
             }
         }catch(Exception e){log.error("Error reading if WebPage typeof...",e);}
+        
+        try
+        {
+            if(childOf!=null)
+            {
+                if(childOf.startsWith("!"))
+                {
+                    childOf=childOf.substring(1);
+                    notchildOfs=true;
+                }
+                StringTokenizer st=new StringTokenizer(childOf,"|");
+                while(st.hasMoreTokens())
+                {
+                    String aux=st.nextToken();
+                    
+                    WebPage page=tpl.getWebSite().getWebPage(aux);
+                    if(page!=null)
+                    {
+                        childOfs.add(page);
+                    }
+                }
+            }
+        }catch(Exception e){log.error("Error reading if WebPage instanceof...",e);}        
     }
 
     /**
@@ -333,6 +365,27 @@ public class SWBIFMethod
                     return null;
                 }
             }
+            //System.out.println("childOfs:"+childOfs);
+            if(!childOfs.isEmpty())
+            {
+                boolean cont=false;
+                Iterator<WebPage> it=childOfs.iterator();
+                while(it.hasNext())
+                {
+                    WebPage page=it.next();
+                    //System.out.println("cls:"+cls);
+                    if(page.isChildof(webpage))
+                    {
+                        cont=true;
+                        break;
+                    }
+                }
+                if((!cont && !notchildOfs)||(cont && notchildOfs))
+                {
+                    return null;
+                }
+            }            
+            
         }else if(type.equals("if:website"))
         {
             if(!ids.isEmpty())
