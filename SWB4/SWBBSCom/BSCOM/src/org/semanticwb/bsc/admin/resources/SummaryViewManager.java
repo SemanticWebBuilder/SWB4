@@ -376,11 +376,6 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             output.append("    myGrid.startup();\n");
             output.append("  });\n");
             output.append("</script>\n");
-            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/Grid.css\"/>\n");
-            output.append("<link rel=\"stylesheet\" href=\"/swbadmin/js/dojo/dojox/grid/resources/soriaGrid.css\"/>\n");
-            output.append("<style type=\"text/css\">\n");
-            output.append("  .dojoxGrid table { margin: 0; } ");
-            output.append("</style>\n");
 
             //Se evalua el mostrar la forma para filtrado en grid
             if (filters != null && showFiltering) {
