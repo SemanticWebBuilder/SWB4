@@ -134,6 +134,7 @@ public class SWBIFMethod
         instanceOfs=new ArrayList();
         typeOfs=new ArrayList();        
         ids=new ArrayList();        
+        childOfs=new ArrayList();        
 
         try
         {
@@ -374,7 +375,7 @@ public class SWBIFMethod
                 {
                     WebPage page=it.next();
                     //System.out.println("cls:"+cls);
-                    if(page.isChildof(webpage))
+                    if(webpage.isChildof(page))
                     {
                         cont=true;
                         break;
