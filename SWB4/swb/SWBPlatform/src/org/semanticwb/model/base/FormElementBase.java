@@ -67,6 +67,8 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
     
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");    
 
+    private Object formMgr=null;
+    
     /**
      * Instantiates a new form element base.
      * 
@@ -353,5 +355,15 @@ public class FormElementBase extends GenericObjectBase implements FormElement, G
 //    {
 //        this.label=label;
 //    }
+
+    @Override
+    public Object getFormMgr() {
+        return formMgr;
+    }
+
+    @Override
+    public void setFormMgr(Object formMgr) {
+        this.formMgr=formMgr;
+    }
 
 }
