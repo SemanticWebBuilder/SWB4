@@ -85,6 +85,7 @@ public interface SWBForms {
         "      dojo.require(\"dijit.form.Slider\");"+"\n"+
         "      dojo.require(\"dojox.form.BusyButton\");"+"\n"+
         "      dojo.require(\"dojox.form.TimeSpinner\");"+"\n"+
+        "      dojo.require(\"dojox.form.Uploader\");"+"\n"+
         "    </script>"+"\n";
 
 }
