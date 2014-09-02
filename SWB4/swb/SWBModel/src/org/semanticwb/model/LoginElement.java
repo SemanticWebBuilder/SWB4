@@ -156,7 +156,7 @@ public class LoginElement extends org.semanticwb.model.base.LoginElementBase {
                 char ch = id.charAt(x);
 
                 if (!(((ch >= '0') && (ch <= '9')) || ((ch >= 'a') && (ch <= 'z')) || ((ch >= 'A') && (ch <= 'Z'))
-                        || (ch == '_') || (ch == '.') || (ch == '@'))) {
+                        || (ch == '_') || (ch == '-') || (ch == '.') || (ch == '@'))) {
                     ret = false;
 
                     break;
