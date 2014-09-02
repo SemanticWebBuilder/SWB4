@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<admresource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xslfile>admresource.xslt</xslfile>
+    <form name="frmAdmRes" action="true" id="frmAdmRes" method="POST">
+            <fieldset legend="Dimensiones en navegador">
+                <statictext name="fixed">Si desea que todas las gráficas de este tipo tengan el mismo tamaño, configure lo siguiente:</statictext>
+                <select name="graphHeight" label="Pixeles para alto de gráfica">
+                    <option value="">Seleccione</option>
+                    <option value="200">200</option>
+                    <option value="250">250</option>
+                    <option value="300">300</option>
+                    <option value="350">350</option>
+                    <option value="400">400</option>
+                    <option value="450">450</option>
+                    <option value="500">500</option>
+                    <option value="550">550</option>
+                    <option value="600">600</option>
+                    <option value="650">650</option>
+                    <option value="700">700</option>
+                    <option value="750">750</option>
+                    <option value="800">800</option>
+                    <option value="850">850</option>
+                    <option value="900">900</option>
+                    <option value="950">950</option>
+                    <option value="1000">1000</option>
+                </select>
+                <select name="graphWidth" label="Pixeles para ancho de gráfica">
+                    <option value="">Seleccione</option>
+                    <option value="350">350</option>
+                    <option value="400">400</option>
+                    <option value="450">450</option>
+                    <option value="500">500</option>
+                    <option value="550">550</option>
+                    <option value="600">600</option>
+                    <option value="650">650</option>
+                    <option value="700">700</option>
+                    <option value="750">750</option>
+                    <option value="800">800</option>
+                    <option value="850">850</option>
+                    <option value="900">900</option>
+                    <option value="950">950</option>
+                    <option value="1000">1000</option>
+                </select>
+            </fieldset>
+            <!--fieldset legend="Configurar dimensiones para PDF">
+                <input type="text" id="width"  name="width" label="Ancho de la imagen (px)" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Ancho Inválido" promptMessage="Ancho de la imagen. Ejemplo: 350" />
+                <input type="text" id="height" name="height" label="Altura de la imagen (px)" maxlength="9" regExp="\d{1,9}(|px|in|cm|mm|pt|em|ex|%)" invalidMessage="Altura Inválida" promptMessage="Altura de la imagen. Ejemplo: 350" />
+            </fieldset-->
+    <fieldset>
+        <input type="submit" name="btnSave" value="Guardar"/>
+        <input type="reset"  name="btnReset" value="Restablecer" />
+    </fieldset>
+    </form>
+</admresource>
