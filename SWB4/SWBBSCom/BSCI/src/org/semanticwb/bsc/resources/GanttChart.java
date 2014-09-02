@@ -25,9 +25,10 @@ import org.semanticwb.bsc.element.Deliverable;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
-import org.semanticwb.portal.api.GenericResource;
+import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.util.UploaderFileCacheUtils;
@@ -39,7 +40,7 @@ import org.w3c.dom.Document;
  *
  * @author Jose Jimenez
  */
-public class GanttChart extends GenericResource implements ComponentExportable {
+public class GanttChart extends GenericAdmResource implements ComponentExportable {
 
     /**
      * Realiza operaciones en la bitacora de eventos.
@@ -71,8 +72,11 @@ public class GanttChart extends GenericResource implements ComponentExportable {
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
+        Resource base = this.getResourceBase();
         StringBuilder output = new StringBuilder(512);
         StringBuilder dataOut = new StringBuilder(512);
+        String graphHeight = base.getAttribute("graphHeight", "500");
+        String graphWidth = base.getAttribute("graphWidth", "600");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
@@ -186,7 +190,11 @@ public class GanttChart extends GenericResource implements ComponentExportable {
                 dataOut.append("]");
 
                 output.append("");
-                output.append("<div id=\"ganttChart\">\n");
+                output.append("<div id=\"ganttChart\" style=\"height:");
+                output.append(graphHeight);
+                output.append("px; width:");
+                output.append(graphWidth);
+                output.append("px;\">");
                 output.append("  <script type=\"text/javascript\" src=\"");
                 output.append(SWBPlatform.getContextPath());
                 output.append("/swbadmin/js/d3/gantt-chart-d3.js\"></script>\n");
@@ -211,7 +219,7 @@ public class GanttChart extends GenericResource implements ComponentExportable {
                 output.append("  var minDate = tasks[0].startDate;\n");
                 output.append("  var format = \"%d/%m/%Y\";\n");
                 output.append("  \n");
-                output.append("  var gantt = d3.gantt().taskTypes(taskNames).tickFormat(format).timeDomainMode(\"fit\");\n");
+                output.append("  var gantt = d3.gantt(taskNames).taskTypes(taskNames).tickFormat(format).timeDomainMode(\"fit\");\n");
                 output.append("  gantt(tasks);\n");
                 output.append("  \n");
                 output.append("  \n");
