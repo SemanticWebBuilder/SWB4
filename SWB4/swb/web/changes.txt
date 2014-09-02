@@ -1,3 +1,6 @@
+    - Soporte a ids con guión medio
+    - Se corrigio bug del file upload de formas (ebe)
+    - Se agregó tag para plantilals (if:webpage) y el parametro (childof) (Jei)
     - Se agregó tag para plantilals (if:website) y el parametro (id) para todos los swbtags (Jei)
   4.5.6.0 02/07/14
     - Firmado de Applets (Jei)
