@@ -1002,7 +1002,7 @@ public class SWBUtils {
             {
                 char ch = aux.charAt(x);
                 if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'z')
-                        || (ch >= 'A' && ch <= 'Z') || ch == '_')
+                        || (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '-')
                 {
                     ret.append(ch);
                 }
@@ -1117,7 +1117,7 @@ public class SWBUtils {
             {
                 char chr = aux.charAt(x);
                 if ( chr==ch || (chr >= '0' && chr <= '9') || (chr >= 'a' && chr <= 'z')
-                        || (chr >= 'A' && chr <= 'Z') || chr == '_')
+                        || (chr >= 'A' && chr <= 'Z') || chr == '_' || chr == '-')
                 {
                     ret.append(chr);
                 }
