@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
@@ -60,7 +59,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
     @Override
     public String renderElement(HttpServletRequest request, SemanticObject obj,
             SemanticProperty prop, String propName, String type, String mode, String lang) {
-//        System.out.println("********************** DojoFileUploader.ConfigFileRequest **********************");
+//        System.out.println("********************** DojoFileUploader.renderElement **********************");
 //        System.out.println("obj: "+obj);
 //        System.out.println("objuri: "+obj.getURI());
 //        System.out.println("prop: "+prop);
@@ -97,98 +96,88 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
 //        }
         WebSite site;
         String url = SWBPlatform.getContextPath() + "/multiuploader/" + obj.getModel().getModelObject().getId() + "/home/" + cad;
-        String enviar = lang.equals("en") ? "You have to send the selected files first" : "Debe enviar primero los archivos seleccionados";
+//        String enviar = lang.equals("en") ? "You have to send the selected files first" : "Debe enviar primero los archivos seleccionados";
         String eliminar = lang.equals("en") ? "Chose the files to delete" : "Selecione el(los) archivo(s) a eliminar";
-        String agregar = lang.equals("en") ? "Add new file upload" : "Agrega un nuevo archivo a cargar";
+        String loading = lang.equals("en") ? "Uploading file, please wait..." : "Cargando archivo, por favor espere...";
+        String done = lang.equals("en") ? "Upload succesful" : "La carga del(los) archivo(s) tuvo éxito";
+        String error = lang.equals("en") ? "There was an error, try again please." : "Ocurrió un error, intente nuevamente.";
 
-        StringBuilder filts = new StringBuilder();
-        Set<String> keys = ufq.getFiltros().keySet();
-        for (String key : keys) {
-            String value = ufq.getFiltros().get(key);
-            if (filts.length() > 0) {
-                filts.append("\\'],");
-            } else if (filts.length() == 0) {
-                filts.append("[");
-            }
-            filts.append("[\\'");
-            filts.append(key);
-            filts.append("\\', \\'");
-            filts.append(value);
-        }
-        filts.append("\\']]");
-
-        buffer.append("	<div style=\"width:300px; height:0px;\"></div>\n");
-        if (prop.getCardinality() != 1) {
-            buffer.append("        <button onclick=\"fileUpload_addNewUpload('" + pname + "','" + filts.toString() + "','" + url + "');return false;\">" + agregar + "</button>\n");
-            buffer.append("	<br><br>\n");
-            buffer.append("	<div id=\"" + pname + "_dynamic\"></div>\n");
-        } else {
-            if (!"view".equals(mode)) {
-                buffer.append("<input dojoType=\"dojox.form.FileInputAuto\" blurDelay=\"0\" "
-                        + "id=\"" + pname + "_defaultAuto\" name=\"" + pname + "_inputFileAuto\" url=\"" + url
-                        + "\" onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  startup=\"dijit.byId(document.getElementById('"+pname+ "_defaultAuto').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
-                        + "fileMask=\"" + filts.toString().replaceAll("\\\\", "") + "\"/>\n");
-                //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
-                buffer.append("<br/>\n");
-            }
+        if (!"view".equals(mode)) {
+            buffer.append("<input ").append("name=\"uploadedfile\" ").append("data-dojo-props=\" \n")
+                    .append("multiple:'").append(prop.getCardinality() != 1 ? "true" : "false").append("', \n")
+                    //+ "force:'iframe', \n" 
+                    .append("uploadOnSelect:'true', \n")
+                    .append("url:'").append(url).append("', \n")
+                    .append("submit: function(form) {}, \n")
+                    .append("onBegin: function(){document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(loading).append("';}, \n")
+                    .append("onComplete: function (result) {document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(done).append("'; console.log('result:'+result);}, \n")
+                    .append("onCancel: function() {console.log('cancelled');}, \n")
+                    .append("onAbort: function() {console.log('aborted');}, \n")
+                    .append("onError: function (evt) {document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(error).append("'; console.log(evt);}, \n")
+                    .append("\" ")
+                    .append("type=\"file\" ").append("data-dojo-type=\"dojox.form.Uploader\" ")
+                    .append("label=\"Select File\" ").append("id=\"").append(pname).append("_defaultAuto\" ").append("/>  ");
             
+            buffer.append("<span id=\"").append(pname).append("_lblStatus\"></span>");
+            buffer.append("<br/>\n");
+
             if (!"create".equals(mode) && obj.getProperty(prop) != null) {
                 String name = obj.getProperty(prop);
                 if (name.startsWith(pname)) {
                     name = name.substring(pname.length() + 1);
                 }
-                if ("edit".equals(mode)) {
-                    buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
-                            + pname + "_delFile\" name=\""
-                            + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath()+"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>\n");
-                } else {
-                    buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath()+"/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">"+name+"</a>");
-                }
-            }else
-            {
-                buffer.append("<script type=\"text/javascript\">");
-                buffer.append("    var fileUpload_Callback2 = function(data,ioArgs,widgetRef){");
-                buffer.append("        if(data && data.status && data.status == \"success\")");
-                buffer.append("        {");
-                buffer.append("            var ele=document.getElementById(\""+pname+ "_defaultAuto\");");
-                buffer.append("            var form = dijit.byId(ele.form.id);");
-                buffer.append("            form.extValid=true;");
-                buffer.append("            form.onValidStateChange(form.isValid()&&form.extValid);");
-                buffer.append("        }");
-                buffer.append("        fileUpload_Callback(data,ioArgs,widgetRef);");
-                buffer.append("    };");
-                buffer.append("</script>");
-            }
-        }
-
-        buffer.append("<input type=\"hidden\" name=\"" + pname + "\" value=\"" + cad + "\" />\n");
-        UploaderFileCacheUtils.put(cad, new java.util.LinkedList<UploadedFile>());
-//        buffer.append("\n");
-//        buffer.append("\n");
-//        buffer.append("\n");
-//        buffer.append("\n");
-//        buffer.append("\n");
-//        buffer.append("\n");
-//        buffer.append("</td>\n");
-
-//        buffer.append("<table border=\"0\"><tr><td><iframe src=\"" + url + "\" frameborder=\"0\" width=\"225\" "
-//                + "scrolling=\"no\" name=\"ifrupd" + cad + "\" id=\"ifrupd" + cad + "\" height=\"170\" ></iframe>\n");
-//        buffer.append("<input type=\"hidden\" name=\"" + pname + "\" value=\"" + cad + "\" /></td>\n");
-        if (!"create".equals(mode) && prop.getCardinality() != 1) {
-            Iterator<SemanticLiteral> lista = obj.listLiteralProperties(prop);
-            if(lista.hasNext())
-            {
-                buffer.append(eliminar + ":<br><select dojoType=\"dijit.form.MultiSelect\" name=\""
-                        + pname + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
-                while (lista.hasNext()) {
-                    SemanticLiteral lit = lista.next();
-                    String fname = lit.getString();
-                    if (fname.startsWith(pname)) {
-                        fname = fname.substring(pname.length() + 1);
+                if (prop.getCardinality() == 1) {
+                    if ("edit".equals(mode)) {
+                        buffer.append("Eliminar: <input dojoType=\"dijit.form.CheckBox\" id=\""
+                                + pname + "_delFile\" name=\""
+                                + pname + "_delFile\" value=\"" + name + "\" /><a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>\n");
+                    } else {
+                        buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
                     }
-                    buffer.append("<option value=\""+fname+"\">" + fname + "</option>");
                 }
-                buffer.append("</select>");
+            }
+
+            buffer.append("<input type=\"hidden\" name=\"" + pname + "\" value=\"" + cad + "\" />\n");
+            UploaderFileCacheUtils.put(cad, new java.util.LinkedList<UploadedFile>());
+
+            if (!"create".equals(mode) && prop.getCardinality() != 1) {
+                Iterator<SemanticLiteral> lista = obj.listLiteralProperties(prop);
+                if (lista.hasNext()) {
+                    buffer.append(eliminar + ":<br><select dojoType=\"dijit.form.MultiSelect\" name=\""
+                            + pname + "_delFile\" multiple=\"multiple\" size=\"4\">\n");
+                    while (lista.hasNext()) {
+                        SemanticLiteral lit = lista.next();
+                        String fname = lit.getString();
+                        if (fname.startsWith(pname)) {
+                            fname = fname.substring(pname.length() + 1);
+                        }
+                    buffer.append("<option value=\""+fname+"\">" + fname + "</option>");
+                    }
+                    buffer.append("</select>");
+                }
+            }
+        } else {
+            if (obj.getProperty(prop) != null) {
+                if (prop.getCardinality() == 1) {
+                    String name = obj.getProperty(prop);
+                    if (name.startsWith(pname)) {
+                        name = name.substring(pname.length() + 1);
+                    }
+                    buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + obj.getProperty(prop) + "\">" + name + "</a>");
+                } else {
+                    Iterator<SemanticLiteral> lista = obj.listLiteralProperties(prop);
+                    if (lista.hasNext()) {
+                        while (lista.hasNext()) {
+                            SemanticLiteral lit = lista.next();
+                            String fname = lit.getString();
+                            String name = fname;
+                            if (fname.startsWith(pname)) {
+                                name = fname.substring(pname.length() + 1);
+                            }
+                            buffer.append("&nbsp;<a href=\"" + SWBPlatform.getContextPath() + "/work" + obj.getWorkPath() + "/" + fname + "\">" + name + "</a>");
+                        }
+                    }
+                }
             }
         }
         //System.out.println(buffer.toString());
@@ -210,8 +199,8 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
                 request.getParameter(propName+"_new") != null ||
                 request.getParameter(pname ) != null)
             {
-    //        System.out.println("********************** FlashFileUploader.process **********************");
-    //        System.out.println(request.getParameter(pname + "_delFile"));
+            //        System.out.println("********************** FlashFileUploader.process **********************");
+            //        System.out.println(request.getParameter(pname + "_delFile"));
             if (request.getParameter(pname + "_delFile") != null) {
                 if (prop.getCardinality() != 1) {
                     Iterator<SemanticLiteral> list = obj.listLiteralProperties(prop);
@@ -234,7 +223,7 @@ public class DojoFileUpload extends org.semanticwb.model.base.DojoFileUploadBase
             }
             String cad = request.getParameter(propName+"_new");
             if (cad==null) cad = request.getParameter(pname);
-    //        System.out.println("Cadena:"+cad);
+            //        System.out.println("Cadena:"+cad);
             List<UploadedFile> lista = UploaderFileCacheUtils.get(cad);
             for (UploadedFile arch : lista) {
                 File orig = new File(arch.getTmpuploadedCanonicalFileName());
