@@ -1612,7 +1612,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
         } catch (java.io.IOException ioe) {
             response = getResponse(conex.getErrorStream());
-            log.error("Unsuccessful request to: " + url);
+            log.error("Unsuccessful request to: " + url + "\n" + response);
             //ioe.printStackTrace();
         } finally {
             close(in);
@@ -2389,8 +2389,79 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public void getSocialNetStats(SocialNetwork socialNet) {
-        System.out.println("Entra a Facebook/getSocialNetStats:"+socialNet);
+        System.out.println("\nEntra a Facebook/getSocialNetStats:"+socialNet+" "+socialNet.getTitle());
         SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
-        SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 1000, 1200, 1500);
+        if(this.isSn_authenticated()){
+            if(this.isIsFanPage()){//is a fan page
+                Map<String, String> params = new HashMap<String, String>(2);
+                params.put("access_token", this.getAccessToken());
+                params.put("fields", "id,likes,talking_about_count");        
+                String response = "";
+                int likes = 0;
+                int talkingAbout = 0;
+                try {                    
+                        response = getRequest(params, "https://graph.facebook.com/" + this.getFacebookUserId(),
+                                "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");                   
+                        
+                        try{
+                            JSONObject jsonObj = null;
+                            jsonObj = new JSONObject(response);
+                            likes = jsonObj.getInt("likes");
+                            talkingAbout = jsonObj.getInt("talking_about_count");
+                            System.out.println("ISPAGE: friends-"+ 0 + " likes-" + likes + "TAT-" + talkingAbout);
+                            SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 0, likes, talkingAbout);
+                            
+                        }catch(JSONException jse){
+                            log.error("Unable to parse the response for People Talking About You for" + this.getFacebookUserId()+ ":" + response);
+                        }
+                }catch(IOException e){
+                    log.error("Unable to get People Talking About You " + e);
+                }
+            }else{//is an user
+                Map<String, String> params = new HashMap<String, String>(2);
+                params.put("access_token", this.getAccessToken());
+                int friends = 0;
+                int subscribers = 0;
+                String fbResponse = null;
+                boolean successfulFriens = false;
+                try{
+                    fbResponse = getRequest(params, "https://graph.facebook.com/v2.0/me/friends/",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+                    try{
+                        JSONObject jsonObj = new JSONObject(fbResponse);
+                        if(!jsonObj.isNull("summary")){
+                            if(!jsonObj.getJSONObject("summary").isNull("total_count")){
+                                friends = jsonObj.getJSONObject("summary").getInt("total_count");
+                                successfulFriens = true;
+                            }
+                        }
+                    }catch(JSONException je){
+                        log.error("Error recovering friends_count ", je);
+                    }
+                    
+                    fbResponse = getRequest(params, "https://graph.facebook.com/v2.0/me/subscribers/",
+                            "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
+                    try{
+                        JSONObject jsonObj = new JSONObject(fbResponse);
+                        if(!jsonObj.isNull("summary")){
+                            if(!jsonObj.getJSONObject("summary").isNull("total_count")){
+                                subscribers = jsonObj.getJSONObject("summary").getInt("total_count");
+                                if(successfulFriens){
+                                    SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, friends, subscribers, 0);
+                                    System.out.println("ISUSER: friends-"+ friends + " likes-" + subscribers + "TAT-" + 0);
+                                }
+                            }
+                        }
+                    }catch(JSONException je){
+                        log.error("Error recovering subscribers_count ", je);
+                    }
+                }catch(IOException e){
+                    System.out.println("Error getting user information"  + e.getMessage());
+                }
+                
+            }
+        }else{
+            log.warn("Not authenticated network:" + this.getTitle());
+        }        
     }
 }
