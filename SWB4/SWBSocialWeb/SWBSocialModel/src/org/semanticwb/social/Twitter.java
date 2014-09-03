@@ -22,6 +22,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
+import org.semanticwb.model.Resource;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
@@ -32,18 +33,18 @@ import org.semanticwb.social.listener.Classifier;
 import org.semanticwb.social.listener.twitter.SWBSocialStatusListener;
 import org.semanticwb.social.util.SWBSocialUtil;
 import twitter4j.FilterQuery;
+import twitter4j.GeoLocation;
 import twitter4j.Query;
 import twitter4j.Status;
+import twitter4j.StatusListener;
 import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
-import twitter4j.GeoLocation;
-import twitter4j.StatusListener;
-import twitter4j.TwitterStreamFactory;
 
 
 public class Twitter extends org.semanticwb.social.base.TwitterBase {
@@ -1239,7 +1240,27 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
     @Override
     public void getSocialNetStats(SocialNetwork socialNet) {
         System.out.println("Entra a Twitter/getSocialNetStats:"+socialNet);
-        SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
-        SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 1000, 1200, 1500);
+        if(this.isSn_authenticated()){
+        twitter4j.Twitter twitter = new TwitterFactory().getInstance();
+            try {
+                twitter.setOAuthConsumer(this.getAppKey(), this.getSecretKey());
+                AccessToken accessToken = new AccessToken(this.getAccessToken(), this.getAccessTokenSecret());
+                twitter.setOAuthAccessToken(accessToken);
+                twitter4j.User user = twitter.showUser(twitter.getId());
+                int friends = 0;
+                int followers = 0;
+                friends = user.getFriendsCount();
+                followers = user.getFollowersCount();
+                
+                System.out.println("TWITTER:" + this.getTitle() + " friends:" + friends  + " followers:" + followers);
+                SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
+                SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, friends, followers, 0);
+                
+            }catch(Exception e){
+                log.error("Error trying to get friends & followers for " + this.getTitle(), e);
+            }
+        }else{
+            log.warn("Not authenticated network:" + this.getTitle());
+        }
     }
 }
