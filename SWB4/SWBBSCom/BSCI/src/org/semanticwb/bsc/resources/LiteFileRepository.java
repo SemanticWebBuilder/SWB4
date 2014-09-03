@@ -124,78 +124,120 @@ public class LiteFileRepository extends GenericResource
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             //urlorder.setParameter("parentUUID", parentUUID);
 
-            out.println("<div id=\"ProcessFileRepository\">");
-            out.println("<table width=\"100%\">");
-            out.println("<thead>");
-            out.println("<tr>");
-            out.println("<th>");
-            out.println("Id");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("Versión");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
-            out.println("</th>");
-            out.println("<th>");
-            out.println("Acción");
-            out.println("</th>");
-            out.println("</tr>");
-            out.println("</thead>");
-
+out.println("<div class=\"panel panel-default\"> <!-- panel -->");
+out.println("  <div class=\"panel-heading swbstrgy-panel-heading\">");
+out.println("    <div class=\"row\">");
+out.println("      <div class=\"col-xs-6\">Repositorio de documentos</div>");
+out.println("        <div class=\"col-xs-6 swb-panel-heading-btn\">");
+out.println("          <button class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-plus\"></i> Agregar Carpeta</button>");
+out.println("        </div>");
+out.println("      </div>");
+out.println("  </div>");
+            
+out.println("<div class=\"panel-body swbstrgy-panel-body\"> <!-- panel-body -->");
+out.println("<div class=\"row\">");
+out.println("<div class=\"col-sm-3 col-xs-12\">");
+out.println("</div> <!-- /.col-sm-3 -->");
+            
+out.println("<div class=\"col-sm-9 col-xs-12\">");
+out.println("  <ol class=\"breadcrumb\">");
+out.println("    <li><a href=\"#\">Repositorio de Documentos</a></li>");
+out.println("    <li><a href=\"#\">Carpeta 2</a></li>");
+out.println("    <li class=\"active\">Carpeta 2.1</li>");
+out.println("  </ol>");
+out.println("  <div class=\"panel panel-default\">");
+out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
+out.println("      <div class=\"row\">");
+out.println("        <div class=\"col-md-7 col-xs-12\">");
+out.println("          Carpeta 2.1");
+out.println("        </div>");
+if(luser >= 2) {
+    SWBResourceURL urlnew = paramRequest.getRenderUrl();
+    urlnew.setParameter("act", "new");
+    out.println("        <div class=\"col-md-5 col-xs-12 swb-panel-heading-btn\">");
+    //out.println("          <button class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
+    out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
+    out.println("        </div>");
+}
+out.println("      </div>");
+out.println("    </div>");
+out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
+out.println("      <div class=\"table table-responsive\">");
+out.println("        <table class=\"table table-striped table-hover\">");
+out.println("          <thead>");
+out.println("            <tr>");
+out.println("              <th>ID</th>");
+out.println("              <th>");
+out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
+out.println("              </th>");
+out.println("              <th>");
+out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
+out.println("              </th>");
+out.println("              <th>"+paramRequest.getLocaleString("lblVersion")+"</th>");
+out.println("              <th>");
+out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+out.println("              </th>");
+out.println("              <th>");
+out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+out.println("              </th>");
+out.println("              <th>"+paramRequest.getLocaleString("lblAction")+"</th>");
+out.println("            </tr>");
+out.println("          </thead>");
+//            out.println("<div id=\"ProcessFileRepository\">");
+//            out.println("<table width=\"100%\">");
+//            out.println("<thead>");
+//            out.println("<tr>");
+//            out.println("<th>");
+//            out.println("Id");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("Versión");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+//            out.println("</th>");
+//            out.println("<th>");
+//            out.println("Acción");
+//            out.println("</th>");
+//            out.println("</tr>");
+//            out.println("</thead>");
             out.println("<tbody>");
-
             Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir);
-
             ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
             String orderBy = request.getParameter("orderBy");
             if (null == orderBy)
             {
                 orderBy = "title";
             }
-
             HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
-
             while (itrf.hasNext())
             {
                 RepositoryFile repoFile = itrf.next();
-
                 VersionInfo version = repoFile.getActualVersion();
                 String skey = repoFile.getId();
-
-                if (orderBy.equals("title"))
-                {
+                if (orderBy.equals("title")) {
                     skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-
-                } else if (orderBy.equals("date"))
-                {
+                }else if (orderBy.equals("date")) {
                     //nodo.getProperty("jcr:created").getDate().getTime())
                     skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-
-                } else if (orderBy.equals("type"))
-                {
+                }else if (orderBy.equals("type")) {
                     String file = version.getVersionFile();
                     String type = getFileName(file);
-
                     skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
                     //hmNodes.put(skey, repoFile);
-                } else if (orderBy.equals("usr"))
-                {
+                }else if (orderBy.equals("usr")) {
                     User usrc = version.getCreator();
-
                     skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-
-                    if (usrc != null)
-                    {
+                    if (usrc != null) {
                         skey = usrc.getFullName() + skey;
                     }
                 }
@@ -210,70 +252,61 @@ public class LiteFileRepository extends GenericResource
             Iterator<String> lnit = list.iterator();
             while (lnit.hasNext())
             {
-
                 String skey = lnit.next();
-
                 RepositoryFile repositoryFile = hmNodes.get(skey);
                 VersionInfo vi = repositoryFile.getLastVersion();
-
-                if (vi == null)
-                {
+                if(vi == null) {
                     repositoryFile.remove();
                     continue;
                 }
-
                 out.println("<tr>");
-                out.println("<td>");
+                // 1
+                out.println("<td class=\"gen-right\">");
                 String fid = repositoryFile.getId();
                 out.println(fid);
                 out.println("</td>");
-
-                out.println("<td>");
+                // 2
+                out.println("<td class=\"gen-center\">");
                 SWBResourceURL urldetail = paramRequest.getRenderUrl();
                 urldetail.setParameter("act", "detail");
                 urldetail.setParameter("fid", fid);
-
                 String file = "";
                 String type = "";
-
-                if (vi != null && vi.getVersionFile() != null)
-                {
+                if(vi != null && vi.getVersionFile() != null) {
                     file = vi.getVersionFile();
                     type = getFileName(file);
                 }
-
-                if (luser > 0)
-                {
+                if(luser > 0) {
                     String ulrdirecta = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(MODE_GETFILE).setParameter("fid", repositoryFile.getId()).setParameter("verNum", "" + vi.getVersionNumber()).toString();
                     out.println("<a href=\"" + ulrdirecta + "\">");
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                     out.println("</a>");
-                } else
-                {
+                }else {
                     out.println("<img border=0 src='" + path + "" + type + "' alt=\"" + getFileType(file) + "\" />");
                 }
-
                 out.println("</td>");
+                // 3
                 out.println("<td>");
                 out.println(repositoryFile.getDisplayTitle(usr.getLanguage()));
                 out.println("</td>");
-                out.println("<td>");
+                // 4
+                out.println("<td class=\"gen-center\">");
                 out.println(vi.getVersionValue());
                 out.println("</td>");
-                out.println("<td align=\"center\">");
+                // 5
+                out.println("<td class=\"gen-right\">");
                 out.println(vi != null && vi.getUpdated() != null ? format.format(vi.getUpdated()) : "--");
                 out.println("</td>");
+                // 6
                 out.println("<td>");
                 out.println(vi != null && vi.getModifiedBy() != null && vi.getModifiedBy().getFullName() != null ? vi.getModifiedBy().getFullName() : "--");
                 out.println("</td>");
-
-                out.println("<td>");
-
-                out.println("<a href=\"" + urldetail + "\"><img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\"/>");
-
+                // 7
+                out.println("<td class=\"gen-center\">");
+                out.println("<a href=\"" + urldetail + "\">");
+                out.println("<img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\">");
                 out.println("</a>");
-
-                if (luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1))
+                if(luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1))
                 {
                     SWBResourceURL urlremove = paramRequest.getActionUrl();
                     urlremove.setAction("removefile");
@@ -283,37 +316,37 @@ public class LiteFileRepository extends GenericResource
                     out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
                     out.println("</a>");
                 }
-
                 out.println("</td>");
-
                 out.println("</tr>");
             }
             out.println("</tbody>");
-            out.println("<tfoot>");
-            out.println("<tr>");
-            out.println("<td colspan=\"5\">");
-
-            if (luser >= 2)
-            {
-                SWBResourceURL urlnew = paramRequest.getRenderUrl();
-                urlnew.setParameter("act", "new");
-                out.println("<button onclick=\"window.location='" + urlnew + "';\">" + "Agregar archivo" + "</button>");
-
-                if (base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("1"))
-                {
-                    SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
-                    urlnewDirectory.setParameter("act", "newDirectory");
-                    out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
-                }
-            }
-
-            out.println("</td>");
-            out.println("</tr>");
-            out.println("</tfoot>");
-            out.println("</table>");
-            out.println("</div>");
-
-        } else if ("detail".equals(action))
+//            out.println("<tfoot>");
+//            out.println("<tr>");
+//            out.println("<td colspan=\"5\">");
+//
+//            if(luser >= 2) {
+//                SWBResourceURL urlnew = paramRequest.getRenderUrl();
+//                urlnew.setParameter("act", "new");
+//                out.println("<button onclick=\"window.location='" + urlnew + "';\">" + "Agregar archivo" + "</button>");
+//                if(base.getAttribute(CHK_FOLDERSUPPORT, "1").equals("1")) {
+//                    SWBResourceURL urlnewDirectory = paramRequest.getRenderUrl();
+//                    urlnewDirectory.setParameter("act", "newDirectory");
+//                    out.println("<button onclick=\"window.location='" + urlnewDirectory + "';\">" + "Agregar carpeta" + "</button>");
+//                }
+//            }
+//            out.println("</td>");
+//            out.println("</tr>");
+//            out.println("</tfoot>");
+            out.println("        </table>");
+            out.println("      </div> <!-- /.table-responsive -->");
+            out.println("    </div> <!-- /.panel-body -->");
+            out.println("  </div> <!-- /.panel -->");
+            out.println("</div> <!-- /.col-sm-9 -->");
+            out.println("</div> <!-- /.row -->");
+            out.println("</div> <!-- /.panel-body -->");
+            out.println("</div> <!-- /.panel -->");
+        }
+        else if ("detail".equals(action))
         {
             String fid = request.getParameter("fid");
             RepositoryFile repoFile = RepositoryFile.ClassMgr.getRepositoryFile(fid, repoDir.getWebSite());
