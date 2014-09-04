@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<db xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <table name="socialnets_stats">
+	        <column id="socialsite" type="VARCHAR" size="250" acceptNulls="false"/>
+            <column id="socialNet" type="VARCHAR" size="250" acceptNulls="false"/>
+            <column id="friends" type="INTEGER" size="10" acceptNulls="true"/>
+            <column id="followers" type="INTEGER" size="10" acceptNulls="true"/>
+            <column id="ptat" type="INTEGER" size="10" acceptNulls="true"/>
+            <column id="date" type="TIMESTAMP" size="14" acceptNulls="false"/>
+    </table>
+	 <index name="socialnets_indexSocialSite" table="socialnets_stats" >
+		<colindex id="socialsite"/>
+    </index>
+    <index name="socialnets_indexSOCIALNET" table="socialnets_stats" >
+		<colindex id="socialNet"/>
+    </index>
+	<index name="socialnets_indexFRIENDS" table="socialnets_stats" >
+		<colindex id="friends"/>
+    </index>
+    <index name="socialnets_indexFOLLOWERS" table="socialnets_stats" >
+		<colindex id="followers"/>
+    </index>
+	<index name="socialnets_indexPTAT" table="socialnets_stats" >
+		<colindex id="ptat"/>
+    </index>
+    <index name="socialnets_indexDATE" table="socialnets_stats" >
+		<colindex id="date"/>
+    </index>
+</db>
