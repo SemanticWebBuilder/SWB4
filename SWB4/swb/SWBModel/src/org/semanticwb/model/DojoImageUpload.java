@@ -309,6 +309,7 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
 //        String agregar = lang.equals("en") ? "Add new file upload" : "Agrega un nuevo archivo a cargar";
         String error = lang.equals("en") ? "There was an error, try again please." : "Ocurrió un error, intente nuevamente.";
         String loading = lang.equals("en") ? "Uploading file, please wait..." : "Cargando archivo, por favor espere...";
+        String done = lang.equals("en") ? "Upload succesful" : "La carga del(los) archivo(s) tuvo éxito";
 //        StringBuilder filts = new StringBuilder();
 //        Set<String> keys = ufq.getFiltros().keySet();
 //        for (String key : keys) {
@@ -324,46 +325,24 @@ public class DojoImageUpload extends org.semanticwb.model.base.DojoImageUploadBa
 //            filts.append(value);
 //        }
 //        filts.append("\\']]");
-        String multiple = "false;";
         if (!"view".equals(mode))
         {
-            buffer.append("<input "
-                    + "name=\"uploadedfile\" "
-                    + "data-dojo-props=\" \n"
-                    + "multiple:'" + (prop.getCardinality() != 1 ? "true" : "false") + "', \n"
+            buffer.append("<input ").append("name=\"uploadedfile\" ").append("data-dojo-props=\" \n")
+                    .append("multiple:'").append(prop.getCardinality() != 1 ? "true" : "false").append("', \n")
                     //+ "force:'iframe', \n" 
-                    + "uploadOnSelect:'true', \n"
-                    + "url:'" + url + "', \n"
-                    + "submit: function(form) {console.log('smf');form.submit();}, \n"
-                    + "onComplete: function (result) {console.log(result);"
-                    + "document.getElementById('" + pname + "_lblStatus').innerHTML=result.detail;"
-                    + "}, \n"
-                    + "onCancel: function() {console.log('cancelled');}, \n"
-                    + "onBegin: function() {"
-                    + "document.getElementById('" + pname + "_lblStatus').innerHTML='" + loading + "';"
-                    + "console.log('started upload');}, \n"
-                    + "onAbort: function() {console.log('aborted');}, \n"
-                    + "onError: function (evt) {console.log(evt);"
-                    + "document.getElementById('" + pname + "_lblStatus').innerHTML='" + error + "';"
-                    + "} \n"
-                    + "\" "
-                    + "type=\"file\" "
-                    + "data-dojo-type=\"dojox.form.Uploader\" "
-                    + "label=\"Select File\" "
-                    + "id=\"" + pname + "_defaultAuto\" "
-                    + "/>  <span id=\"" + pname + "_lblStatus\"></span>");
-//            buffer.append("<input dojoType=\"dojox/form/Uploader\"  "
-//                    + "multiple=\""+multiple+"\" "
-//                    + "type=\"file\""
-//                    + "uploadOnSelect=\"true\""
-//                    + "id=\"" + pname + "_defaultAuto\" "
-//                    + "name=\"" + pname + "_inputFileAuto\" "
-//                    + "url=\"" + url + "\" "
-//                    + "onComplete=\"fileUpload_Callback"+((obj.getProperty(prop) != null)?"":"2")+"\"  "
-//                    + "startup=\"dijit.byId(document.getElementById('"+pname+ "_defaultAuto').form.id).extValid="+(obj.getProperty(prop) != null)+";\" "
-//                    + "fileMask=\"" + filts.toString().replaceAll("\\\\", "") + "\""
-//                    + "/>\n");
-            //buffer.append("        <button onclick=\"return false;\">Enviar</button>\n");
+                    .append("uploadOnSelect:'true', \n")
+                    .append("url:'").append(url).append("', \n")
+                    .append("submit: function(form) {}, \n")
+                    .append("onBegin: function(){document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(loading).append("';}, \n")
+                    .append("onComplete: function (result) {document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(done).append("'; console.log('result:'+result);}, \n")
+                    .append("onCancel: function() {console.log('cancelled');}, \n")
+                    .append("onAbort: function() {console.log('aborted');}, \n")
+                    .append("onError: function (evt) {document.getElementById('").append(pname).append("_lblStatus').innerHTML='").append(error).append("'; console.log(evt);}, \n")
+                    .append("\" ")
+                    .append("type=\"file\" ").append("data-dojo-type=\"dojox.form.Uploader\" ")
+                    .append("label=\"Select File\" ").append("id=\"").append(pname).append("_defaultAuto\" ").append("/>  ");
+            
+            buffer.append("<span id=\"").append(pname).append("_lblStatus\"></span>");
             buffer.append("<br/>\n");
 
             if (!"create".equals(mode) && obj.getProperty(prop) != null)
