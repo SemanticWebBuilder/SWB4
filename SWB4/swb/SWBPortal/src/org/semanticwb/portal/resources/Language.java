@@ -139,8 +139,15 @@ public class Language extends GenericAdmResource
                 elang.setAttribute("lang", lang.getDisplayTitle(paramRequest.getUser().getLanguage()));//
                 elang.setAttribute("title", lang.getDisplayTitle(paramRequest.getUser().getLanguage()));
                 String url = request.getRequestURI();
-                String[] values = url.split("/");
+
                 StringBuilder urlToLanguage = new StringBuilder();
+                String context = SWBPortal.getContextPath();
+                url = url.substring(context.length()); // le quita el context
+                String[] values = url.split("/");
+                if (url.isEmpty())
+                {
+                    url = "/";
+                }
                 if (url.equals("/"))
                 {
                     url += lang.getId() + "/" + paramRequest.getWebPage().getWebSiteId() + "/" + paramRequest.getWebPage().getId();
@@ -168,11 +175,13 @@ public class Language extends GenericAdmResource
                     }
                 }
                 //url.setParameter("language", lang.getId());//
-                String urlToDisplay = urlToLanguage.toString();
+                String urlToDisplay = context + urlToLanguage.toString();
+                urlToDisplay = urlToDisplay.replace("//", "/");
                 if (request.getQueryString() != null)
                 {
                     urlToDisplay += "?" + request.getQueryString();
                 }
+
                 elang.setAttribute("ref", urlToDisplay);
                 root.appendChild(elang);
             }
