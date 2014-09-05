@@ -28,19 +28,21 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.model.Resource;
-import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.util.FileUpload;
 import org.semanticwb.base.util.ImageResizer;
+import org.semanticwb.model.Resource;
+import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.admin.resources.StyleInner;
+import org.semanticwb.portal.api.*;
+import org.semanticwb.portal.util.FileUpload;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -61,6 +63,63 @@ import org.semanticwb.portal.admin.resources.StyleInner;
 public class ImageGallery extends GenericResource
 {
 
+    public String replaceTags(String str, HttpServletRequest request, SWBParameters paramRequest)
+    {
+        if (str == null || str.trim().length() == 0)
+        {
+            return "";
+        }
+
+        str = str.trim();
+        //TODO: codificar cualquier atributo o texto
+        if (str.indexOf("{") > -1)
+        {
+
+            Iterator it = SWBUtils.TEXT.findInterStr(str, "{request.getParameter(\"", "\")}");
+            while (it.hasNext())
+            {
+                String s = (String) it.next();
+                str = SWBUtils.TEXT.replaceAll(str, "{request.getParameter(\"" + s + "\")}", request.getParameter(replaceTags(s, request, paramRequest)));
+            }
+
+            it = SWBUtils.TEXT.findInterStr(str, "{session.getAttribute(\"", "\")}");
+            while (it.hasNext())
+            {
+                String s = (String) it.next();
+                str = SWBUtils.TEXT.replaceAll(str, "{session.getAttribute(\"" + s + "\")}", (String) request.getSession().getAttribute(replaceTags(s, request, paramRequest)));
+            }
+
+            it = SWBUtils.TEXT.findInterStr(str, "{getEnv(\"", "\")}");
+            while (it.hasNext())
+            {
+                String s = (String) it.next();
+                str = SWBUtils.TEXT.replaceAll(str, "{getEnv(\"" + s + "\")}", SWBPlatform.getEnv(replaceTags(s, request, paramRequest)));
+            }
+
+            str = SWBUtils.TEXT.replaceAll(str, "{user.login}", paramRequest.getUser().getLogin());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.email}", paramRequest.getUser().getEmail());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.language}", paramRequest.getUser().getLanguage());
+            str = SWBUtils.TEXT.replaceAll(str, "{user.country}", paramRequest.getUser().getCountry());
+            str = SWBUtils.TEXT.replaceAll(str, "{webpath}", SWBPortal.getContextPath());
+            str = SWBUtils.TEXT.replaceAll(str, "{distpath}", SWBPortal.getDistributorPath());
+            str = SWBUtils.TEXT.replaceAll(str, "{webworkpath}", SWBPortal.getWebWorkPath());
+            str = SWBUtils.TEXT.replaceAll(str, "{workpath}", SWBPortal.getWorkPath());
+            str = SWBUtils.TEXT.replaceAll(str, "{websiteid}", paramRequest.getWebPage().getWebSiteId());
+            str = SWBUtils.TEXT.replaceAll(str, "{topicurl}", paramRequest.getWebPage().getUrl());
+            str = SWBUtils.TEXT.replaceAll(str, "{topicid}", paramRequest.getWebPage().getId());
+            str = SWBUtils.TEXT.replaceAll(str, "{topic.title}", paramRequest.getWebPage().getDisplayTitle(paramRequest.getUser().getLanguage()));
+            if (str.indexOf("{templatepath}") > -1)
+            {
+                //TODO:pasar template por paramrequest
+                TemplateImp template = (TemplateImp) SWBPortal.getTemplateMgr().getTemplate(paramRequest.getUser(), paramRequest.getAdminTopic());
+                if (template != null)
+                {
+                    str = SWBUtils.TEXT.replaceAll(str, "{templatepath}", template.getActualPath());
+                }
+            }
+        }
+        return str;
+    }
     /**
      * The log.
      */
@@ -108,7 +167,8 @@ public class ImageGallery extends GenericResource
             try
             {
                 width = Integer.parseInt(base.getAttribute("width"));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 width = 180;
             }
@@ -134,22 +194,26 @@ public class ImageGallery extends GenericResource
                                 {
                                     int height = Integer.parseInt(base.getAttribute("height", "180"));
                                     ImageResizer.crop(img, width, height, thumbnail, "jpeg");
-                                } catch (NumberFormatException e)
+                                }
+                                catch (NumberFormatException e)
                                 {
                                     log.error(e);
                                 }
-                            } else
+                            }
+                            else
                             {
                                 ImageResizer.resizeCrop(img, width, thumbnail, "jpeg");
                             }
-                        } catch (IOException ioe)
+                        }
+                        catch (IOException ioe)
                         {
                             log.error("Error while setting thumbnail for image: " + img + " in resource " + base.getId() + "-" + base.getTitle(), ioe);
                         }
                     }
                 }
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
@@ -161,14 +225,8 @@ public class ImageGallery extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        response.setContentType("text/html; charset=ISO-8859-1");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-
-        PrintWriter out = response.getWriter();
-
         Resource base = getResourceBase();
-        ArrayList<String> imgpath = new ArrayList<String>();
+        List<String> imgpath = new ArrayList<String>();
         Iterator<String> it = base.getAttributeNames();
         while (it.hasNext())
         {
@@ -181,6 +239,35 @@ public class ImageGallery extends GenericResource
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
+        if (base.getAttribute("jspPath") != null && !base.getAttribute("jspPath").trim().isEmpty())
+        {
+            try
+            {
+                String path = base.getAttribute("jspPath");
+                path = replaceTags(path, request, paramRequest);
+                request.setAttribute("paramRequest", paramRequest);
+                request.setAttribute("images", imgpath);
+                request.getRequestDispatcher(path).include(request, response);
+                return;
+            }
+            catch (IOException e)
+            {
+                log.error(e);
+                return;
+            }
+            catch (ServletException e)
+            {
+                log.error(e);
+                return;
+            }
+        }
+
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+
+        PrintWriter out = response.getWriter();
+
         String lang = paramRequest.getUser().getLanguage();
         String script = getGalleryScript(base.getId(), Integer.parseInt(base.getAttribute("width", "220")), Integer.parseInt(base.getAttribute("height", "220")), Boolean.valueOf(base.getAttribute("autoplay")), Integer.parseInt(base.getAttribute("pause", "2500")), Integer.parseInt(base.getAttribute("fadetime", "500")), Boolean.parseBoolean(base.getAttribute("title")) ? (base.getTitle(lang) == null ? base.getDisplayTitle(lang) : base.getTitle(lang)) : "", ip);
         out.print(script);
@@ -356,13 +443,16 @@ public class ImageGallery extends GenericResource
         if (action.equalsIgnoreCase("add") || action.equalsIgnoreCase("edit"))
         {
             out.println(getForm(request, paramRequest));
-        } else if (action.equalsIgnoreCase("update"))
+        }
+        else if (action.equalsIgnoreCase("update"))
         {
             FileUpload fup = new FileUpload();
             try
             {
                 fup.getFiles(request, response);
 
+                String jspPath = null != fup.getValue("jspPath") && !"".equals(fup.getValue("jspPath").trim()) ? fup.getValue("jspPath").trim() : null;
+                base.setAttribute("jspPath", jspPath);
                 String value = null != fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
                 base.setAttribute("title", value);
                 value = null != fup.getValue("width") && !"".equals(fup.getValue("width").trim()) ? fup.getValue("width").trim() : "180";
@@ -398,7 +488,8 @@ public class ImageGallery extends GenericResource
                         file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
                         file.delete();
                         base.removeAttribute(filenameAttr);
-                    } else
+                    }
+                    else
                     {
                         value = null != fup.getFileName(filenameAttr) && !"".equals(fup.getFileName(filenameAttr).trim()) ? fup.getFileName(filenameAttr).trim() : null;
                         if (value != null)
@@ -409,7 +500,8 @@ public class ImageGallery extends GenericResource
                                 if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
                                 {
                                     msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
-                                } else
+                                }
+                                else
                                 {
                                     if (admResUtils.uploadFile(base, fup, filenameAttr))
                                     {
@@ -424,29 +516,34 @@ public class ImageGallery extends GenericResource
                                             {
                                                 int height = Integer.parseInt(base.getAttribute("height", "180"));
                                                 ImageResizer.crop(image, width, height, thumbnail, "jpeg");
-                                            } catch (NumberFormatException nfe)
+                                            }
+                                            catch (NumberFormatException nfe)
                                             {
                                                 log.error(nfe);
                                             }
-                                        } else
+                                        }
+                                        else
                                         {
                                             ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
                                         }
 
                                         base.setAttribute(filenameAttr, filename);
-                                    } else
+                                    }
+                                    else
                                     {
                                         msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
                                     }
                                 }
-                            } else
+                            }
+                            else
                             {
                                 msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
                             }
                         }
                     }
                     i++;
-                } while (value != null || base.getAttribute(filenameAttr) != null);
+                }
+                while (value != null || base.getAttribute(filenameAttr) != null);
 
                 base.updateAttributesToDB();
 
@@ -455,12 +552,14 @@ public class ImageGallery extends GenericResource
                 out.println("   alert('" + msg + "');");
                 out.println("   location='" + paramRequest.getRenderUrl().setAction("edit").toString() + "';");
                 out.println("</script>");
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 log.error(e);
                 msg = paramRequest.getLocaleString("msgErrUpdateResource") + " " + base.getId();
             }
-        } else if (action.equals("remove"))
+        }
+        else if (action.equals("remove"))
         {
             msg = admResUtils.removeResource(base);
             out.println(
@@ -518,6 +617,16 @@ public class ImageGallery extends GenericResource
         htm.append("\n<fieldset> ");
         htm.append("\n<legend>" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_legendData") + "</legend>");
         htm.append("\n<table width=\"100%\"  border=\"0\" cellpadding=\"5\" cellspacing=\"5\"> ");
+
+        htm.append("\n<tr>");
+        htm.append("\n<td width=\"200\" align=\"right\">");
+        htm.append("<label for=\"jspPath\" class=\"swbform-label\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_Path_JSP") + "</label>");
+        htm.append("\n</td>");
+        //htm.append("<label for=\"imgWidth\" class=\"swbform-label\">"+    +"</label>");
+        htm.append("\n<td>");
+        htm.append("<input id=\"jspPath\" dojotype=\"dijit.form.TextBox\" name=\"jspPath\" value=\"" + base.getAttribute("jspPath", "") + "\"/>");//.append(base.getAttribute("jspPath","")).append(" value=\"true\" type=\"text\" />");
+        htm.append("\n</td> ");
+        htm.append("\n</tr>");
 
         htm.append("\n<tr>");
         htm.append("\n<td width=\"200\" align=\"right\">");
@@ -786,7 +895,8 @@ public class ImageGallery extends GenericResource
             htm.append("}");
             htm.append(admResUtils.loadIsNumber(10));
             htm.append("</script>\n");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             log.error(e);
         }
@@ -802,7 +912,8 @@ public class ImageGallery extends GenericResource
         if (paramsRequest.getMode().equalsIgnoreCase("fillStyle"))
         {
             doEditStyle(request, response, paramsRequest);
-        } else
+        }
+        else
         {
             super.processRequest(request, response, paramsRequest);
         }
