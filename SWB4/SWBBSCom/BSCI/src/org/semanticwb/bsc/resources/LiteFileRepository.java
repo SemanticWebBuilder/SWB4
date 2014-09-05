@@ -43,6 +43,7 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.bsc.BSC;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
@@ -77,18 +78,44 @@ public class LiteFileRepository extends GenericResource
     private static final String LVL_ADMIN = "prop_admin";
     private static final String CHK_FOLDERSUPPORT = "prop_foldersupport";
     private static final NumberFormat numf = NumberFormat.getNumberInstance();
+    
+    public static final String ROOT_REPOSITORY = "docs_rep_toc";
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        if (paramRequest.getMode().equals(MODE_GETFILE))
-        {
+        if (paramRequest.getMode().equals(MODE_GETFILE)) {
             doGetFile(request, response, paramRequest);
-        } else
-        {
+        }else {
             super.processRequest(request, response, paramRequest);
         }
 
+    }
+    
+    private String getFolders(WebPage parent, String lang) {
+        StringBuilder bstp = new StringBuilder();
+        Iterator<WebPage> childs = parent.listVisibleChilds(lang);
+        if(childs.hasNext()) {
+            bstp.append("  <div id=\""+parent.getId()+"\" class=\"panel-collapse collapse\" style=\"height: auto;\">").append("\n");
+            bstp.append("    <div class=\"panel-body swb-panel-accordion\">").append("\n");
+            bstp.append("      <ul class=\"list-group\">").append("\n");
+            WebPage child;
+            while(childs.hasNext()) {
+                child = childs.next();
+                bstp.append("        <li class=\"swb-sublist-accordion\">").append("\n");
+                if(child.listVisibleChilds(lang).hasNext()) {
+                    bstp.append("          <a href=\"#"+child.getId()+"\" class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\"><span class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+child.getTitle()+"</a>").append("\n");
+                    bstp.append(getFolders(child, lang));
+                }else {
+                    bstp.append("          <a href=\"#\" class=\"swb-menu-rep\"><span class=\"glyphicon glyphicon-chevron-right\"></span>&nbsp;&nbsp;&nbsp;&nbsp;"+child.getTitle()+"</a>").append("\n");
+                }
+                bstp.append("        </li>").append("\n");
+            }
+            bstp.append("      </ul>").append("\n");
+            bstp.append("    </div>").append("\n");
+            bstp.append("  </div>").append("\n");
+        }
+        return bstp.toString();
     }
 
     @Override
@@ -106,7 +133,7 @@ public class LiteFileRepository extends GenericResource
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
         User usr = paramRequest.getUser();
-        String lang = usr.getLanguage();
+        final String lang = usr.getLanguage()==null?"es":usr.getLanguage();
 
         int luser = getLevelUser(usr);
 
@@ -122,21 +149,59 @@ public class LiteFileRepository extends GenericResource
         {
 
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
-            //urlorder.setParameter("parentUUID", parentUUID);
+            
+            
 
+            
+BSC scorecard = (BSC) getResourceBase().getWebSite();
+WebPage root = scorecard.getWebPage(ROOT_REPOSITORY);
 out.println("<div class=\"panel panel-default\"> <!-- panel -->");
 out.println("  <div class=\"panel-heading swbstrgy-panel-heading\">");
 out.println("    <div class=\"row\">");
 out.println("      <div class=\"col-xs-6\">Repositorio de documentos</div>");
-out.println("        <div class=\"col-xs-6 swb-panel-heading-btn\">");
-out.println("          <button class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-plus\"></i> Agregar Carpeta</button>");
-out.println("        </div>");
+out.println("      <div class=\"col-xs-6 swb-panel-heading-btn\">");
+out.println("        <button class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-plus\"></i> Agregar Carpeta</button>");
 out.println("      </div>");
+out.println("    </div>");
 out.println("  </div>");
             
 out.println("<div class=\"panel-body swbstrgy-panel-body\"> <!-- panel-body -->");
 out.println("<div class=\"row\">");
 out.println("<div class=\"col-sm-3 col-xs-12\">");
+out.println("<div class=\"panel-group swb-pg-repo\">");
+//////////////
+out.println("<div class=\"panel panel-primary\">");
+out.println("  <div class=\"panel-heading\">");
+out.println("    <p class=\"panel-title\">");
+out.println("      <a href=\"#"+root.getId()+"\" class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\"><span class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+root.getTitle()+"</a>");
+out.println("    </p>");
+out.println("  </div>");
+Iterator<WebPage> folders = root.listVisibleChilds(lang);            
+out.println("  <div id=\""+root.getId()+"\" class=\"panel-collapse collapse\" style=\"height: auto;\">");
+out.println("    <div class=\"panel-body swb-panel-accordion\">");
+if(folders.hasNext()) {
+    WebPage folder;
+    out.println("      <ul class=\"list-group\">");
+    while(folders.hasNext()) {
+        folder = folders.next();
+        out.println("        <li class=\"swb-sublist-accordion\">");
+        if(folder.listVisibleChilds(lang).hasNext()) {
+            out.println("          <a href=\"#"+folder.getId()+"\" class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\"><span class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+folder.getTitle()+"</a>");
+            out.println(getFolders(folder, lang));
+        }else {
+            out.println("          <a href=\"#\" class=\"swb-menu-rep\"><span class=\"glyphicon glyphicon-chevron-right\"></span>&nbsp;&nbsp;&nbsp;&nbsp;"+folder.getTitle()+"</a>");
+        }
+        out.println("        </li>");
+    }
+    out.println("      </ul>");
+}
+out.println("    </div>");
+out.println("  </div>");
+out.println("</div>");
+//////////////
+
+out.println("");
+out.println("  </div>");
 out.println("</div> <!-- /.col-sm-3 -->");
             
 out.println("<div class=\"col-sm-9 col-xs-12\">");
@@ -155,7 +220,6 @@ if(luser >= 2) {
     SWBResourceURL urlnew = paramRequest.getRenderUrl();
     urlnew.setParameter("act", "new");
     out.println("        <div class=\"col-md-5 col-xs-12 swb-panel-heading-btn\">");
-    //out.println("          <button class=\"btn btn-default\" type=\"button\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
     out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
     out.println("        </div>");
 }
@@ -183,34 +247,9 @@ out.println("              </th>");
 out.println("              <th>"+paramRequest.getLocaleString("lblAction")+"</th>");
 out.println("            </tr>");
 out.println("          </thead>");
-//            out.println("<div id=\"ProcessFileRepository\">");
-//            out.println("<table width=\"100%\">");
-//            out.println("<thead>");
-//            out.println("<tr>");
-//            out.println("<th>");
-//            out.println("Id");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">" + "Tipo" + "</a>");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">" + "Nombre" + "</a>");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("Versión");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
-//            out.println("</th>");
-//            out.println("<th>");
-//            out.println("Acción");
-//            out.println("</th>");
-//            out.println("</tr>");
-//            out.println("</thead>");
+
             out.println("<tbody>");
+            
             Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir);
             ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
             String orderBy = request.getParameter("orderBy");
@@ -243,11 +282,10 @@ out.println("          </thead>");
                 }
                 hmNodes.put(skey, repoFile);
             }
-
             ArrayList list = new ArrayList(hmNodes.keySet());
             Collections.sort(list);
-
             //// TERMINA ORDENADO
+            
             /// DESPLIEGUE DE ARCHIVOS ENCONTRADOS
             Iterator<String> lnit = list.iterator();
             while (lnit.hasNext())
@@ -312,7 +350,7 @@ out.println("          </thead>");
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
                     urlremove.setParameter("fid", fid);
-                    out.println("<a href=\"#\" onclick=\"if(confirm('¿Estás seguro de querer eliminar este archivo?')){window.location='" + urlremove + "';} else {return false;}\">");
+                    out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQryConfirmRemoveFile") +"')){window.location='" + urlremove + "';} else {return false;}\" title=\""+paramRequest.getLocaleString("msgRemoveFile") +"\">");
                     out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
                     out.println("</a>");
                 }
