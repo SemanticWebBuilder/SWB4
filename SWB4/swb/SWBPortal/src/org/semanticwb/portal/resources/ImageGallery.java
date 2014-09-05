@@ -239,6 +239,12 @@ public class ImageGallery extends GenericResource
         }
         String[] ip = new String[imgpath.size()];
         imgpath.toArray(ip);
+        List<String> imgpath_tmb = new ArrayList<String>();
+        for (String image : imgpath)
+        {
+            String img_tmb = image.substring(0, image.lastIndexOf("/")) + "/" + _thumbnail + image.substring(image.lastIndexOf("/") + 1);
+            imgpath_tmb.add(img_tmb);
+        }
         if (base.getAttribute("jspPath") != null && !base.getAttribute("jspPath").trim().isEmpty())
         {
             try
@@ -247,6 +253,7 @@ public class ImageGallery extends GenericResource
                 path = replaceTags(path, request, paramRequest);
                 request.setAttribute("paramRequest", paramRequest);
                 request.setAttribute("images", imgpath);
+                request.setAttribute("thumbnails", imgpath_tmb);
                 request.getRequestDispatcher(path).include(request, response);
                 return;
             }
