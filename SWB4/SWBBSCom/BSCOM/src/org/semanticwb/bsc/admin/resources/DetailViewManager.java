@@ -733,8 +733,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         StringBuilder output = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
-        output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
-
         if (message == null) {
             FileReader reader = retrieveTemplate();
             String suri = request.getParameter("suri");
@@ -770,10 +768,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
             output.append("<!-- .....Aqui va el iconclass.............. -->").append("\n");
-            output.append("<h2");
-            output.append(" class=\"");
+            output.append("<p class=\"fa fa-circle");
             output.append(statusStyleClass);
-            output.append("\">");
+            output.append("\"></p>");
+            output.append("<h4>");
             //secondStatusStyleClass dejo de asignarse desde el 17/06/14 con el uso de Detailed
             if (secondStatusStyleClass != null) {
                 output.append("<span class=\"");
@@ -781,8 +779,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 output.append("\"> &nbsp; </span>");
             }
             output.append(semObj.getDisplayName());
-            output.append("</h2>\n");
-
+            output.append("</h4>\n");
+            output.append("<hr>\n");
+            
             if (reader != null) {
                 output.append(generateDisplay(request, paramRequest, reader, semObj, collaboration));
             } else {
@@ -792,7 +791,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             output.append(paramRequest.getLocaleString(message));
         }
 
-        output.append("</div>\n");
         out.println(output.toString());
     }
 

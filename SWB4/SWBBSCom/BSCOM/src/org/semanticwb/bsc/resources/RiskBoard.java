@@ -36,12 +36,14 @@ import org.semanticwb.model.FormValidateException;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.Template;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.platform.SemanticClass;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import org.semanticwb.platform.SemanticOntology;
@@ -58,9 +60,10 @@ import org.semanticwb.portal.api.SWBResourceURLImp;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
- * Despliega el tablero de riesgos y proporciona las facilidades para actualizar parte de la 
- * informacion mostrada y para la gestión de acciones de mitigacion y de iniciativas asociadas
- * a los riesgos.
+ * Despliega el tablero de riesgos y proporciona las facilidades para actualizar
+ * parte de la informacion mostrada y para la gestión de acciones de mitigacion
+ * y de iniciativas asociadas a los riesgos.
+ *
  * @author jose.jimenez
  */
 public class RiskBoard extends GenericResource {
@@ -85,35 +88,38 @@ public class RiskBoard extends GenericResource {
 //        "    .noValido {  background-color:#FF6666;  }\n" +
 //        "    .textCentered {  text-align:center;  }\n" +
 //        "</style>\n";
-
-    
     /**
      * Realiza operaciones en la bitacora de eventos.
      */
     private static final Logger log = SWBUtils.getLogger(GenericSemResource.class);
-    
+
     /**
-     * Genera el codigo HTML para la presentacion de los vínculos hacia las operaciones de 
-     * exportación del contenido del tablero de riesgos a formato PDF y Excel.
+     * Genera el codigo HTML para la presentacion de los vínculos hacia las
+     * operaciones de exportación del contenido del tablero de riesgos a formato
+     * PDF y Excel.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
-        
+
         StringBuilder dataOut = new StringBuilder(512);
-        WebSite website = this.getResourceBase().getWebSite();website.getModelProperty("quadrant1HexColor");
-        
+        WebSite website = this.getResourceBase().getWebSite();
+        website.getModelProperty("quadrant1HexColor");
+
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY) {
             dataOut.append(doIconExport(request, paramRequest));
         } else if (paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT) {
@@ -122,28 +128,34 @@ public class RiskBoard extends GenericResource {
         }
         out.println(dataOut.toString());
     }
-    
+
     /**
-     * Genera el c&oacute;digo HTML utilizado para presentar la vista del tablero de riesgos en el modo en que se indica.
-     * @param website la instancia de {@code WebSite} de la que se debe extraer la informaci&oacute; de los riesgos
-     * @param mode modo de visualizaci&oacute;n de la informaci&oacute;n presentada en el tablero. Puede tener los valores:
-     *        {@literal view} con el que solo se muestra la informaci&oacute;n almacenada y {@literal edit} con el que 
-     *        se pueden realizar modificaciones a cierta informaci&oacute;n
+     * Genera el c&oacute;digo HTML utilizado para presentar la vista del
+     * tablero de riesgos en el modo en que se indica.
+     *
+     * @param website la instancia de {@code WebSite} de la que se debe extraer
+     * la informaci&oacute; de los riesgos
+     * @param mode modo de visualizaci&oacute;n de la informaci&oacute;n
+     * presentada en el tablero. Puede tener los valores: {@literal view} con el
+     * que solo se muestra la informaci&oacute;n almacenada y {@literal edit}
+     * con el que se pueden realizar modificaciones a cierta informaci&oacute;n
      * @param request la petici&oacute;n HTTP enviada por el cliente
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
-     * @return un {@code String} que contiene el c&oacute;digo HTML para representar la informaci&oacute;n de los riesgos
-     *        en el modo en que se desea mostrar el tablero
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @return un {@code String} que contiene el c&oacute;digo HTML para
+     * representar la informaci&oacute;n de los riesgos en el modo en que se
+     * desea mostrar el tablero
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      */
     private String generateBoardView(WebSite website, String mode, HttpServletRequest request,
             SWBParamRequest paramRequest) throws SWBResourceException {
-        
+
         StringBuilder output = new StringBuilder(512);
         String exportType = request.getParameter("type");
-        
+
         if (exportType == null) {
             output.append(this.getStylesString());
         }
@@ -155,7 +167,7 @@ public class RiskBoard extends GenericResource {
             determinants[cont] = det;
             cont++;
         }
-        
+        output.append("<div class=\"panel panel-default\">");
         if (mode != null && mode.equalsIgnoreCase("edit")) {
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("showAddWindow");
@@ -180,51 +192,75 @@ public class RiskBoard extends GenericResource {
             output.append("\n  dojo.require(\"dijit.form.CheckBox\");");
             output.append("\n  dojo.require(\"dijit.Editor\");");
             output.append("</script>");
-            output.append("<div style=\"align:right;\">");
-            output.append("  ");
-            output.append("<a href=\"#\" onclick=\"showMyDialog('");
+
+            output.append("     <div class=\"panel-heading swbstrgy-panel-heading \">");
+            output.append("         <div class=\"row\">");
+            output.append("             <div class=\"col-xs-6\"></div>");
+            output.append("             <div class=\"col-xs-6 swb-boton-panel-cabeza\">");
+            output.append("<a href=\"#\" class=\"btn btn-default\" onclick=\"showMyDialog('");
             output.append(url);
             output.append("', '");
             output.append(paramRequest.getLocaleString("lbl_addTitle"));
             output.append("');\">");
             output.append(paramRequest.getLocaleString("lbl_addTitle"));
             output.append("</a>");
-            output.append("</div>");
-            output.append("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"swbDialog\" ");
-            output.append("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
+            output.append("             </div>");
+            output.append("          </div>");
+            output.append("       </div>");
+
+
+            output.append("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-6 col-lg-offset-3 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo\" id=\"swbDialog\" ");
+            output.append("title=\"Agregar\" >\n");
+            output.append("\n<div class=\"panelDialog panelDialog-default\">");
+            output.append("\n<div class=\"swb-panel-cuerpo\">");
             output.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"swbDialogImp\" ");
-            output.append("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
+            output.append(" executeScripts=\"true\">\n");
             output.append("    Cargando...\n");
+            output.append("  </div>\n");
+            output.append("  </div>\n");
             output.append("  </div>\n");
             output.append("</div>\n");
         }
+
+        output.append("<div class=\"panel-body swbstrgy-panel-body swbstrgy-risk-board\">");
+        output.append("<div class=\"table-responsive\">");
+
         output.append("<table>\n");
         output.append(this.createTableHeading(determinants));
         output.append(this.createTableBody(determinants, website, mode, request, paramRequest));
         output.append("</table>\n");
+        output.append("</div>");
+
+        output.append("</div>");
+        output.append("</div>");
+
         return output.toString();
     }
-    
+
     /**
-     * Crea el c&oacute;digo HTML correspondiente al encabezado de la tabla que muestra el tablero de riesgos
-     * @param determinants conjunto de objetos {@code Determinant} utilizado en la generaci&oacute;n del encabezado
-     * @return un {@code String} que contiene el c&oacute;digo HTML del encabezado del tablero de riesgos
+     * Crea el c&oacute;digo HTML correspondiente al encabezado de la tabla que
+     * muestra el tablero de riesgos
+     *
+     * @param determinants conjunto de objetos {@code Determinant} utilizado en
+     * la generaci&oacute;n del encabezado
+     * @return un {@code String} que contiene el c&oacute;digo HTML del
+     * encabezado del tablero de riesgos
      */
     private String createTableHeading(Determinant[] determinants) {
-        
+
         StringBuilder data = new StringBuilder(256);
-        
+
         data.append("  <thead>\n");
         data.append("    <tr>\n");
-        data.append("      <th colspan=\"16\" class=\"evalRiesgo\">I. EVALUACI&Oacute;N DE RIESGOS</th>\n");
+        data.append("      <th colspan=\"16\" class=\"swbstrgy-risk-hc-1\">I. EVALUACI&Oacute;N DE RIESGOS</th>\n");
         data.append("      <th colspan=\"");
         data.append(6 + determinants.length);
-        data.append("\" class=\"evalControl\">II. EVALUACI&Oacute;N DE CONTROLES</th>\n");
-        data.append("      <th colspan=\"2\" class=\"valRiesgoCtrl\">III. VALORACI&Oacute;N DE RIESGOS VS. CONTROLES</th>\n");
-        data.append("      <th class=\"mapaRiesgoth\">IV. MAPA DE RIESGOS</th>\n");
-        data.append("      <th colspan=\"3\" class=\"accionIniciativa\">V. ESTRATEGIAS Y ACCIONES</th>\n");
+        data.append("\" class=\"swbstrgy-risk-hc-2\">II. EVALUACI&Oacute;N DE CONTROLES</th>\n");
+        data.append("      <th colspan=\"2\" class=\"swbstrgy-risk-hc-3\">III. VALORACI&Oacute;N DE RIESGOS VS. CONTROLES</th>\n");
+        data.append("      <th class=\"swbstrgy-risk-hc-4\">IV. MAPA DE RIESGOS</th>\n");
+        data.append("      <th colspan=\"3\" class=\"swbstrgy-risk-hc-5\">V. ESTRATEGIAS Y ACCIONES</th>\n");
         data.append("    </tr>\n");
-        data.append("    <tr>\n");
+        data.append("    <tr class=\"swbstrgy-risk-sh-1\">\n");
         data.append("      <th rowspan=\"2\">No. de Riesgo</th>\n");
         data.append("      <th rowspan=\"2\">Unidad Administrativa</th>\n");
         data.append("      <th colspan=\"2\">Alineaci&oacute;n a Estrategias, Objetivos o Metas Institucionales</th>\n");
@@ -246,7 +282,7 @@ public class RiskBoard extends GenericResource {
         data.append("      <th rowspan=\"2\">Descripci&oacute;n de la(s) Acci&oacute;n(es)</th>\n");
         data.append("      <th rowspan=\"2\">Descripci&oacute;n de la(s) Iniciativa(s)</th>\n");
         data.append("    </tr>\n");
-        data.append("    <tr>\n");
+        data.append("    <tr class=\"swbstrgy-risk-sh-2\">\n");
         data.append("      <th>Selecci&oacute;n</th>\n");
         data.append("      <th>Descripci&oacute;n</th>\n");
         data.append("      <th>Selecci&oacute;n</th>\n");
@@ -273,24 +309,29 @@ public class RiskBoard extends GenericResource {
         data.append("  </thead>\n");
         data.append("");
         data.append("");
-    
+
         return data.toString();
     }
 
     /**
-     * Crea el c&oacute;digo HTML correspondiente al cuerpo de la tabla que representa al tablero
-     * de riesgos.
-     * @param determinants conjunto de objetos {@code Determinant} utilizados para crear el encabezado de la tabla
-     * @param website la instancia de {@code WebSite} de la que se debe extraer la informaci&oacute; de los riesgos
-     * @param mode indica el modo de visualizaci&oacute;n de la informaci&oacute;n representada en el tablero, 
-     *        puede ser: {@literal view} o {@literal edit}
+     * Crea el c&oacute;digo HTML correspondiente al cuerpo de la tabla que
+     * representa al tablero de riesgos.
+     *
+     * @param determinants conjunto de objetos {@code Determinant} utilizados
+     * para crear el encabezado de la tabla
+     * @param website la instancia de {@code WebSite} de la que se debe extraer
+     * la informaci&oacute; de los riesgos
+     * @param mode indica el modo de visualizaci&oacute;n de la
+     * informaci&oacute;n representada en el tablero, puede ser: {@literal view}
+     * o {@literal edit}
      * @param request la petici&oacute;n HTTP enviada por el cliente
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
-     * @return un {@code String} 
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @return un {@code String}
      */
     private String createTableBody(Determinant[] determinants, WebSite website, String mode, HttpServletRequest request,
             SWBParamRequest paramRequest) {
-        
+
         StringBuilder data = new StringBuilder(256);
 //        String fields = "Risk.prefix|Risk.area|Risk.elementRelated|Risk.elementInstanceRelated|Risk.title" +
 //                "|Risk.riskLeveldecision|Risk.classificationRisk|Risk.classifRiskSpecifyOther|Factor.prefix" +
@@ -301,8 +342,8 @@ public class RiskBoard extends GenericResource {
 //                "|Risk.finAssessmentLikelihood|Risk.calculateQuadrant|Risk.stratManageRisk|Action.title" +
 //                "|Initiative.title";
         SemanticProperty[] factorFields = {
-                Factor.bsc_prefix, Factor.swb_title, Factor.bsc_classificationFactor, Factor.bsc_factorType
-            };
+            Factor.bsc_prefix, Factor.swb_title, Factor.bsc_classificationFactor, Factor.bsc_factorType
+        };
         SemanticProperty[] controlFields = {Control.bsc_prefix, Control.swb_title, Control.bsc_controlType};
         Iterator<Risk> risks = Risk.ClassMgr.listRisks(website);
         String simpleTd = "      <td>\n";
@@ -310,8 +351,8 @@ public class RiskBoard extends GenericResource {
         String lang = paramRequest.getUser().getLanguage();
         User user = paramRequest.getUser();
         int totalRows = 0;
-        
-        data.append("  <tbody>\n");
+
+        data.append("  <tbody class=\"swbstrgy-risk-content\">\n");
         //Se obtienen todos los riesgos creados en el BSC indicado
         while (risks != null && risks.hasNext()) {
             Risk risk = risks.next();
@@ -322,9 +363,9 @@ public class RiskBoard extends GenericResource {
             totalRows += riskSpan;
             short factorSpan = 1;
             String spanRiskTd = "      <td" + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "") + ">\n";
-            String spanRiskTextCenteredTd = "      <td" + 
-                    (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "") +
-                    " class=\"textCentered\">\n";
+            String spanRiskTextCenteredTd = "      <td"
+                    + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "")
+                    + " class=\"gen-center\">\n";
             String spanRiskStyledTd = "      <td" + (riskSpan > 1 ? " rowspan=\"" + riskSpan + "\"" : "");
             String closeTdTag = ">\n";
             String spanFactorTd = null;
@@ -335,7 +376,7 @@ public class RiskBoard extends GenericResource {
             Factor formerFactor = null;
             Control formerControl = null;
             HashMap<Determinant, DeterminantValue> determValues = new HashMap<Determinant, DeterminantValue>(8);
-            
+
             Iterator<Factor> factorIt = risk.listValidFactorsByPrefix();
             while (factorIt != null && factorIt.hasNext()) {
                 Factor factor = factorIt.next();
@@ -353,7 +394,7 @@ public class RiskBoard extends GenericResource {
                     ctrlRowCount++;
                 }
             }
-            
+
             data.append("    <tr>\n");
             data.append(spanRiskTextCenteredTd);
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_prefix, lang, mode));
@@ -379,7 +420,7 @@ public class RiskBoard extends GenericResource {
             data.append(spanRiskTd);
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_classifRiskSpecifyOther, lang, mode));
             data.append(tdEnclosing);
-            
+
             //Se agregan las propiedades del Factor
             if (rows[0][0] != null) {
                 formerFactor = (Factor) rows[0][0].getGenericInstance();
@@ -389,7 +430,7 @@ public class RiskBoard extends GenericResource {
                 for (SemanticProperty property : factorFields) {
                     data.append(spanFactorTd);
                     if (index == 0) {
-                        data.append(" class=\"textCentered\"");
+                        data.append(" class=\"gen-center\"");
                     }
                     data.append(">\n");
                     data.append(this.renderPropertyValue(request, formerFactor.getSemanticObject(), property, lang, mode));
@@ -410,34 +451,38 @@ public class RiskBoard extends GenericResource {
             data.append(spanRiskTextCenteredTd);
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_iniAssessmentLikelihood, lang, mode));
             data.append(tdEnclosing);
-            
+
             String quadrantLabel = null;
             short quadrant = risk.calculateQuadrant(true);
             switch (quadrant) {
-                case 1: quadrantLabel = "I";
-                        break;
-                case 2: quadrantLabel = "II";
-                        break;
-                case 3: quadrantLabel = "III";
-                        break;
-                case 4: quadrantLabel = "IV";
-                        break;
+                case 1:
+                    quadrantLabel = "I";
+                    break;
+                case 2:
+                    quadrantLabel = "II";
+                    break;
+                case 3:
+                    quadrantLabel = "III";
+                    break;
+                case 4:
+                    quadrantLabel = "IV";
+                    break;
             }
             data.append(spanRiskStyledTd);
             data.append(" class=\"cuadrante");
             data.append(quadrant);
-            data.append(" textCentered\"");
+            data.append(" gen-center\"");
             data.append(closeTdTag);
             data.append(quadrantLabel);
             data.append(tdEnclosing);
-            
-            spanFactorTd = "      <td" + (factorSpan > 1 ? " rowspan=\"" + factorSpan + "\"" : "") +
-                           " class=\"textCentered\">\n";
+
+            spanFactorTd = "      <td" + (factorSpan > 1 ? " rowspan=\"" + factorSpan + "\"" : "")
+                    + " class=\"gen-center\">\n";
             if (formerFactor != null) {
                 data.append(spanFactorTd);
                 data.append(formerFactor.isControlRelated() ? "SI" : "NO");
             } else {
-                data.append("      <td class=\"textCentered\">NO");
+                data.append("      <td class=\"gen-center\">NO");
             }
             data.append(tdEnclosing);
             //se agregan las propiedades del Control
@@ -451,7 +496,7 @@ public class RiskBoard extends GenericResource {
             } else {
                 data.append("      <td></td><td></td><td></td>");
             }
-            
+
             if (formerControl != null) {
                 Iterator<DeterminantValue> determIt = formerControl.listDeterminantValues();
                 while (determIt != null && determIt.hasNext()) {
@@ -479,20 +524,20 @@ public class RiskBoard extends GenericResource {
             if (formerControl != null) {
                 data.append(formerControl.calculateDetermination() ? "Suficiente" : "Deficiente");
             } else {
-                data.append("      <td>&nbsp;</td>");
+                data.append("      &nbsp;");
             }
             boolean isRiskControled = risk.calculateControled();
             data.append(tdEnclosing);
             data.append(spanRiskStyledTd);
             if (isRiskControled) {
-                data.append(" class=\"riesgoControlado textCentered\"");
+                data.append(" class=\"riesgoControlado gen-center\"");
             } else {
-                data.append(" class=\"riesgoNoControlado textCentered\"");
+                data.append(" class=\"riesgoNoControlado gen-center\"");
             }
             data.append(closeTdTag);
             data.append(isRiskControled ? "SI" : "NO");
             data.append(tdEnclosing);
-            
+
             /*realizar llamado a validateAssessment() para saber si marcar en rojo estas dos celdas*/
             short initialValue = (short) risk.getIniAssessmentImpactLevel();
             short finalValue = (short) risk.getFinAssessmentImpactLevel();
@@ -501,7 +546,7 @@ public class RiskBoard extends GenericResource {
                 data.append(spanRiskTextCenteredTd);
             } else {
                 data.append(spanRiskStyledTd);
-                data.append(" class=\"noValido textCentered\"");
+                data.append(" class=\"noValido gen-center\"");
                 data.append(closeTdTag);
             }
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentImpactLevel, lang, mode));
@@ -513,43 +558,51 @@ public class RiskBoard extends GenericResource {
                 data.append(spanRiskTextCenteredTd);
             } else {
                 data.append(spanRiskStyledTd);
-                data.append(" class=\"noValido textCentered\"");
+                data.append(" class=\"noValido gen-center\"");
                 data.append(closeTdTag);
             }
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_finAssessmentLikelihood, lang, mode));
             data.append(tdEnclosing);
-            
+
             quadrantLabel = null;
             quadrant = risk.calculateQuadrant(false);
             switch (quadrant) {
-                case 1: quadrantLabel = "I";
-                        break;
-                case 2: quadrantLabel = "II";
-                        break;
-                case 3: quadrantLabel = "III";
-                        break;
-                case 4: quadrantLabel = "IV";
-                        break;
+                case 1:
+                    quadrantLabel = "I";
+                    break;
+                case 2:
+                    quadrantLabel = "II";
+                    break;
+                case 3:
+                    quadrantLabel = "III";
+                    break;
+                case 4:
+                    quadrantLabel = "IV";
+                    break;
             }
             data.append(spanRiskStyledTd);
             data.append(" class=\"cuadrante");
             data.append(quadrant);
-            data.append(" textCentered\"");
+            data.append(" gen-center\"");
             data.append(closeTdTag);
             data.append(quadrantLabel);
             data.append(tdEnclosing);
-            
+
             data.append(spanRiskTd);
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_stratManageRisk, lang, mode));
             data.append(tdEnclosing);
-            data.append(spanRiskTd);
+            
+            
+            String spanRiskTd1 = "      <td" + (riskSpan > 1 ? " class=\"descripAction\" rowspan=\"" + riskSpan + "\"" : "") + ">\n";
+            data.append(spanRiskTd1);
             try {
                 data.append(this.getActionsDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
                 RiskBoard.log.error("Despliegue de Actions, risk = " + risk.getURI(), swbe);
             }
             data.append(tdEnclosing);
-            data.append(spanRiskTd);
+            
+            data.append(spanRiskTd1);
             try {
                 data.append(this.getInitiativesDisplay(risk, paramRequest, mode));
             } catch (SWBResourceException swbe) {
@@ -557,14 +610,14 @@ public class RiskBoard extends GenericResource {
             }
             data.append(tdEnclosing);
             data.append("    </tr>");
-            
+
             //Se agregan las filas restantes (la primera ya esta) para completar lo que abarca el span calculado
             int rowCount = 1;
             while (rowCount < ctrlRowCount) {
                 data.append("    <tr>");
                 Factor factorInTurn = (Factor) rows[rowCount][0].createGenericInstance();
                 determValues = new HashMap(8);
-                
+
                 //Si el factor no se ha desplegado, se extraen los datos para el despliegue de las columnas
                 if (!factorInTurn.equals(formerFactor)) {
                     factorSpan = this.calculateRowSpan(null, factorInTurn);
@@ -573,14 +626,14 @@ public class RiskBoard extends GenericResource {
                     for (SemanticProperty property : factorFields) {
                         data.append(spanFactorTd);
                         if (index == 0) {
-                            data.append(" class=\"textCentered\"");
+                            data.append(" class=\"gen-center\"");
                         }
                         data.append(">\n");
                         data.append(this.renderPropertyValue(request, factorInTurn.getSemanticObject(), property, lang, mode));
                         data.append(tdEnclosing);
                     }
                     data.append(spanFactorTd);
-                    data.append(" class=\"textCentered\">\n");
+                    data.append(" class=\"gen-center\">\n");
                     data.append(factorInTurn.isControlRelated() ? "SI" : "NO");
                     data.append(tdEnclosing);
                 }
@@ -620,40 +673,45 @@ public class RiskBoard extends GenericResource {
                 } else {
                     data.append("      <td></td><td></td><td></td>\n");
                     for (Determinant det : determinants) {
-                            data.append("      <td>&nbsp;</td>\n");
+                        data.append("      <td>&nbsp;</td>\n");
                     }
                     data.append("      <td>&nbsp;</td>\n");
                 }
-                
+
                 formerFactor = factorInTurn;
                 rowCount++;
                 data.append("    </tr>");
             }
-            
+
         }
         data.append("  </tbody>\n");
-        
+
         if (mode.equalsIgnoreCase("view")) {
             request.setAttribute("totalRows", totalRows);
         }
-        
+
         return data.toString();
     }
-    
+
     /**
-     * Calcula cuantas filas contiguas son ocupadas por registros del mismo riesgo o factor
-     * @param risk el objeto {@code Risk} del que se desea calcular el n&uacute;mero de filas en la tabla.
-     *      Si es {@literal null} se realiza el c&aacute;lculo para el factor
-     * @param factor el objeto {@code Factor} del que se desea calcular el n&uacute;mero de filas en la tabla.
-     *        Si es {@literal null}, el valor devuelto es {@literal 1}
-     * @return el n&uacute;mero de filas contiguas ocupadas por registros de la misma clase en la tabla.
-     *         Si los par&aacute;metros recibidos son {@literal null}, el valor devuelto es {@literal 1}
+     * Calcula cuantas filas contiguas son ocupadas por registros del mismo
+     * riesgo o factor
+     *
+     * @param risk el objeto {@code Risk} del que se desea calcular el
+     * n&uacute;mero de filas en la tabla. Si es {@literal null} se realiza el
+     * c&aacute;lculo para el factor
+     * @param factor el objeto {@code Factor} del que se desea calcular el
+     * n&uacute;mero de filas en la tabla. Si es {@literal null}, el valor
+     * devuelto es {@literal 1}
+     * @return el n&uacute;mero de filas contiguas ocupadas por registros de la
+     * misma clase en la tabla. Si los par&aacute;metros recibidos son
+     * {@literal null}, el valor devuelto es {@literal 1}
      */
     private short calculateRowSpan(Risk risk, Factor factor) {
-        
+
         short span = 0;
         short factorCont = 0;
-        
+
         if (risk != null) {
             Iterator<Factor> factorIt = risk.listValidFactors();  // listFactors()
             while (factorIt != null && factorIt.hasNext()) {
@@ -689,18 +747,20 @@ public class RiskBoard extends GenericResource {
         }
         return span;
     }
-    
+
     /**
      * Devuelve el despliegue correspondiente al valor de la propiedad
      * especificada, del objeto indicado.
+     *
      * @param request petici&oacute;n HTTP realizada por el cliente
      * @param elementBSC representa el objeto del cual se desea extraer la
      * informaci&oacute;n
-     * @param property la propiedad semantica de la cual se desea obtener su valor
+     * @param property la propiedad semantica de la cual se desea obtener su
+     * valor
      * @param lang representa el lenguaje en que se desea mostrar el valor de la
      * propiedad indicada
-     * @param mode indica el modo de despliegue en que se desea mostrar el valor de 
-     * la propiedad, {@literal edit} o {@literal view}
+     * @param mode indica el modo de despliegue en que se desea mostrar el valor
+     * de la propiedad, {@literal edit} o {@literal view}
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
@@ -712,11 +772,11 @@ public class RiskBoard extends GenericResource {
 
         //Codigo para obtener el displayElement
         Statement st = null;
-        
+
         if (property != Descriptiveable.swb_title && property != Descriptiveable.swb_description) {
             st = property.getRDFProperty().getProperty(
-                SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                    SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
+                    "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         }
         if (st != null) {
             //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
@@ -756,18 +816,21 @@ public class RiskBoard extends GenericResource {
         }
         return ret != null ? ret : "";
     }
-    
+
     /**
-     * Determina si el usuario en sesi&oacute;n tiene los permisos necesarios para hacer actualizaciones
-     * en la informaci&oacute;n del elemento presentado en la pantalla.
-     * @return un boleano que representa si el usuario tiene permitido hacer actualizaciones
-     * ({@code true}) a la informaci&oacute;n presentada, de lo contrario devuelve {@code false}.
+     * Determina si el usuario en sesi&oacute;n tiene los permisos necesarios
+     * para hacer actualizaciones en la informaci&oacute;n del elemento
+     * presentado en la pantalla.
+     *
+     * @return un boleano que representa si el usuario tiene permitido hacer
+     * actualizaciones ({@code true}) a la informaci&oacute;n presentada, de lo
+     * contrario devuelve {@code false}.
      */
     private boolean userCanEdit() {
-        
+
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
-        
+
         final WebSite scorecard = getResourceBase().getWebSite();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
@@ -804,10 +867,12 @@ public class RiskBoard extends GenericResource {
         }
         return access;
     }
-    
+
     /**
-     * Eval&uacute;a si el {@code formElement} indicado es susceptible de edici&oacute;n a fin de
-     * presentar la interface de edici&oacue;n en l&iacute;nea.
+     * Eval&uacute;a si el {@code formElement} indicado es susceptible de
+     * edici&oacute;n a fin de presentar la interface de edici&oacue;n en
+     * l&iacute;nea.
+     *
      * @param formElement el objeto de forma a presentar en la interface
      * @return {@literal true} si el {@code formElement} puede presentar
      * interface de edici&oacute;n, {@literal false} de lo contrario
@@ -818,8 +883,10 @@ public class RiskBoard extends GenericResource {
     }
 
     /**
-     * Permite la selecci&oacute;n de un grupo o rol a fin de permitir que los usuarios asociados
-     * al elemento seleccionado sean los &uacute;nicos que pueden realizar modificaciones en el tablero
+     * Permite la selecci&oacute;n de un grupo o rol a fin de permitir que los
+     * usuarios asociados al elemento seleccionado sean los &uacute;nicos que
+     * pueden realizar modificaciones en el tablero
+     *
      * @param request la petici&oacute;n enviada por el cliente
      * @param response la respuesta generada a la petici&oacute;n recibida
      * @param paramRequest un objeto de la plataforma de SWB con datos
@@ -832,7 +899,7 @@ public class RiskBoard extends GenericResource {
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -843,7 +910,7 @@ public class RiskBoard extends GenericResource {
         Resource base = getResourceBase();
         String statusMsg = request.getParameter("statusMsg");
         String statusErr = request.getParameter("statusErr");
-        
+
         if (bsc != null) {
             SWBResourceURL url = paramRequest.getActionUrl();
             url.setAction("setPerm");
@@ -932,7 +999,7 @@ public class RiskBoard extends GenericResource {
         } else {
             RiskBoard.log.error(new SWBResourceException("No se tiene referencia a un BSC"));
         }
-        
+
         //Muestra mensaje sobre resultado de la operacion realizada
         if ((statusMsg != null && !statusMsg.isEmpty())
                 || (statusErr != null && !statusErr.isEmpty())) {
@@ -958,6 +1025,7 @@ public class RiskBoard extends GenericResource {
     /**
      * Realiza las operaciones de almacenamiento o eliminaci&oacute;n de
      * informaci&oacute;n de la configuraci&oacute;n del recurso.
+     *
      * @param request la petici&oacute;n enviada por el cliente
      * @param response la respuesta generada a la petici&oacute;n recibida
      * @throws SWBResourceException si durante la ejecuci&oacute;n no se cuenta
@@ -968,7 +1036,7 @@ public class RiskBoard extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response)
             throws SWBResourceException, IOException {
-        
+
         String action = response.getAction();
         String statusMsg = null;
         String errorMsg = null;
@@ -978,15 +1046,15 @@ public class RiskBoard extends GenericResource {
         GenericObject generic = null;
         Risk risk = null;
         String modeToShow = SWBResourceURL.Mode_VIEW;
-        
+
         if (request.getParameter("urlRisk") != null) {
             generic = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("urlRisk")),
-                scorecard.getSemanticModel()).createGenericInstance();
+                    scorecard.getSemanticModel()).createGenericInstance();
             if (generic instanceof Risk) {
                 risk = (Risk) generic;
             }
         }
-        
+
         if (action.equalsIgnoreCase("setPerm")) {
             Resource base = getResourceBase();
 
@@ -998,7 +1066,7 @@ public class RiskBoard extends GenericResource {
             }
             statusMsg = "msg_PermissionAssigned";
             modeToShow = SWBResourceURL.Mode_ADMIN;
-            
+
             try {
                 base.updateAttributesToDB();
             } catch (SWBException swbe) {
@@ -1007,7 +1075,7 @@ public class RiskBoard extends GenericResource {
             }
         } else if (action.equalsIgnoreCase(SWBActionResponse.Action_ADD)) {
             String objType = request.getParameter("objType");
-            
+
             if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName()) && risk != null) {
                 formMgr = new SWBFormMgr(MitigationAction.sclass, scorecard.getSemanticObject(), null);
                 try {
@@ -1031,7 +1099,7 @@ public class RiskBoard extends GenericResource {
                     RiskBoard.log.error("Al crear Initiative", ex);
                 }
             }
-            
+
         } else if (action.equalsIgnoreCase(SWBActionResponse.Action_EDIT)) {
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -1048,7 +1116,7 @@ public class RiskBoard extends GenericResource {
             if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName())) {
             
             } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName())) {
-                
+
             }*/
         } else if (action.equalsIgnoreCase(SWBActionResponse.Action_REMOVE) && risk != null) {
             String suri = request.getParameter("suri");
@@ -1063,7 +1131,7 @@ public class RiskBoard extends GenericResource {
         } else {
             super.processAction(request, response);
         }
-        
+
         if (statusMsg != null) {
             response.setRenderParameter("statusMsg", statusMsg);
         }
@@ -1072,18 +1140,22 @@ public class RiskBoard extends GenericResource {
         }
         response.setMode(modeToShow);
     }
-    
+
     /**
-     * Valida los valores asignados a los rubros de la valoraci&oacute;n final del riesgo
+     * Valida los valores asignados a los rubros de la valoraci&oacute;n final
+     * del riesgo
+     *
      * @param initialValue valor asignado al rubro de valoraci&oacute;n inicial
      * @param finalValue valor asignado al rubro de valoraci&oacute;n final
-     * @param riskControled valor calculado sobre si el riesgo es controlado suficientemente
-     * @return {@code true} en caso de que el valor final sea correcto, {@code false} de lo contrario
+     * @param riskControled valor calculado sobre si el riesgo es controlado
+     * suficientemente
+     * @return {@code true} en caso de que el valor final sea correcto,
+     * {@code false} de lo contrario
      */
     private boolean validateAssessment(int initialValue, int finalValue, boolean riskControled) {
-        
+
         boolean validation = true;
-        
+
         if (finalValue > initialValue) {
             validation = false;
         }
@@ -1097,91 +1169,100 @@ public class RiskBoard extends GenericResource {
     }
 
     /**
-     * Distribuye las peticiones recibidas entre los diferentes modos de vista del recurso, esto es, en base al modo
-     * indicado en la petici&oacute;n se decide qu&eacute;m&eacute;todo es el que resolver&aacute; la petici&oacute;n.
+     * Distribuye las peticiones recibidas entre los diferentes modos de vista
+     * del recurso, esto es, en base al modo indicado en la petici&oacute;n se
+     * decide qu&eacute;m&eacute;todo es el que resolver&aacute; la
+     * petici&oacute;n.
+     *
      * @param request la petici&oacute;n enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if("showAddWindow".equalsIgnoreCase(mode)) {
+        if ("showAddWindow".equalsIgnoreCase(mode)) {
             doShowAddWindow(request, response, paramRequest);
-        }else if("addElement".equalsIgnoreCase(mode)) {
+        } else if ("addElement".equalsIgnoreCase(mode)) {
             doAddElement(request, response, paramRequest);
-        }else if("editElement".equalsIgnoreCase(mode)) {
+        } else if ("editElement".equalsIgnoreCase(mode)) {
             doEditElement(request, response, paramRequest);
-        }else if("export".equalsIgnoreCase(mode)) {
+        } else if ("export".equalsIgnoreCase(mode)) {
             doGetExportedDocument(request, response, paramRequest);
-        }else {
+        } else {
             super.processRequest(request, response, paramRequest);
         }
         /*switch (paramRequest.getMode()) {
-            case "showAddWindow":
-                doShowAddWindow(request, response, paramRequest);
-                break;
-            case "addElement":
-                doAddElement(request, response, paramRequest);
-                break;
-            case "editElement":
-                doEditElement(request, response, paramRequest);
-                break;
-            case "export":
-                doGetExportedDocument(request, response, paramRequest);
-                break;
-            default: super.processRequest(request, response, paramRequest);
+        case "showAddWindow":
+        doShowAddWindow(request, response, paramRequest);
+        break;
+        case "addElement":
+        doAddElement(request, response, paramRequest);
+        break;
+        case "editElement":
+        doEditElement(request, response, paramRequest);
+        break;
+        case "export":
+        doGetExportedDocument(request, response, paramRequest);
+        break;
+        default: super.processRequest(request, response, paramRequest);
         }*/
     }
-    
+
     /**
-     * Presenta la interface para definir si se desea crear una instancia de {@code Action} o 
-     * {@code Initiative} asociada a un riesgo.
+     * Presenta la interface para definir si se desea crear una instancia de
+     * {@code Action} o {@code Initiative} asociada a un riesgo.
+     *
      * @param request la petici&oacute;n enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     private void doShowAddWindow(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
         WebSite website = paramRequest.getWebPage().getWebSite();
         SWBResourceURL url = paramRequest.getRenderUrl();
-        
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         url.setMode("addElement");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        output.append("<p class=\"text-center\">Selecciona los datos para crear un registro</p>\n");
         output.append("<form id=\"addCriteria\" name=\"addCriteria\" action=\"");
         output.append(url);
         //postHtml(url, tagid)
         //submitFormPortal(formid)
-        output.append("\" onsubmit=\"validateSubmit(this);return false;\" class=\"swbform\" method=\"post\">\n");
-        output.append("  <fieldset>\n");
-        output.append("    <legend>Selecciona los datos para crear un registro</fieldset>\n");
-        output.append("    <label for=\"risk\">");
+        output.append("\" onsubmit=\"validateSubmit(this);return false;\" class=\"form-horizontal swb-padding-top\" method=\"post\">\n");
+        output.append("<div class=\"form-group\">\n");
+        output.append("    <label for=\"risk\" class=\"col-lg-3 control-label\">");
         output.append(paramRequest.getLocaleString("lbl_selectRisk"));
         output.append("</label>\n");
-        output.append("    <select id=\"risk\" name=\"risk\">\n");
+        output.append("    <div class=\"col-lg-9\">\n");
+        output.append("    <select id=\"risk\" name=\"risk\" class=\"form-control\">\n");
         output.append("      <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_emptyOption"));
         output.append("</option>\n");
-        
+
         Iterator<Risk> riskIt = Risk.ClassMgr.listRisks(website);
         while (riskIt != null && riskIt.hasNext()) {
             Risk risk = riskIt.next();
@@ -1192,26 +1273,31 @@ public class RiskBoard extends GenericResource {
             output.append("</option>\n");
         }
         output.append("    </select>\n");
-        output.append("    <br>\n");
-        output.append("    <label for=\"objType\">");
+        output.append("    </div>\n");
+        output.append("    </div>\n");
+
+        output.append("<div class=\"form-group\">");
+        output.append("    <label for=\"objType\" class=\"col-lg-3 control-label\">");
         output.append(paramRequest.getLocaleString("lbl_selectObject"));
         output.append("</label>\n");
-        output.append("    <select id=\"objType\" name=\"objType\">\n");
+        output.append("    <div class=\"col-lg-9\">\n");
+        output.append("    <select id=\"objType\" name=\"objType\" class=\"form-control\">\n");
         output.append("      <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_emptyOption"));
         output.append("</option>\n");
         output.append("      <option value=\"MitigationAction\">Acci&oacute;n</option>\n");
         output.append("      <option value=\"Initiative\">Iniciativa</option>\n");
         output.append("    </select>\n");
-        output.append("  </fieldset>\n");
-        output.append("  <fieldset>\n");
-        output.append("  </fieldset>\n");
-        output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"continuar\">");
+        output.append("    </div>\n");
+        output.append("    </div>\n");
+        output.append("    <div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
+        output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"continuar\" class=\"pull-right swb-boton-enviar\">");
         output.append(paramRequest.getLocaleString("lbl_continuateBtn"));
         output.append("</button>");
-        output.append("          <button dojoType=\"dijit.form.Button\" onclick=\"dijit.byId('swbDialog').hide()\">");
+        output.append("          <button dojoType=\"dijit.form.Button\" onclick=\"dijit.byId('swbDialog').hide()\" class=\"pull-right swb-boton-cancelar\">");
         output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
         output.append("</button>");
+        output.append("    </div>\n");
         output.append("</form>\n");
         output.append("    ");
         output.append("");
@@ -1219,22 +1305,26 @@ public class RiskBoard extends GenericResource {
         output.append("");
         out.println(output.toString());
     }
-    
+
     /**
-     * Presenta la interface para la captura de los datos correspondientes al elemento a crear.
+     * Presenta la interface para la captura de los datos correspondientes al
+     * elemento a crear.
+     *
      * @param request la petici&oacute;n enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     private void doAddElement(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
         WebSite website = paramRequest.getWebPage().getWebSite();
@@ -1246,60 +1336,107 @@ public class RiskBoard extends GenericResource {
         String riskUrl = request.getParameter("risk");
         GenericObject semObj = SemanticObject.createSemanticObject(riskUrl).createGenericInstance();
         Risk risk = null;
-        
+        String lang = paramRequest.getUser().getLanguage();
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         if (semObj instanceof Risk) {
             risk = (Risk) semObj;
         }
+        SemanticObject semObjInst;
+        SemanticClass semClass = null;
         if (risk != null && objectType != null) {
             if (objectType.equals("MitigationAction")) {
-                formMgr = new SWBFormMgr(MitigationAction.bsc_MitigationAction,
-                        website.getSemanticModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+                semClass = MitigationAction.bsc_MitigationAction;
             } else if (objectType.equals("Initiative")) {
-                formMgr = new SWBFormMgr(Initiative.bsc_Initiative,
-                        website.getSemanticModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+                semClass = Initiative.bsc_Initiative;
             }
-            /*formMgr.clearProperties();
-            formMgr.addProperty(Action.swb_title);
-            formMgr.addProperty(Action.swb_description);*/
-            formMgr.setType(SWBFormMgr.TYPE_DOJO);
-            //formMgr.setSubmitByAjax(true);
-            formMgr.setOnSubmit("submitAndReload(this.id);return false;");
-            formMgr.setMode(SWBFormMgr.MODE_CREATE);
-            formMgr.addHiddenParameter("urlRisk", risk.getURI());
-            formMgr.addHiddenParameter("objType", objectType);
-            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
-                    + "name=\"enviar\" >" + paramRequest.getLocaleString("lbl_createBtn") + "</button>");
-            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
-                    + "onclick=\"dijit.byId('swbDialog').hide()\">"
-                    + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>");
-            formMgr.setAction(url.toString());
-            output.append("<div id=\"frmAdd\">");
-            output.append(formMgr.renderForm(request));
-            output.append("</div>");
+            if (semClass != null) {
+                formMgr = new SWBFormMgr(semClass,
+                        website.getSemanticModel().getModelObject(), SWBFormMgr.MODE_CREATE);
+                semObjInst = new SemanticObject(website.getSemanticModel(), semClass);
+                formMgr.clearProperties();
+                formMgr.addProperty(Descriptiveable.swb_title);
+                formMgr.addHiddenParameter("urlRisk", risk.getURI());
+                formMgr.addHiddenParameter("objType", objectType);
+
+                String onsubmit = " onsubmit=\"if(submitAndReload(this.id)){return true;} else {return false;}\"";
+                output.append("<form id=\"");
+                output.append(formMgr.getFormName());
+                output.append("\" class=\"form-horizontal swb-padding-top\" action=\"");
+                output.append(url);
+                output.append("\"");
+                output.append(onsubmit);
+                output.append(" method=\"post\" >\n");
+                output.append(formMgr.getFormHiddens());
+
+                Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.getProperties().iterator());
+                while (it.hasNext()) {
+                    SemanticProperty prop1 = it.next();
+                    output.append("<div class=\"form-group\">\n");
+                    String reqtxt = " &nbsp;";
+                    if (prop1.isRequired()) {
+                        reqtxt = " <em>*</em>";
+                    }
+                    output.append("<label for=\"");
+                    output.append(prop1.getName());
+                    output.append("\" class=\"col-lg-2 control-label\">");
+                    output.append(prop1.getDisplayName(lang));
+                    output.append(reqtxt);
+                    output.append("</label>\n");
+
+                    output.append("<div class=\"col-lg-10\">\n");
+                    output.append(
+                            formMgr.getFormElement(prop1).renderElement(
+                            request, semObjInst, prop1,
+                            prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang));
+                    output.append("</div>\n");
+                    output.append("</div>\n");
+                }
+
+                output.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
+                output.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton\" ");
+                output.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+                output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
+                output.append("</button>\n");
+
+                output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton\" ");//btn btn-default pull-right swb-boton-enviar
+                output.append("name=\"enviar\" >");
+                output.append(paramRequest.getLocaleString("lbl_createBtn"));
+                output.append("</button>\n");
+
+                output.append("</div>\n");
+                output.append("</form>\n");
+
+            }
         }
         out.println(output.toString());
     }
-    
+
     /**
-     * Genera el c&oacute;digo HTML con el que se presentan los datos de las acciones relacionadas a los riesgos
-     * @param risk la instancia {@code Risk} a la que estan asociadas las acciones a desplegar
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
-     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es {@literal edit} se presentan las
-     *         opciones para editar y eliminar cada elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
-     * @return un {@code String} que representa al c&oacute;digo HTML para el despliegue de las acciones de un riesgo
+     * Genera el c&oacute;digo HTML con el que se presentan los datos de las
+     * acciones relacionadas a los riesgos
+     *
+     * @param risk la instancia {@code Risk} a la que estan asociadas las
+     * acciones a desplegar
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es
+     * {@literal edit} se presentan las opciones para editar y eliminar cada
+     * elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
+     * @return un {@code String} que representa al c&oacute;digo HTML para el
+     * despliegue de las acciones de un riesgo
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      */
     private String getActionsDisplay(Risk risk, SWBParamRequest paramRequest, String mode)
             throws SWBResourceException {
-        
-        StringBuilder data = new StringBuilder (256);
+
+        StringBuilder data = new StringBuilder(256);
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setMode("editElement");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -1307,68 +1444,68 @@ public class RiskBoard extends GenericResource {
         urlDelete.setAction(SWBResourceURL.Action_REMOVE);
         urlDelete.setCallMethod(SWBResourceURL.Call_DIRECT);
         urlDelete.setParameter("urlRisk", risk.getEncodedURI());
-        
+
         Iterator<MitigationAction> actionIt = risk.listMitigationActions();
         if (actionIt != null && actionIt.hasNext()) {
-            data.append("      <table height=\"100%\">\n");
+            data.append("      <table>\n");
+            data.append("      <tbody>\n");
             while (actionIt.hasNext()) {
                 MitigationAction action = actionIt.next();
                 data.append("      <tr>\n");
-                data.append("        <td>");
+                data.append("        <td class=\"tableTdAction\">");
                 data.append(action.getTitle());
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
-                    data.append("        <td>");
-                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
+                    data.append("        <td class=\"tableTdAction\">");
+                    data.append("<a href=\"#\" class=\"fa fa-pencil fa-2x buttonAction\" onclick=\"showMyDialog('");
                     data.append(url);
                     data.append("?suri=");
                     data.append(action.getEncodedURI());
                     data.append("', '");
                     data.append(action.getTitle());
-                    data.append("');\"><img src=\"");
-                    data.append(SWBPlatform.getContextPath());
-                    data.append(paramRequest.getLocaleString("path_editImg"));
-                    data.append("\" alt=\"");
-                    data.append(paramRequest.getLocaleString("lbl_editAlt"));
-                    data.append("\"></a>&nbsp;&nbsp;&nbsp;");
-                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
+                    data.append("');\">");
+                    data.append("</a>");
+                    data.append("<a href=\"#\" class=\"fa fa-trash-o fa-2x buttonAction\" onclick=\"deleteElement(1, '");
                     data.append(action.getTitle());
                     data.append("', '");
                     data.append(urlDelete.toString());
                     data.append("&suri=");
                     data.append(action.getEncodedURI());
-                    data.append("');\"><img src=\"");
-                    data.append(SWBPlatform.getContextPath());
-                    data.append(paramRequest.getLocaleString("path_deleteImg"));
-                    data.append("\" alt=\"");
-                    data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
-                    data.append("\"></a>");
+                    data.append("');\">");
+                    data.append("</a>");
                     data.append("</td>\n");
                 }
                 data.append("      </tr>\n");
             }
+            data.append("      </tbody>\n");
             data.append("      </table>\n");
         }
-        
+
         return data.toString();
     }
-    
+
     /**
-     * Genera el c&oacute;digo HTML con el que se presentan los datos de las iniciativas relacionadas a los riesgos
-     * @param risk la instancia {@code Risk} a la que estan asociadas las iniciativas a desplegar
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
-     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es {@literal edit} se presentan las
-     *         opciones para editar y eliminar cada elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
-     * @return un {@code String} que representa al c&oacute;digo HTML para el despliegue de las iniciativas de un riesgo
+     * Genera el c&oacute;digo HTML con el que se presentan los datos de las
+     * iniciativas relacionadas a los riesgos
+     *
+     * @param risk la instancia {@code Risk} a la que estan asociadas las
+     * iniciativas a desplegar
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @param mode indica el modo de despliegue de la informaci&oacute;n. Si es
+     * {@literal edit} se presentan las opciones para editar y eliminar cada
+     * elemento mostrado, sino solo se muestra el t&iacute;tulo del elemento
+     * @return un {@code String} que representa al c&oacute;digo HTML para el
+     * despliegue de las iniciativas de un riesgo
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      */
     private String getInitiativesDisplay(Risk risk, SWBParamRequest paramRequest, String mode)
             throws SWBResourceException {
-        
-        StringBuilder data = new StringBuilder (256);
+
+        StringBuilder data = new StringBuilder(256);
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setMode("editElement");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -1376,83 +1513,80 @@ public class RiskBoard extends GenericResource {
         urlDelete.setAction(SWBResourceURL.Action_REMOVE);
         urlDelete.setCallMethod(SWBResourceURL.Call_DIRECT);
         urlDelete.setParameter("urlRisk", risk.getEncodedURI());
-        
+
         Iterator<Initiative> iniIt = risk.listInitiatives();
         if (iniIt != null && iniIt.hasNext()) {
             data.append("      <table>\n");
+            data.append("      <tbody>\n");
             while (iniIt.hasNext()) {
                 Initiative initiative = iniIt.next();
                 data.append("      <tr>\n");
-                data.append("        <td>");
+                data.append("        <td class=\"tableTdAction\">");
                 data.append(initiative.getTitle());
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
-                    data.append("        <td>");
-                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
+                    data.append("        <td class=\"tableTdAction\">");
+                    data.append("<a href=\"#\" class=\"fa fa-pencil fa-2x buttonAction\" onclick=\"showMyDialog('");
                     data.append(url);
                     data.append("?suri=");
                     data.append(initiative.getEncodedURI());
                     data.append("', '");
                     data.append(initiative.getTitle());
-                    data.append("');\"><img src=\"");
-                    data.append(SWBPlatform.getContextPath());
-                    data.append(paramRequest.getLocaleString("path_editImg"));
-                    data.append("\" alt=\"");
-                    data.append(paramRequest.getLocaleString("lbl_editAlt"));
-                    data.append("\"></a>&nbsp;&nbsp;&nbsp;");
-                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
+                    data.append("');\">");
+                    data.append("</a>");
+                    data.append("<a href=\"#\" class=\"fa fa-trash-o fa-2x buttonAction\" onclick=\"deleteElement(1, '");
                     data.append(initiative.getTitle());
                     data.append("', '");
                     data.append(urlDelete.toString());
                     data.append("&suri=");
                     data.append(initiative.getEncodedURI());
-                    data.append("');\"><img src=\"");
-                    data.append(SWBPlatform.getContextPath());
-                    data.append(paramRequest.getLocaleString("path_deleteImg"));
-                    data.append("\" alt=\"");
-                    data.append(paramRequest.getLocaleString("lbl_deleteAlt"));
-                    data.append("\"></a>");
+                    data.append("');\">");
+                    data.append("</a>");
                     data.append("</td>\n");
                 }
                 data.append("      </tr>\n");
             }
+            data.append("      </tbody>\n");
             data.append("      </table>\n");
         }
-        
+
         return data.toString();
     }
-    
+
     /**
-     * Presenta la interface para la edici&oacute;n de los datos correspondientes al elemento indicado 
-     * por el par&aacute;metro {@code suri} en {@code request}.
+     * Presenta la interface para la edici&oacute;n de los datos
+     * correspondientes al elemento indicado por el par&aacute;metro
+     * {@code suri} en {@code request}.
+     *
      * @param request la petici&oacute;n enviada por el cliente
-     * @param response la respuesta HTTP que se genera en base al contenido de la petici&oacute;n
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
+     * @param response la respuesta HTTP que se genera en base al contenido de
+     * la petici&oacute;n
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
     private void doEditElement(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(512);
-        boolean bigDisplay = false;
+        //boolean bigDisplay = false;
+        String lang = paramRequest.getUser().getLanguage();
         //WebSite website = paramRequest.getWebPage().getWebSite();
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_EDIT);
         url.setCallMethod(SWBResourceURL.Call_CONTENT);
-        //SWBFormMgr formMgr = null;
-        SemanticObject semObject = SemanticObject.createSemanticObject(URLDecoder.
-                decode(request.getParameter("suri")));
-        
+        SemanticObject semObject = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("suri")));
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         if (semObject != null) {
             GenericObject generic = semObject.createGenericInstance();
             SWBFormMgr formMgr = new SWBFormMgr(semObject, null, SWBFormMgr.MODE_EDIT);
@@ -1479,26 +1613,18 @@ public class RiskBoard extends GenericResource {
                 formMgr.addProperty(Initiative.bsc_estimatedStart);
                 formMgr.addProperty(Initiative.bsc_plannedEnd);
                 formMgr.addProperty(Initiative.bsc_plannedStart);
-                bigDisplay = true;
+//                bigDisplay = true;
             }
             formMgr.setType(SWBFormMgr.TYPE_DOJO);
             formMgr.setSubmitByAjax(true);
             formMgr.setOnSubmit("mySubmitForm(this.id)");
             formMgr.setMode(SWBFormMgr.MODE_EDIT);
-            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
-                    + "name=\"enviar\" >" + paramRequest.getLocaleString("lbl_editBtn") + "</button>\n");
-            formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
-                    + "onclick=\"dijit.byId('swbDialog').hide()\">"
-                    + paramRequest.getLocaleString("lbl_cancelBtn") + "</button>\n");
-            formMgr.setAction(url.toString());
-            output.append("<div id=\"frmEdit\"");
-            if (bigDisplay) {
-                output.append(" style=\"max-height:400px;\"");
-            }
-            output.append(">");
-            
+            String htmlCode = "";
+            int fromIndex = 0;
+            int toIndex = 0;
+
             //Se elimina la liga para captura de los valores localizados de las propiedades title y description
-            String htmlCode = formMgr.renderForm(request);
+            /*String htmlCode = formMgr.renderForm(request);
             int fromIndex = 0;
             int toIndex = 0;
             if (htmlCode.indexOf("<input name=\"title\"") > 0) {
@@ -1514,30 +1640,118 @@ public class RiskBoard extends GenericResource {
                 String beginning = htmlCode.substring(0, fromIndex);
                 String ending = htmlCode.substring(toIndex + "locale</a>".length());
                 htmlCode = beginning + ending;
+            }*/
+
+            output.append("<script type=\"text/javascript\">\n");
+            // scan page for widgets and instantiate them
+            output.append("dojo.require(\"dojo.parser\");\n");
+            output.append("dojo.require(\"dijit._Calendar\");\n");
+            output.append("dojo.require(\"dijit.ProgressBar\");\n");
+
+            output.append("dojo.require(\"dijit.Editor\");\n");
+            output.append("dojo.require(\"dijit.form.Form\");\n");
+            output.append("dojo.require(\"dijit.form.CheckBox\");\n");
+            output.append("dojo.require(\"dijit.form.Textarea\");");
+            output.append("dojo.require(\"dijit.form.FilteringSelect\");\n");
+            output.append("dojo.require(\"dijit.form.TextBox\");\n");
+            output.append("dojo.require(\"dijit.form.DateTextBox\");\n");
+            output.append("dojo.require(\"dijit.form.TimeTextBox\");\n");
+            output.append("dojo.require(\"dijit.form.Button\");\n");
+            output.append("dojo.require(\"dijit.form.NumberSpinner\");\n");
+            output.append("dojo.require(\"dijit.form.Slider\");\n");
+            output.append("dojo.require(\"dojox.form.BusyButton\");\n");
+            output.append("dojo.require(\"dojox.form.TimeSpinner\");\n");
+            output.append("</script>\n");
+
+            String onsubmit = " onsubmit=\"if(mySubmitForm(this.id)){return true;} else {return false;}\"";
+            output.append("<form id=\"");
+            output.append(formMgr.getFormName());
+            output.append("\" class=\"form-horizontal swb-padding-top\" action=\"");
+            output.append(url);
+            output.append("\"");
+            output.append(onsubmit);
+            output.append(" method=\"post\" >\n"); 
+            output.append(formMgr.getFormHiddens());
+
+            Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.getProperties().iterator());
+
+            while (it.hasNext()) {
+                SemanticProperty prop1 = it.next();
+                output.append("<div class=\"form-group\">\n");
+                String reqtxt = " &nbsp;";
+                if (prop1.isRequired()) {
+                    reqtxt = " <em>*</em>";
+                }
+                output.append("<label for=\"");
+                output.append(prop1.getName());
+                output.append("\" class=\"col-lg-2 control-label\">");
+                output.append(prop1.getDisplayName(lang));
+                output.append(reqtxt);
+                output.append("</label>\n");
+
+                output.append("<div class=\"col-lg-10\">\n");
+                if (prop1.equals(Descriptiveable.swb_description) || prop1.equals(Descriptiveable.swb_title)) {
+                    htmlCode = formMgr.getFormElement(prop1).renderElement(
+                            request, semObject, prop1,
+                            prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_EDIT, lang);
+                    if (htmlCode.indexOf("<input name=\"title\"") > -1) {
+                        fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<input name=\"title\""));
+                        toIndex = htmlCode.indexOf("locale</a>", fromIndex);
+                        String beginning = htmlCode.substring(0, fromIndex);
+                        String ending = htmlCode.substring(toIndex + "locale</a>".length());
+                        htmlCode = beginning + ending;
+                    } else if (htmlCode.indexOf("<textarea name=\"description\"") > -1) {
+                        fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<textarea name=\"description\""));
+                        toIndex = htmlCode.indexOf("locale</a>", fromIndex);
+                        String beginning = htmlCode.substring(0, fromIndex);
+                        String ending = htmlCode.substring(toIndex + "locale</a>".length());
+                        htmlCode = beginning + ending;
+                    }
+                    output.append(htmlCode);
+                } else {
+                    output.append(
+                            formMgr.getFormElement(prop1).renderElement(
+                            request, semObject, prop1,
+                            prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_EDIT, lang));
+                }
+                output.append("</div>\n");
+                output.append("</div>\n");
             }
-                    
-            output.append(htmlCode);
-            output.append("</div>");
+            output.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
+            output.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton\" ");
+            output.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+            output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
+            output.append("</button>\n");
+            output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton\" ");//btn btn-default pull-right swb-boton-enviar
+            output.append("name=\"enviar\" >");
+            output.append(paramRequest.getLocaleString("lbl_createBtn"));
+            output.append("</button>\n");
+            output.append("</div>\n");
+            output.append("</form>\n");
+            output.append("</div>\n");
         }
         out.println(output.toString());
     }
-    
+
     /**
-     * Genera la vista del recurso cuando es ejecutado como recurso de estrategia
+     * Genera la vista del recurso cuando es ejecutado como recurso de
+     * estrategia
+     *
      * @param request la petici&oacute;n HTML hecha por el cliente
-     * @param paramRequest objeto por el que se accede a varios objetos exclusivos de SWB
-     * @return un {@code String} que representa las ligas de HTML hacia los m&eacute;todos que muestran el tablero 
-     * como archivos PDF o de Excel.
+     * @param paramRequest objeto por el que se accede a varios objetos
+     * exclusivos de SWB
+     * @return un {@code String} que representa las ligas de HTML hacia los
+     * m&eacute;todos que muestran el tablero como archivos PDF o de Excel.
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
-     *         de la plataforma de SWB para la correcta ejecuci&oacute;n del
-     *         m&eacute;todo. Como la extracci&oacute;n de valores para
-     *         par&aacute;metros de i18n.
+     * de la plataforma de SWB para la correcta ejecuci&oacute;n del
+     * m&eacute;todo. Como la extracci&oacute;n de valores para
+     * par&aacute;metros de i18n.
      * @throws IOException si ocurre un problema con la lectura/escritura de la
-     *         petici&oacute;n/respuesta.
+     * petici&oacute;n/respuesta.
      */
-    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest) 
+    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
-        
+
         StringBuilder ret = new StringBuilder(128);
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(),
                 paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
@@ -1569,13 +1783,16 @@ public class RiskBoard extends GenericResource {
         ret.append("</a>");
         return ret.toString();
     }
-    
+
     /**
-     * Genera la misma vista de informaci&oacute;n que el m&eacute;todo {@code doView} pero con formato PDF o Excel, 
-     * de acuerdo al par&aacute;metro {@code type} recibido en {@code request}.
+     * Genera la misma vista de informaci&oacute;n que el m&eacute;todo
+     * {@code doView} pero con formato PDF o Excel, de acuerdo al
+     * par&aacute;metro {@code type} recibido en {@code request}.
+     *
      * @param request la petici&oacute;n HTTP enviada por el cliente
      * @param response la respuesta HTTP que se enviar&aacute; al cliente
-     * @param paramRequest objeto por el que se accede a varios exclusivos de SWB
+     * @param paramRequest objeto por el que se accede a varios exclusivos de
+     * SWB
      * @throws SWBResourceException si se presenta alg&uacute;n problema dentro
      * de la plataforma de SWB para la correcta ejecuci&oacute;n del
      * m&eacute;todo. Como la extracci&oacute;n de valores para
@@ -1585,13 +1802,13 @@ public class RiskBoard extends GenericResource {
      */
     public void doGetExportedDocument(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        
+
         WebSite website = paramRequest.getWebPage().getWebSite();
         StringBuilder output = new StringBuilder(512);
         String htmlCode = this.generateBoardView(website, "view", request, paramRequest);
         String displayType = request.getParameter("type") != null ? request.getParameter("type") : null;
         String fileExtension = null;
-        
+
         if (displayType != null && displayType.equalsIgnoreCase("excel")) {
             response.setContentType("application/vnd.ms-excel; charset=ISO-8859-1");
             fileExtension = "xlsx";
@@ -1602,8 +1819,8 @@ public class RiskBoard extends GenericResource {
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         if (displayType != null && !displayType.equalsIgnoreCase("excel")) {
-            response.setHeader("Content-Disposition", "attachment; filename=\"" +
-                    getResourceBase().getWebSiteId() + ".tableroRiesgos." + fileExtension + "\"");
+            response.setHeader("Content-Disposition", "attachment; filename=\""
+                    + getResourceBase().getWebSiteId() + ".tableroRiesgos." + fileExtension + "\"");
         } else if (displayType != null && displayType.equalsIgnoreCase("excel")) {
             response.setHeader("Content-Disposition", "inline; filename=\"tableroRiesgos.xls\"");  //- See more at: http://www.quicklyjava.com/export-web-page-to-excel/#sthash.dS3knjmu.dpuf
         }
@@ -1631,7 +1848,7 @@ public class RiskBoard extends GenericResource {
         output.append(htmlCode);
         output.append("</body>");
         output.append("</html>");
-        
+
         if (fileExtension.equals("pdf")) {
             if (htmlCode != null && htmlCode.length() > 0) {
                 OutputStream os = response.getOutputStream();
@@ -1658,11 +1875,13 @@ public class RiskBoard extends GenericResource {
             out.println(SWBUtils.TEXT.replaceAll(output.toString(), " textCentered", ""));
         }
     }
-    
+
     /**
      * Reemplaza c&oacute;digo HTML por acentos, esto es para la estructura XML
      * requerida.
-     * @param htmlString el objeto String en que se reemplazar&aacute;n las entidades de HTML por car&aacute;cteres.
+     *
+     * @param htmlString el objeto String en que se reemplazar&aacute;n las
+     * entidades de HTML por car&aacute;cteres.
      * @return el objeto String modificado
      */
     private String replaceHtml(String htmlString) {
@@ -1693,9 +1912,10 @@ public class RiskBoard extends GenericResource {
         sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&Uuml;", "Ü");
         return sbStr;
     }
-    
+
     /**
      * Obtiene los links de la plantilla de la p&aacute;gina actual
+     *
      * @param paramRequest Objeto con el cual se acceden a los objetos de SWB
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @return el objeto String que representa el c&oacute;digo HTML con los
@@ -1705,13 +1925,13 @@ public class RiskBoard extends GenericResource {
      */
     private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
             throws FileNotFoundException, IOException {
-        
+
         User user = paramRequest.getUser();
         WebPage wp = paramRequest.getWebPage();
-        
+
         Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/" + 
-                template.getActualVersion().getVersionNumber() + "/"
+        String filePath = template.getWorkPath() + "/"
+                + template.getActualVersion().getVersionNumber() + "/"
                 + template.getFileName(template.getActualVersion().getVersionNumber());
         FileReader reader = null;
         StringBuilder view = new StringBuilder(256);
@@ -1756,53 +1976,58 @@ public class RiskBoard extends GenericResource {
         }
         return view.toString();
     }
-    
+
     /**
-     * Genera un {@code String} que representa los estilos CSS a utilizar para la presentaci&oacute;n 
-     * del tablero. Obtiene del modelo correspondiente las propiedades: {@literal quadrant1HexColor}, {@literal quadrant2HexColor},
-     * {@literal quadrant3HexColor} y {@literal quadrant4HexColor} para utilizar su contenido en el armado de los estilos.
+     * Genera un {@code String} que representa los estilos CSS a utilizar para
+     * la presentaci&oacute;n del tablero. Obtiene del modelo correspondiente
+     * las propiedades: {@literal quadrant1HexColor},
+     * {@literal quadrant2HexColor}, {@literal quadrant3HexColor} y
+     * {@literal quadrant4HexColor} para utilizar su contenido en el armado de
+     * los estilos.
+     *
      * @return el {@code String} con los estilos del tablero de riesgos
      */
     private String getStylesString() {
-        
+
         WebSite website = this.getResourceBase().getWebSite();
-        String stylesString = "<style>\n" + 
-                "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n" +
-                "    th {  text-align:center; background-color:#EEEEEE;  }\n" + 
-                "    .evalRiesgo {  background-color:#87CEEB;  }\n" + 
-                "    .evalControl {  background-color:#1E90FF;  }\n" + 
-                "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n" + 
-                "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n" +
-                "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n" +
-                "    .cuadrante1 {  background-color:" + 
-                (website.getModelProperty("quadrant1HexColor") != null ? website.getModelProperty("quadrant1HexColor") : "#FF0000") +
-                ";  }\n" +
-                "    .cuadrante2 {  background-color:" +
-                (website.getModelProperty("quadrant2HexColor") != null ? website.getModelProperty("quadrant2HexColor") : "#FFFF00") +
-                ";  }\n" +
-                "    .cuadrante3 {  background-color:" +
-                (website.getModelProperty("quadrant3HexColor") != null ? website.getModelProperty("quadrant3HexColor") : "#00FFFF") +
-                ";  }\n" +
-                "    .cuadrante4 {  background-color:" +
-                (website.getModelProperty("quadrant4HexColor") != null ? website.getModelProperty("quadrant4HexColor") : "#3CB371") +
-                ";  }\n" +
-                "    .riesgoControlado {  background-color:#389738;  }\n" +
-                "    .riesgoNoControlado {  background-color:#FFFF80;  }\n" +
-                "    .noValido {  background-color:#FF6666;  }\n" +
-                "    .textCentered {  text-align:center;  }\n" +
-                "</style>\n";
+        String stylesString = "<style>\n"
+                + "    table, th, td {  border: 1px solid black; background-color:#FFFFFF; padding:3px; }\n"
+                + "    th {  text-align:center; background-color:#EEEEEE;  }\n"
+                + "    .evalRiesgo {  background-color:#87CEEB;  }\n"
+                + "    .evalControl {  background-color:#1E90FF;  }\n"
+                + "    .valRiesgoCtrl {  background-color:#6495ED; color:#FFFFFF;  }\n"
+                + "    .mapaRiesgoth {  background-color:#FFFFFF;  }\n"
+                + "    .accionIniciativa {  background-color:#0000CD; color:#FFFFFF;  }\n"
+                + "    .cuadrante1 {  background-color:"
+                + (website.getModelProperty("quadrant1HexColor") != null ? website.getModelProperty("quadrant1HexColor") : "#FF0000")
+                + ";  }\n"
+                + "    .cuadrante2 {  background-color:"
+                + (website.getModelProperty("quadrant2HexColor") != null ? website.getModelProperty("quadrant2HexColor") : "#FFFF00")
+                + ";  }\n"
+                + "    .cuadrante3 {  background-color:"
+                + (website.getModelProperty("quadrant3HexColor") != null ? website.getModelProperty("quadrant3HexColor") : "#00FFFF")
+                + ";  }\n"
+                + "    .cuadrante4 {  background-color:"
+                + (website.getModelProperty("quadrant4HexColor") != null ? website.getModelProperty("quadrant4HexColor") : "#3CB371")
+                + ";  }\n"
+                + "    .riesgoControlado {  background-color:#389738;  }\n"
+                + "    .riesgoNoControlado {  background-color:#FFFF80;  }\n"
+                + "    .noValido {  background-color:#FF6666;  }\n"
+                + "    .textCentered {  text-align:center;  }\n"
+                + "</style>\n";
         return stylesString;
     }
-    
+
     /*
      * Realiza la verificacion de la existencia de todos los DeterminantValue asociados a los controles registrados.
      * En caso de que alguno no exista, lo crea y asocia al control correspondiente
      */
     static {
         Control.bsc_Control.registerObserver(new SemanticObserver() {
+
             @Override
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
-                if("ADD".equalsIgnoreCase(action)) {
+                if ("ADD".equalsIgnoreCase(action)) {
                     GenericObject generic = obj.createGenericInstance();
                     if (generic instanceof Control) {
                         Control control = (Control) generic;
