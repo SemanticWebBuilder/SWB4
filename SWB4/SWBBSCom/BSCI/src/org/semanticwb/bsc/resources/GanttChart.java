@@ -190,6 +190,13 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
                 dataOut.append("]");
 
                 output.append("");
+                output.append("<div class=\"row\">\n");
+                output.append("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">\n");
+                output.append("<div class=\"panel panel-default panel-detalle\">\n");
+                output.append("<div class=\"panel-heading head-detalle\">\n");
+                output.append(initiative.getTitle());
+                output.append("</div>\n");
+                output.append("<div class=\"panel-body body-detalle\">\n");                
                 output.append("<div id=\"ganttChart\" style=\"height:");
                 output.append(graphHeight);
                 output.append("px; width:");
@@ -199,6 +206,11 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
                 output.append(SWBPlatform.getContextPath());
                 output.append("/swbadmin/js/d3/gantt-chart-d3.js\"></script>\n");
                 output.append("</div>\n");
+                output.append("</div>\n");
+                output.append("</div>\n");
+                output.append("</div>\n");
+                output.append("</div>\n");
+                
                 output.append("  <script type=\"text/javascript\">\n");
                 output.append("    var tasks = ");
                 output.append(dataOut.toString());

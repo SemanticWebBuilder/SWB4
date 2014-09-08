@@ -82,6 +82,10 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 List<Period> periodsList = new java.util.ArrayList<Period>();
                 StringBuilder usedColors = new StringBuilder(32);
 
+                out.println("<div class=\"row\">");
+                out.println("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+                out.println("<div class=\"panel panel-default panel-detalle\">");
+                
                 try {
                     measurablePeriods = indicator.listMeasurablesPeriods();
                     if (measurablePeriods == null || !measurablePeriods.hasNext()) {
@@ -111,12 +115,14 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 //Codigo HTML para generar la grafica
                 firstOutput.append("<div id=\"graphContainer\">\n");
                 firstOutput.append("   <div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>\n");
-                firstOutput.append("       <h4 align=\"center\">");
+                firstOutput.append("       <div class=\"panel-heading head-detalle\">");
                 firstOutput.append(indicator.getTitle());
-                firstOutput.append("       </h4>\n");
-                firstOutput.append("       <div>\n");
+                firstOutput.append("       </div>\n");
+                firstOutput.append("       <div class=\"panel-body body-detalle\">\n");
+                firstOutput.append("       <div class=\"centerSvg\">\n");
                 firstOutput.append("         <input type=\"radio\" name=\"graphType\" id=\"hGraph\" value=\"1\" onclick=\"javascript:showGraph(this);\" checked=\"checked\"><label for=\"hGraph\">Horizontal</label>\n");
                 firstOutput.append("         <input type=\"radio\" name=\"graphType\" id=\"vGraph\" value=\"2\" onclick=\"javascript:showGraph(this);\"><label for=\"vGraph\">Vertical</label>\n");
+                firstOutput.append("       </div>\n");
                 firstOutput.append("       </div>\n");
                 
                 output.append("   </div>\n");
@@ -295,17 +301,25 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                     }
                     graphHeight = String.valueOf(height);
                 }
-                
+                svgOutput.append("       <div class=\"panel-body body-detalle\">\n");
+                svgOutput.append("       <div class=\"centerSvg\">\n");
                 svgOutput.append("       <svg style=\"height:");
                 svgOutput.append(graphHeight);
                 svgOutput.append("px; width:");
                 svgOutput.append(graphWidth);
                 svgOutput.append("px;");
                 svgOutput.append("\"></svg>\n");
+                svgOutput.append("   </div>\n");
+                svgOutput.append("   </div>\n");
                 
                 out.println(firstOutput.toString());
                 out.println(svgOutput.toString());
                 out.println(output.toString());
+                
+                out.println("</div>");
+                out.println("</div>");
+                out.println("</div>");
+
             }
         }
     }

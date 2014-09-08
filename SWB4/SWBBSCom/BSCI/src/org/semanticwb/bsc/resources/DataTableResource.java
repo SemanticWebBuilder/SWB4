@@ -95,9 +95,10 @@ public class DataTableResource extends GenericResource implements ComponentExpor
             Collections.sort(lperiods);
             periods = lperiods.iterator();
         }
-//        out.println("<div class=\"swbform\">");
-//        out.println("<fieldset>");
-        out.println("<table class=\"detail data-table\">"); 
+        out.println("<div class=\"row\">");
+        out.println("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12 swb-interli\">");
+        out.println("<div class=\"table-responsive\">");
+        out.println("<table class=\"table table-hover\">"); 
         out.println("<thead>");
         out.println("<tr>");
         out.println("<th>Periodo</th>");
@@ -155,8 +156,9 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         }
         out.println("</tbody>");
         out.println("</table>");
-//        out.println("</fieldset>");
-//        out.println("</div>");
+        out.println("</div>");
+        out.println("</div>");
+        out.println("</div>");
     }
     
     @Override
