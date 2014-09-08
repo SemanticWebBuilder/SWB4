@@ -1,7 +1,6 @@
 package org.semanticwb.bsc.formelement;
 
 import java.net.URLDecoder;
-import java.util.Enumeration;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import org.semanticwb.Logger;
@@ -126,7 +125,6 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
     public void process(HttpServletRequest request, SemanticObject obj, SemanticProperty prop, String propName) {
         final String action = request.getParameter("_action");
         String usrWithGrants = request.getParameter("usrWithGrants");
-
         WebSite scorecard = (WebSite) obj.getModel().getModelObject().getGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
@@ -208,7 +206,6 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         formMgr.addProperty(Attachment.bsc_file);
         formMgr.setType(SWBFormMgr.TYPE_XHTML);
         formMgr.setSubmitByAjax(true);
-        formMgr.setOnSubmit("mySubmitForm(this.id)");
         formMgr.setMode(SWBFormMgr.MODE_EDIT);
 
         FormElementURL urlp = getProcessURL(obj, prop);
@@ -216,56 +213,52 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         urlp.setParameter("usrWithGrants", usrWithGrants);
         String url = urlp.toString();
         String onsubmit = " onsubmit=\"if(validateData(this.id, 'edit')){mySubmitForm(this.id)}\"";
-        toReturn.append("<div id=\"frmEdit\">");
+        toReturn.append("<div id=\"frmAdd\">");
         toReturn.append("<form id=\"");
         toReturn.append(formMgr.getFormName());
-        toReturn.append("\" class=\"swbform\" action=\"");
+        toReturn.append("\" class=\"form-horizontal\" action=\"");
         toReturn.append(url);
         toReturn.append("\"");
         toReturn.append(onsubmit);
         toReturn.append(" method=\"post\">\n");
         toReturn.append(formMgr.getFormHiddens());
-        toReturn.append("	<fieldset>\n");
-        toReturn.append("	    <table>\n");
-        toReturn.append("           <tbody>\n");
 
         Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.
                 getProperties().iterator());
         while (it.hasNext()) {
             SemanticProperty prop1 = it.next();
-            toReturn.append("            <tr>\n");
-            toReturn.append("                <td align=\"right\">\n");
-            toReturn.append("                    ");
-            toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(),
-                    SWBFormMgr.MODE_EDIT));
-            toReturn.append("                </td>\n");
-            toReturn.append("                <td>\n");
+            toReturn.append("<div class=\"form-group\">");
+            String reqtxt = " &nbsp;";
+            if (prop1.isRequired()) {
+                reqtxt = " <em>*</em>";
+            }
+            toReturn.append("<label for=\"");
+            toReturn.append(prop1.getName());
+            toReturn.append("\" class=\"col-lg-2 control-label\">");
+            toReturn.append(prop1.getDisplayName(lang));
+            toReturn.append(reqtxt);
+            toReturn.append("</label>");
 
+            toReturn.append("<div class=\"col-lg-10\">");
             toReturn.append(
                     formMgr.getFormElement(prop1).renderElement(
                     request, semObject, prop1,
                     prop1.getName(), "XHTML", SWBFormMgr.MODE_EDIT, lang));
-            toReturn.append("                </td>\n");
-            toReturn.append("             </tr>\n");
+            toReturn.append("</div>");
+            toReturn.append("</div>");
         }
-        toReturn.append("	    </tbody>\n");
-        toReturn.append("<tr>");
-        toReturn.append("<td align=\"center\" colspan=\"2\">");
-        toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" ");
-        toReturn.append("name=\"enviar\" >");
-        toReturn.append(getLocaleString("send", lang));
-        toReturn.append("</button>");
-        toReturn.append("          <button dojoType=\"dijit.form.Button\" ");
+        toReturn.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
         toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
         toReturn.append(getLocaleString("cancel", lang));
         toReturn.append("</button>");
-        toReturn.append("</td>");
-        toReturn.append("</tr>");
-        toReturn.append("	    </table>\n");
-        toReturn.append("	</fieldset>\n");
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-enviar\" type=\"submit\" ");
+        toReturn.append("name=\"enviar\" >");
+        toReturn.append(getLocaleString("send", lang));
+        toReturn.append("</button>");
+        toReturn.append("</div>");
         toReturn.append("</form>\n");
         toReturn.append("</div>");
-
         return toReturn.toString();
     }
 
@@ -421,45 +414,49 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append(" ");
                 toReturn.append(valueStr2);
                 toReturn.append("');");
-                toReturn.append("\n         dijit.byId('");
-                toReturn.append(Attachment.bsc_file.getName());
-                toReturn.append("_new_defaultAuto').focus(); return false;}");
+                toReturn.append("return false;}");
                 toReturn.append("\n        return true;");
                 toReturn.append("\n    }");
                 toReturn.append("\n</script>");
 
-                toReturn.append("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
-                toReturn.append("style=\"width:450px;height:225px;\" ");
+                toReturn.append("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-6 col-lg-offset-3 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo \" ");//class=\"soria\"
                 toReturn.append("id=\"swbDialog\" title=\"Agregar\" >\n");
+                toReturn.append("\n<div class=\"panelDialog panelDialog-default\">");
+                toReturn.append("\n<div class=\"swb-panel-cuerpo\">");
                 toReturn.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
-                toReturn.append("style=\"width:450px;height:225px;\" ");
                 toReturn.append("id=\"swbDialogImp\" executeScripts=\"true\">\n");
                 toReturn.append("    Cargando...\n");
                 toReturn.append("  </div>\n");
+                toReturn.append("  </div>\n");
+                toReturn.append("  </div>\n");
                 toReturn.append("</div>\n");
 
-                toReturn.append("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
-                toReturn.append("style=\"height:125px;\" ");
+                toReturn.append("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog2 col-lg-2 col-lg-offset-5 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo\" "); //soria
                 toReturn.append("id=\"swbDialog2\" title=\"");
                 toReturn.append(getLocaleString("successfulOperation", lang));
                 toReturn.append("");
                 toReturn.append("\" >\n");
+                toReturn.append("\n<div class=\"panelDialog panelDialog-default\">");
+                toReturn.append("\n<div class=\"swb-panel-cuerpo\">");
                 toReturn.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
-                toReturn.append("style=\"height:125px;width:250px;text-align:center;\" ");
                 toReturn.append("id=\"swbDialogImp2\" executeScripts=\"true\">\n");
-                toReturn.append("          <p style=\"align:center\">");
+                toReturn.append("          <p class=\"text-center bold\"><strong>");
                 toReturn.append(getLocaleString("successfulOperation", lang));
-                toReturn.append("</p>\n");
-                toReturn.append("          <p style=\"vertical-align: middle\">");
-                toReturn.append("<button dojoType=\"dijit.form.Button\" ");
+                toReturn.append("</strong></p>\n");
+                toReturn.append("<div class=\"btn-group col-lg-2 col-lg-offset-3 col-md-12 \">");
+                toReturn.append("<button dojoType=\"dijit.form.Button\" class=\"swb-boton-enviar\" ");//btn btn-default btn-lg btn-block 
                 toReturn.append("onclick=\"dijit.byId('swbDialog2').hide()\">");
                 toReturn.append(getLocaleString("success", lang));
-                toReturn.append("</button></p>");
+                toReturn.append("</button>");
+                toReturn.append("  </div>\n");
+
+                toReturn.append("  </div>\n");
+                toReturn.append("  </div>\n");
                 toReturn.append("  </div>\n");
                 toReturn.append("</div>\n");
 
                 if ("true".equals(usrWithGrants)) {
-                    toReturn.append("<a href=\"#\" onclick=\"showDialog('");
+                    toReturn.append("<a href=\"#\" class=\"swb-url-lista detalle-archivos\" onclick=\"showDialog('");
                     toReturn.append(urlAddFE.setContentType("text/html; charset=UTF-8"));
                     toReturn.append("', '");
                     toReturn.append(Attachment.sclass.getDisplayName(lang));
@@ -467,13 +464,10 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                     toReturn.append(getLocaleString("add", lang));
                     toReturn.append(" ");
                     toReturn.append(Attachment.sclass.getDisplayName(lang));
-                    toReturn.append("\n</a>");
+                    toReturn.append("\n</a>");                    
                 }
-
-                toReturn.append("\n</div>");
-
                 toReturn.append("<br/>");
-                toReturn.append("\n<div class=\"swbform\" id=\"swbform\">");
+                toReturn.append("\n<div class=\"table-responsive\" id=\"swbform\">");
                 if (itAttachments.hasNext()) {
                     toReturn.append(listAttachment(itAttachments, suri, obj, prop, type,
                             mode, lang, usrWithGrants));
@@ -512,20 +506,63 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         formMgr.addProperty(Attachment.swb_title);
         formMgr.addProperty(Attachment.swb_description);
         formMgr.addProperty(Attachment.bsc_file);
-        formMgr.setType(SWBFormMgr.TYPE_XHTML);
+        formMgr.setType(SWBFormMgr.TYPE_DOJO);
         formMgr.setSubmitByAjax(true);
-        formMgr.setOnSubmit("if(validateData(this.id, 'add')) {mySubmitForm(this.id)}");
         formMgr.setMode(SWBFormMgr.MODE_CREATE);
 
         String url = getProcessURL(obj, prop).setParameter("_action", Action_ADD).toString();
-        formMgr.addButton("          <button dojoType=\"dijit.form.Button\" type=\"submit\" "
-                + "name=\"enviar\" >" + getLocaleString("send", lang) + "</button>");
-        formMgr.addButton("          <button dojoType=\"dijit.form.Button\" "
-                + "onclick=\"dijit.byId('swbDialog').hide()\">"
-                + getLocaleString("cancel", lang) + "</button>");
         formMgr.setAction(url);
-        toReturn.append("<div id=\"frmAdd\">");
-        toReturn.append(formMgr.renderForm(request));
+        toReturn.append("<div id=\"frmAdd\" >");
+        
+        SemanticObject semObj = new SemanticObject(obj.getModel(), Attachment.bsc_Attachment);
+        String onsubmit = " onsubmit=\"if(validateData(this.id, 'add')){mySubmitForm(this.id);} else {return false;}\"";
+        toReturn.append("<form id=\"");
+        toReturn.append(formMgr.getFormName());
+        toReturn.append("\" class=\"form-horizontal\" action=\"");
+        toReturn.append(url);
+        toReturn.append("\"");
+        toReturn.append(onsubmit);
+        toReturn.append(" method=\"post\" dojoType=\"dijit.form.Form\">\n");
+        toReturn.append(formMgr.getFormHiddens());
+
+        Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.
+                getProperties().iterator());
+        while (it.hasNext()) {
+            SemanticProperty prop1 = it.next();
+            toReturn.append("<div class=\"form-group\">");
+            String reqtxt = " &nbsp;";
+            if (prop1.isRequired()) {
+                reqtxt = " <em>*</em>";
+            }
+            toReturn.append("<label for=\"");
+            toReturn.append(prop1.getName());
+            toReturn.append("\" class=\"col-lg-2 control-label\">");
+            toReturn.append(prop1.getDisplayName(lang));
+            toReturn.append(reqtxt);
+            toReturn.append("</label>");
+
+            toReturn.append("<div class=\"col-lg-10\">");
+            toReturn.append(
+                    formMgr.getFormElement(prop1).renderElement(
+                    request, semObj, prop1,
+                    prop1.getName(), "XHTML", SWBFormMgr.MODE_CREATE, lang));
+            toReturn.append("</div>");
+            toReturn.append("</div>");
+        }
+        
+        toReturn.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
+        toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+        toReturn.append(getLocaleString("cancel", lang));
+        toReturn.append("</button>");
+        
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"pull-right swb-boton-enviar\" ");//btn btn-default pull-right swb-boton-enviar
+        toReturn.append("name=\"enviar\" >");
+        toReturn.append(getLocaleString("send", lang));
+        toReturn.append("</button>");
+
+        toReturn.append("</div>");
+        toReturn.append("</form>");
         toReturn.append("</div>");
         return toReturn.toString();
     }
@@ -592,9 +629,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             SemanticObject obj, SemanticProperty prop, String type, String mode, String lang,
             String usrWithGrants) {
         StringBuilder toReturn = new StringBuilder();
-        toReturn.append("\n<table width=\"98%\">");
+        toReturn.append("\n<table class=\"tabla-detalle table\">");
         itAttachments = SWBComparator.sortByCreated(itAttachments, false);
-
+        toReturn.append("<tbody>");
         while (itAttachments.hasNext()) {
             Attachment attachment = itAttachments.next();
             toReturn.append("\n<tr>");
@@ -605,10 +642,9 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append(attachment.getWorkPath());
             toReturn.append("/");
             toReturn.append(attachment.getFile());
-            toReturn.append("\" target='_blank'>");
+            toReturn.append("\" target='_blank' class=\"swb-url-lista detalle-archivos\">");
             toReturn.append(attachment.getTitle() == null ? "" : attachment.getTitle());
             toReturn.append("\n</a>");
-            toReturn.append("\n</div>");
             toReturn.append("\n</td>");
 
             toReturn.append("\n<td>");
@@ -634,24 +670,15 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 urlRemove.setParameter("obj", suri);
                 urlRemove.setParameter("usrWithGrants", usrWithGrants);
 
-                toReturn.append("\n<td>");
-//                if (user.equals(attachment.getCreator())) {
+                toReturn.append("\n<td class=\"swb-td-accion\">");
                 toReturn.append("\n<a href=\"#\" onclick=\"showDialog('");
                 toReturn.append(urlEdit.setContentType("text/html; charset=UTF-8"));
                 toReturn.append("', '");
                 toReturn.append(Attachment.sclass.getDisplayName(lang));
                 toReturn.append("');\">");
-                toReturn.append("\n<img src=\"");
-                toReturn.append(SWBPlatform.getContextPath());
-                toReturn.append("/swbadmin/icons/editar_1.gif\" alt=\"");
-                toReturn.append(getLocaleString("edit", lang));
-                toReturn.append("\"/>");
+                
+                toReturn.append("<i class=\"fa fa-pencil fa-lg swb-boton-accion\" title=\"Editar\"></i>");
                 toReturn.append("\n</a>");
-//                }
-                toReturn.append("\n</td>");
-
-                toReturn.append("\n<td>");
-//                if (user.equals(attachment.getCreator())) {
                 toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
                 toReturn.append("¿");
                 toReturn.append(getLocaleString("alertDeleteElement", lang));
@@ -663,19 +690,14 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("',null); ");
                 toReturn.append("} else { return false;}");
                 toReturn.append("\">");
-                toReturn.append("\n<img src=\"");
-                toReturn.append(SWBPlatform.getContextPath());
-                toReturn.append("/swbadmin/icons/iconelim.png\" alt=\"");
-                toReturn.append(getLocaleString("delete", lang));
-                toReturn.append("\"/>");
+                toReturn.append("<i class=\"fa fa-trash-o fa-lg swb-boton-accion\" title=\"Eliminar\"></i>");
                 toReturn.append("\n</a>");
-//                }
                 toReturn.append("\n</td>");
-
 
             }
             toReturn.append("\n</tr>");
         }
+        toReturn.append("</tbody>");
         toReturn.append("\n</table>");
         return toReturn.toString();
     }
