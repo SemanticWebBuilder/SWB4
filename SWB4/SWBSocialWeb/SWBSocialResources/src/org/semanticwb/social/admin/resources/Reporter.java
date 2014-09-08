@@ -224,9 +224,13 @@ public class Reporter extends GenericResource {
 
     public static boolean passFilters(PostIn postIn, String gender, String schoolGrade, String slifeStage, String sentimentalRelationShip, String scountryState, Date dateSince, Date dateTo) {
         SocialNetworkUser postInUser = postIn.getPostInSocialNetworkUser();
+        if(postInUser == null){
+            return false;
+        }
+        
         CountryState postInCountryState = postIn.getGeoStateMap();
-        boolean genderZeroEqualsThree = false;       
-        if(postInUser.getSnu_gender() == 0 && gender.equals("3")){
+        boolean genderZeroEqualsThree = false;
+        if(postInUser.getSnu_gender() == 0 && gender != null && gender.equals("3")){
             genderZeroEqualsThree = true;
         }
 
