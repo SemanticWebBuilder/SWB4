@@ -662,7 +662,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("  </tr>\n");
         output.append("  <tr>\n");
         for (SemanticProperty prop : criteria.getProps2Show()) {
-            output.append("    <th>");
+            output.append("    <th class=\"swb-report-header\">");
             output.append(prop.getLabel());
             output.append("</th>\n");
             if (prop.getURI().indexOf("title") != -1 && titleIndex == -1) {
@@ -683,7 +683,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             output.append("  <tr>\n");
             for (SemanticProperty prop : criteria.getProps2Show()) {
 
-                output.append("    <td>\n");
+                output.append("    <td class=\"swb-report\">\n");
                 if (sameKind) {
                     output.append(this.renderPropertyValue(request, item, prop.getURI(), paramRequest.getUser().getLanguage()));
                 } else {
