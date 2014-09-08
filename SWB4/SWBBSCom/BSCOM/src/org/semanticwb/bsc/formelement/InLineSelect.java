@@ -398,7 +398,7 @@ public class InLineSelect extends org.semanticwb.bsc.formelement.base.InLineSele
                     viewString.append(objectId);
                     viewString.append("\",\n");
                     viewString.append("        autoSave: false,\n");
-                    viewString.append("        noValueIndicator: \"<span>&#61508;</span>\"\n,");
+//                    viewString.append("        noValueIndicator: \"<span>&#61508;</span>\"\n,");
 //                    viewString.append("        noValueIndicator: has(\"ie\") <= 6 ? 		\"<span style='font-family: wingdings; text-decoration: underline;'>&#160;&#160;&#160;&#160;&#61508;&#160;&#160;&#160;&#160;</span>\" :\n" +
 //"		\"<span style='text-decoration: underline;'>&#160;&#160;&#160;&#160;&#61508;&#160;&#160;&#160;&#160;</span>\",\n");
                     viewString.append("        editor: \"dijit.form.Select\",\n");

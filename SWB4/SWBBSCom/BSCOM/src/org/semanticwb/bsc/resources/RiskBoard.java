@@ -155,6 +155,7 @@ public class RiskBoard extends GenericResource {
 
         StringBuilder output = new StringBuilder(512);
         String exportType = request.getParameter("type");
+        User user = paramRequest.getUser();
 
         if (exportType == null) {
             output.append(this.getStylesString());
@@ -169,6 +170,7 @@ public class RiskBoard extends GenericResource {
         }
         output.append("<div class=\"panel panel-default\">");
         if (mode != null && mode.equalsIgnoreCase("edit")) {
+            String lang = user.getLanguage();
             SWBResourceURL url = paramRequest.getRenderUrl();
             url.setMode("showAddWindow");
             url.setCallMethod(SWBResourceURL.Call_DIRECT);
@@ -193,20 +195,22 @@ public class RiskBoard extends GenericResource {
             output.append("\n  dojo.require(\"dijit.Editor\");");
             output.append("</script>");
 
-            output.append("     <div class=\"panel-heading swbstrgy-panel-heading \">");
-            output.append("         <div class=\"row\">");
-            output.append("             <div class=\"col-xs-6\"></div>");
-            output.append("             <div class=\"col-xs-6 swb-boton-panel-cabeza\">");
-            output.append("<a href=\"#\" class=\"btn btn-default\" onclick=\"showMyDialog('");
+            output.append("\n     <div class=\"panel-heading swbstrgy-panel-heading \">");
+            output.append("\n         <div class=\"row\">");
+            output.append("\n            <div class=\"col-xs-6\">");
+            output.append(paramRequest.getWebPage().getDisplayName(lang) == null ? paramRequest.getWebPage().getTitle() : paramRequest.getWebPage().getDisplayName(lang));
+            output.append("</div>");
+            output.append("\n             <div class=\"col-xs-6 swb-boton-panel-cabeza\">");
+            output.append("\n<a href=\"#\" class=\"btn btn-default\" onclick=\"showMyDialog('");
             output.append(url);
             output.append("', '");
             output.append(paramRequest.getLocaleString("lbl_addTitle"));
             output.append("');\">");
             output.append(paramRequest.getLocaleString("lbl_addTitle"));
-            output.append("</a>");
-            output.append("             </div>");
-            output.append("          </div>");
-            output.append("       </div>");
+            output.append("\n</a>");
+            output.append("\n             </div>");
+            output.append("\n          </div>");
+            output.append("\n       </div>");
 
 
             output.append("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-6 col-lg-offset-3 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo\" id=\"swbDialog\" ");
@@ -1457,21 +1461,23 @@ public class RiskBoard extends GenericResource {
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
                     data.append("        <td class=\"tableTdAction\">");
-                    data.append("<a href=\"#\" class=\"fa fa-pencil fa-2x buttonAction\" onclick=\"showMyDialog('");
+                    data.append("<a href=\"#\" onclick=\"showMyDialog('"); //class=\"fa fa-pencil fa-2x buttonAction\"
                     data.append(url);
                     data.append("?suri=");
                     data.append(action.getEncodedURI());
                     data.append("', '");
                     data.append(action.getTitle());
                     data.append("');\">");
+                    data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
                     data.append("</a>");
-                    data.append("<a href=\"#\" class=\"fa fa-trash-o fa-2x buttonAction\" onclick=\"deleteElement(1, '");
+                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");//class=\"fa fa-trash-o fa-2x buttonAction\" 
                     data.append(action.getTitle());
                     data.append("', '");
                     data.append(urlDelete.toString());
                     data.append("&suri=");
                     data.append(action.getEncodedURI());
                     data.append("');\">");
+                    data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
                     data.append("</a>");
                     data.append("</td>\n");
                 }
@@ -1526,21 +1532,23 @@ public class RiskBoard extends GenericResource {
                 data.append("</td>\n");
                 if (mode != null && mode.equalsIgnoreCase("edit")) {
                     data.append("        <td class=\"tableTdAction\">");
-                    data.append("<a href=\"#\" class=\"fa fa-pencil fa-2x buttonAction\" onclick=\"showMyDialog('");
+                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
                     data.append(url);
                     data.append("?suri=");
                     data.append(initiative.getEncodedURI());
                     data.append("', '");
                     data.append(initiative.getTitle());
                     data.append("');\">");
+                    data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
                     data.append("</a>");
-                    data.append("<a href=\"#\" class=\"fa fa-trash-o fa-2x buttonAction\" onclick=\"deleteElement(1, '");
+                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
                     data.append(initiative.getTitle());
                     data.append("', '");
                     data.append(urlDelete.toString());
                     data.append("&suri=");
                     data.append(initiative.getEncodedURI());
                     data.append("');\">");
+                    data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
                     data.append("</a>");
                     data.append("</td>\n");
                 }
