@@ -361,9 +361,10 @@ public class DeliverableElement extends org.semanticwb.bsc.formelement.base.Deli
                     toReturn.append("} else { return false;}");
                     toReturn.append("\">");
 
-                    toReturn.append("<i class=\"fa fa-trash-o fa-lg swb-boton-accion\" title=\"");
-                    toReturn.append(getLocaleString("delete", lang));
-                    toReturn.append("\"></i>");
+//                    toReturn.append("<i class=\"fa fa-trash-o fa-lg swb-boton-accion\" title=\"");
+//                    toReturn.append(getLocaleString("delete", lang));
+//                    toReturn.append("\"></i>");
+                    toReturn.append("<span class=\"glyphicon glyphicon-trash\"></span>");
                     toReturn.append("\n</a>");
                     toReturn.append("\n</td>");
                 }

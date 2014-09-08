@@ -677,7 +677,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append(Attachment.sclass.getDisplayName(lang));
                 toReturn.append("');\">");
                 
-                toReturn.append("<i class=\"fa fa-pencil fa-lg swb-boton-accion\" title=\"Editar\"></i>");
+                //toReturn.append("<i class=\"fa fa-pencil fa-lg swb-boton-accion\" title=\"Editar\"></i>");
+                toReturn.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
                 toReturn.append("\n</a>");
                 toReturn.append("\n<a href=\"#\" onclick=\"if(confirm(\'");
                 toReturn.append("¿");
@@ -690,7 +691,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("',null); ");
                 toReturn.append("} else { return false;}");
                 toReturn.append("\">");
-                toReturn.append("<i class=\"fa fa-trash-o fa-lg swb-boton-accion\" title=\"Eliminar\"></i>");
+                toReturn.append("<span class=\"glyphicon glyphicon-trash\"></span>");
+//                toReturn.append("<i class=\"fa fa-trash-o fa-lg swb-boton-accion\" title=\"Eliminar\"></i>");
                 toReturn.append("\n</a>");
                 toReturn.append("\n</td>");
 
