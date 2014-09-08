@@ -262,8 +262,8 @@ public class EmailResource extends GenericResource {
         url.setMode(Mode_SendMail);
         
         
-out.print("\n<div dojoType=\"dijit.Dialog\" class=\"soria\" id=\"emailDialog\" ");
-out.print("title=\"Agregar\" style=\"width:auto; height:auto;\">\n");
+out.print("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-12 swb-ventana-dialogo\" id=\"emailDialog\" ");
+out.print("title=\"Agregar\">\n");
 out.println("<script type=\"text/javascript\">");
 out.println("  dojo.require('dijit.Dialog');");
 out.println("  dojo.require('dojox.layout.ContentPane');");
@@ -290,9 +290,13 @@ out.println("      handleAs: 'text'");
 out.println("    });");
 out.println("  }");
 out.println("</script>");
+out.println("\n<div class=\"panelDialog panelDialog-default\">");
+out.println("\n<div class=\"swb-panel-cuerpo\">");
 out.print("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" id=\"emailDialogImp\" ");
-out.print("style=\"padding:10px; width:auto; height:auto;\" executeScripts=\"true\">\n");
+out.print("style=\"width:auto; height:auto;\" executeScripts=\"true\">\n");
 out.print("    Cargando...\n");
+out.print("  </div>\n");
+out.print("  </div>\n");
 out.print("  </div>\n");
 out.print("</div>\n");
         
