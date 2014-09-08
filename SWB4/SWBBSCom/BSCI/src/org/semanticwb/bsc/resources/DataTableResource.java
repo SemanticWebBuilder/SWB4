@@ -98,7 +98,7 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         out.println("<div class=\"row\">");
         out.println("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12 swb-interli\">");
         out.println("<div class=\"table-responsive\">");
-        out.println("<table class=\"table table-hover\">"); 
+        out.println("<table class=\"table table-hover table-striped\">"); 
         out.println("<thead>");
         out.println("<tr>");
         out.println("<th>Periodo</th>");
