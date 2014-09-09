@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
@@ -112,10 +113,10 @@ public class LiteFileRepository extends GenericResource
                     bstp.append("          <a href=\"#"+child.getId()+"\" onclick=\"postHtml('"+xyz.setParameter("wpId", child.getId()) +"','lfr_"+base.getId()+"'); if($('#"+child.getId()+"').hasClass('in')){$('#nodico_"+child.getId()+"').addClass('glyphicon-folder-close').removeClass('glyphicon-folder-open')}");
                     bstp.append("          else{$('#nodico_"+child.getId()+"').addClass('glyphicon-folder-open').removeClass('glyphicon-folder-close')}\" ");
                     bstp.append("          class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\" style=\"padding-left:"+paddingLeft+"px;\">");
-                    bstp.append("           <span id=\"nodico_"+child.getId()+"\" class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+child.getTitle()+"</a>").append("\n");
+                    bstp.append("           <span id=\"nodico_"+child.getId()+"\" class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+(child.getDisplayTitle(lang)==null?child.getTitle():child.getDisplayTitle(lang))+"</a>").append("\n");
                     bstp.append(getFolders(child, lang, paddingLeft+10, xyz));
                 }else {
-                    bstp.append("          <a href=\"#\" onclick=\"postHtml('"+xyz.setParameter("wpId", child.getId()) +"','lfr_"+base.getId()+"')\" class=\"swb-menu-rep\" style=\"padding-left:"+paddingLeft+"px;\">"+child.getTitle()+"</a>").append("\n");
+                    bstp.append("          <a href=\"#\" onclick=\"postHtml('"+xyz.setParameter("wpId", child.getId()) +"','lfr_"+base.getId()+"')\" class=\"swb-menu-rep\" style=\"padding-left:"+paddingLeft+"px;\">"+(child.getDisplayTitle(lang)==null?child.getTitle():child.getDisplayTitle(lang))+"</a>").append("\n");
                 }
                 bstp.append("        </li>").append("\n");
             }
@@ -143,9 +144,27 @@ public class LiteFileRepository extends GenericResource
         int luser = getLevelUser(usr);
         
         BSC scorecard = (BSC) base.getWebSite();
-        WebPage repoDir = scorecard.getWebPage(wpId);
-        SWBResourceURL urlorder = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT);
-        urlorder.setParameter("wpId", wpId);
+        WebPage repoDir = scorecard.getWebPage(wpId);        
+        
+out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
+out.println("      <div class=\"row\">");
+out.println("        <div class=\"col-md-7 col-xs-12\">");
+out.println(repoDir.getDisplayTitle(lang)==null?repoDir.getTitle():repoDir.getDisplayTitle(lang));
+out.println("        </div>");
+if(luser >= 2) {
+    SWBResourceURL urlnew = paramRequest.getRenderUrl();
+    urlnew.setParameter("act", "new");
+    out.println("        <div class=\"col-md-5 col-xs-12 swb-panel-heading-btn\">");
+    out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
+    out.println("        </div>");
+}
+out.println("      </div>");
+out.println("    </div>");
+
+SWBResourceURL urlorder = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_CONTENT).setParameter("wpId", wpId);
+out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
+out.println("      <div class=\"table table-responsive\">");        
+        
         
         out.println("        <table class=\"table table-striped table-hover\">");
         out.println("          <thead>");
@@ -170,48 +189,11 @@ public class LiteFileRepository extends GenericResource
 
         out.println("<tbody>");
 
-        Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir, scorecard);
-        ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
-        String orderBy = request.getParameter("orderBy");
-        if (null == orderBy)
-        {
-            orderBy = "title";
-        }
-        HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
-        while (itrf.hasNext())
-        {
-            RepositoryFile repoFile = itrf.next();
-            VersionInfo version = repoFile.getActualVersion();
-            String skey = repoFile.getId();
-            if (orderBy.equals("title")) {
-                skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-            }else if (orderBy.equals("date")) {
-                //nodo.getProperty("jcr:created").getDate().getTime())
-                skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-            }else if (orderBy.equals("type")) {
-                String file = version.getVersionFile();
-                String type = getFileName(file);
-                skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                //hmNodes.put(skey, repoFile);
-            }else if (orderBy.equals("usr")) {
-                User usrc = version.getCreator();
-                skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                if (usrc != null) {
-                    skey = usrc.getFullName() + skey;
-                }
-            }
-            hmNodes.put(skey, repoFile);
-        }
-        ArrayList list = new ArrayList(hmNodes.keySet());
-        Collections.sort(list);
-        //// TERMINA ORDENADO
-
-        /// DESPLIEGUE DE ARCHIVOS ENCONTRADOS
-        Iterator<String> lnit = list.iterator();
+        List<RepositoryFile> list = orderDocuments(request.getParameter("orderBy"), lang, repoDir);
+        Iterator<RepositoryFile> lnit = list.iterator();
         while (lnit.hasNext())
         {
-            String skey = lnit.next();
-            RepositoryFile repositoryFile = hmNodes.get(skey);
+            RepositoryFile repositoryFile = lnit.next();
             VersionInfo vi = repositoryFile.getLastVersion();
             if(vi == null) {
                 repositoryFile.remove();
@@ -261,8 +243,9 @@ public class LiteFileRepository extends GenericResource
             out.println("</td>");
             // 7
             out.println("<td class=\"gen-center\">");
-            out.println("<a href=\"" + urldetail + "\">");
-            out.println("<img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\">");
+            out.println("<a href=\"" + urldetail + "\" title=\"Ver más\">");
+            //out.println("<img src=\"" + path + "info.gif\" border=\"0\" alt=\"Ver detalle\">");
+            out.println("  <span class=\"glyphicon glyphicon-info-sign\"></span>");
             out.println("</a>");
             if(luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1))
             {
@@ -270,8 +253,9 @@ public class LiteFileRepository extends GenericResource
                 urlremove.setAction("removefile");
                 urlremove.setParameter("act", "remove");
                 urlremove.setParameter("fid", fid);
-                out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQryConfirmRemoveFile") +"')){window.location='" + urlremove + "';} else {return false;}\" title=\""+paramRequest.getLocaleString("msgRemoveFile") +"\">");
-                out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQryConfirmRemoveFile") +"')){window.location='" + urlremove + "';} else {return false;}\" title=\""+paramRequest.getLocaleString("msgRemoveFile") +"\" title=\"Eliminar\">");
+                //out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                out.println("  <span class=\"glyphicon glyphicon-trash\"></span>");
                 out.println("</a>");
             }
             out.println("</td>");
@@ -296,6 +280,10 @@ public class LiteFileRepository extends GenericResource
 //            out.println("</tr>");
 //            out.println("</tfoot>");
         out.println("        </table>");
+        
+out.println("      </div> <!-- /.table-responsive -->");
+out.println("    </div> <!-- /.panel-body -->");
+        
     }
 
     private String path;
@@ -315,24 +303,15 @@ public class LiteFileRepository extends GenericResource
         response.setHeader("Pragma", "no-cache");
 
         Resource base = getResourceBase();
-
-//        numf.setMaximumFractionDigits(1);
-
-//        String path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
         PrintWriter out = response.getWriter();
-        String suri = request.getParameter("suri");
         User usr = paramRequest.getUser();
         final String lang = usr.getLanguage()==null?"es":usr.getLanguage();
-
         int luser = getLevelUser(usr);
-
         WebPage repoDir = paramRequest.getWebPage();
-
         String action = request.getParameter("act")==null?"":request.getParameter("act");
 
         if ("".equals(action))
         {
-            
             SWBResourceURL xyz = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(Mode_X);
             BSC scorecard = (BSC) base.getWebSite();
             WebPage root = scorecard.getWebPage(ROOT_REPOSITORY);
@@ -368,13 +347,13 @@ public class LiteFileRepository extends GenericResource
                 while(folders.hasNext()) {
                     folder = folders.next();
                     out.println("        <li class=\"swb-sublist-accordion\">");
-                    if(folder.listVisibleChilds(lang).hasNext()) {            
-                        out.println("          <a href=\"#"+folder.getId()+"\" onclick=\"postHtml('"+xyz.setParameter("wpId", folder.getId()) +"','lfr_"+base.getId()+"'); if($('#"+folder.getId()+"').hasClass('in')){$('#nodico_"+folder.getId()+"').addClass('glyphicon-folder-close').removeClass('glyphicon-folder-open')}");
-                        out.println("           else{$('#nodico_"+folder.getId()+"').addClass('glyphicon-folder-open').removeClass('glyphicon-folder-close')}\" ");
-                        out.println("           class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\" style=\"padding-left:20px;\"><span id=\"nodico_"+folder.getId()+"\" class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+folder.getTitle()+"</a>");            
+                    if(folder.listVisibleChilds(lang).hasNext()) {
+                        out.print("          <a href=\"#"+folder.getId()+"\" onclick=\"postHtml('"+xyz.setParameter("wpId", folder.getId()) +"','lfr_"+base.getId()+"'); if($('#"+folder.getId()+"').hasClass('in')){$('#nodico_"+folder.getId()+"').addClass('glyphicon-folder-close').removeClass('glyphicon-folder-open')} ");
+                        out.print("            else{$('#nodico_"+folder.getId()+"').addClass('glyphicon-folder-open').removeClass('glyphicon-folder-close')}\" ");
+                        out.println("         class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\" style=\"padding-left:20px;\"><span id=\"nodico_"+folder.getId()+"\" class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+folder.getTitle()+"</a>");
                         out.println(getFolders(folder, lang, 30, xyz));
                     }else {
-                        out.println("          <a href=\"#\" onclick=\"postHtml('"+xyz.setParameter("wpId", folder.getId()) +"','lfr_"+base.getId()+"')\" class=\"swb-menu-rep\" style=\"padding-left:20px;\">"+folder.getTitle()+"</a>");
+                        out.println("        <a href=\"#\" onclick=\"postHtml('"+xyz.setParameter("wpId", folder.getId()) +"','lfr_"+base.getId()+"')\" class=\"swb-menu-rep\" style=\"padding-left:20px;\">"+folder.getTitle()+"</a>");
                     }
                     out.println("        </li>");
                 }
@@ -394,11 +373,12 @@ public class LiteFileRepository extends GenericResource
             out.println("    <li><a href=\"#\">Carpeta 2</a></li>");
             out.println("    <li class=\"active\">Carpeta 2.1</li>");
             out.println("  </ol>");
-            out.println("  <div class=\"panel panel-default\">");
+            
+            out.println("  <div id=\"lfr_"+base.getId()+"\" class=\"panel panel-default\">");
             out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
             out.println("      <div class=\"row\">");
             out.println("        <div class=\"col-md-7 col-xs-12\">");
-            out.println("          Carpeta 2.1");
+            out.println(repoDir.getDisplayTitle(lang)==null?repoDir.getTitle():repoDir.getDisplayTitle(lang));
             out.println("        </div>");
             if(luser >= 2) {
                 SWBResourceURL urlnew = paramRequest.getRenderUrl();
@@ -407,13 +387,13 @@ public class LiteFileRepository extends GenericResource
                 out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
                 out.println("        </div>");
             }
-            out.println("      </div>");
-            out.println("    </div>");
+            out.println("      </div> <!-- /.row -->");
+            out.println("    </div> <!-- /.panel-heading -->");
             
             SWBResourceURL urlorder = paramRequest.getRenderUrl();
             out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
-            out.println("      <div id=\"lfr_"+base.getId()+"\" class=\"table table-responsive\">"); 
-            out.println("        <table id=\"doc_list\" class=\"table table-striped table-hover\">");
+            out.println("      <div class=\"table table-responsive\">");
+            out.println("        <table class=\"table table-striped table-hover\">");
             out.println("          <thead>");
             out.println("            <tr>");
             out.println("                  <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
@@ -433,51 +413,14 @@ public class LiteFileRepository extends GenericResource
             out.println("                  <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
             out.println("                </tr>");
             out.println("          </thead>");
-
-            out.println("<tbody>");
-            
-            Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir, scorecard);
-            ///// ORDENADO DE ARCHIVOS SEGUN OPCIÓN
-            String orderBy = request.getParameter("orderBy");
-            if (null == orderBy)
-            {
-                orderBy = "title";
-            }
-            HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
-            while (itrf.hasNext())
-            {
-                RepositoryFile repoFile = itrf.next();
-                VersionInfo version = repoFile.getActualVersion();
-                String skey = repoFile.getId();
-                if (orderBy.equals("title")) {
-                    skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                }else if (orderBy.equals("date")) {
-                    //nodo.getProperty("jcr:created").getDate().getTime())
-                    skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                }else if (orderBy.equals("type")) {
-                    String file = version.getVersionFile();
-                    String type = getFileName(file);
-                    skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                    //hmNodes.put(skey, repoFile);
-                }else if (orderBy.equals("usr")) {
-                    User usrc = version.getCreator();
-                    skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
-                    if (usrc != null) {
-                        skey = usrc.getFullName() + skey;
-                    }
-                }
-                hmNodes.put(skey, repoFile);
-            }
-            ArrayList list = new ArrayList(hmNodes.keySet());
-            Collections.sort(list);
-            //// TERMINA ORDENADO
+            out.println("          <tbody>");
             
             /// DESPLIEGUE DE ARCHIVOS ENCONTRADOS
-            Iterator<String> lnit = list.iterator();
+            List<RepositoryFile> list = orderDocuments(request.getParameter("orderBy"), lang, repoDir);
+            Iterator<RepositoryFile> lnit = list.iterator();
             while (lnit.hasNext())
             {
-                String skey = lnit.next();
-                RepositoryFile repositoryFile = hmNodes.get(skey);
+                RepositoryFile repositoryFile = lnit.next();
                 VersionInfo vi = repositoryFile.getLastVersion();
                 if(vi == null) {
                     repositoryFile.remove();
@@ -527,8 +470,9 @@ public class LiteFileRepository extends GenericResource
                 out.println("</td>");
                 // 7
                 out.println("<td class=\"gen-center\">");
-                out.println("<a href=\"" + urldetail + "\">");
-                out.println("<img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\">");
+                out.println("<a href=\"" + urldetail + "\" title=\"Ver más\">");
+                //out.println("<img src=\"" + path + "info.gif\" border=\"0\" alt=\"ver detalle\">");
+                out.println("  <span class=\"glyphicon glyphicon-info-sign\"></span>");
                 out.println("</a>");
                 if(luser == 3 || (vi.getCreator() != null && vi.getCreator().equals(usr) && luser > 1))
                 {
@@ -536,8 +480,9 @@ public class LiteFileRepository extends GenericResource
                     urlremove.setAction("removefile");
                     urlremove.setParameter("act", "remove");
                     urlremove.setParameter("fid", fid);
-                    out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQryConfirmRemoveFile") +"')){window.location='" + urlremove + "';} else {return false;}\" title=\""+paramRequest.getLocaleString("msgRemoveFile") +"\">");
-                    out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                    out.println("<a href=\"#\" onclick=\"if(confirm('"+paramRequest.getLocaleString("msgQryConfirmRemoveFile") +"')){window.location='" + urlremove + "';} else {return false;}\" title=\""+paramRequest.getLocaleString("msgRemoveFile") +"\" title=\"Eliminar\">");
+                    //out.println("<img src=\"" + path + "delete.gif\" border=\"0\" alt=\"eliminar\"/>");
+                    out.println("  <span class=\"glyphicon glyphicon-trash\"></span>");
                     out.println("</a>");
                 }
                 out.println("</td>");
@@ -565,6 +510,7 @@ public class LiteFileRepository extends GenericResource
             out.println("      </div> <!-- /.table-responsive -->");
             out.println("    </div> <!-- /.panel-body -->");
             out.println("  </div> <!-- /.panel -->");
+            
             out.println("</div> <!-- /.col-sm-9 -->");
             out.println("</div> <!-- /.row -->");
             out.println("</div> <!-- /.panel-body -->");
@@ -1066,6 +1012,46 @@ public class LiteFileRepository extends GenericResource
             out.println("</form>");
             out.println("</div>");
         }
+    }
+    
+    private List<RepositoryFile> orderDocuments(String orderBy, String lang, WebPage repoDir)
+    {
+        Iterator<RepositoryFile> itrf = RepositoryFile.ClassMgr.listRepositoryFileByRepositoryFileDirectory(repoDir, getResourceBase().getWebSite());
+        if(orderBy == null) {
+            orderBy = "title";
+        }
+        HashMap<String, RepositoryFile> hmNodes = new HashMap<String, RepositoryFile>();
+        while (itrf.hasNext())
+        {
+            RepositoryFile repoFile = itrf.next();
+            VersionInfo version = repoFile.getActualVersion();
+            String skey = repoFile.getId();
+            if (orderBy.equals("title")) {
+                skey = repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+            }else if (orderBy.equals("date")) {
+                //nodo.getProperty("jcr:created").getDate().getTime())
+                skey = version.getCreated().getTime() + " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+            }else if (orderBy.equals("type")) {
+                String file = version.getVersionFile();
+                String type = getFileName(file);
+                skey = type + "-" + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                //hmNodes.put(skey, repoFile);
+            }else if (orderBy.equals("usr")) {
+                User usrc = version.getCreator();
+                skey = " - " + repoFile.getDisplayTitle(lang) + " - " + repoFile.getId();
+                if (usrc != null) {
+                    skey = usrc.getFullName() + skey;
+                }
+            }
+            hmNodes.put(skey, repoFile);
+        }
+        List docs = new ArrayList<RepositoryFile>();
+        ArrayList<String> list = new ArrayList<String>(hmNodes.keySet());
+        Collections.sort(list);
+        for(String key:list) {
+            docs.add(hmNodes.get(key));
+        }
+        return docs;
     }
 
     public void doGetFile(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
