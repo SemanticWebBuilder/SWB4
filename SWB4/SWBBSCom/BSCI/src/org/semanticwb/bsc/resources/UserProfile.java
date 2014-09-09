@@ -116,12 +116,21 @@ public class UserProfile extends GenericAdmResource {
         formMgr.setLang(lang);
         SWBResourceURL url = paramRequest.getActionUrl().setAction(SWBResourceURL.Action_EDIT);
 
+        toReturn.append("<div class=\"row\">");
+        toReturn.append("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12 swb-panel-contenido \">");
+        toReturn.append("<div class=\"panel panel-default\">");
+        toReturn.append("   <div class=\"panel-heading swb-panel-cabeza\">Perfil de Usuario</div>");
+        toReturn.append("   <div class=\"panel-body swb-panel-cuerpo perfil-usuario\">");
         //////////////////////MUESTRA FORM PARA SUBIR FOTO//////////////////////////////////
-        toReturn.append("<div id=\"frmUser\">");
-        toReturn.append("<form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n");
-        toReturn.append(formMgrPhoto.getFormHiddens());
-        toReturn.append("<div id=\"Photo\" class=\"foto\">");
-        toReturn.append("<p><img src=\"" + img + "\" /></p>");
+        //toReturn.append("<div id=\"frmUser\">");
+         toReturn.append("       <div class=\"row\">");
+        toReturn.append("           <div class=\"col-lg-5 col-md-5 col-sm-12 col-xs-12 perfil-persona\" id=\"frmUser\">");
+        toReturn.append("               <div class=\"row\">");
+        toReturn.append("               <form id=\"formUserPhoto\" class=\"swbform\" action=\"" + urlPhoto + "\" method=\"post\">\n"); 
+        toReturn.append(                    formMgrPhoto.getFormHiddens());
+        toReturn.append("                   <div id=\"Photo\" class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        //toReturn.append("<div  class=\"foto\">");
+        toReturn.append("                       <img src=\"" + img + "\" />");
         Iterator<SemanticProperty> itUser = SWBComparator.sortSortableObject(formMgrPhoto.getProperties().iterator());
         while (itUser.hasNext()) {
             SemanticProperty prop1 = itUser.next();
@@ -129,116 +138,121 @@ public class UserProfile extends GenericAdmResource {
             toReturn.append(
                     formMgrPhoto.getFormElement(prop1).renderElement(
                             request, user.getSemanticObject(), prop1,
-                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
+                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang).replace("label=\"Select File\"", "label=\"Cambiar foto\" class=\"btn btn-default btn-morado\""));
             toReturn.append("</p>");
         }
-        toReturn.append("<p><button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviarPhoto\" >");
+        toReturn.append("                       <button class=\"btn btn-default btn-morado\" dojoType=\"dijit.form.Button\" type=\"submit\" name=\"enviarPhoto\" >");
         toReturn.append(paramRequest.getLocaleString("lbl_Save"));
         toReturn.append("    <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
         toReturn.append("require([\"dojo/dom\"], function(dom){");
         toReturn.append("    dom.byId(\"formUserPhoto\").submit();");
         toReturn.append("});");
         toReturn.append("</script>");
-        toReturn.append("</button></p>");
-        toReturn.append("</div>");
-        
-        toReturn.append("<div id=\"data\">");
-        toReturn.append("<p><strong><font size=\"13\">" + user.getFullName() + "</font></strong></p>");
+        toReturn.append("                       </button>");
+    
+        toReturn.append("                   </div>");
+        toReturn.append("                </form>\n"); //cierra form
+        toReturn.append("               </div>"); //cierra div row
+        toReturn.append("               <p></p>");
+        toReturn.append("               <div class=\"row\">");
+        toReturn.append("                   <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        toReturn.append("                       <p class=\"swb-bold\">" + user.getFullName() + "</p>");
+        toReturn.append("                       <p>" + user.getEmail() + "</p>");
         boolean canChangePw = Boolean.parseBoolean(base.getAttribute("canChangePassword", "false"));
         if (canChangePw) {
-            StringBuilder toReturn1 = new StringBuilder();
-            StringBuilder toReturn2 = new StringBuilder();
             SWBResourceURL urlChangePass = paramRequest.getRenderUrl().setMode(Mode_CHANGEPASSWORD);
             urlChangePass.setCallMethod(SWBResourceURL.Call_DIRECT);
             
-            toReturn1.append("<script type=\"text/javascript\">\n");
-            toReturn1.append("  dojo.require('dojo.parser');\n");
-            toReturn1.append("  dojo.require(\"dijit.Dialog\");\n");
-            toReturn1.append("  dojo.require('dijit.form.Form');\n");
-            toReturn1.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
-            toReturn1.append("  dojo.require('dijit.form.ValidationTextBox');\n");
-            toReturn1.append("  dojo.require('dijit.form.TextBox');\n");
+            toReturn.append("<script type=\"text/javascript\">\n");
+            toReturn.append("  dojo.require('dojo.parser');\n");
+            toReturn.append("  dojo.require(\"dijit.Dialog\");\n");
+            toReturn.append("  dojo.require('dijit.form.Form');\n");
+            toReturn.append("  dojo.require(\"dojox.layout.ContentPane\");\n");
+            toReturn.append("  dojo.require('dijit.form.ValidationTextBox');\n");
+            toReturn.append("  dojo.require('dijit.form.TextBox');\n");
+            toReturn.append("  dojo.require(\"dijit.form.Button\");");
             
-            toReturn1.append("  function checkData() {\n");
+            toReturn.append("  function checkData() {\n");
             if (request.getParameter("msg") != null) {
-                toReturn1.append("   alert('");
-                toReturn1.append(paramRequest.getLocaleString(request.getParameter("msg")));
-                toReturn1.append("');");
+                toReturn.append("   alert('");
+                toReturn.append(paramRequest.getLocaleString(request.getParameter("msg")));
+                toReturn.append("');");
                 if (!request.getParameter("msg").equals("msgOkUpdate")) {
-                    toReturn1.append("showDialog('");
-                    toReturn1.append(urlChangePass);
-                    toReturn1.append("', '");
-                    toReturn1.append(paramRequest.getLocaleString("lblDialogName"));
-                    toReturn1.append("');\n");
+                    toReturn.append("showDialog('");
+                    toReturn.append(urlChangePass);
+                    toReturn.append("', '");
+                    toReturn.append(paramRequest.getLocaleString("lblDialogName"));
+                    toReturn.append("');\n");
                 }
             }
-            toReturn1.append("   }\n");
+            toReturn.append("   }\n");
             
-            toReturn1.append("dojo.addOnLoad( function(){\n");
-            toReturn1.append("checkData(\"\");}\n");
-            toReturn1.append(");\n");
-            toReturn1.append("</script>\n");
+            toReturn.append("dojo.addOnLoad( function(){\n");
+            toReturn.append("checkData(\"\");}\n");
+            toReturn.append(");\n");
+            toReturn.append("</script>\n");
             
-            toReturn2.append("<div dojoType=\"dijit.Dialog\" class=\"soria\" ");
-            toReturn2.append("style=\"display:width:380px;height:170px;\" ");
-            toReturn2.append("id=\"swbDialog\" title=\"Agregar\" >\n");
-            toReturn2.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
-            toReturn2.append("  style=\"display:width:380px;height:170px;\" ");
-            toReturn2.append("  id=\"swbDialogImp\" executeScripts=\"true\">\n");
-            toReturn2.append("    Cargando...\n");
-            toReturn2.append("  </div>\n");
-            toReturn2.append("</div>\n");
+            toReturn.append("<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-6 col-lg-offset-3 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo\"");
+            toReturn.append("id=\"swbDialog\" title=\"Agregar\" >\n");
+            toReturn.append("\n<div class=\"panelDialog panelDialog-default\">");
+            toReturn.append("\n<div class=\"swb-panel-cuerpo\">");
+            toReturn.append("  <div dojoType=\"dojox.layout.ContentPane\" class=\"soria\" ");
+            toReturn.append("  id=\"swbDialogImp\" executeScripts=\"true\">\n");
+            toReturn.append("    Cargando...\n");
+            toReturn.append("  </div>\n");
+            toReturn.append("  </div>\n");
+            toReturn.append("  </div>\n");
+            toReturn.append("</div>\n");
             
-            toReturn2.append("<a href=\"#\" onclick=\"showDialog('");
-            toReturn2.append(urlChangePass);
-            toReturn2.append("', '");
-            toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
-            toReturn2.append("')\">\n");
-            toReturn2.append(paramRequest.getLocaleString("lblDialogName"));
-            toReturn2.append("\n</a>");
-            
-            out.println(toReturn1.toString());
-            out.println(toReturn2.toString());
+            toReturn.append("    <button class=\"btn btn-default btn-morado\" onclick=\"showDialog('");
+            toReturn.append(urlChangePass);
+            toReturn.append("', '");
+            toReturn.append(paramRequest.getLocaleString("lblDialogName"));
+            toReturn.append("')\">\n");
+            toReturn.append(paramRequest.getLocaleString("lblDialogName"));
+            toReturn.append("\n</button>");
         }
-        
-        toReturn.append("<p>" + user.getEmail() + "</p>");
-        toReturn.append("</div>");
-        toReturn.append("</form>\n");
-        toReturn.append("</div>");
+        toReturn.append("                   </div>");//cierra div col 12
+        toReturn.append("                </div>"); //cierra div row
+        toReturn.append("           </div>");// cierra div perfil-persona
+        //toReturn.append("       </div>");// primer row
 
-        //////////////////////////MUESTRA FORM PARA DATOS DE CONTACTO DE TRABAJO////////////
-        toReturn.append("<div id=\"frmEdit\">");
-        toReturn.append("<p><strong>" + paramRequest.getLocaleString("lbl_contact") + "</strong></p>");
+       //////////////////////////MUESTRA FORM PARA DATOS DE CONTACTO DE TRABAJO////////////
         toReturn.append("<script type=\"text/javascript\">\n");
         toReturn.append("  dojo.require('dijit.form.ValidationTextBox');\n");
         toReturn.append("  dojo.require('dijit.form.FilteringSelect');\n");
         toReturn.append("</script>\n");
-        toReturn.append("<form id=\"formContactWork\" class=\"swbform\" action=\"" + url + "\" method=\"post\" type=\"dijit.form.Form\">\n");
+        toReturn.append("           <div class=\"col-lg-7 col-md-7 col-sm-12 col-xs-12 perfil-contacto\" id=\"frmEdit\">");// abre div perfil-contacto
+        toReturn.append("           <form id=\"formContactWork\" class=\"swbform\" action=\"" + url + "\" method=\"post\" type=\"dijit.form.Form\">\n");        
         toReturn.append(formMgr.getFormHiddens());
-        toReturn.append("	    <table>\n");
-        toReturn.append("        <tbody>\n");
+		toReturn.append("               <div class=\"row\">"); //abre div row
         Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.getProperties().iterator());
         while (it.hasNext()) {
             SemanticProperty prop1 = it.next();
-            toReturn.append("            <tr>\n");
-            toReturn.append("                <td width=\"200px\" align=\"right\">\n");
-            toReturn.append("                    ");
+            
+            toReturn.append("               <div class=\"col-xs-6\">");
+            toReturn.append("                   <div class=\"form-group\">");
+            toReturn.append("                       <label>");
             toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(), SWBFormMgr.MODE_VIEW));
-            toReturn.append("                </td>\n");
-            toReturn.append("                <td>\n");
+            toReturn.append("                       </label>\n");
             toReturn.append(
                     formMgr.getFormElement(prop1).renderElement(
                             request, cw.getSemanticObject(), prop1,
-                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang));
-            toReturn.append("                </td>\n");
-            toReturn.append("                </tr>\n");
+                            prop1.getName(), "dojo", SWBFormMgr.MODE_EDIT, lang).replace("<input ", "<input class=\"form-control\" ").replace("<select ", "<select class=\"form-control\" ").replace("size=\"30\"", "").replace("style=\"width:300px;\"", ""));
+            
+            toReturn.append("                   </div>\n");
+            toReturn.append("                </div>\n");
         }
-        toReturn.append("<tr>");
-        toReturn.append("<td align=\"center\" colspan=\"2\">");
-        toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"button\" name=\"enviar\" >");
+        
+        toReturn.append("               </div>"); //cierra div row
+        toReturn.append("<hr>");
+        
+        toReturn.append("               <div class=\"row\">");
+        toReturn.append("                   <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        toReturn.append("                       <button class=\"btn btn-default pull-right btn-morado\" dojoType=\"dijit.form.Button\" type=\"button\" name=\"enviar\" >");
         toReturn.append(paramRequest.getLocaleString("lbl_Save"));
         
-        toReturn.append("    <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
+        toReturn.append("                       <script type=\"dojo/on\" data-dojo-event=\"click\" data-dojo-args=\"evt\">");
         toReturn.append("require([\"dojo/dom\"], function(dom){");
         toReturn.append("if(dom.byId(\"area_\").value!=''){");
         toReturn.append("    dom.byId(\"formContactWork\").submit();");
@@ -246,14 +260,18 @@ public class UserProfile extends GenericAdmResource {
         toReturn.append("else{alert('Debes seleccionar un area');return false;");
         toReturn.append("}");
         toReturn.append("});");
-        toReturn.append("</script>");
-        toReturn.append("</button>");
-        toReturn.append("</td>");
-        toReturn.append("</tr>");
-        toReturn.append("	    </table>\n");
-        toReturn.append("</form>\n");
-        toReturn.append("</div>");
+        toReturn.append("                       </script>");
+        toReturn.append("                       </button>");
         toReturn.append("<div id=\"chiefDIV\"></div>");
+        toReturn.append("                   </div>\n");//cierra div col-lg-12
+        toReturn.append("               <div class=\"row\">"); //cierra div row
+        toReturn.append("           </form>");
+        toReturn.append("           </div>\n"); //cierra div perfil contacto
+        toReturn.append("       </div>");// primer row
+        toReturn.append("   </div>"); // cierra div perfil usuario
+        toReturn.append("</div>");
+        toReturn.append("</div>");
+        toReturn.append("</div>");
         out.println(toReturn.toString());
     }
     
@@ -409,10 +427,10 @@ public class UserProfile extends GenericAdmResource {
         toReturn.append("\n<tbody>");
         toReturn.append("\n<tr>");
         toReturn.append("\n<td align=\"center\" colspan=\"2\">");
-        toReturn.append("\n<button dojoType='dijit.form.Button' type=\"submit\">");
+        toReturn.append("\n<button dojoType='dijit.form.Button' class='dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton'  type=\"submit\">");
         toReturn.append(paramRequest.getLocaleString("lbl_Save"));
         toReturn.append("</button>\n");
-        toReturn.append("\n<button dojoType='dijit.form.Button' ");
+        toReturn.append("\n<button dojoType='dijit.form.Button' class='pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton' ");
         toReturn.append("onclick=\"dijit.byId('swbDialog').hide();\">");
         toReturn.append(paramRequest.getLocaleString("lbl_Cancel"));
         toReturn.append("</button>\n");
