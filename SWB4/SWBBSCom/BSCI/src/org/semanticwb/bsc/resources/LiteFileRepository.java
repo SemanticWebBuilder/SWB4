@@ -150,21 +150,21 @@ public class LiteFileRepository extends GenericResource
         out.println("        <table class=\"table table-striped table-hover\">");
         out.println("          <thead>");
         out.println("            <tr>");
-        out.println("              <th>ID</th>");
-        out.println("              <th>");
+        out.println("              <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
+        out.println("              <th class=\"swbstrgy_docrep-type_item\">");
         out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
         out.println("              </th>");
-        out.println("              <th>");
+        out.println("              <th class=\"swbstrgy_docrep-title_item\">");
         out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
         out.println("              </th>");
-        out.println("              <th>"+paramRequest.getLocaleString("lblVersion")+"</th>");
-        out.println("              <th>");
+        out.println("              <th class=\"swbstrgy_docrep-ver_item\">"+paramRequest.getLocaleString("lblVersion")+"</th>");
+        out.println("              <th class=\"swbstrgy_docrep-date_item\">");
         out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
         out.println("              </th>");
-        out.println("              <th>");
+        out.println("              <th class=\"swbstrgy_docrep-usr_item\">");
         out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
         out.println("              </th>");
-        out.println("              <th>"+paramRequest.getLocaleString("lblAction")+"</th>");
+        out.println("              <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
         out.println("            </tr>");
         out.println("          </thead>");
 
@@ -332,8 +332,8 @@ public class LiteFileRepository extends GenericResource
 
         if ("".equals(action))
         {
-            SWBResourceURL urlorder = paramRequest.getRenderUrl();
-
+            
+            SWBResourceURL xyz = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(Mode_X);
             BSC scorecard = (BSC) base.getWebSite();
             WebPage root = scorecard.getWebPage(ROOT_REPOSITORY);
             out.println("<div class=\"panel panel-default\"> <!-- panel -->");
@@ -354,7 +354,7 @@ public class LiteFileRepository extends GenericResource
             out.println("<div class=\"panel panel-primary\">");
             out.println("  <div class=\"panel-heading\">");
             out.println("    <p class=\"panel-title\">");
-            out.println("      <a href=\"#"+root.getId()+"\" onclick=\"if($('#"+root.getId()+"').hasClass('in')){$('#nodico_"+root.getId()+"').addClass('glyphicon-folder-close').removeClass('glyphicon-folder-open')} ");
+            out.println("      <a href=\"#"+root.getId()+"\" onclick=\"postHtml('"+xyz.setParameter("wpId", root.getId()) +"','lfr_"+base.getId()+"'); if($('#"+root.getId()+"').hasClass('in')){$('#nodico_"+root.getId()+"').addClass('glyphicon-folder-close').removeClass('glyphicon-folder-open')} ");
             out.println("        else{$('#nodico_"+root.getId()+"').addClass('glyphicon-folder-open').removeClass('glyphicon-folder-close')}\" ");
             out.println("       class=\"accordion-toggle swb-menu-rep\" data-toggle=\"collapse\"><span id=\"nodico_"+root.getId()+"\" class=\"glyphicon glyphicon-folder-close\"></span>&nbsp;"+root.getTitle()+"</a>");
             out.println("    </p>");
@@ -363,9 +363,6 @@ public class LiteFileRepository extends GenericResource
             out.println("  <div id=\""+root.getId()+"\" class=\"panel-collapse collapse\" style=\"height: auto;\">");
             out.println("    <div class=\"panel-body swb-panel-accordion\">");
             if(folders.hasNext()) {
-                SWBResourceURL xyz = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_DIRECT).setMode(Mode_X);
-                
-                
                 WebPage folder;
                 out.println("      <ul class=\"list-group\">");
                 while(folders.hasNext()) {
@@ -412,27 +409,29 @@ public class LiteFileRepository extends GenericResource
             }
             out.println("      </div>");
             out.println("    </div>");
+            
+            SWBResourceURL urlorder = paramRequest.getRenderUrl();
             out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
             out.println("      <div id=\"lfr_"+base.getId()+"\" class=\"table table-responsive\">"); 
-            out.println("        <table class=\"table table-striped table-hover\">");
+            out.println("        <table id=\"doc_list\" class=\"table table-striped table-hover\">");
             out.println("          <thead>");
             out.println("            <tr>");
-            out.println("              <th>ID</th>");
-            out.println("              <th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=type\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
-            out.println("              </th>");
-            out.println("              <th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=title\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
-            out.println("              </th>");
-            out.println("              <th>"+paramRequest.getLocaleString("lblVersion")+"</th>");
-            out.println("              <th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=date\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
-            out.println("              </th>");
-            out.println("              <th>");
-            out.println("<a href=\"" + urlorder + "?orderBy=usr\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
-            out.println("              </th>");
-            out.println("              <th>"+paramRequest.getLocaleString("lblAction")+"</th>");
-            out.println("            </tr>");
+            out.println("                  <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
+            out.println("                  <th class=\"swbstrgy_docrep-type_item\">");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
+            out.println("                  </th>");
+            out.println("                  <th class=\"swbstrgy_docrep-title_item\">");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
+            out.println("                  </th>");
+            out.println("                  <th class=\"swbstrgy_docrep-ver_item\">"+paramRequest.getLocaleString("lblVersion")+"</th>");
+            out.println("                  <th class=\"swbstrgy_docrep-date_item\">");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+            out.println("                  </th>");
+            out.println("                  <th class=\"swbstrgy_docrep-usr_item\">");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+            out.println("                  </th>");
+            out.println("                  <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
+            out.println("                </tr>");
             out.println("          </thead>");
 
             out.println("<tbody>");
