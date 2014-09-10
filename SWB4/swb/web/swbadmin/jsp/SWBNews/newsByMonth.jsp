@@ -136,216 +136,228 @@
 
 
 <%
-            String usrlanguage = paramRequest.getUser().getLanguage();
-            Locale locale = new Locale(usrlanguage);
-            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
+    String usrlanguage = paramRequest.getUser().getLanguage();
+    Locale locale = new Locale(usrlanguage);
+    DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, new Locale(usrlanguage));
 
-            List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
+    List<SWBNewContent> contents = (List<SWBNewContent>) request.getAttribute("news");
 
-            Collections.sort(contents, new SWBNewContentComparator());
-            if (contents != null && contents.size() > 0)
-            {
+    Collections.sort(contents, new SWBNewContentComparator());
+    if (contents != null && contents.size() > 0)
+    {
 
-                for (SWBNewContent content : contents)
-                {
+        for (SWBNewContent content : contents)
+        {
 
-                    SWBResourceURL url = paramRequest.getRenderUrl();
+            SWBResourceURL url = paramRequest.getRenderUrl();
                     //url.setParameter("uri",content.getResourceBase().getSemanticObject().getURI());
-                    //url.setParameter("uri", content.getResourceBase().getSemanticObject().getId());
-                    url.setMode(paramRequest.Mode_VIEW);
-                    url.setCallMethod(paramRequest.Call_CONTENT);
-                    String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
-                    if (title != null && title.trim().equals(""))
-                    {
-                        title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
-                    }
-                    String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
+            //url.setParameter("uri", content.getResourceBase().getSemanticObject().getId());
+            url.setMode(paramRequest.Mode_VIEW);
+            url.setCallMethod(paramRequest.Call_CONTENT);
+            String title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
+            if (title != null && title.trim().equals(""))
+            {
+                title = SWBUtils.TEXT.encodeExtendedCharacters(content.getResourceBase().getDisplayTitle(usrlanguage));
+            }
+            String titleURL = getTitleURL(content.getResourceBase().getDisplayTitle(usrlanguage));
 
-                    String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
-                    //String urlcontent=url.toString().replace("&", "&amp;");
+            String urlcontent = url.toString().replace("&", "&amp;") + "/" + content.getResourceBase().getSemanticObject().getId() + "/" + titleURL;
+            //String urlcontent=url.toString().replace("&", "&amp;");
 
-                    String titleImage = title.replace('"', '\'');
-                    String ago = "";
-                    String source = content.getSource();
-                    String date = "";
-                    if (date != null && !date.trim().equals(""))
-                    {
-                        ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
-                    }
-                    String country = "";
-                    if (content.getCountry() != null)
-                    {
-                        country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage)) + ")";
-                    }
-                    String originalTitle = "";
-                    if (content.getOriginalTitle() != null)
-                    {
-                        originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
-                    }
-                    String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
-                    pathPhoto = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
-                    String image = "";
-                    if (content.getImage() != null)
-                    {
-                        image = content.getImage();
-                        pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
-                    }
-                    if (content.getPublishDate() != null)
-                    {
-                        int month = -1;
+            String titleImage = title.replace('"', '\'');
+            String ago = "";
+            String source = content.getSource();
+            String date = "";
+            if (date != null && !date.trim().equals(""))
+            {
+                if (content.getPublishTime() != null)
+                {
+                    Date time = content.getPublishTime();
+                    Calendar cal = Calendar.getInstance();
+                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(time);
+                    cal.setTime(content.getPublishDate());
+                    cal.set(Calendar.HOUR, cal2.get(Calendar.HOUR));
+                    cal.set(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
+                    cal.set(Calendar.SECOND, cal2.get(Calendar.SECOND));
+                    cal.set(Calendar.MILLISECOND, cal2.get(Calendar.MILLISECOND));
+                    ago = SWBUtils.TEXT.getTimeAgo(cal.getTime(), usrlanguage);
+                }
+                else
+                {
+                    ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                }
+            }
+            String country = "";
+            if (content.getCountry() != null)
+            {
+                country = "(" + SWBUtils.TEXT.encodeExtendedCharacters(content.getCountry().getTitle(usrlanguage)) + ")";
+            }
+            String originalTitle = "";
+            if (content.getOriginalTitle() != null)
+            {
+                originalTitle = SWBUtils.TEXT.encodeExtendedCharacters(content.getOriginalTitle());
+            }
+            String pathPhoto = SWBPortal.getContextPath() + "/swbadmin/jsp/SWBNews/sinfoto.png";
+            pathPhoto = SWBPortal.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/css/noticias_infotec.gif";
+            String image = "";
+            if (content.getImage() != null)
+            {
+                image = content.getImage();
+                pathPhoto = SWBPortal.getWebWorkPath() + content.getSemanticObject().getWorkPath() + "/thmb_image_" + image;
+            }
+            if (content.getPublishDate() != null)
+            {
+                int month = -1;
 
-                        if (request.getParameter("month") != null)
+                if (request.getParameter("month") != null)
+                {
+                    try
+                    {
+                        month = Integer.parseInt(request.getParameter("month"));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                String languser = "es";
+                if (paramRequest.getUser().getLanguage() != null)
+                {
+                    languser = paramRequest.getUser().getLanguage();
+                }
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(content.getPublishDate());
+                int year = Calendar.getInstance().get(Calendar.YEAR);
+                if (request.getParameter("year") != null)
+                {
+                    try
+                    {
+                        year = Integer.parseInt(request.getParameter("year"));
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                Locale userlocale = new Locale(languser);
+                DateFormatSymbols ds = new DateFormatSymbols(userlocale);
+                String uri = request.getRequestURI();
+                StringTokenizer st = new StringTokenizer(uri, "/");
+                if (st.countTokens() == 9)
+                {
+                    ArrayList<String> values = new ArrayList<String>();
+                    while (st.hasMoreTokens())
+                    {
+                        String data = st.nextToken();
+                        values.add(data);
+                    }
+                    String s_month = values.get(7);
+                    String s_year = values.get(8);
+                    try
+                    {
+                        year = Integer.parseInt(s_year);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                    }
+                    int iMonth = -1;
+                    for (String dsmonth : ds.getMonths())
+                    {
+                        iMonth++;
+                        if (dsmonth.equalsIgnoreCase(s_month))
                         {
-                            try
-                            {
-                                month = Integer.parseInt(request.getParameter("month"));
-                            }
-                            catch (NumberFormatException e)
-                            {
-                                e.printStackTrace();
-                            }
+                            month = iMonth;
+                            break;
                         }
-                        String languser = "es";
-                        if (paramRequest.getUser().getLanguage() != null)
-                        {
-                            languser = paramRequest.getUser().getLanguage();
-                        }
-
-
-
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(content.getPublishDate());
-                        int year = Calendar.getInstance().get(Calendar.YEAR);
-                        if (request.getParameter("year") != null)
-                        {
-                            try
-                            {
-                                year = Integer.parseInt(request.getParameter("year"));
-                            }
-                            catch (NumberFormatException e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                        Locale userlocale = new Locale(languser);
-                        DateFormatSymbols ds = new DateFormatSymbols(userlocale);
-                        String uri = request.getRequestURI();
-                        StringTokenizer st = new StringTokenizer(uri, "/");
-                        if (st.countTokens() == 9)
-                        {
-                            ArrayList<String> values = new ArrayList<String>();
-                            while (st.hasMoreTokens())
-                            {
-                                String data = st.nextToken();
-                                values.add(data);
-                            }
-                            String s_month = values.get(7);
-                            String s_year = values.get(8);
-                            try
-                            {
-                                year = Integer.parseInt(s_year);
-                            }
-                            catch (NumberFormatException nfe)
-                            {
-                            }
-                            int iMonth = -1;
-                            for (String dsmonth : ds.getMonths())
-                            {
-                                iMonth++;
-                                if (dsmonth.equalsIgnoreCase(s_month))
-                                {
-                                    month=iMonth;
-                                    break;
-                                }
-                            }
-                        }
-
-
-                        if (!(month == cal.get(Calendar.MONTH) && year == cal.get(Calendar.YEAR)))
-                        {
-                            continue;
-                        }
-                        date = sdf.format(content.getPublishDate());
-
-
                     }
+                }
+
+                if (!(month == cal.get(Calendar.MONTH) && year == cal.get(Calendar.YEAR)))
+                {
+                    continue;
+                }
+                date = sdf.format(content.getPublishDate());
+
+            }
 %>
 <div class="entradaVideos">
     <div class="thumbVideo">
         <%
-                            if (pathPhoto != null)
-                            {
+            if (pathPhoto != null)
+            {
         %>
         <img width="120" height="120" alt="<%=titleImage%>" src="<%=pathPhoto%>" />
         <%
-                            }
+            }
         %>
 
     </div>
     <div class="infoVideo">
         <h3><%=title%><%
-                            if (country != null && !country.equals(""))
-                            {
+            if (country != null && !country.equals(""))
+            {
             %>&nbsp;<%=country%><%
-                                }
+                }
             %>
         </h3>
         <%
-                            if (originalTitle != null && !originalTitle.trim().equals(""))
-                            {
+            if (originalTitle != null && !originalTitle.trim().equals(""))
+            {
         %>
         <p><%=originalTitle%></p>
         <%
-                            }
+            }
         %>
         <p class="fechaVideo">
             <%
-                                if (date != null && !date.trim().equals(""))
-                                {
+                if (date != null && !date.trim().equals(""))
+                {
             %>
             <%=date%> - <%=ago%>
             <%
-                                }
+                }
             %>
 
         </p>
         <%
-                            if (source != null)
-                            {
-                                if (content.getSourceURL() == null)
-                                {
+            if (source != null)
+            {
+                if (content.getSourceURL() == null)
+                {
 
         %>
         <p>Fuente: <%=source%></p>
         <%
-                                        }
-                                        else
-                                        {
-                                            String urlsource = content.getSourceURL();
-                                            urlsource = urlsource.replace("&", "&amp;");
+        }
+        else
+        {
+            String urlsource = content.getSourceURL();
+            urlsource = urlsource.replace("&", "&amp;");
         %>
         <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
-        <%
-                                }
-                            }
-        %>
+            <%
+                    }
+                }
+            %>
         <p class="vermas"><a href="<%=urlcontent%>">Ver Más</a></p>
     </div>
     <div class="clear">&nbsp;</div>
 </div>
 <%
-                }
+    }
 
-                String urlall = paramRequest.getWebPage().getUrl();
+    String urlall = paramRequest.getWebPage().getUrl();
                 //urlall.setMode(urlall.Mode_VIEW);
-                //urlall.setCallMethod(urlall.Call_CONTENT);
-                String viewAll = "[Ver todas las noticias]";
-                if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
-                {
-                    viewAll = "[View all news]";
-                }
+    //urlall.setCallMethod(urlall.Call_CONTENT);
+    String viewAll = "[Ver todas las noticias]";
+    if (paramRequest.getUser().getLanguage() != null && !paramRequest.getUser().getLanguage().equalsIgnoreCase("en"))
+    {
+        viewAll = "[View all news]";
+    }
 %>
 <p><a href="<%=urlall%>"><%=viewAll%></a></p>
 <%
-            }
+    }
 %>
