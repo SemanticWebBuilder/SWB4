@@ -66,19 +66,8 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
             //Se crea una variable de sesion para recuperar en el jsp la url dinamica
             
             session.setAttribute("redirectInstagram", uri);
-            
             out.println("<script type=\"text/javascript\">");
-            out.println(" function ioauth() {");
-            out.println("  mywin = window.open('https://api.instagram.com/oauth/authorize/?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code','_blank','width=840,height=680',true);");
-            out.println("  if(mywin == null){");
-            out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
-            out.println("    return;");
-            out.println("  }");
-            out.println("  mywin.focus();");
-            out.println(" }");
-            out.println(" if(confirm('¿Autenticar la cuenta en Instagram?')) {");
-            out.println("  ioauth();");
-            out.println(" }");
+            out.println("   location.href='"+ "https://api.instagram.com/oauth/authorize/?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code"+"'");
             out.println("</script>");
         } else {
             Map<String, String> params = new HashMap<String, String>();
@@ -108,7 +97,16 @@ public class Instagram extends org.semanticwb.social.base.InstagramBase
                 System.out.println("Error en la autenticacion de Instagram: " + ex);
             } finally {
                 out.println("<script type=\"text/javascript\">");
-                out.println("  window.close();");
+                out.println("try{" +
+                    "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                    "if (form.onsubmit){"+
+                        "var result = form.onsubmit.call(form);" +
+                    "}" +
+                    "if (result !== false){" +
+                        "form.submit();" +
+                    "}"+
+                    "window.close();" +
+                "}catch(e){window.opener=self; window.close();}");
                 out.println("</script>");
             }
         }
