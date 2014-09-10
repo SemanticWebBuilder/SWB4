@@ -933,7 +933,7 @@ public class ImageGallery extends GenericResource
         htm.append("\n        var imghtml=row.cells[row.cells.length-1].innerHTML; ");
         htm.append("\n        var pos=imghtml.indexOf('id=\"'); ");
         htm.append("\n        if(pos!=-1){ ");
-        htm.append("\n                  var pos2=imghtml.indexOf('\"',pos+6); ");        
+        htm.append("\n                  var pos2=imghtml.indexOf('\"',pos+6); ");
         htm.append("\n                  idEditImg=imghtml.substring(pos+4,pos2);");
         htm.append("\n        } ");
         //htm.append("\n        alert(idEditImg); ");
@@ -1006,9 +1006,9 @@ public class ImageGallery extends GenericResource
             String attval = base.getAttribute(attname);
             if (attval != null && attname.startsWith("imggallery_"))
             {
-                long value=new Date().getTime();
+                long value = new Date().getTime();
                 //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
-                String img = "<img id=\""+ attname +"\" src=\"" + webWorkPath + _thumbnail + attval + "?date="+value+"\" alt=\"" + attname + "\" border=\"0\" />";
+                String img = "<img id=\"" + attname + "\" src=\"" + webWorkPath + _thumbnail + attval + "?date=" + value + "\" alt=\"" + attname + "\" border=\"0\" />";
                 htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "'); ");
             }
         }
