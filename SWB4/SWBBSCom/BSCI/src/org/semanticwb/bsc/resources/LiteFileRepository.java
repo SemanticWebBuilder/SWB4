@@ -34,6 +34,7 @@ import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -81,7 +82,16 @@ public class LiteFileRepository extends GenericResource
     private static final String CHK_FOLDERSUPPORT = "prop_foldersupport";
     private static final NumberFormat numf = NumberFormat.getNumberInstance();
     
-    public static final String ROOT_REPOSITORY = "docs_rep_toc";
+    public static final String ROOT_REPOSITORY = "docs_rep_toc";    
+    private String path;
+    
+    @Override
+    public void setResourceBase(Resource base) throws SWBResourceException {
+        super.setResourceBase(base);
+        path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
+        numf.setMaximumFractionDigits(1);
+        
+    }
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -127,6 +137,21 @@ public class LiteFileRepository extends GenericResource
         return bstp.toString();
     }
     
+    private String breadCrumbs(WebPage currentFolder, final String lang) {
+        final WebSite scorecard = getResourceBase().getWebSite();
+        List<String> crumbs = new ArrayList<String>();
+        final WebPage root = scorecard.getWebPage(ROOT_REPOSITORY);
+        crumbs.add("</ol>");
+        crumbs.add("<li class=\"active\">"+(currentFolder.getDisplayTitle(lang)==null?currentFolder.getTitle():currentFolder.getDisplayTitle(lang))+"</li>");
+        while(!currentFolder.equals(root)) {
+            currentFolder = currentFolder.getParent();
+            crumbs.add("<li><a href=\"#\">"+(currentFolder.getDisplayTitle(lang)==null?currentFolder.getTitle():currentFolder.getDisplayTitle(lang))+"</a></li>");
+        }
+        crumbs.add("<ol class=\"breadcrumb\">");
+        Collections.reverse(crumbs);
+        return Arrays.toString(crumbs.toArray()).replaceAll("[,\\[\\]]", "\n");
+    }
+    
     public void doX(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -144,52 +169,51 @@ public class LiteFileRepository extends GenericResource
         int luser = getLevelUser(usr);
         
         BSC scorecard = (BSC) base.getWebSite();
-        WebPage repoDir = scorecard.getWebPage(wpId);        
+        WebPage currentFolder = scorecard.getWebPage(wpId);
         
-out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
-out.println("      <div class=\"row\">");
-out.println("        <div class=\"col-md-7 col-xs-12\">");
-out.println(repoDir.getDisplayTitle(lang)==null?repoDir.getTitle():repoDir.getDisplayTitle(lang));
-out.println("        </div>");
-if(luser >= 2) {
-    SWBResourceURL urlnew = paramRequest.getRenderUrl();
-    urlnew.setParameter("act", "new");
-    out.println("        <div class=\"col-md-5 col-xs-12 swb-panel-heading-btn\">");
-    out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
-    out.println("        </div>");
-}
-out.println("      </div>");
-out.println("    </div>");
+System.out.println(breadCrumbs(currentFolder, lang));        
+        
+        out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
+        out.println("      <div class=\"row\">");
+        out.println("        <div class=\"col-md-7 col-xs-12\">");
+        out.println(currentFolder.getDisplayTitle(lang)==null?currentFolder.getTitle():currentFolder.getDisplayTitle(lang));
+        out.println("        </div>");
+        if(luser >= 2) {
+            SWBResourceURL urlnew = paramRequest.getRenderUrl();
+            urlnew.setParameter("act", "new");
+            out.println("        <div class=\"col-md-5 col-xs-12 swb-panel-heading-btn\">");
+            out.println("          <button class=\"btn btn-default\" type=\"button\" onclick=\"window.location='"+urlnew+"';\"><i class=\"fa fa-plus\"></i> Agregar Archivo</button>");
+            out.println("        </div>");
+        }
+        out.println("      </div>");
+        out.println("    </div>");
 
-SWBResourceURL urlorder = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_CONTENT).setParameter("wpId", wpId);
-out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
-out.println("      <div class=\"table table-responsive\">");        
-        
-        
+        SWBResourceURL urlorder = paramRequest.getRenderUrl().setCallMethod(SWBResourceURL.Call_CONTENT).setParameter("wpId", wpId);
+        out.println("    <div class=\"panel-body swbstrgy-panel-body\">");
+        out.println("      <div class=\"table table-responsive\">");
         out.println("        <table class=\"table table-striped table-hover\">");
         out.println("          <thead>");
         out.println("            <tr>");
-        out.println("              <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
-        out.println("              <th class=\"swbstrgy_docrep-type_item\">");
-        out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
-        out.println("              </th>");
-        out.println("              <th class=\"swbstrgy_docrep-title_item\">");
-        out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
-        out.println("              </th>");
-        out.println("              <th class=\"swbstrgy_docrep-ver_item\">"+paramRequest.getLocaleString("lblVersion")+"</th>");
-        out.println("              <th class=\"swbstrgy_docrep-date_item\">");
-        out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
-        out.println("              </th>");
-        out.println("              <th class=\"swbstrgy_docrep-usr_item\">");
-        out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
-        out.println("              </th>");
-        out.println("              <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
-        out.println("            </tr>");
+        out.println("                  <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
+        out.println("                  <th class=\"swbstrgy_docrep-type_item\">");
+        out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\""+paramRequest.getLocaleString("lblOrderByType")+"\">"+paramRequest.getLocaleString("lblType")+"</a>");
+        out.println("                  </th>");
+        out.println("                  <th class=\"swbstrgy_docrep-title_item\">");
+        out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\""+paramRequest.getLocaleString("lblOrderByFilename")+"\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
+        out.println("                  </th>");
+        out.println("                  <th class=\"swbstrgy_docrep-ver_item\">"+paramRequest.getLocaleString("lblVersion")+"</th>");
+        out.println("                  <th class=\"swbstrgy_docrep-date_item\">");
+        out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\""+paramRequest.getLocaleString("lblOrderByDate")+"\">" + paramRequest.getLocaleString("lblLastDateModification") + "</a>");
+        out.println("                  </th>");
+        out.println("                  <th class=\"swbstrgy_docrep-usr_item\">");
+        out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\""+paramRequest.getLocaleString("lblOrderByUser")+"\">" + paramRequest.getLocaleString("lblModifiedBy") + "</a>");
+        out.println("                  </th>");
+        out.println("                  <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
+        out.println("                </tr>");
         out.println("          </thead>");
+        out.println("          <tbody>");
 
-        out.println("<tbody>");
-
-        List<RepositoryFile> list = orderDocuments(request.getParameter("orderBy"), lang, repoDir);
+        List<RepositoryFile> list = orderDocuments(request.getParameter("orderBy"), lang, currentFolder);
         Iterator<RepositoryFile> lnit = list.iterator();
         while (lnit.hasNext())
         {
@@ -285,15 +309,6 @@ out.println("      </div> <!-- /.table-responsive -->");
 out.println("    </div> <!-- /.panel-body -->");
         
     }
-
-    private String path;
-    @Override
-    public void setResourceBase(Resource base) throws SWBResourceException {
-        super.setResourceBase(base);
-        path = SWBPlatform.getContextPath() + "/swbadmin/images/repositoryfile/";
-        numf.setMaximumFractionDigits(1);
-        
-    }
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -368,12 +383,7 @@ out.println("    </div> <!-- /.panel-body -->");
             out.println("</div> <!-- /.col-sm-3 -->");
 
             out.println("<div class=\"col-sm-9 col-xs-12\">");
-            out.println("  <ol class=\"breadcrumb\">");
-            out.println("    <li><a href=\"#\">Repositorio de Documentos</a></li>");
-            out.println("    <li><a href=\"#\">Carpeta 2</a></li>");
-            out.println("    <li class=\"active\">Carpeta 2.1</li>");
-            out.println("  </ol>");
-            
+            out.println(breadCrumbs(repoDir, lang));
             out.println("  <div id=\"lfr_"+base.getId()+"\" class=\"panel panel-default\">");
             out.println("    <div class=\"panel-heading swbstrgy-panel-heading\">");
             out.println("      <div class=\"row\">");
@@ -398,17 +408,17 @@ out.println("    </div> <!-- /.panel-body -->");
             out.println("            <tr>");
             out.println("                  <th class=\"swbstrgy_docrep-ID_item\">ID</th>");
             out.println("                  <th class=\"swbstrgy_docrep-type_item\">");
-            out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\"Ordenar por tipo\">"+paramRequest.getLocaleString("lblType")+"</a>");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "type") + "\" title=\""+paramRequest.getLocaleString("lblOrderByType")+"\">"+paramRequest.getLocaleString("lblType")+"</a>");
             out.println("                  </th>");
             out.println("                  <th class=\"swbstrgy_docrep-title_item\">");
-            out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\"Ordenar por nombre\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "title") + "\" title=\""+paramRequest.getLocaleString("lblOrderByFilename")+"\">"+paramRequest.getLocaleString("lblFilename")+"</a>");
             out.println("                  </th>");
             out.println("                  <th class=\"swbstrgy_docrep-ver_item\">"+paramRequest.getLocaleString("lblVersion")+"</th>");
             out.println("                  <th class=\"swbstrgy_docrep-date_item\">");
-            out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\"Ordenar por fecha de modificación\">" + "Modificado" + "</a>");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "date") + "\" title=\""+paramRequest.getLocaleString("lblOrderByDate")+"\">" + paramRequest.getLocaleString("lblLastDateModification") + "</a>");
             out.println("                  </th>");
             out.println("                  <th class=\"swbstrgy_docrep-usr_item\">");
-            out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\"Ordenar por usuario que lo modificó.\">" + "Modificado por" + "</a>");
+            out.println("<a href=\"" + urlorder.setParameter("orderBy", "usr") + "\" title=\""+paramRequest.getLocaleString("lblOrderByUser")+"\">" + paramRequest.getLocaleString("lblModifiedBy") + "</a>");
             out.println("                  </th>");
             out.println("                  <th class=\"swbstrgy_docrep-axn_item\">"+paramRequest.getLocaleString("lblAction")+"</th>");
             out.println("                </tr>");
@@ -1185,7 +1195,7 @@ out.println("    </div> <!-- /.panel-body -->");
             out.println("<tr><td colspan=\"2\"><B>" + paramRequest.getLocaleString("msgRolesDefinitionLevel") + "</B></td></tr>");
             out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgView") + ":</td>");
             out.println("<td><select name=\"ver\">" + getSelectOptions("ver", wsite, paramRequest) + "</select></td></tr>");
-            out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("msgModify") + ":</td>");
+            out.println("<tr><td align=\"right\" width=150>" + paramRequest.getLocaleString("lblModify") + ":</td>");
             out.println("<td><select name=\"modificar\">" + getSelectOptions("modificar", wsite, paramRequest) + "</select></td></tr>");
             out.println("<tr><td align=\"right\"  width=150>" + paramRequest.getLocaleString("msgAdministrate") + ":</td>");
             out.println("<td><select name=\"administrar\">" + getSelectOptions("administrar", wsite, paramRequest) + "</select></td></tr>");
