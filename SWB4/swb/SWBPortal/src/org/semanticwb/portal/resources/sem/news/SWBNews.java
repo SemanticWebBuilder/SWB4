@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,6 +39,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.CalendarRef;
+import org.semanticwb.model.Device;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.Resource;
 import org.semanticwb.model.ResourceCollectionCategory;
@@ -74,6 +77,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         super(base);
     }
 
+    
     /**
      * Gets the news by month.
      *
@@ -236,8 +240,32 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         {
             while (resources.hasNext())
             {
-                Resource resource = resources.next();
-                if (resource.isActive() && !resource.isDeleted() && user.haveAccess(resource) && resource.isValid())
+                Resource resource = resources.next();                
+                Iterator<CalendarRef> refs = resource.listCalendarRefs();
+                boolean isOnSchedule = true;
+                while (refs.hasNext())
+                {
+                    CalendarRef ref = refs.next();
+                    if (ref.isValid() && ref.isActive() && ref.getCalendar().isActive() && ref.getCalendar().isValid())
+                    {
+                        if (!ref.getCalendar().isOnSchedule())
+                        {
+                            isOnSchedule = false;
+                        }
+                    }
+                }
+                Device d = resource.getDevice();
+                boolean device = true;
+                if (d != null)
+                {
+                    if (!user.hasDevice(d))
+                    {
+                        device = false;
+
+                    }
+                }
+                
+                if (device && isOnSchedule && resource.isActive() && !resource.isDeleted() && user.haveAccess(resource) && resource.isValid())
                 {
                     SWBNewContent object = (SWBNewContent) resource.getResourceData().createGenericInstance();
                     if (uri == null)
