@@ -120,7 +120,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 <label for=\"elementType\">");
         output.append(                                      paramRequest.getLocaleString("lbl_elementType"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"elementType\" id=\"elementType\" onchange=\"listTitles(this);\">");
+        output.append("                                 <select class=\"form-control\" name=\"elementType\" id=\"elementType\" onchange=\"listTitles(this);\">");
         output.append("                                 <option value=\"\">");
         output.append(                                  paramRequest.getLocaleString("lbl_title_opt"));
         output.append("                                 </option>");
@@ -155,16 +155,12 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 </select>");
         output.append("                             </div>"); //cierra form-group
         output.append("                         </div>");
-        output.append("                     </div>");//cierra div row
-        
-        output.append("<hr>");
-        output.append("                     <div class=\"row\">");
-        output.append("                         <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
         output.append("                             <div class=\"form-group\">");
         output.append("                                 <label for=\"title\">");
         output.append(paramRequest.getLocaleString("lbl_title"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"title\" id=\"titleSelect\" onchange=\"listStatus(this);\">");
+        output.append("                                 <select class=\"form-control\" name=\"title\" id=\"titleSelect\" onchange=\"listStatus(this);\">");
         output.append("                                     <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_title_opt"));
         output.append("                                     </option>");
@@ -191,7 +187,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 <label for=\"initialPeriod\">");
         output.append(paramRequest.getLocaleString("lbl_initialPeriod"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"initialPeriod\" id=\"initialPeriod\">");
+        output.append("                                 <select class=\"form-control\" name=\"initialPeriod\" id=\"initialPeriod\">");
         output.append("                                     <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_noSelection"));
         output.append("                                     </option>");
@@ -204,7 +200,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 <label for=\"finalPeriod\">");
         output.append(paramRequest.getLocaleString("lbl_finalPeriod"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"finalPeriod\" id=\"finalPeriod\">");
+        output.append("                                 <select class=\"form-control\" name=\"finalPeriod\" id=\"finalPeriod\">");
         output.append("                                     <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_noSelection"));
         output.append("                                     </option>");
@@ -220,7 +216,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 <label for=\"status\">");
         output.append(                                  paramRequest.getLocaleString("lbl_status"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"status\" id=\"status\">\n");
+        output.append("                                 <select class=\"form-control\" name=\"status\" id=\"status\">\n");
         output.append("                                     <option value=\"\">");
         output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
         output.append("                                     </option>\n");
@@ -232,7 +228,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("                                 <label for=\"champion\">");
         output.append(                                  paramRequest.getLocaleString("lbl_champion"));
         output.append("                                 </label>");
-        output.append("                                 <select name=\"champion\" id=\"champion\">\n");
+        output.append("                                 <select class=\"form-control\" name=\"champion\" id=\"champion\">\n");
         output.append("                                     <option value=\"\">");
         output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
         output.append("                                     </option>\n");
@@ -261,7 +257,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             output.append("                                 <label for=\"sponsor\">");
             output.append(                                  paramRequest.getLocaleString("lbl_sponsor"));
             output.append("                                 </label>");
-            output.append("                                 <select name=\"sponsor\" id=\"sponsor\">");
+            output.append("                                 <select class=\"form-control\" name=\"sponsor\" id=\"sponsor\">");
             output.append("                                     <option value=\"\">");
             output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
             output.append("                                     </option>");
@@ -459,7 +455,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("             </div>");// cierra div row principal
         output.append("         </div>");// cierra panel body
         output.append("     </div");// cierra div panel default
-        output.append("</div");
+        output.append("</div>");
         out.println(output.toString());
     }
 
