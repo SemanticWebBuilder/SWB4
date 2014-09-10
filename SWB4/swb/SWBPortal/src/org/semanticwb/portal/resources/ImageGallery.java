@@ -447,14 +447,7 @@ public class ImageGallery extends GenericResource
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
-        Resource base = getResourceBase();
-
-        Iterator<String> it = base.getAttributeNames();
-        while (it.hasNext())
-        {
-            String attname = it.next();
-            System.out.println("att: " + attname);
-        }
+        Resource base = getResourceBase();        
         String msg = paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
