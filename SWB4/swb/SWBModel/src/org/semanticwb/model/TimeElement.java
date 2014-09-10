@@ -144,7 +144,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
         String value = request.getParameter(propName);
 
         if (value != null) {
-            System.out.println("from request: " + value);
+            //System.out.println("from request: " + value);
         }
 
         if (value == null) {
@@ -152,7 +152,7 @@ public class TimeElement extends org.semanticwb.model.base.TimeElementBase {
 
             if (dt != null) {
                 value = format.format(dt);
-                System.out.println("from model: " + value);
+                //System.out.println("from model: " + value);
             }
         }
 
