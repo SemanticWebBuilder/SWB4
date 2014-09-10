@@ -187,7 +187,7 @@
             while (resources.hasNext())
             {
                 Resource resource = resources.next();
-                if (resource.isActive() && !resource.isDeleted() && user.haveAccess(resource) && resource.isActive())
+                if (resource.isValid() && !resource.isDeleted() && user.haveAccess(resource) && resource.isActive())
                 {
                     SWBNewContent object = (SWBNewContent) resource.getResourceData().createGenericInstance();
                     if (uri == null)
