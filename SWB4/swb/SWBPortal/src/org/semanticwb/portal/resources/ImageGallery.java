@@ -23,15 +23,20 @@
 package org.semanticwb.portal.resources;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
@@ -42,7 +47,6 @@ import org.semanticwb.portal.TemplateImp;
 import org.semanticwb.portal.admin.admresources.util.WBAdmResourceUtils;
 import org.semanticwb.portal.admin.resources.StyleInner;
 import org.semanticwb.portal.api.*;
-import org.semanticwb.portal.util.FileUpload;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -437,6 +441,7 @@ public class ImageGallery extends GenericResource
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -444,6 +449,12 @@ public class ImageGallery extends GenericResource
 
         Resource base = getResourceBase();
 
+        Iterator<String> it = base.getAttributeNames();
+        while (it.hasNext())
+        {
+            String attname = it.next();
+            System.out.println("att: " + attname);
+        }
         String msg = paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
@@ -453,104 +464,210 @@ public class ImageGallery extends GenericResource
         }
         else if (action.equalsIgnoreCase("update"))
         {
-            FileUpload fup = new FileUpload();
+            // upload settings
+            final int MEMORY_THRESHOLD = 1024 * 1024 * 3;  // 3MB
+            final int MAX_FILE_SIZE = 1024 * 1024 * 40; // 40MB
+            final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
+            //FileUpload fup = new FileUpload();
+            DiskFileItemFactory factory = new DiskFileItemFactory();
+            // sets memory threshold - beyond which files are stored in disk 
+            factory.setSizeThreshold(MEMORY_THRESHOLD);
+            // sets temporary location to store files
+            factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+
+            ServletFileUpload upload = new ServletFileUpload(factory);
+
+            // sets maximum size of upload file
+            upload.setFileSizeMax(MAX_FILE_SIZE);
+
+            // sets maximum size of request (include file + form data)
+            upload.setSizeMax(MAX_REQUEST_SIZE);
+
             try
             {
-                fup.getFiles(request, response);
+                List<FileItem> formItems = upload.parseRequest(request);
 
-                String jspPath = null != fup.getValue("jspPath") && !"".equals(fup.getValue("jspPath").trim()) ? fup.getValue("jspPath").trim() : null;
+                String jspPath = null != getValue("jspPath", formItems) && !"".equals(getValue("jspPath", formItems).trim()) ? getValue("jspPath", formItems).trim() : null;
                 base.setAttribute("jspPath", jspPath);
-                String value = null != fup.getValue("title") && !"".equals(fup.getValue("title").trim()) ? fup.getValue("title").trim() : null;
+                String value = null != getValue("title", formItems) && !"".equals(getValue("title", formItems).trim()) ? getValue("title", formItems).trim() : null;
                 base.setAttribute("title", value);
-                value = null != fup.getValue("width") && !"".equals(fup.getValue("width").trim()) ? fup.getValue("width").trim() : "180";
+                value = null != getValue("width", formItems) && !"".equals(getValue("width", formItems).trim()) ? getValue("width", formItems).trim() : "180";
                 base.setAttribute("width", value);
-                value = null != fup.getValue("height") && !"".equals(fup.getValue("height").trim()) ? fup.getValue("height").trim() : null;
+                value = null != getValue("height", formItems) && !"".equals(getValue("height", formItems).trim()) ? getValue("height", formItems).trim() : null;
                 base.setAttribute("height", value);
-                value = null != fup.getValue("autoplay") && !"".equals(fup.getValue("autoplay").trim()) ? fup.getValue("autoplay").trim() : null;
+                value = null != getValue("autoplay", formItems) && !"".equals(getValue("autoplay", formItems).trim()) ? getValue("autoplay", formItems).trim() : null;
                 base.setAttribute("autoplay", value);
 
-                value = null != fup.getValue("cut") && !"".equals(fup.getValue("cut").trim()) ? fup.getValue("cut").trim() : null;
+                value = null != getValue("cut", formItems) && !"".equals(getValue("cut", formItems).trim()) ? getValue("cut", formItems).trim() : null;
                 base.setAttribute("cut", value);
 
-                value = null != fup.getValue("pause") && !"".equals(fup.getValue("pause").trim()) ? fup.getValue("pause").trim() : null;
+                value = null != getValue("pause", formItems) && !"".equals(getValue("pause", formItems).trim()) ? getValue("pause", formItems).trim() : null;
                 base.setAttribute("pause", value);
-                value = null != fup.getValue("fadetime") && !"".equals(fup.getValue("fadetime").trim()) ? fup.getValue("fadetime").trim() : null;
+                value = null != getValue("fadetime", formItems) && !"".equals(getValue("fadetime", formItems).trim()) ? getValue("fadetime", formItems).trim() : null;
                 base.setAttribute("fadetime", value);
-                value = null != fup.getValue("titlestyle") && !"".equals(fup.getValue("titlestyle").trim()) ? fup.getValue("titlestyle").trim() : null;
+                value = null != getValue("titlestyle", formItems) && !"".equals(getValue("titlestyle", formItems).trim()) ? getValue("titlestyle", formItems).trim() : null;
                 base.setAttribute("titlestyle", value);
 
                 int i = 1;
                 int width = Integer.parseInt(base.getAttribute("width"));
-                String filenameAttr, removeChk;
-                do
+                //String filenameAttr, removeChk;
+
+                String prefix_removeChk = "remove_" + base.getId() + "_";
+                List<FileItem> imagesRemove = new ArrayList<FileItem>();
+                for (FileItem item : formItems)
                 {
-                    filenameAttr = "imggallery_" + base.getId() + "_" + i;
-                    removeChk = "remove_" + base.getId() + "_" + i;
-                    value = null != fup.getValue(removeChk) && !"".equals(fup.getValue(removeChk).trim()) ? fup.getValue(removeChk).trim() : "0";
-
-                    if ("1".equals(value) && base.getAttribute(filenameAttr) != null)
+                    if (item.getFieldName().startsWith(prefix_removeChk))
                     {
-                        File file = new File(workPath + base.getAttribute(filenameAttr));
-                        file.delete();
-                        file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
-                        file.delete();
-                        base.removeAttribute(filenameAttr);
+                        imagesRemove.add(item);
                     }
-                    else
+                }
+                for (FileItem item : imagesRemove)
+                {
+                    String filenameAttr = item.getFieldName();
+                    filenameAttr = filenameAttr.replaceFirst("remove_", "imggallery_");
+                    File file = new File(workPath + base.getAttribute(filenameAttr));
+                    file.delete();
+                    file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
+                    file.delete();
+                    base.removeAttribute(filenameAttr);
+                }
+
+                String prefix = "imggallery_" + base.getId() + "_";
+                List<FileItem> imagesAdd = new ArrayList<FileItem>();
+                for (FileItem item : formItems)
+                {
+                    if (item.getFieldName().startsWith(prefix))
                     {
-                        value = null != fup.getFileName(filenameAttr) && !"".equals(fup.getFileName(filenameAttr).trim()) ? fup.getFileName(filenameAttr).trim() : null;
-                        if (value != null)
+                        imagesAdd.add(item);
+                    }
+                }
+                for (FileItem item : imagesAdd)
+                {
+                    value = getFileName(item.getFieldName(), imagesAdd);
+                    String filenameAttr = item.getFieldName();
+                    if (value != null)
+                    {
+                        String filename = admResUtils.getFileName(base, value);
+                        int intPos = filename.lastIndexOf(".");
+                        if (intPos != -1)
                         {
-                            String filename = admResUtils.getFileName(base, value);
-                            if (filename != null && !filename.trim().equals(""))
+                            filename = item.getFieldName() + filename.substring(intPos);
+                        }
+                        if (filename != null && !filename.trim().equals(""))
+                        {
+                            if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
                             {
-                                if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
-                                {
-                                    msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
-                                }
-                                else
-                                {
-                                    if (admResUtils.uploadFile(base, fup, filenameAttr))
-                                    {
-                                        File image = new File(workPath + filename);
-                                        File thumbnail = new File(workPath + _thumbnail + filename);
-                                        String s_cut = base.getAttribute("cut", "false");
-                                        boolean cut = Boolean.parseBoolean(s_cut);
-
-                                        if (cut)
-                                        {
-                                            try
-                                            {
-                                                int height = Integer.parseInt(base.getAttribute("height", "180"));
-                                                ImageResizer.crop(image, width, height, thumbnail, "jpeg");
-                                            }
-                                            catch (NumberFormatException nfe)
-                                            {
-                                                log.error(nfe);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
-                                        }
-
-                                        base.setAttribute(filenameAttr, filename);
-                                    }
-                                    else
-                                    {
-                                        msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
-                                    }
-                                }
+                                msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
                             }
                             else
                             {
-                                msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                                if (uploadFile(base, filename, filenameAttr, formItems))
+                                {
+                                    File image = new File(workPath + filename);
+                                    File thumbnail = new File(workPath + _thumbnail + filename);
+                                    String s_cut = base.getAttribute("cut", "false");
+                                    boolean cut = Boolean.parseBoolean(s_cut);
+
+                                    if (cut)
+                                    {
+                                        try
+                                        {
+                                            int height = Integer.parseInt(base.getAttribute("height", "180"));
+                                            ImageResizer.crop(image, width, height, thumbnail, "jpeg");
+                                        }
+                                        catch (NumberFormatException nfe)
+                                        {
+                                            log.error(nfe);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
+                                    }
+
+                                    base.setAttribute(filenameAttr, filename);
+                                }
+                                else
+                                {
+                                    msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                                }
                             }
                         }
+                        else
+                        {
+                            msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                        }
                     }
-                    i++;
                 }
-                while (value != null || base.getAttribute(filenameAttr) != null);
+                /*do
+                 {
+                 filenameAttr = "imggallery_" + base.getId() + "_" + i;
+                 removeChk = "remove_" + base.getId() + "_" + i;
+                 value = null != getValue(removeChk, formItems) && !"".equals(getValue(removeChk, formItems).trim()) ? getValue(removeChk, formItems).trim() : "0";
+
+                 if ("1".equals(value) && base.getAttribute(filenameAttr) != null)
+                 {
+                 File file = new File(workPath + base.getAttribute(filenameAttr));
+                 file.delete();
+                 file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
+                 file.delete();
+                 base.removeAttribute(filenameAttr);
+                 }
+                 else
+                 {
+                 value = null != getFileName(filenameAttr, formItems) && !"".equals(getFileName(filenameAttr, formItems).trim()) ? getFileName(filenameAttr, formItems).trim() : null;
+                 if (value != null)
+                 {
+                 String filename = admResUtils.getFileName(base, value);
+                 if (filename != null && !filename.trim().equals(""))
+                 {
+                 if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
+                 {
+                 msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
+                 }
+                 else
+                 {
+                 if (uploadFile(base, formItems, filenameAttr))
+                 {
+                 File image = new File(workPath + filename);
+                 File thumbnail = new File(workPath + _thumbnail + filename);
+                 String s_cut = base.getAttribute("cut", "false");
+                 boolean cut = Boolean.parseBoolean(s_cut);
+
+                 if (cut)
+                 {
+                 try
+                 {
+                 int height = Integer.parseInt(base.getAttribute("height", "180"));
+                 ImageResizer.crop(image, width, height, thumbnail, "jpeg");
+                 }
+                 catch (NumberFormatException nfe)
+                 {
+                 log.error(nfe);
+                 }
+                 }
+                 else
+                 {
+                 ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
+                 }
+
+                 base.setAttribute(filenameAttr, filename);
+                 }
+                 else
+                 {
+                 msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                 }
+                 }
+                 }
+                 else
+                 {
+                 msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                 }
+                 }
+                 }
+                 i++;
+                 }
+                 while (value != null || base.getAttribute(filenameAttr) != null);*/
 
                 base.updateAttributesToDB();
 
@@ -771,17 +888,29 @@ public class ImageGallery extends GenericResource
         htm.append("\n</div>  ");
 
         htm.append("\n<script type=\"text/javascript\"> ");
+
+        htm.append("\nfunction generateUUID(){");
+        htm.append("\nvar d = new Date().getTime();");
+        htm.append("\nvar uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {");
+        htm.append("\nvar r = (d + Math.random()*16)%16 | 0;");
+        htm.append("\nd = Math.floor(d/16);");
+        htm.append("\nreturn (c=='x' ? r : (r&0x7|0x8)).toString(16);");
+        htm.append("\n});");
+        htm.append("\nreturn uuid;");
+        htm.append("\n};");
+
         htm.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
         htm.append("\n    var tbl = document.getElementById(tblId); ");
         htm.append("\n    var lastRow = tbl.rows.length; ");
-        htm.append("\n    var iteration = lastRow-1; // descontar el renglon de titulo ");
+        htm.append("\n    var icolDisplay = lastRow-1; // descontar el renglon de titulo ");
+        htm.append("\n    var iteration = generateUUID();");
         htm.append("\n    var row = tbl.insertRow(lastRow); ");
         htm.append("\n    row.style.backgroundColor = '#F4F4DD'; ");
         htm.append("\n ");
         htm.append("\n    // celda folio ");
         htm.append("\n    var folioCell = row.insertCell(0); ");
         htm.append("\n    folioCell.style.textAlign = 'right'; ");
-        htm.append("\n    var folioTextNode = document.createTextNode(iteration); ");
+        htm.append("\n    var folioTextNode = document.createTextNode(icolDisplay); ");
         htm.append("\n    folioCell.appendChild(folioTextNode); ");
         htm.append("\n ");
         htm.append("\n    // cell check edit ");
@@ -800,7 +929,15 @@ public class ImageGallery extends GenericResource
         htm.append("\n    editCheckInput.disabled = true; ");
         htm.append("\n    editCheckInput.onclick = function(){ ");
         htm.append("\n        if(editCheckInput.checked) { ");
-        htm.append("\n            row.cells[row.cells.length-1].innerHTML = '<input type=\"file\" id=\"imggallery_" + base.getId() + "_'+iteration+'\" name=\"imggallery_" + base.getId() + "_'+iteration+'\" size=\"40\" />'; ");
+        htm.append("\n        var idEditImg='';");
+        htm.append("\n        var imghtml=row.cells[row.cells.length-1].innerHTML; ");
+        htm.append("\n        var pos=imghtml.indexOf('id=\"'); ");
+        htm.append("\n        if(pos!=-1){ ");
+        htm.append("\n                  var pos2=imghtml.indexOf('\"',pos+6); ");        
+        htm.append("\n                  idEditImg=imghtml.substring(pos+4,pos2);");
+        htm.append("\n        } ");
+        //htm.append("\n        alert(idEditImg); ");
+        htm.append("\n            row.cells[row.cells.length-1].innerHTML = '<input type=\"file\" id=\"'+idEditImg+'\" name=\"'+idEditImg+'\" size=\"40\" />'; ");
         htm.append("\n            editCheckInput.checked = false; ");
         htm.append("\n            editCheckInput.disabled = true; ");
         htm.append("\n        } ");
@@ -869,8 +1006,9 @@ public class ImageGallery extends GenericResource
             String attval = base.getAttribute(attname);
             if (attval != null && attname.startsWith("imggallery_"))
             {
+                long value=new Date().getTime();
                 //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
-                String img = "<img src=\"" + webWorkPath + _thumbnail + attval + "\" alt=\"" + attname + "\" border=\"0\" />";
+                String img = "<img id=\""+ attname +"\" src=\"" + webWorkPath + _thumbnail + attval + "?date="+value+"\" alt=\"" + attname + "\" border=\"0\" />";
                 htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "'); ");
             }
         }
@@ -1060,5 +1198,91 @@ public class ImageGallery extends GenericResource
         out.append("</div>\n");
 
         return out.toString();
+    }
+
+    public String getValue(String name, List<FileItem> list)
+    {
+        for (FileItem fileitem : list)
+        {
+            if (fileitem.getFieldName().equals(name))
+            {
+                return fileitem.getString();
+            }
+        }
+        return null;
+    }
+
+    public String getFileName(String name, List<FileItem> list)
+    {
+        for (FileItem fileitem : list)
+        {
+            if (fileitem.getFieldName().equals(name))
+            {
+                return fileitem.getName();
+            }
+        }
+        return null;
+    }
+
+    public byte[] getFileData(String name, List<FileItem> list) throws IOException
+    {
+        for (FileItem fileitem : list)
+        {
+            if (fileitem.getFieldName().equals(name))
+            {
+                byte[] content = new byte[(int) fileitem.getSize()];
+                InputStream in = fileitem.getInputStream();
+                in.read(content);
+                return content;
+            }
+        }
+        return new byte[0];
+    }
+
+    public boolean uploadFile(Resource base, String fileName, String pInForm, List<FileItem> items)
+    {
+
+        //String strWorkPath = workPath;
+        boolean bOk = false;
+        try
+        {
+
+            if (fileName != null && !fileName.trim().equals(""))
+            {
+                //strWorkPath += base.getWorkPath() + "/";
+                File file = new File(workPath);
+
+                if (!file.exists())
+                {
+                    file.mkdirs();
+                }
+                if (file.exists() && file.isDirectory())
+                {
+                    String s3 = fileName;
+                    int i = s3.lastIndexOf("\\");
+                    if (i != -1)
+                    {
+                        s3 = s3.substring(i + 1);
+                    }
+                    i = s3.lastIndexOf("/");
+                    if (i != -1)
+                    {
+                        s3 = s3.substring(i + 1);
+                    }
+                    byte[] content = getFileData(pInForm, items);
+                    FileOutputStream fileoutputstream = new FileOutputStream(workPath + s3);
+                    fileoutputstream.write(content, 0, content.length);
+                    fileoutputstream.close();
+                    return true;
+
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + fileName + ".");
+        }
+        return bOk;
     }
 }
