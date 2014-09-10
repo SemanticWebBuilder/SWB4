@@ -508,7 +508,7 @@ public class ImageGallery extends GenericResource
                 value = null != getValue("titlestyle", formItems) && !"".equals(getValue("titlestyle", formItems).trim()) ? getValue("titlestyle", formItems).trim() : null;
                 base.setAttribute("titlestyle", value);
 
-                int i = 1;
+                
                 int width = Integer.parseInt(base.getAttribute("width"));
                 //String filenameAttr, removeChk;
 
