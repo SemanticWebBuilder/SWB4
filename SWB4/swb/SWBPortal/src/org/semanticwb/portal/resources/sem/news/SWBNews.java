@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
@@ -51,7 +52,9 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 {
 
     //private static Calendar calendar = Calendar.getInstance();
-    /** The Constant log. */
+    /**
+     * The Constant log.
+     */
     private static final Logger log = SWBUtils.getLogger(SWBNews.class);
 
     /**
@@ -63,7 +66,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Instantiates a new sWB news.
-     * 
+     *
      * @param base the base
      */
     public SWBNews(org.semanticwb.platform.SemanticObject base)
@@ -73,7 +76,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Gets the news by month.
-     * 
+     *
      * @param contents the contents
      * @return the news by month
      */
@@ -83,7 +86,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         TreeMap<String, List<SWBNewContent>> getNewsByMonth = new TreeMap<String, List<SWBNewContent>>();
         for (SWBNewContent content : contents)
         {
-            if (content.getPublishDate() != null)
+            if (content.getPublishDate() != null && content.getResourceBase().isValid() && content.getResourceBase().isActive() && !content.getResourceBase().isDeleted())
             {
                 calendar.setTime(content.getPublishDate());
                 int newmonth = calendar.get(Calendar.MONTH);
@@ -103,7 +106,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Gets the years.
-     * 
+     *
      * @param contents the contents
      * @return the years
      */
@@ -113,7 +116,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         Calendar calendar = Calendar.getInstance();
         for (SWBNewContent content : contents)
         {
-            if (content.getPublishDate() != null)
+            if (content.getPublishDate() != null && content.getResourceBase().isValid() && content.getResourceBase().isActive() && !content.getResourceBase().isDeleted())
             {
                 calendar.setTime(content.getPublishDate());
                 int new_year = calendar.get(Calendar.YEAR);
@@ -125,7 +128,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Checks for news.
-     * 
+     *
      * @param contents the contents
      * @param month the month
      * @param year the year
@@ -136,7 +139,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         Calendar calendar = Calendar.getInstance();
         for (SWBNewContent content : contents)
         {
-            if (content.getPublishDate() != null)
+            if (content.getPublishDate() != null && content.getResourceBase().isValid() && content.getResourceBase().isActive() && !content.getResourceBase().isDeleted())
             {
                 calendar.setTime(content.getPublishDate());
                 if (month == calendar.get(Calendar.MONTH) && year == calendar.get(Calendar.YEAR))
@@ -157,7 +160,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     {
         if (paramRequest.getMode().equals("month"))
         {
-            if (paramRequest.getCallMethod() == paramRequest.Call_STRATEGY)
+            if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
             {
                 doStategy(request, response, paramRequest);
             }
@@ -190,7 +193,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Gets the news.
-     * 
+     *
      * @param uri the uri
      * @param user the user
      * @return the news
@@ -234,7 +237,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             while (resources.hasNext())
             {
                 Resource resource = resources.next();
-                if (resource.isActive() && !resource.isDeleted() && user.haveAccess(resource))
+                if (resource.isActive() && !resource.isDeleted() && user.haveAccess(resource) && resource.isValid())
                 {
                     SWBNewContent object = (SWBNewContent) resource.getResourceData().createGenericInstance();
                     if (uri == null)
@@ -244,7 +247,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                             object.setResourceBase(resource);
                             news.add(object);
                         }
-                        catch (Exception e)
+                        catch (SWBResourceException e)
                         {
                             log.error(e);
 
@@ -260,7 +263,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                                 object.setResourceBase(resource);
                                 news.add(object);
                             }
-                            catch (Exception e)
+                            catch (SWBResourceException e)
                             {
                                 log.error(e);
 
@@ -276,7 +279,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Do show news by moth.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -286,12 +289,10 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     public void doShowNewsByMoth(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
 
-
-
         String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/jsp/" + this.getClass().getSimpleName() + "/";
         if (request.getParameter("month") != null)
         {
-            int month = -1;
+
             int year = Calendar.getInstance().get(Calendar.YEAR);
             if (request.getParameter("year") != null)
             {
@@ -299,7 +300,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             }
             try
             {
-                month = Integer.parseInt(request.getParameter("month"));
+                int month = Integer.parseInt(request.getParameter("month"));
                 String key = month + "_" + year;
                 if (month >= 0 && month <= 12)
                 {
@@ -314,7 +315,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                         request.setAttribute("this", this);
                         dis.include(request, response);
                     }
-                    catch (Exception e)
+                    catch (IOException e)
+                    {
+                        log.error(e);
+                    }
+                    catch (ServletException e)
                     {
                         log.error(e);
                     }
@@ -368,7 +373,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                                 request.setAttribute("this", this);
                                 dis.include(request, response);
                             }
-                            catch (Exception e)
+                            catch (IOException e)
+                            {
+                                log.error(e);
+                            }
+                            catch (ServletException e)
                             {
                                 log.error(e);
                             }
@@ -401,7 +410,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("this", this);
             dis.include(request, response);
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error(e);
+        }
+        catch (ServletException e)
         {
             log.error(e);
         }
@@ -422,7 +435,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("this", this);
             dis.include(request, response);
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error(e);
+        }
+        catch (ServletException e)
         {
             log.error(e);
         }
@@ -430,7 +447,7 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
 
     /**
      * Do rss.
-     * 
+     *
      * @param request the request
      * @param response the response
      * @param paramRequest the param request
@@ -444,8 +461,8 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         String path = basePath + "rss.jsp";
         RequestDispatcher dis = request.getRequestDispatcher(path);
         /*SWBResourceURL url=paramRequest.getRenderUrl();
-        url.setCallMethod(url.Call_CONTENT);
-        url.setMode(url.Mode_VIEW);*/
+         url.setCallMethod(url.Call_CONTENT);
+         url.setMode(url.Mode_VIEW);*/
         String url = paramRequest.getWebPage().getUrl();
         try
         {
@@ -456,7 +473,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("this", this);
             dis.include(request, response);
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error(e);
+        }
+        catch (ServletException e)
         {
             log.error(e);
         }
@@ -472,7 +493,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("paramRequest", paramRequest);
             dis.include(request, response);
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error(e);
+        }
+        catch (ServletException e)
         {
             log.error(e);
         }
@@ -482,7 +507,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
     public String getResourceCacheID(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException
     {
         Resource base = paramRequest.getResourceBase();
-        String key = null;
         String uri = request.getParameter("uri");
 
         if (uri != null && !uri.startsWith("http:"))
@@ -495,7 +519,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             }
             uri = uriSite + "/Resource#" + uri;
         }
-
 
         if (uri != null)
         {
@@ -529,21 +552,21 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
         }
         if (paramRequest.getCallMethod() == SWBParamRequest.Call_STRATEGY)
         {
-            key = SWBResourceCachedMgr.getKey(base);
+            String key = SWBResourceCachedMgr.getKey(base);
             key = "strategy_" + key;
+            return key;
 
         }
         else if (uri != null && paramRequest.getCallMethod() == SWBParamRequest.Call_CONTENT)
         {
-            key = SWBResourceCachedMgr.getKey(base);
+            String key = SWBResourceCachedMgr.getKey(base);
             key = "content_" + uri + "_" + key;
+            return key;
         }
         else
         {
             return super.getResourceCacheID(request, paramRequest);
         }
-        return key;
-
     }
 
 
@@ -567,8 +590,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             return;
         }
 
-
-
         String uri = request.getParameter("uri");
 
         if (uri != null && !uri.startsWith("http:"))
@@ -581,7 +602,6 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             }
             uri = uriSite + "/Resource#" + uri;
         }
-
 
         if (uri != null)
         {
@@ -638,7 +658,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
                             request.setAttribute("this", this);
                             dis.include(request, response);
                         }
-                        catch (Exception e)
+                        catch (IOException e)
+                        {
+                            log.error(e);
+                        }
+                        catch (ServletException e)
                         {
                             log.error(e);
                         }
@@ -660,7 +684,11 @@ public class SWBNews extends org.semanticwb.portal.resources.sem.news.base.SWBNe
             request.setAttribute("this", this);
             dis.include(request, response);
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error(e);
+        }
+        catch (ServletException e)
         {
             log.error(e);
         }
