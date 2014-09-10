@@ -1053,3 +1053,9 @@ function removeMin(thisVar, id, today_hidden, hour, minute){
 
     dojoObj.attr('value', dojoObj.attr('value'));
 }
+
+function myFunction(url) {
+    var myWindow = window.open(url, "_blank", "width=800, height=600");
+    //myWindow.opener.document.write("<p>This is the source window Edited!</p>");
+    //window.showModalDialog(url, 'dialogWidth:800px; dialogHeight:600px; dialogLeft:10; dialogTop:10; center:1; status:0; help:0');
+}
