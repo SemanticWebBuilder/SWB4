@@ -297,7 +297,7 @@ public class FileDownload extends GenericAdmResource
         {
             super.setResourceBase(base);
         }
-        catch (Exception e)
+        catch (SWBResourceException e)
         {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
