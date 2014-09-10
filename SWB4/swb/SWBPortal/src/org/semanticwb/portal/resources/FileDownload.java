@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
+import javax.activation.MimetypesFileTypeMap;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import org.semanticwb.Logger;
@@ -336,6 +337,7 @@ public class FileDownload extends GenericAdmResource
             javax.servlet.http.HttpServletResponse response,
             SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException
     {
+        MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 
         Resource base = this.getResourceBase();
         try
@@ -552,10 +554,18 @@ public class FileDownload extends GenericAdmResource
                             {
                                 contentLength = "" + Integer.parseInt(info.content_length);
                             }
-                            String contentType = "application/binary";
+                            String contentType;
                             if (info.content_type != null)
                             {
                                 contentType = info.content_type;
+                            }
+                            else
+                            {
+                                contentType=mimeTypesMap.getContentType(nameFileURL);
+                                if(contentType==null)
+                                {
+                                    contentType = "application/binary";
+                                }
                             }
                             response.setHeader("Content-Length", contentLength);
                             response.setHeader("Content-Disposition", "attachment;filename=" + nameFileURL);
@@ -582,7 +592,12 @@ public class FileDownload extends GenericAdmResource
                 fileName = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + fileName;
                 java.io.File file = new java.io.File(fileName);
                 response.setHeader("Content-Length", file.length() + "");
-                response.setContentType("application/binary");
+                String mimeType=mimeTypesMap.getContentType(file);
+                if(mimeType==null)
+                {
+                    mimeType="application/binary";
+                }
+                response.setContentType(mimeType);
                 response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
                 base.addHit(request, reqParams.getUser(), reqParams.getWebPage());
                 SWBUtils.IO.copyStream(new FileInputStream(fileName), response.getOutputStream());
