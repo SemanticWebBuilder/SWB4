@@ -33,6 +33,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
+import java.util.logging.Level;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -159,7 +160,7 @@ public class FileDownload extends GenericAdmResource
 
     }
 
-    private static void download(URL url, OutputStream out) throws IOException
+    private static void download(URL url, OutputStream out)
     {
         HttpURLConnection connection;
         try
@@ -168,6 +169,7 @@ public class FileDownload extends GenericAdmResource
         }
         catch (IOException ex)
         {
+            log.debug(ex);
             return;
         }
         try
@@ -176,6 +178,7 @@ public class FileDownload extends GenericAdmResource
         }
         catch (ProtocolException ex)
         {
+            log.debug(ex);
             return;
         }
         connection.setConnectTimeout(60000); //60 secs
@@ -189,18 +192,69 @@ public class FileDownload extends GenericAdmResource
         }
         catch (IOException ex)
         {
+            log.debug(ex);
             return;
         }
-        InputStream stream = connection.getInputStream();
-        byte[] buffer = new byte[1024];
-        int read = stream.read(buffer);
-        while (read != -1)
+        InputStream stream;
+        try
         {
-            out.write(buffer, 0, read);
+            stream = connection.getInputStream();
+        }
+        catch (IOException ex)
+        {
+            log.debug(ex);
+            return;
+        }
+        byte[] buffer = new byte[1024];
+        int read;
+        try
+        {
             read = stream.read(buffer);
         }
-        stream.close();
-        out.close();
+        catch (IOException ex)
+        {
+            log.debug(ex);
+            return;
+        }
+        while (read != -1)
+        {
+            try
+            {
+                out.write(buffer, 0, read);
+            }
+            catch (IOException ex)
+            {
+                log.debug(ex);
+                return;
+            }
+            try
+            {
+                read = stream.read(buffer);
+            }
+            catch (IOException ex)
+            {
+                log.debug(ex);
+                return;
+            }
+        }
+        try
+        {
+            stream.close();
+        }
+        catch (IOException ex)
+        {
+            log.debug(ex);
+            return;
+        }
+        try
+        {
+            out.close();
+        }
+        catch (IOException ex)
+        {
+            log.debug(ex);
+            return;
+        }
     }
 
     private static FileInfo getInfo(URL urlDownloadnew)
