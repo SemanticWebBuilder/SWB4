@@ -543,18 +543,7 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
 
         if (code == null) {
             out.println("<script type=\"text/javascript\">");
-            out.println(" function ioauth() {");
-            //out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com&access_type=offline','_blank','width=840,height=680',true);");
-            out.println("  mywin = window.open('https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline&state=/profile&approval_prompt=force','_blank','width=840,height=680',true);");
-            out.println("  if(mywin == null){");
-            out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
-            out.println("    return;");
-            out.println("  }");
-            out.println("  mywin.focus();");
-            out.println(" }");
-            out.println(" if(confirm('¿Autenticar la cuenta en YouTube?')) {");
-            out.println("  ioauth();");
-            out.println(" }");
+            out.println("   location.href='"+ "https://accounts.google.com/o/oauth2/auth?client_id=" + clientId + "&redirect_uri=" + uriTemp + "&response_type=code&scope=https://gdata.youtube.com+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile&access_type=offline&state=/profile&approval_prompt=force"+"'");
             out.println("</script>");
         } else {
             Map<String, String> params = new HashMap<String, String>();
@@ -595,7 +584,16 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 System.out.println("Error en la autenticacion: " + ex);
             } finally {
                 out.println("<script type=\"text/javascript\">");
-                out.println("  window.close();");
+                out.println("try{" +
+                    "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                    "if (form.onsubmit){"+
+                        "var result = form.onsubmit.call(form);" +
+                    "}" +
+                    "if (result !== false){" +
+                        "form.submit();" +
+                    "}"+
+                    "window.close();" +
+                "}catch(e){window.opener=self; window.close();}");
                 out.println("</script>");
             }
         }

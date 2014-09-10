@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Language;
@@ -747,17 +748,18 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 //response.sendRedirect(requestToken.getAuthorizationURL());
                 PrintWriter out = response.getWriter();
                 out.println("<script type=\"text/javascript\">");
-                out.println(" function ioauth() {");
+                /*out.println(" function ioauth() {");
                 out.println("  mywin = window.open('"+requestToken.getAuthorizationURL()+"','_blank','width=840,height=680',true);");
                 out.println("  if(mywin == null){");
                 out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
                 out.println("    return;");
                 out.println("  }");
-                out.println("  mywin.focus();");
-                out.println(" }");
-                out.println(" if(confirm('¿Autenticar la cuenta en Twitter?')) {");
-                out.println("  ioauth();");
-                out.println(" }");
+                out.println("  mywin.focus();");*/
+                out.println("   location.href='"+ requestToken.getAuthorizationURL()+"'");
+                //out.println(" }");
+                //out.println(" if(confirm('¿Autenticar la cuenta en Twitter?')) {");
+                //out.println("  ioauth();");
+                //out.println(" }");
                 out.println("</script>");
             }catch(TwitterException te) {
                 throw new IOException(te.getMessage());
@@ -784,12 +786,21 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
             }finally {
                 PrintWriter out = response.getWriter();
                 out.println("<script type=\"text/javascript\">");
-                out.println("  window.close();");
+                out.println("try{" +
+                    "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                    "if (form.onsubmit){"+
+                        "var result = form.onsubmit.call(form);" +
+                    "}" +
+                    "if (result !== false){" +
+                        "form.submit();" +
+                    "}"+
+                    "window.close();" +
+                "}catch(e){window.opener=self; window.close();}");
                 out.println("</script>");
             }
         }
     }
-    
+
     private String getRedirectUrl(HttpServletRequest request, SWBParamRequest paramRequest)
     {
         //System.out.println("getRedirectUrl....");

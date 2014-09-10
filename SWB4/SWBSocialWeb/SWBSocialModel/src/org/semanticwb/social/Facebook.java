@@ -1396,18 +1396,10 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             //System.out.println("Facebook----paso 1");
             String url = doRequestPermissions(request, paramRequest);
             PrintWriter out = response.getWriter();
+           
+            
             out.println("<script type=\"text/javascript\">");
-            out.println(" function ioauth() {");
-            out.println("  mywin = window.open(" + url + ",'_blank','width=840,height=680',true);");
-            out.println("  if(mywin == null){");
-            out.println("    alert('¿Tienes bloqueadas las ventajas emergentes?');");
-            out.println("    return;");
-            out.println("  }");
-            out.println("  mywin.focus();");
-            out.println(" }");
-            out.println(" if(confirm('¿Autenticar la cuenta en Facebook?')) {");
-            out.println("  ioauth();");
-            out.println(" }");
+            out.println("   location.href="+ url+"");
             out.println("</script>");
         } else if (state != null && state.equals(session.getAttribute("state")) && error == null) {
             //System.out.println("Facebook----2");
@@ -1482,7 +1474,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     request.setAttribute("msg", userId);
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
-                    out.println("  window.close();");
+                    out.println("try{" +
+                        "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                        "if (form.onsubmit){"+
+                            "var result = form.onsubmit.call(form);" +
+                        "}" +
+                        "if (result !== false){" +
+                            "form.submit();" +
+                        "}"+
+                        "window.close();" +
+                    "}catch(e){window.opener=self; window.close();}");
                     out.println("</script>");
 
                     String app_token_url = "https://graph.facebook.com/oauth/access_token?" + "client_id=" + getAppKey() + "&client_secret=" + getSecretKey() + "&grant_type=client_credentials";
@@ -1500,7 +1501,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                     request.setAttribute("msg", "hubo problemas. contacta a tu administrador para revisar el visor de errores");
                     PrintWriter out = response.getWriter();
                     out.println("<script type=\"text/javascript\">");
-                    out.println("  window.close();");
+                    out.println("try{" +
+                        "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                        "if (form.onsubmit){"+
+                            "var result = form.onsubmit.call(form);" +
+                        "}" +
+                        "if (result !== false){" +
+                            "form.submit();" +
+                        "}"+
+                        "window.close();" +
+                    "}catch(e){window.opener=self; window.close();}");
                     out.println("</script>");
                     //System.out.println("error error error error error error error error 2");
                 }
@@ -1511,7 +1521,16 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
             //System.out.println("ERROR:Se ha encontrado un problema con la respuesta obtenida, se considera no aut&eacute;ntica.");
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
-            out.println("  window.close();");
+            out.println("try{" +
+                "var form = window.opener.document.getElementById('authNet/"+ this.getEncodedURI() + "');\n"+
+                "if (form.onsubmit){"+
+                    "var result = form.onsubmit.call(form);" +
+                "}" +
+                "if (result !== false){" +
+                    "form.submit();" +
+                "}"+
+                "window.close();" +
+            "}catch(e){window.opener=self; window.close();}");
             out.println("</script>");
             request.setAttribute("msg", "Se ha encontrado un problema con la respuesta obtenida, tu cuenta se considera no aut&eacute;ntica.");
         }
