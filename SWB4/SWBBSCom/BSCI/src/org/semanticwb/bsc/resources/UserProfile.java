@@ -231,7 +231,7 @@ public class UserProfile extends GenericAdmResource {
             SemanticProperty prop1 = it.next();
             
             toReturn.append("               <div class=\"col-xs-6\">");
-            toReturn.append("                   <div class=\"form-group\">");
+            toReturn.append("                   <div class=\"form-group user-group\">");
             toReturn.append("                       <label>");
             toReturn.append(formMgr.renderLabel(request, prop1, prop1.getName(), SWBFormMgr.MODE_VIEW));
             toReturn.append("                       </label>\n");
