@@ -1588,7 +1588,7 @@ public class RiskBoard extends GenericResource {
         //WebSite website = paramRequest.getWebPage().getWebSite();
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_EDIT);
-        url.setCallMethod(SWBResourceURL.Call_CONTENT);
+        url.setCallMethod(SWBResourceURL.Call_DIRECT);
         SemanticObject semObject = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("suri")));
 
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -1630,25 +1630,6 @@ public class RiskBoard extends GenericResource {
             String htmlCode = "";
             int fromIndex = 0;
             int toIndex = 0;
-
-            //Se elimina la liga para captura de los valores localizados de las propiedades title y description
-            /*String htmlCode = formMgr.renderForm(request);
-            int fromIndex = 0;
-            int toIndex = 0;
-            if (htmlCode.indexOf("<input name=\"title\"") > 0) {
-                fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<input name=\"title\""));
-                toIndex = htmlCode.indexOf("locale</a>", fromIndex);
-                String beginning = htmlCode.substring(0, fromIndex);
-                String ending = htmlCode.substring(toIndex + "locale</a>".length());
-                htmlCode = beginning + ending;
-            }
-            if (htmlCode.indexOf("<textarea name=\"description\"") > 0) {
-                fromIndex = htmlCode.indexOf("<a href=", htmlCode.indexOf("<textarea name=\"description\""));
-                toIndex = htmlCode.indexOf("locale</a>", fromIndex);
-                String beginning = htmlCode.substring(0, fromIndex);
-                String ending = htmlCode.substring(toIndex + "locale</a>".length());
-                htmlCode = beginning + ending;
-            }*/
 
             output.append("<script type=\"text/javascript\">\n");
             // scan page for widgets and instantiate them
@@ -1698,6 +1679,7 @@ public class RiskBoard extends GenericResource {
                 output.append("</label>\n");
 
                 output.append("<div class=\"col-lg-10\">\n");
+                //Se elimina la liga para captura de los valores localizados de las propiedades title y description
                 if (prop1.equals(Descriptiveable.swb_description) || prop1.equals(Descriptiveable.swb_title)) {
                     htmlCode = formMgr.getFormElement(prop1).renderElement(
                             request, semObject, prop1,
@@ -1737,7 +1719,7 @@ public class RiskBoard extends GenericResource {
             output.append("</div>\n");
             output.append("</form>\n");
             output.append("</div>\n");
-        }
+        }      
         out.println(output.toString());
     }
 
