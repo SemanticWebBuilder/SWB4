@@ -731,7 +731,7 @@ public class WBFileUpload
                 Hashtable hashtable1 = new Hashtable(4);
                 hashtable1.put("name", s9);
                 //hashtable1.put("filename", s7);
-                hashtable1.put("filename", SWBUtils.TEXT.replaceSpecialCharacters(s7,'.',true));
+                hashtable1.put("filename", SWBUtils.TEXT.replaceSpecialCharactersForFile(s7,'.',true));
                 if(s8 == null)
                     s8 = "application/octet-stream";
                 hashtable1.put("content-type", s8);
