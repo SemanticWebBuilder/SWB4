@@ -23,7 +23,16 @@
 package org.semanticwb.portal.resources;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.DecimalFormat;
+import java.util.UUID;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
@@ -38,36 +47,225 @@ import org.w3c.dom.Element;
 /**
  * Administra la descarga de contenidos, en forma de archivos de file system,
  * incrementando un contador de las descargas realizadas del archivo asociado.
+ *
  * @author Jorge Alberto Jiménez
  */
-public class FileDownload extends GenericAdmResource {
+public class FileDownload extends GenericAdmResource
+{
 
+    static class FileInfo
+    {
 
+        String content_length;
+        String content_type;
+    }
+
+    /*private static boolean isURL(String urlDownloadnew)
+     {
+     try
+     {
+     new URL(urlDownloadnew).;
+     return true;
+     }
+     catch (MalformedURLException e)
+     {
+     return false;
+     }
+     }*/
+    private static final long K = 1024;
+    private static final long M = K * K;
+    private static final long G = M * K;
+    private static final long T = G * K;
+
+    public static String convertToStringRepresentation(final long value)
+    {
+        final long[] dividers = new long[]
+        {
+            T, G, M, K, 1
+        };
+        final String[] units = new String[]
+        {
+            "TB", "GB", "MB", "KB", "B"
+        };
+        if (value < 1)
+        {
+            throw new IllegalArgumentException("Invalid file size: " + value);
+        }
+        String result = null;
+        for (int i = 0; i < dividers.length; i++)
+        {
+            final long divider = dividers[i];
+            if (value >= divider)
+            {
+                result = format(value, divider, units[i]);
+                break;
+            }
+        }
+        return result;
+    }
+
+    private static String format(final long value,
+            final long divider,
+            final String unit)
+    {
+        final double result
+                = divider > 1 ? (double) value / (double) divider : (double) value;
+        return new DecimalFormat("#,##0.#").format(result) + " " + unit;
+    }
+
+    private static String getFileName(URL url)
+    {
+        String file;
+        try
+        {
+            file = url.toURI().getPath();
+        }
+        catch (URISyntaxException ex)
+        {
+            return null;
+        }
+
+        int pos2 = file.lastIndexOf("/");
+        if (pos2 != -1)
+        {
+            file = file.substring(pos2 + 1);
+            if (file.contains("."))
+            {
+                return file;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
+    private static boolean isURL(String urlDownloadnew)
+    {
+        try
+        {
+            new URL(urlDownloadnew);
+            return true;
+        }
+        catch (MalformedURLException e)
+        {
+            return false;
+        }
+
+    }
+
+    private static void download(URL url, OutputStream out) throws IOException
+    {
+        HttpURLConnection connection;
+        try
+        {
+            connection = (HttpURLConnection) url.openConnection();
+        }
+        catch (IOException ex)
+        {
+            return;
+        }
+        try
+        {
+            connection.setRequestMethod("GET");
+        }
+        catch (ProtocolException ex)
+        {
+            return;
+        }
+        connection.setConnectTimeout(60000); //60 secs
+        connection.setReadTimeout(60000); //60 secs
+        try
+        {
+            if (connection.getResponseCode() != 200)
+            {
+                return;
+            }
+        }
+        catch (IOException ex)
+        {
+            return;
+        }
+        InputStream stream = connection.getInputStream();
+        byte[] buffer = new byte[1024];
+        int read = stream.read(buffer);
+        while (read != -1)
+        {
+            out.write(buffer, 0, read);
+            read = stream.read(buffer);
+        }
+        stream.close();
+        out.close();
+    }
+
+    private static FileInfo getInfo(URL urlDownloadnew)
+    {
+        try
+        {
+            //URL urlDownloadnew = new URL("http://www.diputados.gob.mx/LeyesBiblio/pdf/111.pdf");
+            HttpURLConnection connection = (HttpURLConnection) urlDownloadnew.openConnection();
+            connection.setRequestMethod("HEAD");
+            connection.setConnectTimeout(60000); //60 secs
+            connection.setReadTimeout(60000); //60 secs
+            if (connection.getResponseCode() != 200)
+            {
+                return null;
+            }
+            String contentLength = connection.getHeaderField("Content-Length");
+            String contentType = connection.getHeaderField("Content-Type");
+            /*System.out.println("c: " + contentLength);
+             System.out.println("contentType: " + contentType);*/
+            FileInfo info = new FileInfo();
+            info.content_length = contentLength;
+            info.content_type = contentType;
+            return info;
+        }
+        catch (IOException e)
+        {
+            return null;
+        }
+    }
     javax.xml.transform.Templates tpl;
 
     private static Logger log = SWBUtils.getLogger(FileDownload.class);
 
-    
     @Override
-    public void setResourceBase(Resource base) {
-        try {
+    public void setResourceBase(Resource base)
+    {
+        try
+        {
             super.setResourceBase(base);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Error while setting resource base: " + base.getId() + "-" + base.getTitle(), e);
         }
-        if (!"".equals(base.getAttribute("template", "").trim())) {
-            try {
+        if (!"".equals(base.getAttribute("template", "").trim()))
+        {
+            try
+            {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error("Error while loading resource template: " + base.getId(), e);
             }
         }
         //System.out.println("template: " + tpl);
-        if (tpl == null) {
-            try {
+        if (tpl == null)
+        {
+            try
+            {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt"));
                 //System.out.println("template por defecto: " + tpl);
-            }  catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 log.error("Error while loading default resource template: " + base.getId(), e);
             }
         }
@@ -75,64 +273,176 @@ public class FileDownload extends GenericAdmResource {
 
     //@Override
     public void doView(javax.servlet.http.HttpServletRequest request,
-                       javax.servlet.http.HttpServletResponse response,
-                       SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException {
+            javax.servlet.http.HttpServletResponse response,
+            SWBParamRequest reqParams) throws SWBResourceException, java.io.IOException
+    {
 
         Resource base = this.getResourceBase();
-        try {
+        try
+        {
             String fileName = base.getAttribute("fileName", "").trim();
-            if (reqParams.getAction() == null || !reqParams.getAction().equals("download")) {
+            if (reqParams.getAction() == null || !reqParams.getAction().equals("download"))
+            {
                 SWBResourceURL wburl = reqParams.getRenderUrl();
-                wburl.setCallMethod(wburl.Call_DIRECT);
+                wburl.setCallMethod(SWBResourceURL.Call_DIRECT);
                 wburl.setAction("download");
 
                 String text = base.getAttribute("text", "");
                 String architecture = base.getAttribute("architecture", "");
                 String historyUrl = base.getAttribute("historyUrl", "");
-                fileName = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + fileName;
-                java.io.File file=new java.io.File(fileName);
-                if (file != null) {
+                String fileName1 = base.getAttribute("fileName1", null);
+
+                if (fileName1 != null && !fileName1.trim().isEmpty() && (fileName1.startsWith("http://") || fileName1.startsWith("https://")) && isURL(fileName1))
+                {
+                    URL url = new URL(fileName1);
+                    String nameFileURL = getFileName(url);
+                    if (nameFileURL != null)
+                    {
+                        FileInfo info = getInfo(url);
+                        Document dom = SWBUtils.XML.getNewDocument();
+                        Element el = dom.createElement("FileDownload");
+                        el.setAttribute("text", text);
+                        el.setAttribute("name", nameFileURL);
+                        if (base.getAttribute("fileName1_uri", null) == null)
+                        {
+                            String uuid = UUID.randomUUID().toString();
+                            base.setAttribute("fileName1_uri", uuid);
+                        }
+                        String uuid = base.getAttribute("fileName1_uri");
+                        el.setAttribute("path", wburl.toString() + "/uridoc/" + uuid);
+                        int length = 0;
+                        if (info.content_length != null)
+                        {
+                            length = Integer.parseInt(info.content_length);
+                        }
+                        String ext = "SIN EXTENSION";
+                        int pos = nameFileURL.lastIndexOf(".");
+                        if (pos != -1)
+                        {
+                            ext = nameFileURL.substring(pos);
+                        }
+                        String size = "0";
+                        if (length > 0)
+                        {
+                            size = convertToStringRepresentation(length);
+                        }
+                        el.setAttribute("length", size);
+                        el.setAttribute("nHits", "" + base.getHits());
+                        el.setAttribute("url", historyUrl);
+                        el.setAttribute("tArchitecture", architecture);
+                        el.setAttribute("textension", ext);
+                        dom.appendChild(el);
+                        if (tpl == null)
+                        {
+
+                            if (!"".equals(base.getAttribute("template", "").trim()))
+                            {
+                                try
+                                {
+                                    tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
+                                }
+                                catch (Exception e)
+                                {
+                                    log.error("Error while loading resource template: " + base.getId(), e);
+                                }
+                            }
+                            else
+                            {
+                                //System.out.println("template: " + tpl);
+                                try
+                                {
+                                    InputStream input = SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                    if (input != null)
+                                    {
+                                        tpl = SWBUtils.XML.loadTemplateXSLT(input);
+                                        //} else {
+                                        //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    log.error("Error while loading default resource template: " + base.getId(), e);
+                                }
+                            }
+                        }
+
+                        response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
+                    }
+                }
+                else
+                {
+
+                    if(fileName==null || fileName.trim().isEmpty())
+                    {
+                        return;
+                    }
+                    fileName = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + fileName;
+                    java.io.File file = new java.io.File(fileName);
+                    if(!file.exists())
+                    {
+                        return;
+                    }
                     int pos = fileName.lastIndexOf("/");
-                    if (pos >- 1) {
+                    if (pos > - 1)
+                    {
                         fileName = fileName.substring(pos + 1);
                     }
                     String ext = "";
                     pos = -1;
-                    pos = fileName.indexOf(".");
-                    if (pos > -1) {
+                    pos = fileName.lastIndexOf(".");
+                    if (pos > -1)
+                    {
                         ext = fileName.substring(pos);
                     }
-                    Document  dom = SWBUtils.XML.getNewDocument();
+                    Document dom = SWBUtils.XML.getNewDocument();
                     Element el = dom.createElement("FileDownload");
                     el.setAttribute("text", text);
                     el.setAttribute("name", fileName);
                     el.setAttribute("path", wburl.toString() + "/doc/" + base.getAttribute("fileName", "").trim());
-                    el.setAttribute("length", "" + file.length());
+                    String size = "0";
+                    if (file.length() > 0)
+                    {
+                        size = convertToStringRepresentation(file.length());
+                    }
+                    el.setAttribute("length", size);
                     el.setAttribute("nHits", "" + base.getHits());
                     el.setAttribute("url", historyUrl);
                     el.setAttribute("tArchitecture", architecture);
                     el.setAttribute("textension", ext);
                     dom.appendChild(el);
                     //System.out.println("El DOM a utilizar: " + SWBUtils.XML.domToXml(dom));
-                    /** Por ahora **/
-                    if (tpl == null) {
+                    /**
+                     * Por ahora *
+                     */
+                    if (tpl == null)
+                    {
 
-                        if (!"".equals(base.getAttribute("template", "").trim())) {
-                            try {
+                        if (!"".equals(base.getAttribute("template", "").trim()))
+                        {
+                            try
+                            {
                                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
-                            } catch (Exception e) {
+                            }
+                            catch (Exception e)
+                            {
                                 log.error("Error while loading resource template: " + base.getId(), e);
                             }
-                        } else {
+                        }
+                        else
+                        {
                             //System.out.println("template: " + tpl);
-                            try {
+                            try
+                            {
                                 InputStream input = SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt");
-                                if (input != null) {
+                                if (input != null)
+                                {
                                     tpl = SWBUtils.XML.loadTemplateXSLT(input);
-                                //} else {
-                                //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
+                                    //} else {
+                                    //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
                                 }
-                            }  catch (Exception e) {
+                            }
+                            catch (Exception e)
+                            {
                                 log.error("Error while loading default resource template: " + base.getId(), e);
                             }
                         }
@@ -140,19 +450,79 @@ public class FileDownload extends GenericAdmResource {
 
                     response.getWriter().print(SWBUtils.XML.transformDom(tpl, dom));
                 }
-            } else {
-                int pos = request.getRequestURI().indexOf("/doc/");
-                if (pos > -1) {
+
+            }
+            else
+            {
+                int pos = request.getRequestURI().indexOf("/uridoc/");
+                if (pos != -1)
+                {
+                    String uri = request.getRequestURI().substring(pos + 8);
+                    if (uri == null || uri.trim().isEmpty())
+                    {
+                        return;
+                    }
+                    if (base.getAttribute("fileName1_uri", null) == null)
+                    {
+                        String uuid = UUID.randomUUID().toString();
+                        base.setAttribute("fileName1_uri", uuid);
+                    }
+                    String uuid2 = base.getAttribute("fileName1_uri", null);
+                    if (!uri.equals(uuid2))
+                    {
+                        return;
+                    }
+                    String fileName1 = base.getAttribute("fileName1", null);
+                    URL url = new URL(fileName1);
+                    if (fileName1 != null && !fileName1.trim().isEmpty() && isURL(fileName1))
+                    {
+                        String nameFileURL = getFileName(url);
+                        if (nameFileURL != null)
+                        {
+                            FileInfo info = getInfo(url);
+                            String contentLength = "0";
+                            if (info.content_length != null)
+                            {
+                                contentLength = "" + Integer.parseInt(info.content_length);
+                            }
+                            String contentType = "application/binary";
+                            if (info.content_type != null)
+                            {
+                                contentType = info.content_type;
+                            }
+                            response.setHeader("Content-Length", contentLength);
+                            response.setHeader("Content-Disposition", "attachment;filename=" + nameFileURL);
+                            response.setContentType(contentType);
+                            base.addHit(request, reqParams.getUser(), reqParams.getWebPage());
+                            download(url, response.getOutputStream());
+                            return;
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                pos = request.getRequestURI().indexOf("/doc/");
+                if (pos > -1)
+                {
                     fileName = request.getRequestURI().substring(pos + 5);
                 }
                 fileName = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + fileName;
                 java.io.File file = new java.io.File(fileName);
                 response.setHeader("Content-Length", file.length() + "");
                 response.setContentType("application/binary");
+                response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
                 base.addHit(request, reqParams.getUser(), reqParams.getWebPage());
                 SWBUtils.IO.copyStream(new FileInputStream(fileName), response.getOutputStream());
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("At responding file download request", e);
         }
     }
