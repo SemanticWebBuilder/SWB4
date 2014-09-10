@@ -33,8 +33,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.UUID;
-import java.util.logging.Level;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBException;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.Resource;
@@ -42,6 +44,7 @@ import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -149,7 +152,7 @@ public class FileDownload extends GenericAdmResource
     private static boolean isURL(String urlDownloadnew)
     {
         try
-        {
+        {            
             new URL(urlDownloadnew);
             return true;
         }
@@ -252,8 +255,7 @@ public class FileDownload extends GenericAdmResource
         }
         catch (IOException ex)
         {
-            log.debug(ex);
-            return;
+            log.debug(ex);            
         }
     }
 
@@ -286,7 +288,7 @@ public class FileDownload extends GenericAdmResource
     }
     javax.xml.transform.Templates tpl;
 
-    private static Logger log = SWBUtils.getLogger(FileDownload.class);
+    private static final Logger log = SWBUtils.getLogger(FileDownload.class);
 
     @Override
     public void setResourceBase(Resource base)
@@ -305,7 +307,11 @@ public class FileDownload extends GenericAdmResource
             {
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
             }
-            catch (Exception e)
+            catch (TransformerConfigurationException e)
+            {
+                log.error("Error while loading resource template: " + base.getId(), e);
+            }
+            catch (SWBException e)
             {
                 log.error("Error while loading resource template: " + base.getId(), e);
             }
@@ -318,7 +324,7 @@ public class FileDownload extends GenericAdmResource
                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getAdminFileStream("/swbadmin/xsl/FileDownload/WBFileDownload.xslt"));
                 //System.out.println("template por defecto: " + tpl);
             }
-            catch (Exception e)
+            catch (TransformerConfigurationException e)
             {
                 log.error("Error while loading default resource template: " + base.getId(), e);
             }
@@ -395,7 +401,11 @@ public class FileDownload extends GenericAdmResource
                                 {
                                     tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
                                 }
-                                catch (Exception e)
+                                catch (TransformerConfigurationException e)
+                                {
+                                    log.error("Error while loading resource template: " + base.getId(), e);
+                                }
+                                catch (SWBException e)
                                 {
                                     log.error("Error while loading resource template: " + base.getId(), e);
                                 }
@@ -413,7 +423,7 @@ public class FileDownload extends GenericAdmResource
                                         //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
                                     }
                                 }
-                                catch (Exception e)
+                                catch (TransformerConfigurationException e)
                                 {
                                     log.error("Error while loading default resource template: " + base.getId(), e);
                                 }
@@ -441,8 +451,7 @@ public class FileDownload extends GenericAdmResource
                     {
                         fileName = fileName.substring(pos + 1);
                     }
-                    String ext = "";
-                    pos = -1;
+                    String ext = "";                    
                     pos = fileName.lastIndexOf(".");
                     if (pos > -1)
                     {
@@ -477,7 +486,11 @@ public class FileDownload extends GenericAdmResource
                             {
                                 tpl = SWBUtils.XML.loadTemplateXSLT(SWBPortal.getFileFromWorkPath(base.getWorkPath() + "/" + base.getAttribute("template").trim()));
                             }
-                            catch (Exception e)
+                            catch (TransformerConfigurationException e)
+                            {
+                                log.error("Error while loading resource template: " + base.getId(), e);
+                            }
+                            catch (SWBException e)
                             {
                                 log.error("Error while loading resource template: " + base.getId(), e);
                             }
@@ -495,7 +508,7 @@ public class FileDownload extends GenericAdmResource
                                     //    System.out.println("\nInputStream NULO!, no encuentra: /swbadmin/xsl/FileDownload/WBFileDownload.xslt");
                                 }
                             }
-                            catch (Exception e)
+                            catch (TransformerConfigurationException e)
                             {
                                 log.error("Error while loading default resource template: " + base.getId(), e);
                             }
@@ -575,7 +588,19 @@ public class FileDownload extends GenericAdmResource
                 SWBUtils.IO.copyStream(new FileInputStream(fileName), response.getOutputStream());
             }
         }
-        catch (Exception e)
+        catch (IOException e)
+        {
+            log.error("At responding file download request", e);
+        }
+        catch (NumberFormatException e)
+        {
+            log.error("At responding file download request", e);
+        }
+        catch (TransformerException e)
+        {
+            log.error("At responding file download request", e);
+        }
+        catch (DOMException e)
         {
             log.error("At responding file download request", e);
         }
