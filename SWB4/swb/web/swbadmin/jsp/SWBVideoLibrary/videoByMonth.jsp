@@ -87,7 +87,24 @@
             String ago="";
             if(date!=null && !date.trim().equals(""))
             {
-                ago=SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                if (content.getPublishTime() != null)
+                {
+                    Date time = content.getPublishTime();
+                    Calendar cal = Calendar.getInstance();
+                    Calendar cal2 = Calendar.getInstance();
+                    cal2.setTime(time);
+                    cal.setTime(content.getPublishDate());
+                    cal.set(Calendar.HOUR, cal2.get(Calendar.HOUR));
+                    cal.set(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
+                    cal.set(Calendar.SECOND, cal2.get(Calendar.SECOND));
+                    cal.set(Calendar.MILLISECOND, cal2.get(Calendar.MILLISECOND));
+                    ago = SWBUtils.TEXT.getTimeAgo(cal.getTime(), usrlanguage);
+                }
+                else
+                {
+                    ago = SWBUtils.TEXT.getTimeAgo(content.getPublishDate(), usrlanguage);
+                }
+                
             }
             %>
             <div class="entradaVideos">
