@@ -82,6 +82,7 @@
     -->
     
         <target name="-post-compile">
+        <copy file="../applets/appletChat/dist/appletChat.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/DragDrop/dist/SWBAplDragDrop.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/EditFilters/dist/SWBAplEditFilters.jar" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../applets/filterSection/dist/SWBAplFilterSection.jar" todir="${build.classes.dir}//swbadmin/lib"/>
@@ -102,19 +103,25 @@
         <copy file="../applets/SWBAppBPMNModeler/install/SWBAppBPMNModeler_browser.jnlp" todir="${build.classes.dir}//swbadmin/lib"/>
         <copy file="../lib/json.jar" todir="${build.classes.dir}//swbadmin/lib"/>
       
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplHtmlEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFtp.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplGenericTree.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplRules.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFilterSection.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplWorkFlowAdmin.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAppBPMNModeler.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/json.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplCommons.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplXSLEditor.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
-        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDigitalSignature.jar" alias="webbuilder" storepass="softjei" keypass="wbadmkey" keystore="./sign/webbuilder.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/appletChat.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplTMAdmin.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplTMView.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplGraph.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplBar.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplEditFilters.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplHtmlEditor.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDragDrop.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFtp.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplGenericTree.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplModeler.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplRules.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplFilterSection.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplWorkFlowAdmin.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAppBPMNModeler.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/json.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplCommons.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplXSLEditor.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
+        <signjar jar="${build.classes.dir}//swbadmin/lib/SWBAplDigitalSignature.jar" alias="infotec" storepass="xxx" keypass="xxx" keystore="/Users/javiersolis/Desktop/infotec.jks"/>
      
         </target>
 </project>
