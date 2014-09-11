@@ -177,7 +177,7 @@
                     Calendar cal2 = Calendar.getInstance();
                     cal2.setTime(time);
                     cal.setTime(content.getPublishDate());
-                    cal.set(Calendar.HOUR, cal2.get(Calendar.HOUR_OF_DAY));
+                    cal.set(Calendar.HOUR_OF_DAY, cal2.get(Calendar.HOUR_OF_DAY));
                     cal.set(Calendar.MINUTE, cal2.get(Calendar.MINUTE));
                     cal.set(Calendar.SECOND, cal2.get(Calendar.SECOND));
                     cal.set(Calendar.MILLISECOND, cal2.get(Calendar.MILLISECOND));
