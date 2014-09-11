@@ -23,6 +23,7 @@
 package org.semanticwb.portal.resources.sem.videolibrary;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.*;
 import org.semanticwb.Logger;
@@ -36,7 +37,9 @@ import org.semanticwb.portal.api.*;
 public class VideoContent extends org.semanticwb.portal.resources.sem.videolibrary.base.VideoContentBase
 {
 
-    /** The Constant log. */
+    /**
+     * The Constant log.
+     */
     private static final Logger log = SWBUtils.getLogger(VideoContent.class);
 
     /**
@@ -48,7 +51,7 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
 
     /**
      * Instantiates a new video content.
-     * 
+     *
      * @param base the base
      */
     public VideoContent(org.semanticwb.platform.SemanticObject base)
@@ -58,7 +61,7 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
 
     /**
      * Gets the preview.
-     * 
+     *
      * @return the preview
      */
     public String getPreview()
@@ -67,7 +70,7 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
         if (this.getCode() != null)
         {
             String code = SWBUtils.TEXT.decodeExtendedCharacters(this.getCode());
-            code=code.replace("http://www.youtube.com/embed/", "http://www.youtube.com/v/");
+            code = code.replace("http://www.youtube.com/embed/", "http://www.youtube.com/v/");
             //******************  is YouTube  ***********************************
             String pre = "http://www.youtube.com/v/";
             String post = "\"";
@@ -120,9 +123,8 @@ public class VideoContent extends org.semanticwb.portal.resources.sem.videolibra
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.semanticwb.portal.api.GenericResource#doView(HttpServletRequest, HttpServletResponse, SWBParamRequest)
-     */
+   
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
