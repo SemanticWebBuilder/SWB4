@@ -122,11 +122,18 @@ public class GenericSemResource extends GenericResource implements org.semanticw
             {
                 mgr.processForm(request);
             }catch(FormValidateException e){log.error(e);}
-            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).toString());
+            response.sendRedirect(paramRequest.getRenderUrl().setAction(null).setParameter("updated", "true").toString());
         }else
         {
             mgr.setAction(paramRequest.getRenderUrl().setAction("update").toString());
             out.print(mgr.renderForm(request));
+            if (request.getParameter("updated") != null && request.getParameter("updated").equals("true"))
+        {
+
+            out.println("<script type=\"text/javascript\">");
+            out.println("   showStatus('" + "Se actualizó el recurso con id " + getResourceBase().getId() + "');");
+            out.println("</script>");
+        }
         }
         //out.println("</div>");
     }
