@@ -177,6 +177,10 @@ public class SWBNewContent extends org.semanticwb.portal.resources.sem.news.base
 
             out.println(mgr.renderForm(request));
 
+            out.println("<script type=\"text/javascript\">");            
+            out.println("   showStatus('" + "Se actualizó el recurso con id "+ getResourceBase().getId() +"');");
+            out.println("</script>");
+
             if (sndTwr) {
 
                 out.println("<script src=\"http://platform.twitter.com/widgets.js\" type=\"text/javascript\"></script>");
