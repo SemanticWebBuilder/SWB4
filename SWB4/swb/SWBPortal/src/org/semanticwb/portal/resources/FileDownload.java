@@ -589,6 +589,7 @@ public class FileDownload extends GenericAdmResource
                 {
                     fileName = request.getRequestURI().substring(pos + 5);
                 }
+                response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
                 fileName = SWBPortal.getWorkPath() + base.getWorkPath() + "/" + fileName;
                 java.io.File file = new java.io.File(fileName);
                 response.setHeader("Content-Length", file.length() + "");
@@ -598,7 +599,7 @@ public class FileDownload extends GenericAdmResource
                     mimeType="application/binary";
                 }
                 response.setContentType(mimeType);
-                response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+                
                 base.addHit(request, reqParams.getUser(), reqParams.getWebPage());
                 SWBUtils.IO.copyStream(new FileInputStream(fileName), response.getOutputStream());
             }
