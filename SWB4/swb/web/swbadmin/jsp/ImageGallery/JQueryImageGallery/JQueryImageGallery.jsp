@@ -9,6 +9,22 @@
     boolean autoplay = Boolean.valueOf(paramRequest.getResourceBase().getAttribute("autoplay", "false"));
     int autoPlayInterval = Integer.parseInt(paramRequest.getResourceBase().getAttribute("pause", "2500"));
     int slideDuration = Integer.parseInt(paramRequest.getResourceBase().getAttribute("fadetime", "500"));
+    String title = paramRequest.getResourceBase().getTitle(paramRequest.getUser().getLanguage());
+    if (title == null)
+    {
+        title = paramRequest.getResourceBase().getTitle();
+    }
+    if (title == null)
+    {
+        title = "";
+    }
+    boolean showTitle = Boolean.parseBoolean(paramRequest.getResourceBase().getAttribute("title", "false"));
+    if (showTitle)
+    {
+%>
+<h1><%=title%></h1>
+<%
+    }
 %>
 
 <div style="padding: 0; margin: 0; font-family:Arial, Verdana;background-color:#fff;">

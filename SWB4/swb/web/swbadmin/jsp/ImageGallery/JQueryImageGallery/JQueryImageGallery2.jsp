@@ -9,7 +9,24 @@
     boolean autoplay = Boolean.valueOf(paramRequest.getResourceBase().getAttribute("autoplay", "false"));
     int autoPlayInterval = Integer.parseInt(paramRequest.getResourceBase().getAttribute("pause", "2500"));
     int slideDuration = Integer.parseInt(paramRequest.getResourceBase().getAttribute("fadetime", "500"));
+    String title = paramRequest.getResourceBase().getTitle(paramRequest.getUser().getLanguage());
+    if (title == null)
+    {
+        title = paramRequest.getResourceBase().getTitle();
+    }
+    if (title == null)
+    {
+        title = "";
+    }
+    boolean showTitle = Boolean.parseBoolean(paramRequest.getResourceBase().getAttribute("title", "false"));
+    if (showTitle)
+    {
 %>
+<h1><%=title%></h1>
+<%
+    }
+%>
+
 <div style="background:#fff;">
     <!-- it works the same with all jquery version from 1.x to 2.x -->
     <script type="text/javascript" src="<%=pathJS%>jquery-1.9.1.min.js"></script>
