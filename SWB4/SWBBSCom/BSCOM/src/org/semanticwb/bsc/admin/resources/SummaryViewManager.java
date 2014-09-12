@@ -1658,7 +1658,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             doShowForm(request, response, paramRequest);
         }else if("viewsList".equalsIgnoreCase(mode)) {
             doViewsList(request, response, paramRequest);
-        }else if("Mode_StreamPDF".equalsIgnoreCase(mode)) {
+        }else if(Mode_PDFDocument.equalsIgnoreCase(mode)) {
             doGetPDFDocument(request, response, paramRequest);
         }else {
             super.processRequest(request, response, paramRequest);
@@ -1755,7 +1755,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder();
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-        url.setMode(Mode_StreamPDF);
+        url.setMode(Mode_PDFDocument);//Mode_PDFDocument
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
 //        String title = paramRequest.getLocaleString("msgPrintPDFDocument");
 //        ret.append("<a href=\"");
