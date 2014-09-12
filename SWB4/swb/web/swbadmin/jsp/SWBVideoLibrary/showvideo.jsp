@@ -57,7 +57,7 @@
     urlall.setMode(urlall.Mode_VIEW);
     urlall.setCallMethod(urlall.Call_CONTENT);
     String source=content.getSource();
-    
+    content.getResourceBase().incViews();
     
 %>
 <div class="columnaIzquierda">
@@ -100,6 +100,14 @@
             }
         %>
         <%
+            if(duration!=null && !duration.equals(""))
+            {
+                %>
+                <p>Duración : <%=duration%></p>
+                <%
+            }
+        %>
+        <%
             if(source!=null)
             {
                 if(content.getVideoWebPage()==null)
@@ -113,7 +121,7 @@
                     String urlsource=content.getVideoWebPage();
                     urlsource=urlsource.replace("&", "&amp;");
                     %>
-                    <p>Fuente: <a href="<%=urlsource%>"><%=source%></a></p>
+                    <p>Fuente: <a target="_blank" href="<%=urlsource%>"><%=source%></a></p>
                     <%
                 }
             }
