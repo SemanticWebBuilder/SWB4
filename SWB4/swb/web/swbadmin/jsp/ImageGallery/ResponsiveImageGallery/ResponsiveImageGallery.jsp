@@ -27,7 +27,7 @@
 <%
     }
 %>
-<link rel="stylesheet" type="text/css" href="<%=pathCSS%>demo.css" />
+
 <link rel="stylesheet" type="text/css" href="<%=pathCSS%>style.css" />
 <link rel="stylesheet" type="text/css" href="<%=pathCSS%>elastislide.css" />
 <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow&v1' rel='stylesheet' type='text/css' />
