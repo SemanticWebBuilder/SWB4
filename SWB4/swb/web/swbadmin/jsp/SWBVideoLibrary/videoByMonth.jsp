@@ -82,7 +82,7 @@
             }
             String titleImage=title.replace('"', '\'');
             String date=sdf.format(content.getPublishDate());
-            String preview=content.getPreview();
+            String preview=content.getCode();
             String source=content.getSource();
             String ago="";
             if(date!=null && !date.trim().equals(""))
@@ -109,7 +109,8 @@
             %>
             <div class="entradaVideos">
         <div class="thumbVideo">
-          <img alt="<%=titleImage%>" src="<%=preview%>" />
+          <%--<img alt="<%=titleImage%>" src="<%=preview%>" /> --%>
+          <%=preview%>
         </div>
         <div class="infoVideo">
             <h3><%=title%></h3>
