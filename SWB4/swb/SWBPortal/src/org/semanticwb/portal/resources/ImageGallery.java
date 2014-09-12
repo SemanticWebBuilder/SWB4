@@ -157,6 +157,66 @@ public class ImageGallery extends GenericResource
     /* (non-Javadoc)
      * @see org.semanticwb.portal.api.GenericResource#setResourceBase(org.semanticwb.model.Resource)
      */
+    private void generaTbm()
+    {
+        Resource base = getResourceBase();
+        int width;
+        try
+        {
+            width = Integer.parseInt(base.getAttribute("width"));
+        }
+        catch (Exception e)
+        {
+            width = 180;
+        }
+        Iterator<String> it = base.getAttributeNames();
+        while (it.hasNext())
+        {
+            String attname = it.next();
+            String attval = base.getAttribute(attname);
+            if (attname.startsWith("imggallery_") && attval != null)
+            {
+                String fn = attval.substring(attval.lastIndexOf("/") + 1);
+                File img = new File(workPath + fn);
+                File thumbnail = new File(workPath + _thumbnail + fn);
+                if (thumbnail.exists())
+                {
+                    thumbnail.delete();
+                }
+                try
+                {
+                    String s_cut = base.getAttribute("cut", "false");
+                    boolean cut = Boolean.parseBoolean(s_cut);
+                    if (cut)
+                    {
+                        try
+                        {
+                            int height = Integer.parseInt(base.getAttribute("height", "180"));
+                            ImageResizer.crop(img, width, height, thumbnail, "jpeg");
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            log.error(e);
+                        }
+                    }
+                    else
+                    {
+                        ImageResizer.resizeCrop(img, width, thumbnail, "jpeg");
+                    }
+                }
+                catch (IOException ioe)
+                {
+                    log.error("Error while setting thumbnail for image: " + img + " in resource " + base.getId() + "-" + base.getTitle(), ioe);
+                }
+
+            }
+            else
+            {
+
+            }
+        }
+    }
+
     @Override
     public void setResourceBase(Resource base)
     {
@@ -165,57 +225,8 @@ public class ImageGallery extends GenericResource
             super.setResourceBase(base);
             workPath = SWBPortal.getWorkPath() + base.getWorkPath() + "/";
             webWorkPath = SWBPortal.getWebWorkPath() + base.getWorkPath() + "/";
-
+            generaTbm();
             // Si no existen thumbnails se crean
-            int width;
-            try
-            {
-                width = Integer.parseInt(base.getAttribute("width"));
-            }
-            catch (Exception e)
-            {
-                width = 180;
-            }
-            Iterator<String> it = base.getAttributeNames();
-            while (it.hasNext())
-            {
-                String attname = it.next();
-                String attval = base.getAttribute(attname);
-                if (attname.startsWith("imggallery_") && attval != null)
-                {
-                    String fn = attval.substring(attval.lastIndexOf("/") + 1);
-                    File img = new File(workPath + fn);
-                    File thumbnail = new File(workPath + _thumbnail + fn);
-                    if (!thumbnail.exists())
-                    {
-                        try
-                        {
-                            String s_cut = base.getAttribute("cut", "false");
-                            boolean cut = Boolean.parseBoolean(s_cut);
-                            if (cut)
-                            {
-                                try
-                                {
-                                    int height = Integer.parseInt(base.getAttribute("height", "180"));
-                                    ImageResizer.crop(img, width, height, thumbnail, "jpeg");
-                                }
-                                catch (NumberFormatException e)
-                                {
-                                    log.error(e);
-                                }
-                            }
-                            else
-                            {
-                                ImageResizer.resizeCrop(img, width, thumbnail, "jpeg");
-                            }
-                        }
-                        catch (IOException ioe)
-                        {
-                            log.error("Error while setting thumbnail for image: " + img + " in resource " + base.getId() + "-" + base.getTitle(), ioe);
-                        }
-                    }
-                }
-            }
         }
         catch (Exception e)
         {
@@ -447,7 +458,7 @@ public class ImageGallery extends GenericResource
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
 
-        Resource base = getResourceBase();        
+        Resource base = getResourceBase();
         String msg = paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_undefinedOperation");
         String action = null != request.getParameter("act") && !"".equals(request.getParameter("act").trim()) ? request.getParameter("act").trim() : paramRequest.getAction();
 
@@ -501,7 +512,6 @@ public class ImageGallery extends GenericResource
                 value = null != getValue("titlestyle", formItems) && !"".equals(getValue("titlestyle", formItems).trim()) ? getValue("titlestyle", formItems).trim() : null;
                 base.setAttribute("titlestyle", value);
 
-                
                 int width = Integer.parseInt(base.getAttribute("width"));
                 //String filenameAttr, removeChk;
 
@@ -556,7 +566,8 @@ public class ImageGallery extends GenericResource
                             {
                                 if (uploadFile(base, filename, filenameAttr, formItems))
                                 {
-                                    File image = new File(workPath + filename);
+                                    base.setAttribute(filenameAttr, filename);
+                                    /*File image = new File(workPath + filename);
                                     File thumbnail = new File(workPath + _thumbnail + filename);
                                     String s_cut = base.getAttribute("cut", "false");
                                     boolean cut = Boolean.parseBoolean(s_cut);
@@ -578,7 +589,7 @@ public class ImageGallery extends GenericResource
                                         ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
                                     }
 
-                                    base.setAttribute(filenameAttr, filename);
+                                    base.setAttribute(filenameAttr, filename);*/
                                 }
                                 else
                                 {
@@ -592,78 +603,10 @@ public class ImageGallery extends GenericResource
                         }
                     }
                 }
-                /*do
-                 {
-                 filenameAttr = "imggallery_" + base.getId() + "_" + i;
-                 removeChk = "remove_" + base.getId() + "_" + i;
-                 value = null != getValue(removeChk, formItems) && !"".equals(getValue(removeChk, formItems).trim()) ? getValue(removeChk, formItems).trim() : "0";
-
-                 if ("1".equals(value) && base.getAttribute(filenameAttr) != null)
-                 {
-                 File file = new File(workPath + base.getAttribute(filenameAttr));
-                 file.delete();
-                 file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
-                 file.delete();
-                 base.removeAttribute(filenameAttr);
-                 }
-                 else
-                 {
-                 value = null != getFileName(filenameAttr, formItems) && !"".equals(getFileName(filenameAttr, formItems).trim()) ? getFileName(filenameAttr, formItems).trim() : null;
-                 if (value != null)
-                 {
-                 String filename = admResUtils.getFileName(base, value);
-                 if (filename != null && !filename.trim().equals(""))
-                 {
-                 if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
-                 {
-                 msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
-                 }
-                 else
-                 {
-                 if (uploadFile(base, formItems, filenameAttr))
-                 {
-                 File image = new File(workPath + filename);
-                 File thumbnail = new File(workPath + _thumbnail + filename);
-                 String s_cut = base.getAttribute("cut", "false");
-                 boolean cut = Boolean.parseBoolean(s_cut);
-
-                 if (cut)
-                 {
-                 try
-                 {
-                 int height = Integer.parseInt(base.getAttribute("height", "180"));
-                 ImageResizer.crop(image, width, height, thumbnail, "jpeg");
-                 }
-                 catch (NumberFormatException nfe)
-                 {
-                 log.error(nfe);
-                 }
-                 }
-                 else
-                 {
-                 ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
-                 }
-
-                 base.setAttribute(filenameAttr, filename);
-                 }
-                 else
-                 {
-                 msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
-                 }
-                 }
-                 }
-                 else
-                 {
-                 msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
-                 }
-                 }
-                 }
-                 i++;
-                 }
-                 while (value != null || base.getAttribute(filenameAttr) != null);*/
-
+                
                 base.updateAttributesToDB();
 
+                generaTbm();
                 msg = paramRequest.getLocaleString("msgOkUpdateResource") + " " + base.getId();
                 out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
                 out.println("   alert('" + msg + "');");
