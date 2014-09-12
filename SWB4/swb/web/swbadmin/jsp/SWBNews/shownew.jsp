@@ -407,6 +407,7 @@ public static String changeCharacters(String data)
             ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setMode(paramRequest.Mode_VIEW);
             ((org.semanticwb.portal.api.SWBParamRequestImp) paramRequest).setCallMethod(paramRequest.Call_CONTENT);
             content.doView(request, res, paramRequest);
+            content.getResourceBase().incViews();
 %>
 
 <%=res.toString()%>
