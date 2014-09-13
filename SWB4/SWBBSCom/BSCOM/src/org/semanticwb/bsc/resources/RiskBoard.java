@@ -212,7 +212,6 @@ public class RiskBoard extends GenericResource {
             output.append("\n          </div>");
             output.append("\n       </div>");
 
-
             output.append("\n<div dojoType=\"dijit.Dialog\" class=\"clsDialog col-lg-6 col-lg-offset-3 co-md-8 col-sm-8 col-sm-offset-2 col-xs-12 swb-ventana-dialogo\" id=\"swbDialog\" ");
             output.append("title=\"Agregar\" >\n");
             output.append("\n<div class=\"panelDialog panelDialog-default\">");
@@ -595,8 +594,7 @@ public class RiskBoard extends GenericResource {
             data.append(spanRiskTd);
             data.append(this.renderPropertyValue(request, risk.getSemanticObject(), Risk.bsc_stratManageRisk, lang, mode));
             data.append(tdEnclosing);
-            
-            
+
             String spanRiskTd1 = "      <td" + (riskSpan > 1 ? " class=\"descripAction\" rowspan=\"" + riskSpan + "\"" : "") + ">\n";
             data.append(spanRiskTd1);
             try {
@@ -605,7 +603,7 @@ public class RiskBoard extends GenericResource {
                 RiskBoard.log.error("Despliegue de Actions, risk = " + risk.getURI(), swbe);
             }
             data.append(tdEnclosing);
-            
+
             data.append(spanRiskTd1);
             try {
                 data.append(this.getInitiativesDisplay(risk, paramRequest, mode));
@@ -780,7 +778,7 @@ public class RiskBoard extends GenericResource {
         if (property != Descriptiveable.swb_title && property != Descriptiveable.swb_description) {
             st = property.getRDFProperty().getProperty(
                     SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
-                    "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
+                            "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
         }
         if (st != null) {
             //Se obtiene: SemanticProperty: displayElement de la propiedad en cuestion (prop)
@@ -788,7 +786,7 @@ public class RiskBoard extends GenericResource {
             if (soDisplayElement != null) {
                 SemanticObject formElement = soDisplayElement.getObjectProperty(
                         org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(
-                        "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
+                                "http://www.semanticwebbuilder.org/swb4/xforms/ontology#formElement"));
                 if (formElement != null) {
                     FormElement fe = (FormElement) formElement.createGenericInstance();
                     boolean applyInlineEdit = false;
@@ -1117,11 +1115,11 @@ public class RiskBoard extends GenericResource {
                 }
             }
             /*
-            if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName())) {
+             if (objType.equals(MitigationAction.bsc_MitigationAction.getClassCodeName())) {
             
-            } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName())) {
+             } else if (objType.equals(Initiative.bsc_Initiative.getClassCodeName())) {
 
-            }*/
+             }*/
         } else if (action.equalsIgnoreCase(SWBActionResponse.Action_REMOVE) && risk != null) {
             String suri = request.getParameter("suri");
             GenericObject genericObj = SemanticObject.getSemanticObject(suri).createGenericInstance();
@@ -1206,20 +1204,20 @@ public class RiskBoard extends GenericResource {
             super.processRequest(request, response, paramRequest);
         }
         /*switch (paramRequest.getMode()) {
-        case "showAddWindow":
-        doShowAddWindow(request, response, paramRequest);
-        break;
-        case "addElement":
-        doAddElement(request, response, paramRequest);
-        break;
-        case "editElement":
-        doEditElement(request, response, paramRequest);
-        break;
-        case "export":
-        doGetExportedDocument(request, response, paramRequest);
-        break;
-        default: super.processRequest(request, response, paramRequest);
-        }*/
+         case "showAddWindow":
+         doShowAddWindow(request, response, paramRequest);
+         break;
+         case "addElement":
+         doAddElement(request, response, paramRequest);
+         break;
+         case "editElement":
+         doEditElement(request, response, paramRequest);
+         break;
+         case "export":
+         doGetExportedDocument(request, response, paramRequest);
+         break;
+         default: super.processRequest(request, response, paramRequest);
+         }*/
     }
 
     /**
@@ -1294,13 +1292,18 @@ public class RiskBoard extends GenericResource {
         output.append("    </select>\n");
         output.append("    </div>\n");
         output.append("    </div>\n");
-        output.append("    <div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
+        output.append("    <div class=\"row1\">\n");
+        output.append("          <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\"></div>\n");
+        output.append("          <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
         output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" name=\"continuar\" class=\"pull-right swb-boton-enviar\">");
         output.append(paramRequest.getLocaleString("lbl_continuateBtn"));
-        output.append("</button>");
+        output.append("</button>\n");
+        output.append("          </div>\n");
+        output.append("          <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
         output.append("          <button dojoType=\"dijit.form.Button\" onclick=\"dijit.byId('swbDialog').hide()\" class=\"pull-right swb-boton-cancelar\">");
         output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
         output.append("</button>");
+        output.append("          </div>\n");
         output.append("    </div>\n");
         output.append("</form>\n");
         output.append("    ");
@@ -1367,7 +1370,7 @@ public class RiskBoard extends GenericResource {
                 formMgr.addHiddenParameter("objType", objectType);
 
                 String onsubmit = " onsubmit=\"if(submitAndReload(this.id)){return true;} else {return false;}\"";
-                output.append("<form id=\"");
+                output.append("<form dojoType=\"dijit.form.Form\" id=\"");
                 output.append(formMgr.getFormName());
                 output.append("\" class=\"form-horizontal swb-padding-top\" action=\"");
                 output.append(url);
@@ -1394,22 +1397,27 @@ public class RiskBoard extends GenericResource {
                     output.append("<div class=\"col-lg-10\">\n");
                     output.append(
                             formMgr.getFormElement(prop1).renderElement(
-                            request, semObjInst, prop1,
-                            prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang));
+                                    request, semObjInst, prop1,
+                                    prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_CREATE, lang));
                     output.append("</div>\n");
                     output.append("</div>\n");
                 }
 
-                output.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
-                output.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton\" ");
-                output.append("onclick=\"dijit.byId('swbDialog').hide()\">");
-                output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
-                output.append("</button>\n");
-
+                output.append("<div class=\"row1\">\n");
+                output.append("   <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\"></div>\n");
+                output.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
                 output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton\" ");//btn btn-default pull-right swb-boton-enviar
                 output.append("name=\"enviar\" >");
                 output.append(paramRequest.getLocaleString("lbl_createBtn"));
                 output.append("</button>\n");
+                output.append("   </div>\n");
+
+                output.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
+                output.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton\" ");
+                output.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+                output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
+                output.append("</button>\n");
+                output.append("   </div>\n");
 
                 output.append("</div>\n");
                 output.append("</form>\n");
@@ -1588,7 +1596,7 @@ public class RiskBoard extends GenericResource {
         //WebSite website = paramRequest.getWebPage().getWebSite();
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_EDIT);
-        url.setCallMethod(SWBResourceURL.Call_DIRECT);
+        url.setCallMethod(SWBResourceURL.Call_CONTENT);
         SemanticObject semObject = SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("suri")));
 
         response.setContentType("text/html; charset=ISO-8859-1");
@@ -1633,12 +1641,12 @@ public class RiskBoard extends GenericResource {
 
             output.append("<script type=\"text/javascript\">\n");
             // scan page for widgets and instantiate them
-            output.append("dojo.require(\"dojo.parser\");\n");
+            //output.append("dojo.require(\"dojo.parser\");\n");
             output.append("dojo.require(\"dijit._Calendar\");\n");
             output.append("dojo.require(\"dijit.ProgressBar\");\n");
 
             output.append("dojo.require(\"dijit.Editor\");\n");
-            output.append("dojo.require(\"dijit.form.Form\");\n");
+            //output.append("dojo.require(\"dijit.form.Form\");\n");
             output.append("dojo.require(\"dijit.form.CheckBox\");\n");
             output.append("dojo.require(\"dijit.form.Textarea\");");
             output.append("dojo.require(\"dijit.form.FilteringSelect\");\n");
@@ -1652,14 +1660,14 @@ public class RiskBoard extends GenericResource {
             output.append("dojo.require(\"dojox.form.TimeSpinner\");\n");
             output.append("</script>\n");
 
-            String onsubmit = " onsubmit=\"if(mySubmitForm(this.id)){return true;} else {return false;}\"";
-            output.append("<form id=\"");
+            String onsubmit = " onsubmit=\"submitAndReload(this.id)\""; // mySubmitForm(this.id)
+            output.append("<form dojoType=\"dijit.form.Form\" id=\"");
             output.append(formMgr.getFormName());
             output.append("\" class=\"form-horizontal swb-padding-top\" action=\"");
             output.append(url);
             output.append("\"");
             output.append(onsubmit);
-            output.append(" method=\"post\" >\n"); 
+            output.append(" method=\"post\" >\n");
             output.append(formMgr.getFormHiddens());
 
             Iterator<SemanticProperty> it = SWBComparator.sortSortableObject(formMgr.getProperties().iterator());
@@ -1701,25 +1709,30 @@ public class RiskBoard extends GenericResource {
                 } else {
                     output.append(
                             formMgr.getFormElement(prop1).renderElement(
-                            request, semObject, prop1,
-                            prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_EDIT, lang));
+                                    request, semObject, prop1,
+                                    prop1.getName(), SWBFormMgr.TYPE_DOJO, SWBFormMgr.MODE_EDIT, lang));
                 }
                 output.append("</div>\n");
                 output.append("</div>\n");
             }
-            output.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">\n");
+            output.append("<div class=\"row1\">\n");
+            output.append("   <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\"></div>\n");
+            output.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12\">\n");// pull-right
+            output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton\" ");//btn btn-default pull-right swb-boton-enviar
+            output.append("name=\"enviar\" >");
+            output.append(paramRequest.getLocaleString("lbl_editBtn"));
+            output.append("</button>\n");
+            output.append("    </div>\n");
+            output.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
             output.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar dijit dijitReset dijitInline dijitButton\" ");
             output.append("onclick=\"dijit.byId('swbDialog').hide()\">");
             output.append(paramRequest.getLocaleString("lbl_cancelBtn"));
             output.append("</button>\n");
-            output.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"dijit dijitReset dijitInline pull-right swb-boton-enviar dijitButton\" ");//btn btn-default pull-right swb-boton-enviar
-            output.append("name=\"enviar\" >");
-            output.append(paramRequest.getLocaleString("lbl_createBtn"));
-            output.append("</button>\n");
+            output.append("    </div>\n");
             output.append("</div>\n");
             output.append("</form>\n");
             output.append("</div>\n");
-        }      
+        }
         out.println(output.toString());
     }
 
