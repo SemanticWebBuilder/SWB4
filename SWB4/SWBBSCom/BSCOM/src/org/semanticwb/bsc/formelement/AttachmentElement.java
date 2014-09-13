@@ -83,8 +83,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
@@ -185,8 +185,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
@@ -242,20 +242,27 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append("<div class=\"col-lg-10\">");
             toReturn.append(
                     formMgr.getFormElement(prop1).renderElement(
-                    request, semObject, prop1,
-                    prop1.getName(), "XHTML", SWBFormMgr.MODE_EDIT, lang));
+                            request, semObject, prop1,
+                            prop1.getName(), "XHTML", SWBFormMgr.MODE_EDIT, lang));
             toReturn.append("</div>");
             toReturn.append("</div>");
         }
-        toReturn.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
-        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
-        toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
-        toReturn.append(getLocaleString("cancel", lang));
-        toReturn.append("</button>");
+        toReturn.append("<div class=\"row1\">\n");
+        toReturn.append("   <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\"></div>\n");
+
+        toReturn.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
         toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-enviar\" type=\"submit\" ");
         toReturn.append("name=\"enviar\" >");
         toReturn.append(getLocaleString("send", lang));
         toReturn.append("</button>");
+        toReturn.append("</div>");
+        toReturn.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
+        toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+        toReturn.append(getLocaleString("cancel", lang));
+        toReturn.append("</button>");
+        toReturn.append("</div>");
+
         toReturn.append("</div>");
         toReturn.append("</form>\n");
         toReturn.append("</div>");
@@ -274,8 +281,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
@@ -464,7 +471,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                     toReturn.append(getLocaleString("add", lang));
                     toReturn.append(" ");
                     toReturn.append(Attachment.sclass.getDisplayName(lang));
-                    toReturn.append("\n</a>");                    
+                    toReturn.append("\n</a>");
                 }
                 toReturn.append("<br/>");
                 toReturn.append("\n<div class=\"table-responsive\" id=\"swbform\">");
@@ -490,8 +497,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
@@ -513,7 +520,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
         String url = getProcessURL(obj, prop).setParameter("_action", Action_ADD).toString();
         formMgr.setAction(url);
         toReturn.append("<div id=\"frmAdd\" >");
-        
+
         SemanticObject semObj = new SemanticObject(obj.getModel(), Attachment.bsc_Attachment);
         String onsubmit = " onsubmit=\"if(validateData(this.id, 'add')){mySubmitForm(this.id);} else {return false;}\"";
         toReturn.append("<form id=\"");
@@ -544,22 +551,26 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
             toReturn.append("<div class=\"col-lg-10\">");
             toReturn.append(
                     formMgr.getFormElement(prop1).renderElement(
-                    request, semObj, prop1,
-                    prop1.getName(), "XHTML", SWBFormMgr.MODE_CREATE, lang));
+                            request, semObj, prop1,
+                            prop1.getName(), "XHTML", SWBFormMgr.MODE_CREATE, lang));
             toReturn.append("</div>");
             toReturn.append("</div>");
         }
-        
-        toReturn.append("<div class=\"btn-group col-lg-12 col-md-12 pull-right\">");
-        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
-        toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
-        toReturn.append(getLocaleString("cancel", lang));
-        toReturn.append("</button>");
-        
+
+        toReturn.append("<div class=\"row1\">\n");
+        toReturn.append("   <div class=\"col-lg-8 col-md-8 col-sm-8 col-xs-12\"></div>\n");
+        toReturn.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
         toReturn.append("          <button dojoType=\"dijit.form.Button\" type=\"submit\" class=\"pull-right swb-boton-enviar\" ");//btn btn-default pull-right swb-boton-enviar
         toReturn.append("name=\"enviar\" >");
         toReturn.append(getLocaleString("send", lang));
         toReturn.append("</button>");
+        toReturn.append("    </div>\n");
+        toReturn.append("   <div class=\"col-lg-2 col-md-2 col-sm-2 col-xs-12 \">\n");//pull-right
+        toReturn.append("          <button dojoType=\"dijit.form.Button\" class=\"pull-right swb-boton-cancelar\" ");
+        toReturn.append("onclick=\"dijit.byId('swbDialog').hide()\">");
+        toReturn.append(getLocaleString("cancel", lang));
+        toReturn.append("</button>");
+        toReturn.append("    </div>\n");
 
         toReturn.append("</div>");
         toReturn.append("</form>");
@@ -579,8 +590,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
@@ -616,8 +627,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @param usrWithGrants define si existen permisos para editar o eliminar
@@ -676,7 +687,7 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
                 toReturn.append("', '");
                 toReturn.append(Attachment.sclass.getDisplayName(lang));
                 toReturn.append("');\">");
-                
+
                 //toReturn.append("<i class=\"fa fa-pencil fa-lg swb-boton-accion\" title=\"Editar\"></i>");
                 toReturn.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
                 toReturn.append("\n</a>");
@@ -715,8 +726,8 @@ public class AttachmentElement extends org.semanticwb.bsc.formelement.base.Attac
      * @param type el tipo de despliegue a generar. Actualmente solo se acepta
      * el valor {@code dojo}
      * @param mode el modo en que se presentar&aacute; el despliegue del
-     * FormElement. Los modos soportados son:
-     * {@literal edit}, {@literal create}, {@literal filter} y {@literal view}
+     * FormElement. Los modos soportados son: {@literal edit},
+     * {@literal create}, {@literal filter} y {@literal view}
      * @param lang el lenguaje utilizado en la generaci&oacute;n del
      * c&oacute;digo HTML a regresar
      * @return el objeto String que representa el c&oacute;digo HTML con la
