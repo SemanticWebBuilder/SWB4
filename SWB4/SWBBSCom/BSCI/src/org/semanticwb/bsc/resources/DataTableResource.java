@@ -130,8 +130,13 @@ public class DataTableResource extends GenericResource implements ComponentExpor
                     state = sm.getMinimumState();
                     star.getMeasure(period).getEvaluation().setStatus(state);
                 }
-                String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
-                out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
+                if(state==null) {
+                    out.println("<span class=\"state-unknown\">Desconocido</span>");
+                }else {
+                    String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
+                    out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
+                }
+                
             }else {
                 out.println("--");
             }
@@ -190,7 +195,7 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         urlAction.setAction(SWBParamRequest.Action_ADD);
 
         out.println("<div class=\"swbform\">");
-        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" name=\"" + base.getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
+        out.println("<form id=\"" + base.getId() + "/InLineEditRes\" action=\""+urlAction+"\" method=\"post\" >");
         out.println("<fieldset>");
         out.println("<legend>");
         out.println(paramRequest.getLocaleString("lbl_Admin_Basic"));
@@ -238,10 +243,10 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         out.println("       <select name=\"editar\">" + strRules + "</select>");
         out.print("     </li>");
         
-        out.println("   <li class=\"swbform-li\">");
-        out.println("       <label for=\"autosave\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_Autosave")+"</label>");
-        out.println("       <input type=\"checkbox\" name=\"autosave\" id=\"autosave\" value=\"true\" "+(Boolean.parseBoolean(base.getAttribute("autosave"))?"checked=\"checked\"":"")+" dojoType=\"dijit.form.CheckBox\" promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAutosave")+"\" />");
-        out.print("     </li>");
+//        out.println("   <li class=\"swbform-li\">");
+//        out.println("       <label for=\"autosave\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_Autosave")+"</label>");
+//        out.println("       <input type=\"checkbox\" name=\"autosave\" id=\"autosave\" value=\"true\" "+(Boolean.parseBoolean(base.getAttribute("autosave"))?"checked=\"checked\"":"")+" dojoType=\"dijit.form.CheckBox\" promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAutosave")+"\" />");
+//        out.print("     </li>");
         out.println("   <li class=\"swbform-li\">");
         out.println("       <label for=\"left\" class=\"swbform-label\">"+paramRequest.getLocaleString("lbl_Admin_Before")+"</label>");
         out.println("       <input type=\"text\" name=\"left\" id=\"left\" maxlength=\"2\" value=\""+base.getAttribute("left","7")+"\" regExp=\"\\d{1,2}\" dojoType=\"dijit.form.ValidationTextBox\" invalidMessage=\""+paramRequest.getLocaleString("msg_Admin_IncorrectAmount")+"\"  promptMessage=\""+paramRequest.getLocaleString("msg_Admin_PrompAmountBefore")+"\" />");
@@ -281,10 +286,8 @@ public class DataTableResource extends GenericResource implements ComponentExpor
             if(attr != null) {
                 base.setAttribute("editRole", attr);                
             }
-            
-            attr = request.getParameter("autosave")==null?"false":"true";
-            base.setAttribute("autosave", attr);
-            
+//            attr = request.getParameter("autosave")==null?"false":"true";
+//            base.setAttribute("autosave", attr);
             attr = request.getParameter("left");
             try {
                 Integer.parseInt(attr);
