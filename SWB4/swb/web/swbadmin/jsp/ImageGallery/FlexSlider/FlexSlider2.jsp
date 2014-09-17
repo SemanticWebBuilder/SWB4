@@ -4,6 +4,7 @@
 <%
     List<String> imagenes = (List<String>) request.getAttribute("images");
     List<String> thumbnails = (List<String>) request.getAttribute("thumbnails");
+    List<String> descriptions = (List<String>) request.getAttribute("descriptions");
     String pathJS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/js/";
     String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/images/";
     String pathCSS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/css/";
@@ -36,18 +37,29 @@
 
 
 <div id="slider" class="flexslider">
-    <ul class="slides">
+    <div class="slides">
         <%
+            int i = 0;
             for (String image : imagenes)
             {
+                String description = descriptions.get(i);
+                i++;
         %>
-        <li>
+        <div>
             <img src="<%=image%>" />
-        </li>
+            <%
+                if (!description.isEmpty())
+                {
+            %>
+            <p class="slideDescription"><%=description%></p>
+            <%
+                }
+            %>
+        </div>
         <%
             }
         %>
-    </ul>
+    </div>
 </div>
 <div id="carousel" class="flexslider">
     <ul class="slides">
@@ -98,6 +110,7 @@
             slideshow: <%=autoplay%>,
             animationSpeed: <%=slideDuration%>,
             sync: "#carousel",
+            selector: ".slides > div",
             start: function(slider) {
                 //$('body').removeClass('loading');
             }
