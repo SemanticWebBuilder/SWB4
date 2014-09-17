@@ -125,7 +125,7 @@ public class MulSelWithoutCurrentObject extends org.semanticwb.bsc.formelement.b
 
             if (mode.equals("edit") || mode.equals("create")) {
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
-                ret.append(" style=\"width:300px;\"");
+                ret.append(" style=\"width:500px;\" size=6");
 
                 if (DOJO) {
                     //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
@@ -174,7 +174,7 @@ public class MulSelWithoutCurrentObject extends org.semanticwb.bsc.formelement.b
                 ret.append("</select>");
             } else if (mode.equals("view")) {
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
-                ret.append(" style=\"width:300px;\"");
+                ret.append(" style=\"width:500px;\"");
 
                 if (DOJO) {
                     //ret.append(" dojoType=\"dijit.form.MultiSelect\" invalidMessage=\"" + imsg + "\"");
