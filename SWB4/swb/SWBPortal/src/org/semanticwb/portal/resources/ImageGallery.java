@@ -244,6 +244,7 @@ public class ImageGallery extends GenericResource
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
         Resource base = getResourceBase();
+        List<String> descriptions = new ArrayList<String>();
         List<String> imgpath = new ArrayList<String>();
         Iterator<String> it = base.getAttributeNames();
         while (it.hasNext())
@@ -253,6 +254,12 @@ public class ImageGallery extends GenericResource
             if (attval != null && attname.startsWith("imggallery_"))
             {
                 imgpath.add(webWorkPath + attval);
+                String descripiton="";
+                if(base.getAttribute("desc_"+attname)!=null)
+                {
+                    descripiton=base.getAttribute("desc_"+attname);
+                }
+                descriptions.add(descripiton);
             }
         }
         String[] ip = new String[imgpath.size()];
@@ -272,6 +279,8 @@ public class ImageGallery extends GenericResource
                 request.setAttribute("paramRequest", paramRequest);
                 request.setAttribute("images", imgpath);
                 request.setAttribute("thumbnails", imgpath_tmb);
+                request.setAttribute("descriptions", descriptions);
+                
                 request.getRequestDispatcher(path).include(request, response);
                 return;
             }
@@ -518,6 +527,7 @@ public class ImageGallery extends GenericResource
                 int width = Integer.parseInt(base.getAttribute("width"));
                 //String filenameAttr, removeChk;
                 String prefix = "imggallery_" + base.getId() + "_";
+
                 value = null != getValue("deleteall", formItems) && !"".equals(getValue("deleteall", formItems).trim()) ? getValue("deleteall", formItems).trim() : null;
                 if (value != null)
                 {
@@ -527,7 +537,7 @@ public class ImageGallery extends GenericResource
                     {
                         String key = keys.next();
                         String file = base.getAttribute(key, null);
-                        if (file != null && key.startsWith(prefix))                            
+                        if (file != null && key.startsWith(prefix))
                         {
                             values.put(key, file);
                         }
@@ -540,8 +550,20 @@ public class ImageGallery extends GenericResource
                         file = new File(workPath + _thumbnail + base.getAttribute(key));
                         file.delete();
                         base.removeAttribute(key);
+                        base.removeAttribute("desc_"+key);
                     }
                 }
+                else
+                {
+                    for (FileItem item : formItems)
+                    {
+                        if (item.getFieldName().startsWith("desc_" + prefix))
+                        {
+                            base.setAttribute(item.getFieldName(), getValue(item.getFieldName(), formItems));
+                        }
+                    }
+                }
+
                 List<FileItem> imagesAddBatch = new ArrayList<FileItem>();
                 for (FileItem item : formItems)
                 {
@@ -550,7 +572,7 @@ public class ImageGallery extends GenericResource
                         imagesAddBatch.add(item);
                     }
                 }
-                
+
                 for (FileItem item : imagesAddBatch)
                 {
                     value = getFileName(item.getFieldName(), imagesAddBatch);
@@ -609,6 +631,7 @@ public class ImageGallery extends GenericResource
                     file = new File(workPath + _thumbnail + base.getAttribute(filenameAttr));
                     file.delete();
                     base.removeAttribute(filenameAttr);
+                    base.removeAttribute("desc_"+filenameAttr);
                 }
 
                 //String prefix = "imggallery_" + base.getId() + "_";
@@ -854,7 +877,8 @@ public class ImageGallery extends GenericResource
         htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"10\" height=\"20\" nowrap=\"nowrap\">&nbsp;</th> ");
         htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"20\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colEdit") + "</th> ");
         htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"30\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colRemove") + "</th> ");
-        htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colFile") + "</th> ");
+        //htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colFile") + "</th> ");
+        htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colDescription") + "</th> ");
         htm.append("\n    <th align=\"center\" scope=\"col\" style=\"text-align:center;\" width=\"40%\" height=\"20\" nowrap=\"nowrap\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_colImage") + "</th> ");
         htm.append("\n  </tr> ");
         htm.append("\n</table> ");
@@ -908,7 +932,8 @@ public class ImageGallery extends GenericResource
         htm.append("\nreturn uuid;");
         htm.append("\n};");
 
-        htm.append("\nfunction addRowToTable(tblId, filename, img, cellSufix) { ");
+        htm.append("\nfunction addRowToTable(tblId, filename, img, cellSufix,desc) { ");
+        htm.append("\n    if(!desc){desc='';} ");
         htm.append("\n    var tbl = document.getElementById(tblId); ");
         htm.append("\n    var lastRow = tbl.rows.length; ");
         htm.append("\n    var icolDisplay = lastRow-1; // descontar el renglon de titulo ");
@@ -974,14 +999,35 @@ public class ImageGallery extends GenericResource
         htm.append("\n    removeCheckInput.value = '1'; ");
         htm.append("\n    removeCheckCell.appendChild(removeCheckInput); ");
         htm.append("\n ");
-        htm.append("\n    // celda nombre de archivo ");
-        htm.append("\n    var filenameCell = row.insertCell(3); ");
-        htm.append("\n    if(filename) { ");
-        htm.append("\n        var fnTxt = document.createTextNode(filename); ");
-        htm.append("\n        filenameCell.appendChild(fnTxt); ");
-        htm.append("\n    } ");
-        htm.append("\n    filenameCell.style.textAlign = 'left'; ");
+
+        /*htm.append("\n    // celda nombre de archivo ");
+         htm.append("\n    var filenameCell = row.insertCell(3); ");
+         htm.append("\n    if(filename) { ");
+         htm.append("\n        var fnTxt = document.createTextNode(filename); ");
+         htm.append("\n        filenameCell.appendChild(fnTxt); ");
+         htm.append("\n    } ");
+         htm.append("\n    filenameCell.style.textAlign = 'left'; ");
+         htm.append("\n ");*/
+        htm.append("\n    // celda nombre de descripcion ");
+        htm.append("\n        var descriptionCell = row.insertCell(3); ");
+        htm.append("\n        var idEditImg='';");
+        htm.append("\n        var imghtml=img; ");        
+        htm.append("\n        var pos=imghtml.indexOf('id=\"'); ");        
+        htm.append("\n        if(pos!=-1){ ");
+        htm.append("\n                  var pos2=imghtml.indexOf('\"',pos+6); ");        
+        htm.append("\n                  idEditImg=imghtml.substring(pos+4,pos2);");        
+        htm.append("\n        } ");
+        htm.append("\n        var descriptionInput = document.createElement('input'); ");
+        htm.append("\n        descriptionInput.type = 'text'; ");
+        htm.append("\n        descriptionInput.name = 'desc_'+idEditImg; ");
+        htm.append("\n        descriptionInput.id = 'desc_'+idEditImg; ");
+        htm.append("\n        descriptionInput.style.width='95%';");
+        htm.append("\n        descriptionInput.value = desc; ");
+        htm.append("\n        descriptionCell.appendChild(descriptionInput); ");
+        //htm.append("\n    } ");
+        //htm.append("\n    filenameCell.style.textAlign = 'left'; ");
         htm.append("\n ");
+
         htm.append("\n    var imgCell = row.insertCell(4); ");
         htm.append("\n    if(img) { ");
         htm.append("\n        imgCell.style.textAlign = 'center'; ");
@@ -1016,9 +1062,15 @@ public class ImageGallery extends GenericResource
             if (attval != null && attname.startsWith("imggallery_"))
             {
                 long value = new Date().getTime();
+                String desc = "";
+                String keyDesc = "desc_" + attname;
+                if (base.getAttribute(keyDesc) != null)
+                {
+                    desc = base.getAttribute(keyDesc);
+                }
                 //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
                 String img = "<img id=\"" + attname + "\" src=\"" + webWorkPath + _thumbnail + attval + "?date=" + value + "\" alt=\"" + attname + "\" border=\"0\" />";
-                htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "'); ");
+                htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "','" + desc + "'); ");
             }
         }
         htm.append("\n</script>");
