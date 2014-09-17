@@ -1068,6 +1068,7 @@ public class ImageGallery extends GenericResource
                 {
                     desc = base.getAttribute(keyDesc);
                 }
+                desc=desc.replace("'", "\\'");
                 //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
                 String img = "<img id=\"" + attname + "\" src=\"" + webWorkPath + _thumbnail + attval + "?date=" + value + "\" alt=\"" + attname + "\" border=\"0\" />";
                 htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "','" + desc + "'); ");
