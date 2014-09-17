@@ -5,7 +5,7 @@
     List<String> imagenes = (List<String>) request.getAttribute("images");
     List<String> thumbnails = (List<String>) request.getAttribute("thumbnails");
     String pathJS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/js/";
-    String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/img/";
+    String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/images/";
     String pathCSS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/css/";
     boolean autoplay = Boolean.valueOf(paramRequest.getResourceBase().getAttribute("autoplay", "false"));
     int autoPlayInterval = Integer.parseInt(paramRequest.getResourceBase().getAttribute("pause", "2500"));
@@ -70,8 +70,12 @@
    $(window).load(function() {
   $('.flexslider').flexslider({
     animation: "slide",
-    controlNav: "thumbnails"
-  });
+    controlNav: "thumbnails",
+    slideshowSpeed: <%=autoPlayInterval%>,
+    animationLoop: true,
+    slideshow: <%=autoplay%>, 
+    animationSpeed: <%=slideDuration%>,            
+});
 });
 </script>
 
