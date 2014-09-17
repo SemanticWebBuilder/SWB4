@@ -29,8 +29,11 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -514,8 +517,81 @@ public class ImageGallery extends GenericResource
 
                 int width = Integer.parseInt(base.getAttribute("width"));
                 //String filenameAttr, removeChk;
+                String prefix = "imggallery_" + base.getId() + "_";
+                value = null != getValue("deleteall", formItems) && !"".equals(getValue("deleteall", formItems).trim()) ? getValue("deleteall", formItems).trim() : null;
+                if (value != null)
+                {
+                    Map<String, String> values = new HashMap<String, String>();
+                    Iterator<String> keys = base.getAttributeNames();
+                    while (keys.hasNext())
+                    {
+                        String key = keys.next();
+                        String file = base.getAttribute(key, null);
+                        if (file != null && key.startsWith(prefix))                            
+                        {
+                            values.put(key, file);
+                        }
+                    }
+                    for (String key : values.keySet())
+                    {
+
+                        File file = new File(workPath + values.get(key));
+                        file.delete();
+                        file = new File(workPath + _thumbnail + base.getAttribute(key));
+                        file.delete();
+                        base.removeAttribute(key);
+                    }
+                }
+                List<FileItem> imagesAddBatch = new ArrayList<FileItem>();
+                for (FileItem item : formItems)
+                {
+                    if (item.getFieldName().equals("fileupload"))
+                    {
+                        imagesAddBatch.add(item);
+                    }
+                }
+                
+                for (FileItem item : imagesAddBatch)
+                {
+                    value = getFileName(item.getFieldName(), imagesAddBatch);
+                    String filenameAttr = item.getFieldName();
+                    String id = UUID.randomUUID().toString();
+                    String key = prefix + id;
+                    if (value != null)
+                    {
+                        String filename = admResUtils.getFileName(base, value);
+                        int intPos = filename.lastIndexOf(".");
+                        if (intPos != -1)
+                        {
+                            filename = key + filename.substring(intPos);
+                        }
+                        if (filename != null && !filename.trim().equals(""))
+                        {
+                            if (!admResUtils.isFileType(filename, "bmp|jpg|jpeg|gif|png"))
+                            {
+                                msg = paramRequest.getLocaleString("msgErrFileType") + " <i>bmp, jpg, jpeg, gif, png</i>: " + filename;
+                            }
+                            else
+                            {
+                                if (uploadFile(base, filename, filenameAttr, item))
+                                {
+                                    base.setAttribute(key, filename);
+                                }
+                                else
+                                {
+                                    msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            msg = paramRequest.getLocaleString("msgErrUploadFile") + " <i>" + value + "</i>.";
+                        }
+                    }
+                }
 
                 String prefix_removeChk = "remove_" + base.getId() + "_";
+
                 List<FileItem> imagesRemove = new ArrayList<FileItem>();
                 for (FileItem item : formItems)
                 {
@@ -535,7 +611,7 @@ public class ImageGallery extends GenericResource
                     base.removeAttribute(filenameAttr);
                 }
 
-                String prefix = "imggallery_" + base.getId() + "_";
+                //String prefix = "imggallery_" + base.getId() + "_";
                 List<FileItem> imagesAdd = new ArrayList<FileItem>();
                 for (FileItem item : formItems)
                 {
@@ -564,32 +640,9 @@ public class ImageGallery extends GenericResource
                             }
                             else
                             {
-                                if (uploadFile(base, filename, filenameAttr, formItems))
+                                if (uploadFile(base, filename, filenameAttr, item))
                                 {
                                     base.setAttribute(filenameAttr, filename);
-                                    /*File image = new File(workPath + filename);
-                                    File thumbnail = new File(workPath + _thumbnail + filename);
-                                    String s_cut = base.getAttribute("cut", "false");
-                                    boolean cut = Boolean.parseBoolean(s_cut);
-
-                                    if (cut)
-                                    {
-                                        try
-                                        {
-                                            int height = Integer.parseInt(base.getAttribute("height", "180"));
-                                            ImageResizer.crop(image, width, height, thumbnail, "jpeg");
-                                        }
-                                        catch (NumberFormatException nfe)
-                                        {
-                                            log.error(nfe);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ImageResizer.resizeCrop(image, width, thumbnail, "jpeg");
-                                    }
-
-                                    base.setAttribute(filenameAttr, filename);*/
                                 }
                                 else
                                 {
@@ -603,7 +656,7 @@ public class ImageGallery extends GenericResource
                         }
                     }
                 }
-                
+
                 base.updateAttributesToDB();
 
                 generaTbm();
@@ -741,6 +794,26 @@ public class ImageGallery extends GenericResource
         htm.append("\n</td>");
         htm.append("\n</tr>");
 
+        htm.append("\n<tr>");
+        htm.append("\n<td width=\"200\" align=\"right\">");
+        htm.append("<label for=\"fileupload\" class=\"swbform-label\">");
+        htm.append(paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_multipleFiles"));
+        htm.append("</label>");
+        htm.append("\n</td>");
+        htm.append("\n<td>");
+        htm.append("\n<input id=\"fileupload\" name=\"fileupload\" type=\"file\" value=\"\" multiple/>");
+        htm.append("\n</td>");
+        htm.append("\n</tr>");
+
+        htm.append("\n<tr>");
+        htm.append("\n<td width=\"200\" align=\"right\">");
+        htm.append("<label for=\"deleteall\" class=\"swbform-label\">" + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_deleteAll") + "</label>");
+        htm.append("\n</td>");
+        htm.append("\n<td>");
+        htm.append("\n<input id=\"deleteall\" dojotype=\"dijit.form.CheckBox\" name=\"deleteall\" type=\"checkbox\" />");
+        htm.append("\n</td>");
+        htm.append("\n</tr>");
+
         String height = base.getAttribute("height", "150");
         htm.append("\n<tr>");
         htm.append("\n<td width=\"200\" align=\"right\">");
@@ -765,8 +838,8 @@ public class ImageGallery extends GenericResource
         htm.append("\n<tr>");
         htm.append("\n<td width=\"200\" align=\"right\">* " + paramRequest.getLocaleString("usrmsg_ImageGallery_doAdmin_img") + "&nbsp;<i>(bmp, jpg, jpeg, gif, png)</i></td>");
         htm.append("\n<td>");
-        htm.append("\n<div id=\"igcontainer_" + base.getId() + "\" style=\"background-color:#F0F0F0; width:602px; height:432px; overflow:visible\"> ");
-        htm.append("\n<div id=\"iggrid_" + base.getId() + "\" style=\"width:600px;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF\"> ");
+        htm.append("\n<div id=\"igcontainer_" + base.getId() + "\" style=\"background-color:#F0F0F0; width:100%; height:432px; overflow:visible\"> ");
+        htm.append("\n<div id=\"iggrid_" + base.getId() + "\" style=\"width:100%;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF\"> ");
         htm.append("\n  <table id=\"igtbl_" + base.getId() + "\" width=\"99%\" cellspacing=\"1\" bgcolor=\"#769CCB\" align=\"center\"> ");
 
         htm.append("\n  <tr bgcolor=\"#E1EAF7\"> ");
@@ -1160,22 +1233,17 @@ public class ImageGallery extends GenericResource
         return null;
     }
 
-    public byte[] getFileData(String name, List<FileItem> list) throws IOException
+    public byte[] getFileData(String name, FileItem fileitem) throws IOException
     {
-        for (FileItem fileitem : list)
-        {
-            if (fileitem.getFieldName().equals(name))
-            {
-                byte[] content = new byte[(int) fileitem.getSize()];
-                InputStream in = fileitem.getInputStream();
-                in.read(content);
-                return content;
-            }
-        }
-        return new byte[0];
+
+        byte[] content = new byte[(int) fileitem.getSize()];
+        InputStream in = fileitem.getInputStream();
+        in.read(content);
+        return content;
+
     }
 
-    public boolean uploadFile(Resource base, String fileName, String pInForm, List<FileItem> items)
+    public boolean uploadFile(Resource base, String fileName, String pInForm, FileItem item)
     {
 
         //String strWorkPath = workPath;
@@ -1205,7 +1273,7 @@ public class ImageGallery extends GenericResource
                     {
                         s3 = s3.substring(i + 1);
                     }
-                    byte[] content = getFileData(pInForm, items);
+                    byte[] content = getFileData(pInForm, item);
                     FileOutputStream fileoutputstream = new FileOutputStream(workPath + s3);
                     fileoutputstream.write(content, 0, content.length);
                     fileoutputstream.close();
