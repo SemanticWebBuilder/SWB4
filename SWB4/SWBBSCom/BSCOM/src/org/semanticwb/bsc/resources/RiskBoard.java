@@ -1660,7 +1660,7 @@ public class RiskBoard extends GenericResource {
             output.append("dojo.require(\"dojox.form.TimeSpinner\");\n");
             output.append("</script>\n");
 
-            String onsubmit = " onsubmit=\"submitAndReload(this.id)\""; // mySubmitForm(this.id)
+            String onsubmit = " onsubmit=\"mySubmitForm(this.id)\""; // mySubmitForm(this.id)
             output.append("<form dojoType=\"dijit.form.Form\" id=\"");
             output.append(formMgr.getFormName());
             output.append("\" class=\"form-horizontal swb-padding-top\" action=\"");
