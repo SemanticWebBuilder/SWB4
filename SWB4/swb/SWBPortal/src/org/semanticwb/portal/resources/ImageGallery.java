@@ -1022,7 +1022,7 @@ public class ImageGallery extends GenericResource
         htm.append("\n        descriptionInput.name = 'desc_'+idEditImg; ");
         htm.append("\n        descriptionInput.id = 'desc_'+idEditImg; ");
         htm.append("\n        descriptionInput.style.width='95%';");
-        htm.append("\n        descriptionInput.value = desc; ");
+        htm.append("\n        descriptionInput.value = unescape(desc); ");
         htm.append("\n        descriptionCell.appendChild(descriptionInput); ");
         //htm.append("\n    } ");
         //htm.append("\n    filenameCell.style.textAlign = 'left'; ");
@@ -1068,7 +1068,10 @@ public class ImageGallery extends GenericResource
                 {
                     desc = base.getAttribute(keyDesc);
                 }
-                desc=desc.replace("'", "\\'");
+                desc=desc.replaceAll(">", "%3E");
+                desc=desc.replaceAll(">", "%3C");
+                desc=desc.replaceAll("'", "%27");
+                desc=desc.replaceAll("\"", "%22");
                 //String img = "<img src=\""+webWorkPath+_thumbnail+attval+"\" width=\""+width+"\" height=\""+height+"\" alt=\""+attname+"\" border=\"0\" />";
                 String img = "<img id=\"" + attname + "\" src=\"" + webWorkPath + _thumbnail + attval + "?date=" + value + "\" alt=\"" + attname + "\" border=\"0\" />";
                 htm.append("\naddRowToTable('igtbl_" + base.getId() + "', '" + base.getAttribute(attname) + "', '" + img + "', '" + attname.substring(11) + "','" + desc + "'); ");
@@ -1341,5 +1344,43 @@ public class ImageGallery extends GenericResource
             log.error(SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc01") + " " + base.getId() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc02") + " " + base.getResourceType() + SWBUtils.TEXT.getLocaleString("locale_swb_util", "error_WBResource_uploadFile_exc03") + " " + fileName + ".");
         }
         return bOk;
+    }
+    public static String escapeTags(String original)
+    {
+        if (original == null)
+        {
+            return "";
+        }
+        StringBuffer out = new StringBuffer("");
+        char[] chars = original.toCharArray();
+        for (int i = 0; i < chars.length; i++)
+        {
+            boolean found = true;
+            switch (chars[i])
+            {
+                case '&':
+                    out.append("&amp;");
+                    break; //&
+                case 60:
+                    out.append("&lt;");
+                    break; //<
+                case 62:
+                    out.append("&gt;");
+                    break; //>
+                case 34:
+                    out.append("&quot;");
+                    break; //"
+                default:
+                    found = false;
+                    break;
+            }
+            if (!found)
+            {
+                out.append(chars[i]);
+            }
+
+        }
+        return out.toString();
+
     }
 }
