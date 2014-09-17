@@ -5,7 +5,7 @@
     List<String> imagenes = (List<String>) request.getAttribute("images");
     List<String> thumbnails = (List<String>) request.getAttribute("thumbnails");
     String pathJS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/js/";
-    String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/img/";
+    String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/images/";
     String pathCSS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/FlexSlider/css/";
     boolean autoplay = Boolean.valueOf(paramRequest.getResourceBase().getAttribute("autoplay", "false"));
     int autoPlayInterval = Integer.parseInt(paramRequest.getResourceBase().getAttribute("pause", "2500"));
@@ -78,7 +78,7 @@
 <script defer src="<%=pathJS%>jquery.flexslider.js"></script>
 
 <script type="text/javascript">
-   
+
     $(window).load(function() {
         $('#carousel').flexslider({
             animation: "slide",
@@ -93,8 +93,10 @@
         $('#slider').flexslider({
             animation: "slide",
             controlNav: false,
-            animationLoop: false,
-            slideshow: false,
+            slideshowSpeed: <%=autoPlayInterval%>,
+            animationLoop: true,
+            slideshow: <%=autoplay%>,
+            animationSpeed: <%=slideDuration%>,
             sync: "#carousel",
             start: function(slider) {
                 //$('body').removeClass('loading');
