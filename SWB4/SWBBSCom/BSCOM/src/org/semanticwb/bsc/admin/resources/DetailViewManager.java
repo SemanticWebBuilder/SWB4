@@ -1689,57 +1689,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
-            throws FileNotFoundException, IOException {
-        User user = paramRequest.getUser();
-        WebPage wp = paramRequest.getWebPage();
-
-        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/"
-                + template.getActualVersion().getVersionNumber() + "/"
-                + template.getFileName(template.getActualVersion().getVersionNumber());
-        FileReader reader = null;
+    private String getLinks(HttpServletRequest request)
+    {
+        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
-        reader = new FileReader(filePath);
-
-        String port = "";
-        if (request.getServerPort() != 80) {
-            port = ":" + request.getServerPort();
-        }
-        String baserequest = request.getScheme() + "://" + request.getServerName()
-                + port;
-
-        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
-        HtmlTag tag = new HtmlTag();
-        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-            int ttype = tok.getTokenType();
-
-            if (ttype == HtmlStreamTokenizer.TT_TAG) {
-                try {
-                    tok.parseTag(tok.getStringValue(), tag);
-                } catch (HtmlException htmle) {
-                    DetailViewManager.log.error("Al parsear la plantilla , "
-                            + filePath, htmle);
-                }
-                if (tag.getTagString().toLowerCase().equals("link")) {
-                    String tagTxt = tag.toString();
-                    if (tagTxt.contains("type=\"text/css\"")) {
-                        if (!tagTxt.contains("/>")) {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
-                        }
-                        if (!tagTxt.contains("{webpath}")) {
-                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
-                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
-                                    tagTxt.length());
-                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
-                        } else {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
-                        }
-                        view.append(tagTxt);
-                    }
-                }
-            }
-        }
+        view.append("<link href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
         return view.toString();
     }
 
@@ -1761,7 +1716,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         StringBuilder output = new StringBuilder();
         output.append("<html>");
         output.append("<head>");
-        output.append(getLinks(paramRequest, request));
+        output.append(getLinks(request));
         output.append("</head>");
         output.append("<body>");
         output.append(getHtml(request, paramRequest));
@@ -2064,10 +2019,10 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         ret.append("<form id=\"frmDetail\" method=\"post\" accept-charset=\"utf-8\" action=\"");
         ret.append(url);
         ret.append("\" style=\"display:none\">").append("\n");
-        ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\"/>").append("\n");
+        ret.append("   <input type=\"hidden\" id=\"image\" name=\"image\">").append("\n");
         ret.append("   <input type=\"hidden\" id=\"uniqueImage\" name=\"uniqueImage\" value=\"");
         ret.append(UploaderFileCacheUtils.uniqueCad());
-        ret.append("\"/>\n");
+        ret.append("\">\n");
         ret.append("</form>").append("\n");
 
         return ret.toString();
