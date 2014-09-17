@@ -1,6 +1,8 @@
+<%@page import="org.semanticwb.SWBUtils"%>
 <%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="java.util.List"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
+
 <%
     List<String> imagenes = (List<String>) request.getAttribute("images");
     List<String> thumbnails = (List<String>) request.getAttribute("thumbnails");
@@ -52,6 +54,7 @@
             <%
                 if (!description.isEmpty())
                 {
+                    description=SWBUtils.TEXT.encodeExtendedCharacters(description);
             %>
             <div class="slideDescription"><%=description%></div>
             <%
