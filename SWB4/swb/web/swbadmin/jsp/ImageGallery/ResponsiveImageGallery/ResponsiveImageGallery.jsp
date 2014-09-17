@@ -4,6 +4,7 @@
 <%
     List<String> imagenes = (List<String>) request.getAttribute("images");
     List<String> thumbnails = (List<String>) request.getAttribute("thumbnails");
+    List<String> descriptions = (List<String>) request.getAttribute("descriptions");
     String pathJS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/ResponsiveImageGallery/js/";
     String pathIMG = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/ResponsiveImageGallery/img/";
     String pathCSS = SWBPortal.getContextPath() + "/swbadmin/jsp/ImageGallery/ResponsiveImageGallery/css/";
@@ -18,6 +19,14 @@
     if (title == null)
     {
         title = "";
+    }
+    boolean showdesc=false;
+    for(String desc : descriptions)
+    {
+        if(!desc.isEmpty())
+        {
+            showdesc=true;
+        }
     }
     boolean showTitle = Boolean.parseBoolean(paramRequest.getResourceBase().getAttribute("title", "false"));
     if (showTitle)
@@ -70,13 +79,20 @@
                     </div>
                     <div class="es-carousel">
                         <ul>
+                            
                             <%
                                 int i = 0;
                                 for (String image : imagenes)
                                 {
                                     String thumb = thumbnails.get(i);
+                                    String description = descriptions.get(i);         
+                                    if(showdesc & description.isEmpty())
+                                    {
+                                        description=image.substring(image.lastIndexOf('/')+1);
+                                    }
                                     i++;
-                                    String description = "";
+                                    
+                                    
                             %>
                             <li><img src="<%=thumb%>" data-large="<%=image%>" alt="<%=image%>" data-description="<%=description%>" /></li>
                                 <%
@@ -95,5 +111,31 @@
 <script type="text/javascript" src="<%=pathJS%>jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="<%=pathJS%>jquery.elastislide.js"></script>
 <script type="text/javascript" src="<%=pathJS%>gallery.js"></script>
+<script>
+    $.Elastislide.defaults = {
+    // orientation 'horizontal' || 'vertical'
+    orientation : 'horizontal',
+ 
+    // sliding speed
+    speed : <%=autoPlayInterval%>,
+ 
+    // sliding easing
+    easing : 'ease-in-out',
+ 
+    // the minimum number of items to show. 
+    // when we resize the window, this will make sure minItems are always shown 
+    // (unless of course minItems is higher than the total number of elements)
+    minItems : 3,
+ 
+    // index of the current item (left most item of the carousel)
+    start : 0,
+     
+    // click item callback
+    onClick : function( el, position, evt ) { return false; },
+    onReady : function() { return false; },
+    onBeforeSlide : function() { return false; },
+    onAfterSlide : function() { return false; }
+};
 
+</script>
 
