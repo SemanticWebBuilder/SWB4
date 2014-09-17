@@ -51,7 +51,7 @@
                 if (!description.isEmpty())
                 {
             %>
-            <p class="slideDescription"><%=description%></p>
+            <div class="slideDescription"><%=description%></div>
             <%
                 }
             %>
