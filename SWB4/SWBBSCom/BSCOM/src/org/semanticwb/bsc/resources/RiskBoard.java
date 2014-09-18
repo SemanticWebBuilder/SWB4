@@ -1752,38 +1752,25 @@ public class RiskBoard extends GenericResource {
      * @throws IOException si ocurre un problema con la lectura/escritura de la
      * petici&oacute;n/respuesta.
      */
-    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
-
+    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         StringBuilder ret = new StringBuilder(128);
-        SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(),
-                paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
-        SWBResourceURL urlExcel = new SWBResourceURLImp(request, getResourceBase(),
-                paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
+        SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode("export");
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setParameter("dispMode", "view");
         url.setParameter("type", "pdf");
-        String titlePdf = paramRequest.getLocaleString("msg_PrintPDFDocument");
-        ret.append("<a href=\"");
-        ret.append(url);
-        ret.append("\" class=\"swbstgy-toolbar-printPdf\" title=\"");
-        ret.append(titlePdf);
-        ret.append("\">");
-        ret.append(titlePdf);
-        ret.append("</a>");
-        urlExcel.setMode("export");
-        urlExcel.setCallMethod(SWBResourceURL.Call_DIRECT);
-        urlExcel.setParameter("dispMode", "view");
-        urlExcel.setParameter("type", "excel");
-        String titleExcel = paramRequest.getLocaleString("msg_PrintXlDocument");
-        ret.append("&nbsp; &nbsp; <a href=\"");
-        ret.append(urlExcel);
-        ret.append("\" class=\"swbstgy-toolbar-printExcel\" title=\"");
-        ret.append(titleExcel);
-        ret.append("\">");
-        ret.append(titleExcel);
-        ret.append("</a>");
+        ret.append("<button type=\"button\" class=\"btn btn-default\" onclick=\"")
+                .append("window.location.href='").append(url.toString()).append("'")
+                .append("\">");
+        ret.append("  <span class=\"glyphicon glyphicon-export\"></span>");
+        ret.append("</button>");
+        url.setParameter("type", "excel");
+        ret.append("<button type=\"button\" class=\"btn btn-default\" onclick=\"")
+                .append("window.location.href='").append(url.toString()).append("'")
+                .append("\">");
+        ret.append("  <span class=\"glyphicon glyphicon-download-alt\"></span>");
+        ret.append("</button>");
         return ret.toString();
     }
 
@@ -1844,8 +1831,8 @@ public class RiskBoard extends GenericResource {
             output.append("cm;}");  // 11in 8.5in
             output.append("</style>");
         }
-        output.append(this.getLinks(paramRequest, request));
-        output.append(this.getStylesString());
+        output.append(getLinks(request));
+        output.append(getStylesString());
         output.append("</head>");
         output.append("<body>");
         output.append(htmlCode);
@@ -1926,7 +1913,15 @@ public class RiskBoard extends GenericResource {
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
+    private String getLinks(HttpServletRequest request)
+    {
+        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
+        StringBuilder view = new StringBuilder(256);
+        view.append("<link href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
+        return view.toString();
+    }
+    /*private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
             throws FileNotFoundException, IOException {
 
         User user = paramRequest.getUser();
@@ -1978,7 +1973,7 @@ public class RiskBoard extends GenericResource {
             }
         }
         return view.toString();
-    }
+    }*/
 
     /**
      * Genera un {@code String} que representa los estilos CSS a utilizar para
