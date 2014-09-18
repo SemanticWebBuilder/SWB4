@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -281,7 +282,12 @@ public class ImageGallery extends GenericResource
                 request.setAttribute("thumbnails", imgpath_tmb);
                 request.setAttribute("descriptions", descriptions);
                 
-                request.getRequestDispatcher(path).include(request, response);
+                //request.getRequestDispatcher(path).include(request, response);
+                RequestDispatcher requestDispatcher=request.getRequestDispatcher(path);
+                if(requestDispatcher!=null)
+                {
+                    requestDispatcher.include(request, response);
+                }
                 return;
             }
             catch (IOException e)
