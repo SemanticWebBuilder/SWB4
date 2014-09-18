@@ -32,6 +32,9 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Representa un archivo físico utilizado a manera de evidencia sobre la realización de alguna actividad.</rdfs:comment>
     <rdfs:subClassOf>
+      <owl:Class rdf:ID="Seasonable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
       <swb:Interface rdf:ID="StatusManuallyAssignable">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Define la posibilidad de que un usuario pueda asignar  directamente un estado a un objeto</rdfs:comment>
@@ -42,18 +45,15 @@
       </swb:Interface>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Class rdf:ID="Seasonable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <owl:Class rdf:ID="Schedule"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
           <owl:Class rdf:ID="Initiative"/>
         </owl:allValuesFrom>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Schedule"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <swb:displayObject>
@@ -304,14 +304,6 @@
       <owl:Class rdf:about="#Updateable"/>
     </rdfs:subClassOf>
     <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom>
-          <owl:Class rdf:ID="Objective"/>
-        </owl:allValuesFrom>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
       <swb:Interface rdf:ID="Serializable">
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Obtiene el número consecutivo utilizado en la asignación de la propiedad prefix de objetos de tipo Recognizable.</rdfs:comment>
@@ -334,31 +326,22 @@
       </swbxf:DisplayObject>
     </swb:displayObject>
     <rdfs:subClassOf>
-      <owl:Class rdf:about="#Seasonable"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf>
-      <swb:Interface rdf:ID="Committable">
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Cualquier elemento BSC que se pueda confirmar y no permitir editarlo</rdfs:comment>
-        <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >org.semanticwb.bsc</swb:classCodePackage>
-        <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
-      </swb:Interface>
-    </rdfs:subClassOf>
-    <rdfs:label xml:lang="en">Indicator</rdfs:label>
-    <rdfs:subClassOf>
-      <owl:Class rdf:about="#SM"/>
-    </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Detailed"/>
-    <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom>
           <swb:Class rdf:ID="Series">
             <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
             >true</swb:autogenId>
-            <rdfs:subClassOf rdf:resource="#Committable"/>
+            <rdfs:subClassOf>
+              <swb:Interface rdf:ID="Committable">
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Cualquier elemento BSC que se pueda confirmar y no permitir editarlo</rdfs:comment>
+                <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >org.semanticwb.bsc</swb:classCodePackage>
+                <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBInterface"/>
+                <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
+              </swb:Interface>
+            </rdfs:subClassOf>
             <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
             <rdfs:subClassOf>
               <owl:Class rdf:ID="Sortable"/>
@@ -398,6 +381,23 @@
         </owl:allValuesFrom>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Seasonable"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="Objective"/>
+        </owl:allValuesFrom>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Committable"/>
+    <rdfs:label xml:lang="en">Indicator</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#SM"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Detailed"/>
     <rdfs:subClassOf>
       <owl:Class rdf:ID="InitiativeAssignable"/>
     </rdfs:subClassOf>
@@ -478,9 +478,9 @@
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
-          <owl:Class rdf:ID="BSC"/>
+          <owl:Class rdf:ID="Agreement"/>
         </owl:allValuesFrom>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
       </owl:Restriction>
     </rdfs:subClassOf>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -498,16 +498,16 @@
     </swb:displayObject>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.tracing</swb:classCodePackage>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA</rdfs:comment>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
-          <owl:Class rdf:ID="Agreement"/>
+          <owl:Class rdf:ID="BSC"/>
         </owl:allValuesFrom>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
     <rdfs:subClassOf rdf:resource="#Status"/>
@@ -563,16 +563,16 @@
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Interface"/>
   </owl:Class>
   <owl:Class rdf:ID="State">
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.</rdfs:comment>
-    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
-    >true</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="#StateGroup"/>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Un estado define la situación de una medición  en un indicador respecto de las metas de su objetivo.</rdfs:comment>
+    <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Iconable"/>
     <rdfs:label xml:lang="en">State</rdfs:label>
     <rdfs:subClassOf rdf:resource="#Sortable"/>
@@ -703,8 +703,6 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas.</rdfs:comment>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom>
@@ -713,6 +711,8 @@
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Roleable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <swb:displayObject>
@@ -795,16 +795,16 @@
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Define las características de un Acuerdo.</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#BSCElement"/>
-    <rdfs:label xml:lang="en">Agreement</rdfs:label>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="#Meeting"/>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Define las características de un Acuerdo.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#BSCElement"/>
+    <rdfs:label xml:lang="en">Agreement</rdfs:label>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Agreement">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -843,15 +843,21 @@
     >true</swb:autogenId>
     <rdfs:subClassOf>
       <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#Control"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Clase que define un factor de riesgo.</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
         <owl:allValuesFrom>
           <owl:Class rdf:ID="Risk"/>
         </owl:allValuesFrom>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >Clase que define un factor de riesgo.</rdfs:comment>
-    <rdfs:subClassOf rdf:resource="#BSCTracing"/>
     <swb:displayObject>
       <swbxf:DisplayObject rdf:ID="do_Factor">
         <swbxf:dragSupport rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -864,12 +870,6 @@
     </swb:displayObject>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.tracing</swb:classCodePackage>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#Control"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
   </owl:Class>
@@ -904,9 +904,9 @@
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Define las características de una Iniciativa</rdfs:comment>
     <rdfs:subClassOf rdf:resource="#Updateable"/>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="#Deliverable"/>
@@ -989,11 +989,11 @@
       <swbxf:HerarquicalNode rdf:ID="hn_Meeting">
         <swb:iconClass rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >swbstrgyIconMeeting</swb:iconClass>
-        <swb:title xml:lang="es">Seguimiento Acuerdos</swb:title>
-        <swb:title xml:lang="en">Agreement follow</swb:title>
+        <swbxf:heClass rdf:resource="#Meeting"/>
+        <swb:title xml:lang="es">Seguimiento de Acuerdos</swb:title>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >140</swb:index>
-        <swbxf:heClass rdf:resource="#Meeting"/>
+        <swb:title xml:lang="en">Agreement Monitoring</swb:title>
       </swbxf:HerarquicalNode>
     </swb:hasHerarquicalNode>
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_PTStrategies"/>
@@ -1122,23 +1122,23 @@
     <swb:hasHerarquicalNode rdf:resource="http://www.semanticwebbuilder.org/swb4/xforms/ontology#hn_Languages"/>
   </owl:Class>
   <owl:Class rdf:about="#Perspective">
-    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
-    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-    >org.semanticwb.bsc</swb:classCodePackage>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+        <owl:allValuesFrom rdf:resource="#BSC"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
         <owl:allValuesFrom rdf:resource="#Theme"/>
       </owl:Restriction>
     </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
+    <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >org.semanticwb.bsc</swb:classCodePackage>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#DifferentiatorGroup"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#SWBClass"/>
     <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
     >true</swb:autogenId>
@@ -1155,16 +1155,16 @@
     </swb:displayObject>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#RuleRefable"/>
     <rdfs:subClassOf rdf:resource="#Help"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-        <owl:allValuesFrom rdf:resource="#BSC"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Serializable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="#Recognizable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#UserGroupable"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#DifferentiatorGroup"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#hasWebPageChild"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableClass"/>
     <rdf:type rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Class"/>
@@ -1184,6 +1184,12 @@
     <rdfs:subClassOf rdf:resource="#Help"/>
     <rdfs:subClassOf rdf:resource="#BSCElement"/>
     <rdfs:subClassOf rdf:resource="#InitiativeAssignable"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#BSC"/>
+        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Descriptiveable"/>
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente.</rdfs:comment>
@@ -1196,12 +1202,6 @@
     >true</swb:autogenId>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#FilterableNode"/>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Activeable"/>
-    <rdfs:subClassOf>
-      <owl:Restriction>
-        <owl:allValuesFrom rdf:resource="#BSC"/>
-        <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
-      </owl:Restriction>
-    </rdfs:subClassOf>
     <rdfs:subClassOf rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#Traceable"/>
     <rdfs:subClassOf rdf:resource="#DepartmentOrganizable"/>
   </owl:Class>
@@ -1241,14 +1241,14 @@
     <rdfs:subClassOf rdf:resource="#Sortable"/>
     <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
     >org.semanticwb.bsc.element</swb:classCodePackage>
+    <rdfs:subClassOf rdf:resource="#Status"/>
+    <rdfs:subClassOf rdf:resource="#Updateable"/>
     <rdfs:subClassOf>
       <owl:Restriction>
         <owl:allValuesFrom rdf:resource="#Theme"/>
         <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
       </owl:Restriction>
     </rdfs:subClassOf>
-    <rdfs:subClassOf rdf:resource="#Status"/>
-    <rdfs:subClassOf rdf:resource="#Updateable"/>
   </owl:Class>
   <owl:Class rdf:ID="NumberSpinner">
     <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -1685,10 +1685,10 @@
         </swbxf:formElement>
         <swbxf:propGroup>
           <swbxf:PropertyGroup rdf:ID="causal">
-            <rdfs:label xml:lang="es">Relación causa - efecto</rdfs:label>
-            <rdfs:label xml:lang="en">Causal relationship</rdfs:label>
             <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-            >100</swb:index>
+            >94</swb:index>
+            <rdfs:label xml:lang="en">Causal relationship</rdfs:label>
+            <rdfs:label xml:lang="es">Relación causa - efecto</rdfs:label>
           </swbxf:PropertyGroup>
         </swbxf:propGroup>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
@@ -2336,17 +2336,17 @@
         </swb:displayObject>
         <swb:classCodePackage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >org.semanticwb.bsc.accessory</swb:classCodePackage>
+        <rdfs:label xml:lang="en">Differentiator</rdfs:label>
+        <rdfs:subClassOf rdf:resource="#Sortable"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Un Differentiator se dibuja en el mapa estratégico del scorecard. Los Differentiator unicamente sirvan para alojar etiquetas de differenciadores dentro de un mapa estratégico.</rdfs:comment>
+        <rdfs:label xml:lang="es">Diferenciador</rdfs:label>
         <rdfs:subClassOf>
           <owl:Restriction>
             <owl:allValuesFrom rdf:resource="#DifferentiatorGroup"/>
             <owl:onProperty rdf:resource="http://www.semanticwebbuilder.org/swb4/ontology#webPageParent"/>
           </owl:Restriction>
         </rdfs:subClassOf>
-        <rdfs:label xml:lang="en">Differentiator</rdfs:label>
-        <rdfs:subClassOf rdf:resource="#Sortable"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
-        >Un Differentiator se dibuja en el mapa estratégico del scorecard. Los Differentiator unicamente sirvan para alojar etiquetas de differenciadores dentro de un mapa estratégico.</rdfs:comment>
-        <rdfs:label xml:lang="es">Diferenciador</rdfs:label>
         <swb:autogenId rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
         >true</swb:autogenId>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Class"/>
@@ -3214,10 +3214,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_plannedEnd">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >32</swb:index>
-        <rdfs:label xml:lang="es">Fecha de finalización planeada</rdfs:label>
-        <rdfs:label xml:lang="en">Planned end date</rdfs:label>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="planTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3226,20 +3222,32 @@
             >toPlanDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
         <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >32</swb:index>
+        <rdfs:label xml:lang="es">Fecha fin planeada</rdfs:label>
         <swbxf:propPromptMessage xml:lang="es">Fecha final planeada</swbxf:propPromptMessage>
+        <swbxf:propGroup>
+          <swbxf:PropertyGroup rdf:ID="Calendar">
+            <rdfs:label xml:lang="en">Calendar</rdfs:label>
+            <rdfs:label xml:lang="es">Calendario</rdfs:label>
+            <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+            >95</swb:index>
+          </swbxf:PropertyGroup>
+        </swbxf:propGroup>
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
+        <rdfs:label xml:lang="en">Planned end date</rdfs:label>
         <swbxf:propPromptMessage xml:lang="en">Planned final date</swbxf:propPromptMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="estimatedStart">
+    <rdfs:domain rdf:resource="#Initiative"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_estimatedStart">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >41</swb:index>
-        <rdfs:label xml:lang="en">Initial estimated date</rdfs:label>
-        <rdfs:label xml:lang="es">Fecha estimada inicial</rdfs:label>
+        <rdfs:label xml:lang="es">Fecha inicio replaneada</rdfs:label>
+        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="estimatedFrom">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3248,16 +3256,15 @@
             >fromEstimatedDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
-        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage xml:lang="es">Fecha inicial estimada</swbxf:propPromptMessage>
+        <swbxf:propGroup rdf:resource="#Calendar"/>
         <swbxf:propPromptMessage xml:lang="en">Estimated start date</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Replan start date</rdfs:label>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >41</swb:index>
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
-    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain rdf:resource="#Initiative"/>
-    <rdfs:label xml:lang="es">Fecha inicio estimada</rdfs:label>
-    <rdfs:label xml:lang="en">Estimated start date</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="elementRelated">
     <swb:required rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -3289,12 +3296,17 @@
     <rdfs:domain rdf:resource="#HelpPage"/>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="estimatedEnd">
+    <rdfs:domain rdf:resource="#Initiative"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_estimatedEnd">
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >42</swb:index>
-        <rdfs:label xml:lang="en">Final estimated date</rdfs:label>
-        <rdfs:label xml:lang="es">Fecha estimada final</rdfs:label>
+        <rdfs:label xml:lang="en">Replan end date</rdfs:label>
+        <rdfs:label xml:lang="es">Fecha fin replaneada</rdfs:label>
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
+        <swbxf:propPromptMessage xml:lang="en">Estimated final date</swbxf:propPromptMessage>
+        <swbxf:propPromptMessage xml:lang="es">Fecha final estimada</swbxf:propPromptMessage>
+        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="estimatedTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3303,16 +3315,10 @@
             >toEstimatedDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
-        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
-        <swbxf:propPromptMessage xml:lang="es">Fecha final estimada</swbxf:propPromptMessage>
-        <swbxf:propPromptMessage xml:lang="en">Estimated final date</swbxf:propPromptMessage>
+        <swbxf:propGroup rdf:resource="#Calendar"/>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
-    <rdfs:domain rdf:resource="#Initiative"/>
-    <rdfs:label xml:lang="es">Fecha fin estimada</rdfs:label>
-    <rdfs:label xml:lang="en">Estimated end date</rdfs:label>
   </owl:DatatypeProperty>
   <owl:DatatypeProperty rdf:ID="finAssessmentLikelihood">
     <bsc:displayElement>
@@ -3420,10 +3426,9 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_actualStart">
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >55</swb:index>
-        <rdfs:label xml:lang="es">Fecha de inicio real</rdfs:label>
-        <rdfs:label xml:lang="en">Actual start date</rdfs:label>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="actualFrom">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3432,10 +3437,12 @@
             >fromActualDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
+        <rdfs:label xml:lang="es">Fecha inicio real</rdfs:label>
         <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
-        <swbxf:propPromptMessage xml:lang="es">Fecha inicial actual</swbxf:propPromptMessage>
         <swbxf:propPromptMessage xml:lang="en">Start actual date</swbxf:propPromptMessage>
+        <rdfs:label xml:lang="en">Actual start date</rdfs:label>
+        <swbxf:propGroup rdf:resource="#Calendar"/>
+        <swbxf:propPromptMessage xml:lang="es">Fecha inicial actual</swbxf:propPromptMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
@@ -3835,10 +3842,10 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_plannedStart">
+        <swbxf:propPromptMessage xml:lang="en">Planned start date</swbxf:propPromptMessage>
         <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
         >31</swb:index>
-        <rdfs:label xml:lang="es">Fecha de inicio planeada</rdfs:label>
-        <rdfs:label xml:lang="en">Planned start date</rdfs:label>
+        <swbxf:propGroup rdf:resource="#Calendar"/>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="planFrom">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -3847,10 +3854,11 @@
             >fromPlanDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
+        <rdfs:label xml:lang="es">Fecha inicio planeada</rdfs:label>
+        <rdfs:label xml:lang="en">Planned start date</rdfs:label>
         <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage xml:lang="es">Fecha inicial planeada</swbxf:propPromptMessage>
-        <swbxf:propPromptMessage xml:lang="en">Planned start date</swbxf:propPromptMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
@@ -4006,10 +4014,6 @@
     <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
     <swb:displayProperty>
       <swbxf:DisplayProperty rdf:ID="dp_actualEnd">
-        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-        >60</swb:index>
-        <rdfs:label xml:lang="es">Fecha de finalización real</rdfs:label>
-        <rdfs:label xml:lang="en">Actual end date</rdfs:label>
         <swbxf:formElement>
           <bsc:DateElement rdf:ID="actualTo">
             <swb:dateOnChange rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
@@ -4018,10 +4022,15 @@
             >toActualDate</swb:dateId>
           </bsc:DateElement>
         </swbxf:formElement>
-        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
-        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
+        <rdfs:label xml:lang="en">Actual end date</rdfs:label>
+        <rdfs:label xml:lang="es">Fecha fin real</rdfs:label>
+        <swbxf:propGroup rdf:resource="#Calendar"/>
         <swbxf:propPromptMessage xml:lang="es">Fecha actual final</swbxf:propPromptMessage>
+        <swb:index rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
+        >60</swb:index>
+        <swbxf:propInvalidMessage xml:lang="en">Date or date format is not correct</swbxf:propInvalidMessage>
         <swbxf:propPromptMessage xml:lang="en">Final actual date</swbxf:propPromptMessage>
+        <swbxf:propInvalidMessage xml:lang="es">Formato o fecha incorrecto</swbxf:propInvalidMessage>
       </swbxf:DisplayProperty>
     </swb:displayProperty>
   </owl:DatatypeProperty>
