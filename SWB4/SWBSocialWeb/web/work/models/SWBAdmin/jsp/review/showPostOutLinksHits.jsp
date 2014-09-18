@@ -71,6 +71,11 @@
                             %>
                             <tr>
                                 <td>
+                                    <%if (postOutLinksHit.getSocialNet() instanceof Youtube) {
+                                        out.println("<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+                                    } else {
+                                        out.println("<img class=\"swbIcon" + postOutLinksHit.getSocialNet().getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+                                    }%>
                                     <%=postOutLinksHit.getSocialNet().getDisplayTitle(user.getLanguage())%>
                                 </td>
                                 <td>
