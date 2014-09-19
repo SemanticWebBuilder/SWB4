@@ -27,7 +27,7 @@
     try{
         SemanticObject semObj=SemanticObject.createSemanticObject(suri);
         SocialTopic socialTopic=(SocialTopic)semObj.createGenericInstance();
-        Iterator<PostOut> itPostOut=socialTopic.listPosts();
+        Iterator<PostOut> itPostOut=PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic);
         while(itPostOut.hasNext())
         {
             PostOut postOut=itPostOut.next();
@@ -84,6 +84,11 @@
                                 %>
                                 <tr class="socialNetHits">
                                     <td>
+                                        <%if (postOutLinksHit.getSocialNet() instanceof Youtube) {
+                                            out.println("<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+                                        } else {
+                                            out.println("<img class=\"swbIcon" + postOutLinksHit.getSocialNet().getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>");
+                                        }%>
                                         <%=postOutLinksHit.getSocialNet().getDisplayTitle(user.getLanguage())%>
                                     </td>
                                     <td>
