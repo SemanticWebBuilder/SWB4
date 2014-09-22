@@ -573,15 +573,15 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             output.append("<div id=\"containerV\">");
             output.append(" <div id=\"headerV\">");
             output.append("     <div id=\"scoreInfoV\">");
-            output.append("                 <h4 class=\"titleReference\">Scorecard:</h4>");
+            output.append("                 <h4 class=\"titleReference\">"+paramRequest.getLocaleString("lbl_scorecard")+":</h4>");
             output.append("                 <h4 class=\"titleProperty\">"+modelSite+"</h4>");
             output.append("     </div>");
             output.append("     <div id=\"scoreInfoV1\">");
-            output.append("                 <h4 class=\"titleReference\">Periodo:</h4>");
+            output.append("                 <h4 class=\"titleReference\">"+paramRequest.getLocaleString("lbl_period")+":</h4>");
             output.append("                 <h4 class=\"titleProperty\">"+titlePeriod+"</h4>");
             output.append("     </div>");
             output.append("     <div id=\"scoreInfoV1\">");
-            output.append("                 <h4 class=\"titleReference\">Generado:</h4>");
+            output.append("                 <h4 class=\"titleReference\">"+paramRequest.getLocaleString("lbl_generated")+":</h4>");
             output.append("                 <h4 class=\"titleProperty\">"+SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")+"</h4>");
             output.append("     </div>");
             output.append("     <div id=\"Title\">");
