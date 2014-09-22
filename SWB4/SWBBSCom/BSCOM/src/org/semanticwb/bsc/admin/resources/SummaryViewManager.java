@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -515,6 +516,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
         StringBuilder hd = new StringBuilder(128);
         StringBuilder toReturn = new StringBuilder(128);
         String lang = paramRequest.getUser().getLanguage();
+        Date date = new Date();       
         User user = paramRequest.getUser();
         if (this.getActiveView() == null) {
             output.append(paramRequest.getLocaleString("msg_noContentView"));
@@ -526,9 +528,11 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             //se tiene captura de datos en el periodo obtenido
             SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
             WebSite website = this.getResourceBase().getWebSite();
+            String modelSite = website.getTitle(lang) == null ? website.getTitle() : website.getTitle(lang);
             Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
             String periodId = (String) request.getSession(true).getAttribute(website.getId());
             boolean addStatus = false;
+            String titleSummary = "";
 
             //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
             if (periodId == null) {
@@ -541,24 +545,56 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             Period thisPeriod = periodId != null
                     ? Period.ClassMgr.getPeriod(periodId, website)
                     : null;
-
+            String titlePeriod = thisPeriod.getTitle(lang) == null ? thisPeriod.getTitle() : thisPeriod.getTitle(lang);
             //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
             if (semWorkClass.equals(Objective.bsc_Objective)) {
                 addStatus = true;
-            } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
+                titleSummary = paramRequest.getLocaleString("lbl_titleObjective");
+            } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {              
                 addStatus = true;
-            }
+                titleSummary = paramRequest.getLocaleString("lbl_titleIndicator");
+            } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
+                titleSummary = paramRequest.getLocaleString("lbl_titleAgreement");
+            } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
+                titleSummary = paramRequest.getLocaleString("lbl_titleInitiative");
+            } else if (semWorkClass.equals(Risk.bsc_Risk)) {
+                titleSummary = paramRequest.getLocaleString("lbl_titleRisk");
+            }         
             //Comienza a armar el html a regresar
+            //output.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
             output.append("<html>");
             output.append("<head>");
             output.append("<style type=\"text/css\">");
             output.append("    @page { size: 11in 8.5in;}");
             output.append("</style>");
-            output.append(getLinks(paramRequest, request));
+            output.append(getLinks(request));
             output.append("</head>");
             output.append("<body>");
-            output.append("<table width=\"100%\" border=\"0\" class=\"\">");
+            output.append("<div id=\"containerV\">");
+            output.append(" <div id=\"headerV\">");
+            output.append("     <div id=\"scoreInfoV\">");
+            output.append("                 <h4 class=\"titleReference\">Scorecard:</h4>");
+            output.append("                 <h4 class=\"titleProperty\">"+modelSite+"</h4>");
+            output.append("     </div>");
+            output.append("     <div id=\"scoreInfoV1\">");
+            output.append("                 <h4 class=\"titleReference\">Periodo:</h4>");
+            output.append("                 <h4 class=\"titleProperty\">"+titlePeriod+"</h4>");
+            output.append("     </div>");
+            output.append("     <div id=\"scoreInfoV1\">");
+            output.append("                 <h4 class=\"titleReference\">Generado:</h4>");
+            output.append("                 <h4 class=\"titleProperty\">"+SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")+"</h4>");
+            output.append("     </div>");
+            output.append("     <div id=\"Title\">");
+            output.append("                 <h4 class=\"titleView\">"+titleSummary+"</h4>");
+            output.append("     </div>");
+            output.append("  </div>");
+            output.append("<div id=\"logoSWBSV\"></div>");
+            
+            //Contenido del documento
+            output.append("         <div id=\"contentDocV\">");
+            output.append("                 <table class=\"table table-striped\">");
             //Obtiene encabezados de tabla
+            output.append("<thead>");
             output.append("<tr>");
             Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
             ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
@@ -606,6 +642,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                 output.append("</th>");
             }
             output.append("</tr>");
+            output.append("</thead>");
 
 
             //Arma los renglones con el contenido de la tabla
@@ -626,7 +663,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                 }
                 GenericIterator<PropertyListItem> viewPropertiesList1 = activeView.listPropertyListItems();
                 StringBuilder status = new StringBuilder(128);
-
+                output.append("<tbody>");
                 output.append("<tr>");
                 if (addStatus) {
                     PeriodStatus perStat = null;
@@ -691,17 +728,20 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                     String[] heading = (String[]) thisHeading1.getValue();
                     thisHeading1 = headings2Show.higherEntry(thisKey);
                     if (!addStatus) {
-                        output.append("<td>" + heading[1] + "</td>");
+                        output.append("<td class=\"center-td\">" + heading[1] + "</td>");
                     }
                     if (addStatus && thisKey > 0) {
-                        output.append("<td>" + heading[1] + "</td>");
+                        output.append("<td class=\"center-td\">" + heading[1] + "</td>");
                     }
 
                 }
                 output.append("</tr>");
+                output.append("</tbody>");
             }
 
-            output.append("</table>");
+            output.append("                     </table>");
+            output.append("                 </div>");//cierra div contentDocV
+            output.append("</div>");//cierra div Conteiner
             output.append("</body>");
             output.append("</html>");
         }
@@ -720,57 +760,12 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
-            throws FileNotFoundException, IOException {
-        User user = paramRequest.getUser();
-        WebPage wp = paramRequest.getWebPage();
-        
-        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/" + 
-                template.getActualVersion().getVersionNumber() + "/"
-                + template.getFileName(template.getActualVersion().getVersionNumber());
-        FileReader reader = null;
+    private String getLinks(HttpServletRequest request)
+    {
+        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
-        reader = new FileReader(filePath);
-
-        String port = "";
-        if (request.getServerPort() != 80) {
-            port = ":" + request.getServerPort();
-        }
-        String baserequest = request.getScheme() + "://" + request.getServerName()
-                + port;
-
-        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
-        HtmlTag tag = new HtmlTag();
-        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-            int ttype = tok.getTokenType();
-
-            if (ttype == HtmlStreamTokenizer.TT_TAG) {
-                try {
-                    tok.parseTag(tok.getStringValue(), tag);
-                } catch (HtmlException htmle) {
-                    SummaryViewManager.log.error("Al parsear la plantilla , "
-                            + filePath, htmle);
-                }
-                if (tag.getTagString().toLowerCase().equals("link")) {
-                    String tagTxt = tag.toString();
-                    if (tagTxt.contains("type=\"text/css\"")) {
-                        if (!tagTxt.contains("/>")) {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
-                        }
-                        if (!tagTxt.contains("{webpath}")) {
-                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
-                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
-                                    tagTxt.length());
-                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
-                        } else {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
-                        }
-                        view.append(tagTxt);
-                    }
-                }
-            }
-        }
+        view.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
         return view.toString();
     }
 
