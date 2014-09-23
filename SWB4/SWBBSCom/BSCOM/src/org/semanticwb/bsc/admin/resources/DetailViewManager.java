@@ -511,7 +511,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
         PrintWriter out = response.getWriter();
-        StringBuilder output = new StringBuilder(512);
+        StringBuilder html = new StringBuilder(512);
         String templateContent = "";
         String viewUri = request.getParameter("viewUri") != null
                 ? request.getParameter("viewUri") : "";
@@ -548,163 +548,163 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
 
         //Se genera el código HTML para presentar la forma en que se capturan los datos de la vista detalle
         //para los dos modos: creación y edición
-        output.append("        <div>\n");
-        output.append("            <form dojoType=\"dijit.form.Form\" name=\"detailViewForm");
-        output.append(this.getId());
-        output.append("\" ");
-        output.append("id=\"detailViewForm");
-        output.append(this.getId());
-        output.append("\" class=\"swbform\" onsubmit=\"submitForm('detailViewForm");
-        output.append(this.getId());
-        output.append("');return false;\" method=\"post\" action=\"");
-        output.append(url.toString());
-        output.append("\">\n");
-        output.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"");
-        output.append(propertiesUrl);
-        output.append("\">\n");
+        html.append("        <div>\n");
+        html.append("            <form dojoType=\"dijit.form.Form\" name=\"detailViewForm");
+        html.append(this.getId());
+        html.append("\" ");
+        html.append("id=\"detailViewForm");
+        html.append(this.getId());
+        html.append("\" class=\"swbform\" onsubmit=\"submitForm('detailViewForm");
+        html.append(this.getId());
+        html.append("');return false;\" method=\"post\" action=\"");
+        html.append(url.toString());
+        html.append("\">\n");
+        html.append("                <input type=\"hidden\" id=\"urlForProperties\" name=\"urlForProperties\" value=\"");
+        html.append(propertiesUrl);
+        html.append("\">\n");
 
         if (operation.equals("edit")) {
-            output.append("                <input type=\"hidden\" id=\"svUri");
-            output.append(this.getId());
-            output.append("\" name=\"svUri\" value=\"" + viewUri + "\">\n");
+            html.append("                <input type=\"hidden\" id=\"svUri");
+            html.append(this.getId());
+            html.append("\" name=\"svUri\" value=\"" + viewUri + "\">\n");
         }
-        output.append("<fieldset>\n");
-        output.append("    <legend>");
-        output.append(paramRequest.getLocaleString("lbl_pageTitle"));
-        output.append("</legend>\n");
-        output.append("    <table>\n");
-        output.append("        <tbody>\n");
-        output.append("            <tr>\n");
-        output.append("                <td width=\"200px\" align=\"right\">\n");
-        output.append("                    ");
-        output.append(formMgr.renderLabel(request, DetailView.swb_title, DetailView.swb_title.getName(), modeUsed));
-        output.append("                </td>\n");
-        output.append("                <td>\n");
-        output.append("                    ");
+        html.append("<fieldset>\n");
+        html.append("    <legend>");
+        html.append(paramRequest.getLocaleString("lbl_pageTitle"));
+        html.append("</legend>\n");
+        html.append("    <table>\n");
+        html.append("        <tbody>\n");
+        html.append("            <tr>\n");
+        html.append("                <td width=\"200px\" align=\"right\">\n");
+        html.append("                    ");
+        html.append(formMgr.renderLabel(request, DetailView.swb_title, DetailView.swb_title.getName(), modeUsed));
+        html.append("                </td>\n");
+        html.append("                <td>\n");
+        html.append("                    ");
         if (operation.equals("edit") && viewSemObject != null) {
-            output.append(
+            html.append(
                     formMgr.getFormElement(DetailView.swb_title).renderElement(
                             request, viewSemObject.getSemanticObject(), DetailView.swb_title,
                             DetailView.swb_title.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
-            output.append(
+            html.append(
                     formMgr.getFormElement(DetailView.swb_title).renderElement(
                             request, null, DetailView.swb_title, DetailView.swb_title.getName(),
                             "dojo", modeUsed, lang));
         }
-        output.append("                </td>\n");
-        output.append("            </tr>\n");
-        output.append("            <tr>\n");
-        output.append("                <td width=\"200px\" align=\"right\">\n");
-        output.append("                    ");
-        output.append(formMgr.renderLabel(request, DetailView.swb_description, modeUsed));
-        output.append("                </td>\n");
-        output.append("                <td>\n");
-        output.append("                    ");
+        html.append("                </td>\n");
+        html.append("            </tr>\n");
+        html.append("            <tr>\n");
+        html.append("                <td width=\"200px\" align=\"right\">\n");
+        html.append("                    ");
+        html.append(formMgr.renderLabel(request, DetailView.swb_description, modeUsed));
+        html.append("                </td>\n");
+        html.append("                <td>\n");
+        html.append("                    ");
         if (operation.equals("edit") && viewSemObject != null) {
-            output.append(
+            html.append(
                     formMgr.getFormElement(DetailView.swb_description).renderElement(
                             request, viewSemObject.getSemanticObject(), DetailView.swb_description,
                             DetailView.swb_description.getName(), "dojo", modeUsed, lang));
         } else if (operation.equals("add")) {
-            output.append(
+            html.append(
                     formMgr.getFormElement(DetailView.swb_description).renderElement(
                             request, null, DetailView.swb_description, DetailView.swb_description.getName(),
                             "dojo", modeUsed, lang));
         }
-        output.append("                </td>\n");
-        output.append("            </tr>\n");
-        output.append("            <tr>\n");
-        output.append("                <td align=\"right\">\n");
-        output.append("                  <label for=\"FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("\">\n");
-        output.append(paramRequest.getLocaleString("lbl_template"));
-        output.append("&nbsp; \n");
-        output.append("                  </label>\n");
-        output.append("                </td>\n");
-        output.append("                <td align=\"left\" width=\"850px\" height=\"600px\">\n");
-        output.append("                  <textarea name=\"FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("\" id=\"FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("\">");
-        output.append(templateContent);
-        output.append("</textarea>\n");
-        output.append("");
-        output.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
-        output.append("    <script type=\"dojo/method\">\n");
-        output.append("      var oFCKeditor = new FCKeditor( 'FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("', '100%', '100%' ) ;\n");
-        output.append("      oFCKeditor.BasePath = '");
-        output.append(SWBPlatform.getContextPath());
-        output.append("/swbadmin/js/fckeditor/';\n");
-        output.append("      oFCKeditor.Config['CustomConfigurationsPath'] = ");
-        output.append(SWBPlatform.getContextPath());
-        output.append("'/swbadmin/js/fckeditor/fckconfig_inserter.js';\n");
-        output.append("      oFCKeditor.ReplaceTextarea();\n");
-        output.append("      oFCKeditor.urlInsertHtmlData = '");
-        output.append(SWBUtils.TEXT.scape4Script(propertiesUrl));
-        output.append("' ;\n");
-        output.append("    </script>\n");
-        output.append("</div>\n");
-        output.append("                </td>\n");
-        output.append("            </tr>\n");
-        output.append("        </tbody>\n");
-        output.append("    </table>\n");
-        output.append("</fieldset>\n");
+        html.append("                </td>\n");
+        html.append("            </tr>\n");
+        html.append("            <tr>\n");
+        html.append("                <td align=\"right\">\n");
+        html.append("                  <label for=\"FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("\">\n");
+        html.append(paramRequest.getLocaleString("lbl_template"));
+        html.append("&nbsp; \n");
+        html.append("                  </label>\n");
+        html.append("                </td>\n");
+        html.append("                <td align=\"left\" width=\"850px\" height=\"600px\">\n");
+        html.append("                  <textarea name=\"FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("\" id=\"FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("\">");
+        html.append(templateContent);
+        html.append("</textarea>\n");
+        html.append("");
+        html.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
+        html.append("    <script type=\"dojo/method\">\n");
+        html.append("      var oFCKeditor = new FCKeditor( 'FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("', '100%', '100%' ) ;\n");
+        html.append("      oFCKeditor.BasePath = '");
+        html.append(SWBPlatform.getContextPath());
+        html.append("/swbadmin/js/fckeditor/';\n");
+        html.append("      oFCKeditor.Config['CustomConfigurationsPath'] = ");
+        html.append(SWBPlatform.getContextPath());
+        html.append("'/swbadmin/js/fckeditor/fckconfig_inserter.js';\n");
+        html.append("      oFCKeditor.ReplaceTextarea();\n");
+        html.append("      oFCKeditor.urlInsertHtmlData = '");
+        html.append(SWBUtils.TEXT.scape4Script(propertiesUrl));
+        html.append("' ;\n");
+        html.append("    </script>\n");
+        html.append("</div>\n");
+        html.append("                </td>\n");
+        html.append("            </tr>\n");
+        html.append("        </tbody>\n");
+        html.append("    </table>\n");
+        html.append("</fieldset>\n");
         //despliegue de botones
-        output.append("<fieldset>\n");
-        output.append("    <button dojoType=\"dijit.form.Button\" id=\"btnSave");
-        output.append(this.getId());
-        output.append("\" type=\"button\">");
-        output.append(paramRequest.getLocaleString("lbl_btnSubmit"));
-        output.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
-        output.append("        var oEditor = FCKeditorAPI.GetInstance('FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("') ;\n");
-        output.append("        document.getElementById('FCKeditorDetailView");
-        output.append(this.getId());
-        output.append("').value = oEditor.GetData();\n");
-        output.append("        submitForm(\"detailViewForm");
-        output.append(this.getId());
-        output.append("\");\n");
-        output.append("        return false;\n");
-        output.append("      </script>\n");
-        output.append("    </button>\n");
+        html.append("<fieldset>\n");
+        html.append("    <button dojoType=\"dijit.form.Button\" id=\"btnSave");
+        html.append(this.getId());
+        html.append("\" type=\"button\">");
+        html.append(paramRequest.getLocaleString("lbl_btnSubmit"));
+        html.append("      <script type=\"dojo/method\" event=\"onClick\" args=\"evt\">\n");
+        html.append("        var oEditor = FCKeditorAPI.GetInstance('FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("') ;\n");
+        html.append("        document.getElementById('FCKeditorDetailView");
+        html.append(this.getId());
+        html.append("').value = oEditor.GetData();\n");
+        html.append("        submitForm(\"detailViewForm");
+        html.append(this.getId());
+        html.append("\");\n");
+        html.append("        return false;\n");
+        html.append("      </script>\n");
+        html.append("    </button>\n");
 
         SWBResourceURL urlCancel = paramRequest.getRenderUrl();
         urlCancel.setMode("showListing");
-        output.append("    <button dojoType=\"dijit.form.Button\" ");
-        output.append("type=\"button\" onClick=\"reloadTab('");
-        output.append(this.getResource().getURI());
-        output.append("');\">\n");
-        output.append(paramRequest.getLocaleString("lbl_btnCancel"));
-        output.append("    </button>\n");
+        html.append("    <button dojoType=\"dijit.form.Button\" ");
+        html.append("type=\"button\" onClick=\"reloadTab('");
+        html.append(this.getResource().getURI());
+        html.append("');\">\n");
+        html.append(paramRequest.getLocaleString("lbl_btnCancel"));
+        html.append("    </button>\n");
 
-        output.append("</fieldset>\n");
-        output.append("            </form>\n");
-        output.append("        </div>\n");
+        html.append("</fieldset>\n");
+        html.append("            </form>\n");
+        html.append("        </div>\n");
 
         //Muestra mensaje sobre resultado de la operacion realizada
         if ((statusMsg != null && !statusMsg.isEmpty())
                 || (statusErr != null && !statusErr.isEmpty())) {
 
-            output.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
-            output.append("    <script type=\"dojo/method\">\n");
+            html.append("<div dojoType=\"dojox.layout.ContentPane\">\n");
+            html.append("    <script type=\"dojo/method\">\n");
             if (statusMsg != null) {
                 statusMsg = paramRequest.getLocaleString(statusMsg);
-                output.append("        showStatus('" + statusMsg + "');\n");
+                html.append("        showStatus('" + statusMsg + "');\n");
             } else if (statusErr != null) {
                 statusErr = paramRequest.getLocaleString(statusErr);
-                output.append("        showError('" + statusErr + "');\n");
+                html.append("        showError('" + statusErr + "');\n");
             }
-            output.append("    </script>\n");
-            output.append("</div>\n");
+            html.append("    </script>\n");
+            html.append("</div>\n");
         }
 
-        out.println(output);
+        out.println(html);
     }
 
     /**
@@ -726,7 +726,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
 
         PrintWriter out = response.getWriter();
-        StringBuilder output = new StringBuilder(256);
+        StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
         if (message == null) {
@@ -763,31 +763,31 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
-            output.append("<!-- .....Aqui va el iconclass.............. -->").append("\n");
-            output.append("<p class=\"fa fa-circle");
-            output.append(statusStyleClass);
-            output.append("\"></p>");
-            output.append("<h4>");
+            html.append("<!-- .....Aqui va el iconclass.............. -->").append("\n");
+            html.append("<p class=\"fa fa-circle");
+            html.append(statusStyleClass);
+            html.append("\"></p>");
+            html.append("<h4>");
             //secondStatusStyleClass dejo de asignarse desde el 17/06/14 con el uso de Detailed
             if (secondStatusStyleClass != null) {
-                output.append("<span class=\"");
-                output.append(secondStatusStyleClass);
-                output.append("\"> &nbsp; </span>");
+                html.append("<span class=\"");
+                html.append(secondStatusStyleClass);
+                html.append("\"> &nbsp; </span>");
             }
-            output.append(semObj.getDisplayName());
-            output.append("</h4>\n");
-            output.append("<hr>\n");
+            html.append(semObj.getDisplayName());
+            html.append("</h4>\n");
+            html.append("<hr>\n");
             
             if (reader != null) {
-                output.append(generateDisplay(request, paramRequest, reader, semObj, collaboration));
+                html.append(generateDisplay(request, paramRequest, reader, semObj, collaboration));
             } else {
-                output.append(paramRequest.getLocaleString("fileNotRead"));
+                html.append(paramRequest.getLocaleString("fileNotRead"));
             }
         } else { //Si la información de entrada no es válida
-            output.append(paramRequest.getLocaleString(message));
+            html.append(paramRequest.getLocaleString(message));
         }
 
-        out.println(output.toString());
+        out.println(html.toString());
     }
 
     /**
@@ -1690,7 +1690,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
         String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
-        view.append("<link href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
+        view.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
         return view.toString();
     }
 
@@ -1709,13 +1709,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     private StringBuilder getStructureHtml(HttpServletRequest request,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        StringBuilder output = new StringBuilder();
-        output.append("<html>");
-        output.append("<head>");
-        output.append(getLinks(request));
-        output.append("</head>");
-        output.append("<body>");
-        output.append(getHtml(request, paramRequest));
+        StringBuilder html = new StringBuilder();
+        html.append("<html>");
+        html.append("<head>");
+        html.append(getLinks(request));
+        html.append("</head>");
+        html.append("<body>");
+        html.append(getHtml(request, paramRequest));
         GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
         TreeSet<ComponentExportable> ret = new TreeSet(new SWBPriorityComparator(true));
 
@@ -1732,13 +1732,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         Iterator<ComponentExportable> itRes = ret.iterator();
         while (itRes.hasNext()) {
             ComponentExportable compExpor = itRes.next();
-            output.append("<br/><br/><br/>");
-            output.append(compExpor.doComponentExport(request, paramRequest));
-            output.append("");
+            html.append("<br/><br/><br/>");
+            html.append(compExpor.doComponentExport(request, paramRequest));
+            html.append("");
         }
-        output.append("</body>");
-        output.append("</html>");
-        return output;
+        html.append("</body>");
+        html.append("</html>");
+        return html;
     }
 
     /**
@@ -1755,22 +1755,18 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
             throws SWBResourceException, IOException {
-        StringBuilder output = new StringBuilder(256);
+        StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
-        output.append("<div id=\"detalle\" class=\"detalleObjetivo\">\n");
-
+        html.append("<div id=\"container\">").append("\n");
         if (message == null) {
-            FileReader reader = retrieveTemplate();
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
-            //Declarar variable para el per&iacte;odo, obteniendo el valor del request
             String modelName = paramRequest.getWebPage().getWebSiteId();
             String periodId = request.getSession().getAttribute(modelName) != null
                     ? (String) request.getSession().getAttribute(modelName)
                     : null;
-            String statusStyleClass = "indefinido";
+            String statusStyleClass;
             String secondStatusStyleClass = null;
-            //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
                 if (periodId != null) {
@@ -1778,81 +1774,58 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
-//            PeriodStatus periodStatus = null;
-
-//            UserGroup collaboration = null;
             GenericObject generic = semObj.createGenericInstance();
             Detailed d = (Detailed) generic;
             statusStyleClass = d.getStatusIconClass(period);
 
-            //Si el semObj es hijo de PeriodStatusAssignable se debe:
-//            GenericObject generic = semObj.createGenericInstance();
-//            if (generic != null && generic instanceof Objective) {
-//                Objective objective = (Objective) generic;
-//                periodStatus = objective.getPeriodStatus(period);
-//                statusStyleClass = periodStatus.getStatus().getIconClass();
-//            } else if (generic != null && generic instanceof Indicator) {
-//                Indicator indicator = (Indicator) generic;
-//                Measure measure = indicator.getStar() != null
-//                        ? indicator.getStar().getMeasure(period) : null;
-//                if (measure != null && measure.getEvaluation() != null) {
-//                    periodStatus = measure.getEvaluation();
-//                    statusStyleClass = periodStatus.getStatus().getIconClass();
-//                }
-//            } else if (generic != null && generic instanceof Deliverable) {
-//                Deliverable deliverable = (Deliverable) generic;
-//                statusStyleClass = deliverable.getStatusAssigned() != null
-//                        ? deliverable.getStatusAssigned().getIconClass() : "indefinido";
-//                secondStatusStyleClass = deliverable.getAutoStatus() != null
-//                        ? deliverable.getAutoStatus().getIconClass() : "indefinido";
-//            }
-            //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
-            // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
-            //    - Se pide el listado de objetos PeriodStatus asociado al semObj
-            //    - Se recorre uno por uno los PeriodStatus relacionados
-            //    - Cuando el per&iacte;odo del PeriodStatus = per&iacte;odo del request:
-            //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
-            //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
             WebSite ws = paramRequest.getWebPage().getWebSite();
             String lang = paramRequest.getUser().getLanguage();
             String modelSite = ws.getTitle(lang) == null ? ws.getTitle() : ws.getTitle(lang);
             String titlePeriod = period.getTitle(lang) == null ? period.getTitle() : period.getTitle(lang);
             Date date = new Date();
-            output.append("<div class=\"headerPDF\" style=\"width:40%;float:left;\">");
-            output.append(modelSite);
-            output.append("</div>");
-            output.append("<div class=\"headerPDF\" style=\"width:30%;float:left;\">");
-            output.append(titlePeriod);
-            output.append("</div>");
-            output.append("<div class=\"headerPDF\" style=\"width:30%;float:left;\">");
-            output.append(paramRequest.getLocaleString("lblDateGeneration"));
-            output.append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy"));
-            output.append("</div>");
-            output.append("<br/>");
-            output.append("<br/>");
-            output.append("<h2");
-            output.append(" class=\"");
-            output.append(statusStyleClass);
-            output.append("\">");
+            html.append(" <div id=\"header\">").append("\n");
+            html.append("  <div class=\"scoreInfo\">").append("\n");
+            html.append("   <h4 class=\"titleReference\">Scorecard:</h4>").append("\n");
+            html.append("   <h4 class=\"titleProperty\">").append(modelSite).append("</h4>").append("\n");
+            html.append("  </div>").append("\n");
+            html.append("  <div class=\"scoreInfo\">").append("\n");
+            html.append("   <h4 class=\"titleReference\">Período:</h4>").append("\n");
+            html.append("   <h4 class=\"titleProperty\">").append(titlePeriod).append("</h4>").append("\n");
+            html.append("  </div>").append("\n");
+            html.append("  <div class=\"scoreInfo\">").append("\n");
+            html.append("   <h4 class=\"titleReference\">").append(paramRequest.getLocaleString("lblDateGeneration")).append(":</h4>").append("\n");
+            html.append("   <h4 class=\"titleProperty\">").append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")).append("</h4>").append("\n");
+            html.append("  </div>").append("\n");
+            html.append("  <hr class=\"hrP\" />");
+            html.append("  <div id=\"Title\">").append("\n");
+            html.append("   <h4 class=\"titleView\">").append(semObj.getDisplayName()).append("</h4>").append("\n");
+            html.append("   <h5 class=\"titleFilter\">").append(semObj.getSemanticClass().getCanonicalName()).append("</h5>").append("\n");
+System.out.println();
+            html.append("  </div>").append("\n");
+            html.append(" </div> <!-- /#header -->").append("\n");
+            html.append(" <div id=\"logoSWBS\"></div>").append("\n");
+            
+            html.append(" <div id=\"contentDoc\">").append("\n");
+            html.append("  <h4").append(" class=\"").append(statusStyleClass).append("\">").append("\n");
             if (secondStatusStyleClass != null) {
-                output.append("<span class=\"");
-                output.append(secondStatusStyleClass);
-                output.append("\"> &nbsp; </span>");
+                html.append("&nbsp;<span class=\"");
+                html.append(secondStatusStyleClass);
+                html.append("\">&nbsp;</span>");
             }
-            output.append(semObj.getDisplayName());
-            output.append("</h2>\n");
-
+            html.append(semObj.getDisplayName());
+            html.append("  </h4>\n");
+            FileReader reader = retrieveTemplate();
             if (reader != null) {
-                output.append(generateDisplayPDF(request, paramRequest, reader, semObj));
+                html.append(generateDisplayPDF(request, paramRequest, reader, semObj));
             } else {
-                output.append(paramRequest.getLocaleString("fileNotRead"));
+                html.append(paramRequest.getLocaleString("fileNotRead"));
             }
+            html.append(" </div> <!-- /#contentDoc -->").append("\n");
         } else { //Si la información de entrada no es válida
-            output.append(paramRequest.getLocaleString(message));
+            html.append(paramRequest.getLocaleString(message));
         }
-
-        output.append("</div>\n");
-        return output;
+        html.append("</div> <!-- /#container -->").append("\n");
+        return html;
     }
 
     /**
