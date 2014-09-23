@@ -148,8 +148,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doShowListing(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -505,8 +505,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doEditTemplate(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -723,13 +723,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         PrintWriter out = response.getWriter();
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
-        if (message == null) {
+        if(message == null) {
             FileReader reader = retrieveTemplate();
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -748,15 +748,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
-
-            //periodStatus dejo de servir al introducir Detailed
-            //PeriodStatus periodStatus = null;
             UserGroup collaboration = null;
             GenericObject generic = semObj.createGenericInstance();
             Detailed d = (Detailed) generic;
             statusStyleClass = d.getStatusIconClass(period);
 
-            //-Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
+            // Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
             //    - Se recorre uno por uno los PeriodStatus relacionados
@@ -783,10 +780,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             } else {
                 html.append(paramRequest.getLocaleString("fileNotRead"));
             }
-        } else { //Si la información de entrada no es válida
+        }else { //Si la información de entrada no es válida
             html.append(paramRequest.getLocaleString(message));
         }
-
         out.println(html.toString());
     }
 
@@ -804,8 +800,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doGetPropertiesInfo(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("application/json; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -856,7 +852,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         final String mode = paramRequest.getMode();
         if("showListing".equalsIgnoreCase(mode)) {
             doShowListing(request, response, paramRequest);
@@ -869,23 +866,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }else {
             super.processRequest(request, response, paramRequest);
         }
-        /*switch (paramRequest.getMode()) {
-            case "showListing":
-                doShowListing(request, response, paramRequest);
-                break;
-            case "editTemplate":
-                doEditTemplate(request, response, paramRequest);
-                break;
-            case "getPropertiesInfo":
-                doGetPropertiesInfo(request, response, paramRequest);
-                break;
-            case Mode_StreamPDF:
-                doGetPDFDocument(request, response, paramRequest);
-                break;
-            default:
-                super.processRequest(request, response, paramRequest);
-                break;
-        }*/
     }
 
     /**
@@ -902,8 +882,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response)
-            throws SWBResourceException, IOException {
-
+            throws SWBResourceException, IOException
+    {
         String action = response.getAction();
         String title = request.getParameter("title");
         String descrip = request.getParameter("description");
@@ -1105,8 +1085,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * corresponde al mensaje de error que describe el problema encontrado en
      * los datos, null de lo contrario.
      */
-    private String validateInput(HttpServletRequest request, SWBParamRequest paramRequest) {
-
+    private String validateInput(HttpServletRequest request, SWBParamRequest paramRequest)
+    {
         String suri = request.getParameter("suri");
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
         GenericObject genericObject = semObj != null ? semObj.createGenericInstance() : null;
@@ -1191,8 +1171,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return un objeto {@code FileReader} con el contenido del archivo
      * asociado a la vista detalle asignada como contenido.
      */
-    private FileReader retrieveTemplate() {
-
+    private FileReader retrieveTemplate()
+    {
         String filePath = SWBPortal.getWorkPath()
                 + this.getActiveDetailView().getWorkPath() + DetailViewManager.TEMPLATE_FILENAME;
         FileReader reader = null;
@@ -1223,8 +1203,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * el parseo del contenido de la plantilla
      */
     private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
-            FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException {
-
+            FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException
+    {
         StringBuilder view = new StringBuilder(512);
         StringBuilder javascript = new StringBuilder(256);
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
@@ -1308,8 +1288,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
-            String propUri, String lang, Period period, final UserGroup collaboration) {
-
+            String propUri, String lang, Period period, final UserGroup collaboration)
+    {
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
@@ -1373,10 +1353,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return {@literal true} si existe un valor para el displayElement en la
      * ontolog&iacute;a, {@literal false} de lo contrario
      */
-    private boolean displayElementExists(SemanticProperty property) {
-
+    private boolean displayElementExists(SemanticProperty property)
+    {
         boolean exists = false;
-
         Statement st = property.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
                         "http://www.semanticwebbuilder.org/swb4/bsc#displayElement"));
@@ -1394,7 +1373,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return un boleano que representa la posibilidad del usuario de hacer
      * actualizaciones ({@code true}), de lo contrario devuelve {@code false}.
      */
-    private boolean userCanEdit() {
+    private boolean userCanEdit()
+    {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
 
@@ -1445,7 +1425,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * periodo de captura para el periodo indicado {@code true}, o {@code false}
      * de lo contrario.
      */
-    private boolean isInMeasurementTime(final Period period) {
+    private boolean isInMeasurementTime(final Period period)
+    {
         Resource base = getResourceBase();
         int timeBefore = 0;
         int timeAfter = 0;
@@ -1491,7 +1472,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return {@literal true} si el {@code formElement} puede presentar
      * interface de edici&oacute;n, {@literal false} de lo contrario
      */
-    private boolean isEditable(SemanticObject formElement) {
+    private boolean isEditable(SemanticObject formElement)
+    {
         return formElement.getProperty(TextAreaElement.bsc_editable) == null
                 ? true : formElement.getBooleanProperty(TextAreaElement.bsc_editable);
     }
@@ -1524,8 +1506,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * &eacute;sta es de tipo fecha, de lo contrario, se devuelve una cadena
      * vac&iacute;a
      */
-    private String getDateValue(SemanticObject elementBSC, String propUri) {
-
+    private String getDateValue(SemanticObject elementBSC, String propUri)
+    {
         StringBuilder toReturn = new StringBuilder(128);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
 
@@ -1577,7 +1559,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws IOException Excepti&oacute;n de IO
      */
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -1645,7 +1628,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * car&aacutecteres.
      * @return el objeto String modificado
      */
-    private String replaceHtml(StringBuilder sb) {
+    private static String replaceHtml(StringBuilder sb) {
         String sbStr = SWBUtils.TEXT.replaceAll(sb.toString(), "&oacute;", "ó");
         sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&aacute;", "á");
         sbStr = SWBUtils.TEXT.replaceAll(sbStr, "&eacute;", "é");
@@ -1685,7 +1668,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(HttpServletRequest request)
+    private static String getLinks(HttpServletRequest request)
     {
         String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
         String baserequest = request.getScheme() + "://" + request.getServerName() + port;
@@ -1710,12 +1693,12 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     private StringBuilder getStructureHtml(HttpServletRequest request,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder html = new StringBuilder();
-        html.append("<html>");
-        html.append("<head>");
-        html.append(getLinks(request));
-        html.append("</head>");
-        html.append("<body>");
-        html.append(getHtml(request, paramRequest));
+        html.append("<html>").append("\n");
+        html.append("<head>").append("\n");
+        html.append(getLinks(request)).append("\n");
+        html.append("</head>").append("\n");
+        html.append("<body>").append("\n");
+        html.append(getHtml(request, paramRequest)).append("\n");
         GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
         TreeSet<ComponentExportable> ret = new TreeSet(new SWBPriorityComparator(true));
 
@@ -1732,12 +1715,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         Iterator<ComponentExportable> itRes = ret.iterator();
         while (itRes.hasNext()) {
             ComponentExportable compExpor = itRes.next();
-            html.append("<br/><br/><br/>");
+            html.append("<br/><br/><br/>").append("\n");
             html.append(compExpor.doComponentExport(request, paramRequest));
-            html.append("");
+            html.append("\n");
         }
-        html.append("</body>");
+        html.append("</body>").append("\n");
         html.append("</html>");
+System.out.println("\n\n............................\nhtml=\n"+html);        
         return html;
     }
 
@@ -1753,8 +1737,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * Excepti&oacute;n utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
-            throws SWBResourceException, IOException {
+    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest) 
+            throws SWBResourceException, IOException
+    {
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
         html.append("<div id=\"container\">").append("\n");
@@ -1783,27 +1768,32 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String modelSite = ws.getTitle(lang) == null ? ws.getTitle() : ws.getTitle(lang);
             String titlePeriod = period.getTitle(lang) == null ? period.getTitle() : period.getTitle(lang);
             Date date = new Date();
-            html.append(" <div id=\"header\">").append("\n");
-            html.append("  <div class=\"scoreInfo\">").append("\n");
-            html.append("   <h4 class=\"titleReference\">Scorecard:</h4>").append("\n");
-            html.append("   <h4 class=\"titleProperty\">").append(modelSite).append("</h4>").append("\n");
-            html.append("  </div>").append("\n");
-            html.append("  <div class=\"scoreInfo\">").append("\n");
-            html.append("   <h4 class=\"titleReference\">Período:</h4>").append("\n");
-            html.append("   <h4 class=\"titleProperty\">").append(titlePeriod).append("</h4>").append("\n");
-            html.append("  </div>").append("\n");
-            html.append("  <div class=\"scoreInfo\">").append("\n");
-            html.append("   <h4 class=\"titleReference\">").append(paramRequest.getLocaleString("lblDateGeneration")).append(":</h4>").append("\n");
-            html.append("   <h4 class=\"titleProperty\">").append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")).append("</h4>").append("\n");
-            html.append("  </div>").append("\n");
-            html.append("  <hr class=\"hrP\" />");
-            html.append("  <div id=\"Title\">").append("\n");
-            html.append("   <h4 class=\"titleView\">").append(semObj.getDisplayName()).append("</h4>").append("\n");
-            html.append("   <h5 class=\"titleFilter\">").append(semObj.getSemanticClass().getCanonicalName()).append("</h5>").append("\n");
-System.out.println();
-            html.append("  </div>").append("\n");
-            html.append(" </div> <!-- /#header -->").append("\n");
+            html.append(" <div id=\"contentHead\">").append("\n");
+            html.append("  <div id=\"header\">").append("\n");
+            html.append("   <div class=\"scoreInfo\">").append("\n");
+            html.append("    <h4 class=\"titleReference\">Scorecard:</h4>").append("\n");
+            html.append("    <h4 class=\"titleProperty\">").append(modelSite).append("</h4>").append("\n");
+            html.append("   </div>").append("\n");
+            html.append("   <div class=\"scoreInfoC\">").append("\n");
+            html.append("    <h4 class=\"titleReference\">Período:</h4>").append("\n");
+            html.append("    <h4 class=\"titleProperty\">").append(titlePeriod).append("</h4>").append("\n");
+            html.append("   </div>").append("\n");
+            html.append("   <div class=\"scoreInfoC\">").append("\n");
+            html.append("    <h4 class=\"titleReference\">")
+                    .append(paramRequest.getLocaleString("lblDateGeneration")).append(":</h4>").append("\n");
+            html.append("    <h4 class=\"titleProperty\">")
+                    .append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")).append("</h4>").append("\n");
+            html.append("   </div>").append("\n");
+            //html.append("  <hr class=\"hrP\" />");
+            html.append("   <div id=\"Title\">").append("\n");
+            html.append("    <h4 class=\"titleView\">")
+                    .append(semObj.getDisplayName()).append("</h4>").append("\n");
+            html.append("    <h5 class=\"titleFilter\">")
+                    .append(semObj.getSemanticClass().getDisplayName("es")).append("</h5>").append("\n");
+            html.append("   </div>").append("\n");
+            html.append("  </div> <!-- /#header -->").append("\n");
             html.append(" <div id=\"logoSWBS\"></div>").append("\n");
+            html.append(" </div> <!-- /#contentHead -->").append("\n");
             
             html.append(" <div id=\"contentDoc\">").append("\n");
             html.append("  <h4").append(" class=\"").append(statusStyleClass).append("\">").append("\n");
