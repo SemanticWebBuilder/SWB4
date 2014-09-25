@@ -1,3 +1,27 @@
+/**  
+* SWB Social es una plataforma que descentraliza la publicación, seguimiento y monitoreo hacia las principales redes sociales. 
+* SWB Social escucha y entiende opiniones acerca de una organización, sus productos, sus servicios e inclusive de su competencia, 
+* detectando en la información sentimientos, influencia, geolocalización e idioma, entre mucha más información relevante que puede ser 
+* útil para la toma de decisiones. 
+* 
+* SWB Social, es una herramienta basada en la plataforma SemanticWebBuilder. SWB Social, como SemanticWebBuilder, es una creación original 
+* del Fondo de Información y Documentación para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+* 
+* INFOTEC pone a su disposición la herramienta SWB Social a través de su licenciamiento abierto al público (‘open source’), 
+* en virtud del cual, usted podrá usarla en las mismas condiciones con que INFOTEC la ha diseñado y puesto a su disposición; 
+* aprender de élla; distribuirla a terceros; acceder a su código fuente y modificarla, y combinarla o enlazarla con otro software, 
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+* del SemanticWebBuilder 4.0. y SWB Social 1.0
+* 
+* INFOTEC no otorga garantía sobre SWB Social, de ninguna especie y naturaleza, ni implícita ni explícita, 
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+* de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder o SWB Social, INFOTEC pone a su disposición la siguiente 
+* dirección electrónica: 
+*  http://www.semanticwebbuilder.org
+**/ 
+ 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -146,73 +170,73 @@ public class SWBSocialResUtil {
               StringBuffer ret = new StringBuffer();
               String aux = txt;
               //aux = aux.toLowerCase();
-              aux = aux.replace('Á', 'A');
-              aux = aux.replace('Ä', 'A');
-              aux = aux.replace('Å', 'A');
-              aux = aux.replace('Â', 'A');
-              aux = aux.replace('À', 'A');
-              aux = aux.replace('Ã', 'A');
+                aux = aux.replace('Á', 'A');
+                aux = aux.replace('Ä', 'A');
+                aux = aux.replace('Å', 'A');
+                aux = aux.replace('Â', 'A');
+                aux = aux.replace('À', 'A');
+                aux = aux.replace('Ã', 'A');
 
-              aux = aux.replace('É', 'E');
-              aux = aux.replace('Ê', 'E');
-              aux = aux.replace('È', 'E');
-              aux = aux.replace('Ë', 'E');
+                aux = aux.replace('É', 'E');
+                aux = aux.replace('Ê', 'E');
+                aux = aux.replace('È', 'E');
+                aux = aux.replace('Ë', 'E');
 
-              aux = aux.replace('Í', 'I');
-              aux = aux.replace('Î', 'I');
-              aux = aux.replace('Ï', 'I');
-              aux = aux.replace('Ì', 'I');
+                aux = aux.replace('Í', 'I');
+                aux = aux.replace('Î', 'I');
+                aux = aux.replace('Ï', 'I');
+                aux = aux.replace('Ì', 'I');
 
-              aux = aux.replace('Ó', 'O');
-              aux = aux.replace('Ö', 'O');
-              aux = aux.replace('Ô', 'O');
-              aux = aux.replace('Ò', 'O');
-              aux = aux.replace('Õ', 'O');
+                aux = aux.replace('Ó', 'O');
+                aux = aux.replace('Ö', 'O');
+                aux = aux.replace('Ô', 'O');
+                aux = aux.replace('Ò', 'O');
+                aux = aux.replace('Õ', 'O');
 
-              aux = aux.replace('Ú', 'U');
-              aux = aux.replace('Ü', 'U');
-              aux = aux.replace('Û', 'U');
-              aux = aux.replace('Ù', 'U');
+                aux = aux.replace('Ú', 'U');
+                aux = aux.replace('Ü', 'U');
+                aux = aux.replace('Û', 'U');
+                aux = aux.replace('Ù', 'U');
 
-              aux = aux.replace('Ñ', 'N');
+                aux = aux.replace('Ñ', 'N');
 
 
-              aux = aux.replace('Ç', 'C');
-              aux = aux.replace('Ý', 'Y');
+                aux = aux.replace('Ç', 'C');
+                aux = aux.replace('Ý', 'Y');
 
-              aux = aux.replace('á', 'a');
-              aux = aux.replace('à', 'a');
-              aux = aux.replace('ã', 'a');
-              aux = aux.replace('â', 'a');
-              aux = aux.replace('ä', 'a');
-              aux = aux.replace('å', 'a');
+                aux = aux.replace('á', 'a');
+                aux = aux.replace('à', 'a');
+                aux = aux.replace('ã', 'a');
+                aux = aux.replace('â', 'a');
+                aux = aux.replace('ä', 'a');
+                aux = aux.replace('å', 'a');
 
-              aux = aux.replace('é', 'e');
-              aux = aux.replace('è', 'e');
-              aux = aux.replace('ê', 'e');
-              aux = aux.replace('ë', 'e');
+                aux = aux.replace('é', 'e');
+                aux = aux.replace('è', 'e');
+                aux = aux.replace('ê', 'e');
+                aux = aux.replace('ë', 'e');
 
-              aux = aux.replace('í', 'i');
-              aux = aux.replace('ì', 'i');
-              aux = aux.replace('î', 'i');
-              aux = aux.replace('ï', 'i');
+                aux = aux.replace('í', 'i');
+                aux = aux.replace('ì', 'i');
+                aux = aux.replace('î', 'i');
+                aux = aux.replace('ï', 'i');
 
-              aux = aux.replace('ó', 'o');
-              aux = aux.replace('ò', 'o');
-              aux = aux.replace('ô', 'o');
-              aux = aux.replace('ö', 'o');
-              aux = aux.replace('õ', 'o');
+                aux = aux.replace('ó', 'o');
+                aux = aux.replace('ò', 'o');
+                aux = aux.replace('ô', 'o');
+                aux = aux.replace('ö', 'o');
+                aux = aux.replace('õ', 'o');
 
-              aux = aux.replace('ú', 'u');
-              aux = aux.replace('ù', 'u');
-              aux = aux.replace('ü', 'u');
-              aux = aux.replace('û', 'u');
+                aux = aux.replace('ú', 'u');
+                aux = aux.replace('ù', 'u');
+                aux = aux.replace('ü', 'u');
+                aux = aux.replace('û', 'u');
 
-              aux = aux.replace('ñ', 'n');
+                aux = aux.replace('ñ', 'n');
 
-              aux = aux.replace('ç', 'c');
-              aux = aux.replace('ÿ', 'y');
-              aux = aux.replace('ý', 'y');
+                aux = aux.replace('ç', 'c');
+                aux = aux.replace('ÿ', 'y');
+                aux = aux.replace('ý', 'y');
 
               if (replaceSpaces)
               {
@@ -252,7 +276,7 @@ public class SWBSocialResUtil {
               aux = aux.replaceAll("&uacute;", "ú");
               aux = aux.replaceAll("&ntilde;", "ñ");
               //aux = aux.toLowerCase();
-              //aux = aux.replace('Á', 'A');
+              //aux = aux.replace('�?', 'A');
               aux = aux.replace('Ä', 'A');
               aux = aux.replace('Å', 'A');
               aux = aux.replace('Â', 'A');
