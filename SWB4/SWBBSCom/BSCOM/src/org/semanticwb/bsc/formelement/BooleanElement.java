@@ -8,7 +8,7 @@ import org.semanticwb.platform.SemanticProperty;
  * Elemento para valores booleanos configurable como CheckBox, Radio y Select
  * @author carlos.ramos, ebenezer.sanchez
  */
-public class BooleanElement extends org.semanticwb.model.base.BooleanElementBase 
+public class BooleanElement extends org.semanticwb.bsc.formelement.base.BooleanElementBase
 {
     public BooleanElement(org.semanticwb.platform.SemanticObject base)
     {
