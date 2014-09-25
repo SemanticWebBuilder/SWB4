@@ -74,7 +74,8 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     
     @Override
     public String getStatusIconClass() {
-        return getAgreementStatus() == null ? "undefined" : getAgreementStatus().getIconClass();
+        //return getAgreementStatus() == null ? "undefined" : getAgreementStatus().getIconClass();
+        return getAgreementStatus() == null ? "undefined" : getAgreementStatus();
     }
     
     @Override
