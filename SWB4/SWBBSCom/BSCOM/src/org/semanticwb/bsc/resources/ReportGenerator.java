@@ -152,11 +152,11 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("      </select>");
         output.append("     </div>"); //cierra form-group
         output.append("    </div>");
-        output.append("   </div>");//cierra div row
+        //output.append("   </div>");//cierra div row
         
 //        output.append("   <hr>");
-        output.append("   <div class=\"row\">");
-        output.append("    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        //output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
         output.append("     <div class=\"form-group\">");
         output.append("      <label for=\"title\">");
         output.append(        paramRequest.getLocaleString("lbl_title"));
@@ -1597,13 +1597,13 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("<html>");
         output.append("<head>");
         output.append("<style type=\"text/css\">");
-        int sizePdf = getSize(criteria.getProps2Show().size());
+        output.append("    @page { size: 11in 8.5in;}");
+        /*int sizePdf = getSize(criteria.getProps2Show().size());
         output.append("      @page{ size:");
         output.append(sizePdf);
-        output.append(".0cm 20.0cm; }\">");
+        output.append(".0cm 20.0cm; }\">");*/
         output.append("</style>");
-
-        output.append(getLinks(paramRequest, request));
+        output.append(getLinks(request));
         output.append("</head>");
         output.append("<body>");
 
@@ -1614,16 +1614,30 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         String lang = paramRequest.getUser().getLanguage();
         String modelSite = ws.getTitle(lang) == null ? ws.getTitle() : ws.getTitle(lang);
         Date date = new Date();
-        output.append("<div class=\"headerPDF\" style=\"width:50%;float:left;\">");
-        output.append(modelSite);
-        output.append("</div>");
-        output.append("<div class=\"headerPDF\" style=\"width:50%;float:rigth;\">");
-        output.append(paramRequest.getLocaleString("lblDateGeneration"));
-        output.append(SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy"));
-        output.append("</div>");
-        output.append("<br/>");
-        output.append("<br/>");
-        output.append("<table border=\"1\" style=\"width:100%\" >\n");
+        
+        output.append("<div id=\"containerV\">");
+        output.append(" <div id=\"headerV\">");
+        output.append("     <div id=\"scoreInfoV\">");
+        output.append("                 <h4 class=\"titleReference\">"+paramRequest.getLocaleString("lbl_scorecard")+"</h4>");
+        output.append("                 <h4 class=\"titleProperty\">"+modelSite+"</h4>");
+        output.append("     </div>");
+        output.append("     <div id=\"scoreInfoV1\">");
+        output.append("                 <h4 class=\"titleReference\">"+paramRequest.getLocaleString("lblDateGeneration")+"</h4>");
+        output.append("                 <h4 class=\"titleProperty\">"+SWBUtils.TEXT.getStrDate(date, "es", "dd/mm/yyyy")+"</h4>");
+        output.append("     </div>");
+        output.append("     <div id=\"scoreInfoV1\"></div>");
+        output.append("     <div id=\"Title\">");
+        output.append("                 <h4 class=\"titleView\"></h4>");
+        output.append("     </div>");
+        output.append("  </div>"); //cierra div headerV
+        output.append("<div id=\"logoSWBSV\"></div>");
+        
+        //Contenido del documento
+        output.append("   <div id=\"contentDocV\">");
+        
+        output.append("<table class=\"table\">");
+        //Obtiene encabezados de tabla
+        output.append("<thead>");
         output.append("  <tr>\n");
         for (SemanticProperty prop : criteria.getProps2Show()) {
             output.append("    <th>");
@@ -1635,7 +1649,8 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             itemsCount++;
         }
         output.append("  </tr>\n");
-
+        output.append("</thead>");
+        output.append("<tbody>");
         for (SemanticObject item : results) {
             GenericObject gralItem = item.createGenericInstance();
             boolean sameKind = false;
@@ -1644,6 +1659,7 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
                 sameKind = true;
             }
             itemsCount = 0;
+            
             output.append("  <tr>\n");
             for (SemanticProperty prop : criteria.getProps2Show()) {
                 output.append("    <td>\n");
@@ -1680,7 +1696,10 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             output.append(paramRequest.getLocaleString("msg_noResults"));
             output.append("</td></tr>\n");
         }
+        output.append("</tbody>");
         output.append("</table>");
+        output.append("</div>");//cierra div contentDocV
+        output.append("</div>");//cierra div Conteiner
         output.append("</body>");
         output.append("</html>");
         return output;
@@ -1697,57 +1716,12 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
-            throws FileNotFoundException, IOException {
-        User user = paramRequest.getUser();
-        WebPage wp = paramRequest.getWebPage();
-
-        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/"
-                + template.getActualVersion().getVersionNumber() + "/"
-                + template.getFileName(template.getActualVersion().getVersionNumber());
-        FileReader reader = null;
+    private String getLinks(HttpServletRequest request)
+    {
+        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
-        reader = new FileReader(filePath);
-
-        String port = "";
-        if (request.getServerPort() != 80) {
-            port = ":" + request.getServerPort();
-        }
-        String baserequest = request.getScheme() + "://" + request.getServerName()
-                + port;
-
-        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
-        HtmlTag tag = new HtmlTag();
-        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-            int ttype = tok.getTokenType();
-
-            if (ttype == HtmlStreamTokenizer.TT_TAG) {
-                try {
-                    tok.parseTag(tok.getStringValue(), tag);
-                } catch (HtmlException htmle) {
-                    log.error("Al parsear la plantilla , "
-                            + filePath, htmle);
-                }
-                if (tag.getTagString().toLowerCase().equals("link")) {
-                    String tagTxt = tag.toString();
-                    if (tagTxt.contains("type=\"text/css\"")) {
-                        if (!tagTxt.contains("/>")) {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
-                        }
-                        if (!tagTxt.contains("{webpath}")) {
-                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
-                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
-                                    tagTxt.length());
-                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
-                        } else {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
-                        }
-                        view.append(tagTxt);
-                    }
-                }
-            }
-        }
+        view.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
         return view.toString();
     }
 
