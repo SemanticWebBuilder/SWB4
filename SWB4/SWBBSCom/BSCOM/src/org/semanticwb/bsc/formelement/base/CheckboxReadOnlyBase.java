@@ -2,20 +2,20 @@ package org.semanticwb.bsc.formelement.base;
 
 
    /**
-   * Check box accessible only with permission once marked 
+   * Casilla de verificación accesible solo con permisos una vez marcada 
    */
 public abstract class CheckboxReadOnlyBase extends org.semanticwb.model.BooleanElement 
 {
    /**
-   * Solo lectura para usuarios con alguno de los roles en esta lista de identificadores de roles
+   * Read only for users with any of the roles in this list of identifiers of roles
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_readonlyRoleIds=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#readonlyRoleIds");
    /**
-   * Read only for users in any of the user groups in this list of identifiers of user groups
+   * Solo lectura para usuarios en alguno de los grupos de usuarios en esta lista de identificadores de grupos de usuarios
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_readonlyUserGroupIds=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#readonlyUserGroupIds");
    /**
-   * Check box accessible only with permission once marked
+   * Casilla de verificación accesible solo con permisos una vez marcada
    */
     public static final org.semanticwb.platform.SemanticClass bsc_CheckboxReadOnly=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#CheckboxReadOnly");
    /**
