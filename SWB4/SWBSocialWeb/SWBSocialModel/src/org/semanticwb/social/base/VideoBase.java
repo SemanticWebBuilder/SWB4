@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envia un video a facebook). 
    */
-public abstract class VideoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.social.PostTextable,org.semanticwb.model.Descriptiveable,org.semanticwb.social.PostVideoable,org.semanticwb.social.SocialCalendarRefable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Referensable
+public abstract class VideoBase extends org.semanticwb.social.PostOut implements org.semanticwb.model.Traceable,org.semanticwb.social.SocialCalendarRefable,org.semanticwb.social.PostTextable,org.semanticwb.social.PostVideoable,org.semanticwb.model.Tagable,org.semanticwb.social.PostDataable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable
 {
    /**
    * Clase que sera creada cuando un post sea de tipo video, como lo es para youtube y facebook (cuando se envia un video a facebook).

@@ -1,3 +1,27 @@
+/**  
+* SWB Social es una plataforma que descentraliza la publicación, seguimiento y monitoreo hacia las principales redes sociales. 
+* SWB Social escucha y entiende opiniones acerca de una organización, sus productos, sus servicios e inclusive de su competencia, 
+* detectando en la información sentimientos, influencia, geolocalización e idioma, entre mucha más información relevante que puede ser 
+* útil para la toma de decisiones. 
+* 
+* SWB Social, es una herramienta basada en la plataforma SemanticWebBuilder. SWB Social, como SemanticWebBuilder, es una creación original 
+* del Fondo de Información y Documentación para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+* 
+* INFOTEC pone a su disposición la herramienta SWB Social a través de su licenciamiento abierto al público (‘open source’), 
+* en virtud del cual, usted podrá usarla en las mismas condiciones con que INFOTEC la ha diseñado y puesto a su disposición; 
+* aprender de élla; distribuirla a terceros; acceder a su código fuente y modificarla, y combinarla o enlazarla con otro software, 
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+* del SemanticWebBuilder 4.0. y SWB Social 1.0
+* 
+* INFOTEC no otorga garantía sobre SWB Social, de ninguna especie y naturaleza, ni implícita ni explícita, 
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+* de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder o SWB Social, INFOTEC pone a su disposición la siguiente 
+* dirección electrónica: 
+*  http://www.semanticwebbuilder.org
+**/ 
+ 
 package org.semanticwb.social;
 
 import java.io.BufferedReader;
@@ -642,32 +666,32 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 /* Formato de idiomas -->http://tools.ietf.org/html/bcp47 ----https://twitter.com/search-advanced
                 <option value="am">Amharic (አማርኛ)</option>
                 <option value="ar">Arabic (العربية)</option>
-                <option value="bg">Bulgarian (Български)</option>
+                <option value="bg">Bulgarian (Българ�?ки)</option>
                 <option value="bn">Bengali (বাংলা)</option>
-                <option value="bo">Tibetan (བོད་སྐད)</option>
-                <option value="chr">Cherokee (ᏣᎳᎩ)</option>
+                <option value="bo">Tibetan (བོད་ས�?ད)</option>
+                <option value="chr">Cherokee (�?�ᎳᎩ)</option>
                 <option value="da">Danish (Dansk)</option>
                 <option value="de">German (Deutsch)</option>
                 <option value="dv">Maldivian (ދިވެހި)</option>
                 <option value="el">Greek (Ελληνικά)</option>
                 <option value="en">English (English)</option>
                 <option value="es">Spanish (Español)</option>
-                <option value="fa">Persian (فارسی)</option>
+                <option value="fa">Persian (�?ارسی)</option>
                 <option value="fi">Finnish (Suomi)</option>
                 <option value="fr">French (Français)</option>
-                <option value="gu">Gujarati (ગુજરાતી)</option>
+                <option value="gu">Gujarati (ગ�?જરાતી)</option>
                 <option value="iw">Hebrew (עברית)</option>
                 <option value="hi">Hindi (हिंदी)</option>
                 <option value="hu">Hungarian (Magyar)</option>
                 <option value="hy">Armenian (Հայերեն)</option>
                 <option value="in">Indonesian (Bahasa Indonesia)</option>
-                <option value="is">Icelandic (Íslenska)</option>
+                <option value="is">Icelandic (�?slenska)</option>
                 <option value="it">Italian (Italiano)</option>
-                <option value="iu">Inuktitut (ᐃᓄᒃᑎᑐᑦ)</option>
+                <option value="iu">Inuktitut (�?�ᓄᒃᑎ�?ᑦ)</option>
                 <option value="ja">Japanese (日本語)</option>
-                <option value="ka">Georgian (ქართული)</option>
-                <option value="km">Khmer (ខ្មែរ)</option>
-                <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                <option value="ka">Georgian (ქ�?რთული)</option>
+                <option value="km">Khmer (�?្មែរ)</option>
+                <option value="kn">Kannada (ಕನ�?ನಡ)</option>
                 <option value="ko">Korean (한국어)</option>
                 <option value="lo">Lao (ລາວ)</option>
                 <option value="lt">Lithuanian (Lietuvių)</option>
@@ -680,15 +704,15 @@ public class Twitter extends org.semanticwb.social.base.TwitterBase {
                 <option value="pa">Panjabi (ਪੰਜਾਬੀ)</option>
                 <option value="pl">Polish (Polski)</option>
                 <option value="pt">Portuguese (Português)</option>
-                <option value="ru">Russian (Русский)</option>
+                <option value="ru">Russian (Ру�?�?кий)</option>
                 <option value="si">Sinhala (සිංහල)</option>
                 <option value="sv">Swedish (Svenska)</option>
-                <option value="ta">Tamil (தமிழ்)</option>
-                <option value="te">Telugu (తెలుగు)</option>
+                <option value="ta">Tamil (தமிழ�?)</option>
+                <option value="te">Telugu (తెల�?గ�?)</option>
                 <option value="th">Thai (ไทย)</option>
                 <option value="tl">Tagalog (Tagalog)</option>
                 <option value="tr">Turkish (Türkçe)</option>
-                <option value="ur">Urdu (ﺍﺭﺩﻭ)</option>
+                <option value="ur">Urdu (�?ﺭﺩﻭ)</option>
                 <option value="vi">Vietnamese (Tiếng Việt)</option>
                 <option value="zh">Chinese (中文)</option>*/
             }
