@@ -1,3 +1,27 @@
+/**  
+* SWB Social es una plataforma que descentraliza la publicación, seguimiento y monitoreo hacia las principales redes sociales. 
+* SWB Social escucha y entiende opiniones acerca de una organización, sus productos, sus servicios e inclusive de su competencia, 
+* detectando en la información sentimientos, influencia, geolocalización e idioma, entre mucha más información relevante que puede ser 
+* útil para la toma de decisiones. 
+* 
+* SWB Social, es una herramienta basada en la plataforma SemanticWebBuilder. SWB Social, como SemanticWebBuilder, es una creación original 
+* del Fondo de Información y Documentación para la Industria INFOTEC, cuyo registro se encuentra actualmente en trámite. 
+* 
+* INFOTEC pone a su disposición la herramienta SWB Social a través de su licenciamiento abierto al público (‘open source’), 
+* en virtud del cual, usted podrá usarla en las mismas condiciones con que INFOTEC la ha diseñado y puesto a su disposición; 
+* aprender de élla; distribuirla a terceros; acceder a su código fuente y modificarla, y combinarla o enlazarla con otro software, 
+* todo ello de conformidad con los términos y condiciones de la LICENCIA ABIERTA AL PÚBLICO que otorga INFOTEC para la utilización 
+* del SemanticWebBuilder 4.0. y SWB Social 1.0
+* 
+* INFOTEC no otorga garantía sobre SWB Social, de ninguna especie y naturaleza, ni implícita ni explícita, 
+* siendo usted completamente responsable de la utilización que le dé y asumiendo la totalidad de los riesgos que puedan derivar 
+* de la misma. 
+* 
+* Si usted tiene cualquier duda o comentario sobre SemanticWebBuilder o SWB Social, INFOTEC pone a su disposición la siguiente 
+* dirección electrónica: 
+*  http://www.semanticwebbuilder.org
+**/ 
+ 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -640,8 +664,8 @@ public class SWBSocialUtil {
          * @return a string similar to {@code txt} but with neither accented or
          * special characters nor symbols in it. un objeto string similar a
          * {@code txt} pero sin caracteres acentuados o especiales y sin
-         * s&iacute;mbolos {@literal Á} is replaced by {@literal A} <br>
-         * {@literal Ê} is replaced by {@literal E} <br> {@literal Ï} is
+         * s&iacute;mbolos {@literal �?} is replaced by {@literal A} <br>
+         * {@literal Ê} is replaced by {@literal E} <br> {@literal �?} is
          * replaced by {@literal I} <br> {@literal â} is replaced by
          * {@literal a} <br> {@literal ç} is replaced by {@literal c} <br> and
          * blank spaces are replaced by underscore characters, any symbol in
@@ -2265,7 +2289,7 @@ public class SWBSocialUtil {
                 if (postOut instanceof Message && socialNet instanceof Messageable) 
                 {
                     //System.out.println("MENSAJE!!");
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENV�?E UN POST
                     Messageable messageable = (Messageable) socialNet;
                     //messageable.postMsg((Message) post, request, response);
                     PostableObj postableObj = new PostableObj(messageable, postOut);
@@ -2274,7 +2298,7 @@ public class SWBSocialUtil {
                     sendPostThread.start();
                 } else if (postOut instanceof Photo && socialNet instanceof Photoable) {
                     //System.out.println("PHOTO!!");
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENV�?E UN POST
                     Photoable photoable = (Photoable) socialNet;
                     //photoable.postPhoto((Photo) post, request, response);
                     PostableObj postableObj = new PostableObj(photoable, postOut);
@@ -2283,7 +2307,7 @@ public class SWBSocialUtil {
                     sendPostThread.start();
                 } else if (postOut instanceof Video && socialNet instanceof Videoable) {
                     //System.out.println("VIDEO!!");
-                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENVÍE UN POST
+                    //TODO: YO CREO QUE LO QUE TENGO QUE HACER AQUI, ES UN THREAD POR CADA UNA DE LAS REDES SOCIALES A LAS QUE SE ENV�?E UN POST
                     Videoable videoable = (Videoable) socialNet;
                     //videoable.postVideo((Video) post, request, response);
                     PostableObj postableObj = new PostableObj(videoable, postOut);
@@ -2659,7 +2683,7 @@ public class SWBSocialUtil {
            //long startTime = System.currentTimeMillis();
            
            //Iterar dentro de los estados de un pais
-           //System.out.println("BUSCANDO EN EL PAÍS:" + country.getTitle());
+           //System.out.println("BUSCANDO EN EL PA�?S:" + country.getTitle());
            if(statesPolygons.get(country) != null){
                 for (Map.Entry<CountryState, double[][]> entryState : statesPolygons.get(country).entrySet()) {
                     if(pnpoly(entryState.getValue(), lat, lng)){
