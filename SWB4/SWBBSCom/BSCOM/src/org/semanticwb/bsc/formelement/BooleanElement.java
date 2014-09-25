@@ -38,7 +38,6 @@ public class BooleanElement extends org.semanticwb.bsc.formelement.base.BooleanE
         String trueTitle            = getDisplayTrueTitle(lang);
         String falseTitle           = getDisplayFalseTitle(lang);
         String displayType          = getDisplayType();
-System.out.println("displayType="+displayType);
         if (sobj != null) {
             DisplayProperty dobj = new DisplayProperty(sobj);
             pmsg         = dobj.getPromptMessage();
