@@ -95,7 +95,8 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
 
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(256);
@@ -104,26 +105,22 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         UserRepository repository = paramRequest.getWebPage().getWebSite().getUserRepository();
         url.setMode("report");
 
-        output.append("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12 swb-panel-contenido \">");
-        output.append("     <div class=\"panel panel-default\">");
-        output.append("         <div class=\"panel-heading swb-panel-cabeza\">Reportes</div>");
-        output.append("         <div class=\"panel-body swb-panel-cuerpo swb-reportes\">");
-        output.append("             <div class=\"row\">");
-        output.append("                 <div class=\"col-lg-1 col-md-1 col-sm-0 col-xs-0\"></div>");
-        output.append("                 <div class=\"col-lg-10 col-md-10 col-sm-12 col-xs-12\">"); 
-        output.append("                 <form name=\"reportCrit\" id=\"reportCrit\" action=\"");
+        output.append("<div class=\"panel panel-default\">");
+        output.append(" <div class=\"panel-heading swb-panel-cabeza\">Reportes</div>");
+        output.append(" <div class=\"panel-body swb-panel-cuerpo swb-reportes\">");
+        output.append("  <form name=\"reportCrit\" id=\"reportCrit\" action=\"");
         output.append(url.toString());
         output.append("\" method=\"post\">\n");
-        output.append("                     <div class=\"row\">");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"elementType\">");
-        output.append(                                      paramRequest.getLocaleString("lbl_elementType"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"elementType\" id=\"elementType\" onchange=\"listTitles(this);\">");
-        output.append("                                 <option value=\"\">");
-        output.append(                                  paramRequest.getLocaleString("lbl_title_opt"));
-        output.append("                                 </option>");
+        output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"elementType\">");
+        output.append(        paramRequest.getLocaleString("lbl_elementType"));
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"elementType\" id=\"elementType\" onchange=\"listTitles(this);\">");
+        output.append("       <option value=\"\">");
+        output.append(         paramRequest.getLocaleString("lbl_title_opt"));
+        output.append("       </option>");
 
         OntClass claseOnt = SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getOntClass("http://www.semanticwebbuilder.org/swb4/bsc#BSCElement");
         Iterator<OntClass> children = claseOnt.listSubClasses();
@@ -143,154 +140,155 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             for (int i = 0; i < elements.size(); i++) {
                 String childName = elements.get(i);
                 OntClass elementChild = childMap.get(childName);
-                output.append("        <option value=\"");
+                output.append("       <option value=\"");
                 output.append(elementChild.getLocalName());
                 output.append("\">");
                 output.append(childName);
-                output.append("</option>");
+                output.append("</option>").append("\n");
             }
         }
 
         String propertiesScript = this.getClassesProperties(childMap);
-        output.append("                                 </select>");
-        output.append("                             </div>"); //cierra form-group
-        output.append("                         </div>");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"title\">");
-        output.append(paramRequest.getLocaleString("lbl_title"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"title\" id=\"titleSelect\" onchange=\"listStatus(this);\">");
-        output.append("                                     <option value=\"\">");
+        output.append("      </select>");
+        output.append("     </div>"); //cierra form-group
+        output.append("    </div>");
+        output.append("   </div>");//cierra div row
+        
+//        output.append("   <hr>");
+        output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"title\">");
+        output.append(        paramRequest.getLocaleString("lbl_title"));
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"title\" id=\"titleSelect\" onchange=\"listStatus(this);\">");
+        output.append("       <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_title_opt"));
-        output.append("                                     </option>");
-        output.append("                                 </select>");
-        output.append("                             </div>");//cierra div form-group
-        output.append("                         </div>");
-        output.append("                     </div>");//cierra div row
+        output.append("       </option>");
+        output.append("      </select>");
+        output.append("     </div>");//cierra div form-group
+        output.append("    </div>");
+        output.append("   </div>");//cierra div row
         
         Iterator<Period> periods = this.getAllowedPeriods(paramRequest).iterator();
         StringBuilder periodOpt = new StringBuilder(128);
         while (periods.hasNext()) {
             Period period = periods.next();
-            periodOpt.append("        <option value=\"");
+            periodOpt.append("       <option value=\"");
             periodOpt.append(period.getURI());
             periodOpt.append("\">");
             periodOpt.append(period.getTitle());
-            periodOpt.append("</option>");
+            periodOpt.append("</option>").append("\n");
         }
         output.append("<hr>");
         
-        output.append("                     <div class=\"row\">");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"initialPeriod\">");
+        output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"initialPeriod\">");
         output.append(paramRequest.getLocaleString("lbl_initialPeriod"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"initialPeriod\" id=\"initialPeriod\">");
-        output.append("                                     <option value=\"\">");
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"initialPeriod\" id=\"initialPeriod\">");
+        output.append("       <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_noSelection"));
-        output.append("                                     </option>");
+        output.append("       </option>");
         output.append(periodOpt.toString());
-        output.append("                                 </select>");
-        output.append("                             </div>");
-        output.append("                         </div>");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"finalPeriod\">");
+        output.append("      </select>");
+        output.append("     </div>");
+        output.append("    </div>");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"finalPeriod\">");
         output.append(paramRequest.getLocaleString("lbl_finalPeriod"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"finalPeriod\" id=\"finalPeriod\">");
-        output.append("                                     <option value=\"\">");
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"finalPeriod\" id=\"finalPeriod\">");
+        output.append("       <option value=\"\">");
         output.append(paramRequest.getLocaleString("lbl_noSelection"));
-        output.append("                                     </option>");
+        output.append("       </option>");
         output.append(periodOpt.toString());
-        output.append("                                 </select>");
-        output.append("                             </div>");
-        output.append("                         </div>");
-        output.append("                     </div>");//cierra row
-        output.append("<hr>");
-        output.append("                     <div class=\"row\">");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"status\">");
-        output.append(                                  paramRequest.getLocaleString("lbl_status"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"status\" id=\"status\">\n");
-        output.append("                                     <option value=\"\">");
-        output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
-        output.append("                                     </option>\n");
-        output.append("                                 </select>\n");
-        output.append("                             </div>");
-        output.append("                         </div>");
-        output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-        output.append("                             <div class=\"form-group\">");
-        output.append("                                 <label for=\"champion\">");
-        output.append(                                  paramRequest.getLocaleString("lbl_champion"));
-        output.append("                                 </label>");
-        output.append("                                 <select class=\"form-control\" name=\"champion\" id=\"champion\">\n");
-        output.append("                                     <option value=\"\">");
-        output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
-        output.append("                                     </option>\n");
+        output.append("      </select>");
+        output.append("     </div>");
+        output.append("    </div>");
+        output.append("   </div>");//cierra row
+        output.append("   <hr>");
+        output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"status\">");
+        output.append(paramRequest.getLocaleString("lbl_status"));
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"status\" id=\"status\">\n");
+        output.append("       <option value=\"\">");
+        output.append(paramRequest.getLocaleString("lbl_noSelection"));
+        output.append("       </option>\n");
+        output.append("      </select>\n");
+        output.append("     </div>");
+        output.append("    </div>");
+        output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+        output.append("     <div class=\"form-group\">");
+        output.append("      <label for=\"champion\">");
+        output.append(paramRequest.getLocaleString("lbl_champion"));
+        output.append("      </label>");
+        output.append("      <select class=\"form-control\" name=\"champion\" id=\"champion\">\n");
+        output.append("       <option value=\"\">");
+        output.append(paramRequest.getLocaleString("lbl_noSelection"));
+        output.append("       </option>\n");
 
         Iterator<User> champions = this.userListByRole(paramRequest.getLocaleString("usersRole2List"), repository);
         while (champions != null && champions.hasNext()) {
             User champion = champions.next();
-            output.append("        <option value=\"");
+            output.append("       <option value=\"");
             output.append(champion.getURI());
             output.append("\">");
             output.append(champion.getFullName());
-            output.append("</option>\n");
+            output.append("       </option>\n").append("\n");
         }
-
-        output.append("                                 </select>\n");
-        output.append("                             </div>");
-        output.append("                         </div>");
-        output.append("                     </div>");//cierra row
+        output.append("      </select>\n");
+        output.append("     </div>");
+        output.append("    </div>");
+        output.append("   </div>");//cierra row
 
         //Para un rol en particular (Estratega) se debe permitir revisar a los Sponsor
         if (actualUserRole != null && actualUserRole.getId().equalsIgnoreCase(paramRequest.getLocaleString("superUserRole"))) {
             
-            output.append("                     <div class=\"row\">");
-            output.append("                         <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
-            output.append("                             <div class=\"form-group\">");
-            output.append("                                 <label for=\"sponsor\">");
-            output.append(                                  paramRequest.getLocaleString("lbl_sponsor"));
-            output.append("                                 </label>");
-            output.append("                                 <select class=\"form-control\" name=\"sponsor\" id=\"sponsor\">");
-            output.append("                                     <option value=\"\">");
-            output.append(                                      paramRequest.getLocaleString("lbl_noSelection"));
-            output.append("                                     </option>");
+            output.append("   <div class=\"row\">");
+            output.append("    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">");
+            output.append("     <div class=\"form-group\">");
+            output.append("      <label for=\"sponsor\">");
+            output.append(paramRequest.getLocaleString("lbl_sponsor"));
+            output.append("      </label>");
+            output.append("      <select class=\"form-control\" name=\"sponsor\" id=\"sponsor\">");
+            output.append("       <option value=\"\">");
+            output.append(paramRequest.getLocaleString("lbl_noSelection"));
+            output.append("       </option>");
 
             Iterator<User> sponsors = this.userListByRole("Sponsor", repository);
             while (sponsors != null && sponsors.hasNext()) {
                 User sponsor = sponsors.next();
-                output.append("        <option value=\"");
+                output.append("       <option value=\"");
                 output.append(sponsor.getURI());
                 output.append("\">");
                 output.append(sponsor.getFullName());
-                output.append("</option>");
+                output.append("       </option>").append("\n");
             }
-
-            output.append("                                 </select>");
-            output.append("                             </div>");
-            output.append("                         </div>");
-            output.append("                     </div>");//cierra row
+            output.append("      </select>");
+            output.append("     </div>");
+            output.append("    </div>");
+            output.append("   </div>");//cierra row
             //output.append("<hr>");
         }
-        output.append("<hr>");
-        output.append("                         <div class=\"row swb-reportes-checkboxinline\">");
-        output.append("                             <div class=\"col-lg-2 col-md-2 col-sm-0 col-xs-0\">");
-        output.append("                                 <label>");
-        output.append(                                  paramRequest.getLocaleString("lbl_relatedElements"));
-        output.append("                                 </label>\n");
-        output.append("                             </div>");
-        output.append("                             <div class=\"col-lg-10 col-md-10 col-sm-12 col-xs-12\">");
-
+        output.append("   <hr>");
+        output.append("   <div class=\"row swb-reportes-checkboxinline\">");
+        output.append("    <div class=\"col-lg-2 col-md-2 col-sm-0 col-xs-0\">");
+        output.append("     <label>");
+        output.append(paramRequest.getLocaleString("lbl_relatedElements"));
+        output.append("     </label>\n");
+        output.append("    </div>");
+        output.append("    <div class=\"col-lg-10 col-md-10 col-sm-12 col-xs-12\">");
         for (int i = 0; i < elements.size(); i++) {
             String childName = elements.get(i);
             OntClass elementChild = childMap.get(childName);
-            output.append("        <input type=\"checkbox\" name=\"relElem");
+            output.append("     <input type=\"checkbox\" name=\"relElem");
             output.append(childName);
             output.append("\" id=\"relElem");
             output.append(childName);
@@ -302,30 +300,29 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
             output.append(childName);
             output.append("</label>&nbsp;&nbsp;&nbsp;");
         }
-        output.append("                             </div>");
-        output.append("                         </div>");
-        output.append("                         <div class=\"row swb-reportes-checkboxinline\">");
-        output.append("                             <div class=\"col-lg-2 col-md-2 col-sm-0 col-xs-0\">");      
-        output.append("                                 <label for=\"props2Show\">");
-        output.append(                                  paramRequest.getLocaleString("lbl_props2Show"));
-        output.append("                                 </label>");
-        output.append("                             </div>");
-        output.append("                             <div class=\"col-lg-10 col-md-10 col-sm-12 col-xs-12\">");
-        output.append("                                 <select name=\"props2Show\" id=\"props2Show\" size=\"10\" multiple=\"mutiple\" disabled=\"disabled\">");
-        output.append("                                     <option>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>");
-        output.append("                                 </select>");
-        output.append("                             </div>");
-        output.append("                         </div>");
+        output.append("    </div>");
+        output.append("   </div>");
+        output.append("   <div class=\"row swb-reportes-checkboxinline\">");
+        output.append("    <div class=\"col-lg-2 col-md-2 col-sm-0 col-xs-0\">");      
+        output.append("     <label for=\"props2Show\">");
+        output.append(paramRequest.getLocaleString("lbl_props2Show"));
+        output.append("     </label>");
+        output.append("    </div>");
+        output.append("    <div class=\"col-lg-10 col-md-10 col-sm-12 col-xs-12\">");
+        output.append("     <select name=\"props2Show\" id=\"props2Show\" size=\"10\" multiple=\"mutiple\" disabled=\"disabled\">");
+        output.append("      <option>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>");
+        output.append("     </select>");
+        output.append("    </div>");
+        output.append("   </div>");
         
-        output.append("                     <div class=\"row\">");
-        output.append("                         <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
-        output.append("                             <input class=\"btn btn-default pull-right btn-morado\" type=\"button\" id=\"submitCrit\" value=\"");
-        output.append(                              paramRequest.getLocaleString("lbl_submit"));
-        output.append("\" onclick=\"evaluate2Submit(this.form);\"/>");
-        output.append("                         </div>");
-        output.append("                     </div>");
-        
-        output.append("                     </form>\n");
+        output.append("   <div class=\"row\">");
+        output.append("    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
+        output.append("     <input class=\"btn btn-default pull-right btn-morado\" type=\"button\" id=\"submitCrit\" value=\"");
+        output.append(paramRequest.getLocaleString("lbl_submit"));
+        output.append("\" onclick=\"evaluate2Submit(this.form);\">");
+        output.append("    </div>");
+        output.append("   </div>");       
+        output.append("  </form>\n");
        
         
         SWBResourceURL urlTitles = paramRequest.getRenderUrl();
@@ -451,11 +448,8 @@ public class ReportGenerator extends GenericResource implements PDFExportable {
         output.append("        \n");
         output.append("    }\n");
         output.append("  </script>");
-        output.append("                 </div>"); 
-        output.append("             </div>");// cierra div row principal
-        output.append("         </div>");// cierra panel body
-        output.append("     </div");// cierra div panel default
-        output.append("</div>");
+        output.append(" </div>");// cierra panel body
+        output.append("</div>");// cierra div panel default
         out.println(output.toString());
     }
 
