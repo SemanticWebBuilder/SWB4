@@ -54,7 +54,7 @@ public class SocialNetsStatsMonitor {
             Calendar hour2Start = Calendar.getInstance();
             hour2Start.set(hour2Start.get(Calendar.YEAR),
                     hour2Start.get(Calendar.MONTH),
-                    hour2Start.get(Calendar.DATE), 23, 50, 00); //Hora a las 11:50 pm
+                    hour2Start.get(Calendar.DATE), 23, 40, 00); //Hora a las 11:50 pm
 
             Calendar timeNow = Calendar.getInstance(); //Hora actual
 
@@ -67,11 +67,11 @@ public class SocialNetsStatsMonitor {
 
             Timer timer = new Timer();
 
-            timer.schedule(new monitorSocialNetStats(), 0, (60 * 1000)*10); //Cada 10 minuto
+            //timer.schedule(new monitorSocialNetStats(), 0, (60 * 1000)*10); //Cada 10 minuto
 
             //Que empiece hoy a las 11:59 pm y vuelve a iterar un dia despues y así se siga
             log.event("Initializing SocialNetsStatsMonitor, starts in:" + time2Start + "ms, periodicity:" + oneDay + ",ms");
-            //timer.schedule(new SocialNetsStatsMonitor.monitorSocialNetStats(), time2Start, oneDay);
+            timer.schedule(new SocialNetsStatsMonitor.monitorSocialNetStats(), time2Start, oneDay);
         } catch (Exception e) {
             log.error(e);
         }
