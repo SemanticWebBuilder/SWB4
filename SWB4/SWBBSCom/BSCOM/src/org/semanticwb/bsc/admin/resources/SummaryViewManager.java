@@ -592,13 +592,14 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
             
             //Contenido del documento
             output.append("         <div id=\"contentDocV\">");
-            output.append("                 <table class=\"table table-striped\">");
+            output.append("                 <table class=\"table\">");
             //Obtiene encabezados de tabla
             output.append("<thead>");
             output.append("<tr>");
             Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
             ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
             TreeMap headings2Show = new TreeMap();
+            int contProp = 0;
             if (addStatus) {
                 String[] statusHeading = {
                     "status",
@@ -607,6 +608,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                 };
                 headingsArray.add(statusHeading);
                 headings2Show.put(Integer.parseInt("0"), statusHeading);
+                contProp++;
             }
 
             if (viewPropertiesList != null) {
@@ -626,18 +628,22 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                             };
                             headingsArray.add(heading);
                             headings2Show.put(Integer.valueOf(arrayIndex), heading);
+                            contProp++;
                         }
                     }
                 }
             }
-
             // Coloca cada columna en el orden guardado
             Entry thisHeading = headings2Show.firstEntry();
+            String textClass= "";
+            if(contProp>10){
+                textClass="textSmall";
+            }
             while (thisHeading != null) {
                 Integer thisKey = (Integer) thisHeading.getKey();
                 String[] heading = (String[]) thisHeading.getValue();
                 thisHeading = headings2Show.higherEntry(thisKey);
-                output.append("<th>");
+                output.append("<th class=\""+textClass+"\">");
                 output.append(heading[1]);
                 output.append("</th>");
             }
@@ -695,7 +701,7 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                     } else {
                         status.append("<span class=\"indefinido\">Indefinido</span>");
                     }
-                    output.append("<td>" + status.toString() + "</td>");
+                    output.append("<td class=\""+textClass+"\">" + status.toString() + "</td>");
 
                 }
                 //Por cada propiedad en la vista:
@@ -728,10 +734,10 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                     String[] heading = (String[]) thisHeading1.getValue();
                     thisHeading1 = headings2Show.higherEntry(thisKey);
                     if (!addStatus) {
-                        output.append("<td class=\"center-td\">" + heading[1] + "</td>");
+                        output.append("<td class=\"center-td "+textClass+"\">" + heading[1] + "</td>");
                     }
                     if (addStatus && thisKey > 0) {
-                        output.append("<td class=\"center-td\">" + heading[1] + "</td>");
+                        output.append("<td class=\"center-td "+textClass+"\">" + heading[1] + "</td>");
                     }
 
                 }
