@@ -3,6 +3,8 @@
     Created on : 25/03/2013, 11:31:50 am
     Author     : Jorge.Jimenez
 --%>
+<%@page import="org.semanticwb.model.UserGroup"%>
+<%@page import="org.semanticwb.model.SWBContext"%>
 <%@page import="org.semanticwb.model.AdminFilter"%>
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <%@page import="org.semanticwb.social.SocialSite,java.util.*,org.semanticwb.social.SocialTopic,org.semanticwb.model.WebSite,org.semanticwb.model.User,org.semanticwb.platform.SemanticObject,org.semanticwb.model.SWBComparator"%>
@@ -12,24 +14,52 @@
 <%    
         ArrayList<SocialSite> aListSites=new ArrayList(); 
         User user=paramRequest.getUser(); 
-        SWBResourceURL url = paramRequest.getRenderUrl();   
-        Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
-        while(itSocialSites.hasNext())
-        {
-            SocialSite socialSite=itSocialSites.next();
-            if(socialSite.isValid())
+        SWBResourceURL url = paramRequest.getRenderUrl();  
+        
+        UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+        if(user.hasUserGroup(userSuperAdminGrp)){//is super user-> can see everything
+            Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());
+            while(itSocialSites.hasNext())
             {
-                Iterator<AdminFilter> userAdmFilters=user.listAdminFilters();
-                while(userAdmFilters.hasNext())
+                SocialSite socialSite=itSocialSites.next();
+                if(socialSite.isValid())
                 {
-                    AdminFilter userAdmFilter=userAdmFilters.next();
-                    if(userAdmFilter.haveTreeAccessToSemanticObject(socialSite.getSemanticObject()))
+                    aListSites.add(socialSite);
+                }
+            }
+        }else{
+            Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
+            while(itSocialSites.hasNext())
+            {
+                SocialSite socialSite=itSocialSites.next();
+                if(socialSite.isValid())
+                {
+                    Iterator<AdminFilter> userAdmFilters=user.listAdminFilters();
+                    while(userAdmFilters.hasNext())
+                    {
+                        AdminFilter userAdmFilter=userAdmFilters.next();
+                        if(userAdmFilter.haveTreeAccessToSemanticObject(socialSite.getSemanticObject()))
+                        {
+                            aListSites.add(socialSite);
+                        }
+                    }
+                }
+            }
+            
+            if(aListSites.isEmpty() && (!user.listAdminFilters().hasNext())){//User has not admin filters and the data is Empty
+                itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());
+                while(itSocialSites.hasNext())
+                {
+                    SocialSite socialSite=itSocialSites.next();
+                    if(socialSite.isValid() && user.haveAccess(socialSite))
                     {
                         aListSites.add(socialSite);
                     }
                 }
             }
         }
+        
+
 %>
 
 
