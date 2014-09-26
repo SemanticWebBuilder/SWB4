@@ -48,7 +48,9 @@ package org.semanticwb.social.admin.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeSet;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,9 +58,12 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.AdminFilter;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
 import org.semanticwb.model.WebPage;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
@@ -99,7 +104,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entrando al process Request:" + paramRequest.getMode());
+        //System.out.println("Entrando al process Request:" + paramRequest.getMode());
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
@@ -129,12 +134,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        System.out.println("**************************processAction:");
+        /*System.out.println("**************************processAction:");
         System.out.println(request.getParameter("site"));
         System.out.println(request.getParameter("res"));
         System.out.println(request.getParameter("wbaction"));
         System.out.println(request.getParameter("firstLoad"));
-        System.out.println(request.getParameter("msg"));
+        System.out.println(request.getParameter("msg"));*/
         User user = response.getUser();
         response.setRenderParameter("site", request.getParameter("site"));
         response.setRenderParameter("firstLoad", request.getParameter("firstLoad"));
@@ -175,10 +180,10 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         String lang = paramRequest.getUser().getLanguage();
         int show = 1;
         String firstLoad = request.getParameter("firstLoad");
-        System.out.println("Entrando al doView");
+        /*System.out.println("Entrando al doView");
         System.out.println("First Load:" + request.getParameter("firstLoad"));
         System.out.println("show:" + request.getParameter("show"));
-        System.out.println("site:" + request.getParameter("site"));
+        System.out.println("site:" + request.getParameter("site"));*/
         if (request.getParameter("show") != null) {
             try {
                 show = Integer.parseInt(request.getParameter("show"));
@@ -203,7 +208,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             }
         }
         if(firstLoad == null){
-            System.out.println("This is the first time of doView");
+            //System.out.println("This is the first time of doView");
             out.println("<style type=\"text/css\">");
             out.println("@import \"/swbadmin/js/dojo/dojo/resources/dojo.css\";");
             out.println("@import \"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
@@ -219,7 +224,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             out.println("");
             out.println("");
         }else{
-                System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
+                //System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
         }
 
         out.println("<div class=\"swbform\">");
@@ -230,17 +235,65 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("<input type='hidden' name='firstLoad' value='false'></input>");
         out.println( paramRequest.getLocaleString("selectABrand") + ":");
         out.println("<select name='site' onchange=\"submitForm(\'frmseecontentsToAuthorize\')\">");
-        sites = SWBContext.listWebSites();
-        while (sites.hasNext()) {
-            WebSite site = sites.next();
-            if (!(site.getId().equals(SWBContext.WEBSITE_ADMIN) || site.getId().equals(SWBContext.WEBSITE_GLOBAL) || site.getId().equals(SWBContext.WEBSITE_ONTEDITOR)) && site.isValid() && site instanceof SocialSite) {
-                if (sitetoShow.getId().equals(site.getId())) {
-                    out.println("<option selected=\"true\" value='" + site.getId() + "'>" + site.getTitle() + "</option>");
-                } else {
-                    out.println("<option value='" + site.getId() + "'>" + site.getTitle() + "</option>");
+        
+        ArrayList<SocialSite> aListSites=new ArrayList();
+        
+        UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
+        if(user.hasUserGroup(userSuperAdminGrp)){//is super user-> can see everything
+            Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());
+            while(itSocialSites.hasNext())
+            {
+                SocialSite socialSite=itSocialSites.next();
+                if(socialSite.isValid())
+                {
+                    if (sitetoShow.getId().equals(socialSite.getId())) {
+                        out.println("<option selected=\"true\" value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                    } else {
+                        out.println("<option value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                    }
+                }
+            }
+        }else{
+            Iterator<SocialSite> itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());  
+            while(itSocialSites.hasNext())
+            {
+                SocialSite socialSite=itSocialSites.next();
+                if(socialSite.isValid())
+                {
+                    Iterator<AdminFilter> userAdmFilters=user.listAdminFilters();
+                    while(userAdmFilters.hasNext())
+                    {
+                        AdminFilter userAdmFilter=userAdmFilters.next();
+                        if(userAdmFilter.haveTreeAccessToSemanticObject(socialSite.getSemanticObject()))
+                        {
+                            aListSites.add(socialSite);
+                            if (sitetoShow.getId().equals(socialSite.getId())) {
+                                out.println("<option selected=\"true\" value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                            } else {
+                                out.println("<option value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if(aListSites.isEmpty() && (!user.listAdminFilters().hasNext())){//User has not admin filters and the data is Empty
+                itSocialSites=sortByDisplayNameSet(SocialSite.ClassMgr.listSocialSites(), user.getLanguage());
+                while(itSocialSites.hasNext())
+                {
+                    SocialSite socialSite=itSocialSites.next();
+                    if(socialSite.isValid() && user.haveAccess(socialSite))
+                    {
+                        if (sitetoShow.getId().equals(socialSite.getId())) {
+                            out.println("<option selected=\"true\" value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                        } else {
+                            out.println("<option value='" + socialSite.getId() + "'>" + socialSite.getTitle() + "</option>");
+                        }
+                    }
                 }
             }
         }
+
         out.println("</select>");
         String selected = "";
         if (show == 1) {
@@ -592,5 +645,15 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         out.println("</form>");
         //out.println("</div>");
 
+    }
+    
+    public static Iterator sortByDisplayNameSet(Iterator it, String lang) {
+        TreeSet set = new TreeSet(new SWBComparator(lang)); 
+
+        while (it.hasNext()) {
+            set.add(it.next());
+        }        
+
+        return set.descendingSet().iterator();
     }
 }
