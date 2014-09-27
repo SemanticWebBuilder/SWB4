@@ -125,6 +125,7 @@ public class SWBSocialUtil {
      */
     private static Logger log = SWBUtils.getLogger(SWBSocialUtil.class);
     private static Properties props = null;
+    private static Properties licenseProps = null;
     /**
      * Holds a reference to an object of this class. <p>Mantiene una referencia
      * a un objeto de esta clase.</p>
@@ -345,6 +346,11 @@ public class SWBSocialUtil {
             }
             
         }catch(Exception ignore) {}        
+        
+        try{
+            licenseProps = SWBUtils.TEXT.getPropertyFile("/org/semanticwb/social/infotecadmin/licensetypes.properties");
+        }catch(Exception ignore){}
+        
       }catch(Exception e){
           log.error(e);
       }
@@ -425,6 +431,25 @@ public class SWBSocialUtil {
         if(props!=null)
         {
             obj = props.getProperty(name);
+        }
+        if (obj == null) return defect;
+        return obj;
+    }
+    
+    /**
+     * Obtiene valor de variable de ambiente declarada en licensetypes.properties.
+     * 
+     * @param name String nombre de la variable
+     * @param defect String valor por defecto
+     * @return the env
+     * @return
+     */
+    public static String getLicenseTypeProp(String name, String defect)
+    {
+        String obj = null;
+        if(licenseProps!=null)
+        {
+            obj = licenseProps.getProperty(name);
         }
         if (obj == null) return defect;
         return obj;
