@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Clase que concentra propiedades para configuración general de youtube., para mostrar en sitio admin. ESTA CLASE YA NO SE UTILIZA, ELIMINAR DESPUES. 
    */
-public abstract class YoutubeGCBase extends org.semanticwb.social.GeneralConfig implements org.semanticwb.social.DeveloperKeyable,org.semanticwb.social.Secreteable
+public abstract class YoutubeGCBase extends org.semanticwb.social.GeneralConfig implements org.semanticwb.social.Secreteable,org.semanticwb.social.DeveloperKeyable
 {
    /**
    * Clase que concentra propiedades para configuración general de youtube., para mostrar en sitio admin. ESTA CLASE YA NO SE UTILIZA, ELIMINAR DESPUES.
