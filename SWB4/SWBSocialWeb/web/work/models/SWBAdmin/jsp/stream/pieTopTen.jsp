@@ -20,29 +20,22 @@
 <%@page import="org.json.*"%>
 <%@page import="java.util.*"%> 
 
-<%!    private static int positivesGlobal = 0;
+<%!    
+    private static int positivesGlobal = 0;
     private static int negativesGlobal = 0;
     private static int neutralsGlobal = 0;
 
     JSONArray getObject(SemanticObject semObj, String lang, String idModel, String fi) throws Exception {
         ArrayList<PostOut> list = new ArrayList<PostOut>();
         HashMap map = new HashMap();
-        WebSite ss = SWBSocialUtil.getConfigWebSite();
-        Iterator i = null;
 
         String filter = reemplazar(fi);
 
-        int neutrals = 0, positives = 0, negatives = 0, totalPost = 0;
+        int totalPost = 0;
         Iterator<PostOut> itObjPostIns = null;
 
-        //  if (semObj.getGenericInstance() instanceof Stream) {
-        //    Stream stream = (Stream) semObj.getGenericInstance();
-        //  itObjPostIns = stream.listPostInStreamInvs();
-        //} else if (semObj.getGenericInstance() instanceof SocialTopic) {
         SocialTopic socialTopic = (SocialTopic) semObj.getGenericInstance();
         itObjPostIns = PostOut.ClassMgr.listPostOutBySocialTopic(socialTopic, socialTopic.getSocialSite());
-        //}
-        SWBModel model = WebSite.ClassMgr.getWebSite(idModel);
 
 
         JSONArray node = new JSONArray();
@@ -55,21 +48,17 @@
 
             String title = "";
             responses = postIn.getNumTotNewResponses();
-            // while(listaRedes.hasNext() ){
-
+            //System.out.println("responses:" + responses);
             if (postIn == null) {
                 title = "No definido";
                 // map.put(postIn, map.containsKey(postIn) ? addArray(map.get(postIn), postIn) : new ArrayList<PostOut>());
-                map.put(postIn, map.containsKey(postIn) ? postIn.getNumTotNewResponses() : postIn.getNumTotNewResponses());
+                map.put(postIn.getURI(), map.containsKey(postIn.getURI()) ? postIn.getNumTotNewResponses() : postIn.getNumTotNewResponses());
             } else {
                 // key = postIn.getSocialNetwork();         
                 //map.put(postIn, map.containsKey(postIn) ? addArray(map.get(postIn), postIn) : addPostOut(new ArrayList(), postIn));
-                map.put(postIn, map.containsKey(postIn) ? postIn.getNumTotNewResponses() : postIn.getNumTotNewResponses());
-                //  }
+                map.put(postIn.getURI(), map.containsKey(postIn.getURI()) ? postIn.getNumTotNewResponses() : postIn.getNumTotNewResponses());
             }
             totalPost++;
-
-            //  }
 
             map = sortByComparator(map, false);
 
@@ -117,7 +106,6 @@
     }
 
     public JSONArray getJson(JSONArray node, Float value, int totalPost, PostOut p) throws Exception {
-        float intPorcentaje = 0;
         String nombre = "";
 
         if (value == 0) {
@@ -182,7 +170,6 @@
     }
 
     public ArrayList addArray(Object lista, PostOut postIn) {
-        Boolean c = lista instanceof ArrayList;
         if (lista == null) {
             lista = new ArrayList<PostIn>();
         }
