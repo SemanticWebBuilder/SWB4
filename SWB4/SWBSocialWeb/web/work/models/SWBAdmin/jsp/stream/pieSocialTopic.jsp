@@ -53,7 +53,7 @@
 
 
     if (semObj.getGenericInstance() instanceof Descriptiveable) {
-        title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
+            title = ((Descriptiveable) semObj.getGenericInstance()).getDisplayTitle(lang);
     }
 
 
@@ -99,11 +99,10 @@
             %>
             <div>
                 <input type="radio" id="<%=sn.getURI()%>FB" class="grafFacebookPostOutNet" name="postOutSocialNetwork"  value="<%=sn.getTitle()%>" >
-                <label title="FaceBook" for="<%=sn.getURI()%>FB"><%=sn.getTitle()%></label>
+                <label title="Facebook" for="<%=sn.getURI()%>FB"><%=sn.getTitle()%></label>
                 <div id="<%=sn.getTitle()%>"></div>
             </div>
                 <%
-
                 } else if (sn instanceof Twitter) {
                 %>     
                 <div>
@@ -119,9 +118,17 @@
                         <label title="YouTube" for="<%=sn.getURI()%>YT"><%=sn.getTitle()%></label>
                         <div id="<%=sn.getTitle()%>"></div>
                          </div>
-                        <%
-                            }
-                        %>
+                    <%
+                    }else if (sn instanceof Instagram) {
+                    %>
+                    <div>
+                        <input type="radio" id="<%=sn.getURI()%>YT"   class="grafInstagram"   name="postOutSocialNetwork" value="<%=sn.getTitle()%>" > 
+                        <label title="Instagram" for="<%=sn.getURI()%>IN"><%=sn.getTitle()%></label>
+                        <div id="<%=sn.getTitle()%>"></div>
+                         </div>
+                    <%
+                        }
+                    %>
                    
                     <%
                         }
@@ -553,18 +560,17 @@
         
                         for (var i = 0; i < data.length; i++) {               
                             xArray.push(data[i].label2);                                            
-                        }  
-        
+                        }
+                        console.log("xArray.length::" + xArray.length);
                         var total;           
-            
+                        console.log("cont::::" + cont);
                         if(cont == 0){
                  
-                            if(xArray.length!=1){                      
+                            if(xArray.length>1){                      
                    
                                 for (var x = data.length-1; x < data.length; x++) {  
                                     var to;
                                     to = data[x].valor;
-                  
                                     var paraPositives= document.createElement("p");   
                                     var paraNegatives= document.createElement("p");   
                                     var paraNeutrals= document.createElement("p");   
@@ -581,8 +587,8 @@
                                     element.appendChild(paraPositives);
                                     element.appendChild(paraNegatives);
                                     element.appendChild(paraNeutrals);
-                                    break;
                                     cont++;
+                                    break;
                                 }    
                             }
                    
