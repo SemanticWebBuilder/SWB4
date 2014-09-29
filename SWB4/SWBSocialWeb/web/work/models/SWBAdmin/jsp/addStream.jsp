@@ -27,17 +27,30 @@
         response.sendError(403);
         return;
     }
-    String lang=user.getLanguage();
     response.setHeader("Cache-Control", "no-cache");
     response.setHeader("Pragma", "no-cache");
     String scls=request.getParameter("scls");
     String sref=request.getParameter("sref");
+    long maxStream2add=Long.parseLong(request.getParameter("maxStream2add"));
 
     SemanticClass cls=SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass(scls);
-    SemanticObject ref=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
+    SemanticObject obj=SWBPlatform.getSemanticMgr().getOntology().getSemanticObject(sref);
+    System.out.println("clsJJJ:"+cls);
+    System.out.println("obj:"+obj);
+    
+    long classInstNumber=SWBUtils.Collections.sizeOf(obj.getModel().listInstancesOfClass(cls)); 
+    
+    if(classInstNumber>=maxStream2add) {
+        %>
+            Usted ha alcanzado el mimite de Streams para crear de acuerdo a su tipo de licencia.
+            Si tiene alguna duda, por favor contacte a su administrador de cuenta en Infotec.
+        <%
+        return;
+    }
+            
 
-    //System.out.println("cls:"+cls);
-    //System.out.println("ref:"+ref);
+    String lang=user.getLanguage(); 
+ 
 %>
 <form id="<%=scls%>/form" dojoType="dijit.form.Form" class="swbform" action="<%=org.semanticwb.SWBPlatform.getContextPath()%>/swbadmin/jsp/SemObjectEditor.jsp"  onsubmit="submitForm('<%=scls%>/form');return false;" method="post">
     <input type="hidden" name="scls" value="<%=scls%>"/>
