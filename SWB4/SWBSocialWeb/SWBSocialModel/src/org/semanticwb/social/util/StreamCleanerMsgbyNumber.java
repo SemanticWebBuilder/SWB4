@@ -34,8 +34,10 @@ import java.util.TimerTask;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
+import org.semanticwb.social.LicenseType;
 import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SWBSocial;
+import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
 
 /**
@@ -74,27 +76,41 @@ public class StreamCleanerMsgbyNumber {
          * Metodo que revisa todos los streams activos en todas las marcas a
          */
         public void run() {
-            Iterator<Stream> itStreams = Stream.ClassMgr.listStreams();
-            while (itStreams.hasNext()) {
-                Stream stream = itStreams.next();
-                if (stream.getSocialSite().isValid() && stream.isValid()) {
-                    //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
-                    int postInNumAccepted=stream.getStream_maxMsg();
-                    //1000 es el menor número aceptado en un stream, 99999 es el mayor número aceptado
-                    //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 99999)
-                    if(postInNumAccepted>=1000 && postInNumAccepted<Integer.parseInt(getAllPostInStream(stream)))    
-                    {
-                        int totalExist=Integer.parseInt(getAllPostInStream(stream));
-                        int toErase=totalExist-postInNumAccepted;
-                        //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM-1:"+stream+",toErase:"+toErase);
-                        String query=getAllPostIn2Remove(stream, toErase);
-                        //System.out.println("query pa eliminarJJ:"+query);
-                        Iterator<PostIn> itPostIns2Remove=SWBSocial.executeQueryArray(query, stream.getSocialSite()).iterator();
-                        while(itPostIns2Remove.hasNext())
+            Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
+            while(itSocialSites.hasNext())
+            {
+                SocialSite socialSite=itSocialSites.next();
+                if(socialSite.isValid())
+                {
+                    long streamMaxMessages=0;
+                    LicenseType licenseType=socialSite.getLicenseType();
+                    if(licenseType!=null) streamMaxMessages=Long.parseLong(SWBSocialUtil.getLicenseTypeProp(licenseType.getId().toLowerCase()+".messagenum", "0"));
+                    Iterator<Stream> itStreams = socialSite.listStreams();
+                    while (itStreams.hasNext()) {
+                        Stream stream = itStreams.next();
+                        if (stream.isValid()) 
                         {
-                            PostIn postIn=itPostIns2Remove.next();
-                            //System.out.println("Va a eliminar PostIn:"+postIn);
-                            postIn.remove();
+
+                            //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
+                            long postInNumAccepted=stream.getStream_maxMsg();
+                            if(postInNumAccepted<1000 || postInNumAccepted>streamMaxMessages) postInNumAccepted=streamMaxMessages;
+                            //1000 es el menor número aceptado en un stream, 100,000 es el mayor número aceptado
+                            //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 100,000)
+                            if(postInNumAccepted<Integer.parseInt(getAllPostInStream(stream)))    
+                            {
+                                long totalExist=Integer.parseInt(getAllPostInStream(stream));
+                                long toErase=totalExist-postInNumAccepted;
+                                //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM-1:"+stream+",toErase:"+toErase);
+                                String query=getAllPostIn2Remove(stream, toErase);
+                                //System.out.println("query pa eliminarJJ:"+query);
+                                Iterator<PostIn> itPostIns2Remove=SWBSocial.executeQueryArray(query, socialSite).iterator();
+                                while(itPostIns2Remove.hasNext())
+                                {
+                                    PostIn postIn=itPostIns2Remove.next();
+                                    //System.out.println("Va a eliminar PostIn:"+postIn);
+                                    postIn.remove();
+                                }
+                            }
                         }
                     }
                 }
@@ -116,7 +132,7 @@ public class StreamCleanerMsgbyNumber {
         return query;
     }
     
-     private String getAllPostIn2Remove(Stream stream, int limit) {
+     private String getAllPostIn2Remove(Stream stream, long limit) {
         String query ="PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n"
                 + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
                 + "\n";
