@@ -22,9 +22,6 @@
  */
 package org.semanticwb.process.model;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.User;
@@ -45,40 +42,21 @@ public class UserTask extends org.semanticwb.process.model.base.UserTaskBase
     }
 
     @Override
-    public void execute(FlowNodeInstance instance, User user)
-    {
+    public void execute(FlowNodeInstance instance, User user) {
         super.execute(instance, user);
-        //System.out.println("execute:"+instance+" "+user);
-        if(getResourceAssignationRule()>0 && instance.getAssignedto()==null)
-        {
-            if(getResourceAssignationRule()<4) // De momento todos son aleatorios
-            {
-                List<User> users=SWBProcessMgr.getUsers(instance);
-                int s=users.size();
-                User assigned=users.get(new Random().nextInt(s));                
-                instance.setAssignedto(assigned);
-                //System.out.println("assigned:"+assigned);
-                NotificationTemplate tpl=getProcess().getAssigmentNotificationTemplate();
-                if(tpl!=null)
-                {
-                    try
-                    {
-                        //System.out.println("send mail:"+assigned);
-                        SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
-                    }catch(Exception e)
-                    {
-                        log.error(e);
-                    }
+        boolean assg = SWBProcessMgr.assignUserTaskInstance(instance, user);
+        
+        if (assg) {
+            User assigned = instance.getAssignedto();
+            NotificationTemplate tpl=instance.getProcessInstance().getProcessType().getAssigmentNotificationTemplate();
+            if(tpl!=null) {
+                try {
+                    //System.out.println("send mail:"+assigned);
+                    SWBUtils.EMAIL.sendBGEmail(assigned.getEmail(), SWBScriptParser.parser(instance, assigned, tpl.getSubject()), SWBScriptParser.parser(instance, assigned, tpl.getBody()));
+                } catch(Exception e) {
+                    log.error(e);
                 }
-            }else if(getResourceAssignationRule()==4) // Usuario Creador del Proceso
-            {
-                instance.setAssignedto(instance.getProcessInstance().getCreator());
-            }else if(getResourceAssignationRule()==5) // Usuario Creador de la Tarea
-            {
-                instance.setAssignedto(user);
             }
-            instance.setAssigned(new Date());
-            
         }
     }
     
