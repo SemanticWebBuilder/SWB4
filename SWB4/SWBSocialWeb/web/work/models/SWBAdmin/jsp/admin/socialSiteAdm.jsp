@@ -44,6 +44,10 @@
         String slicenseType="Sin asignar";
         if(licenseType!=null) slicenseType=licenseType.getDisplayTitle(usrLang);
         
+        Institution institution=socialSite.getInstitution(); 
+        String sinstitution="Sin asignar";
+        if(institution!=null) sinstitution=institution.getDisplayTitle(usrLang);
+        
         %>
         <li>
             <a href="<%=url.setParameter("socialSite", socialSite.getId())%>"><%=socialSite.getDisplayTitle(usrLang)%></a>
@@ -57,7 +61,7 @@
             %>
             (<%=formater.format(dirSize/1024.0)%>)kbytes
             
-            
+            <p>Institución:<%=sinstitution%></p>
             <p><%=socialSiteDescr!=null?socialSiteDescr:"SIN DESCRIPCIÓN"%></p>
             <p>Tipo de Licencia Asignada:<%=slicenseType%></p>
         </li>
@@ -75,8 +79,7 @@
             actionURL.setParameter("socialSite", socialSite.getId()); 
             String socialSiteDescr=socialSite.getDisplayDescription(usrLang);
             LicenseType licenseType=socialSite.getLicenseType();
-            String slicenseType=""; 
-            if(licenseType!=null) slicenseType=licenseType.getId();
+            Institution institution=socialSite.getInstitution(); 
             %>
             <form id="<%=socialSite.getId()%>/socialSiteAdm" class="swbform" method="post" action="<%=actionURL%>" method="post"> 
                 <p><h1>Marca:</h1><%=socialSite.getDisplayTitle(usrLang)%></p>
@@ -89,7 +92,21 @@
                         {
                             LicenseType licenseTypeTmp=itLicenseType.next();
                          %>   
-                            <option value="<%=licenseTypeTmp.getId()%>" <%=licenseType!=null&&licenseTypeTmp.getId().equals(licenseType.getId()) ?"selected":""%>><%=licenseTypeTmp.getId()%></option>
+                         <option value="<%=licenseTypeTmp.getId()%>" <%=licenseType!=null&&licenseTypeTmp.getId().equals(licenseType.getId()) ?"selected":""%>><%=licenseTypeTmp.getDisplayTitle(usrLang)%></option>
+                         <% 
+                        }
+                        %>
+                    </select>
+                </p>
+                <p><h1>Institución:</h1>
+                    <select name="institution">
+                        <%
+                        Iterator<Institution> itInstitutions=Institution.ClassMgr.listInstitutions(wsite); 
+                        while(itInstitutions.hasNext())
+                        {
+                            Institution institutionTmp=itInstitutions.next();
+                         %>   
+                         <option value="<%=institutionTmp.getId()%>" <%=institution!=null&&institutionTmp.getId().equals(institution.getId()) ?"selected":""%>><%=institutionTmp.getDisplayTitle(usrLang)%></option>
                          <% 
                         }
                         %>
