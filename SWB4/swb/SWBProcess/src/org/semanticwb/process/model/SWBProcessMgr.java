@@ -22,11 +22,13 @@
  */
 package org.semanticwb.process.model;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.GenericIterator;
@@ -41,8 +43,8 @@ import org.semanticwb.model.WebPage;
 public class SWBProcessMgr
 {
     private static Logger log=SWBUtils.getLogger(SWBProcessMgr.class);
-    
     private static ConcurrentHashMap<Thread, Thread> linkedThreads=new ConcurrentHashMap();
+    private static ConcurrentLinkedQueue<User> candidates = new ConcurrentLinkedQueue<User>();
     
     public static GenericIterator<ProcessInstance> getProcessInstanceWithStatus(ProcessSite site, int status)
     {
@@ -163,7 +165,7 @@ public class SWBProcessMgr
                 if(actins.haveAccess(user))
                 {
                     ret.add(actins);
-                }                    
+                }
             }
         }
         return ret;
@@ -258,7 +260,47 @@ public class SWBProcessMgr
             }
         }
         return arr;
-    }    
+    }
+    
+    /**
+     * Asigna una instancia de tarea de usuario a un usuario de acuerdo a las reglas de asignación.
+     * @param instance Instancia de tarea de usuario.
+     * @param user Usuario para la asignación.
+     * @return true si la tarea se asignó a algún usuario, false en otro caso.
+     */
+    public static boolean assignUserTaskInstance(FlowNodeInstance instance, User user) {
+        boolean success = false;
+        UserTask task = (UserTask)instance.getFlowNodeType();
+        int assignationRule = task.getResourceAssignationRule();
+        
+        if(assignationRule > 0 && instance.getAssignedto()==null) { //Si es asignación manual (0), esta se hace desde el processForm
+            if(assignationRule < 3) {// De momento todos son aleatorios
+                List<User> users = SWBProcessMgr.getUsers(instance);
+                int s = users.size();
+                User assigned = users.get(new Random().nextInt(s));                
+                instance.setAssignedto(assigned);
+            } else if (assignationRule == 3) { //Asignación Distribuida
+                if (candidates.isEmpty()) {
+                    Iterator<User> itusr = getUsers(instance).iterator();
+                    while (itusr.hasNext()) {
+                        User next = itusr.next();
+                        candidates.add(next);
+                    }
+                }
+                
+                if (!candidates.isEmpty()) {
+                    instance.setAssignedto(candidates.remove());
+                }
+            } else if(assignationRule == 4) {// Usuario Creador del Proceso
+                instance.setAssignedto(instance.getProcessInstance().getCreator());
+            } else if(assignationRule == 5) {// Usuario Creador de la Tarea
+                instance.setAssignedto(user);
+            }
+            instance.setAssigned(new Date());
+            success = true;
+        }
+        return success;
+    }
     
     static Thread addLinkedThread(Thread thread)
     {
