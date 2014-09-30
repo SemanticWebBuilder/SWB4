@@ -797,8 +797,11 @@ public class ProcessForm extends GenericResource {
         }
 
         if (asigned == null) {
-            foi.setAssigned(new Date());
-            foi.setAssignedto(user);
+            UserTask ut = (UserTask) foi.getFlowNodeType();
+            if (ut.getResourceAssignationRule() == 0) { //Sólo se hace asignación si el modo seleccionado es manual, de lo contrario ya viene asignada
+                foi.setAssigned(new Date());
+                foi.setAssignedto(user);
+            }
         }
 
         SWBProcessFormMgr mgr = new SWBProcessFormMgr(foi);
