@@ -263,13 +263,13 @@ public class PieSocialTopic extends GenericResource {
                     size++;
 
                     if (filter.equals("")) {
-                         if(p.getNumTotNewResponses() >0){
+                        // if(p.getNumTotNewResponses() >0){
                         lista.add(p);
-                         }
-                    } else if (filter.equals(reemplazar(p.getMsg_Text()))) {
-                         if(p.getNumTotNewResponses() >0){
+                        //}
+                    } else if (filter.equals(reemplazar(p.getURI()))) {
+                        // if(p.getNumTotNewResponses() >0){
                         lista.add(p);
-                         }
+                        // }
                     }
                     if (size >= 10) {
                         break;
@@ -283,7 +283,7 @@ public class PieSocialTopic extends GenericResource {
                     SemanticObject sem = SemanticObject.createSemanticObject(e.getKey().toString().trim());
                     PostOut p = (PostOut) sem.createGenericInstance();
 
-                    if (filterGeneral.equals(p.getMsg_Text())) {
+                    if (filterGeneral.equals(p.getURI())) {
 
                         if (filter.equals("")) {
                             lista.add(p);
@@ -635,7 +635,7 @@ public class PieSocialTopic extends GenericResource {
                     title = "No definido";
                     map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostOut>());
                 } else {
-                    title = sn.getTitle();
+                    title = sn.getURI();
                     map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : addPostOut(new ArrayList(), postIn, title));
                 }
                 totalPost++;
