@@ -135,6 +135,7 @@
 
         JSONObject node_ = new JSONObject();
         node_.put("label", "" + p.getMsg_Text() );
+        node_.put("suri", p.getEncodedURI());
         node_.put("value1", "" + total);
         node_.put("value2", "" + Math.round(value));
         JSONObject joChild = new JSONObject();

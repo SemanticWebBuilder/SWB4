@@ -49,25 +49,15 @@
 
         while (itObjPostIns.hasNext()) {
 
-            PostOut postIn = itObjPostIns.next();
-            SocialNetwork key = null;
-
-            String title = "";
-            Iterator <SocialNetwork> listaRedes =  postIn.listSocialNetworks();
+            PostOut postOut = itObjPostIns.next();
+            Iterator <SocialNetwork> listaRedes =  postOut.listSocialNetworks();
            while(listaRedes.hasNext() ){
                SocialNetwork sn = listaRedes.next();
                 if (sn == null) {
-                title = "No definido";
-                map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : new ArrayList<PostOut>());
-            } else {
-
-               // key = postIn.getSocialNetwork();
-              
-                title = sn.getTitle();
-
-                map.put(title, map.containsKey(title) ? addArray(map.get(title), postIn, title) : addPostOut(new ArrayList() , postIn, title));
-                //  }
-            }
+                    map.put(sn.getURI(), map.containsKey(sn.getURI()) ? addArray(map.get(sn.getURI()), postOut) : new ArrayList<PostOut>());
+                } else {
+                    map.put(sn.getURI(), map.containsKey(sn.getURI()) ? addArray(map.get(sn.getURI()), postOut) : addPostOut(new ArrayList() , postOut));
+                }
             totalPost++;
            
            }
@@ -84,6 +74,7 @@
         } else {
             while (it.hasNext()) {
                 Map.Entry e = (Map.Entry) it.next();
+                System.out.println("FILTER:" + filter);
                 if (filter.equals(e.getKey().toString())) {
                     ArrayList lista = (ArrayList) e.getValue();
                     getJson(node, lista, totalPost, e.getKey().toString(), filter);
@@ -158,6 +149,13 @@
 
             JSONObject node_ = new JSONObject();
             node_.put("label", "" + nombre);
+            SemanticObject so = SemanticObject.createSemanticObject(nombre);
+            if(so != null){
+                SocialNetwork sn = (SocialNetwork) so.createGenericInstance();
+                node_.put("title", sn.getTitle());
+            }else{
+                node_.put("title", nombre);
+            }
             node_.put("value1", "" + total);
             node_.put("value2", "" + round(intPorcentaje));
             JSONObject joChild = new JSONObject();
@@ -210,7 +208,7 @@
         porcentajeNeutrals = ((float) neutrals * 100) / (float) total;
         porcentajePositives = ((float) positives * 100) / (float) total;
         porcentajeNegatives = ((float) negatives * 100) / (float) total;
-
+        SemanticObject so = SemanticObject.createSemanticObject(nombre);
         if (negatives == 0 && positives == 0 && neutrals == 0) {
             JSONObject node3 = new JSONObject();
             node3.put("label", "Sin Datos");
@@ -229,6 +227,7 @@
         if (neutrals > 0) {
             JSONObject node4 = new JSONObject();
             node4.put("label", "Neutros");
+            node4.put("title", "Neutros");
             node4.put("value1", "" + neutrals);
             node4.put("value2", "" + round(porcentajeNeutrals));
             node4.put("color", "#838383");
@@ -241,6 +240,7 @@
         if (negatives > 0) {
             JSONObject node6 = new JSONObject();
             node6.put("label", "Negativos");
+            node6.put("title", "Negativos");
             node6.put("value1", "" + negatives);
             node6.put("value2", "" + round(porcentajeNegatives));
             node6.put("color", "#FF0000");
@@ -251,6 +251,7 @@
         }
         if (positives > 0) {
             JSONObject node5 = new JSONObject();
+            node5.put("label", "Positivos");
             node5.put("label", "Positivos");
             node5.put("value1", "" + positives);
             node5.put("value2", "" + round(porcentajePositives));
@@ -302,21 +303,21 @@
         return Math.rint(number * 100) / 100;
     }
 
-    public ArrayList addArray(Object lista, PostOut postIn, String title) {
+    public ArrayList addArray(Object lista, PostOut postOut) {
         Boolean c = lista instanceof ArrayList;
         if (lista == null) {
-            lista = new ArrayList<PostIn>();
+            lista = new ArrayList<PostOut>();
         }
         ArrayList l = (ArrayList) lista;
-        l.add(postIn);
+        l.add(postOut);
         return l;
 
     }
 
     
-     public ArrayList addPostOut(ArrayList lista,  PostOut postIn, String title) {
+     public ArrayList addPostOut(ArrayList lista,  PostOut postOut) {
 
-        lista.add(postIn);    
+        lista.add(postOut);    
         
         return lista;
 

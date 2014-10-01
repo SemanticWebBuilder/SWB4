@@ -98,33 +98,33 @@
                     if (sn instanceof Facebook) {
             %>
             <div>
-                <input type="radio" id="<%=sn.getURI()%>FB" class="grafFacebookPostOutNet" name="postOutSocialNetwork"  value="<%=sn.getTitle()%>" >
-                <label title="Facebook" for="<%=sn.getURI()%>FB"><%=sn.getTitle()%></label>
-                <div id="<%=sn.getTitle()%>"></div>
+                <input type="radio" id="<%=sn.getURI()%>FB" class="grafFacebookPostOutNet" name="postOutSocialNetwork"  value="<%=sn.getEncodedURI()%>" >
+                <label title="<%=sn.getTitle()%>" for="<%=sn.getURI()%>FB"><%=sn.getTitle()%></label>
+                <div id="<%=sn.getURI()%>"></div>
             </div>
                 <%
                 } else if (sn instanceof Twitter) {
                 %>     
                 <div>
-                    <input type="radio" id="<%=sn.getURI()%>TW"  class="grafTwitterPostOutNet"  name="postOutSocialNetwork"  value="<%=sn.getTitle()%>" > 
-                    <label title="Twitter" for="<%=sn.getURI()%>TW"><%=sn.getTitle()%></label>
-                    <div id="<%=sn.getTitle()%>"></div>
+                    <input type="radio" id="<%=sn.getURI()%>TW"  class="grafTwitterPostOutNet"  name="postOutSocialNetwork"  value="<%=sn.getEncodedURI()%>" > 
+                    <label title="<%=sn.getTitle()%>" for="<%=sn.getURI()%>TW"><%=sn.getTitle()%></label>
+                    <div id="<%=sn.getURI()%>"></div>
                 </div>
                     <%
                     } else if (sn instanceof Youtube) {
                     %>
                     <div>
-                        <input type="radio" id="<%=sn.getURI()%>YT"   class="grafYoutubePostOutNet"   name="postOutSocialNetwork" value="<%=sn.getTitle()%>" > 
-                        <label title="YouTube" for="<%=sn.getURI()%>YT"><%=sn.getTitle()%></label>
-                        <div id="<%=sn.getTitle()%>"></div>
+                        <input type="radio" id="<%=sn.getURI()%>YT"   class="grafYoutubePostOutNet"   name="postOutSocialNetwork" value="<%=sn.getEncodedURI()%>" > 
+                        <label title="<%=sn.getTitle()%>" for="<%=sn.getURI()%>YT"><%=sn.getTitle()%></label>
+                        <div id="<%=sn.getURI()%>"></div>
                          </div>
                     <%
                     }else if (sn instanceof Instagram) {
                     %>
                     <div>
-                        <input type="radio" id="<%=sn.getURI()%>YT"   class="grafInstagram"   name="postOutSocialNetwork" value="<%=sn.getTitle()%>" > 
-                        <label title="Instagram" for="<%=sn.getURI()%>IN"><%=sn.getTitle()%></label>
-                        <div id="<%=sn.getTitle()%>"></div>
+                        <input type="radio" id="<%=sn.getURI()%>IN"   class="grafInstagram"   name="postOutSocialNetwork" value="<%=sn.getEncodedURI()%>" > 
+                        <label title="<%=sn.getTitle()%>" for="<%=sn.getURI()%>IN"><%=sn.getTitle()%></label>
+                        <div id="<%=sn.getURI()%>"></div>
                          </div>
                     <%
                         }
@@ -195,6 +195,7 @@
                             for(var i=0; i<opciones.length; i++) {        
                                 opciones[i].disabled = true;
                             }
+                            console.log('this.value:' + this.value);
                             pieSocialTopicNetwork(this.value, cont);
                             var value = this.value;
                             pie.value(function(d) { return d[value]; }); // change the value function
@@ -232,7 +233,7 @@
                         //.append("span")
                         .attr('class', 'd3-tip')
                         .html(function(d) {                
-                            return "<strong>"+d.data.label+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%";
+                            return "<strong>"+d.data.title+"</strong><br>"+d.data.value1+"/"+d.data.value2+"%";
                         });       
         
         
@@ -241,7 +242,9 @@
                         .enter().append("g")
                         .attr("class", "arc")
                         .on("click", function(d) {
-                            var filter = d.data.label; 
+                            var filter = escape(d.data.label);
+                            //console.log('FILTER:' + filter);
+                            //console.log('d.data:' + d.data.toSource());
                             var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicSocialNetwork").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral="+val;
                             document.location.href = url;
                         })
@@ -299,7 +302,7 @@
                                 xArrayRedes.push(data[i].label3);                                            
                             }  
                  
-                            if(xArray.length!=1){                      
+                            if(xArray.length>=1){                      
                    
                                 for (var x = data.length-1; x < data.length; x++) {  
                                     var to;
@@ -566,7 +569,7 @@
                         console.log("cont::::" + cont);
                         if(cont == 0){
                  
-                            if(xArray.length>1){                      
+                            if(xArray.length>=1){                      
                    
                                 for (var x = data.length-1; x < data.length; x++) {  
                                     var to;
@@ -619,7 +622,7 @@
     <!--grafica mesnajes enviados por usuario--->
     <div id="profileGeoLocationParent">
         <div class="grafTit">
-            <h1>Mejores contestados</h1>
+            <h1>M&aacute;s contestados</h1>
             <a id="hrefSocialTopicTopten" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopTen").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
         </div>
 
@@ -730,16 +733,7 @@
                     .attr("class", "arc")
                     .on("click", function(d) {     
 
-                        var filter = d.data.label; 
-                        for (var i=0; i<filter.length; i++) {
-                            if (filter.charAt(i)=="á") filter = filter.replace(/á/,"a"); 
-                            if (filter.charAt(i)=="é") filter = filter.replace(/é/,"e"); 
-                            if (filter.charAt(i)=="í") filter = filter.replace(/í/,"i"); 
-                            if (filter.charAt(i)=="ó") filter = filter.replace(/ó/,"o"); 
-                            if (filter.charAt(i)=="ú") filter = filter.replace(/ú/,"u"); 
-                        }
-              
- 
+                        var filter = d.data.suri; 
                         var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopTen").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral=all";
                         document.location.href = url;
                     })
@@ -868,11 +862,11 @@
 
 
     <!--top ten postOut peores contestados-->
-
+<%/*
     <div id="profileGeoLocationParent">
         <div class="grafTit">
             <h1>Menos contestados</h1>
-            <a id="hrefSocialTopicbellow" href="<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>" class="excel">Exportar excel</a>
+            <a id="hrefSocialTopicbellow" href="%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%" class="excel">Exportar excel</a>
         </div>
 
         <div id="pieBelow">
@@ -888,7 +882,7 @@
 
         <script>    
             function pieBelow(parametro, cont){   
-                document.getElementById("hrefSocialTopicbellow").href= "<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>&filterGeneral=all" ;
+                document.getElementById("hrefSocialTopicbellow").href= "<=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>&filterGeneral=all" ;
 
            
                 var width = 760,
@@ -908,7 +902,7 @@
                 .outerRadius(radius - 10)
                 .innerRadius(0);
             
-                d3.json("<%=SWBPlatform.getContextPath()%>/work/models/<%=SWBContext.getAdminWebSite().getId()%>/jsp/stream/pieBelow.jsp<%=args%>&filter="+parametro, function(error, data) { 
+                d3.json("%=SWBPlatform.getContextPath()>/work/models/<%=SWBContext.getAdminWebSite().getId()%/jsp/stream/pieBelow.jsp<=args>&filter="+parametro, function(error, data) { 
                     
                     var svg = d3.select("#pieBelow").append("svg")
                     .attr("width", width)
@@ -981,7 +975,7 @@
                             if (filter.charAt(i)=="ú") filter = filter.replace(/ú/,"u"); 
                         }
               
-                        var url = "<%=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)%>"+"&filter="+filter+"&filterGeneral=all";
+                        var url = "<=urlRender.setMode("exportExcel").setParameter("type", "socialTopicTopBellow").setCallMethod(SWBParamRequest.Call_DIRECT).setParameter("suri", suri).setParameter("lang", lang)>"+"&filter="+filter+"&filterGeneral=all";
                         document.location.href = url;
                     })
                     .on("mouseover", function(d, i) {
@@ -1101,7 +1095,7 @@
     
         </script>
     </div><!--div top ten-->
-
+*/%>
 
 
 
