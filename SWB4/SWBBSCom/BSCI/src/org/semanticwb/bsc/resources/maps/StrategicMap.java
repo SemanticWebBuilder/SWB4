@@ -2,6 +2,7 @@ package org.semanticwb.bsc.resources.maps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
@@ -165,10 +166,16 @@ out.println(" </script>");
 
     public void doGetPNGImage(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite webSite = getResourceBase().getWebSite();
+        User user = paramRequest.getUser();
+        final String lang = user.getLanguage();
+        Locale locale = new Locale(lang);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMyyyy", locale);
+        final Period period = getPeriod(request);
+        
         response.setContentType("image/png; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".png\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle()+sdf.format(period.getStart()) + ".png\"");
         
         final String data = request.getParameter("data");
         Document svg = SWBUtils.XML.xmlToDom(data);
@@ -186,11 +193,17 @@ out.println(" </script>");
 
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         WebSite webSite = getResourceBase().getWebSite();
+        User user = paramRequest.getUser();
+        final String lang = user.getLanguage();
+        Locale locale = new Locale(lang);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMyyyy", locale);
+        final Period period = getPeriod(request);
+        
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle() + ".pdf\"");
-
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + webSite.getTitle()+sdf.format(period.getStart())+ ".pdf\"");
+        
         final String data = request.getParameter("data");
 System.out.println("\n\ndata=\n"+data);
         Document svg = SWBUtils.XML.xmlToDom(data);
