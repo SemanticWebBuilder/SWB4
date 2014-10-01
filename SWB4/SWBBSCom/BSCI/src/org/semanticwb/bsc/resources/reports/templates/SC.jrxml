@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SC" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="dataset1"/>
+	<subDataset name="dataset2"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\ana.garcias\\"]]></defaultValueExpression>
 	</parameter>
@@ -11,6 +13,8 @@
 	<field name="scoreCard" class="java.lang.String"/>
 	<field name="logo" class="java.io.InputStream"/>
 	<field name="msg" class="java.lang.String"/>
+	<field name="initiative" class="java.lang.String"/>
+	<field name="periodTitle" class="java.lang.String"/>
 	<variable name="cont" class="java.lang.Integer">
 		<initialValueExpression><![CDATA[$V{cont}]]></initialValueExpression>
 	</variable>
@@ -19,98 +23,185 @@
 		<band/>
 	</background>
 	<title>
-		<band height="72">
+		<band height="75">
 			<frame>
-				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#990099"/>
-				<staticText>
-					<reportElement x="20" y="20" width="248" height="43" forecolor="#FFFFFF"/>
-					<textElement>
-						<font size="34" isBold="true"/>
-					</textElement>
-					<text><![CDATA[SWBStrategy]]></text>
-				</staticText>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#FFFFFF"/>
+				<image>
+					<reportElement isPrintRepeatedValues="false" x="20" y="10" width="555" height="82"/>
+					<imageExpression class="java.io.InputStream"><![CDATA[$F{logo}]]></imageExpression>
+				</image>
 				<textField>
-					<reportElement isPrintRepeatedValues="false" x="466" y="53" width="100" height="20" forecolor="#FFFFFF"/>
-					<textElement>
-						<font size="14" isBold="true"/>
+					<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="92" y="10" width="100" height="20" forecolor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{scoreCard}]]></textFieldExpression>
 				</textField>
-				<image>
-					<reportElement isPrintRepeatedValues="false" x="20" y="63" width="252" height="26"/>
-					<imageExpression class="java.io.InputStream"><![CDATA[$F{logo}]]></imageExpression>
-				</image>
+				<textField pattern="MM/dd/yyyy">
+					<reportElement positionType="FixRelativeToBottom" x="410" y="10" width="78" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="239" y="10" width="100" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{periodTitle}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
-	<pageHeader>
-		<band height="13"/>
-	</pageHeader>
 	<columnHeader>
-		<band height="30">
+		<band height="20">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="88" height="20" forecolor="#990099" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Perspectiva]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="100" y="0" width="118" height="20" forecolor="#990099" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="100" y="0" width="130" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Tema estratégico]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="230" y="0" width="105" height="20" forecolor="#990099" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="230" y="0" width="116" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Objetivo]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="346" y="0" width="100" height="20" forecolor="#990099" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="346" y="0" width="109" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Indicadores]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="456" y="1" width="99" height="19" forecolor="#990099" backcolor="#E6E6E6"/>
+				<reportElement mode="Opaque" x="455" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
 				<textElement textAlignment="Center">
-					<font size="14" isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Iniciativas]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="40">
+		<band height="20">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="2" y="0" width="88" height="20"/>
-				<textElement/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{perspective}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="100" y="0" width="118" height="20"/>
-				<textElement/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="100" y="0" width="130" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{theme}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="234" y="0" width="101" height="20"/>
-				<textElement/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="230" y="0" width="116" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{objective}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="346" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="346" y="0" width="109" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{indicator}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="20" width="553" height="20"/>
+				<reportElement x="0" y="0" width="553" height="20"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{msg}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="455" y="0" width="100" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{initiative}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -128,11 +219,6 @@
 				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
-			</textField>
-			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="0" y="4" width="100" height="13"/>
-				<textElement/>
-				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
