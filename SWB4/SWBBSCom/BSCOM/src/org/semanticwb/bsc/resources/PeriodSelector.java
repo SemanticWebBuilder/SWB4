@@ -2,6 +2,7 @@ package org.semanticwb.bsc.resources;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +41,13 @@ public class PeriodSelector extends GenericResource {
             left = new GregorianCalendar();
             left.setTime(period.getStart());
             right = new GregorianCalendar();
-            right.setTime(period.getEnd());
+            
+            Calendar calEnd = new GregorianCalendar();
+            calEnd.setTime(period.getEnd());
+            calEnd.set(Calendar.HOUR, 23);
+            calEnd.set(Calendar.MINUTE, 59);
+            calEnd.set(Calendar.MILLISECOND, 59);
+            right.setTime(calEnd.getTime());
             if (current.compareTo(left) >= 0 && current.compareTo(right) <= 0) {
                 return period;
             }
@@ -85,6 +92,7 @@ public class PeriodSelector extends GenericResource {
         //Verificar que exista el periodo válido en sesión. Si no existe, ponerlo
         Period nearestPeriod = null;
         if (periodId == null || (!Period.ClassMgr.hasPeriod(periodId, currentBsc))) {
+            System.out.println("period es null");
             nearestPeriod = getNearestPeriod(periods);
             if (nearestPeriod != null) {
                 periodId = nearestPeriod.getId();
