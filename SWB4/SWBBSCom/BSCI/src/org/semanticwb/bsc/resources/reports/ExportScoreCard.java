@@ -3,8 +3,10 @@ package org.semanticwb.bsc.resources.reports;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
@@ -22,6 +24,7 @@ import org.semanticwb.bsc.BSC;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
+import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.bsc.element.Objective;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.portal.api.GenericResource;
@@ -34,8 +37,9 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author ana.garcias
  */
 public class ExportScoreCard extends GenericResource {
+
     private static Logger log = SWBUtils.getLogger(ExportScoreCard.class);
-    
+
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         doViewStrategy(request, response, paramRequest);
@@ -45,16 +49,15 @@ public class ExportScoreCard extends GenericResource {
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (Mode_StreamPDF.equals(paramRequest.getMode())) {
             doGetPDFDocument(request, response, paramRequest);
-        }else {
+        } else {
             super.processRequest(request, response, paramRequest);
         }
     }
-    
-    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+
+    public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         WebSite ws = paramRequest.getWebPage().getWebSite();
-        response.setHeader("Content-Disposition", "attachment; filename=\""+ws.getId()+".pdf\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + ws.getId() + ".pdf\"");
 
         if (ws instanceof BSC) {
             String objective = "";
@@ -62,17 +65,33 @@ public class ExportScoreCard extends GenericResource {
             String perspective = "";
             String indicator = "";
             String scoreCard = "";
+            String periodTitle = "";
+            String initiative = "";
+            String msg = "";
 
             LinkedList<ParamsScoreCard> lista = new LinkedList();
             Period period = getPeriod(request);
+            periodTitle = period.getTitle();
             scoreCard = ws.getTitle();
             JasperTemplates jasperLogo = JasperTemplates.LOGO;
             Iterator<Objective> itObje = Objective.ClassMgr.listObjectiveByPeriod(period, ws);
             int exp = 0;
+
+            Iterator<Initiative> itInitiative = Initiative.ClassMgr.listInitiativeByPeriod(period, ws);
+
+            while (itInitiative.hasNext()) {
+                Initiative init = itInitiative.next();
+                if (init.isActive()) {
+                    exp = 1;
+                    initiative = init.getTitle();
+                    lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, initiative, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                }
+            }
+
             while (itObje.hasNext()) {
                 Objective ob = itObje.next();
                 if (ob.isActive()) {
-                    exp = 1;
+                    exp = 2;
                     boolean hasIndicator = false;
                     objective = ob.getTitle();
                     theme = ob.getTheme().getTitle();
@@ -87,22 +106,24 @@ public class ExportScoreCard extends GenericResource {
                             hasIndicator = true;
                             indicator = indic.getTitle();
                             if (count == 0) {
-                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+
+                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                             } else {
-                                lista.add(new ParamsScoreCard("", "", "", indicator, scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                lista.add(new ParamsScoreCard("", "", "", indicator, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                             }
                             count++;
                         }
                     }
                     if (hasIndicator == false) {
-                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", scoreCard, "", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                     }
+                } else {
+                    msg = paramRequest.getLocaleString("msg");
+                    lista.add(new ParamsScoreCard(perspective, theme, objective, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+
                 }
             }
 
-            if (exp == 0) {
-                lista.add(new ParamsScoreCard("", "", "", "", scoreCard, "No existen objetivos válidos para el periodo seleccionado", this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-            }
             try {
                 JasperTemplates jasperTemplate = JasperTemplates.SCORECARD;
                 InputStream is = getClass().getResourceAsStream(jasperTemplate.getTemplatePath());
@@ -113,9 +134,9 @@ public class ExportScoreCard extends GenericResource {
                 exporter.setParameter(JRExporterParameter.CHARACTER_ENCODING, "iso-8859-1");
                 exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, response.getOutputStream());
                 exporter.exportReport();
-            }catch (IOException e) {
+            } catch (IOException e) {
                 log.error(e);
-            }catch (JRException e) {
+            } catch (JRException e) {
                 log.error(e);
             }
 
@@ -133,9 +154,9 @@ public class ExportScoreCard extends GenericResource {
     }
 
     /**
-     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que 
+     * Genera el despliegue de la liga que redireccionar&aacute; al recurso que
      * exporta un Scorecard.
-     * 
+     *
      * @param request Proporciona informaci&oacute;n de petici&oacute;n HTTP
      * @param response Proporciona funcionalidad especifica HTTP para
      * envi&oacute; en la respuesta
@@ -148,9 +169,9 @@ public class ExportScoreCard extends GenericResource {
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
-        
+
         PrintWriter out = response.getWriter();
-        
+
         //String title = paramRequest.getLocaleString("msgPrintPDFDocument");
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
