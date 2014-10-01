@@ -1077,7 +1077,7 @@ System.out.println("2. period="+period.getTitle());
         SVGjs.append("  return color;").append("\n");
         SVGjs.append("}").append("\n");
         SVGjs.append("var rp_=new Array();").append("\n");        
-        SVGjs.append("var offset_v = 0;").append("\n");
+        SVGjs.append("var offset_v = 5;").append("\n");
         SVGjs.append("var offset_h = 5;").append("\n");
         
 
@@ -1101,6 +1101,7 @@ System.out.println("2. period="+period.getTitle());
         SVGjs.append("  }else {").append("\n");
         SVGjs.append("    rp_.push(new Array(x2,y2));").append("\n");
         SVGjs.append("  }").append("\n");
+        SVGjs.append("  y2-=6;").append("\n");
         
         SVGjs.append("  var arrow;").append("\n");
         SVGjs.append("  var arrowL = createPathL(id,x1,y1,x2,y2,color, offset_h,offset_v);").append("\n");
@@ -1120,7 +1121,7 @@ System.out.println("2. period="+period.getTitle());
         
         
         SVGjs.append("function createPathL(id,x1,y1,x2,y2,color, offset_h,offset_v) {").append("\n");
-        SVGjs.append("  y2-=2;").append("\n");
+        //SVGjs.append("  y2-=2;").append("\n");
         SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
         SVGjs.append("  var d = 'M'+x1+','+y1+' L'+(x1)+','+(y1-offset_h)+' L'+( offset_v)+','+(y1-offset_h)+' L'+( offset_v)+','+y2+' L'+x2+','+y2+' L'+x2+','+(y2+2);").append("\n");
         SVGjs.append("  path.setAttributeNS(null, 'id', id);").append("\n");
@@ -1132,7 +1133,7 @@ System.out.println("2. period="+period.getTitle());
         SVGjs.append("}").append("\n");
         
         SVGjs.append("function createPathR(id,x1,y1,x2,y2,color, offset_h,offset_v) {").append("\n");
-        SVGjs.append("  y2-=2;").append("\n");
+        //SVGjs.append("  y2-=2;").append("\n");
         SVGjs.append("  var path = document.createElementNS(SVG_,'path');").append("\n");
         SVGjs.append("  var d = 'M'+x1+','+y1+' L'+(x1)+','+(y1-offset_h)+' L'+(width-offset_v)+','+(y1-offset_h)+' L'+(width-offset_v)+','+y2+' L'+x2+','+y2+' L'+x2+','+(y2+2);").append("\n");
         SVGjs.append("  path.setAttributeNS(null, 'id', id);").append("\n");
