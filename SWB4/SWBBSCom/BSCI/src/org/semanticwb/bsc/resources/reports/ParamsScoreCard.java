@@ -15,16 +15,20 @@ public class ParamsScoreCard {
     private String theme;
     private String objective;
     private String indicator;
+    private String initiative;
     private String scoreCard;
+    private String periodTitle;
     private String msg;
     private InputStream logo;
     
-    public ParamsScoreCard(String perspective, String theme, String objective, String indicator, String scoreCard, String msg, InputStream logo){
+    public ParamsScoreCard(String perspective, String theme, String objective, String indicator, String initiative, String scoreCard, String periodTitle, String msg, InputStream logo){
         this.perspective = perspective;
         this.theme = theme;
         this.objective = objective;
         this.indicator = indicator;
+        this.initiative = initiative;
         this.scoreCard = scoreCard;
+        this.periodTitle = periodTitle;
         this.msg = msg;
         this.logo = logo;
     }
@@ -61,12 +65,29 @@ public class ParamsScoreCard {
         this.indicator = indicator;
     }
 
+    public String getInitiative() {
+        return initiative;
+    }
+
+    public void setInitiative(String initiative) {
+        this.initiative = initiative;
+    }
+    
+
     public String getScoreCard() {
         return scoreCard;
     }
 
     public void setScoreCard(String scoreCard) {
         this.scoreCard = scoreCard;
+    }
+
+    public String getPeriodTitle() {
+        return periodTitle;
+    }
+
+    public void setPeriodTitle(String periodTitle) {
+        this.periodTitle = periodTitle;
     }
 
     public String getMsg() {
