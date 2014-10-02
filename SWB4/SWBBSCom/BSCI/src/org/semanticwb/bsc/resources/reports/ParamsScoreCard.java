@@ -11,69 +11,69 @@ import java.io.InputStream;
  * @author ana.garcias
  */
 public class ParamsScoreCard {
-    private String perspective;
-    private String theme;
-    private String objective;
-    private String indicator;
-    private String initiative;
+    private String perspectiveTitle;
+    private String themeTitle;
+    private String objectiveTitle;
+    private String indicatorTitle;
+    private String initiativeTitle;
     private String scoreCard;
     private String periodTitle;
     private String msg;
     private InputStream logo;
     
-    public ParamsScoreCard(String perspective, String theme, String objective, String indicator, String initiative, String scoreCard, String periodTitle, String msg, InputStream logo){
-        this.perspective = perspective;
-        this.theme = theme;
-        this.objective = objective;
-        this.indicator = indicator;
-        this.initiative = initiative;
+    public ParamsScoreCard(String perspectiveTitle, String themeTitle, String objectiveTitle, String indicatorTitle, String initiativeTitle, String scoreCard, String periodTitle, String msg, InputStream logo){
+        this.perspectiveTitle = perspectiveTitle;
+        this.themeTitle = themeTitle;
+        this.objectiveTitle = objectiveTitle;
+        this.indicatorTitle = indicatorTitle;
+        this.initiativeTitle = initiativeTitle;
         this.scoreCard = scoreCard;
         this.periodTitle = periodTitle;
         this.msg = msg;
         this.logo = logo;
     }
 
-    public String getPerspective() {
-        return perspective;
+    public String getPerspectiveTitle() {
+        return perspectiveTitle;
     }
 
-    public void setPerspective(String perspective) {
-        this.perspective = perspective;
+    public void setPerspectiveTitle(String perspectiveTitle) {
+        this.perspectiveTitle = perspectiveTitle;
     }
 
-    public String getTheme() {
-        return theme;
+    public String getThemeTitle() {
+        return themeTitle;
     }
 
-    public void setTheme(String theme) {
-        this.theme = theme;
+    public void setThemeTitle(String themeTitle) {
+        this.themeTitle = themeTitle;
     }
 
-    public String getObjective() {
-        return objective;
+    public String getObjectiveTitle() {
+        return objectiveTitle;
     }
 
-    public void setObjective(String objective) {
-        this.objective = objective;
+    public void setObjectiveTitle(String objectiveTitle) {
+        this.objectiveTitle = objectiveTitle;
     }
 
-    public String getIndicator() {
-        return indicator;
+    public String getIndicatorTitle() {
+        return indicatorTitle;
     }
 
-    public void setIndicator(String indicator) {
-        this.indicator = indicator;
+    public void setIndicatorTitle(String indicatorTitle) {
+        this.indicatorTitle = indicatorTitle;
     }
 
-    public String getInitiative() {
-        return initiative;
+    public String getInitiativeTitle() {
+        return initiativeTitle;
     }
 
-    public void setInitiative(String initiative) {
-        this.initiative = initiative;
+    public void setInitiativeTitle(String initiativeTitle) {
+        this.initiativeTitle = initiativeTitle;
     }
-    
 
+ 
     public String getScoreCard() {
         return scoreCard;
     }
