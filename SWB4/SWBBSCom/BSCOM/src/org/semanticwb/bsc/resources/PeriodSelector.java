@@ -92,7 +92,6 @@ public class PeriodSelector extends GenericResource {
         //Verificar que exista el periodo válido en sesión. Si no existe, ponerlo
         Period nearestPeriod = null;
         if (periodId == null || (!Period.ClassMgr.hasPeriod(periodId, currentBsc))) {
-            System.out.println("period es null");
             nearestPeriod = getNearestPeriod(periods);
             if (nearestPeriod != null) {
                 periodId = nearestPeriod.getId();
