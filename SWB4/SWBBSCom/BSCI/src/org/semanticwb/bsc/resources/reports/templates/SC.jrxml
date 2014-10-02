@@ -15,6 +15,12 @@
 	<field name="msg" class="java.lang.String"/>
 	<field name="initiativeTitle" class="java.lang.String"/>
 	<field name="periodTitle" class="java.lang.String"/>
+	<field name="perspectiveHeader" class="java.lang.String"/>
+	<field name="themeHeader" class="java.lang.String"/>
+	<field name="objHeader" class="java.lang.String"/>
+	<field name="indicHeader" class="java.lang.String"/>
+	<field name="initHeader" class="java.lang.String"/>
+	<field name="titleDoc" class="java.lang.String"/>
 	<variable name="cont" class="java.lang.Integer">
 		<initialValueExpression><![CDATA[$V{cont}]]></initialValueExpression>
 	</variable>
@@ -38,7 +44,7 @@
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{scoreCard}]]></textFieldExpression>
 				</textField>
 				<textField pattern="MM/dd/yyyy">
-					<reportElement positionType="FixRelativeToBottom" x="410" y="10" width="78" height="20"/>
+					<reportElement positionType="FixRelativeToBottom" x="407" y="10" width="78" height="20"/>
 					<textElement verticalAlignment="Middle">
 						<font size="9" isBold="true"/>
 					</textElement>
@@ -51,26 +57,19 @@
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{periodTitle}]]></textFieldExpression>
 				</textField>
+				<textField>
+					<reportElement x="34" y="42" width="186" height="21"/>
+					<textElement>
+						<font fontName="Arial Black" size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{titleDoc}]]></textFieldExpression>
+				</textField>
 			</frame>
 		</band>
 	</title>
 	<columnHeader>
 		<band height="20">
-			<staticText>
-				<reportElement mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
-				<box topPadding="1" leftPadding="1" rightPadding="1">
-					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Perspectiva]]></text>
-			</staticText>
-			<staticText>
+			<textField>
 				<reportElement mode="Opaque" x="100" y="0" width="130" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
 				<box topPadding="1" leftPadding="1" rightPadding="1">
 					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -79,40 +78,12 @@
 					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
 					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Tema estratégico]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="230" y="0" width="116" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
-				<box topPadding="1" leftPadding="1" rightPadding="1">
-					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Objetivo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Opaque" x="346" y="0" width="109" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
-				<box topPadding="1" leftPadding="1" rightPadding="1">
-					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
-					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Indicadores]]></text>
-			</staticText>
-			<staticText>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{themeHeader}]]></textFieldExpression>
+			</textField>
+			<textField>
 				<reportElement mode="Opaque" x="455" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
 				<box topPadding="1" leftPadding="1" rightPadding="1">
 					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
@@ -121,11 +92,53 @@
 					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
 					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="11" isBold="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
 				</textElement>
-				<text><![CDATA[Iniciativas]]></text>
-			</staticText>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{initHeader}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{perspectiveHeader}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="230" y="0" width="116" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{objHeader}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="346" y="0" width="109" height="20" forecolor="#FFFFFF" backcolor="#4E2072"/>
+				<box topPadding="1" leftPadding="1" rightPadding="1">
+					<pen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial Black" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{indicHeader}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnHeader>
 	<detail>
@@ -200,7 +213,9 @@
 					<bottomPen lineWidth="0.5" lineColor="#FFFFFF"/>
 					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{initiativeTitle}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -211,13 +226,17 @@
 	<pageFooter>
 		<band height="17">
 			<textField>
-				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6"/>
-				<textElement textAlignment="Right"/>
+				<reportElement mode="Opaque" x="0" y="4" width="528" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6"/>
-				<textElement/>
+				<reportElement mode="Opaque" x="528" y="4" width="27" height="13" backcolor="#E6E6E6"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
