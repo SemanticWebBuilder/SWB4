@@ -32,7 +32,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @since 1.0
  */
 public class InitiativeRiskManager extends GenericResource {
-
     public static org.semanticwb.platform.SemanticProperty bsc_hasInitiativeRisk =
             org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().
             getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasInitiativeRisk");
@@ -55,26 +54,33 @@ public class InitiativeRiskManager extends GenericResource {
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();
-        StringBuilder toReturn = new StringBuilder();
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+//        response.setHeader("Cache-Control", "no-cache");
+//        response.setHeader("Pragma", "no-cache");
 
         User user = paramRequest.getUser();
         if (user == null || !user.isSigned()) {
             response.sendError(403);
             return;
         }
-        final String lang = user.getLanguage();
-
-        String suri = request.getParameter("suri");
-        if (suri == null) {
+        
+        final String suri = request.getParameter("suri");
+        Risk risk;
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
+        SemanticObject semObj = ont.getSemanticObject(suri);
+        try {    
+            risk = (Risk) semObj.createGenericInstance();
+        }catch(ClassCastException cste) {
+            return;
+        }
+        if(suri == null) {
             out.println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
             return;
         }
-
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject semObj = ont.getSemanticObject(suri);
-        Risk risk = (Risk) semObj.createGenericInstance();
+        
+        final String lang = user.getLanguage();
+        StringBuilder toReturn = new StringBuilder();
+        
+        
         if (risk != null) {
            // createInstances(risk, risk.getBSC());
             Iterator<Initiative> it = risk.listInitiatives();

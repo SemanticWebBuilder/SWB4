@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.InitiativeAssignable;
+import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
@@ -26,7 +27,6 @@ import org.semanticwb.portal.api.SWBResourceURL;
  * @author Carlos Ramos
  */
 public class InitiativeManager extends GenericResource {
-
     public static final String Action_UPDT_ACTIVE = "updactv";
     public static final String Action_ACTIVE_ALL = "actall";
     public static final String Action_DEACTIVE_ALL = "deactall";
@@ -42,16 +42,22 @@ public class InitiativeManager extends GenericResource {
             response.sendError(403);
             return;
         }
-        final String lang = user.getLanguage();
         
-        String suri = request.getParameter("suri");
+        final String suri = request.getParameter("suri");
+        Indicator indicator;
+        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();        
+        SemanticObject semObj = ont.getSemanticObject(suri);
+        try {    
+            indicator = (Indicator) semObj.createGenericInstance();
+        }catch(ClassCastException cste) {
+            return;
+        }
         if(suri==null) {
             response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
             return;
         }
         
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();        
-        SemanticObject semObj = ont.getSemanticObject(suri);
+        final String lang = user.getLanguage();
         
         if (semObj != null)
         {
@@ -92,7 +98,7 @@ public class InitiativeManager extends GenericResource {
                     out.println("<td>");
                     out.print("<a href=\"#\" onclick=\"addNewTab('" + initiative.getURI() + "','");
                     out.print(SWBPlatform.getContextPath() + "/swbadmin/jsp/objectTab.jsp" + "','" + initiative.getTitle());
-                    out.println("');return false;\" >" + (initiative.getTitle(lang)==null?(initiative.getTitle()==null?paramRequest.getLocaleString("lbl_undefined"):initiative.getTitle().replaceAll("'","")):initiative.getTitle(lang).replaceAll("'","")) + "</a>");                  
+                    out.println("');return false;\" >" + (initiative.getDisplayTitle(lang)==null?(initiative.getTitle()==null?paramRequest.getLocaleString("lbl_undefined"):initiative.getTitle().replaceAll("'","")):initiative.getDisplayTitle(lang).replaceAll("'","")) + "</a>");                  
                     out.println("</td>");
                     // Responsable
                     out.println("<td>" + (initiative.getInitiativeFacilitator()==null ? paramRequest.getLocaleString("lbl_undefined") : initiative.getInitiativeFacilitator().getFullName()) + "</td>");
