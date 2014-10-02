@@ -11,6 +11,13 @@ import java.io.InputStream;
  * @author ana.garcias
  */
 public class ParamsScoreCard {
+
+    private String titleDoc;
+    private String perspectiveHeader;
+    private String themeHeader;
+    private String objHeader;
+    private String indicHeader;
+    private String initHeader;
     private String perspectiveTitle;
     private String themeTitle;
     private String objectiveTitle;
@@ -20,8 +27,18 @@ public class ParamsScoreCard {
     private String periodTitle;
     private String msg;
     private InputStream logo;
-    
-    public ParamsScoreCard(String perspectiveTitle, String themeTitle, String objectiveTitle, String indicatorTitle, String initiativeTitle, String scoreCard, String periodTitle, String msg, InputStream logo){
+
+    public ParamsScoreCard(String titleDoc, String perspectiveHeader, String themeHeader,
+            String objHeader, String indicHeader, String initHeader, String perspectiveTitle, String themeTitle,
+            String objectiveTitle, String indicatorTitle, String initiativeTitle, String scoreCard,
+            String periodTitle, String msg, InputStream logo) {
+
+        this.titleDoc = titleDoc;
+        this.perspectiveHeader=perspectiveHeader;
+        this.themeHeader=themeHeader;
+        this.objHeader=objHeader;
+        this.indicHeader=indicHeader;
+        this.initHeader=initHeader;
         this.perspectiveTitle = perspectiveTitle;
         this.themeTitle = themeTitle;
         this.objectiveTitle = objectiveTitle;
@@ -33,6 +50,55 @@ public class ParamsScoreCard {
         this.logo = logo;
     }
 
+    public String getTitleDoc() {
+        return titleDoc;
+    }
+
+    public void setTitleDoc(String titleDoc) {
+        this.titleDoc = titleDoc;
+    }
+
+    public String getPerspectiveHeader() {
+        return perspectiveHeader;
+    }
+
+    public void setPerspectiveHeader(String perspectiveHeader) {
+        this.perspectiveHeader = perspectiveHeader;
+    }
+
+    public String getThemeHeader() {
+        return themeHeader;
+    }
+
+    public void setThemeHeader(String themeHeader) {
+        this.themeHeader = themeHeader;
+    }
+
+    public String getObjHeader() {
+        return objHeader;
+    }
+
+    public void setObjHeader(String objHeader) {
+        this.objHeader = objHeader;
+    }
+
+    public String getIndicHeader() {
+        return indicHeader;
+    }
+
+    public void setIndicHeader(String indicHeader) {
+        this.indicHeader = indicHeader;
+    }
+
+    public String getInitHeader() {
+        return initHeader;
+    }
+
+    public void setInitHeader(String initHeader) {
+        this.initHeader = initHeader;
+    }
+
+    
     public String getPerspectiveTitle() {
         return perspectiveTitle;
     }
@@ -73,7 +139,6 @@ public class ParamsScoreCard {
         this.initiativeTitle = initiativeTitle;
     }
 
- 
     public String getScoreCard() {
         return scoreCard;
     }
@@ -105,6 +170,5 @@ public class ParamsScoreCard {
     public void setLogo(InputStream logo) {
         this.logo = logo;
     }
-    
-    
+
 }
