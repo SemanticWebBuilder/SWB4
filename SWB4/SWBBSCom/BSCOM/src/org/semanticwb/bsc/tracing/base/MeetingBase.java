@@ -4,7 +4,7 @@ package org.semanticwb.bsc.tracing.base;
    /**
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA 
    */
-public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.bsc.Status,org.semanticwb.model.Roleable,org.semanticwb.bsc.Serializable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Recognizable
+public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Trashable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Serializable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Status
 {
    /**
    * Almacena la clasificación de sesiones: RAE y NOA.
@@ -317,6 +317,24 @@ public abstract class MeetingBase extends org.semanticwb.bsc.tracing.BSCTracing 
              ret=(org.semanticwb.bsc.accessory.State)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
 /**
