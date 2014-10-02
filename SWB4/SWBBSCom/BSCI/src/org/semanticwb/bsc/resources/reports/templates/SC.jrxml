@@ -6,14 +6,14 @@
 		<defaultValueExpression><![CDATA["C:\\Users\\ana.garcias\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="logo" class="java.io.InputStream"/>
-	<field name="perspective" class="java.lang.String"/>
-	<field name="theme" class="java.lang.String"/>
-	<field name="objective" class="java.lang.String"/>
-	<field name="indicator" class="java.lang.String"/>
+	<field name="perspectiveTitle" class="java.lang.String"/>
+	<field name="themeTitle" class="java.lang.String"/>
+	<field name="objectiveTitle" class="java.lang.String"/>
+	<field name="indicatorTitle" class="java.lang.String"/>
 	<field name="scoreCard" class="java.lang.String"/>
 	<field name="logo" class="java.io.InputStream"/>
 	<field name="msg" class="java.lang.String"/>
-	<field name="initiative" class="java.lang.String"/>
+	<field name="initiativeTitle" class="java.lang.String"/>
 	<field name="periodTitle" class="java.lang.String"/>
 	<variable name="cont" class="java.lang.Integer">
 		<initialValueExpression><![CDATA[$V{cont}]]></initialValueExpression>
@@ -142,7 +142,7 @@
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{perspective}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{perspectiveTitle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="100" y="0" width="130" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
@@ -156,7 +156,7 @@
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{theme}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{themeTitle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="230" y="0" width="116" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
@@ -170,7 +170,7 @@
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{objective}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{objectiveTitle}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="346" y="0" width="109" height="20" forecolor="#4E2072" backcolor="#E5E4E4"/>
@@ -184,7 +184,7 @@
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{indicator}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{indicatorTitle}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="0" width="553" height="20"/>
@@ -201,7 +201,7 @@
 					<rightPen lineWidth="0.5" lineColor="#FFFFFF"/>
 				</box>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{initiative}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{initiativeTitle}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
