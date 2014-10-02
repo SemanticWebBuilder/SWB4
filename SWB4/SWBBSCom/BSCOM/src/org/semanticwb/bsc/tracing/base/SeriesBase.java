@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.UserGroupable,org.semanticwb.bsc.ReadOnly,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Committable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Sortable
+public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Trashable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Filterable,org.semanticwb.bsc.ReadOnly,org.semanticwb.bsc.Help
 {
     public static final org.semanticwb.platform.SemanticClass bsc_SM=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SM");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasSeriesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasSeriesInv");
@@ -381,6 +381,24 @@ public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing i
              ret=(org.semanticwb.bsc.catalogs.Format)obj.createGenericInstance();
          }
          return ret;
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
    /**
    * Gets all the org.semanticwb.bsc.tracing.Measure
