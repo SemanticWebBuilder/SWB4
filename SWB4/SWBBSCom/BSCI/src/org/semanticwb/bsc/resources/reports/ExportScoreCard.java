@@ -60,9 +60,16 @@ public class ExportScoreCard extends GenericResource {
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf");
         WebSite ws = paramRequest.getWebPage().getWebSite();
+        String lang = paramRequest.getUser().getLanguage();
         response.setHeader("Content-Disposition", "attachment; filename=\"" + ws.getId() + ".pdf\"");
 
         if (ws instanceof BSC) {
+            String titleDoc = paramRequest.getLocaleString("titleDoc");
+            String perspectiveHeader= paramRequest.getLocaleString("perspectiveHeader");
+            String themeHeader= paramRequest.getLocaleString("themeHeader");
+            String objHeader= paramRequest.getLocaleString("objHeader");
+            String indicHeader= paramRequest.getLocaleString("indicHeader");
+            String initHeader= paramRequest.getLocaleString("initHeader");
             String objectiveTitle = "";
             String themeTitle = "";
             String perspectiveTitle = "";
@@ -118,9 +125,9 @@ public class ExportScoreCard extends GenericResource {
                                                         hasInitiative = true;
                                                         initiativeTitle = initiative.getTitle();
                                                         if (countInit == 0) {
-                                                            lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                            lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                                                         } else {
-                                                            lista.add(new ParamsScoreCard("", "", "", "", initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                            lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,"", "", "", "", initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
 
                                                         }
                                                         countInit++;
@@ -128,9 +135,9 @@ public class ExportScoreCard extends GenericResource {
                                                 }
                                                 if (hasInitiative == false) {
                                                     if (count == 0) {
-                                                        lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                        lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                                                     } else {
-                                                        lista.add(new ParamsScoreCard("", "", "", indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                        lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,"", "", "", indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                                                     }
                                                     count++;
                                                 }
@@ -138,11 +145,11 @@ public class ExportScoreCard extends GenericResource {
 
                                         }
                                         if (hasIndicator == false) {
-                                            lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                            lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,perspectiveTitle, themeTitle, objectiveTitle, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                                         }
                                     } // si no tiene indicadores, manda la lista hasta los objetivos
                                     else {
-                                        lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                        lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,perspectiveTitle, themeTitle, objectiveTitle, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
                                     }
                                 }
                             }
@@ -152,7 +159,7 @@ public class ExportScoreCard extends GenericResource {
             }
             if (exp == 0) {
                 msg = paramRequest.getLocaleString("msg");
-                lista.add(new ParamsScoreCard("", "", "", "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                lista.add(new ParamsScoreCard(titleDoc,perspectiveHeader,themeHeader,objHeader,indicHeader,initHeader,"", "", "", "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
 
             }
 
@@ -203,8 +210,6 @@ public class ExportScoreCard extends GenericResource {
         response.setHeader("Pragma", "no-cache");
 
         PrintWriter out = response.getWriter();
-
-        //String title = paramRequest.getLocaleString("msgPrintPDFDocument");
         SWBResourceURL url = paramRequest.getRenderUrl();
         url.setCallMethod(SWBResourceURL.Call_DIRECT);
         url.setMode(Mode_StreamPDF);
