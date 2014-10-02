@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,8 @@ import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
 import static org.semanticwb.bsc.PDFExportable.Mode_StreamPDF;
+import org.semanticwb.bsc.Perspective;
+import org.semanticwb.bsc.Theme;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.element.Indicator;
 import org.semanticwb.bsc.element.Initiative;
@@ -60,68 +63,97 @@ public class ExportScoreCard extends GenericResource {
         response.setHeader("Content-Disposition", "attachment; filename=\"" + ws.getId() + ".pdf\"");
 
         if (ws instanceof BSC) {
-            String objective = "";
-            String theme = "";
-            String perspective = "";
-            String indicator = "";
+            String objectiveTitle = "";
+            String themeTitle = "";
+            String perspectiveTitle = "";
+            String indicatorTitle = "";
             String scoreCard = "";
             String periodTitle = "";
-            String initiative = "";
+            String initiativeTitle = "";
             String msg = "";
+            boolean hasIndicator = false;
+            boolean hasInitiative = false;
 
             LinkedList<ParamsScoreCard> lista = new LinkedList();
             Period period = getPeriod(request);
             periodTitle = period.getTitle();
             scoreCard = ws.getTitle();
             JasperTemplates jasperLogo = JasperTemplates.LOGO;
-            Iterator<Objective> itObje = Objective.ClassMgr.listObjectiveByPeriod(period, ws);
             int exp = 0;
 
-            Iterator<Initiative> itInitiative = Initiative.ClassMgr.listInitiativeByPeriod(period, ws);
-
-            while (itInitiative.hasNext()) {
-                Initiative init = itInitiative.next();
-                if (init.isActive()) {
+            Iterator<Perspective> itPersp = Perspective.ClassMgr.listPerspectives(ws);
+            while (itPersp.hasNext()) {
+                Perspective perspective = itPersp.next();
+                //si la perspectiva es activa, trae sus temas
+                if (perspective.isActive()) {
                     exp = 1;
-                    initiative = init.getTitle();
-                    lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, initiative, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-                }
-            }
+                    perspectiveTitle = perspective.getTitle();
+                    List<Theme> themes = perspective.listValidThemes();
+                    if (!themes.isEmpty()) {
+                        Collections.sort(themes);
+                        for (Theme theme : themes) {
+                            themeTitle = theme.getTitle();
+                            //El tema trae sus objetivos
+                            List<Objective> objectives = theme.listValidObjectives();
+                            Collections.sort(objectives);
+                            for (Objective obj : objectives) { //Recorre los objetivos asignados
+                                if (obj.hasPeriod(period)) {
+                                    objectiveTitle = obj.getTitle();
+                                    List<Indicator> indicators = obj.listValidIndicators(); //Trae la lista de indicadores
+                                    if (!indicators.isEmpty()) {
+                                        int count = 0;
+                                        Iterator<Indicator> itIndicator = indicators.iterator();
+                                        while (itIndicator.hasNext()) { //Recorre cada indicador
+                                            hasIndicator = false;
+                                            hasInitiative = false;
+                                            Indicator indicator = itIndicator.next();
+                                            if (indicator.hasPeriod(period)) { //Valida que pertenezcan al mismo periodo
+                                                hasIndicator = true;
+                                                indicatorTitle = indicator.getTitle();
+                                                Iterator<Initiative> itInit = indicator.listInitiatives(); //El indicador trae sus iniciativas
+                                                int countInit = 0;
+                                                while (itInit.hasNext()) {
+                                                    Initiative initiative = itInit.next();
+                                                    if (initiative.isActive() && initiative.hasPeriod(period)) {
+                                                        hasInitiative = true;
+                                                        initiativeTitle = initiative.getTitle();
+                                                        if (countInit == 0) {
+                                                            lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                        } else {
+                                                            lista.add(new ParamsScoreCard("", "", "", "", initiativeTitle, scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
 
-            while (itObje.hasNext()) {
-                Objective ob = itObje.next();
-                if (ob.isActive()) {
-                    exp = 2;
-                    boolean hasIndicator = false;
-                    objective = ob.getTitle();
-                    theme = ob.getTheme().getTitle();
-                    perspective = ob.getTheme().getPerspective().getTitle();
-                    //Saca los indicadores del periodo y evalua si pertenecen al mismo objetivo
-                    Iterator<Indicator> itIndPeriod = Indicator.ClassMgr.listIndicatorByPeriod(period, ws);
-                    int count = 0;
+                                                        }
+                                                        countInit++;
+                                                    }
+                                                }
+                                                if (hasInitiative == false) {
+                                                    if (count == 0) {
+                                                        lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                    } else {
+                                                        lista.add(new ParamsScoreCard("", "", "", indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                                    }
+                                                    count++;
+                                                }
+                                            }
 
-                    while (itIndPeriod.hasNext()) {
-                        Indicator indic = itIndPeriod.next();
-                        if (indic.getObjective().equals(ob) && indic.isActive()) {
-                            hasIndicator = true;
-                            indicator = indic.getTitle();
-                            if (count == 0) {
-
-                                lista.add(new ParamsScoreCard(perspective, theme, objective, indicator, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-                            } else {
-                                lista.add(new ParamsScoreCard("", "", "", indicator, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                        }
+                                        if (hasIndicator == false) {
+                                            lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                        }
+                                    } // si no tiene indicadores, manda la lista hasta los objetivos
+                                    else {
+                                        lista.add(new ParamsScoreCard(perspectiveTitle, themeTitle, objectiveTitle, indicatorTitle, "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+                                    }
+                                }
                             }
-                            count++;
                         }
                     }
-                    if (hasIndicator == false) {
-                        lista.add(new ParamsScoreCard(perspective, theme, objective, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-                    }
-                } else {
-                    msg = paramRequest.getLocaleString("msg");
-                    lista.add(new ParamsScoreCard(perspective, theme, objective, "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
-
                 }
+            }
+            if (exp == 0) {
+                msg = paramRequest.getLocaleString("msg");
+                lista.add(new ParamsScoreCard("", "", "", "", "", scoreCard, periodTitle, msg, this.getClass().getResourceAsStream(jasperLogo.getTemplatePath())));
+
             }
 
             try {
