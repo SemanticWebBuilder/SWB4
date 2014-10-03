@@ -92,7 +92,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
             DevicePlatform dp = dpTmp.next();
             devicePlatform.add(dp);
         }
-        System.out.println("Entra a crear SWBSocialStatusListener...");
+        //System.out.println("Entra a crear SWBSocialStatusListener...");
     }
 
     /*
@@ -116,7 +116,7 @@ public class SWBSocialStatusListener implements twitter4j.StatusListener {
                     twitterStream.cleanUp();
                     twitterStream.shutdown();
                     ListenAlives.remove(stream.getURI() + "|" + socialNetwork.getURI());
-                    System.out.println("DETUVO LA CONEXION EN SWBSocialStatusListener/onStatus-de:" + stream.getURI() + "|" + socialNetwork.getURI());
+                    //System.out.println("DETUVO LA CONEXION EN SWBSocialStatusListener/onStatus-de:" + stream.getURI() + "|" + socialNetwork.getURI());
                     return;
                 }
             }

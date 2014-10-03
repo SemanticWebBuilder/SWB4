@@ -49,7 +49,7 @@ public class SocialTopic extends org.semanticwb.social.base.SocialTopicBase
                     
                     //Cada que un SocialTopic se elimine(de la papelera), se ejecutara este código (borrado de PostOut asociados)
                     
-                    System.out.println("SocialTopic/Observer/action:"+action+", socialTopic:"+socialTopic+",prop:"+prop);
+                    //System.out.println("SocialTopic/Observer/action:"+action+", socialTopic:"+socialTopic+",prop:"+prop);
                     
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el SocialTopic
                     {

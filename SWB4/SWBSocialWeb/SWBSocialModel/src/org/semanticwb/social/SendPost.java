@@ -131,17 +131,17 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                             String photoSource = SWBPortal.getWorkPath() + sendPost.getWorkPath() + "/" + sphoto;
                             //System.out.println("photoSource-George:"+photoSource);
                             String photoTarget = SWBPortal.getWorkPath() + photo.getWorkPath();
-                            System.out.println("photoTarget-1:"+photoTarget);
+                            //System.out.println("photoTarget-1:"+photoTarget);
                             File targetFile=new File(photoTarget);
                             if(!targetFile.exists())
                             {
                                 targetFile.mkdirs();
                             }
                             photoTarget+="/" + sphoto;
-                            System.out.println("photoTarget-2:"+photoTarget);
-                            System.out.println("Va a copiar...");
+                            //System.out.println("photoTarget-2:"+photoTarget);
+                            //System.out.println("Va a copiar...");
                             SWBUtils.IO.copy(photoSource,photoTarget, false, null, null);
-                            System.out.println("Copio....");
+                            //System.out.println("Copio....");
 
 
                             photo.addPhoto(sphoto);
@@ -169,7 +169,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                                 if(!socialNet.getURI().equals(postIn.getPostInSocialNetwork().getURI()))
                                 {
                                     photo.addSocialNetwork(socialNet);
-                                    System.out.println("Copio....:2:"+socialNet);
+                                    //System.out.println("Copio....:2:"+socialNet);
                                 }
                             }
                         }
@@ -208,7 +208,7 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         }
                         
                         //Se agrega postIn fuente del nuevo postOut
-                        System.out.println("postIn NetMsgID:"+postIn.getSocialNetMsgId());
+                        //System.out.println("postIn NetMsgID:"+postIn.getSocialNetMsgId());
                         message.setPostInSource(postIn);
                         
                         

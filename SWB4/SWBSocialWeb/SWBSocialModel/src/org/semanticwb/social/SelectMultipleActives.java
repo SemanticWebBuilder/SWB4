@@ -130,11 +130,11 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
         }
         frmname = frmname + "/form";
         
-        System.out.println("frmname_George:"+frmname);
+        //System.out.println("frmname_George:"+frmname);
         
         
         String formName = (String) request.getAttribute("formName");
-        System.out.println("formName:"+formName);
+        //System.out.println("formName:"+formName);
                 
         StringBuffer   ret          = new StringBuffer();
         String         name         = propName;
@@ -188,7 +188,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
         }
 
         if (prop.isObjectProperty()) {
-            System.out.println("ES OBJECTTYPE");
+            //System.out.println("ES OBJECTTYPE");
             ArrayList<String> vals   = new ArrayList();
             String            auxs[] = request.getParameterValues(propName);
 
@@ -212,7 +212,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
             //String value = obj.getDisplayName(lang);
 
             if (mode.equals("edit") || mode.equals("create")) {
-                System.out.println("ENTRA SELECT 1");
+                //System.out.println("ENTRA SELECT 1");
                 //ret.append("<select name=\"" + name + "\" multiple=\"true\"");
                 //ret.append(" style=\"width:300px;\"");
                 
@@ -314,7 +314,7 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 ret.append("</form>");
                 ret.append("</div>");
             } else if (mode.equals("view")) {
-                System.out.println("ENTRA SELECT 2");
+                //System.out.println("ENTRA SELECT 2");
                 ret.append("<select name=\"" + name + "\" multiple=\"true\"");
                 ret.append(" style=\"width:300px;\"");
 
@@ -375,9 +375,9 @@ public class SelectMultipleActives extends org.semanticwb.social.base.SelectMult
                 ret.append("</select>");
             }
         } else {
-            System.out.println("ES DATATYPE");
+            //System.out.println("ES DATATYPE");
             if (selectValues != null) {
-                System.out.println("ENTRA SELECT DATA-1");
+                //System.out.println("ENTRA SELECT DATA-1");
                 ArrayList<String> vals   = new ArrayList();
                 String            auxs[] = request.getParameterValues(propName);
 

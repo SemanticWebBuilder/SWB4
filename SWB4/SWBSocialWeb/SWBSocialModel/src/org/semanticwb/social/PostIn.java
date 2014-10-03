@@ -103,10 +103,10 @@ public class PostIn extends org.semanticwb.social.base.PostInBase
                             {
                                 //System.out.println("MessageIn Observador-J3:"+socialNetworkUser+", FUE ELIMINADO...");
                                 socialNetworkUser.remove();
-                                System.out.println("PostIn Observador-J3.1:"+socialNetworkUser+", FUE ELIMINADO...");
-                            }else{
+                                //System.out.println("PostIn Observador-J3.1:"+socialNetworkUser+", FUE ELIMINADO...");
+                            }/*else{
                                 System.out.println("Por PostIn, no encontro ni maiz k");
-                            }
+                            }*/
                     }
                     
                 }

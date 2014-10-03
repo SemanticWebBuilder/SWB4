@@ -46,10 +46,10 @@ public class PostOutNet extends org.semanticwb.social.base.PostOutNetBase
         //Observador del objeto PostOutNet 
         PostOutNet.social_PostOutNet.registerObserver(new SemanticObserver() {
             public void notify(SemanticObject obj, Object prop, String lang, String action) {
-                System.out.println("Entra a Observer de PostOutNet-0");
+                //System.out.println("Entra a Observer de PostOutNet-0");
                 if(action!=null)
                 {
-                    System.out.println("Entra a Observer de PostOutNet");
+                    //System.out.println("Entra a Observer de PostOutNet");
                     //Cada que un PostOut se elimine, se ejecutara este código, revisa si el PostOut tiene PostOutNets asociados
                     //de ser así elimina cada uno de ellos.
                     if(action.equals("REMOVE") && prop==null) //Si la acción es eliminar el PostOut
@@ -60,7 +60,7 @@ public class PostOutNet extends org.semanticwb.social.base.PostOutNetBase
                             PostMonitor postMonitor=PostMonitor.ClassMgr.listPostMonitors(SWBContext.getAdminWebSite()).next();
                             if(postMonitor.hasPostOutNet(postOutNet))
                             {
-                                System.out.println("Elimina PostOutNet de PostMonitor unico:"+postMonitor);
+                                //System.out.println("Elimina PostOutNet de PostMonitor unico:"+postMonitor);
                                 postMonitor.removePostOutNet(postOutNet);
                             }
                         }

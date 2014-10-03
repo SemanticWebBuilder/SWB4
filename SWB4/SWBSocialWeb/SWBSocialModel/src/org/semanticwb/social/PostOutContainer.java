@@ -43,7 +43,7 @@ public class PostOutContainer extends org.semanticwb.social.base.PostOutContaine
     public static PostOutContainer getPostContainerByDate(Date date, SWBModel model)
     {
         //
-        System.out.println("Borrado de todos los PostContainers...-No baorraraaaa");
+        //System.out.println("Borrado de todos los PostContainers...-No baorraraaaa");
         /*
         Iterator <PostContainer> itPostC=PostContainer.ClassMgr.listPostContainers(model);
         while(itPostC.hasNext())
@@ -53,26 +53,26 @@ public class PostOutContainer extends org.semanticwb.social.base.PostOutContaine
         }
          * */
 
-        System.out.println("Termina Borrado de todos los PostContainers...");
+        //System.out.println("Termina Borrado de todos los PostContainers...");
         //
 
         int year=1900+(date.getYear());
         int month=1+(date.getMonth());
-        System.out.println("year pa buscar:"+year);
-        System.out.println("month pa buscar:"+month);
+        //System.out.println("year pa buscar:"+year);
+        //System.out.println("month pa buscar:"+month);
         Iterator<SemanticObject> it=model.getSemanticModel().listSubjects(social_year, year+""); //No encuentra
         while(it.hasNext())
         {
             SemanticObject obj=it.next();
             PostOutContainer postContainer=(PostOutContainer)obj.createGenericInstance();
-            System.out.println("postContainer encontrado:"+postContainer+",year:"+postContainer.getYear()+", month:"+postContainer.getMonth());
+            //System.out.println("postContainer encontrado:"+postContainer+",year:"+postContainer.getYear()+", month:"+postContainer.getMonth());
             if(postContainer.getMonth().equals(String.valueOf(month)));
             {
-                System.out.println("Regresa PostContainer:"+postContainer);
+                //System.out.println("Regresa PostContainer:"+postContainer);
                 return postContainer;
             }
         }
-        System.out.println("Va ha crear nuevo postContainer..");
+        //System.out.println("Va ha crear nuevo postContainer..");
         PostOutContainer postContainer=PostOutContainer.ClassMgr.createPostOutContainer(model);
         postContainer.setYear(year+"");
         postContainer.setMonth(month+"");

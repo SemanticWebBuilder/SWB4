@@ -78,7 +78,7 @@ public class MessageIn extends org.semanticwb.social.base.MessageInBase
                             if(i<=1)    
                             {
                                 socialNetworkUser.remove();
-                                System.out.println("Elimino socialNetUser en MessageIn:"+socialNetworkUser);
+                                //System.out.println("Elimino socialNetUser en MessageIn:"+socialNetworkUser);
                             }
                         }
                         
@@ -102,7 +102,7 @@ public class MessageIn extends org.semanticwb.social.base.MessageInBase
                                 while(itSocialNetStreamSearch.hasNext())
                                 {
                                     SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
-                                    System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                                    //System.out.println("Remueve en Stream:"+socialNetStreamSearch);
                                     socialNetStreamSearch.remove();
                                 }
                             }

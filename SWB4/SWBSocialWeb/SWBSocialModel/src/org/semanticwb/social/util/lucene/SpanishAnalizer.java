@@ -741,14 +741,14 @@ public class SpanishAnalizer extends Analyzer {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public TokenStream tokenStreamWOStopWords(String fieldName, Reader reader) {
         TokenStream result = new StandardTokenizer(Version.LUCENE_30, reader);
-        System.out.println("Entra a tokenStreamWOStopWords-0:"+result);
+        //System.out.println("Entra a tokenStreamWOStopWords-0:"+result);
         result = new StandardFilter(result);
         result = new LowerCaseFilter(result);
         result = new ASCIIFoldingFilter(result); // Mi cambio
-        System.out.println("Entra a tokenStreamWOStopWords:"+result);
+        //System.out.println("Entra a tokenStreamWOStopWords:"+result);
         //result = new StopFilter(false, result, new HashSet(Arrays.asList(SPANISH_STOP_WORDS)));
         result = new SnowballFilter(result, "Spanish");
-        System.out.println("Entra a tokenStreamWOStopWords-1:"+result);
+        //System.out.println("Entra a tokenStreamWOStopWords-1:"+result);
         return result;
     }
 }

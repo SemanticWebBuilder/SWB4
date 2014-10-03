@@ -46,7 +46,7 @@ public class SWN3 {
     private HashMap<String, Double> _dict;
 
     public SWN3(){
-        System.out.println("Entra a SWN3");
+        //System.out.println("Entra a SWN3");
         _dict = new HashMap<String, Double>();
         HashMap<String, Vector<Double>> _temp = new HashMap<String, Vector<Double>>();
         try{
@@ -165,7 +165,7 @@ public class SWN3 {
         }
         averageScore = totalScore;
         
-        System.out.println("averageScore:"+averageScore);
+        //System.out.println("averageScore:"+averageScore);
         
         if(averageScore>=0.75)
             return "Strong positive";
@@ -188,7 +188,7 @@ public class SWN3 {
         //String msg="Update on the October event - I have also invited friends from Lincoln in Buenos Aires to join us on this trip. I have reserved a block of 12 rooms at the Holiday Inn Express near Balloon Fiesta Park. There is a free shuttle from an amusement park close by, so no one has to pay for parking (or struggle to get into or out of the park!) There is plenty to do. There are a couple of art museums (both Native American and classical), as well as shopping, hiking, and (my personal favorite) the New Mexico Museum of Natural History. My brother, Mike (Class of '75) is putting together a group tour for whomever wants to go on Friday the 10th. This is fun for parents and kids.Since we are working on this early, there is time to plan for it. Hotel rooms are about $125 per night, starting Thursday the 9th. I will need to know if you are interested no later than the first week of September< so that the hotel can sell any unused rooms and not charge me for them>Espero verlos alli!";
         String msg="Hello,I am 19 years old,I currently work weekends with autistic children, where I help support children aged 5-13 with autism and other learning difficulties. Along side this I am completing an Art Foundation course this June- Afterwards I hope to go onto working with children and becoming an Art Therapist. In the past I have done sign language for both children and the elderly and signed at the Congress Theatre. Sometimes I also help care for a disabled girl with a major disability so much so that she is wheelchair bound and unable to do anything for herself. This has helped me realise just how much working with people, a dream is to me.I am one of 6 children, and despite being only 19, have grown up quickly. I have always been around children, and love it.I babysit for 5 different families, and have recently been made an auntie. Children have, and I am sure, always will be a major part of my life.I have also had experience in retail (Monsoon, Marks and Spencers) and waitressing in The Lamb Inn in Old Town, and Fiesta Bistro in Eastbourne. Thank you in advance for reading this, and I look forward to hearing from you if you've any help or offers,Lydia Harris07784467657";
         String result=swn3.classifyText(msg);
-        System.out.println("result:"+result);
+        //System.out.println("result:"+result);
     }
     
 }

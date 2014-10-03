@@ -52,12 +52,12 @@ public class ReadImage {
             img = ImageIO.read(new File("c://SocialTmp/mapaMexico.gif"));
         } catch (IOException e) {
         }
-        System.out.println("img:"+img);
+        //System.out.println("img:"+img);
         
         // Leemos algunos pixeles ....
-        System.out.println("Pix 1 = " + img.getRGB(10,10));
-        System.out.println("Pix 2 = " + img.getRGB(10,11));
-        System.out.println("Pix 3 = " + img.getRGB(10,21));
+        //System.out.println("Pix 1 = " + img.getRGB(10,10));
+        //System.out.println("Pix 2 = " + img.getRGB(10,11));
+        //System.out.println("Pix 3 = " + img.getRGB(10,21));
 
         int rgb = 0xFF00FF00; // Asignamos colo a la Variable
         
@@ -258,7 +258,7 @@ public class ReadImage {
         double mercN = Math.log(Math.tan((Math.PI/4)+(latRad/2)));
         double y = (mapHeight/2)-(mapWidth*mercN/(2*Math.PI));
        
-        System.out.println("x:"+x+",Y:"+y);
+        //System.out.println("x:"+x+",Y:"+y);
         
         img.setRGB(876, 1161, rgb); // Escribimos Pixel 
     }

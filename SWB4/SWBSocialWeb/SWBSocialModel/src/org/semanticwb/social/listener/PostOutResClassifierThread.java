@@ -96,7 +96,7 @@ public class PostOutResClassifierThread extends java.lang.Thread {
                         if(postOut.getSocialTopic().isSentEmailInComments())
                         {
                             try{
-                                System.out.println("Se envía email de monitor de respuestas(PostOutResClassifierThread) con la sig info:\n"+SWBUtils.TEXT.encode(strbd.toString(), "iso8859-1"));    
+                                //System.out.println("Se envía email de monitor de respuestas(PostOutResClassifierThread) con la sig info:\n"+SWBUtils.TEXT.encode(strbd.toString(), "iso8859-1"));    
                                 //sendGenricEmail2UsersInSocialTopic
                                 SWBSocialUtil.Classifier.sendGenricEmail2UsersInSocialTopic(postOut.getSocialTopic(), "Nuevas respuestas en mensajes enviados", strbd.toString());
                             }catch(Exception e){log.error(e);}

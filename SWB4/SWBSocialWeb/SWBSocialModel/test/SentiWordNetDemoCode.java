@@ -143,15 +143,15 @@ public class SentiWordNetDemoCode {
 
     public static void main(String args[]) {
         File swnFile = new File("c://SocialTmp/SentiWordNet20130122.txt");
-        System.out.println("swnFile:"+swnFile.exists());
+        //System.out.println("swnFile:"+swnFile.exists());
         if (swnFile.exists() ) {
             try {
                 SentiWordNetDemoCode sentiwordnet = new SentiWordNetDemoCode(swnFile);
-                System.out.println("sentiwordnet:"+sentiwordnet);
-                System.out.println("good:"+sentiwordnet.extract("good"));
-		System.out.println("bad:"+sentiwordnet.extract("bad"));
-		System.out.println("blue:"+sentiwordnet.extract("blue"));
-		System.out.println("blue:"+sentiwordnet.extract("blue"));
+                //System.out.println("sentiwordnet:"+sentiwordnet);
+                //System.out.println("good:"+sentiwordnet.extract("good"));
+		//System.out.println("bad:"+sentiwordnet.extract("bad"));
+		//System.out.println("blue:"+sentiwordnet.extract("blue"));
+		//System.out.println("blue:"+sentiwordnet.extract("blue"));
             } catch (Exception e) {
             }
         }

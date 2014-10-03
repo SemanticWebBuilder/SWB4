@@ -77,7 +77,7 @@ public class VideoIn extends org.semanticwb.social.base.VideoInBase
                             if(i<=1)    
                             {
                                 socialNetworkUser.remove();
-                                System.out.println("Elimino socialNetUser en VideoIn:"+socialNetworkUser);
+                                //System.out.println("Elimino socialNetUser en VideoIn:"+socialNetworkUser);
                             }
                         }
                         if(postIn.getPostInStream()!=null)
@@ -100,7 +100,7 @@ public class VideoIn extends org.semanticwb.social.base.VideoInBase
                                 while(itSocialNetStreamSearch.hasNext())
                                 {
                                     SocialNetStreamSearch socialNetStreamSearch=itSocialNetStreamSearch.next();
-                                    System.out.println("Remueve en Stream:"+socialNetStreamSearch);
+                                    //System.out.println("Remueve en Stream:"+socialNetStreamSearch);
                                     socialNetStreamSearch.remove();
                                 }
                             }

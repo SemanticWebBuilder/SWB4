@@ -163,7 +163,8 @@ public class SocialCalendar extends org.semanticwb.social.base.SocialCalendarBas
                                 break;
                             }
                        }catch(Exception e){
-                           System.out.println("Nodo Mal en Calendar/Eval:"+nl.item(x).getFirstChild().getNodeValue());
+                           //System.out.println("Nodo Mal en Calendar/Eval:"+nl.item(x).getFirstChild().getNodeValue());
+                           log.error(e);
                        }
                     } else if (name.equals("starthour")) {
                         String          time = nl.item(x).getFirstChild().getNodeValue();

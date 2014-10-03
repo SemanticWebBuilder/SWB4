@@ -146,7 +146,7 @@ public class SWBSocialComparator implements Comparator {
                         d2 = ((SemanticObject) o2).getDateProperty(PostIn.social_pi_created);
                     } else
                     {
-                        System.out.println("o1:"+o1+",o2:"+o2);
+                        //System.out.println("o1:"+o1+",o2:"+o2);
                         d1 = ((PostIn) o1).getPi_created();
                         d2 = ((PostIn) o2).getPi_created();
                     }
@@ -244,7 +244,7 @@ public class SWBSocialComparator implements Comparator {
                         d2 = ((SemanticObject) o2).getDateProperty(PostOut.social_pout_created);
                     } else
                     {
-                        System.out.println("o1:"+o1+",o2:"+o2);
+                        //System.out.println("o1:"+o1+",o2:"+o2);
                         d1 = ((PostOut) o1).getPout_created();
                         d2 = ((PostOut) o2).getPout_created();
                     }

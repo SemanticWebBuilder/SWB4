@@ -78,7 +78,7 @@ public class PhotoIn extends org.semanticwb.social.base.PhotoInBase
                             if(i<=1)    
                             {
                                 socialNetworkUser.remove();
-                                System.out.println("Elimino socialNetUser en PhotoIn:"+socialNetworkUser);
+                                //System.out.println("Elimino socialNetUser en PhotoIn:"+socialNetworkUser);
                             }
                         }
                         if(postIn.getPostInStream()!=null)
