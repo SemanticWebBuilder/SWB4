@@ -73,7 +73,7 @@
             if(dateSince != null && dateTo != null){
                 st.setTimestamp(2, new Timestamp(dateSince.getTime()));
                 st.setTimestamp(3, new Timestamp(dateTo.getTime()));
-                System.out.println("running sql:" + sql);
+                //System.out.println("running sql:" + sql);
             }
             ResultSet rs = st.executeQuery();
 
@@ -97,12 +97,12 @@
           
             
         }catch(SQLException sqle){
-            System.out.println("error....." +  sqle.getMessage());
+//            System.out.println("error....." +  sqle.getMessage());
         }       
     }else{
         return;
     }
-    System.out.println("growth in jsp");
+    //System.out.println("growth in jsp");
 %>
 
 <meta charset="utf-8">
