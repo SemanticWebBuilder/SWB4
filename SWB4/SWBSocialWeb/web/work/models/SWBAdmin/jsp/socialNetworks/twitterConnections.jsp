@@ -88,11 +88,11 @@
                 }
                 out.println("<div align=\"center\"><h2>" + message + "</h2><br/></div>");
             }
-            System.out.println("Error displaying friends" + te.getErrorMessage());
+            //System.out.println("Error displaying friends" + te.getErrorMessage());
             te.printStackTrace();
             gotError = true;
         }catch(Exception e){
-            System.out.println("Error displaying friends" + e.getMessage());
+            //System.out.println("Error displaying friends" + e.getMessage());
             e.printStackTrace();
             gotError = true;
         }

@@ -3,7 +3,14 @@
     Created on : 30/05/2013, 04:17:04 PM
     Author     : francisco.jimenez
 --%>
-
+<%@page import="java.util.Iterator"%>
+<%@page import="org.semanticwb.platform.SemanticProperty"%>
+<%@page import="org.semanticwb.social.SocialUserExtAttributes"%>
+<%@page import="org.semanticwb.social.PostIn"%>
+<%@page import="org.semanticwb.model.UserGroup"%>
+<%@page import="org.semanticwb.model.SWBContext"%>
+<%@page import="org.semanticwb.model.SWBModel"%>
+<%@page import="org.semanticwb.social.SocialNetwork"%>
 <%@page import="static org.semanticwb.social.admin.resources.Timeline.lookForEntities"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceException"%>
 <%@page import="java.util.ArrayList"%>
@@ -25,6 +32,7 @@
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="twitter4j.*"%>
 <%@page import="twitter4j.conf.ConfigurationBuilder"%>
+<%@page import="static org.semanticwb.social.admin.resources.Timeline.*"%>
 
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 <jsp:useBean id="twitterBean" scope="request" type="twitter4j.Twitter"/>
@@ -32,54 +40,48 @@
 <%
     SWBResourceURL actionURL = paramRequest.getActionUrl();
     SWBResourceURL renderURL = paramRequest.getRenderUrl();
-    String suri = request.getParameter("suri");
+    String objUri = request.getParameter("suri");
  
-    actionURL.setParameter("suri", suri);
+    actionURL.setParameter("suri", objUri);
 %>
-<div class="swbform">
+<div class="timelineTab" style="padding:10px 5px 10px 5px; overflow-y: scroll; height: 400px;">
 <%
-    try {
-            System.out.println("Showing @" + twitterBean.getScreenName() +  "'s Tweets.");
-            out.println("<div align=\"center\"><h2>Showing @" + twitterBean.getScreenName() +  "'s Tweets. </h2><br/></div>");
+    try {            
+            out.println("<div class=\"timelineTab-title\"><p><strong>" + "Mis tweets" + "</strong> @" + twitterBean.getScreenName() + "</p></div>");
             Paging paging = new Paging(); //used to set maxId and count
             paging.count(20);//Gets a number of tweets of timeline. Max value is 100           
             int i = 0;
+            org.semanticwb.model.User user = paramRequest.getUser();
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+            while (list.hasNext()) {
+                SemanticProperty sp = list.next();
+                mapa.put(sp.getName(),sp);
+            }
+            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();                
+            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
+            SocialNetwork socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
+            SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
+            String postURI = null;
+            UserGroup userSuperAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             
             for (Status status : twitterBean.getUserTimeline(paging)){
                 try {
-                        out.println("<fieldset>");
-                        out.println("<table border: 0px\">");
-                        out.println("<tr>");
-                        out.println("   <td colspan=\"2\">");
-                        out.println("   " + status.getUser().getName() + " <b>" + status.getUser().getScreenName()+ "</b>");
-                        out.println("   </td>");
-                        out.println("</tr>");
-                        out.println("<tr>");
-                        out.println("   <td  width=\"10%\">");
-                        out.println("       <img src=\"" + status.getUser().getProfileImageURL() + "\"/>");
-                        out.println("   </td>");
-                        out.println("   <td width=\"90%\">");                                        
-                        String statusText = lookForEntities(status.getText(), renderURL, status.getURLEntities(), status.getMediaEntities(), status.getHashtagEntities(),status.getUserMentionEntities()); 
-
-                        out.println(        statusText);
-                        out.println("   </td>");
-                        out.println("</tr>");
-                        out.println("<tr>");
-                        out.println("   <td colspan=\"2\">");
-                        long minutes = (long)(new Date().getTime()/60000) - (status.getCreatedAt().getTime()/60000);
-                        out.println("Created:<b>" + (int)minutes + "</b> minutes ago - - Retweeted: <b>" + status.getRetweetCount() + "</b> times ");
-                        out.println("   </td>");
-                        out.println("</tr>");
-                        out.println("</table>");
-                        out.println("</fieldset>");             
-                } catch (Exception te) {
-                    System.out.println("Error when getting user tweets " + te);
-                }        
-                i++;
+                    postURI = null;
+                    PostIn post = PostIn.getPostInbySocialMsgId(model,status.getId()+"");
+                    if(post != null){
+                        postURI = post.getURI();
+                    }
+                    doPrintTweet(request, response, paramRequest, status, twitterBean, out,null,USER_TWEETS_TAB, null,user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
+                    } catch (Exception te) {
+                        System.out.println("Error when getting user tweets " + te);
+                    }        
+                    i++;
             }
-            System.out.println("\n\nTotal tweets" + i);
+            //System.out.println("\n\nTotal tweets" + i);
         } catch (Exception te) {
-            System.out.println("Se presento un error en User Tweets Tweets!!");
+            //System.out.println("Se presento un error en User Tweets Tweets!!");
             te.printStackTrace();
         }
 %>
