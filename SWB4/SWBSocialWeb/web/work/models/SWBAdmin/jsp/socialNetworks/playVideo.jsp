@@ -12,7 +12,7 @@
 <%
     String videoFormat ="";
     String videoUrl = URLDecoder.decode(request.getParameter("videoUrl"),"UTF-8");
-    System.out.println("VIDEO URL:" + videoUrl);
+    //System.out.println("VIDEO URL:" + videoUrl);
     if(videoUrl.toLowerCase().contains("www.youtube.com")){//show player from youtube
         videoFormat = "youtube";
     }else if(videoUrl.toLowerCase().contains(".mp4")){
@@ -25,7 +25,7 @@
 %>
 <%
     if(videoFormat.equals("youtube")){
-        System.out.println("Displaing Youtube Video");
+        //System.out.println("Displaing Youtube Video");
 %>
     <div class="swbform">
         <fieldset>

@@ -54,10 +54,19 @@
     LinkedHashMap<Timestamp, Integer[]> chartData = new LinkedHashMap<Timestamp, Integer[]>();
     
     
-    System.out.println("SocialNetGrowth....");
+    //System.out.println("SocialNetGrowth....");
     if(SemanticObject.getSemanticObject(suri) != null){
-        System.out.println("Social Net 1");
+        //System.out.println("Social Net 1");
         SocialNetwork socialNet = (SocialNetwork)SemanticObject.getSemanticObject(suri).createGenericInstance();
+        if(!socialNet.isSn_authenticated()){
+            out.println("<link href=\"/swbadmin/css/swbsocial.css\" rel=\"stylesheet\" type=\"text/css\">");
+            out.println("<div id=\"configuracion_redes\">");
+            out.println("<div id=\"autenticacion\">");
+            out.println("<p>      La cuenta no ha sido autenticada correctamente</p>");
+            out.println("</div>");
+            out.println("</div>");
+            return;
+        }
         Connection con = SWBUtils.DB.getDefaultConnection();
 
         String sql = "select * from socialnets_stats where socialNet=?";
@@ -99,12 +108,12 @@
             st.execute();*/
             
         }catch(SQLException sqle){
-            System.out.println("error....." +  sqle.getMessage());
+            //System.out.println("error....." +  sqle.getMessage());
         }       
     }else{
         return;
     }
-    System.out.println("growth in jsp");
+    //System.out.println("growth in jsp");
 %>
 
 <meta charset="utf-8">
@@ -168,8 +177,8 @@ svg {
                 ptat.push({x:<%=timestamp%>, y: <%=ptat%>});
 <%
                 }catch(Exception e){
-                    e.printStackTrace();
-                    System.out.println("eeeeeeeeeroror");
+                    //e.printStackTrace();
+                    //System.out.println("eeeeeeeeeroror");
                 }
             }
 %>      

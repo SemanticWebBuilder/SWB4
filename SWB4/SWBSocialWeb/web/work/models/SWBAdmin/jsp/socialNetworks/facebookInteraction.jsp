@@ -478,7 +478,15 @@
         SocialNetwork sn = (SocialNetwork) SemanticObject.createSemanticObject(suri).createGenericInstance();
         Facebook fb = null;
         if(!(sn instanceof Facebook)){return;}else{fb = (Facebook)sn;}
-    
+        if(!fb.isSn_authenticated() || fb.getAccessToken() == null){
+            out.println("<link href=\"/swbadmin/css/swbsocial.css\" rel=\"stylesheet\" type=\"text/css\">");
+            out.println("<div id=\"configuracion_redes\">");
+            out.println("<div id=\"autenticacion\">");
+            out.println("<p>      La cuenta no ha sido autenticada correctamente</p>");
+            out.println("</div>");
+            out.println("</div>");
+            return;
+        }
         
         JSONArray monthlyData = getAllPostFromLastMonth(fb, historicData);        
         chartCurrentMonth = getChartValues(monthlyData, out, currentCalendar);
