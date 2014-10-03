@@ -1548,7 +1548,7 @@ public class SocialSentPost extends GenericResource {
      */
     public void doEditPost(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         if (request.getParameter("postOut") != null && request.getParameter("wsite") != null) {
-            response.setContentType("text/html;charset=iso-8859-1");
+            response.setContentType("text/html; charset=ISO-8859-1");
             response.setHeader("Cache-Control", "no-cache");
             response.setHeader("Pragma", "no-cache");
 
