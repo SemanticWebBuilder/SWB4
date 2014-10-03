@@ -46,7 +46,7 @@
     out.println("<div dojoType=\"dijit.layout.ContentPane\"/>");
 
     //out.println("<div dojoType=\"dijit.layout.TabContainer\" region=\"center\" id=\""+replaceId(objUri)+"_tabs_twitter\">");
-    out.println("<div class=\"swbform timelineCont\" style=\" width : 2400px; overflow-y: hidden; height:500px;\">");
+    out.println("<div class=\"swbform timelineCont\" style=\" width : 2800px; overflow-y: hidden; height:500px;\">");
     //TODO:Modificar este codigo para recarga de clases, posible cambio por onLoad
     out.println("    <script type=\"dojo/connect\">");
     out.println("       this.watch(\"selectedChildWidget\", function(name, oval, nval){");
@@ -72,7 +72,10 @@
     
     out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + FOLLOWERS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+paramRequest.getLocaleString("connectionsLabel")+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + FOLLOWERS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
     out.println("</div>");
-
+    
+    out.println("<div class=\"pub-redes\" style=\"width: 400px; height:500px;\" id=\""+ objUri + USER_TWEETS_TAB +"\" dojoType=\"dijit.layout.ContentPane\" title=\""+"TWEETS DE USUARIO"+"\" refreshOnShow=\""+"false"+"\" href=\"" + resourcePath + param + USER_TWEETS_TAB +"\" _loadingMessage=\""+loading+"\" style=\"overflow:auto;\" style_=\"border:0px; width:100%; height:100%\" onLoad_=\"onLoadTab(this);\">");
+    out.println("</div>");
+   
 
     out.println("</div><!-- end Bottom TabContainer -->");   
 %>
