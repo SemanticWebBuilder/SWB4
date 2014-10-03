@@ -49,7 +49,7 @@
     //se respondería a un mensaje
 
     User userCreator = postOut.getCreator();
-    System.out.println("userCreator George:" + userCreator);
+    //System.out.println("userCreator George:" + userCreator);
     String userPhoto = userCreator.getPhoto();
     if (userPhoto == null) {
         userPhoto = "/swbadmin/css/images/profileDefImg.jpg";

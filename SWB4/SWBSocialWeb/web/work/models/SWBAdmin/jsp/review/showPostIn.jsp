@@ -22,7 +22,7 @@
 <%
     
     org.semanticwb.model.User user = paramRequest.getUser();
-    System.out.println("postInJsp:" + request.getAttribute("postIn"));
+    //System.out.println("postInJsp:" + request.getAttribute("postIn"));
     if (request.getAttribute("postIn") == null) {
         return;
     }
