@@ -66,7 +66,7 @@ try{
     //System.out.println("showSinceDate:"+showSinceDate);
     String showGeoProfile="off";
     if(request.getParameter("showGeoProfile")!=null) showGeoProfile=request.getParameter("showGeoProfile"); 
-    System.out.println("showGeoProfile:"+showGeoProfile);
+    //System.out.println("showGeoProfile:"+showGeoProfile);
     
     //System.out.println("streamMapView K llega:"+streamMapView);
     //System.out.println("showGeoProfile K llega:"+showGeoProfile);

@@ -70,7 +70,7 @@
     if(selectedNetworks != null && selectedNetworks.length > 0){
         for(String net: selectedNetworks){
             try{
-                System.out.println("net:"+net);
+                //System.out.println("net:"+net);
                 networks.add(net);
             }catch(Exception e){}
         }

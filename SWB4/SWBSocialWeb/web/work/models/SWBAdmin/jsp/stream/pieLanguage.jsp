@@ -94,7 +94,7 @@
 
             }
         } else {
-            System.out.println("7");
+            //System.out.println("7");
             while (it.hasNext()) {
                 Map.Entry e = (Map.Entry) it.next();
                 if (filter.equals(e.getKey().toString())) {
