@@ -23,7 +23,7 @@
     PostIn postIn=(PostIn)sObjPostIn.createGenericInstance();
     SocialNetwork postInSN=postIn.getPostInSocialNetwork();
     
-    System.out.println("Entra a PostInResponse..:"+postIn);
+    //System.out.println("Entra a PostInResponse..:"+postIn);
     
     Map args = new HashMap();
     args.put("wsite", postIn.getSemanticObject().getModel().getName());
