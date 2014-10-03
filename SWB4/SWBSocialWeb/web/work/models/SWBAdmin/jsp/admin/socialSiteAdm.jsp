@@ -15,11 +15,12 @@
 <%@page import="org.semanticwb.portal.api.*"%>
 <%@page import="java.util.*"%>
 <%@page import="java.io.*"%>
+<%@page import="org.semanticwb.social.util.*"%>
 <%@page import="java.text.DecimalFormat"%> 
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <p>
-<h1>Tipo de Licencia</h1>
+<h1>SWB Social License Manager</h1>
 
 </p>
 <%!
@@ -35,20 +36,25 @@
     <h1>Marcas</h1>
     <ul>
 <%
-    Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
+    Iterator<SocialSite> itSocialSites=SWBComparator.sortByDisplayName(SocialSite.ClassMgr.listSocialSites(), usrLang);
     while(itSocialSites.hasNext())
     {
         SocialSite socialSite=itSocialSites.next();
         String socialSiteDescr=socialSite.getDisplayDescription(usrLang);
-        LicenseType licenseType=socialSite.getLicenseType();
-        String slicenseType="Sin asignar";
-        if(licenseType!=null) slicenseType=licenseType.getDisplayTitle(usrLang);
-        
+       
         Institution institution=socialSite.getInstitution(); 
         String sinstitution="Sin asignar";
         if(institution!=null) sinstitution=institution.getDisplayTitle(usrLang);
         
-        %>
+        LicenseType licenseType=socialSite.getLicenseType();
+        String slicenseType="Sin asignar";
+        int days = SWBSocialUtil.Util.Datediff(socialSite.getCreated(), java.util.Calendar.getInstance().getTime()); 
+        String daysStyle="";  
+        if(licenseType!=null) {
+            slicenseType=licenseType.getDisplayTitle(usrLang);
+            if(licenseType.getId().equals("trial") && days>=2) daysStyle="color:red";
+        } 
+        %> 
         <li>
             <a href="<%=url.setParameter("socialSite", socialSite.getId())%>"><%=socialSite.getDisplayTitle(usrLang)%></a>
             <%
@@ -61,9 +67,12 @@
             %>
             (<%=formater.format(dirSize/1024.0)%>)kbytes
             
+            <p>Activo:<%=socialSite.isActive()?"SI":"NO"%></p>
             <p>Institución:<%=sinstitution%></p>
             <p><%=socialSiteDescr!=null?socialSiteDescr:"SIN DESCRIPCIÓN"%></p>
             <p>Tipo de Licencia Asignada:<%=slicenseType%></p>
+            <p>Fecha de creación:<%=socialSite.getCreated()%></p>
+            <p style="<%=daysStyle%>">Días Transcurridos:<%=days%></p>
         </li>
         <%
     }    
