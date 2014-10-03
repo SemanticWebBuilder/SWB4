@@ -2431,7 +2431,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
 
     @Override
     public void getSocialNetStats(SocialNetwork socialNet) {
-        System.out.println("\nEntra a Facebook/getSocialNetStats:"+socialNet+" "+socialNet.getTitle());
+        //System.out.println("\nEntra a Facebook/getSocialNetStats:"+socialNet+" "+socialNet.getTitle());
         SocialSite sSite=(SocialSite)WebSite.ClassMgr.getWebSite(socialNet.getSemanticObject().getModel().getName());
         if(this.isSn_authenticated()){
             if(this.isIsFanPage()){//is a fan page
@@ -2450,7 +2450,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                             jsonObj = new JSONObject(response);
                             likes = jsonObj.getInt("likes");
                             talkingAbout = jsonObj.getInt("talking_about_count");
-                            System.out.println("ISPAGE: friends-"+ 0 + " likes-" + likes + "TAT-" + talkingAbout);
+                            //System.out.println("ISPAGE: friends-"+ 0 + " likes-" + likes + "TAT-" + talkingAbout);
                             SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, 0, likes, talkingAbout);
                             
                         }catch(JSONException jse){
@@ -2490,7 +2490,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                                 subscribers = jsonObj.getJSONObject("summary").getInt("total_count");
                                 if(successfulFriens){
                                     SWBSocialUtil.LOG.logSocialNetStats(sSite, socialNet, friends, subscribers, 0);
-                                    System.out.println("ISUSER: friends-"+ friends + " likes-" + subscribers + "TAT-" + 0);
+                                    //System.out.println("ISUSER: friends-"+ friends + " likes-" + subscribers + "TAT-" + 0);
                                 }
                             }
                         }
@@ -2498,7 +2498,7 @@ public class Facebook extends org.semanticwb.social.base.FacebookBase {
                         log.error("Error recovering subscribers_count ", je);
                     }
                 }catch(IOException e){
-                    System.out.println("Error getting user information"  + e.getMessage());
+                    log.error(e);
                 }
                 
             }
