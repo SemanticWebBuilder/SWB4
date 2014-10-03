@@ -127,7 +127,7 @@
                 negativesundefined++;
             }
         }
-        System.out.println("Entra 8");
+        //System.out.println("Entra 8");
         float intTotalVotos = undefined + highSchool + college + graduate;
         float intPorcentajehighSchool = 0;
         float intPorcentajecollege = ((float) college * 100) / (float) totalPost;
@@ -139,7 +139,7 @@
             intPorcentajegraduate = ((float) graduate * 100) / (float) totalPost;
             intPorcentajeundefined = ((float) undefined * 100) / (float) totalPost;
         }
-        System.out.println("Entra 9");
+        //System.out.println("Entra 9");
         //System.out.println("neutralshighSchool" + neutralshighSchool);
         //System.out.println("totalPosthighSchool" + totalPosthighSchool);
         int totalPositives = positivescollege + positivesgraduate + positiveshighSchool + positivesundefined;

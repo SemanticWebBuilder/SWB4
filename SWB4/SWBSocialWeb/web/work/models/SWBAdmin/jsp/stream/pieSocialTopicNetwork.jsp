@@ -74,7 +74,7 @@
         } else {
             while (it.hasNext()) {
                 Map.Entry e = (Map.Entry) it.next();
-                System.out.println("FILTER:" + filter);
+                //System.out.println("FILTER:" + filter);
                 if (filter.equals(e.getKey().toString())) {
                     ArrayList lista = (ArrayList) e.getValue();
                     getJson(node, lista, totalPost, e.getKey().toString(), filter);
