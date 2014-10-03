@@ -1789,7 +1789,7 @@ System.out.println("\n\n............................\nhtml=\n"+html);
             html.append("    <h4 class=\"titleView\">")
                     .append(semObj.getDisplayName()).append("</h4>").append("\n");
             html.append("    <h5 class=\"titleFilter\">")
-                    .append(semObj.getSemanticClass().getDisplayName("es")).append("</h5>").append("\n");
+                    .append(semObj.getSemanticClass().getDisplayName(lang)).append("</h5>").append("\n");
             html.append("   </div>").append("\n");
             html.append("  </div> <!-- /#header -->").append("\n");
             html.append(" <div id=\"logoSWBS\"></div>").append("\n");
