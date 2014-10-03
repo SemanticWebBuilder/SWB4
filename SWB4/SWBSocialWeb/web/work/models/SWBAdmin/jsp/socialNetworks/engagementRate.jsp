@@ -96,7 +96,7 @@
                 //return 0; 
                 //return a.compareTo(b);
             }catch(Exception e){
-                System.out.print("e");
+                //System.out.print("e");
             }
             return response;
         }                
@@ -135,7 +135,7 @@
                 //return 0; 
                 //return a.compareTo(b);
             }catch(Exception e){
-                System.out.print("e");
+                //System.out.print("e");
             }
             return response;
         }
@@ -155,7 +155,7 @@
     SemanticObject semObj = SemanticObject.createSemanticObject(suri);
     if(semObj == null)return;
     
-    System.out.println("Social Net 1");
+    //System.out.println("Social Net 1");
     SocialNetwork socialNet = (SocialNetwork)SemanticObject.getSemanticObject(suri).createGenericInstance();
     Date dateSince = null;
     Date dateTo = null;

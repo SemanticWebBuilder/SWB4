@@ -74,7 +74,7 @@
     Facebook facebook = (Facebook) semanticObject.createGenericInstance();   
     
     String usrProfile = getFullUserProfileFromId("friends", facebook);
-    System.out.println("array of friends:" + usrProfile);
+    //System.out.println("array of friends:" + usrProfile);
     JSONObject usrResp = new JSONObject(usrProfile);
     JSONArray usrData = usrResp.getJSONArray("data");
 
@@ -120,7 +120,7 @@
 
                 if (usrResp.has("paging")) {
                     nextPage = usrResp.getJSONObject("paging").getString("next");
-                    System.out.println("------THA NEXT PAGE:" + nextPage);
+                    //System.out.println("------THA NEXT PAGE:" + nextPage);
                     String params[] = nextPage.split("&");
                     String nextPageSend = null;
                     String offsetFriends = null;
@@ -131,7 +131,7 @@
                             offsetFriends = params[i].substring(params[i].indexOf("=")+1);
                         }
                     }
-                    System.out.println("np:" + nextPageSend + " of:" + offsetFriends);
+                    //System.out.println("np:" + nextPageSend + " of:" + offsetFriends);
                     /*int position = nextPage.indexOf("__after_id");
                     String nextPageSend = nextPage.substring(position + 11, nextPage.length());
 
