@@ -4,7 +4,7 @@ package org.semanticwb.bsc.element.base;
    /**
    * Define un riesgo que puede presentarse mediante un elemento del BSC: Objetivo, Entregable, Iniciativa o Indicador. Un riesgo tambien puede presentarse independientemente. 
    */
-public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Trashable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Roleable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.bsc.Detailed,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Attachmentable
+public abstract class RiskBase extends org.semanticwb.bsc.element.BSCElement implements org.semanticwb.model.Searchable,org.semanticwb.model.Trashable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Referensable,org.semanticwb.bsc.Help,org.semanticwb.bsc.Detailed,org.semanticwb.bsc.InitiativeAssignable,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.ActionAssignable,org.semanticwb.model.Filterable,org.semanticwb.bsc.DepartmentOrganizable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Attachmentable,org.semanticwb.model.Traceable,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode
 {
    /**
    * Permite seleccionar una alineación. Los posibles valores son Estrategia, Objetivo y Meta
