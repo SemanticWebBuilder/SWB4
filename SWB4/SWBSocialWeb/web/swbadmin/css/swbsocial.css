@@ -1162,6 +1162,7 @@ border-radius: 4px; /*IE */
 .ico-twt span { background: url(images/iconos-swbSocial.png) no-repeat -20px -90px;}
 .ico-fcb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -108px;}
 .ico-ytb span { background: url(images/iconos-swbSocial.png) no-repeat -20px -126px;}
+.ico-ffp span { background: url(images/iconos-swbSocial.png) no-repeat -20px -180px;}
 
 .boton { margin:auto; border:#FFF solid 1px; padding:0.4em 0.9em; color:#FFF;
 box-shadow: 0 0 1px #666666;
@@ -2069,12 +2070,60 @@ border-radius:10px 0 10px 0;
 .helpText { cursor:help; float:right; margin:5px 0 0 5px }
 
 
+
 /*Información Config Redes Sociales*/
-.swb-redesconfig-info { height:115px; overflow:auto; border:solid 1px #CCC; padding:2px 0;}
-.swb-redesconfig-info label { display:block; width:300px;}
+.swb-redesconfig-info { height:115px; overflow:auto; border:solid 1px #CCC; padding:2px 0; width:300px;}
+.swb-redesconfig-info label { display:block;}
 .swb-redesconfig-info label:hover { background:#efefef; cursor:pointer;}
 .swb-redesconfig-info input { position:relative; top:-7px; cursor:pointer;}
 .swb-redesconfig-info span  {position:relative; top:-5px; }
 
 
+/*Comienza Mobile*/
 
+.pagecenter{
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);    
+}
+
+.pageleftTotal{
+    -webkit-transform: translate3d(-100%,0,0);
+    transform: translate3d(-100%,0,0);
+}
+
+.pagerightTotal{
+    -webkit-transform: translate3d(100%,0,0);
+    transform: translate3d(100%,0,0);
+}
+
+.novisible{
+    visibility: hidden;
+}
+
+.visible{ visibility: visible;}
+
+.ui-btn { 
+    display:inline-block; 
+    width:18%;}
+#mobileButons{ text-align:center;}
+
+
+#wrapper {
+	position:absolute; z-index:1;
+	top:0; bottom:0; left:0;
+	width:100%;
+	background:#aaa;
+	overflow:auto;
+}
+
+/*SCROLER*/
+#scroller { overflow: auto; -webkit-overflow-scrolling: touch; }
+#scroller ul { list-style:none; padding:0; margin:0; width:100%; text-align:left;}
+#scroller li { padding:0; background-color:#000; }
+#scroller li a { text-decoration:none; color:#FFF; text-shadow:none; display:block; border-bottom:1px solid #666; line-height:40px; font-size:14px; padding-left:10px; background:url(images/mobile-boton-lista.png) no-repeat right;}
+#scroller li a:active { background:url(images/mobile-boton-lista2.png) no-repeat right #f93; border-bottom:1px solid #fc6; text-shadow:1px 1px 1px #000;}
+
+
+
+
+ /*Termina Mobile*/
