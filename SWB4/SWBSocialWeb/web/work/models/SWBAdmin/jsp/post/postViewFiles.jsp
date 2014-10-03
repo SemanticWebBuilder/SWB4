@@ -32,7 +32,7 @@
         while(imageList.hasNext())
         {
             File file=imageList.next();
-            System.out.println("file:"+SWBPortal.getWebWorkPath()+semObj.getWorkPath()+"/"+file.getName());
+            //System.out.println("file:"+SWBPortal.getWebWorkPath()+semObj.getWorkPath()+"/"+file.getName());
             %>
                  <img src="<%=SWBPortal.getWebWorkPath()+semObj.getWorkPath()+"/"+file.getName()%>"/>
             <%

@@ -79,7 +79,7 @@
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
+                //System.out.println("\n\n\nERROR:" +   response);
             }
             //ioe.printStackTrace();
         } finally {
@@ -123,7 +123,7 @@
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                System.out.println("\n\n\nERROR:" +   response);
+                //System.out.println("\n\n\nERROR:" +   response);
             }
             ioe.printStackTrace();
         } finally {
@@ -199,7 +199,7 @@
                 c.close();
             }
             catch ( IOException ex ) {
-                System.out.println("Error at closing object: " + c.getClass().getName());
+                //System.out.println("Error at closing object: " + c.getClass().getName());
             }
         }
     }
@@ -217,7 +217,7 @@
     public String doRT(PostIn postIn){
         String retweetId = null;
         try {
-            System.out.println("Doing Retweet!!");
+            //System.out.println("Doing Retweet!!");
             SocialNetwork postInSN = postIn.getPostInSocialNetwork();
             twitter4j.Twitter twitter = null;
             Twitter semanticTwitter = (Twitter)postInSN;
@@ -226,25 +226,25 @@
             Long id = Long.parseLong(postIn.getSocialNetMsgId());
             //System.out.println("Tweet to RT in doRT:" + id);
             retweetId = "" + twitter.retweetStatus(id).getId();
-            System.out.println("Retweet!");
+            //System.out.println("Retweet!");
         } catch (TwitterException ex){
-            System.out.println("Error when trying to retweet " + ex.getMessage());
+            //System.out.println("Error when trying to retweet " + ex.getMessage());
         }
         return retweetId;
     }
     public boolean undoRT(PostIn postIn, Long retweetId){
         try {
-            System.out.println("Undoing Retweet");
+            //System.out.println("Undoing Retweet");
             SocialNetwork postInSN = postIn.getPostInSocialNetwork();
             twitter4j.Twitter twitter = null;
             Twitter semanticTwitter = (Twitter)postInSN;
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
             //System.out.println("Tweet to UNDORT " + retweetId);
             twitter.destroyStatus(retweetId); //Destroy Tweet generated when you Retweeted
-            System.out.println("UNDO Retweet!");
+            //System.out.println("UNDO Retweet!");
             return true;
         } catch (TwitterException ex) {
-            System.out.println("Error when trying to undo retweet:" + ex.getMessage());
+            //System.out.println("Error when trying to undo retweet:" + ex.getMessage());
         }
         return false;
     }
@@ -257,12 +257,12 @@
             Twitter semanticTwitter = (Twitter)postInSN;
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
             Long id = Long.parseLong(postIn.getSocialNetMsgId());
-            System.out.println("Doing FAVORITE:" + id);
+            //System.out.println("Doing FAVORITE:" + id);
             twitter.createFavorite(id);
-            System.out.println("Favorited!");           
+            //System.out.println("Favorited!");           
         }catch(TwitterException ex) {
             if(ex.getErrorCode() == 139){//You have already favorited this status
-                System.out.println("You have already favorited this status");
+                //System.out.println("You have already favorited this status");
             }
         }
         return true;
@@ -275,16 +275,16 @@
             Twitter semanticTwitter = (Twitter)postInSN;
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
             Long id = Long.parseLong(postIn.getSocialNetMsgId());
-            System.out.println("UNDOING FAVORITE:" + id);
+            //System.out.println("UNDOING FAVORITE:" + id);
             twitter.destroyFavorite(id);
         } catch (TwitterException ex) { 
-            System.out.println("You have already UNFAVORITED this status ");
+            //System.out.println("You have already UNFAVORITED this status ");
         }
         return true;
     }
     
     public boolean doFBLike(PostIn postIn){
-        System.out.println("LIKE-Start");
+        //System.out.println("LIKE-Start");
         try{
             String postID = postIn.getSocialNetMsgId();        
             SocialNetwork postInSN = postIn.getPostInSocialNetwork();        
@@ -298,24 +298,24 @@
                 try {
                     JSONObject likeResponse = new JSONObject(fbResponse);
                     if(likeResponse.has("error")){
-                        System.out.println(likeResponse.getJSONObject("error").getString("message"));
+                        //System.out.println(likeResponse.getJSONObject("error").getString("message"));
                         return false;
                     }
                 } catch (JSONException ex) {
-                    System.out.println("Error doing like action " +  ex.getMessage());
+                    //System.out.println("Error doing like action " +  ex.getMessage());
                     return false;
                 }
             }
-            System.out.println("LIKE-End");
+            //System.out.println("LIKE-End");
             return true;
         }catch(Exception e){
-            System.out.println("Error:" +  e.getMessage());
+            //System.out.println("Error:" +  e.getMessage());
             return false;
         }
     }
 
     public boolean doFBDislike(PostIn postIn){
-        System.out.println("DISLIKE-Start"); //If you liked a post from a user you gave like, you cannot give unlike            
+        //System.out.println("DISLIKE-Start"); //If you liked a post from a user you gave like, you cannot give unlike            
         try{
             String postID = postIn.getSocialNetMsgId();
             SocialNetwork postInSN = postIn.getPostInSocialNetwork();
@@ -328,20 +328,20 @@
             fbResponse= postRequest(params, "https://graph.facebook.com/" + postID + "/likes" ,
                             "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "DELETE");
             if(!fbResponse.equals("true")){//If the response is not true, there was an error
-                System.out.println("ERROR TRYING TO UNLIKE ID:" + fbResponse);                
+                //System.out.println("ERROR TRYING TO UNLIKE ID:" + fbResponse);                
                     try {
                         JSONObject likeResponse = new JSONObject(fbResponse);
                         if(likeResponse.has("error")){                            
-                            System.out.println(likeResponse.getJSONObject("error").getString("message"));
+                            //System.out.println(likeResponse.getJSONObject("error").getString("message"));
                         }
                     } catch (JSONException ex) {
-                        System.out.println("Error doing like action " +  ex.getMessage() );
+                        //System.out.println("Error doing like action " +  ex.getMessage() );
                     }            
             }
-            System.out.println("DISLIKE-End");
+            //System.out.println("DISLIKE-End");
             return true;
         }catch(Exception e){
-            System.out.println("ERROR:" + e.getMessage());
+            //System.out.println("ERROR:" + e.getMessage());
             return false;
         }
     }
@@ -351,7 +351,7 @@
         SocialNetwork postInSN = postIn.getPostInSocialNetwork();        
         Youtube semanticYoutube = (Youtube) postInSN;
         if(!semanticYoutube.validateToken()){
-            System.out.println("Unable to update the access token!");
+            //System.out.println("Unable to update the access token!");
             return false;
         }
         
@@ -389,7 +389,7 @@
             }
             //System.out.println("--Ejecuted Like/disLike:" + likeInfo.toString());
         }catch(Exception ex){
-            System.out.println("ERROR" + ex.toString());
+            //System.out.println("ERROR" + ex.toString());
             ex.printStackTrace();
             return false;
         }
@@ -402,7 +402,7 @@
         Youtube semanticYoutube = (Youtube) postInSN;
         String favoriteId = null;
         if(!semanticYoutube.validateToken()){
-            System.out.println("Unable to update the access token!");
+            //System.out.println("Unable to update the access token!");
             return null;
         }
         
@@ -454,7 +454,7 @@
                 }
             }
         }catch(Exception ex){
-            System.out.println("ERROR->" + ex.toString());
+            //System.out.println("ERROR->" + ex.toString());
             //ex.printStackTrace();
             return null;
         }
@@ -465,7 +465,7 @@
         SocialNetwork postInSN = postIn.getPostInSocialNetwork();        
         Youtube semanticYoutube = (Youtube) postInSN;
         if(!semanticYoutube.validateToken()){
-            System.out.println("Unable to update the access token!");
+            //System.out.println("Unable to update the access token!");
             return null;
         }
         
@@ -492,7 +492,7 @@
                favoriteInfo.append(line);
             }
         }catch(Exception ex){
-            System.out.println("ERROR->" + ex.toString());
+            //System.out.println("ERROR->" + ex.toString());
             return favoriteId; //On error return the same id
         }
         //The server does not return info when the favorite is deleted.
@@ -504,14 +504,14 @@
     String lang = request.getParameter("lang");
     String postUri = request.getParameter("postUri");
     String action = request.getParameter("action");
-    System.out.println("Action to be executed: " +  action);
+    //System.out.println("Action to be executed: " +  action);
     
     SemanticObject semObject = SemanticObject.createSemanticObject(postUri);
     PostIn postIn = (PostIn) semObject.getGenericInstance();
     SocialNetwork postInSN = postIn.getPostInSocialNetwork();
     
     if(action == null){//Displays user actions available for each social network
-        System.out.println("\n\t\tDisplays user actions available for each social network");
+        //System.out.println("\n\t\tDisplays user actions available for each social network");
         out.println("<b><font color=\"#CC6600\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("availableActions", lang) + "</font></b></br>");
         
         out.print("<style type=\"text/css\">");
@@ -545,7 +545,7 @@
                 }
             }catch(Exception e){
                 out.println("This tweet might not exist anymore");
-                System.out.println("Error getting tweet information"  + e.getMessage());
+                //System.out.println("Error getting tweet information"  + e.getMessage());
             }
         }else if(postInSN instanceof Facebook){//Displays Like
             out.println("<b><font color=\"#CC6600\">Facebook</font></b></br>");
@@ -574,7 +574,7 @@
                 }
             }catch(Exception e){
                 out.println("This post might not exist anymore");
-                System.out.println("Error getting like information for Facebook post"  + e.getMessage());
+                //System.out.println("Error getting like information for Facebook post"  + e.getMessage());
             }
         }else if(postInSN instanceof Youtube){//Displays Like, Favorite
             out.println("<b><font color=\"#CC6600\">Youtube</font></b></br>");
@@ -599,7 +599,7 @@
                     out.print("<a href=\"#\" onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + "/work/models/SWBAdmin/jsp/post/postActions.jsp?postUri=" + postIn.getEncodedURI() + "&action=UNDORT&retweetId=" + retweetId + "&lang=" + lang + "','" + postIn.getURI() +  "/RT'); return false;" +"\">" + SWBSocialResUtil.Util.getStringFromGenericLocale("undoRtPostIn", lang) + "</a> ");
                 }
             }catch(NumberFormatException nfe){
-                System.out.println("Error undoing retweet:" + nfe.getMessage());
+                //System.out.println("Error undoing retweet:" + nfe.getMessage());
             }
         }else if(action.equalsIgnoreCase("FAV")){//For Twitter and Youtube
             if(postInSN instanceof Twitter){
