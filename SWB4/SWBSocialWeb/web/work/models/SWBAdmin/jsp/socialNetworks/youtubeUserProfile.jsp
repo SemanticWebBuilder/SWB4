@@ -33,7 +33,8 @@
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95");
 
         }catch(Exception e){
-            System.out.println("Error getting user information"  + e.getMessage());
+            //System.out.println("Error getting user information"  + e.getMessage());
+            e.printStackTrace();
         }
         return response;
     }
@@ -64,7 +65,7 @@
     int mutualFriendsCount = 0;
     
     
-    System.out.println("Displaying user information!!");
+    //System.out.println("Displaying user information!!");
     JSONObject information = usrResp.getJSONObject("entry");      
 
     

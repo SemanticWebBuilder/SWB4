@@ -66,9 +66,9 @@
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
         //semanticYoutube.setRefreshToken("1/EBI7ANgfHcp7CHm3acP5hGoFZ29XhZzIzT2jv_h-3so");
-        System.out.println("ACCESS TOKEN:" + semanticYoutube.getAccessToken());
+        //System.out.println("ACCESS TOKEN:" + semanticYoutube.getAccessToken());
         if(!semanticYoutube.validateToken()){//If was unable to refresh the token
-            System.out.println("unable to refresh the token!");
+            //System.out.println("unable to refresh the token!");
             out.println("Problem refreshing access token");
             return;
         }
