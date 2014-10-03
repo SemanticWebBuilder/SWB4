@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <%
         //Se recupera la variable de sesion y el code que regresa Instagram y se redirecciona
-        System.out.println("Redirecting................");
+        //System.out.println("Redirecting................");
         session.getAttribute("redirectInstagram");
         response.sendRedirect(session.getAttribute("redirectInstagram") + "?code=" + request.getParameter("code"));
 %> 

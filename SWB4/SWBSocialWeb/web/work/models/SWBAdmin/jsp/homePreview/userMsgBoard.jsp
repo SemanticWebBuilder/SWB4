@@ -235,9 +235,9 @@
             System.out.println("Va a Borrar:"+userMessage);
             userMessage.remove(); 
         }*/
-        System.out.println("user:"+user+",ConfigSite:"+wsite);
+        //System.out.println("user:"+user+",ConfigSite:"+wsite);
         Iterator<UserMessage> itUserMsg = UserMessage.ClassMgr.listUserMessageByUsers(user, wsite); 
-        System.out.println("itUserMsgJJ:"+itUserMsg); 
+        //System.out.println("itUserMsgJJ:"+itUserMsg); 
         HashMap hashBydate = new HashMap();
         //ArrayList lista = new ArrayList();
         while (itUserMsg.hasNext()) {
