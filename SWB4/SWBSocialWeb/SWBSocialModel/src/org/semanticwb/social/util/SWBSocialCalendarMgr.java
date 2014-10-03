@@ -155,13 +155,13 @@ public class SWBSocialCalendarMgr {
                 Date today=new Date();
                 if(eval(fastCalendar))
                 {
-                    System.out.println("postout:"+postOut+", esta publicado?"+postOut.isPublished()+", necesita Autorizacion?:"+ pfmgr.needAnAuthorization(postOut));
+                    //System.out.println("postout:"+postOut+", esta publicado?"+postOut.isPublished()+", necesita Autorizacion?:"+ pfmgr.needAnAuthorization(postOut));
                     boolean needAuthorization = pfmgr.needAnAuthorization(postOut);
                     
                     //if(!postOut.isPublished() && !pfmgr.needAnAuthorization(postOut))   //Si no ha sido publicado y no necesita autorizacón en flujos
                     if(!postOut.isPublished() && ((!pfmgr.needAnAuthorization(postOut)) || (needAuthorization && postOut.getPflowInstance() != null && postOut.getPflowInstance().getStatus() == 3)))
                     {
-                        System.out.println("VA A PUBLICAR POR FASTCALENDAR, HEEEE!!");
+                        //System.out.println("VA A PUBLICAR POR FASTCALENDAR, HEEEE!!");
                         try
                         {
                             SWBSocialUtil.PostOutUtil.publishPost(postOut);
@@ -179,7 +179,7 @@ public class SWBSocialCalendarMgr {
                             log.error(e);
                         }
                     }else{  //Si ya fué evaluado correctamente (llego la fecha y hora para publicarlo), pero no cumple con algún flujo, se elimina el FastCalendar, cuando termine en el flujo se podra publicar el PostOut normalmente.
-                        System.out.println("ELIMINO EL FASTCALENDAR...-1");
+                        //System.out.println("ELIMINO EL FASTCALENDAR...-1");
                         postOut.removeFastCalendar();
                         fastCalendar.remove();
                     }
@@ -190,7 +190,7 @@ public class SWBSocialCalendarMgr {
                      {
                         postOut.removeFastCalendar();
                         fastCalendar.remove();
-                        System.out.println("ELIMINO EL FASTCALENDAR...-2");
+                        //System.out.println("ELIMINO EL FASTCALENDAR...-2");
                      }
                 }        
             }
@@ -210,12 +210,12 @@ public class SWBSocialCalendarMgr {
     private static boolean eval(FastCalendar fastCalendar){
         Date inidate = fastCalendar.getFc_date();
         Date today=new Date();
-        System.out.println("inidate:"+inidate+",today:"+today);
-        System.out.println("inidate Year:"+inidate.getYear()+",inidate Month:"+inidate.getMonth()+",inidate Day:"+inidate.getDay()+",inidate Min:"+inidate.getMinutes());
-        System.out.println("today Year:"+today.getYear()+",today Month:"+today.getMonth()+",today Day:"+today.getDay()+",today Min:"+today.getMinutes());
+        //System.out.println("inidate:"+inidate+",today:"+today);
+        //System.out.println("inidate Year:"+inidate.getYear()+",inidate Month:"+inidate.getMonth()+",inidate Day:"+inidate.getDay()+",inidate Min:"+inidate.getMinutes());
+        //System.out.println("today Year:"+today.getYear()+",today Month:"+today.getMonth()+",today Day:"+today.getDay()+",today Min:"+today.getMinutes());
         if(inidate.getYear()==today.getYear() && inidate.getMonth()==today.getMonth() && inidate.getDay()==today.getDay() && inidate.getHours()==today.getHours() && inidate.getMinutes()<=today.getMinutes())
         {
-            System.out.println("Si son Iguales...");
+            //System.out.println("Si son Iguales...");
             return true;
         }
         return false;

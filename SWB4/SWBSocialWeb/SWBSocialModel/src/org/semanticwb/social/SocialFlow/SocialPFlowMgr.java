@@ -706,12 +706,10 @@ public class SocialPFlowMgr {
                                         {
                                             if(resource.getFastCalendar()==null)
                                             {
-                                                System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1");
                                                 SWBSocialUtil.PostOutUtil.publishPost(resource);
                                                 publishedMsgmailToMsgAuthor(resource);
                                                 if(resource.getPflowInstance()!=null)
                                                 {
-                                                    System.out.println("Se va a publicar Jorge-20 CHECATE ESTO AMIGO:1--PONE STATUS DE 2...");
                                                     resource.getPflowInstance().setStatus(2);
                                                     resource.getPflowInstance().setStep("swbSocialPublished");   
                                                 }
@@ -851,7 +849,6 @@ public class SocialPFlowMgr {
                                 {
                                     if(resource.getFastCalendar()==null)
                                     {
-                                        System.out.println("Se va a publicar Jorge-20:3");
                                         SWBSocialUtil.PostOutUtil.publishPost(resource);
                                         publishedMsgmailToMsgAuthor(resource);
                                         if(resource.getPflowInstance()!=null)

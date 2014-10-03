@@ -117,12 +117,12 @@ public class MonitorMgr {
                                 }**/
                             }else if(postOutNet.getPo_created()!=null){
                                 int days=SWBSocialUtil.Util.Datediff(postOutNet.getPo_created(), Calendar.getInstance().getTime());
-                                System.out.println("Monitor/respuesta:False--->Days:"+days);
+                                //System.out.println("Monitor/respuesta:False--->Days:"+days);
                                 if(days>=1)
                                 {
-                                    System.out.println("Va a eliminar de Monitor el PostOutNet:"+postOutNet);
+                                    //System.out.println("Va a eliminar de Monitor el PostOutNet:"+postOutNet);
                                     postMonitor.removePostOutNet(postOutNet);
-                                    System.out.println("Elimino de Monitor el PostOutNet:"+postOutNet);
+                                    //System.out.println("Elimino de Monitor el PostOutNet:"+postOutNet);
                                 }
                             }else{
                                 postMonitor.removePostOutNet(postOutNet);

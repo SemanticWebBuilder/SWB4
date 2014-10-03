@@ -52,9 +52,9 @@ public class TestDelectLang {
             {
                 DetectorFactory.loadProfile(profileDir); 
                 Detector detector = DetectorFactory.create();
-                System.out.println("Lang:"+detector.detect());
+                //System.out.println("Lang:"+detector.detect());
                 detector.append("EE.UU. expulsa a tres diplomáticos #venezolanos en respuesta a la expulsión de tres estadounidenses la semana pasada http://cnn.it/1jxkEke");
-                System.out.println("Lang:"+detector.detect());
+                //System.out.println("Lang:"+detector.detect());
                 /*
                 ArrayList<Language> langlist = detector.getProbabilities();
                 if(!langlist.isEmpty())

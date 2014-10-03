@@ -605,7 +605,8 @@ public class Youtube extends org.semanticwb.social.base.YoutubeBase {
                 * */
 
             } catch (Exception ex) {
-                System.out.println("Error en la autenticacion: " + ex);
+                //System.out.println("Error en la autenticacion: " + ex);
+                log.error(ex);
             } finally {
                 out.println("<script type=\"text/javascript\">");
                 out.println("try{" +

@@ -234,7 +234,7 @@ public class ListenerMgr implements SWBAppObject {
             {
                 //////////////////////Agregado para alerta de cantidad de mensajes inusuales en un Stream
                 int streamIterations=stream.getStreamIterations();
-                System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations);
+                //System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations);
                 if(streamIterations>0 && stream.getStreamPercentageAlert()>0 && stream.getStreamEmail2Alerts().trim().length()>0) //Si los usuarios escribieron un porcentaje en el dato del Stream, entonces se revisa
                 {
                     float oldStreamPostInAvg=stream.getPromPostNumber();
@@ -254,7 +254,7 @@ public class ListenerMgr implements SWBAppObject {
                             messageBody+="ha sobrepasado el porcentaje del "+stream.getStreamPercentageAlert()+"% definido para el stream en cada iteración.<br/><br/><br/><br/><br/><br/><br/><br/>";
                             messageBody+="<b>Atte. Servicio de Notificaciones de SWBSocial</b>";
                             String emails=stream.getStreamEmail2Alerts();
-                            System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
+                            //System.out.println("Se enviarían emails a estas cuentas notificando que se sobrepaso el porcentaje de mensajes de entrada del Stream:"+emails);
                             try{
                                 SWBUtils.EMAIL.sendBGEmail(emails, "Notificación-Mensajes sobrepasó promedio en Stream:"+stream.getDisplayTitle("es"), messageBody);
                                 //System.out.println("Envió correo:"+difAvgs);
@@ -267,7 +267,7 @@ public class ListenerMgr implements SWBAppObject {
                     }
                 }
                 stream.setStreamIterations(streamIterations+1); //Grava la primera iteración
-                System.out.println("Iteración:"+stream.getStreamIterations());
+                //System.out.println("Iteración:"+stream.getStreamIterations());
                 ///////////////////// Termina Agregado para alerta de cantidad de mensajes inusuales en un Stream
                 boolean isThereNoListenAliveNets=false;
                 Iterator<SocialNetwork> itSocialNets=stream.listSocialNetworks();

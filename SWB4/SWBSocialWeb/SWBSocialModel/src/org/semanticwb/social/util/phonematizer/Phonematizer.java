@@ -50,9 +50,9 @@ public class Phonematizer {
         String in_word="inovasion";
 
         in_word=normalizer(in_word);
-        System.out.println("normalizer:"+in_word);
+        //System.out.println("normalizer:"+in_word);
         String out_word=phonematize(in_word);
-        System.out.println("out_word:"+out_word);
+        //System.out.println("out_word:"+out_word);
     }
 
 

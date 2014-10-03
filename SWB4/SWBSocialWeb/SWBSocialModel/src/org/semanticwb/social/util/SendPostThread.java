@@ -90,7 +90,7 @@ public class SendPostThread extends java.lang.Thread {
                 while (!postableList.isEmpty())
                 {
                     Object obj=postableList.removeLast();
-                    System.out.println("SendPostThread/obj:"+obj);
+                    //System.out.println("SendPostThread/obj:"+obj);
                     try
                     {
                      if(obj instanceof PostableObj)
@@ -105,7 +105,7 @@ public class SendPostThread extends java.lang.Thread {
                           {
                               Messageable messageable=(Messageable) postable;
                               messageable.postMsg((Message)postableObj.getPost());
-                              System.out.println("Se publica-4");
+                              //System.out.println("Se publica-4");
                               //postOut.setPublished(true);
                           }else if(postOut instanceof Photo && postable instanceof Photoable)
                           {
