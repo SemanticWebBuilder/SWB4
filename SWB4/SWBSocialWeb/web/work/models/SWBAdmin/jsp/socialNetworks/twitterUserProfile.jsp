@@ -142,7 +142,7 @@
                 i++;
             }
         } catch (Exception te) {
-            System.out.println("Se presento un error en User Profile!!");            
+            //System.out.println("Se presento un error en User Profile!!");            
             te.printStackTrace();
         }
 %>
