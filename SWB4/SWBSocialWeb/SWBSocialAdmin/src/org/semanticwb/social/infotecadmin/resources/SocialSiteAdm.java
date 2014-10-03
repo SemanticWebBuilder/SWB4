@@ -19,6 +19,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.social.Institution;
 import org.semanticwb.social.LicenseType;
 import org.semanticwb.social.SocialSite;
 
@@ -55,16 +56,20 @@ public class SocialSiteAdm extends GenericResource {
      @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         try {
-            System.out.println("Entra a SocialSiteAdm/processAction");
             String action=response.getAction();
             String lang=response.getUser().getLanguage();
-            if(request.getParameter("socialSite")!=null && request.getParameter("licenseType")!=null && action.equals(SWBResourceURL.Action_EDIT))
+            if(request.getParameter("socialSite")!=null && request.getParameter("licenseType")!=null && request.getParameter("institution")!=null && action.equals(SWBResourceURL.Action_EDIT))
             {
-                WebSite wsite=response.getWebPage().getWebSite();
-                System.out.println("Entra a SocialSiteAdm/processAction2--:"+request.getParameter("licenseType"));
+                System.out.println("License en Clase:"+request.getParameter("licenseType"));
+                WebSite wsite=response.getWebPage().getWebSite(); 
                 SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(request.getParameter("socialSite"));
+                
                 LicenseType licenseType=LicenseType.ClassMgr.getLicenseType(request.getParameter("licenseType"), wsite);
                 socialSite.setLicenseType(licenseType);
+                
+                Institution institution=Institution.ClassMgr.getInstitution(request.getParameter("institution"), wsite);
+                socialSite.setInstitution(institution);
+                
                 response.setRenderParameter("statusMsg", "Marca "+socialSite.getDisplayTitle(lang)+" Actualizada");                
             }
         }catch(Exception e){log.error(e);}        
