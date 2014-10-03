@@ -119,12 +119,12 @@
                 }
                 out.println("<div align=\"center\"><h2>" + message + "</h2><br/></div>");
             }
-            System.out.println("Error displaying timeline:" + te.getErrorMessage());
-            te.printStackTrace();
+            //System.out.println("Error displaying timeline:" + te.getErrorMessage());
+            //te.printStackTrace();
             gotError = true;
         }catch(Exception e){
-            System.out.println("Error displaying timeline" + e.getMessage());
-            e.printStackTrace();
+            //System.out.println("Error displaying timeline" + e.getMessage());
+            //e.printStackTrace();
             gotError = true;
         }
         out.println("</div>");
@@ -142,7 +142,7 @@
     <script type="dojo/method">
     <%        
         String intervalId = (String)session.getAttribute(objUri + "pooling");
-        System.out.println("\n\nSESSION VAR FOR CURRENT TAB:" + intervalId);
+        //System.out.println("\n\nSESSION VAR FOR CURRENT TAB:" + intervalId);
         
         if(intervalId == null){
     %>

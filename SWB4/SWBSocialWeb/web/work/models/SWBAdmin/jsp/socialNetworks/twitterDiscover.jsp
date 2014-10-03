@@ -59,34 +59,34 @@
 
             // Print the trends.
             for (Trend trends : dailyTrends.getTrends()) {
-                System.out.println("get name : " + trends.getName());
-                System.out.println("get URL : " + trends.getURL());
-                System.out.println("get Query : " + trends.getQuery());
+                //System.out.println("get name : " + trends.getName());
+                //System.out.println("get URL : " + trends.getURL());
+                //System.out.println("get Query : " + trends.getQuery());
                 out.write("<p><a href=\"" + trends.getURL() + "\" target=\"_blank\">" + trends.getName() +"</a></p>");                
                 i++;
             }
             
-            System.out.println("Total of trends" + i);
+            //System.out.println("Total of trends" + i);
             ResponseList<Category> categories = twitterBean.getSuggestedUserCategories();
             Iterator<Category> catIt = categories.iterator();
             while(catIt.hasNext()){
                 Category c = catIt.next();
-                System.out.println("Category:" + c.getName() + " slug:" + c.getSlug());
+                //System.out.println("Category:" + c.getName() + " slug:" + c.getSlug());
             }
             
             ResponseList<User> users = twitterBean.getUserSuggestions("negocios");
             
             for (User user : users) {
                 if (user.getStatus() != null) {
-                    System.out.println("@" + user.getScreenName() + " - " + user.getStatus().getText());
+                    //System.out.println("@" + user.getScreenName() + " - " + user.getStatus().getText());
                 } else {
                     // the user is protected
-                    System.out.println("@" + user.getScreenName());
+                    //System.out.println("@" + user.getScreenName());
                 }
             }
               
         } catch (Exception te) {
-            System.out.println("Se presento un error en Discover!!");
+            //System.out.println("Se presento un error en Discover!!");
             te.printStackTrace();
         }            
 %>    
