@@ -20,7 +20,7 @@
 <%@page import="org.semanticwb.social.admin.resources.util.SWBSocialResUtil"%>
 
 <%
-    System.out.println("mostrando calendario");
+    //System.out.println("mostrando calendario");
     if (request.getAttribute("postOut") == null) {
         return;
     }

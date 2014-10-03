@@ -21,12 +21,12 @@
 <jsp:useBean id="paramRequest" scope="request" type="org.semanticwb.portal.api.SWBParamRequest"/>
 
 <%
-    System.out.println("suri EN JSP:"+request.getParameter("suri")); 
+    //System.out.println("suri EN JSP:"+request.getParameter("suri")); 
     String suri=request.getParameter("suri");
     if(suri==null) return;
     User user=paramRequest.getUser(); 
     if(request.getAttribute("postOut")==null) return;
-    System.out.println("postOut EN JSP:"+request.getParameter("postOut")); 
+    //System.out.println("postOut EN JSP:"+request.getParameter("postOut")); 
     
     SemanticObject semObj=(SemanticObject)request.getAttribute("postOut");
     if(semObj==null) return; 

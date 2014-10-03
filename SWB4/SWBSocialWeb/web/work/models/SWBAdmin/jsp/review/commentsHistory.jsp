@@ -38,9 +38,9 @@
     
     //System.out.println("--------------------");
     ArrayList postOutSocialNets = SWBSocialUtil.sparql.getPostOutSocialNetwors(postOut);
-    for(int i= 0; i < postOutSocialNets.size(); i++){
+    /*for(int i= 0; i < postOutSocialNets.size(); i++){
         System.out.println("->" + postOutSocialNets.get(i));
-    }
+    }*/
     
     //System.out.println("--------------------");
     /*ArrayList postOutSocialOUTNETS = SWBSocialUtil.sparql.getPostOutNetsPostOut(postOut, (SocialNetwork)SemanticObject.createSemanticObject("http://www.NewBrandOne.swb#social_Facebook:1").createGenericInstance());
