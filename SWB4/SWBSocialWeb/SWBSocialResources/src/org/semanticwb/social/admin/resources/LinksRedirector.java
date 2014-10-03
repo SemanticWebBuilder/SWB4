@@ -55,14 +55,14 @@ public class LinksRedirector extends GenericResource {
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("Entra a LinksRedirector/doView/uri:"+request.getParameter("uri")+", neturi:"+request.getParameter("neturi")+", code:"+request.getParameter("code"));
+        ////System.out.println("Entra a LinksRedirector/doView/uri:"+request.getParameter("uri")+", neturi:"+request.getParameter("neturi")+", code:"+request.getParameter("code"));
         if(request.getParameter("uri")!=null && request.getParameter("neturi")!=null && request.getParameter("code")!=null)
         {
             SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("uri"));
             if(semObj!=null)
             {
                 PostOut postOut=(PostOut)semObj.createGenericInstance(); 
-                System.out.println("Entra a LinksRedirector/doView/postOut:"+postOut);
+                ////System.out.println("Entra a LinksRedirector/doView/postOut:"+postOut);
                 if(postOut!=null)
                 {
                     SemanticObject semObjNet=SemanticObject.createSemanticObject(request.getParameter("neturi"));
@@ -74,7 +74,7 @@ public class LinksRedirector extends GenericResource {
                         while(itLinks.hasNext())
                         {
                             PostOutLinksHits link=itLinks.next();
-                            System.out.println("Entra a LinksRedirector/doView/link:"+link);
+                            ////System.out.println("Entra a LinksRedirector/doView/link:"+link);
                             if(link.getSocialNet()!=null && link.getSocialNet().getURI().equals(socialNetwork.getURI()) && link.getPol_code().equals(request.getParameter("code")))
                             {
                                 link.setPol_hits(link.getPol_hits()+1);
@@ -84,19 +84,19 @@ public class LinksRedirector extends GenericResource {
                                 //Por el momento con la ip de los usuarios podría saber su ubicación y talvez ubicarlos en un mapa de google maps. (No esta por el mpmento)
                                 if(SWBPortal.getEnv("swbsocial/allowLinkHitsUserInfo", "false").equalsIgnoreCase("true"))
                                 {
-                                    System.out.println("Remote Addres:"+request.getRemoteAddr());
+                                    ////System.out.println("Remote Addres:"+request.getRemoteAddr());
                                     /*
                                     Enumeration<String> enHeaders=request.getHeaderNames();
                                     while(enHeaders.hasMoreElements())
                                     {
                                         String headerName=enHeaders.nextElement();
-                                        System.out.println("headerName:"+headerName+",value:"+request.getHeader(headerName));
+                                        //System.out.println("headerName:"+headerName+",value:"+request.getHeader(headerName));
                                     }
                                     Enumeration<String> enAttrs=request.getAttributeNames();
                                     while(enAttrs.hasMoreElements())
                                     {
                                         String attr=enAttrs.nextElement();
-                                        System.out.println("attr:"+attr+",value:"+request.getAttribute(attr));
+                                        //System.out.println("attr:"+attr+",value:"+request.getAttribute(attr));
                                     }
                                     * */
                                     
@@ -106,7 +106,7 @@ public class LinksRedirector extends GenericResource {
                                 }
 
                                 PrintWriter out=response.getWriter(); 
-                                System.out.println("Entra a LinksRedirector/doView/REDIRECT A:"+link.getTargetUrl());
+                                ////System.out.println("Entra a LinksRedirector/doView/REDIRECT A:"+link.getTargetUrl());
                                 out.println("<meta http-equiv=\"refresh\" content=\"0;url="+link.getTargetUrl()+"\">");
                                 break;
                            }

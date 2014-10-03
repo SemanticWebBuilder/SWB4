@@ -75,7 +75,7 @@ public class StreamMap extends GenericResource{
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException 
     {
-        //System.out.println("EWntra a StremMap-0");
+        ////System.out.println("EWntra a StremMap-0");
         PrintWriter out = response.getWriter();
         User user=paramRequest.getUser();
         String suri=request.getParameter("suri");
@@ -238,7 +238,7 @@ public class StreamMap extends GenericResource{
         out.println("</div>");
         if(request.getParameter("mapSinceDate")!=null)
         {
-            //System.out.println("mapSinceDate k LLega a Clase:"+request.getParameter("mapSinceDate"));
+            ////System.out.println("mapSinceDate k LLega a Clase:"+request.getParameter("mapSinceDate"));
             out.println("<div class=\"swbSocialMapIframe\">");
             out.println("   <iframe width=\"100%\" height=\"100%\" src=\""+paramRequest.getRenderUrl().setMode(Mode_showMap).setParameter("suri", request.getParameter("suri")).setParameter("mapSinceDate"+semObj.getModel().getName() + semObj.getId(), request.getParameter("mapSinceDate")).setParameter("streamMapView", request.getParameter("streamMapView")).setParameter("networks", request.getParameterValues("networks")).setParameter("showGeoProfile", request.getParameter("showGeoProfile")) +"\"></iframe> ");
             out.println("</div>");
@@ -279,7 +279,7 @@ public class StreamMap extends GenericResource{
                if (dis != null) {
                    try {
                        request.setAttribute("swbSocialUser", swbSocialUser.getSemanticObject());
-                       //System.out.println("Map/doShowDetails:"+request.getParameter("suri"));
+                       ////System.out.println("Map/doShowDetails:"+request.getParameter("suri"));
                        request.setAttribute("suri", request.getParameter("suri"));
                        request.setAttribute("paramRequest", paramRequest);
                        dis.include(request, response);

@@ -833,7 +833,7 @@ public class NewBrand extends GenericResource {
 
                     //Refrescar el árbol (Zkoss)
                     //Tree tree=(Tree)request.getSession().getAttribute("tree");
-                    //System.out.println(tree);
+                    ////System.out.println(tree);
                     //tree.setModel(tree.getModel());
                     //Refrescar nodo del árbol...
                     //SWBSocialResourceUtils.Resources.createNewBrandNode(request, paramRequest, site);
@@ -899,7 +899,7 @@ public class NewBrand extends GenericResource {
             Iterator<UserRepository> itUsrReps = SWBContext.listUserRepositories();
             while (itUsrReps.hasNext()) {
                 UserRepository usrRep = itUsrReps.next();
-                System.out.println("usrRep.getId():"+usrRep.getId());
+                //System.out.println("usrRep.getId():"+usrRep.getId());
                 out.println("<option value=\"" + usrRep.getId() + "\">" + usrRep.getDisplayTitle(lang) + "</option>");
             }
             out.println("</select>");

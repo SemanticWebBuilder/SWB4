@@ -158,7 +158,7 @@ public class SWBSocialRule extends GenericResource {
         WebPage WebPage = response.getWebPage();
         String tmparam = request.getParameter("tm");
         SocialSite socialSite=SocialSite.ClassMgr.getSocialSite(tmparam);
-        System.out.println("processAction/socialSite..J:"+socialSite.getId());
+        ////System.out.println("processAction/socialSite..J:"+socialSite.getId());
         try {
             if (id != null) {
                 if (accion.equals("removeit")) {
@@ -181,10 +181,10 @@ public class SWBSocialRule extends GenericResource {
                     if (request.getParameter("tmsid") != null) {
                         tmsid = request.getParameter("tmsid");
                     }
-                    System.out.println("processAction/tmsid..J:"+tmsid);
+                    ////System.out.println("processAction/tmsid..J:"+tmsid);
                     //SocialSite ptm = SocialSite.ClassMgr.getSocialSite(tmsid);
                     SocialRule rRule = SocialRule.ClassMgr.getSocialRule(id, socialSite);
-                    System.out.println("processAction/rRule..J:"+rRule);
+                    ////System.out.println("processAction/rRule..J:"+rRule);
                     rRule.setTitle(request.getParameter("title"));
                     rRule.setDescription(request.getParameter("description"));
                     rRule.setModifiedBy(user);
@@ -581,7 +581,7 @@ public class SWBSocialRule extends GenericResource {
             hmOper.put("!=", paramRequest.getLocaleString("msgNotContains"));
             for(int i=1; i<26; i++)
             {
-                //System.out.println("i "+i);
+                ////System.out.println("i "+i);
                 hmOper.put("-"+i, "-"+i);
             }
             hmAttr.put("Operador", hmOper);
@@ -891,7 +891,7 @@ public class SWBSocialRule extends GenericResource {
                     String thisValue = (String) itOper.next();
                     String thisLabel = (String) hmOper.get(thisValue);
 
-                    //System.out.println("Operadores cargados: "+thisLabel+", "+thisValue);
+                    ////System.out.println("Operadores cargados: "+thisLabel+", "+thisValue);
 
                     Element operator = dom.createElement("operator");
                     operator.setAttribute("value", thisValue);
@@ -1006,7 +1006,7 @@ public class SWBSocialRule extends GenericResource {
         //log.debug("doGateway: URI"+request.getParameter("suri")+", id:"+request.getParameter("id"));
         ServletInputStream in = request.getInputStream();
         String sin=SWBUtils.IO.readInputStream(in);
-        //System.out.println("sin:"+sin);
+        ////System.out.println("sin:"+sin);
         Document dom = SWBUtils.XML.xmlToDom(sin);
 
         if (!dom.getFirstChild().getNodeName().equals("req")) {
@@ -1092,7 +1092,7 @@ public class SWBSocialRule extends GenericResource {
                 strXMLRule += "<rule/>";
             }
             try {
-                System.out.println("strXMLRule_George:"+strXMLRule);
+                ////System.out.println("strXMLRule_George:"+strXMLRule);
                 rRule.setXml(strXMLRule);
                 rRule = null;
                 dom = SWBUtils.XML.xmlToDom(strXMLRule);

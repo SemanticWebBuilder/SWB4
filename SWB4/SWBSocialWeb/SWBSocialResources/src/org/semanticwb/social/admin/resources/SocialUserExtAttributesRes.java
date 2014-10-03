@@ -100,7 +100,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
       
    private void setUserExtendedAttributes(HttpServletRequest request, SWBActionResponse response) {
         try {
-            //System.out.println("setUserExtendedAttributes-1:"+request.getParameter("suri"));
+            ////System.out.println("setUserExtendedAttributes-1:"+request.getParameter("suri"));
             if(request.getParameter("suri")!=null)
             {
                 //WebSite wsite=SWBContext.getAdminWebSite();
@@ -117,7 +117,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
                 }**/
              
                 
-                //System.out.println("setUserExtendedAttributes-2:"+list.hasNext()+",usr:"+user);
+                ////System.out.println("setUserExtendedAttributes-2:"+list.hasNext()+",usr:"+user);
                 while (list.hasNext()) {
                     SemanticProperty sp = list.next();
                     if (null == request.getParameter(sp.getName())) {
@@ -128,9 +128,9 @@ public class SocialUserExtAttributesRes extends GenericResource{
                         //if(sp.getName().equals(SocialUserExtAttributes.social_userCanReValueMsg.getName())) socialExtAtt.setUserCanReValueMsg(false);
                         //if(sp.getName().equals(SocialUserExtAttributes.social_userCanRemoveMsg.getName())) socialExtAtt.setUserCanRemoveMsg(false);
                         //if(sp.getName().equals(SocialUserExtAttributes.social_userCanRespondMsg.getName())) socialExtAtt.setUserCanRespondMsg(false);
-                        //System.out.println("setUserExtendedAttributes-3REMGeorge24:"+sp+",user prop:"+user.getExtendedAttribute(sp));
+                        ////System.out.println("setUserExtendedAttributes-3REMGeorge24:"+sp+",user prop:"+user.getExtendedAttribute(sp));
                     } else {
-                        //System.out.println("setUserExtendedAttributes-4:"+sp);
+                        ////System.out.println("setUserExtendedAttributes-4:"+sp);
                         String [] values = request.getParameterValues(sp.getName());
                         if (values.length > 1) {
                             String value = "";
@@ -151,7 +151,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
                             //if(sp.getName().equals(SocialUserExtAttributes.social_userCanReValueMsg.getName())) socialExtAtt.setUserCanReValueMsg(true);
                             //if(sp.getName().equals(SocialUserExtAttributes.social_userCanRemoveMsg.getName())) socialExtAtt.setUserCanRemoveMsg(true);
                             //if(sp.getName().equals(SocialUserExtAttributes.social_userCanRespondMsg.getName())) socialExtAtt.setUserCanRespondMsg(true);
-                            //System.out.println("sp:"+sp+", a True");
+                            ////System.out.println("sp:"+sp+", a True");
                         } else if (sp.isInt()) {
                             try {
                                 Integer val = Integer.valueOf(request.getParameter(sp.getName()));
@@ -189,7 +189,7 @@ public class SocialUserExtAttributesRes extends GenericResource{
     private void setUserExtendedAttributes(HttpServletRequest request, SWBActionResponse response) {
         //User user=response.getUser();
         //Tomando en cuenta que todos los usuarios que se modificaran en sus propiedades extendidas, sean usuarios del repositorio de Admin.
-        System.out.println("setUserExtendedAttributes-JJ0");
+        //System.out.println("setUserExtendedAttributes-JJ0");
         if(request.getParameter("suri")!=null)
         {
             WebSite wsite=SWBContext.getAdminWebSite();
@@ -198,10 +198,10 @@ public class SocialUserExtAttributesRes extends GenericResource{
             User user=(User)semObj.createGenericInstance();
 
             SocialUserExtAttributes socialextatt = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), wsite);
-            System.out.println("user.getId()--GEORGE:"+user.getId()+",socialextatt-1:"+socialextatt);
+            //System.out.println("user.getId()--GEORGE:"+user.getId()+",socialextatt-1:"+socialextatt);
             if (socialextatt == null) {
                 socialextatt = SocialUserExtAttributes.ClassMgr.createSocialUserExtAttributes(user.getId(), wsite);
-                System.out.println("user.getId():"+user.getId()+",socialextatt-2:"+socialextatt);
+                //System.out.println("user.getId():"+user.getId()+",socialextatt-2:"+socialextatt);
             }
         */    
             /*
@@ -209,41 +209,41 @@ public class SocialUserExtAttributesRes extends GenericResource{
             while(enParams.hasMoreElements())
             {
                 String paramName=(String)enParams.nextElement();
-                System.out.println("param:"+paramName+",value:"+request.getParameter(paramName));
+                //System.out.println("param:"+paramName+",value:"+request.getParameter(paramName));
             }*/
 /*
             if (request.getParameter(SocialUserExtAttributes.social_userCanRemoveMsg.getName()) != null) {
-                System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---True");
+                //System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---True");
                 socialextatt.setUserCanRemoveMsg(true);
             }else{
-                System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---False");
+                //System.out.println(SocialUserExtAttributes.social_userCanRemoveMsg.getName()+"---False");
                 socialextatt.setUserCanRemoveMsg(false);
                // socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRemoveMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanRespondMsg.getName()) != null) {
-                System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---True");
+                //System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---True");
                 socialextatt.setUserCanRespondMsg(true);
             }else{
-                System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---False");
+                //System.out.println(SocialUserExtAttributes.social_userCanRespondMsg.getName()+"---False");
                 socialextatt.setUserCanRespondMsg(false);
                 //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanRespondMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReValueMsg.getName()) != null) {
-                System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---True");
+                //System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---True");
                 socialextatt.setUserCanReValueMsg(true);
             }else{
-                System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---False");
+                //System.out.println(SocialUserExtAttributes.social_userCanReValueMsg.getName()+"---False");
                 socialextatt.setUserCanReValueMsg(false);
                 //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReValueMsg.getName());
             }
 
             if (request.getParameter(SocialUserExtAttributes.social_userCanReTopicMsg.getName()) != null) {
-                System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---True");
+                //System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---True");
                 socialextatt.setUserCanReTopicMsg(true);
             }else{
-                System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---False");
+                //System.out.println(SocialUserExtAttributes.social_userCanReTopicMsg.getName()+"---False");
                 socialextatt.setUserCanReTopicMsg(false);
                 //socialextatt.removeProperty(SocialUserExtAttributes.social_userCanReTopicMsg.getName());
             }

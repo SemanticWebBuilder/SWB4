@@ -278,12 +278,12 @@ public class StreamInBox extends GenericResource {
             return;
         }
 
-        //System.out.println("Stream-id/doEdit:"+id);
+        ////System.out.println("Stream-id/doEdit:"+id);
 
         Stream stream = (Stream) SemanticObject.getSemanticObject(id).getGenericInstance();
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
 
-        //System.out.println("stream:"+stream.getURI());
+        ////System.out.println("stream:"+stream.getURI());
 
         PrintWriter out = response.getWriter();
 
@@ -382,7 +382,7 @@ public class StreamInBox extends GenericResource {
         } catch (Exception ignored) {
             nPage = 1;
         }
-        //System.out.println("nPage a Filtros:"+nPage);
+        ////System.out.println("nPage a Filtros:"+nPage);
 
         HashMap hmapResult = filtros(swbSocialUser, wsite, searchWord, request, stream, nPage);
 
@@ -867,7 +867,7 @@ public class StreamInBox extends GenericResource {
                     totalPages = Double.valueOf(nRec / 20).intValue() + 1;
                 }
             }
-            //System.out.println("StreamInBox/totalPages:"+totalPages);
+            ////System.out.println("StreamInBox/totalPages:"+totalPages);
 
             out.println("<div id=\"page\">");
             out.println("<div id=\"pagSumary\">" + paramRequest.getLocaleString("page") + ":" + nPage + " " + paramRequest.getLocaleString("of") + " " + totalPages + "</div>");
@@ -1438,44 +1438,44 @@ public class StreamInBox extends GenericResource {
                 String inputTextValue = request.getParameter("fw");
 
                 if (inputTextValue != null && inputTextValue.trim().length() > 0) {
-                    //System.out.println("Text Completo:"+inputTextValue);
+                    ////System.out.println("Text Completo:"+inputTextValue);
                     inputTextValue = SWBSocialUtil.Strings.removePrepositions(inputTextValue);
-                    //System.out.println("Text Sin Prepo:"+inputTextValue);
+                    ////System.out.println("Text Sin Prepo:"+inputTextValue);
 
                     String[] phrases = inputTextValue.split(";");
-                    ///System.out.println("Entra a processA/reValue-2:"+phrases);
+                    /////System.out.println("Entra a processA/reValue-2:"+phrases);
                     int nv = Integer.parseInt(request.getParameter("nv"));
-                    //System.out.println("Entra a processA/reValue-3:"+nv);¿¿8
+                    ////System.out.println("Entra a processA/reValue-3:"+nv);¿¿8
                     int dpth = Integer.parseInt(request.getParameter("dpth"));
-                    //System.out.println("Entra a processA/reValue-4:"+dpth);
+                    ////System.out.println("Entra a processA/reValue-4:"+dpth);
                     SentimentalLearningPhrase slp;
                     for (String phrase : phrases) {
                         String originalPhrase=phrase.toLowerCase().trim();
                         phrase = originalPhrase;
-                        //System.out.println("Entra a processA/reValue-4.1:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.1:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                        //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
-                        //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        //System.out.println("Entra a processA/reValue-4.4:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.4:"+phrase);
                         //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
                         //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
                         //sitios.
-                        //System.out.println("phrase:"+phrase);
+                        ////System.out.println("phrase:"+phrase);
                         slp = SentimentalLearningPhrase.getSentimentalLearningPhrasebyPhrase(phrase, SWBSocialUtil.getConfigWebSite());
                         if (slp == null) {
                             //phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
                             //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                             //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
                             slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBSocialUtil.getConfigWebSite());
-                            System.out.println("Guarda Frase J:"+phrase);
+                            //System.out.println("Guarda Frase J:"+phrase);
                             slp.setOriginalPhrase(originalPhrase);
                             slp.setPhrase(phrase);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
                         } else {
-                            System.out.println("Modifica Frase:"+slp+",sentiment:"+nv+",Intensity:"+dpth);
+                            //System.out.println("Modifica Frase:"+slp+",sentiment:"+nv+",Intensity:"+dpth);
                             slp.setOriginalPhrase(originalPhrase);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
@@ -1492,7 +1492,7 @@ public class StreamInBox extends GenericResource {
                             while(itStreamPostIns.hasNext())
                             {
                                 PostIn postIn=itStreamPostIns.next();
-                                //System.out.println("postIn:"+postIn.getMsg_Text());
+                                ////System.out.println("postIn:"+postIn.getMsg_Text());
                                 HashMap hmapValues = SWBSocialUtil.Classifier.classifyText(postIn.getMsg_Text());
                                 float promSentimentalValue = ((Float) hmapValues.get("promSentimentalValue")).floatValue();
                                 int sentimentalTweetValueType = ((Integer) hmapValues.get("sentimentalTweetValueType")).intValue();
@@ -1558,9 +1558,9 @@ public class StreamInBox extends GenericResource {
             response.setRenderParameter("statusMsg", response.getLocaleString("postDeleted"));
             response.setMode(Mode_DELETEPOSTIN);
         } else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
+            ////System.out.println("Entra a Strean_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
-                //System.out.println("Entra a InBox_processAction-3");
+                ////System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                 Stream stOld = postIn.getPostInStream();
                 ///
@@ -1570,8 +1570,8 @@ public class StreamInBox extends GenericResource {
                 Enumeration<String> enumParams = request.getParameterNames();
                 while (enumParams.hasMoreElements()) {
                     String paramName = enumParams.nextElement();
-                    //System.out.println("paramName:" + paramName);
-                    //System.out.println("paramValue:" + request.getParameter(paramName));
+                    ////System.out.println("paramName:" + paramName);
+                    ////System.out.println("paramValue:" + request.getParameter(paramName));
                     if (paramName.startsWith("http://")) {//get param name starting with http:// -> URIs
                         if (socialUri.trim().length() > 0) {
                             socialUri += "|";
@@ -1590,7 +1590,7 @@ public class StreamInBox extends GenericResource {
                         SocialNetwork socialNet = (SocialNetwork) semObject.createGenericInstance();
                         //Se agrega la red social de salida al post
                         aSocialNets.add(socialNet);
-                        //System.out.println("Agregando net:" + socialNet);
+                        ////System.out.println("Agregando net:" + socialNet);
                     }
                 }
                 ///
@@ -1618,17 +1618,17 @@ public class StreamInBox extends GenericResource {
                     socialPFlow = (SocialPFlow) SemanticObject.createSemanticObject(socialFlow).createGenericInstance();
                 }
 
-                //System.out.println("Entra a InBox_processAction-4");
+                ////System.out.println("Entra a InBox_processAction-4");
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, request.getParameter("toPost"), request, response);
 
-                //System.out.println("Entra a InBox_processAction-5");                
+                ////System.out.println("Entra a InBox_processAction-5");                
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                 response.setRenderParameter("suri", stOld.getURI());
                 response.setRenderParameter("postUri", postIn.getURI());
                 response.setMode(Mode_REDIRECTTOMODE);
             }
         } else if (action.equals("AdvReClassbyTopic")) {
-            //System.out.println("StreamInBox/processAction/action-1:"+action);
+            ////System.out.println("StreamInBox/processAction/action-1:"+action);
             String streamUri = request.getParameter("stream");
             if (streamUri != null && request.getParameter("advClassChoose") != null) {
                 SemanticObject semOnj = SemanticObject.getSemanticObject(request.getParameter("stream"));
@@ -1751,8 +1751,8 @@ public class StreamInBox extends GenericResource {
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
         //.out.println("Stream---K carajos...:"+stream.getURI()+",orderByJInBox:"+request.getParameter("orderBy")+",page:"+nPage);
-        //System.out.println("stream k Llega a Filtros--George08/11/2013:"+nPage);
-        //System.out.println("filtros/searchWord:"+searchWord);
+        ////System.out.println("stream k Llega a Filtros--George08/11/2013:"+nPage);
+        ////System.out.println("filtros/searchWord:"+searchWord);
         //Set<PostIn> setso = new TreeSet();
         long streamPostIns = 0L;
         String sQuery = null;
@@ -1768,7 +1768,7 @@ public class StreamInBox extends GenericResource {
             }
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         } else {
-            //System.out.println("nPageJ:"+nPage+",searchWord:"+searchWord+",nPage:"+nPage);
+            ////System.out.println("nPageJ:"+nPage+",searchWord:"+searchWord+",nPage:"+nPage);
             if (nPage != 0) {
                 if (searchWord != null && searchWord.trim().length() > 0) {
                     streamPostIns = Integer.parseInt(getPostInStreambyWord_Query(0, 0, true, stream, searchWord.trim()));
@@ -1832,11 +1832,11 @@ public class StreamInBox extends GenericResource {
                         } else if (request.getParameter("orderBy").equals("repliesUp")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery = getAllPostInbyShared_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            //System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
+                            ////System.out.println("ENTRA A REPLIESUP:"+streamPostIns+"query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("repliesDown")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery = getAllPostInbyShared_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
-                            //System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
+                            ////System.out.println("ENTRA A REPLIESDOWN:"+streamPostIns+"query:"+sQuery);
                         } else if (request.getParameter("orderBy").equals("friendsUp")) {
                             //streamPostIns=Integer.parseInt(getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             sQuery = getAllPostInbyFriends_Query(null, Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
@@ -1862,13 +1862,13 @@ public class StreamInBox extends GenericResource {
                         }
                     }
                     //Termina Armado de Query
-                    //System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
+                    ////System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                     if (sQuery != null) {
                         aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
                     }
                 } else {  //Todos, sin filtros
                     streamPostIns = Integer.parseInt(getAllPostInStream_Query(stream));
-                    //System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
+                    ////System.out.println("ENTRA AQUI--STREAMINBOX...TODOS-1:"+streamPostIns);
                     if (streamPostIns > 0) {
                         sQuery = getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream);
                         aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
@@ -1881,23 +1881,23 @@ public class StreamInBox extends GenericResource {
                     aListFilter = SWBSocial.executeQueryArray(sQuery, wsite);
                 }
             }
-            //System.out.println("streamPostIns-Antes de:"+streamPostIns);
+            ////System.out.println("streamPostIns-Antes de:"+streamPostIns);
             /*
              if(streamPostIns==0L)
              {
              streamPostIns=Integer.parseInt(getAllPostInStream_Query(0, 0, true, stream));
              }*/
-            //System.out.println("StreamPostIns InBoxJJ:"+streamPostIns);
+            ////System.out.println("StreamPostIns InBoxJJ:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
 
-        //System.out.println("aListFilter SIZE:"+aListFilter);
+        ////System.out.println("aListFilter SIZE:"+aListFilter);
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
-            //System.out.println("Entra a ORDEBAR -2");
+            ////System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }/*else{
-         System.out.println("******ENTRA A HACER TOSDOSSSSS******");
+         //System.out.println("******ENTRA A HACER TOSDOSSSSS******");
          streamPostIns=Long.parseLong(getAllPostInStream_Query(0, 0, true, stream));
          sQuery=getAllPostInStream_Query(Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), false, stream); 
          aListFilter=executeQueryArray(sQuery, wsite);
@@ -1924,7 +1924,7 @@ public class StreamInBox extends GenericResource {
                 "where {\n"
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
                 + "  }\n";
-        //System.out.println("query:"+query);
+        ////System.out.println("query:"+query);
         WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
         query = SWBSocial.executeQuery(query, wsite);
         return query;
@@ -1960,11 +1960,11 @@ public class StreamInBox extends GenericResource {
             }
         }
         if (isCount) {
-            //System.out.println("Query Count:"+query);
+            ////System.out.println("Query Count:"+query);
             WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             query = SWBSocial.executeQuery(query, wsite);
         }
-        //System.out.println("query:"+query);
+        ////System.out.println("query:"+query);
         return query;
     }
 
@@ -2408,7 +2408,7 @@ public class StreamInBox extends GenericResource {
                 query += "LIMIT " + limit;
             }
         }
-        System.out.println("En getPostInCreated_Query:" + query);
+        //System.out.println("En getPostInCreated_Query:" + query);
         if (isCount) {
             WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             query = SWBSocial.executeQuery(query, wsite);
@@ -2569,7 +2569,7 @@ public class StreamInBox extends GenericResource {
                 query += "LIMIT " + limit;
             }
         }
-        System.out.println("query-User:" + query);
+        //System.out.println("query-User:" + query);
         if (isCount) {
             WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             query = SWBSocial.executeQuery(query, wsite);
@@ -2650,7 +2650,7 @@ public class StreamInBox extends GenericResource {
                 query += "LIMIT " + limit;
             }
         }
-        System.out.println("getPostInPriority_Query/query:" + query);
+        //System.out.println("getPostInPriority_Query/query:" + query);
         if (isCount) {
             WebSite wsite = WebSite.ClassMgr.getWebSite(stream.getSemanticObject().getModel().getName());
             query = SWBSocial.executeQuery(query, wsite);
@@ -2797,7 +2797,7 @@ public class StreamInBox extends GenericResource {
 
         //Show Creation Time
         out.println("<td>");
-        //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
+        ////System.out.println("FechaTimeAgo:"+postIn.getPi_created());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
         if (postIn.getPi_createdInSocialNet() != null) {
@@ -2869,10 +2869,10 @@ public class StreamInBox extends GenericResource {
         int userKloutScore = 0;
         SocialNetworkUser socialNetUser = postIn.getPostInSocialNetworkUser();
         if (socialNetUser != null) {
-            //System.out.println("checkKlout--J:"+checkKlout);
+            ////System.out.println("checkKlout--J:"+checkKlout);
             //Looking for user klout
             if (postIn.getPostInSocialNetwork().getSemanticObject().getSemanticClass().isSubClass(Kloutable.social_Kloutable) && socialNetUser.getSnu_klout() < streamKloutValue) {
-                //System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
+                ////System.out.println("checkKlout--J1:"+checkKlout+",socialNetUser:"+socialNetUser+",id:"+socialNetUser.getId()+",socialNetUser:"+socialNetUser.getSnu_id());
                 HashMap userKloutDat = SWBSocialUtil.Classifier.classifybyKlout(postIn.getPostInSocialNetwork(), stream, socialNetUser, socialNetUser.getSnu_id(), true);
                 userKloutScore = ((Integer) userKloutDat.get("userKloutScore")).intValue();
                 socialNetUser.setSnu_klout(userKloutScore);
@@ -2884,7 +2884,7 @@ public class StreamInBox extends GenericResource {
                 } else {
                     out.println("<div class=\"klout\">" + userKloutScore + "</div>");
                 }
-                //System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
+                ////System.out.println("checkKlout--J2:"+userKloutScore+", NO VOLVERA A PONER KLOUT PARA ESTE USER:"+socialNetUser);
             } else {
                 if (streamKloutValue == 0) {
                     out.println("---");

@@ -207,7 +207,7 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
                 String remSinceDate=request.getParameter("remSinceDate"+socialTopic.getId());
                 if(remSinceDate!=null && remSinceDate.trim().length()>0)
                 {
-                    //System.out.println("remSinceDate-2:"+remSinceDate);
+                    ////System.out.println("remSinceDate-2:"+remSinceDate);
                     Date date = null;
                     SimpleDateFormat formatoDelTexto=null;
                     try {
@@ -216,7 +216,7 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
                     } catch (ParseException ex) {
                         ex.printStackTrace();
                     }
-                    //System.out.println("date J:"+date);
+                    ////System.out.println("date J:"+date);
                     if(date!=null)
                     {
                         Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInBySocialTopic(socialTopic, wsite);
@@ -227,7 +227,7 @@ public class RemoveMessagesResourceFromTopic extends GenericResource {
                             {
                                 if(postIn.getPi_created().compareTo(date)<0)
                                 {
-                                    //System.out.println("postIn a eliminar:"+postIn.getCreated());
+                                    ////System.out.println("postIn a eliminar:"+postIn.getCreated());
                                     postIn.remove();
                                 }
                             }

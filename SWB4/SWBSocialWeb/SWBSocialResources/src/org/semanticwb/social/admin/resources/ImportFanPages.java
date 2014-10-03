@@ -78,7 +78,7 @@ public class ImportFanPages extends GenericResource{
     
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("loading JSP importFP");
+        ////System.out.println("loading JSP importFP");
         final String path = SWBPlatform.getContextPath() + "/work/models/" + paramRequest.getWebPage().getWebSiteId() + "/jsp/fanPages/importFPFacebook.jsp";
         request.setAttribute("paramRequest", paramRequest);
         
@@ -93,15 +93,15 @@ public class ImportFanPages extends GenericResource{
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         String action = response.getAction();
-        System.out.println("process action:" + action);
+        ////System.out.println("process action:" + action);
         WebPage rootPage = null;
         if(action.equals(IMPORT_FB_PAGES)){
             String suri = request.getParameter("suri") == null ? "" : request.getParameter("suri");
             String site = request.getParameter("site") == null ? "" : request.getParameter("site");
             String pages[] = request.getParameterValues("pages") == null ? null : request.getParameterValues("pages");
-            System.out.println("suri:" + suri);
-            System.out.println("site:" + site);
-            System.out.println("pages[]:" + pages);
+            ////System.out.println("suri:" + suri);
+            ////System.out.println("site:" + site);
+            ////System.out.println("pages[]:" + pages);
             //add facebook pages
             if(suri.isEmpty() || site.isEmpty() || pages == null){
                 response.setMode(SWBResourceURL.Mode_HELP);
@@ -132,7 +132,7 @@ public class ImportFanPages extends GenericResource{
             params.put("access_token", facebook.getAccessToken());
             String respFanPage = postRequest(params, "https://graph.facebook.com/me/accounts",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-            //System.out.println("respFanPage:" + respFanPage);
+            ////System.out.println("respFanPage:" + respFanPage);
             try{
                 JSONObject responseFP = new JSONObject(respFanPage);
                 if(!responseFP.isNull("data")){
@@ -209,9 +209,9 @@ public class ImportFanPages extends GenericResource{
             String suri = request.getParameter("suri") == null ? "" : request.getParameter("suri");
             String site = request.getParameter("site") == null ? "" : request.getParameter("site");
             String pages[] = request.getParameterValues("pages") == null ? null : request.getParameterValues("pages");
-            //System.out.println("suri:" + suri);
-            //System.out.println("site:" + site);
-            //System.out.println("pages[]:" + pages);
+            ////System.out.println("suri:" + suri);
+            ////System.out.println("site:" + site);
+            ////System.out.println("pages[]:" + pages);
             //add facebook pages
             if(suri.isEmpty() || site.isEmpty() || pages == null){
                 response.setMode(SWBResourceURL.Mode_HELP);
@@ -224,7 +224,7 @@ public class ImportFanPages extends GenericResource{
             
             String respFanPage = postRequest(params, "https://graph.facebook.com/me/accounts",
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-            //System.out.println("respFanPage:" + respFanPage);
+            ////System.out.println("respFanPage:" + respFanPage);
             try{
                 JSONObject responseFP = new JSONObject(respFanPage);
                 if(!responseFP.isNull("data")){
@@ -279,8 +279,8 @@ public class ImportFanPages extends GenericResource{
     @Override
     public void doHelp(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         PrintWriter out = response.getWriter();        
-        //System.out.println("--->" + request.getParameter("homePageSuri"));
-        //System.out.println("------>" + URLDecoder.decode(request.getParameter("homePageSuri")));
+        ////System.out.println("--->" + request.getParameter("homePageSuri"));
+        ////System.out.println("------>" + URLDecoder.decode(request.getParameter("homePageSuri")));
         String brandSuri = request.getParameter("reloadGroup") == null ? null : URLDecoder.decode(request.getParameter("reloadGroup"));
         //WebPage reloadPage = (WebPage)SemanticObject.createSemanticObject(URLDecoder.decode(request.getParameter("homePageSuri"))).createGenericInstance();
                 
@@ -314,7 +314,7 @@ public class ImportFanPages extends GenericResource{
             params.put("access_token", fp.getPageAccessToken());
             String pageTabs = postRequestParams(params, "https://graph.facebook.com/" + fp.getPage_id() +"/tabs",
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", "GET");
-            //System.out.println("\n\n--------------------\n" + pageTabs);
+            ////System.out.println("\n\n--------------------\n" + pageTabs);
             JSONObject jsonObject = new JSONObject(pageTabs);            
             if(jsonObject.has("data")){
                 JSONArray data = jsonObject.getJSONArray("data");
@@ -347,7 +347,7 @@ public class ImportFanPages extends GenericResource{
                             position = tmp.getLong("position") +"";
                         }
                         
-                        //System.out.println("\n\n\n\nid:" + id  + " name:" + name + " position:" + position);
+                        ////System.out.println("\n\n\n\nid:" + id  + " name:" + name + " position:" + position);
                         if(id.isEmpty() || name.isEmpty() || position.isEmpty()){
                             log.error("Fan page tab not added to Social:" + tmp);
                             continue;
@@ -381,7 +381,7 @@ public class ImportFanPages extends GenericResource{
                     }
                 }
             }
-            //System.out.println("SE ENCUENTRA ACTIVO EL TAB: " + isActive);
+            ////System.out.println("SE ENCUENTRA ACTIVO EL TAB: " + isActive);
         } catch (Exception ex) {
             log.error("Problem getting list of current tabs from page ", ex );
         }
@@ -411,7 +411,7 @@ public class ImportFanPages extends GenericResource{
             String userAgent, String method) throws IOException {
 
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
-        //System.out.println("2URL : " + url + "?" + paramString);
+        ////System.out.println("2URL : " + url + "?" + paramString);
         URL serverUrl = new URL(url + "?" + paramString);
 
         HttpURLConnection conex = null;
@@ -433,7 +433,7 @@ public class ImportFanPages extends GenericResource{
             conex.setDoOutput(true);
             conex.connect();
 
-            //System.out.println("CONNECT:" + conex);
+            ////System.out.println("CONNECT:" + conex);
             //   out = conex.getOutputStream();
             //   out.write(paramString.toString().getBytes("UTF-8"));
             in = conex.getInputStream();
@@ -441,7 +441,7 @@ public class ImportFanPages extends GenericResource{
 
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
-                //System.out.println("ERROR:" +   getResponse(conex.getErrorStream()));
+                ////System.out.println("ERROR:" +   getResponse(conex.getErrorStream()));
                 response = getResponse(conex.getErrorStream());
                 log.error("\n\nERROR:" + response);
             }
@@ -480,7 +480,7 @@ public class ImportFanPages extends GenericResource{
             conex.connect();
             in = conex.getInputStream();
             response = getResponse(in);
-            //System.out.println("RESPONSE:" + response);
+            ////System.out.println("RESPONSE:" + response);
 
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {

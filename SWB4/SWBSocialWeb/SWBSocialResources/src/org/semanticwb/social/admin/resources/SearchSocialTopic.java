@@ -171,9 +171,9 @@ public class SearchSocialTopic extends GenericAdmResource {
             if (wsid != null) {
                 // considerar paginación y ordenarlos por creación
                 WebSite ws = WebSite.ClassMgr.getWebSite(wsid);
-                //System.out.println("ws:"+ws.getNameSpace());
+                ////System.out.println("ws:"+ws.getNameSpace());
                 if (isResSearch) {
-                    //System.out.println("Recurso...");
+                    ////System.out.println("Recurso...");
                     Resource resource = null;
                     resource = ws.getResource(searctxt);
                     if (searchtype.equals("id") && resource != null) {
@@ -182,7 +182,7 @@ public class SearchSocialTopic extends GenericAdmResource {
                         Iterator<Resource> itres = ws.listResources();
                         while (itres.hasNext()) {
                             resource = itres.next();
-                            //System.out.println("res:"+resource.getDisplayTitle(usr.getLanguage()));
+                            ////System.out.println("res:"+resource.getDisplayTitle(usr.getLanguage()));
                             if (!searchtype.equals("id") && resource.getDisplayTitle(usr.getLanguage())!=null&& resource.getDisplayTitle(usr.getLanguage()).indexOf(searctxt) > -1) {
                                 hmresult.put(resource, resource);
                             }

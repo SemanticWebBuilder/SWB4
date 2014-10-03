@@ -68,7 +68,6 @@ public class ShowPostOut extends GenericResource {
                 dis.include(request, response);
             } catch (Exception ex) {
                 log.error(ex);
-                ex.printStackTrace(System.out);
             }
         }
     }

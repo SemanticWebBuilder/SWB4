@@ -107,7 +107,7 @@ public class SocialWebResource extends GenericAdmResource
         User user = paramRequest.getUser();
         SocialNetwork socialNetwork;
         String objUri = request.getParameter("suri"); //uri of socialNetwork        
-        //System.out.println("Entrando a red doView de autenticate");
+        ////System.out.println("Entrando a red doView de autenticate");
         try {
             socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(objUri).getGenericInstance();
             boolean validConfiguration = false;
@@ -147,29 +147,29 @@ public class SocialWebResource extends GenericAdmResource
             /*if(socialNetwork.getAppKey() == null || socialNetwork.getSecretKey() == null){
                 if(socialNetwork instanceof Twitter){
                     TwitterGC tw = wsite.getAdm_twittergc();
-                    System.out.println("tw:" + tw.getAppKey());
-                    System.out.println("tw:" + tw.getSecretKey());
+                    //System.out.println("tw:" + tw.getAppKey());
+                    //System.out.println("tw:" + tw.getSecretKey());
                 }else if(socialNetwork instanceof Facebook){
                     FacebookGC fb = wsite.getAdm_facebookgc();
-                    System.out.println("fb:" + fb.getAppKey());
-                    System.out.println("fb:" + fb.getSecretKey());
+                    //System.out.println("fb:" + fb.getAppKey());
+                    //System.out.println("fb:" + fb.getSecretKey());
                 }else if(socialNetwork instanceof Youtube){
                     YoutubeGC yt = wsite.getAdm_youtubegc();
-                    System.out.println("yt:" + yt.getAppKey());
-                    System.out.println("yt:" + yt.getSecretKey());
-                    System.out.println("yt:" + yt.getDeveloperKey());
+                    //System.out.println("yt:" + yt.getAppKey());
+                    //System.out.println("yt:" + yt.getSecretKey());
+                    //System.out.println("yt:" + yt.getDeveloperKey());
                 }
                 out.println("No han sido configuradas la llave de la aplicación o la llave secreta");
-                System.out.println("NULL SOCIAL NET PARAMS");
+                //System.out.println("NULL SOCIAL NET PARAMS");
                 return;
             }else if(socialNetwork.getAppKey().isEmpty() || socialNetwork.getSecretKey().isEmpty()){
                 out.println("No han sido configuradas la llave de la aplicación o la llave secreta");
-                System.out.println("EMPTY SOCIAL NET PARAMS");
+                //System.out.println("EMPTY SOCIAL NET PARAMS");
                 return;
             }*/
         }catch(Exception ex) {
             socialNetwork = null;
-            System.out.println("No valid value for current social Network");
+            //System.out.println("No valid value for current social Network");
             ex.printStackTrace();
             return;
         }
@@ -199,7 +199,7 @@ public class SocialWebResource extends GenericAdmResource
                     out.println("</form>");
                     out.println("<div align=\"center\"><span id=\"csLoading" + socialNetwork.getEncodedURI() + "\" style=\"width: 100px; display: none\" align=\"center\"><img src=\"" +SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span></div>");
                 /*
-                //System.out.println("Ya esta autenticada, puede refrescar tokens");
+                ////System.out.println("Ya esta autenticada, puede refrescar tokens");
                 out.println("<div class=\"swbform\">");
                 out.println("<table width=\"100%\" border=\"0px\">");            
                 out.println("   <tr>");
@@ -227,7 +227,7 @@ public class SocialWebResource extends GenericAdmResource
                 out.println("</div>");
                 */
             }else if(!socialNetwork.isSn_authenticated()){
-                //System.out.println("No esta autenticada");
+                ////System.out.println("No esta autenticada");
                 out.println("<form id=\"authNet/" + socialNetwork.getEncodedURI() + "\" action=\"" + paramRequest.getRenderUrl().setParameter("suri", objUri)+ "\" method=\"post\" onsubmit=\"try{document.getElementById('csLoading" + socialNetwork.getEncodedURI() + "').style.display='inline';}catch(noe){}; setTimeout(function(){submitForm('authNet/" + socialNetwork.getEncodedURI() + "')},1000); return false;\">" );
                 out.println("<div id=\"configuracion_redes\">");
                 out.println("<div id=\"autenticacion\">");
@@ -274,10 +274,10 @@ public class SocialWebResource extends GenericAdmResource
     
     public void doAuthenticate(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        //System.out.println("**************** ENTRANDO A DO AUTHENTICATE*******************");
-        //System.out.println("\t\tsuri:" + request.getParameter("suri"));
-        //System.out.println("\t\twsid:" + request.getParameter("wsid"));
-        //System.out.println("\t\tParamX:" + request.getParameter("paramX"));
+        ////System.out.println("**************** ENTRANDO A DO AUTHENTICATE*******************");
+        ////System.out.println("\t\tsuri:" + request.getParameter("suri"));
+        ////System.out.println("\t\twsid:" + request.getParameter("wsid"));
+        ////System.out.println("\t\tParamX:" + request.getParameter("paramX"));
         
         String fromDoView = (String)request.getParameter("fromDoView");
         HttpSession session = request.getSession(true);
@@ -294,29 +294,29 @@ public class SocialWebResource extends GenericAdmResource
             wsite = (SocialSite)WebSite.ClassMgr.getWebSite(request.getParameter("wsid"));
         }
         
-        //System.out.println("\t\tsw:" + session.getAttribute("sw") );
+        ////System.out.println("\t\tsw:" + session.getAttribute("sw") );
         if(session.getAttribute("sw") == null)
         {
-            //System.out.println("\n\nLa primera vez que entra SW es null");
-            //System.out.println("SW:" + session.getAttribute("sw") );
+            ////System.out.println("\n\nLa primera vez que entra SW es null");
+            ////System.out.println("SW:" + session.getAttribute("sw") );
             
             SocialNetwork socialNetwork = (SocialNetwork)wsite.getSemanticObject().getModel().getGenericObject(suri);
 
             session.setAttribute("sw", socialNetwork);
-            //System.out.println("Ahora ya tiene un valor:" +  socialNetwork);
+            ////System.out.println("Ahora ya tiene un valor:" +  socialNetwork);
             socialNetwork.authenticate(request, response, paramRequest);
-            System.out.println("Y va a autenticar");
+            //System.out.println("Y va a autenticar");
         }
         else
         {
-            //System.out.println("\n\nLa segunda vez que entra SW ya no es null");
+            ////System.out.println("\n\nLa segunda vez que entra SW ya no es null");
             SocialNetwork socialNetwork = (SocialNetwork)session.getAttribute("sw");
             session.removeAttribute("sw");
             //objUri = socialNetwork.getURI();
-            //System.out.println("Y contiene el siguiente valor:" +  socialNetwork);
+            ////System.out.println("Y contiene el siguiente valor:" +  socialNetwork);
             //if(!socialNetwork.isSn_authenticated()) {//removed to allow reauthentication
                 socialNetwork.authenticate(request, response, paramRequest);
-                //System.out.println("Y fue a autenticar, DE NUEVO y entró al else.");
+                ////System.out.println("Y fue a autenticar, DE NUEVO y entró al else.");
             //}                        
         }        
     }
@@ -324,15 +324,15 @@ public class SocialWebResource extends GenericAdmResource
     @Override
     public void doEdit(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-System.out.println("********************   doEdit.");
+//System.out.println("********************   doEdit.");
         
         final String basePath = "/work/models/" + paramRequest.getWebPage().getWebSite().getId() + "/admin/jsp/components/" + this.getClass().getSimpleName() + "/";
-System.out.println(" recuperando socialNetwork....");
+//System.out.println(" recuperando socialNetwork....");
         String objUri = (String)request.getAttribute("objUri");
         SocialNetwork socialNetwork;
         try {
             socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-            System.out.println(" 1.socialNetwork="+socialNetwork.getId());
+            //System.out.println(" 1.socialNetwork="+socialNetwork.getId());
             String title = request.getParameter("title");
             String desc = request.getParameter("desc");
             String appId = request.getParameter("appId");
@@ -356,7 +356,7 @@ System.out.println(" recuperando socialNetwork....");
             objUri = (String)session.getAttribute("objUri");
             try {
                 socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
-System.out.println(" 2.socialNetwork="+socialNetwork.getId());
+//System.out.println(" 2.socialNetwork="+socialNetwork.getId());
                 if(!socialNetwork.isSn_authenticated()) {
                     socialNetwork.authenticate(request, response, paramRequest);
                 }
@@ -382,7 +382,7 @@ System.out.println(" 2.socialNetwork="+socialNetwork.getId());
     /*
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-System.out.println("processAction....");
+//System.out.println("processAction....");
         final String wsiteId = request.getParameter(ATTR_BRAND);
         final SocialSite model = SocialSite.ClassMgr.getSocialSite(wsiteId);
         final String action = response.getAction();
@@ -411,17 +411,17 @@ System.out.println("processAction....");
     
     private boolean isValidConfiguration(SocialNetwork socialNetwork, String appKey, String appSecret){
         boolean validConfiguration = true;
-        //System.out.println("appKey:" + appKey + "---" + appSecret);
+        ////System.out.println("appKey:" + appKey + "---" + appSecret);
         if(socialNetwork.getAppKey() == null || socialNetwork.getAppKey().isEmpty()){
             if(appKey != null && !appKey.isEmpty()){
                 socialNetwork.setAppKey(appKey);
-                //System.out.println("valid key!");
+                ////System.out.println("valid key!");
             }else{validConfiguration = false;}
         }
         if(socialNetwork.getSecretKey() == null || socialNetwork.getSecretKey().isEmpty()){
             if(appSecret != null && !appSecret.isEmpty()){
                 socialNetwork.setSecretKey(appSecret);
-                //System.out.println("valid secret!");
+                ////System.out.println("valid secret!");
             }else{validConfiguration = false;}
         }
         return validConfiguration;

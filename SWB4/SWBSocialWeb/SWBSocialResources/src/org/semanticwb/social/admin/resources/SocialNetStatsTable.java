@@ -51,7 +51,7 @@ public class SocialNetStatsTable extends GenericResource{
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        System.out.println("SocialNetStatsTable:doView");
+        //System.out.println("SocialNetStatsTable:doView");
     }
 
 
@@ -59,11 +59,11 @@ public class SocialNetStatsTable extends GenericResource{
     @Override
     public void install(ResourceType recobj) throws SWBResourceException {
         try{
-            System.out.println("Comienza a instalar tabla socialnets_stats");
+            ////System.out.println("Comienza a instalar tabla socialnets_stats");
             GenericDB db = new GenericDB();
             String xml = SWBUtils.IO.getFileFromPath(SWBUtils.getApplicationPath() + "/WEB-INF/xml/socialnetsstats.xml");
             db.executeSQLScript(xml, SWBUtils.DB.getDatabaseName(), null);
-            System.out.println("termina de instalar tabla socialnets_stats");
+            ////System.out.println("termina de instalar tabla socialnets_stats");
         }catch (SQLException e)
         {
             log.error(e);

@@ -238,7 +238,7 @@ public class SocialPFlowRes extends GenericResource
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                //e.printStackTrace(System.out);
                 addElement("err", e.getMessage(), res);
             }
         }
@@ -276,7 +276,6 @@ public class SocialPFlowRes extends GenericResource
                 }
                 catch (Exception ue)
                 {
-                    ue.printStackTrace(System.out);
                     log.error(ue);
                 }
             }
@@ -293,7 +292,6 @@ public class SocialPFlowRes extends GenericResource
             }
             catch (Exception ue)
             {
-                ue.printStackTrace(System.out);
                 log.error(ue);
             }
         }
@@ -374,7 +372,6 @@ public class SocialPFlowRes extends GenericResource
                 catch (Exception e)
                 {
                     log.error(e);
-                    e.printStackTrace(System.out);
                     addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1"), res);
                 }
             }
@@ -382,7 +379,7 @@ public class SocialPFlowRes extends GenericResource
         catch (Exception e)
         {
             log.error(e);
-            e.printStackTrace(System.out);
+            //e.printStackTrace(System.out);
             addElement("err", java.util.ResourceBundle.getBundle("org/semanticwb/portal/admin/resources/SWBAWorkflow").getString("msg1") + " error: " + e.getMessage(), res);
         }
 
@@ -405,31 +402,31 @@ public class SocialPFlowRes extends GenericResource
             while(itSemClasses.hasNext())
             {
                 SemanticClass semClass=itSemClasses.next();
-                //System.out.println("Social-getResourceTypeCat/semClass-G:"+semClass+", id:"+semClass.getClassId());
-                //System.out.println("Social-getResourceTypeCat/Class label:"+semClass.getLabel(lang)); 
+                ////System.out.println("Social-getResourceTypeCat/semClass-G:"+semClass+", id:"+semClass.getClassId());
+                ////System.out.println("Social-getResourceTypeCat/Class label:"+semClass.getLabel(lang)); 
                 
                 
                 resources.add(semClass.getClassId());
                 String sLabel=semClass.getLabel("es");
                 if(semClass.getLabel(lang)!=null) sLabel=semClass.getLabel(lang);
                 Element erole = addNode("resourceType", "" + semClass.getClassId(), sLabel, res);     //Comentado Jorge 05/Mayo/2013
-                System.out.println("semClass Id:"+semClass.getClassId());
+                ////System.out.println("semClass Id:"+semClass.getClassId());
                 //Element erole = addNode("PostType", "" + semClass.getClassId(), sLabel, res);     //Agregado por el de arriba- Jorge 05/Mayo/2013
                 erole.setAttribute("topicmap", map.getId());
                 erole.setAttribute("topicmapname", map.getTitle());
                 String description = semClass.getComment("es");
                 if(semClass.getComment(lang) != null) description = semClass.getComment(lang);
-                //System.out.println("description--1:"+description);
+                ////System.out.println("description--1:"+description);
                 if(description==null) description = semClass.getComment();
-                //System.out.println("description--2:"+description);
+                ////System.out.println("description--2:"+description);
                 if(description==null || description.trim().length()==0) description="_";
-                //System.out.println("description--3:"+description);
+                ////System.out.println("description--3:"+description);
                 addElement("description", description, erole);
                 
             }
         }catch(Exception e)
         {
-            System.out.println("Error Goe:"+e.getMessage());
+            ////System.out.println("Error Goe:"+e.getMessage());
             log.error(e);
         }
         
@@ -727,7 +724,7 @@ public class SocialPFlowRes extends GenericResource
         PrintWriter out = response.getWriter();
         ServletInputStream in = request.getInputStream();
         Document dom = SWBUtils.XML.xmlToDom(in);
-        //System.out.println("Social gateway: " + SWBUtils.XML.domToXml(dom));
+        ////System.out.println("Social gateway: " + SWBUtils.XML.domToXml(dom));
         if (!dom.getFirstChild().getNodeName().equals("req"))
         {
             response.sendError(404, request.getRequestURI());
@@ -756,7 +753,7 @@ public class SocialPFlowRes extends GenericResource
             {
                 ret = SWBUtils.XML.domToXml(res, true);
             }
-//            System.out.println("ret:" + ret);
+//            //System.out.println("ret:" + ret);
         }
         catch (Exception e)
         {
@@ -771,16 +768,16 @@ public class SocialPFlowRes extends GenericResource
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
-        //System.out.println("Hola-Entra a doView...");
+        ////System.out.println("Hola-Entra a doView...");
         String id = request.getParameter("suri");
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         GenericObject go = ont.getGenericObject(id);
-        //System.out.println("go J:"+go.getSemanticObject().getSemanticClass());
+        ////System.out.println("go J:"+go.getSemanticObject().getSemanticClass());
         SocialPFlow pfgo = (SocialPFlow) go;
-//        System.out.println("pf xml: " + pfgo.getXml());
+//        //System.out.println("pf xml: " + pfgo.getXml());
         if (pfgo != null && (pfgo.getXml() == null || (pfgo.getXml() != null && pfgo.getXml().trim().length() == 0)))  
         {
-//            System.out.println("pf xml es NULL");
+//            //System.out.println("pf xml es NULL");
             Document newdoc = SWBUtils.XML.getNewDocument();
             Element wfs = newdoc.createElement("workflows");
             Element wf = newdoc.createElement("workflow");
@@ -793,12 +790,12 @@ public class SocialPFlowRes extends GenericResource
             wf.appendChild(edes);
             newdoc.appendChild(wfs);
             String xmlpflow = SWBUtils.XML.domToXml(newdoc);
-//            System.out.println("XML: " + xmlpflow);
+//            //System.out.println("XML: " + xmlpflow);
             pfgo.setXml(xmlpflow);
 
         }
 
-//        System.out.println("XML AFTER: " + pfgo.getXml());
+//        //System.out.println("XML AFTER: " + pfgo.getXml());
 
         String tm = pfgo.getWebSite().getId();
         try
@@ -813,7 +810,7 @@ public class SocialPFlowRes extends GenericResource
             else if (act.equals("edit") && id != null && user != null && tm != null)
             {
 
-//                System.out.println("Con OBJECT");
+//                //System.out.println("Con OBJECT");
 //
 //                out.println("<OBJECT id=\"apptree\" name=\"editrole\" classid=\"clsid:CAFEEFAC-0014-0002-0000-ABCDEFFEDCBA\" ");
 //                out.println("width=\"100%\" height=\"350\" >");
@@ -832,14 +829,14 @@ public class SocialPFlowRes extends GenericResource
 //                out.println("    No Java 2 SDK, Standard Edition v 1.5.0 support for APPLET!!");
 //                out.println("</OBJECT>");
 
-//                System.out.println("Con APPLET");
+//                //System.out.println("Con APPLET");
 
                 /* 
-                System.out.println("SocialPFLOWRes-George/idworkflow:"+id);
-                System.out.println("SocialPFLOWRes-George/jsess:"+request.getSession().getId());
-                System.out.println("SocialPFLOWRes-George/cgipath:"+url);
-                System.out.println("SocialPFLOWRes-George/locale:"+user.getLanguage());
-                System.out.println("SocialPFLOWRes-George/tm:"+tm);
+                //System.out.println("SocialPFLOWRes-George/idworkflow:"+id);
+                //System.out.println("SocialPFLOWRes-George/jsess:"+request.getSession().getId());
+                //System.out.println("SocialPFLOWRes-George/cgipath:"+url);
+                //System.out.println("SocialPFLOWRes-George/locale:"+user.getLanguage());
+                //System.out.println("SocialPFLOWRes-George/tm:"+tm);
                 **/
                 
                 out.println("<div class=\"applet\">");
@@ -855,7 +852,7 @@ public class SocialPFlowRes extends GenericResource
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            //e.printStackTrace(System.out);
             log.error(e);
             return;
         }
@@ -988,7 +985,7 @@ public class SocialPFlowRes extends GenericResource
                     catch (Exception e)
                     {
                         log.error(e);
-                        e.printStackTrace(System.out);
+                        //e.printStackTrace(System.out);
                         throw e;
                     }
                 }

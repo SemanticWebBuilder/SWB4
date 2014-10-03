@@ -124,7 +124,7 @@ public class Timeline extends GenericResource{
         String objUri = (String) request.getParameter("suri");
         String contentTabId = (String) request.getParameter("contentTabId");
         HttpSession session = request.getSession(true);
-        //System.out.println("suriReceived in Timeline:" + objUri);
+        ////System.out.println("suriReceived in Timeline:" + objUri);
         twitter4j.Twitter twitter = null;
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Twitter semanticTwitter = (Twitter) semanticObject.createGenericInstance();
@@ -144,7 +144,7 @@ public class Timeline extends GenericResource{
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             }catch (Exception e) {
-                //System.out.println("Error loading the Twitter Tabs " + e);
+                ////System.out.println("Error loading the Twitter Tabs " + e);
                 log.error("Error loading the Twitter Tabs ", e);
             }
             return;
@@ -164,23 +164,23 @@ public class Timeline extends GenericResource{
         }
         if(twitterUsers.get(objUri) == null){//If user is not logged in, create an instance and add it
             twitter = new TwitterFactory(configureOAuth(semanticTwitter).build()).getInstance();
-            //System.out.println("LET'S CREATE A NEW TWITTER OBJECT: " + twitter);
-            //System.out.println("objUri NEW in doView:" + objUri);
+            ////System.out.println("LET'S CREATE A NEW TWITTER OBJECT: " + twitter);
+            ////System.out.println("objUri NEW in doView:" + objUri);
             twitterUsers.put(objUri, twitter);
         }else{//The user has been created before, use it.
             twitter = twitterUsers.get(objUri);
-            //System.out.println("objUri OLD in doView:" + objUri);
-            //System.out.println("DO NOT CREATE A NEW TWITTER OBJECT");
+            ////System.out.println("objUri OLD in doView:" + objUri);
+            ////System.out.println("DO NOT CREATE A NEW TWITTER OBJECT");
         }
 
         /*try{
-            System.out.println("\n*\n*\n*");
-            System.out.println("doView suri:" + objUri);
-            System.out.println("doView id:" + twitter.getId());
-            System.out.println("doView username:" + twitter.getScreenName());        
-            System.out.println("\n*\n*\n*");
+            //System.out.println("\n*\n*\n*");
+            //System.out.println("doView suri:" + objUri);
+            //System.out.println("doView id:" + twitter.getId());
+            //System.out.println("doView username:" + twitter.getScreenName());        
+            //System.out.println("\n*\n*\n*");
         }catch(Exception e){ 
-            System.out.println("Error doView: " + e.getMessage());
+            //System.out.println("Error doView: " + e.getMessage());
         }*/
         
         /*//Start the listener
@@ -203,9 +203,9 @@ public class Timeline extends GenericResource{
             twitterStream.user();//This method internally starts a thread
             session.setAttribute(objUri + "tweetsListener", tweetsListener);
             session.setAttribute(objUri + "twitterStream", twitterStream);
-            System.out.println("Listener started!");
+            //System.out.println("Listener started!");
         }else{
-             System.out.println("Do not Start a new listener we already have one!!");
+             //System.out.println("Do not Start a new listener we already have one!!");
              if(session.getAttribute(objUri + "tweetsListener") != null){//If the tab is refreshed, clean all 'new' statuses in ArrayList
                  ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearHomeStatus();
                  ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearMentionsStatus();
@@ -239,9 +239,9 @@ public class Timeline extends GenericResource{
                 twitterStream.user();//This method internally starts a thread
                 session.setAttribute(objUri + "tweetsListener", tweetsListener);
                 session.setAttribute(objUri + "twitterStream", twitterStream);
-                System.out.println("Listener started!");
+                //System.out.println("Listener started!");
             }else{
-                 System.out.println("Do not Start a new listener we already have one!!");
+                 //System.out.println("Do not Start a new listener we already have one!!");
                  if(session.getAttribute(objUri + "tweetsListener") != null){//If the tab is refreshed, clean all 'new' statuses in ArrayList
                      ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearHomeStatus();
                      ((SocialUserStreamListener)session.getAttribute( objUri + "tweetsListener")).clearMentionsStatus();
@@ -290,7 +290,7 @@ public class Timeline extends GenericResource{
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {        
         String action = response.getAction();
         String objUri = request.getParameter("suri");
-        //System.out.println("suri in processAction:" + objUri);
+        ////System.out.println("suri in processAction:" + objUri);
         twitter4j.Twitter twitter = twitterUsers.get(objUri);
         if(twitter == null && !action.equals("postMessage") && !action.equals("uploadPhoto")){//When executing an action if can't recover a valid twitter, create it
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
@@ -299,16 +299,16 @@ public class Timeline extends GenericResource{
             twitterUsers.put(objUri, twitter);
             if(twitter == null){return;}//Unable to create twitter
         }
-        //System.out.println("Action:" + response.getAction());
+        ////System.out.println("Action:" + response.getAction());
         if(action.equals("doRT")){ //Makes the retweet
             response.setRenderParameter("suri", objUri);
             response.setRenderParameter("currentTab", request.getParameter("currentTab"));
             try {
                 Long id = Long.parseLong(request.getParameter("id"));
-                //System.out.println("Tweet to RT in doRT:" + id);
+                ////System.out.println("Tweet to RT in doRT:" + id);
                 response.setRenderParameter("retweetId", twitter.retweetStatus(id).getId()+""); //When a RT is made a new id is created and it's used to undo the RT
                 response.setRenderParameter("id", id+"");                                       //Id of original status
-                //System.out.println("Retwit!");
+                ////System.out.println("Retwit!");
                 response.setMode("retweetSent"); //show RT Message and update div
             } catch (TwitterException ex) {
                 log.error("Error when trying to retweet ", ex);
@@ -320,7 +320,7 @@ public class Timeline extends GenericResource{
             response.setRenderParameter("suri", objUri);
             response.setRenderParameter("currentTab", request.getParameter("currentTab"));
             try {
-                //System.out.println("Undoing Retweet!!");
+                ////System.out.println("Undoing Retweet!!");
                 Long retweetId = Long.parseLong(request.getParameter("retweetId"));
                 Long originalId = Long.parseLong(request.getParameter("id"));                
                 twitter.destroyStatus(retweetId); //Destroy Tweet generated when you Retweeted
@@ -337,7 +337,7 @@ public class Timeline extends GenericResource{
             try {
                 Long id = Long.parseLong(request.getParameter("id"));
                 String answer = request.getParameter("replyText");
-                //System.out.println("Answer Text:" + answer);
+                ////System.out.println("Answer Text:" + answer);
                 twitter.updateStatus(new StatusUpdate(answer).inReplyToStatusId(id));
                 response.setRenderParameter("repliedTweet", "ok");
                 response.setMode("tweetSent");                
@@ -348,7 +348,7 @@ public class Timeline extends GenericResource{
             try {
                 String dmText = request.getParameter("dmText");
                 String idUser = request.getParameter("userId");
-                //System.out.println("Answer Text:" + dmText);
+                ////System.out.println("Answer Text:" + dmText);
                 DirectMessage message = twitter.sendDirectMessage(Long.parseLong(idUser), dmText);
                 response.setRenderParameter("repliedTweet", "ok");
                 response.setMode("tweetSent");                
@@ -359,12 +359,12 @@ public class Timeline extends GenericResource{
         }else if(action.equals("doFavorite")){
             try {
                 Long id = Long.parseLong(request.getParameter("id"));
-                //System.out.println("Doing FAVORITE:" + id);
+                ////System.out.println("Doing FAVORITE:" + id);
                 twitter.createFavorite(id); // El id de st Deberá ser guardado para poder deshacer el Favorite
                 response.setRenderParameter("id", id+"");
                 response.setRenderParameter("suri", objUri);
                 response.setRenderParameter("currentTab", request.getParameter("currentTab"));
-                //System.out.println("Favorited!");
+                ////System.out.println("Favorited!");
                 response.setMode("favoriteSent"); //show Favorited Message and update div
             }catch(TwitterException ex) {
                 if(ex.getErrorCode() == 139){//You have already favorited this status
@@ -377,12 +377,12 @@ public class Timeline extends GenericResource{
         }else if(action.equals("undoFavorite")){
             try {
                 Long id = Long.parseLong(request.getParameter("id"));
-                //System.out.println("UNDOING FAVORITE:" + id);
+                ////System.out.println("UNDOING FAVORITE:" + id);
                 twitter.destroyFavorite(id);
                 response.setRenderParameter("id", id+"");
                 response.setRenderParameter("suri", objUri);
                 response.setRenderParameter("currentTab", request.getParameter("currentTab"));
-                //System.out.println("Unfavorited!");
+                ////System.out.println("Unfavorited!");
                 response.setMode("favoriteSent"); //show Favorited Message and update div
             } catch (TwitterException ex) { 
                 log.error("You have already UNFAVORITED this status ", ex);
@@ -397,7 +397,7 @@ public class Timeline extends GenericResource{
             try {
                 String friendToAdd = request.getParameter("targetUser");
                 twitter.createFriendship(friendToAdd);
-                //System.out.println("Following user:" + friendToAdd);
+                ////System.out.println("Following user:" + friendToAdd);
                 response.setRenderParameter("suri", objUri);
                 response.setRenderParameter("targetUser", friendToAdd);               
                 response.setMode("followSent"); //show follow message
@@ -408,7 +408,7 @@ public class Timeline extends GenericResource{
             try{
                 String friendToDelete = request.getParameter("targetUser");
                 twitter.destroyFriendship(friendToDelete);
-                //System.out.println("UNFollowing user:" + friendToDelete);
+                ////System.out.println("UNFollowing user:" + friendToDelete);
                 response.setRenderParameter("suri", objUri);
                 response.setRenderParameter("targetUser", friendToDelete);
                 response.setMode("undoFollowSent"); //show unfollow Message
@@ -423,7 +423,7 @@ public class Timeline extends GenericResource{
             try {
                 socialNetwork = (SocialNetwork)SemanticObject.createSemanticObject(objUri).getGenericInstance();
             }catch(Exception e){
-                //System.out.println("Error getting the SocialNetwork " + e);
+                ////System.out.println("Error getting the SocialNetwork " + e);
                 log.error("Error getting the SocialNetwork ", e);
                 return;
             }
@@ -458,19 +458,19 @@ public class Timeline extends GenericResource{
                     }
 
                     if(socialNetUser != null){//User already exists
-                        //System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
+                        ////System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
                         int userKloutScore = 0;
                         int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
                         if(days > 5 && checkKlout){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                            //System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
+                            ////System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
                             Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                             userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                            //System.out.println("userKloutScore K TRAJO:" + userKloutScore);
+                            ////System.out.println("userKloutScore K TRAJO:" + userKloutScore);
                             socialNetUser.setSnu_klout(userKloutScore);
                         }
 
                     }else{//User does not exist, create it
-                        //System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                        ////System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
                         int userKloutScore = 0;
                         if(checkKlout){
                             Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
@@ -513,7 +513,7 @@ public class Timeline extends GenericResource{
                     }
                 }
                 response.setRenderParameter("postUri", postIn.getURI());
-                //System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                ////System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
             }catch(Exception e){
                 log.error("Error trying to setSocialTopic", e);
             }
@@ -538,9 +538,9 @@ public class Timeline extends GenericResource{
             }
             response.setMode("reAssignedPost");
         }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            ////System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
-                //System.out.println("Entra a InBox_processAction-3");
+                ////System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = null;
                 SocialTopic socialTopic = null;
                 String suri = request.getParameter("objUri");
@@ -592,7 +592,7 @@ public class Timeline extends GenericResource{
                     }
                 }
 
-                //System.out.println("Entra a InBox_processAction-4");
+                ////System.out.println("Entra a InBox_processAction-4");
                 if(postIn != null){//When is a response from the timeline
                     SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
                 }else if(socialTopic != null){//When is new tweet to some user
@@ -606,7 +606,7 @@ public class Timeline extends GenericResource{
             try {
                 if(request.getParameter("isDM") != null && request.getParameter("isDM").equals("true")){
                     Long id = Long.parseLong(request.getParameter("id"));
-                    System.out.println("Removing tweet:" + id);              
+                    //System.out.println("Removing tweet:" + id);              
                     DirectMessage removedDM = twitter.destroyDirectMessage(id);
                     if(removedDM != null && removedDM.getId() == id){
                         response.setRenderParameter("id", id+"");
@@ -621,7 +621,7 @@ public class Timeline extends GenericResource{
                     }
                 }else{//Is a tweet
                     Long id = Long.parseLong(request.getParameter("id"));
-                    System.out.println("Removing tweet:" + id);              
+                    //System.out.println("Removing tweet:" + id);              
                     Status removed = twitter.destroyStatus(id);
                     if(removed != null && removed.getId() == id){
                         response.setRenderParameter("id", id+"");
@@ -647,24 +647,24 @@ public class Timeline extends GenericResource{
    @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         //
-        //System.out.println("\n\n+\n+\nEntering process request!");
+        ////System.out.println("\n\n+\n+\nEntering process request!");
         String mode = paramRequest.getMode();
-        //System.out.println("\n\n+\n+\nModo: " + mode);
+        ////System.out.println("\n\n+\n+\nModo: " + mode);
         PrintWriter out = response.getWriter();
         String objUri = request.getParameter("suri");
-        //System.out.println("suri in processRequest:" + objUri);
+        ////System.out.println("suri in processRequest:" + objUri);
         twitter4j.Twitter twitter = twitterUsers.get(objUri);
         if(mode!= null && mode.equals("getMoreTweets")){//Gets more Tweets
-            //System.out.println("brings additional TWEETS");
+            ////System.out.println("brings additional TWEETS");
             doGetMoreTweets(request, response, paramRequest);
         }else if(mode!= null && mode.equals("getMoreMentions")){//Gets more Mentions
-            //System.out.println("brings additional MENTIONS");
+            ////System.out.println("brings additional MENTIONS");
             doGetMoreMentions(request, response, paramRequest);
         }else if(mode!= null && mode.equals("getMoreFavorites")){//Gets more Favorites
-            //System.out.println("brings additional FAVORITES");
+            ////System.out.println("brings additional FAVORITES");
             doGetMoreFavorites(request, response, paramRequest);
         }else if(mode!= null && mode.equals("getMoreDM")){//Gets more Direct Messages
-            //System.out.println("brings additional DIRECT MESSAGES");
+            ////System.out.println("brings additional DIRECT MESSAGES");
             doGetMoreDMsgs(request, response, paramRequest);
         }else if(mode!= null && mode.equals("onError")) {//Handles error
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
@@ -712,7 +712,7 @@ public class Timeline extends GenericResource{
                 log.error("onError ", ex);
             }
         }else if(mode!= null && mode.equals("retweetSent")){//Displays updated data of retweeted tweet
-            //System.out.println("RETWEET SENT!!!");
+            ////System.out.println("RETWEET SENT!!!");
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
             SWBResourceURL actionURL = paramRequest.getActionUrl();
             renderURL.setParameter("suri", request.getParameter("suri"));
@@ -807,7 +807,7 @@ public class Timeline extends GenericResource{
             try {
                 socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             }catch(Exception e){
-                //System.out.println("Error getting the SocialNetwork " + e);
+                ////System.out.println("Error getting the SocialNetwork " + e);
                 log.error("Error getting the SocialNetwork ", e);
                 return;
             }
@@ -833,19 +833,19 @@ public class Timeline extends GenericResource{
 
 
                     if(socialNetUser != null){//User already exists
-                        //System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
+                        ////System.out.println("The user already exists: " + socialNetUser.getSnu_name() + " - " + socialNetUser.getSnu_id() +"="+ status.getUser().getId());
                         int userKloutScore = 0;
                         int days=SWBSocialUtil.Util.Datediff(socialNetUser.getUpdated(), Calendar.getInstance().getTime());
                         if(days > 5){  //Si ya pasaron 5 o mas días de que se actualizó la info del usuario, entonces busca su score en Klout
-                            //System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
+                            ////System.out.println("YA PASARON MAS DE 5 DÍAS, BUSCAR KLOUT DE USUARIO...");
                             Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
                             userKloutScore=Double.valueOf(socialNetKloutAble.getUserKlout(creatorId)).intValue(); 
-                            //System.out.println("userKloutScore K TRAJO:" + userKloutScore);
+                            ////System.out.println("userKloutScore K TRAJO:" + userKloutScore);
                             socialNetUser.setSnu_klout(userKloutScore);
                         }
 
                     }else{//User does not exist, create it
-                        //System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
+                        ////System.out.println("USUARIO NO EXISTE EN EL SISTEMA, REVISAR QUE KLOUT TIENE");
                         int userKloutScore = 0;
 
                         Kloutable socialNetKloutAble=(Kloutable) socialNetwork;
@@ -856,7 +856,7 @@ public class Timeline extends GenericResource{
                         socialNetUser.setSnu_id(status.getUser().getId()+"");
                         socialNetUser.setSnu_klout(userKloutScore);
                         socialNetUser.setUserUrl("https://twitter.com/" + status.getUser().getScreenName());
-                        //System.out.println("setting user name = " + status.getUser().getScreenName());
+                        ////System.out.println("setting user name = " + status.getUser().getScreenName());
                         socialNetUser.setSnu_name("@"+status.getUser().getScreenName());
                         socialNetUser.setSnu_SocialNetworkObj(socialNetwork.getSemanticObject());
                         socialNetUser.setSnu_photoUrl(status.getUser().getBiggerProfileImageURL());
@@ -877,15 +877,15 @@ public class Timeline extends GenericResource{
                     SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
                     if(defaultSocialTopic != null){
                         postIn.setSocialTopic(defaultSocialTopic);//Asigns socialTipic
-                        //System.out.println("Setting social topic:" + defaultSocialTopic);
+                        ////System.out.println("Setting social topic:" + defaultSocialTopic);
                     }else{
                         postIn.setSocialTopic(null);
-                        //System.out.println("Setting to null");
+                        ////System.out.println("Setting to null");
                     }
                       
-                    //System.out.println("Post created ok: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                    ////System.out.println("Post created ok: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
                 }else{
-                    System.out.println("Creating another response");
+                    //System.out.println("Creating another response");
                 }
             }catch(Exception e){
                 log.error("Error trying to setSocialTopic ", e);
@@ -926,7 +926,7 @@ public class Timeline extends GenericResource{
             out.println("</form>");
             out.println("<span id=\"csLoading\" style=\"width: 100px; display: none\" align=\"center\">&nbsp;&nbsp;&nbsp;<img src=\"" + SWBPlatform.getContextPath() + "/swbadmin/images/loading.gif\"/></span>");
         }else if(mode.equals("doGetHomeStream")){//Displays new home statuses obtained with the stream
-            //System.out.println("ProcessRequest: doGetHomeStream-> RenderURL:" + paramRequest.getRenderUrl() + " actionURL:" + paramRequest.getActionUrl());
+            ////System.out.println("ProcessRequest: doGetHomeStream-> RenderURL:" + paramRequest.getRenderUrl() + " actionURL:" + paramRequest.getActionUrl());
             HttpSession session = request.getSession(true);
             if(session.getAttribute(objUri + "tweetsListener")!=null){
                 SocialUserStreamListener tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri + "tweetsListener");
@@ -1086,7 +1086,7 @@ public class Timeline extends GenericResource{
                     out.println("<a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("doGetHomeStream").setParameter("suri", objUri) + "','" + objUri +"/stream','top'); try{dojo.byId(this.parentNode.id).innerHTML = '';}catch(noe){}; return false;\">" + paramRequest.getLocaleString("youHave") + " <b>" + noOfNewTweets +  "</b> " + (noOfNewTweets > 1 ? paramRequest.getLocaleString("newTweets") : paramRequest.getLocaleString("newTweet")) +  "</a>");
                 }
                 if(tweetsListener.getFavoritesSize() > 0){
-                    //System.out.println("hay nuevos favoritos:" + tweetsListener.getFavoritesSize() );
+                    ////System.out.println("hay nuevos favoritos:" + tweetsListener.getFavoritesSize() );
                     out.println("<script type=\"text/javascript\">");
                     /*out.println("   var tabId = '" + objUri + FAVORITES_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
@@ -1109,7 +1109,7 @@ public class Timeline extends GenericResource{
                 }
                 
                 if(tweetsListener.getMentionsSize() >0 ){
-                    //System.out.println("hay nuevas menciones:" + tweetsListener.getMentionsSize() );
+                    ////System.out.println("hay nuevas menciones:" + tweetsListener.getMentionsSize() );
                     out.println("<script type=\"text/javascript\">");
                     /*out.println("   var tabId = '" +objUri + MENTIONS_TAB + "';");
                     out.println("   var pane = dijit.byId(tabId);");                   
@@ -1130,7 +1130,7 @@ public class Timeline extends GenericResource{
                 }
                 
                 if(tweetsListener.getDirectMSize() >0 ){
-                    //System.out.println("hay nuevos direct msgs:" + tweetsListener.getDirectMSize() );
+                    ////System.out.println("hay nuevos direct msgs:" + tweetsListener.getDirectMSize() );
                     out.println("<script type=\"text/javascript\">");
                     /*out.println("   var tabId = '" +objUri + DIRECT_MESSAGES_TAB +"';");
                     out.println("   var pane = dijit.byId(tabId);");                   
@@ -1155,8 +1155,8 @@ public class Timeline extends GenericResource{
             HttpSession session = request.getSession(true);
             if(session.getAttribute(objUri + "tweetsListener")!=null){
                 SocialUserStreamListener tweetsListener = (SocialUserStreamListener)session.getAttribute(objUri +"tweetsListener");
-                System.out.println("Stopping listener for this timeline:");
-                System.out.println(tweetsListener.stopListener());
+                //System.out.println("Stopping listener for this timeline:");
+                //System.out.println(tweetsListener.stopListener());
                 twitterUsers.remove(objUri);
                 if(session.getAttribute(objUri + "pooling") != null){
                     session.removeAttribute(objUri + "pooling");
@@ -1175,7 +1175,7 @@ public class Timeline extends GenericResource{
             actionURL.setParameter("suri", objUri);
             Long id = Long.parseLong(request.getParameter("id"));
             String currentTab = request.getParameter("currentTab");
-            //System.out.println("Inside favorite sent: " + id);
+            ////System.out.println("Inside favorite sent: " + id);
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Twitter semTwitter = (Twitter) semanticObject.createGenericInstance();
             
@@ -1210,7 +1210,7 @@ public class Timeline extends GenericResource{
         }else if(mode!= null && mode.equals("showError")){//Displays updated data and shows error
             SWBResourceURL renderURL = paramRequest.getRenderUrl();
             Long id = Long.parseLong(request.getParameter("id"));
-            //System.out.println("Error processing action!!!");
+            ////System.out.println("Error processing action!!!");
             
             try {
                 Status originalStatus = twitter.showStatus(id);
@@ -1237,7 +1237,7 @@ public class Timeline extends GenericResource{
                 log.error("No fue posible desplegar el error", ex);
             }
         }else if(mode!= null && mode.equals("showDMError")){//Displays updated data and shows error            
-            //System.out.println("Error processing action!!!");
+            ////System.out.println("Error processing action!!!");
             
             out.println("<span class=\"inline\" dojoType=\"dojox.layout.ContentPane\">");
             out.println("<script type=\"dojo/method\">");
@@ -1324,7 +1324,7 @@ public class Timeline extends GenericResource{
             out.println("   showStatus('El tema fue cambiado correctamente');");
             out.println("</script>");
         }else if(mode.equals("storeInterval")){//Storing the interval for the current uri
-            //System.out.println("suri:" + objUri + "---interval:" + request.getParameter("interval"));
+            ////System.out.println("suri:" + objUri + "---interval:" + request.getParameter("interval"));
             if(request.getParameter("interval") != null){
                 HttpSession session = request.getSession(true);
                 session.setAttribute(objUri + "pooling", request.getParameter("interval"));
@@ -1402,7 +1402,7 @@ public class Timeline extends GenericResource{
         }
         
         try {
-            //System.out.println("Get the next 25 tweets!!");
+            ////System.out.println("Get the next 25 tweets!!");
             Paging paging = new Paging(); //used to set maxId, count
             paging.count(20);
             if(maxTweetID >0L){
@@ -1439,14 +1439,14 @@ public class Timeline extends GenericResource{
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreTweets") + "</a></label>");
             out.println("</div>");
-            //System.out.println("Total tweets:" + i);
+            ////System.out.println("Total tweets:" + i);
         } catch (Exception te) {
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreTwitLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreTweets").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreTweets','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreTweets") + "</a></label>");
             out.println("</div>");
             log.error("Error when getting timeline: ", te);
         }
-        //System.out.println("Has finised printing tweets!");
+        ////System.out.println("Has finised printing tweets!");
     }
     
     public void doGetMoreMentions(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
@@ -1468,7 +1468,7 @@ public class Timeline extends GenericResource{
         }
         
         try {
-            //System.out.println("Get the next 25 tweets!!");
+            ////System.out.println("Get the next 25 tweets!!");
             Paging paging = new Paging(); //used to set maxId, count
             paging.count(20);
             if(maxTweetID >0L){
@@ -1505,7 +1505,7 @@ public class Timeline extends GenericResource{
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreMentions") +"</a></label>");
             out.println("</div>");
-            //System.out.println("Total mentions:" + i);
+            ////System.out.println("Total mentions:" + i);
         } catch (Exception te) {
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreMentionLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreMentions").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreMentions','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreMentions") +"</a></label>");
@@ -1533,7 +1533,7 @@ public class Timeline extends GenericResource{
         }
         
         try {
-            //System.out.println("Get the next 25 favorites!!");
+            ////System.out.println("Get the next 25 favorites!!");
             Paging paging = new Paging(); //used to set maxId, count
             paging.count(20);
             if(maxTweetID >0L){
@@ -1568,7 +1568,7 @@ public class Timeline extends GenericResource{
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFavorites") + "</a></label>");
             out.println("</div>");
-            //System.out.println("Total favorites:" + i);
+            ////System.out.println("Total favorites:" + i);
         } catch (Exception te) {
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreFavoritesLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreFavorites").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreFavorites','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreFavorites") + "</a></label>");
@@ -1596,7 +1596,7 @@ public class Timeline extends GenericResource{
         }
         
         try {
-            //System.out.println("Get the next 25 Direct Messages!!");
+            ////System.out.println("Get the next 25 Direct Messages!!");
             Paging paging = new Paging(); //used to set maxId, count
             paging.count(20);
             if(maxTweetID >0L){
@@ -1611,7 +1611,7 @@ public class Timeline extends GenericResource{
             out.println("<div align=\"center\" style=\"margin-bottom: 10px;\">");
             out.println("<label id=\"" + objUri + "/moreDMLabel\"><a href=\"#\" onclick=\"appendHtmlAt('" + renderURL.setMode("getMoreDM").setParameter("maxTweetID", maxTweetID+"") + "','" + objUri + "/getMoreDM','bottom');try{this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode);}catch(noe){}; return false;\">" + paramRequest.getLocaleString("moreDMs") + "</a></label>");
             out.println("</div>");
-            //System.out.println("Total direct messages:" + i);
+            ////System.out.println("Total direct messages:" + i);
         } catch (Exception te) {
             log.error("Error when getting timeline: ", te);
         }
@@ -1658,23 +1658,23 @@ public class Timeline extends GenericResource{
                     log.error("Error getting the user of RT: " + e.getMessage());
                 }
             }else{
-                //System.out.println("Match not found");
+                ////System.out.println("Match not found");
             }
             //Unable to undoRT created in another application
             
-            //System.out.println("\n\nstatus.getCurrentUserRetweetId():" + status.getCurrentUserRetweetId());
-            //System.out.println("status.getContributors():" + status.getContributors().length);
+            ////System.out.println("\n\nstatus.getCurrentUserRetweetId():" + status.getCurrentUserRetweetId());
+            ////System.out.println("status.getContributors():" + status.getContributors().length);
             //for(long v: status.getContributors()){
-                //System.out.println("v:" + v);
+                ////System.out.println("v:" + v);
             //}
             //Status originalStatus = status.getRetweetedStatus();
             
-            //System.out.println("\n\nstatus.getRetweetedStatus()" + status.getRetweetedStatus());
+            ////System.out.println("\n\nstatus.getRetweetedStatus()" + status.getRetweetedStatus());
             
             //try{
                   //if(originalStatus.getUser().getId()==0L);
             //                twitter.getRetweets(1l);
-            //                System.out.println("userid:" + twitter.getId());                
+            //                //System.out.println("userid:" + twitter.getId());                
             //}catch(Exception e){}
         }
 
@@ -1977,10 +1977,10 @@ public class Timeline extends GenericResource{
                 }
             }
             for(Status st : conversations){
-                System.out.println("from:" + st.getUser().getScreenName() + " text:" + st.getText() );
+                //System.out.println("from:" + st.getUser().getScreenName() + " text:" + st.getText() );
             }
         } catch (TwitterException ex) {
-            System.out.println("message" + ex.getMessage());
+            //System.out.println("message" + ex.getMessage());
             ex.printStackTrace();
             java.util.logging.Logger.getLogger(Timeline.class.getName()).log(Level.SEVERE, null, ex);
         }*/
@@ -2042,7 +2042,7 @@ public class Timeline extends GenericResource{
             
             }
         }catch(Exception ex){
-            //System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
+            ////System.out.println("Error checking updating Tweet Status!" + ex.getMessage());
             log.error("Error checking updating Tweet Status!", ex);
         }
     }
@@ -2050,20 +2050,20 @@ public class Timeline extends GenericResource{
     public static void updateStatusRT(Status originalStatus, SWBResourceURL renderURL, SWBResourceURL actionURL, String objUri, java.io.Writer out, Long currentUser, String tabSuffix, Twitter semTwitter, SWBParamRequest paramRequest){
         try{
             if(originalStatus.isRetweetedByMe()){
-                //System.out.println("SI es RT by ME inside update Status!!");
+                ////System.out.println("SI es RT by ME inside update Status!!");
                 //actionURL.setAction("undoRT");
                 //out.write("<a href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + originalStatus.getId() + INFORMATION + tabSuffix + "'); return false;" +"\">Undo Retweet</a>");
                 out.write("<a title=\"" + paramRequest.getLocaleString("undoRetweet") +"\" class=\"noretweet\" href=\"#\"  onclick=\"return false;" +"\"></a>");
             }else if(originalStatus.getUser().getId() == currentUser){ //User cannot retweet its own tweet
-                //System.out.println(" Is My Tweet ");
+                ////System.out.println(" Is My Tweet ");
                 //out.write("<span></span>");
             }else{
-                //System.out.println("Vamos a hacer RT");
+                ////System.out.println("Vamos a hacer RT");
                 actionURL.setAction("doRT");
                 out.write("<a title=\"" + paramRequest.getLocaleString("retweet") +"\" class=\"retweet\" href=\"#\"  onclick=\"try{dojo.byId(this.parentNode).innerHTML = '<img src=" + SWBPlatform.getContextPath() + "/swbadmin/icons/loading.gif>';}catch(noe){} postSocialHtml('" + actionURL.setParameter("id", originalStatus.getId()+"").setParameter("currentTab", tabSuffix) + "','" + semTwitter.getId() + originalStatus.getId() + INFORMATION + tabSuffix +  "'); return false;" +"\"></a> ");
             }
         }catch(Exception ex){
-            //System.out.println("Error checking updating RT Status!" + ex.getMessage());
+            ////System.out.println("Error checking updating RT Status!" + ex.getMessage());
             log.error("Error checking updating RT Status!", ex);
         }
     }
