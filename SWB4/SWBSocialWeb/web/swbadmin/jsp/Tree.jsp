@@ -1,3 +1,6 @@
+<%@page import="org.semanticwb.social.SWBSocial"%>
+<%@page import="org.semanticwb.social.util.SWBSocialUtil"%>
+<%@page import="org.semanticwb.social.base.SocialSiteBase"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.hp.hpl.jena.ontology.OntModelSpec"%>
 <%@page import="com.hp.hpl.jena.ontology.OntDocumentManager"%>
@@ -5,10 +8,13 @@
 <%@page import="com.hp.hpl.jena.ontology.OntClass"%>
 <%@page import="org.json.*,org.semanticwb.*,org.semanticwb.model.*,org.semanticwb.platform.*,java.util.*,com.hp.hpl.jena.*,com.hp.hpl.jena.util.*,com.hp.hpl.jena.rdf.model.Model" %>
 <%@page import="org.semanticwb.social.Pageable"%>
+<%@page import="org.semanticwb.social.SocialSite"%> 
 <%@page import="org.semanticwb.social.Stream"%>
+<%@page import="org.semanticwb.social.LicenseType"%>
 <%@page contentType="text/html" %><%@page pageEncoding="UTF-8" %>
 <%!
-    int nullnode=0;
+    Boolean usingLicenseMgr=Boolean.parseBoolean(SWBPortal.getEnv("swbsocial/useLicenseMgr", "false")); 
+    int nullnode=0; 
 
     public String getLocaleString(String key, String lang)
     {
@@ -265,15 +271,23 @@
 
     public void addHerarquicalNodes(JSONArray arr, SemanticObject obj, User user) throws JSONException
     {
+        LicenseType licenseType=null;
+        WebSite wsite=WebSite.ClassMgr.getWebSite(obj.getModel().getName());
+        if(wsite instanceof SocialSite)
+        {
+            SocialSite socialSite=(SocialSite)wsite;
+            licenseType=socialSite.getLicenseType();
+        }
+        
         Iterator<SemanticObject> it=SWBComparator.sortSortableObject(obj.getSemanticClass().listHerarquicalNodes());
         while(it.hasNext())
         {
             HerarquicalNode node=new HerarquicalNode(it.next());
-            addHerarquicalNode(arr,node,obj,false,user);
+            addHerarquicalNode(arr,node,obj,false,user, licenseType);
         }
     }
 
-    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user) throws JSONException
+    public void addHerarquicalNode(JSONArray arr, HerarquicalNode node, SemanticObject obj, boolean addChilds, User user, LicenseType licenseType) throws JSONException
     {
         if(!SWBPortal.getAdminFilterMgr().haveAccessToHerarquicalNode(user, obj.getURI(), node))return;
         if(obj.getBooleanProperty(Trashable.swb_deleted)==true)return;
@@ -299,6 +313,7 @@
         JSONArray childs=new JSONArray();
 
         Iterator<SemanticObject> it=null;
+        Iterator<SemanticObject> itTmp=null;
         if(cls!=null)
         {
             it=SWBObjectFilter.filter(SWBComparator.sortSermanticObjects(user.getLanguage(), obj.getModel().listInstancesOfClass(cls)),pf);
@@ -306,7 +321,7 @@
         {
             it=new ArrayList().iterator();
         }
-
+   
         //System.out.println("obj:"+obj.getId()+" cls:"+cls);
         //drop acceptance
         JSONArray dropacc=new JSONArray();
@@ -316,12 +331,28 @@
         JSONArray menus=new JSONArray();
         jobj.putOpt("menus", menus);
         String url=SWBPlatform.getContextPath();
-
+        long classInstNumber=0;
+        long maxStream2add=0;
+        boolean canAddInstance=true;
+        //System.out.println("Avrekp1:"+
         if(cls!=null)
         {
             //TODO:Separar en controller
             if(cls.equals(Stream.sclass))
             {
+                if(licenseType!=null)
+                {
+                    classInstNumber=SWBUtils.Collections.sizeOf(obj.getModel().listInstancesOfClass(cls)); 
+                    maxStream2add=Long.parseLong(SWBSocialUtil.getLicenseTypeProp(licenseType.getId().toLowerCase()+".streamsnum", "0"));
+                    if(classInstNumber>=maxStream2add) canAddInstance=false; 
+                }else {
+                    try{
+                        if(usingLicenseMgr){
+                            canAddInstance=false;
+                        }
+                    }catch(Exception e){System.out.println("Error");}   
+                }
+                //SWBSocialUtil.getLicenseTypeProp(name, defect)
                 //Para que el Jsp del dialogo de creación sea propio, yo tengo mas pripiedades obligatorias que no deseo 
                 //que aparezcan en el dialogo de creación, sino hasta la pestaña de "Información" de la clase Stream (en este caso)
                 url+="/work/models/SWBAdmin/jsp/addStream.jsp"; 
@@ -336,12 +367,16 @@
                 url+="/swbadmin/jsp/SemObjectEditor.jsp";
             }
             url+="?scls="+cls.getEncodedURI()+"&sref="+obj.getEncodedURI();
+            try{
+                if(usingLicenseMgr) url+="&maxStream2add="+maxStream2add;
+            }catch(Exception e){}
             if(pf!=null)url+="&"+pf;
 
-            if(SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD))
+            if(canAddInstance && SWBPortal.getAdminFilterMgr().haveClassAction(user, cls, AdminFilter.ACTION_ADD))
             {
                 menus.put(getMenuItem(getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()), getLocaleString("icon_add",null),getAction("showDialog", url,getLocaleString("add",user.getLanguage())+" "+cls.getDisplayName(user.getLanguage()))));
                 dropacc.put(cls.getClassId());
+                menus.put(getMenuSeparator());
             }
             //Iterator<SemanticClass> it2=cls.listSubClasses();
             //while(it2.hasNext())
@@ -350,7 +385,6 @@
             //    menus.put(getMenuItem("Agregar "+scls.getDisplayName(lang), getLocaleString("icon_add",null),getAction("showDialog", SWBPlatform.getContextPath()+"/swbadmin/jsp/SemObjectEditor.jsp?scls="+scls.getEncodedURI()+"&sref="+obj.getEncodedURI()+"&sprop="+prop.getEncodedURI(),null)));
             //    dropacc.put(scls.getClassID());
             //}
-            menus.put(getMenuSeparator());
         }
         menus.put(getMenuReload(user.getLanguage()));
 
@@ -374,7 +408,7 @@
             {
                 HerarquicalNode cnode=sit.next();
                 //System.out.println("cnode:"+cnode);
-                addHerarquicalNode(childs,cnode,obj,false,user);
+                addHerarquicalNode(childs,cnode,obj,false,user, licenseType);
             }
 
             while(it.hasNext())
@@ -955,12 +989,20 @@
 
         if(addChilds)
         {
+            LicenseType licenseType=null;
+            WebSite wsite=WebSite.ClassMgr.getWebSite(obj.getModel().getName());
+            if(wsite instanceof SocialSite)
+            {
+                SocialSite socialSite=(SocialSite)wsite;
+                licenseType=socialSite.getLicenseType();
+            }
+            
             Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
                 //System.out.println("cnode:"+cnode);
-                addHerarquicalNode(childs,cnode,obj,false,user);
+                addHerarquicalNode(childs,cnode,obj,false,user, licenseType);
             }
 
             while(it.hasNext())
@@ -1039,12 +1081,20 @@
 
         if(addChilds)
         {
+            LicenseType licenseType=null;
+            WebSite wsite=WebSite.ClassMgr.getWebSite(obj.getModel().getName());
+            if(wsite instanceof SocialSite)
+            {
+                SocialSite socialSite=(SocialSite)wsite;
+                licenseType=socialSite.getLicenseType();
+            }
+            
             Iterator<HerarquicalNode> sit=SWBComparator.sortSortableObject(node.listHerarquicalNodes());
             while(sit.hasNext())
             {
                 HerarquicalNode cnode=sit.next();
                 //System.out.println("cnode:"+cnode);
-                addHerarquicalNode(childs,cnode,obj,false,user);
+                addHerarquicalNode(childs,cnode,obj,false,user, licenseType);
             }
 
             while(it.hasNext())
@@ -1313,7 +1363,15 @@
                 SemanticObject nobj=ont.getSemanticObject(nuri);
                 //System.out.println("obj:"+obj+" node:"+nobj);
                 HerarquicalNode node=new HerarquicalNode(nobj);
-                addHerarquicalNode(items,node,obj,addChilds,user);
+                LicenseType licenseType=null;
+                WebSite wsite=WebSite.ClassMgr.getWebSite(obj.getModel().getName());
+                if(wsite instanceof SocialSite)
+                {
+                    SocialSite socialSite=(SocialSite)wsite;
+                    licenseType=socialSite.getLicenseType();
+                }
+                
+                addHerarquicalNode(items,node,obj,addChilds,user, licenseType);
             }
         }else
         {
