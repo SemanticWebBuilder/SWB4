@@ -131,7 +131,7 @@ public class YoutubeWall extends GenericResource{
             out.println("</div>");
             return;
         }
-        //System.out.println("suriReceived in YoutubeWall:" + objUri);
+        ////System.out.println("suriReceived in YoutubeWall:" + objUri);
         if(contentTabId == null){//The resource is loaded for the first time and it needs to display the tabs
             String jspResponse = SWBPlatform.getContextPath() +"/work/models/" + paramRequest.getWebPage().getWebSiteId() +"/jsp/socialNetworks/youtubeTabs1.jsp";
             RequestDispatcher dis = request.getRequestDispatcher(jspResponse);
@@ -139,7 +139,7 @@ public class YoutubeWall extends GenericResource{
                 request.setAttribute("paramRequest", paramRequest);
                 dis.include(request, response);
             }catch (Exception e) {
-                //System.out.println("Error loading the Youtube Tabs " + e);
+                ////System.out.println("Error loading the Youtube Tabs " + e);
                 log.error("Error loading Youtube tabs", e);
             }
             return;
@@ -168,10 +168,10 @@ public class YoutubeWall extends GenericResource{
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         String mode = paramRequest.getMode();
-        System.out.println("\n\n\nModo: " + mode);        
+        //System.out.println("\n\n\nModo: " + mode);        
         String objUri = request.getParameter("suri");
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
-        //System.out.println("suri in processRequest:" + objUri);
+        ////System.out.println("suri in processRequest:" + objUri);
         PrintWriter out = response.getWriter();
         if(mode!= null && mode.equals("commentVideoSent")){//Feedback of commented video
             //response.getWriter().print("Comment sent");
@@ -185,7 +185,7 @@ public class YoutubeWall extends GenericResource{
             String videoId = request.getParameter("videoId");
             String action = request.getParameter("action");
             String htmlImage = "";
-            //System.out.println("LIKE SENT:" + request.getParameter("suri") + videoId + action);
+            ////System.out.println("LIKE SENT:" + request.getParameter("suri") + videoId + action);
             String actionTitle = "";
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
@@ -196,7 +196,7 @@ public class YoutubeWall extends GenericResource{
                 paramsVideo.put("fields", "yt:statistics,yt:rating,published");
                 String videoInfo= getRequest(paramsVideo, "https://gdata.youtube.com/feeds/api/videos/" + videoId,
                                 "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", semanticYoutube.getAccessToken());
-                //System.out.println("video INFO:" + videoInfo);
+                ////System.out.println("video INFO:" + videoInfo);
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder;
                 builder = factory.newDocumentBuilder();
@@ -208,17 +208,17 @@ public class YoutubeWall extends GenericResource{
                 for( int tmp = 0; tmp < rootNode.getLength(); tmp++){
                     Node nNode= rootNode.item(tmp);
                     if(nNode.getNodeName().equals("published")){
-                        System.out.println("published:" + nNode.getTextContent());
+                        //System.out.println("published:" + nNode.getTextContent());
                         Date date = formatter.parse(nNode.getTextContent());
                         out.write(df.format(date) + "&nbsp; ");
                     }else if(nNode.getNodeName().equals("yt:statistics")){                        
                         out.println( paramRequest.getLocaleString("views") +":" + nNode.getAttributes().getNamedItem("viewCount").getTextContent() + " ");
-                        System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
+                        //System.out.println(nNode.getAttributes().getNamedItem("viewCount").getTextContent());
                         favCount = nNode.getAttributes().getNamedItem("favoriteCount").getTextContent();
                     }else if(nNode.getNodeName().equals("yt:rating")){
-                        //System.out.println("yt:rating" + nNode.getNodeValue());
-                        //System.out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent());
-                        //System.out.println(nNode.getAttributes().getNamedItem("numLikes").getTextContent());
+                        ////System.out.println("yt:rating" + nNode.getNodeValue());
+                        ////System.out.println(nNode.getAttributes().getNamedItem("numDislikes").getTextContent());
+                        ////System.out.println(nNode.getAttributes().getNamedItem("numLikes").getTextContent());
                         
                         out.write(" <strong><span> " + paramRequest.getLocaleString("likes") + ": </span>");
                         out.write(nNode.getAttributes().getNamedItem("numLikes").getTextContent() + " ");
@@ -261,7 +261,7 @@ public class YoutubeWall extends GenericResource{
             try {
                 socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             }catch(Exception e){
-                //System.out.println("Error getting the SocialNetwork " + e);
+                ////System.out.println("Error getting the SocialNetwork " + e);
                 log.error("Error getting the social Network", e);
                 return;
             }
@@ -311,7 +311,7 @@ public class YoutubeWall extends GenericResource{
                         }
                     }
 
-                    //System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
+                    ////System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
                     SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
 
                     postIn=VideoIn.ClassMgr.createVideoIn(model);
@@ -334,7 +334,7 @@ public class YoutubeWall extends GenericResource{
                     videoIn.setVideo(BASE_VIDEO_URL + videoId);
 
                      if(socialNetUser == null){//User does not exist                    
-                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
+                        //System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
                         socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
                         socialNetUser.setSnu_id(creatorId);
                         socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
@@ -344,7 +344,7 @@ public class YoutubeWall extends GenericResource{
                         socialNetUser.setFollowers(0);
                         socialNetUser.setFriends(0);
                     }else{
-                        System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                        //System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
                     }
 
                     postIn.setPostInSocialNetworkUser(socialNetUser);
@@ -352,10 +352,10 @@ public class YoutubeWall extends GenericResource{
                     SocialTopic defaultSocialTopic = SocialTopic.ClassMgr.getSocialTopic("DefaultTopic", model);
                     if(defaultSocialTopic != null){
                         postIn.setSocialTopic(defaultSocialTopic);//Asigns socialTipic
-                        System.out.println("Setting social topic:" + defaultSocialTopic);
+                        //System.out.println("Setting social topic:" + defaultSocialTopic);
                     }else{
                         postIn.setSocialTopic(null);
-                        System.out.println("Setting to null");
+                        //System.out.println("Setting to null");
                     }
                 }
                 
@@ -375,9 +375,9 @@ public class YoutubeWall extends GenericResource{
                     }
                 }
 
-                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                //System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
             }catch(Exception e){
-                System.out.println("Error trying to setSocialTopic");
+                //System.out.println("Error trying to setSocialTopic");
                 log.error("ERROR:", e);
             }            
             
@@ -618,8 +618,8 @@ public class YoutubeWall extends GenericResource{
             }
             SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
             Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
-            //System.out.println("VIDEO ID:" + videoId);
-            System.out.println("SURI:" + objUri);
+            ////System.out.println("VIDEO ID:" + videoId);
+            //System.out.println("SURI:" + objUri);
             out.println("<script type=\"javascript\">");
             out.println("   showStatus('" + paramRequest.getLocaleString("videoDeleted") +"');");
             out.println("   var deleted = document.getElementById('" + semanticYoutube.getId() + "/" + videoId +"');");
@@ -644,7 +644,7 @@ public class YoutubeWall extends GenericResource{
         SemanticObject semanticObject = SemanticObject.createSemanticObject(objUri);
         Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
-        System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
+        //System.out.println("videoId:" +videoId + "--startIndex:" + startIndex  + "--totalComments:" + totalComments);
         
         try{
             HashMap<String, String> paramsUsr = new HashMap<String, String>(3);
@@ -706,7 +706,7 @@ public class YoutubeWall extends GenericResource{
                     out.write("</p>");
                     out.write("</li>");
                 }
-                System.out.println("SE OBTUVIERON :" + commentCounter + " COMENTARIOS");
+                //System.out.println("SE OBTUVIERON :" + commentCounter + " COMENTARIOS");
                 if((Integer.parseInt(startIndex) + commentCounter) < Integer.parseInt(totalComments) ){//Link to get more comments
                     out.write("<li class=\"timelinemore\">");
                     out.write("<label><a href=\"#\" onclick=\"appendHtmlAt('" + paramRequest.getRenderUrl().setMode("getMoreComments").setParameter("videoId", videoId).setParameter("startIndex", (commentCounter + Integer.parseInt(startIndex)) +"").setParameter("totalComments", totalComments+"").setParameter("suri", objUri)
@@ -715,7 +715,7 @@ public class YoutubeWall extends GenericResource{
                 }
             }
         }catch(Exception e){
-            //System.out.println("ERROR GETTING MORE COMMENTS");
+            ////System.out.println("ERROR GETTING MORE COMMENTS");
             log.error("Problem getting more comments", e);
         }
     }
@@ -727,18 +727,18 @@ public class YoutubeWall extends GenericResource{
         String action = response.getAction();
         
         if(action != null && (action.equals("doLike") || action.equals("doDislike"))){//Do a Like
-            System.out.println("Doing a like");
+            //System.out.println("Doing a like");
             response.setRenderParameter("videoId", request.getParameter("videoId"));                                       //Id of original status
             response.setRenderParameter("suri", request.getParameter("suri"));
             response.setRenderParameter("action", action);
             doLikeDislike(request);
             response.setMode("likeSent");
         }else if(action != null && action.equals("createCommentVideo")){
-            System.out.println("Commenting a video");
+            //System.out.println("Commenting a video");
             doCommentVideo(request);
             response.setMode("commentVideoSent");
         }else if (action != null && action.equals("createCommentComment")) {
-            System.out.println("Commenting commenting a video");
+            //System.out.println("Commenting commenting a video");
             doCommentComment(request);
             response.setMode("commentVideoSent");
         }else if(action.equals("setSocialTopic")){
@@ -749,7 +749,7 @@ public class YoutubeWall extends GenericResource{
             try {
                 socialNetwork = (SocialNetwork)SemanticObject.getSemanticObject(objUri).getGenericInstance();
             }catch(Exception e){
-                //System.out.println("Error getting the SocialNetwork " + e);
+                ////System.out.println("Error getting the SocialNetwork " + e);
                 log.error("Error getting the social Network", e);
                 return;
             }
@@ -792,7 +792,7 @@ public class YoutubeWall extends GenericResource{
                     }
                 }
 
-                //System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
+                ////System.out.println("-" + title + "-" + description +"-" + creatorName + "-" + creatorId );
                 SWBModel model=WebSite.ClassMgr.getWebSite(socialNetwork.getSemanticObject().getModel().getName());
                 SocialNetworkUser socialNetUser = SocialNetworkUser.getSocialNetworkUserbyIDAndSocialNet(creatorId, socialNetwork, model);
                                 
@@ -818,7 +818,7 @@ public class YoutubeWall extends GenericResource{
                     videoIn.setVideo(BASE_VIDEO_URL + videoId);
 
                      if(socialNetUser == null){//User does not exist                    
-                        System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
+                        //System.out.println("USUARIO NO EXISTE EN EL SISTEMA");
                         socialNetUser=SocialNetworkUser.ClassMgr.createSocialNetworkUser(model);//Create a socialNetworkUser
                         socialNetUser.setSnu_id(creatorId);
                         socialNetUser.setSnu_name((creatorName.isEmpty()) ? creatorId : creatorName);
@@ -828,7 +828,7 @@ public class YoutubeWall extends GenericResource{
                         socialNetUser.setFollowers(0);
                         socialNetUser.setFriends(0);
                     }else{
-                        System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
+                        //System.out.println("YA EXISTE EN EL SISTEMA:" + socialNetUser);
                     }
 
                     postIn.setPostInSocialNetworkUser(socialNetUser);
@@ -849,9 +849,9 @@ public class YoutubeWall extends GenericResource{
                 
                 response.setRenderParameter("postUri", postIn.getURI());
 
-                System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
+                //System.out.println("POST CREADO CORRECTAMENTE: " + postIn.getId() + " ** " + postIn.getSocialNetMsgId());
             }catch(Exception e){
-                //System.out.println("Error trying to setSocialTopic");
+                ////System.out.println("Error trying to setSocialTopic");
                 log.error("ERROR:", e);
             }
             response.setRenderParameter("suri", socialNetwork.getURI());
@@ -885,9 +885,9 @@ public class YoutubeWall extends GenericResource{
             response.setRenderParameter("suri", request.getParameter("suri"));
             response.setMode("videoDeleted");
         }else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            ////System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
-                //System.out.println("Entra a InBox_processAction-3");
+                ////System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                 SocialTopic stOld = postIn.getSocialTopic();
                 ///
@@ -932,7 +932,7 @@ public class YoutubeWall extends GenericResource{
                     }
                 }
 
-                //System.out.println("Entra a InBox_processAction-4");
+                ////System.out.println("Entra a InBox_processAction-4");
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
                 response.setMode("commentVideoSent");
             }
@@ -973,7 +973,7 @@ public class YoutubeWall extends GenericResource{
             conn.connect();
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            //System.out.println("THE READ:" + docxml);
+            ////System.out.println("THE READ:" + docxml);
 
         }catch(Exception ex){
             log.error("ERROR deleting video", ex);
@@ -989,8 +989,8 @@ public class YoutubeWall extends GenericResource{
         String category = request.getParameter("category");
         String keywords = request.getParameter("keywords");
         String privacy = request.getParameter("privacy");
-        System.out.println("THE PRIVACY:" + privacy);
-        System.out.println("SURI:" + objUri);
+        //System.out.println("THE PRIVACY:" + privacy);
+        //System.out.println("SURI:" + objUri);
         
         if((videoId == null || videoId.trim().isEmpty()) || (title == null || title.trim().isEmpty()) ||
                 (objUri == null || objUri.trim().isEmpty()) || (description == null || description.trim().isEmpty())
@@ -1052,8 +1052,8 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.println("THIS IS WHAT I READ:" + docxml);
-            //System.out.println("THE READ:" + docxml);
+            //System.out.println("THIS IS WHAT I READ:" + docxml);
+            ////System.out.println("THE READ:" + docxml);
 
         }catch(Exception ex){
             log.error("ERROR", ex);
@@ -1105,9 +1105,9 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.println("--Ejecuted Like/disLike:" + docxml);
+            //System.out.println("--Ejecuted Like/disLike:" + docxml);
         }catch(Exception ex){
-            //System.out.println("ERROR" + ex.toString());
+            ////System.out.println("ERROR" + ex.toString());
             log.error("Error making like/dislike", ex);
         }
     }
@@ -1157,9 +1157,9 @@ public class YoutubeWall extends GenericResource{
             writer.close();                        
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.println("--docxml en post Comment----" + docxml);               
+            //System.out.println("--docxml en post Comment----" + docxml);               
         }catch(Exception ex){
-            //System.out.println("ERROR" + ex.toString());            
+            ////System.out.println("ERROR" + ex.toString());            
             log.error(ex);
         }
     }
@@ -1169,10 +1169,10 @@ public class YoutubeWall extends GenericResource{
         String commentId = request.getParameter("commentId");
         String objUri = request.getParameter("suri");
         String comment = request.getParameter("commentComment");
-        System.out.println("videoId:" + videoId);
-        System.out.println("commentId:" + commentId);
-        System.out.println("objUri:" + objUri);
-        System.out.println("comment:" + comment);
+        //System.out.println("videoId:" + videoId);
+        //System.out.println("commentId:" + commentId);
+        //System.out.println("objUri:" + objUri);
+        //System.out.println("comment:" + comment);
         
 
         if ((videoId == null || videoId.isEmpty()) || (comment == null || comment.isEmpty())
@@ -1213,15 +1213,15 @@ public class YoutubeWall extends GenericResource{
                     + " href=\"http://gdata.youtube.com/feeds/api/videos/" + videoId + "/comments/" + commentId + "\" />   "
                     + "<content>" + comment + "</content>"
                     + "</entry>";
-            System.out.println("XML" + xml);
+            //System.out.println("XML" + xml);
             writer.write(xml.getBytes("UTF-8"));
             writer.flush();
             writer.close();
             BufferedReader readerl = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String docxml = readerl.readLine();
-            System.out.println("--docxml en post Comment----" + docxml);
+            //System.out.println("--docxml en post Comment----" + docxml);
         } catch (Exception ex) {
-            System.out.println("ERROR" + ex.toString());
+            //System.out.println("ERROR" + ex.toString());
             //ex.printStackTrace();
         }
     }
@@ -1297,8 +1297,8 @@ public class YoutubeWall extends GenericResource{
                 //Comments,start
                 String ytComments = "";
                 if(!video.isNull("commentCount") && video.getInt("commentCount")>0 && !isPrivate){
-                    //System.out.println("URL for comments:" );
-                    //System.out.println("token:" + semanticYoutube.getAccessToken());
+                    ////System.out.println("URL for comments:" );
+                    ////System.out.println("token:" + semanticYoutube.getAccessToken());
                     ytComments= getRequest(paramsComments, "https://gdata.youtube.com/feeds/api/videos/" + video.getString("id") + "/comments",
                         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", semanticYoutube.getAccessToken());
                     JSONObject jsonComments = new JSONObject(ytComments);
@@ -1450,7 +1450,7 @@ public class YoutubeWall extends GenericResource{
         
         CharSequence paramString = (null == params) ? "" : delimit(params.entrySet(), "&", "=", true);
         URL serverUrl = new URL(url + "?" +  paramString);       
-        //System.out.println("URL:" +  serverUrl);
+        ////System.out.println("URL:" +  serverUrl);
         
         HttpURLConnection conex = null;
         InputStream in = null;
@@ -1473,12 +1473,12 @@ public class YoutubeWall extends GenericResource{
             conex.connect();
             in = conex.getInputStream();
             response = getResponse(in);
-            //System.out.println("RESPONSE:" + response);
+            ////System.out.println("RESPONSE:" + response);
                         
         } catch (java.io.IOException ioe) {
             if (conex.getResponseCode() >= 400) {
                 response = getResponse(conex.getErrorStream());
-                //System.out.println("\n\n\nERROR:" +   response);
+                ////System.out.println("\n\n\nERROR:" +   response);
                 log.error("ERROR creating connection:", ioe);
             }
             //ioe.printStackTrace();
@@ -1507,7 +1507,7 @@ public class YoutubeWall extends GenericResource{
             Youtube semanticYoutube = (Youtube) semanticObject.createGenericInstance();
             int videosInChannel = 0 ;
             if(!semanticYoutube.validateToken()){//If was unable to refresh the token
-                //System.out.println("unable to refresh the token!");
+                ////System.out.println("unable to refresh the token!");
                 log.error("Unable to refresh the access token!");
                 return;
             }
@@ -1563,7 +1563,7 @@ public class YoutubeWall extends GenericResource{
                     doPrintVideo(request, response, paramRequest, out, postURI, videosArray.getJSONObject(i), user.hasUserGroup(userSuperAdminGrp), userCanRetopicMsg, userCanRespondMsg, userCanRemoveMsg);
                     totalVideos++;
                 }
-                //System.out.println("Videos recibidos:" + totalVideos);
+                ////System.out.println("Videos recibidos:" + totalVideos);
 
                 if(totalVideos + Integer.parseInt(maxVideoId) < videosInChannel){
                     out.write("<div align=\"center\">");
@@ -1689,7 +1689,7 @@ public class YoutubeWall extends GenericResource{
                     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95", accessToken);
 
         }catch(Exception e){
-            //System.out.println("Error getting video information"  + e.getMessage());
+            ////System.out.println("Error getting video information"  + e.getMessage());
             log.error("Error getting video information", e);
         }
         return response;

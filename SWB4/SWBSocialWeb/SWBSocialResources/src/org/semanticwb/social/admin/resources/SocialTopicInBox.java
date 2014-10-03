@@ -337,7 +337,7 @@ public class SocialTopicInBox extends GenericResource {
         String page = request.getParameter("page");
         if (page == null && request.getParameter("noSaveSess") == null) //Cuando venga page!=null no se mete nada a session, ni tampoco se manda return.
         {
-            //System.out.println("Entra a Cuestiones de Sesión-Jorge---");
+            ////System.out.println("Entra a Cuestiones de Sesión-Jorge---");
             HttpSession session = request.getSession(true);
             if (null == searchWord) {
                 searchWord = "";
@@ -1044,7 +1044,7 @@ public class SocialTopicInBox extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        //System.out.println("Entra a InBox_processAction-1:"+action);
+        ////System.out.println("Entra a InBox_processAction-1:"+action);
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
@@ -1085,9 +1085,9 @@ public class SocialTopicInBox extends GenericResource {
                 //response.setMode(Mode_UPDATEPOSTIN);
             }
         } else if (action.equals("postMessage") || action.equals("uploadPhoto") || action.equals("uploadVideo")) {
-            //System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
+            ////System.out.println("Entra a InBox_processAction-2:"+request.getParameter("objUri"));
             if (request.getParameter("objUri") != null) {
-                //System.out.println("Entra a InBox_processAction-3");
+                ////System.out.println("Entra a InBox_processAction-3");
                 PostIn postIn = (PostIn) SemanticObject.getSemanticObject(request.getParameter("objUri")).createGenericInstance();
                 SocialTopic stOld = postIn.getSocialTopic();
                 ///
@@ -1148,10 +1148,10 @@ public class SocialTopicInBox extends GenericResource {
                     }
                 }
 
-                //System.out.println("Entra a InBox_processAction-4");
+                ////System.out.println("Entra a InBox_processAction-4");
                 SWBSocialUtil.PostOutUtil.sendNewPost(postIn, postIn.getSocialTopic(), socialPFlow, aSocialNets, wsite, toPost, request, response);
 
-                //System.out.println("Entra a InBox_processAction-5");                
+                ////System.out.println("Entra a InBox_processAction-5");                
                 response.setRenderParameter("statusMsg", response.getLocaleString("msgResponseCreated"));
                 response.setRenderParameter("suri", stOld.getURI());
                 response.setRenderParameter("postUri", postIn.getURI());
@@ -1671,7 +1671,7 @@ public class SocialTopicInBox extends GenericResource {
              {
              streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
              }*/
-            //System.out.println("StreamPostIns:"+streamPostIns);
+            ////System.out.println("StreamPostIns:"+streamPostIns);
 
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
@@ -1680,7 +1680,7 @@ public class SocialTopicInBox extends GenericResource {
 
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
-            //System.out.println("Entra a ORDEBAR -2");
+            ////System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }/*else{
          streamPostIns=Integer.parseInt(getAllPostInSocialTopic_Query(0, 0, true, socialTopic));
@@ -2557,7 +2557,7 @@ public class SocialTopicInBox extends GenericResource {
 
         //created
         out.println("<td>");
-        //System.out.println("FechaTimeAgo:"+postIn.getPi_created());
+        ////System.out.println("FechaTimeAgo:"+postIn.getPi_created());
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy hh:mm a", new Locale("es", "MX"));
         SimpleDateFormat output = new SimpleDateFormat("EEEE dd 'de' MMMM 'de' yyyy hh:mm a", new Locale("es", "MX"));
         if (postIn.getPi_createdInSocialNet() != null) {

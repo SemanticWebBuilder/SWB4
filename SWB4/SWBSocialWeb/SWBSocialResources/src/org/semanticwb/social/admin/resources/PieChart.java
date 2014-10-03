@@ -222,7 +222,7 @@ public class PieChart extends GenericResource {
         String type = request.getParameter("type");
         String filter = request.getParameter("filter");
         String filterGeneral = request.getParameter("filterGeneral");        
-        //System.out.println("\nGenerando Reporte: " + type+"-" + filter +"-" + filterGeneral+"-"+request.getParameter("lang"));
+        ////System.out.println("\nGenerando Reporte: " + type+"-" + filter +"-" + filterGeneral+"-"+request.getParameter("lang"));
         if (filter == null) {
             filter = "";
         }
@@ -688,7 +688,7 @@ public class PieChart extends GenericResource {
         String selectedMonth = request.getParameter("selectedMonth") == null ? "" : request.getParameter("selectedMonth");
         String selectedDay = request.getParameter("selectedDay") == null ? "" : request.getParameter("selectedDay");
         String selectedHourTmp = request.getParameter("selectedHour") == null ? "" : request.getParameter("selectedHour");
-        //System.out.println("SELECTED HOUR:" + selectedHourTmp);
+        ////System.out.println("SELECTED HOUR:" + selectedHourTmp);
         int selectedHour = Integer.parseInt(selectedHourTmp);
         String fullDate = "";
         
@@ -726,7 +726,7 @@ public class PieChart extends GenericResource {
     */
    public static ArrayList getPostInByStreamAndDay(org.semanticwb.social.Stream stream, String date)
    {
-       //System.out.println("entrando por los datos!");
+       ////System.out.println("entrando por los datos!");
        if(date == null || date.isEmpty()){
            return null;
        }
@@ -756,7 +756,7 @@ public class PieChart extends GenericResource {
     */
    public static ArrayList getPostInBySocialTopicAndDay(org.semanticwb.social.SocialTopic socialTopic, String date)
    {
-       //System.out.println("entrando por los datos!");
+       ////System.out.println("entrando por los datos!");
        if(date == null || date.isEmpty()){
            return null;
        }

@@ -290,7 +290,6 @@ public class RemoveMessagesResource extends GenericResource {
                 }
             }catch(Exception e)
             {
-                System.out.println(e.getMessage()); 
                 log.error(e);
             }
         }
@@ -341,10 +340,10 @@ public class RemoveMessagesResource extends GenericResource {
                 }else if(mode.equals(Action_REMOVESINCEDATE))   //Elimina mensajes en el stream hacia atras, a partir de una fecha dada 
                 {
                     String remSinceDate=request.getParameter("remSinceDate"+stream.getId());
-                    //System.out.println("Entra a processAction/RemoveStream2:"+remSinceDate);
+                    ////System.out.println("Entra a processAction/RemoveStream2:"+remSinceDate);
                     if(remSinceDate!=null && remSinceDate.trim().length()>0)
                     {
-                        //System.out.println("remSinceDate-G2:"+remSinceDate);
+                        ////System.out.println("remSinceDate-G2:"+remSinceDate);
                         Date date = null;
                         SimpleDateFormat formatoDelTexto=null;
                         try {
@@ -353,7 +352,7 @@ public class RemoveMessagesResource extends GenericResource {
                         } catch (ParseException ex) {
                             ex.printStackTrace();
                         }
-                        //System.out.println("date JRemove:"+date);
+                        ////System.out.println("date JRemove:"+date);
                         if(date!=null)
                         {
                             Iterator<PostIn> itPostIns=PostIn.ClassMgr.listPostInByPostInStream(stream, wsite);
@@ -364,7 +363,7 @@ public class RemoveMessagesResource extends GenericResource {
                                 {
                                     if(postIn.getPi_created().compareTo(date)<0)
                                     {
-                                        //System.out.println("postIn a eliminar:"+postIn.getCreated());
+                                        ////System.out.println("postIn a eliminar:"+postIn.getCreated());
                                         postIn.remove();
                                     }
                                 }
@@ -385,14 +384,14 @@ public class RemoveMessagesResource extends GenericResource {
                         
                         for(SocialTopic sTopic: topics){
                             ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialTopic(stream, sTopic);
-                            //System.out.println("\n\nVamos a borra los " + postIns.size() + " sdel topic:" + sTopic.getDisplayTitle("es"));
+                            ////System.out.println("\n\nVamos a borra los " + postIns.size() + " sdel topic:" + sTopic.getDisplayTitle("es"));
                             for(int i = 0; i < postIns.size() ; i++){
                                 SemanticObject sobj =(SemanticObject) postIns.get(i);
                                 sobj.remove();
                             }
-                            //System.out.println("Eliminados " + postIns.size() + "!!!");
+                            ////System.out.println("Eliminados " + postIns.size() + "!!!");
                         }
-                        //System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
+                        ////System.out.println("ELIMINANDO SOLO LOS TOPICS SELECCIONADOS");
                     }
                 }else if(mode.equals(Action_REMOVESELECTEDNETWORKS))   //Elimina los postIns de una red en el Stream
                 {
@@ -407,17 +406,17 @@ public class RemoveMessagesResource extends GenericResource {
                         }
                         
                         for(SocialNetwork sNetwork: networks){
-                            //System.out.println("NET:" +  sNetwork.getTitle());
+                            ////System.out.println("NET:" +  sNetwork.getTitle());
                             ArrayList postIns = SWBSocialUtil.sparql.getPostInbyStreamAndSocialNetwork(stream, sNetwork);
-                            //System.out.println("\n\nVamos a borra los " + postIns.size() + " de la RED:" + sNetwork.getDisplayTitle("es"));
+                            ////System.out.println("\n\nVamos a borra los " + postIns.size() + " de la RED:" + sNetwork.getDisplayTitle("es"));
                             for(int i = 0; i < postIns.size() ; i++){
                                 SemanticObject sobj =(SemanticObject) postIns.get(i);
                                 sobj.remove();
-                                //System.out.println(postIns.get(i));
+                                ////System.out.println(postIns.get(i));
                             }
-                            //System.out.println("Eliminados " + postIns.size() + "!!!");                            
+                            ////System.out.println("Eliminados " + postIns.size() + "!!!");                            
                         }
-                        //System.out.println("ELIMINANDO SOLO LOS POSTS DE ESTA RED SELECCIONADOS");
+                        ////System.out.println("ELIMINANDO SOLO LOS POSTS DE ESTA RED SELECCIONADOS");
                     }
                 }
             }catch(Exception e)

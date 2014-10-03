@@ -138,17 +138,17 @@ public class SWBSocialResUtil {
          */
         public static String createHttpLink(String text)
         {
-            //System.out.println("SWBSocialUtil/replaceHref");
+            ////System.out.println("SWBSocialUtil/replaceHref");
             int pos=0;
             int f = text.indexOf("http", pos);
             int space=text.indexOf(" ", f);
             if(space==-1) {
               space=text.length();
             }
-            //System.out.println("f:"+f+",space:"+space);
+            ////System.out.println("f:"+f+",space:"+space);
             while (f >= 0 && space>0)
             {
-                //System.out.println("ENTRA WHILE F:"+f+",space:"+space);
+                ////System.out.println("ENTRA WHILE F:"+f+",space:"+space);
                 text=text.substring(0, f)+"<a target=\"_new\" href=\""+text.substring(f, space)+"\">"+text.substring(f, space)+"</a>"+text.substring(space);
                 pos = f + 24+text.substring(f, space).length()+2+text.substring(f, space).length();
                 f = text.indexOf("http", pos);
@@ -378,7 +378,7 @@ public class SWBSocialResUtil {
                     URLConnection urlCon = url.openConnection();
 
                     // Sacamos por pantalla el tipo de fichero
-                    //System.out.println(urlCon.getContentType());
+                    ////System.out.println(urlCon.getContentType());
 
                     // Se obtiene el inputStream de la foto web y se abre el fichero
                     // local.

@@ -92,7 +92,7 @@ public class test extends GenericResource{
         WebPage newWebPage=wsite.createWebPage("x1_"+new Date().toString());
         newWebPage.setParent(homePage);
         
-        System.out.println("homePage a reload:"+homePage);
+        //System.out.println("homePage a reload:"+homePage);
         
         out.println("<script type=\"text/javascript\">");
         out.println("   parent.updateTreeNodeByURI('"+homePage.getURI()+"') ");
@@ -104,7 +104,7 @@ public class test extends GenericResource{
         face.addFanPage(face);
         face.setTitle("x1_"+new Date().toString());
         face.setIsFanPage(true);
-        //System.out.println("IconClassJ:"+((DisplayObject)face.sclass.getDisplayObject().createGenericInstance()).getIconClass()+", de cta:"+face);
+        ////System.out.println("IconClassJ:"+((DisplayObject)face.sclass.getDisplayObject().createGenericInstance()).getIconClass()+", de cta:"+face);
         //String iconClassName=((DisplayObject)face.sclass.getDisplayObject().createGenericInstance()).getIconClass();
         //((DisplayObject)face.sclass.getDisplayObject().createGenericInstance()).setIconClass(iconClassName+"_X");
         

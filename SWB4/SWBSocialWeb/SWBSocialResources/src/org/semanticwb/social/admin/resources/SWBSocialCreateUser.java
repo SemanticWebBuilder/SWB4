@@ -127,7 +127,7 @@ public class SWBSocialCreateUser  extends GenericResource {
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException
     {
-        //System.out.println("PA:UserCreate");
+        ////System.out.println("PA:UserCreate");
         String usrep = request.getParameter("userRepository");
         String login = request.getParameter("login");
         String password = request.getParameter("passwd");
@@ -136,13 +136,13 @@ public class SWBSocialCreateUser  extends GenericResource {
             return;
         }
         UserRepository ur = SWBContext.getUserRepository(usrep);
-        //System.out.println("UR:"+ur);
+        ////System.out.println("UR:"+ur);
         if (null!=ur.getUserByLogin(login)){
             response.setMode(SWBResourceURL.Mode_VIEW);
             return;
         }
         User user = ur.createUser();
-        //System.out.println("UC:"+user);
+        ////System.out.println("UC:"+user);
         user.setLogin(login);
         user.setPassword(password);
         response.setMode(SWBResourceURL.Mode_EDIT);

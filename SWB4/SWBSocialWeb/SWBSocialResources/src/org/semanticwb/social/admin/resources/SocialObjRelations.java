@@ -61,7 +61,6 @@ public class SocialObjRelations extends GenericResource
                     dis.include(request, response);
                 } catch (Exception e) {
                     log.error(e);
-                    e.printStackTrace(System.out);
                 }
             }
        } catch (Exception e) {

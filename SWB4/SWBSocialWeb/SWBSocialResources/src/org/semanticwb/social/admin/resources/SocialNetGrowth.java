@@ -64,9 +64,9 @@ public class SocialNetGrowth extends GenericResource{
         /*
         PrintWriter out = response.getWriter();
         String suri = request.getParameter("suri");
-        System.out.println("SocialNetGrowth....");
+        //System.out.println("SocialNetGrowth....");
         if(SemanticObject.getSemanticObject(suri) != null){
-            System.out.println("Social Net 1");
+            //System.out.println("Social Net 1");
             SocialNetwork socialNet = (SocialNetwork)SemanticObject.getSemanticObject(suri).createGenericInstance();
             Connection con = SWBUtils.DB.getDefaultConnection();
     
@@ -89,7 +89,7 @@ public class SocialNetGrowth extends GenericResource{
                     out.println("</p>");
                 }
             }catch(SQLException sqle){
-                System.out.println("error....." +  sqle.getMessage());
+                //System.out.println("error....." +  sqle.getMessage());
             }
             
             out.println("<script type=\"text/javascript\">");

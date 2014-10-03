@@ -162,23 +162,23 @@ public class Reporter extends GenericResource {
         }
 
         /*for(int i = 0; i < genderParams.length; i++){
-            System.out.println("gender___" + genderParams[i]);
+            //System.out.println("gender___" + genderParams[i]);
         }
         
         for(int i = 0; i < schoolGradeParams.length; i++){
-            System.out.println("schoolGradeParams___" + schoolGradeParams[i]);
+            //System.out.println("schoolGradeParams___" + schoolGradeParams[i]);
         }
         
         for(int i = 0; i < slifeStageParams.length; i++){
-            System.out.println("slifeStageParams___" + slifeStageParams[i]);
+            //System.out.println("slifeStageParams___" + slifeStageParams[i]);
         }
         
         for(int i = 0; i < sentimentalRelationShipParams.length; i++){
-            System.out.println("sentimentalRelationShipParams___" + sentimentalRelationShipParams[i]);
+            //System.out.println("sentimentalRelationShipParams___" + sentimentalRelationShipParams[i]);
         }
         
         for(int i = 0; i < scountryStateParams.length; i++){
-            System.out.println("scountryStateParams___" + scountryStateParams[i]);
+            //System.out.println("scountryStateParams___" + scountryStateParams[i]);
         }*/
         /*String gender = request.getParameter("gender");
         String schoolGrade = request.getParameter("schoolGrade");

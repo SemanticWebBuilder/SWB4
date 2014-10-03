@@ -104,7 +104,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
 
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-        //System.out.println("Entrando al process Request:" + paramRequest.getMode());
+        ////System.out.println("Entrando al process Request:" + paramRequest.getMode());
         final String mode = paramRequest.getMode();
         if (Mode_SOURCE.equals(mode)) {
             doShowSource(request, response, paramRequest);
@@ -134,12 +134,12 @@ public class SocialDocumentsToAuhorize extends GenericResource {
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
-        /*System.out.println("**************************processAction:");
-        System.out.println(request.getParameter("site"));
-        System.out.println(request.getParameter("res"));
-        System.out.println(request.getParameter("wbaction"));
-        System.out.println(request.getParameter("firstLoad"));
-        System.out.println(request.getParameter("msg"));*/
+        /*//System.out.println("**************************processAction:");
+        //System.out.println(request.getParameter("site"));
+        //System.out.println(request.getParameter("res"));
+        //System.out.println(request.getParameter("wbaction"));
+        //System.out.println(request.getParameter("firstLoad"));
+        //System.out.println(request.getParameter("msg"));*/
         User user = response.getUser();
         response.setRenderParameter("site", request.getParameter("site"));
         response.setRenderParameter("firstLoad", request.getParameter("firstLoad"));
@@ -180,10 +180,10 @@ public class SocialDocumentsToAuhorize extends GenericResource {
         String lang = paramRequest.getUser().getLanguage();
         int show = 1;
         String firstLoad = request.getParameter("firstLoad");
-        /*System.out.println("Entrando al doView");
-        System.out.println("First Load:" + request.getParameter("firstLoad"));
-        System.out.println("show:" + request.getParameter("show"));
-        System.out.println("site:" + request.getParameter("site"));*/
+        /*//System.out.println("Entrando al doView");
+        //System.out.println("First Load:" + request.getParameter("firstLoad"));
+        //System.out.println("show:" + request.getParameter("show"));
+        //System.out.println("site:" + request.getParameter("site"));*/
         if (request.getParameter("show") != null) {
             try {
                 show = Integer.parseInt(request.getParameter("show"));
@@ -208,7 +208,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             }
         }
         if(firstLoad == null){
-            //System.out.println("This is the first time of doView");
+            ////System.out.println("This is the first time of doView");
             out.println("<style type=\"text/css\">");
             out.println("@import \"/swbadmin/js/dojo/dojo/resources/dojo.css\";");
             out.println("@import \"/swbadmin/js/dojo/dijit/themes/soria/soria.css\";");
@@ -224,7 +224,7 @@ public class SocialDocumentsToAuhorize extends GenericResource {
             out.println("");
             out.println("");
         }else{
-                //System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
+                ////System.out.println("THIS IS ANOTHER CALL (=" + firstLoad);
         }
 
         out.println("<div class=\"swbform\">");
@@ -444,17 +444,17 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                             break; //Determinamos que solo se mostrara una y se mostrara un "ver mas" en dado caso que fueran mas redes sociales.
                         }
                         SocialNetwork socialNet = itPostSocialNets.next();
-                        //System.out.println("socialNet-1:"+socialNet);
+                        ////System.out.println("socialNet-1:"+socialNet);
                         String sSocialNet = socialNet.getDisplayTitle(lang);
                         String netIcon = "";
-                        //System.out.println("socialNet-2:"+sSocialNet);
+                        ////System.out.println("socialNet-2:"+sSocialNet);
                         if(socialNet instanceof Youtube){
                             netIcon = "<img class=\"swbIconYouTube\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
                         }else{
                             netIcon = "<img class=\"swbIcon" + socialNet.getClass().getSimpleName() + "\" src=\"/swbadmin/js/dojo/dojo/resources/blank.gif\"/>";
                         }
                         if (sSocialNet != null && sSocialNet.trim().length() > 0) {
-                            //System.out.println("socialNet-3:"+sSocialNet);
+                            ////System.out.println("socialNet-3:"+sSocialNet);
                             //Sacar privacidad
                             String sPrivacy = null;
                             //Si es necesario, cambiar esto por querys del Jei despues.
@@ -572,7 +572,6 @@ public class SocialDocumentsToAuhorize extends GenericResource {
                     dis.include(request, response);
                 } catch (Exception e) {
                     log.error(e);
-                    e.printStackTrace(System.out);
                 }
             }
         }

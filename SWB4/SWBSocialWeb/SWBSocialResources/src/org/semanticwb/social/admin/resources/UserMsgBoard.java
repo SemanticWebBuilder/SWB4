@@ -59,7 +59,7 @@ public class UserMsgBoard extends GenericResource{
         PrintWriter out = response.getWriter();
         if(request.getParameter("statusMsg")!=null)
         {
-            System.out.println("statusMsg:"+request.getParameter("statusMsg"));
+            //System.out.println("statusMsg:"+request.getParameter("statusMsg"));
             out.println("<script type=\"javascript\">");
             out.println("   showStatus('" + request.getParameter("statusMsg") + "');");
             out.println("</script>");
@@ -92,13 +92,13 @@ public class UserMsgBoard extends GenericResource{
                     while(enParamNames.hasMoreElements())
                     {
                         String strName=enParamNames.nextElement();
-                        System.out.println("ParamName:"+strName+",value:"+request.getParameter(strName));
+                        //System.out.println("ParamName:"+strName+",value:"+request.getParameter(strName));
                         if(strName.equals("hasUsers"))
                         {
                             String[] values=request.getParameterValues(strName);
                             for(int i=0;i<values.length;i++) 
                             {
-                                System.out.println("Value["+i+"]:"+values[i]);
+                                //System.out.println("Value["+i+"]:"+values[i]);
                             }
                         }
                     }*/
@@ -129,20 +129,20 @@ public class UserMsgBoard extends GenericResource{
                     }
                 }catch(Exception e)
                 {
-                    System.out.println(e.getMessage());
+                    //System.out.println(e.getMessage());
                     log.error(e);
                 }
             }else if(action.equals("remMsg")) {
                 if(request.getParameter("msgUri")!=null)
                 {
-                    System.out.println("msgUri:"+request.getParameter("msgUri"));
+                    //System.out.println("msgUri:"+request.getParameter("msgUri"));
                     SemanticObject semObj=SemanticObject.createSemanticObject(request.getParameter("msgUri")); 
                     if(semObj!=null)
                     {
                         UserMessage userMsg=(UserMessage)semObj.createGenericInstance(); 
-                        System.out.println("UsrMsg Msg mi estimado:"+userMsg.getUsrMsg());
+                        //System.out.println("UsrMsg Msg mi estimado:"+userMsg.getUsrMsg());
                         userMsg.remove();
-                        System.out.println("semObj:"+semObj+",Ha sido eliminado mi estimado...");
+                        //System.out.println("semObj:"+semObj+",Ha sido eliminado mi estimado...");
                     }
                 }
                 response.setRenderParameter("statusMsg", "Mensaje Eliminado");

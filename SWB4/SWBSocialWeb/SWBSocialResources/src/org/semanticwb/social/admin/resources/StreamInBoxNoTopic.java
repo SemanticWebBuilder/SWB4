@@ -283,7 +283,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("}");
         out.println("</style>");
 
-        //System.out.println("search word que llega sin:"+request.getParameter("search"));
+        ////System.out.println("search word que llega sin:"+request.getParameter("search"));
         String searchWord = request.getParameter("search");
         String swbSocialUser = request.getParameter("swbSocialUser");
 
@@ -751,7 +751,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         //Aquí hago una iteración para sacar los elementos que no tienen SocialTopic, esto para que al momento de la páginación
         //ya se tenga exactamente cuantos elementos son.
 
-        //System.out.println("setso Jorge:"+setso+", size:"+setso.size());
+        ////System.out.println("setso Jorge:"+setso+", size:"+setso.size());
         /*
         ArrayList<PostIn> setsoFinal = new ArrayList();;
         Iterator<PostIn> itTmp = itposts;
@@ -816,9 +816,9 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</fieldset>");
 
 
-        //System.out.println("J-P:"+p);
-        //System.out.println("J-X:"+x);
-        //System.out.println("J-L:"+l);
+        ////System.out.println("J-P:"+p);
+        ////System.out.println("J-X:"+x);
+        ////System.out.println("J-L:"+l);
 
         if (nRec>0) {
             int totalPages=1;
@@ -933,10 +933,10 @@ public class StreamInBoxNoTopic extends GenericResource {
     public void processAction(HttpServletRequest request, SWBActionResponse response) throws SWBResourceException, IOException {
         final Resource base = getResourceBase();
         String action = response.getAction();
-        //System.out.println("Entra a InBox_processAction-1:"+action);
+        ////System.out.println("Entra a InBox_processAction-1:"+action);
         if (action.equals("changeSocialTopic")) {
             if (request.getParameter("postUri") != null && request.getParameter("newSocialTopic") != null) {
-                //System.out.println("processAction/1");
+                ////System.out.println("processAction/1");
                 SemanticObject semObj = SemanticObject.getSemanticObject(request.getParameter("postUri"));
                 PostIn post = (PostIn) semObj.createGenericInstance();
                 Stream stOld = post.getPostInStream();
@@ -1016,26 +1016,26 @@ public class StreamInBoxNoTopic extends GenericResource {
                 String inputTextValue = request.getParameter("fw");
 
                 if (inputTextValue != null && inputTextValue.trim().length()>0) {
-                    //System.out.println("Text Completo:"+inputTextValue);
+                    ////System.out.println("Text Completo:"+inputTextValue);
                     inputTextValue = SWBSocialUtil.Strings.removePrepositions(inputTextValue);
-                    //System.out.println("Text Sin Prepo:"+inputTextValue);
+                    ////System.out.println("Text Sin Prepo:"+inputTextValue);
 
                     String[] phrases = inputTextValue.split(";");
-                    ///System.out.println("Entra a processA/reValue-2:"+phrases);
+                    /////System.out.println("Entra a processA/reValue-2:"+phrases);
                     int nv = Integer.parseInt(request.getParameter("nv"));
-                    //System.out.println("Entra a processA/reValue-3:"+nv);¿¿8
+                    ////System.out.println("Entra a processA/reValue-3:"+nv);¿¿8
                     int dpth = Integer.parseInt(request.getParameter("dpth"));
-                    //System.out.println("Entra a processA/reValue-4:"+dpth);
+                    ////System.out.println("Entra a processA/reValue-4:"+dpth);
                     SentimentalLearningPhrase slp;
                     for (String phrase : phrases) {
                         phrase = phrase.toLowerCase().trim();
-                        //System.out.println("Entra a processA/reValue-4.1:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.1:"+phrase);
                         phrase = SWBSocialUtil.Classifier.normalizer(phrase).getNormalizedPhrase();
-                        //System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.2--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
-                        //System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.3--J:"+phrase);
                         phrase = SWBSocialUtil.Classifier.phonematize(phrase);
-                        //System.out.println("Entra a processA/reValue-4.4:"+phrase);
+                        ////System.out.println("Entra a processA/reValue-4.4:"+phrase);
                         //Se Buscan y se crean las frases de aprendizaje del sistema en el sitio de Admin, para que el sistema aprenda independientemente del
                         //sitio, así también si se elimina un sitio, las palabras aprendidas por el sistema para el clasificador, aun siguen sirviendo para los demas
                         //sitios.
@@ -1045,12 +1045,12 @@ public class StreamInBoxNoTopic extends GenericResource {
                             //phrase = SWBSocialUtil.Classifier.getRootPhrase(phrase);
                             //phrase = SWBSocialUtil.Classifier.phonematize(phrase);
                             slp = SentimentalLearningPhrase.ClassMgr.createSentimentalLearningPhrase(SWBContext.getAdminWebSite());
-                            //System.out.println("Guarda Frase J:"+phrase);
+                            ////System.out.println("Guarda Frase J:"+phrase);
                             slp.setPhrase(phrase);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
                         } else {
-                            //System.out.println("Modifica Frase:"+slp);
+                            ////System.out.println("Modifica Frase:"+slp);
                             slp.setSentimentType(nv);
                             slp.setIntensityType(dpth);
                         }
@@ -1148,7 +1148,7 @@ public class StreamInBoxNoTopic extends GenericResource {
      * Method which controls the filters allowed in this class
      */
     private HashMap filtros(String swbSocialUser, WebSite wsite, String searchWord, HttpServletRequest request, Stream stream, int nPage) {
-        //System.out.println("Stream:"+stream.getURI()+",orderByJ:"+request.getParameter("orderBy")+",page:"+nPage);
+        ////System.out.println("Stream:"+stream.getURI()+",orderByJ:"+request.getParameter("orderBy")+",page:"+nPage);
         long streamPostIns=0L;
         String sQuery=null;
         ArrayList<PostIn> aListFilter = new ArrayList();
@@ -1261,12 +1261,12 @@ public class StreamInBoxNoTopic extends GenericResource {
                         }
                         
                         //Termina Armado de Query
-                        //System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
+                        ////System.out.println("sQuery a Ejecutar..:"+sQuery+"...FIN...");
                         if(sQuery!=null)
                         {
                             //streamPostIns=Integer.parseInt(getPostInPlace_Query("down", Integer.valueOf((nPage * RECPERPAGE) - RECPERPAGE).longValue(), Integer.valueOf((RECPERPAGE)).longValue(), true, stream));
                             aListFilter=SWBSocial.executeQueryArray(sQuery, wsite);
-                            //System.out.println("Al ejecutar Query size:"+aListFilter.size());
+                            ////System.out.println("Al ejecutar Query size:"+aListFilter.size());
                         }
                     }else{  //No seleccionaron ningún ordenamiento
                         streamPostIns=Integer.parseInt(getPostInWithOutTopic_Query(0, 0, true, stream));
@@ -1285,14 +1285,14 @@ public class StreamInBoxNoTopic extends GenericResource {
                     }
                 }
             
-            //System.out.println("streamPostIns FINAL:"+streamPostIns);
+            ////System.out.println("streamPostIns FINAL:"+streamPostIns);
             hampResult.put("countResult", Long.valueOf(streamPostIns));
         }
         
 
         if (aListFilter.size() > 0) {
             itposts = aListFilter.iterator();
-            //System.out.println("Entra a ORDEBAR -2");
+            ////System.out.println("Entra a ORDEBAR -2");
             //setso = SWBSocialComparator.convertArray2TreeSet(itposts);
         }/*else{
             sQuery=getPostInWithOutTopic_Query(0, 0, stream);

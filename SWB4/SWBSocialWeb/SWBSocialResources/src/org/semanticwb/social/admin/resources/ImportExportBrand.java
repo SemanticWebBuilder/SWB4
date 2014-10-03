@@ -297,7 +297,7 @@ public class ImportExportBrand extends GenericResource {
                 Iterator itthreads=Thread.getAllStackTraces().keySet().iterator();
                 while(itthreads.hasNext()){
                 Thread threadTmp=(Thread)itthreads.next();
-                System.out.println("Thead Generico:"+threadTmp.getId());
+                //System.out.println("Thead Generico:"+threadTmp.getId());
                 }*/
 
                 ImportExportBrandThreads swbmodeladmThreads = new ImportExportBrandThreads();

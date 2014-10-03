@@ -66,7 +66,6 @@ public class ShowPostIn extends GenericResource {
                 dis.include(request, response);
             } catch (Exception ex) {
                 log.error(ex);
-                ex.printStackTrace(System.out);
             }
         }
     }
