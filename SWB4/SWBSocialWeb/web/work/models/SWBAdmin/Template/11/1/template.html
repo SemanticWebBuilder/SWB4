@@ -1,0 +1,36 @@
+<template method="setHeaders" Content-Type="text/html"  response="{response}" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<title>
+   <TOPIC METHOD="getDisplayName" LANGUAGE="{user@getLanguage}"/>
+</title>
+
+<!--
+Nota: No olvides incluir estos scripts en tus plantillas hechas por fuera
+***************************************************************************
+***************************************************************************
+-->
+<link rel='stylesheet' type='text/css' media='all' href='{webpath}/swbadmin/js/dojo/dijit/themes/soria/soria.css' />
+<link rel='stylesheet' type='text/css' media='all' href='{webpath}/swbadmin/css/swb_portal.css' />
+<script type="text/javascript">
+    var djConfig = {
+        parseOnLoad: true,
+        isDebug: false
+    };
+</script>
+<script type="text/javascript" src="{webpath}/swbadmin/js/dojo/dojo/dojo.js"></script>
+<script type="text/javascript" src="{webpath}/swbadmin/js/swb.js"></script>
+<!--
+***************************************************************************
+***************************************************************************
+-->
+
+</head>
+ <body>
+   <div>
+   <Content></Content>
+</div>
+ </body>
+</html>
