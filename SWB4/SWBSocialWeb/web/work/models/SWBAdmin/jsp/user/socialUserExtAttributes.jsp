@@ -68,7 +68,7 @@
         <label for="userCanRemoveMsg"><span>&nbsp;</span>Permiso para Eliminar Mensajes:</label>
         <input type="checkbox" name="userCanRemoveMsg" <%=userCanRemoveMsg?"checked":""%>/>
         <br/> 
-        <label for="userCanRespondMsg"><span>&nbsp;</span>Permiso para Responder/Publicar Mensajes:</label>
+        <label for="userCanRespondMsg"><span>&nbsp;</span>Permiso para Responder:</label>
         <input type="checkbox" name="userCanRespondMsg" <%=userCanRespondMsg?"checked":""%>/> 
         <br/> 
         <label for="userCanReValueMsg"><span>&nbsp;</span>Permiso para Re-Evaluar Mensajes:</label>
