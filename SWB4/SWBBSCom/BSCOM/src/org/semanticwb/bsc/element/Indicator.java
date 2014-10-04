@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import org.semanticwb.bsc.catalogs.Attachment;
+import org.semanticwb.bsc.parser.IndicatorParser;
 import org.semanticwb.bsc.tracing.EvaluationRule;
-import org.semanticwb.bsc.tracing.Measure;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
@@ -24,75 +24,75 @@ import org.semanticwb.platform.SemanticObserver;
 /*
  * Clase que persiste informaci&oacute;n de un indicador. Un indicador permite informar sobre el avance para alcanzar un objetivo.
  */
-public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
-{
-    public static final String names[] = {"Actual","Meta","Actual Acumulado","Meta Acumulada"};
-    static
-    {
+public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
+
+    public static final String names[] = {"Actual", "Meta", "Actual Acumulado", "Meta Acumulada"};
+
+    static {
         bsc_analysis.registerObserver(new SemanticObserver() {
             @Override
-            public void notify(SemanticObject obj, Object prop, String lang, String action)
-            {
-                System.out.println("\n\nIndicator.bsc_Updateable.... action="+action);
-                System.out.println("obj="+obj);
-                System.out.println("prop="+prop);
+            public void notify(SemanticObject obj, Object prop, String lang, String action) {
+                System.out.println("\n\nIndicator.bsc_Updateable.... action=" + action);
+                System.out.println("obj=" + obj);
+                System.out.println("prop=" + prop);
             }
         });
-        
+
         bsc_hasSeries.registerObserver(new SemanticObserver() {
             @Override
-            public void notify(SemanticObject obj, Object prop, String lang, String action)
-            {
-                if("ADD".equalsIgnoreCase(action)) {
-                    Indicator indicator = (Indicator)obj.createGenericInstance();
+            public void notify(SemanticObject obj, Object prop, String lang, String action) {
+                if ("ADD".equalsIgnoreCase(action)) {
+                    Indicator indicator = (Indicator) obj.createGenericInstance();
                     // Funcionan exactamente igual indicator.getSeries() y indicator.getLastSeries()
                     Series series = indicator.getSeries();
-                    if(series!=null && series.getEvaluationRule()==null)
-                    {
+                    if (series != null && series.getEvaluationRule() == null) {
                         State state;
                         List<State> validStates = indicator.listValidStates();
-                        for(int i=0; i<validStates.size(); i++) {
+                        for (int i = 0; i < validStates.size(); i++) {
                             state = validStates.get(i);
                             EvaluationRule rule = EvaluationRule.ClassMgr.createEvaluationRule(indicator.getBSC());
-                            rule.setTitle("Regla para "+state.getTitle());
-                            rule.setTitle("Regla para "+state.getTitle(lang), lang);
-                            rule.setDescription("Regla para evaluar serie "+names[i]);
-                            rule.setDescription("Regla para evaluar serie "+names[i], lang);
+                            rule.setTitle("Regla para " + state.getTitle());
+                            rule.setTitle("Regla para " + state.getTitle(lang), lang);
+                            rule.setDescription("Regla para evaluar serie " + names[i]);
+                            rule.setDescription("Regla para evaluar serie " + names[i], lang);
                             rule.setAppraisal(state);
                             series.addEvaluationRule(rule);
-                        }                            
+                        }
                     }
                 }
             }
         });
+
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Indicator.class, new IndicatorParser());
     }
-   
-    public Indicator(org.semanticwb.platform.SemanticObject base)
-    {
+
+    public Indicator(org.semanticwb.platform.SemanticObject base) {
         super(base);
     }
-    
+
     /**
-     * Obtiene el prefijo para identificar un indicador. 
-     * En caso de que el prefijo sea nulo, asigna un prefijo en autom&aacute;tico. 
-     * @return {@code String} Regresa un string con el prefijo asociado al indicador, 
-     * si el prefijo es asignado en autom&aacute;tico utiliza el prefijo del objetivo
-     * seguido de un n&uacute;mero consecutivo asignado por un motor.
+     * Obtiene el prefijo para identificar un indicador. En caso de que el
+     * prefijo sea nulo, asigna un prefijo en autom&aacute;tico.
+     *
+     * @return {@code String} Regresa un string con el prefijo asociado al
+     * indicador, si el prefijo es asignado en autom&aacute;tico utiliza el
+     * prefijo del objetivo seguido de un n&uacute;mero consecutivo asignado por
+     * un motor.
      * <p>
      * Ejemplo:
-     * </p> 
+     * </p>
      * <p>
-     * El motor asigna un n&uacute;mero 1 para el Objetivo F1, se obtendr&iacute;a el siguiente prefijo: 
-     *  {@literal  F1.1 }
+     * El motor asigna un n&uacute;mero 1 para el Objetivo F1, se
+     * obtendr&iacute;a el siguiente prefijo: {@literal  F1.1 }
      * </p>
      */
     @Override
     public String getPrefix() {
         String prefix = super.getPrefix();
-        if(prefix==null) {
+        if (prefix == null) {
             try {
                 prefix = getObjective().getPrefix().trim() + "." + getObjective().getSerial();
-            }catch(Exception e) {
+            } catch (Exception e) {
                 prefix = getObjective().getTitle().substring(0, 1).toUpperCase() + "." + getObjective().getSerial();
             }
             setPrefix(prefix);
@@ -102,7 +102,8 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
 
     /**
      * Asigna un prefijo al indicador
-     * @param value 
+     *
+     * @param value
      */
     @Override
     public void setPrefix(String value) {
@@ -113,59 +114,61 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public boolean updateAppraisal(Period period) {
         return getObjective().updateAppraisal(period);
     }
-    
+
     @Override
     public boolean hasState(State value) {
         return getObjective().hasState(value);
     }
-    
+
     private List<Period> sortValidPeriods() {
         return sortValidPeriods(true);
     }
-    
+
     private List<Period> sortValidPeriods(boolean ascendent) {
         //List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
         List<Period> periods = listValidPeriods();
-        if(ascendent) {
+        if (ascendent) {
             Collections.sort(periods);
-        }else {            
-            Collections.sort(periods, Collections.reverseOrder());            
+        } else {
+            Collections.sort(periods, Collections.reverseOrder());
         }
         return periods;
     }
-    
+
     private List<Period> sortPeriods() {
         return sortPeriods(true);
     }
-    
+
     private List<Period> sortPeriods(boolean ascendent) {
         List<Period> periods = SWBUtils.Collections.copyIterator(super.listPeriods());
-        if(ascendent) {
+        if (ascendent) {
             Collections.sort(periods);
-        }else {            
-            Collections.sort(periods, Collections.reverseOrder());            
+        } else {
+            Collections.sort(periods, Collections.reverseOrder());
         }
         return periods;
     }
-    
+
     private List<State> sortStates() {
         return sortStates(true);
     }
-    
+
     private List<State> sortStates(boolean ascendent) {
         //List<State> states = SWBUtils.Collections.copyIterator(listStates());
         List<State> states = listValidStates();
-        if(ascendent) {
+        if (ascendent) {
             Collections.sort(states);
-        }else {            
+        } else {
             Collections.sort(states, Collections.reverseOrder());
         }
         return states;
     }
-    
+
     /**
      * Devuelve todos los períodos de medición ordenados ascendentemente
-     * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
+     *
+     * @return A GenericIterator with all the
+     * org.semanticwb.bsc.accessory.Period sorted
      * @throws org.semanticwb.bsc.utils.UndefinedFrequencyException
      * @throws org.semanticwb.bsc.utils.InappropriateFrequencyException
      */
@@ -173,11 +176,14 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
     public Iterator<Period> listMeasurablesPeriods() throws UndefinedFrequencyException, InappropriateFrequencyException {
         return listMeasurablesPeriods(true);
     }
-    
+
     /**
      * Devuelve todos los períodos de medición ordenados.
-     * @param ascendent - para ordenar ascendente use ascendent=true y descendentemente=false para orden descendente
-     * @return A GenericIterator with all the org.semanticwb.bsc.accessory.Period sorted
+     *
+     * @param ascendent - para ordenar ascendente use ascendent=true y
+     * descendentemente=false para orden descendente
+     * @return A GenericIterator with all the
+     * org.semanticwb.bsc.accessory.Period sorted
      * @throws org.semanticwb.bsc.utils.UndefinedFrequencyException
      * @throws org.semanticwb.bsc.utils.InappropriateFrequencyException
      */
@@ -186,177 +192,176 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase
         int f = 0;
         try {
             f = getPeriodicity().getNumberOfPeriods();
-        }catch(Exception e) {
+        } catch (Exception e) {
             throw new UndefinedFrequencyException("Frecuencia de medición indefinida.");
         }
-        if(f<1) {
+        if (f < 1) {
             throw new InappropriateFrequencyException("Frecuencia de medición inapropiada");
         }
-        
-        List<Period> periods = sortValidPeriods();        
+
+        List<Period> periods = sortValidPeriods();
         List<Period> measurablesPeriods = new ArrayList();
-        for(int i=1; i<=periods.size(); i++) {                 
-            if(i%f==0) {                
-                measurablesPeriods.add(periods.get(i-1));
+        for (int i = 1; i <= periods.size(); i++) {
+            if (i % f == 0) {
+                measurablesPeriods.add(periods.get(i - 1));
             }
         }
-        if(ascendent) {
+        if (ascendent) {
             Collections.sort(measurablesPeriods);
-        }else {
+        } else {
             Collections.sort(measurablesPeriods, Collections.reverseOrder());
         }
         return measurablesPeriods.iterator();
     }
-    
+
     /**
-     * Recupera el primer período de la lista de períodos asignados al indicador.
+     * Recupera el primer período de la lista de períodos asignados al
+     * indicador.
+     *
      * @return El período más anterior
      */
-    public Period getFirstPeriod()
-    {
+    public Period getFirstPeriod() {
         List<Period> periods = sortValidPeriods();
         try {
             return periods.get(0);
-        }catch(IndexOutOfBoundsException e) {            
+        } catch (IndexOutOfBoundsException e) {
         }
         return null;
     }
-    
+
     /**
-     * Recupera el último período de la lista de períodos asignados al indicador.
+     * Recupera el último período de la lista de períodos asignados al
+     * indicador.
+     *
      * @return El período más posterior
      */
     @Override
-    public Period getLastPeriod()
-    {
+    public Period getLastPeriod() {
         List<Period> periods = sortValidPeriods();
         try {
-            return periods.get(periods.size()-1);
-        }catch(IndexOutOfBoundsException e) {            
+            return periods.get(periods.size() - 1);
+        } catch (IndexOutOfBoundsException e) {
         }
         return null;
     }
-    
+
     @Override
     public State getMinimumState() {
         List<State> states = sortStates();
         try {
             return states.get(0);
-        }catch(IndexOutOfBoundsException e) {
-        
+        } catch (IndexOutOfBoundsException e) {
+
         }
         return null;
     }
-    
+
     @Override
     public State getMaximumState() {
         List<State> states = sortStates();
         try {
-            return states.get(states.size()-1);
-        }catch(IndexOutOfBoundsException e) {
-        
+            return states.get(states.size() - 1);
+        } catch (IndexOutOfBoundsException e) {
+
         }
         return null;
     }
-    
-    public Series getLastSeries()
-    {
+
+    public Series getLastSeries() {
         return getSeries();
     }
-    
+
     @Override
-    public Series getSeries()
-    {
+    public Series getSeries() {
         Iterator<Series> it = SWBComparator.sortByCreated(listSerieses(), false);
-        return it.hasNext()?it.next():null;
+        return it.hasNext() ? it.next() : null;
     }
 
     @Override
     public GenericIterator<Period> listPeriods() {
-        return (GenericIterator)listPeriods(true);
+        return (GenericIterator) listPeriods(true);
     }
-    
+
     public Iterator<Period> listPeriods(boolean ascendent) {
         return sortPeriods(ascendent).iterator();
     }
-    
+
     @Override
     public Iterator<Period> listAvailablePeriods() {
         return getObjective().listAvailablePeriods();
     }
-    
+
     @Override
     public Iterator<Period> listAvailablePeriods(boolean ascendent) {
         return getObjective().listAvailablePeriods(ascendent);
     }
-    
+
     @Override
     public List<Series> listValidSerieses() {
         List<Series> validSerieses = SWBUtils.Collections.filterIterator(super.listSerieses(), new GenericFilterRule<Series>() {
-                                                                        @Override
-                                                                        public boolean filter(Series s) {
-                                                                            User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
-                                                                            if(user==null) {
-                                                                                user = SWBContext.getAdminUser();
-                                                                            }
-                                                                            return !s.isValid() || !user.haveAccess(s);
-                                                                        }            
-                                                                    });
+            @Override
+            public boolean filter(Series s) {
+                User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                if (user == null) {
+                    user = SWBContext.getAdminUser();
+                }
+                return !s.isValid() || !user.haveAccess(s);
+            }
+        });
         return validSerieses;
     }
-    
+
     @Override
     public List<Period> listValidPeriods() {
         List<Period> validPeriods = SWBUtils.Collections.filterIterator(super.listPeriods(), new GenericFilterRule<Period>() {
-                                                                        @Override
-                                                                        public boolean filter(Period p) {
-                                                                            User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
-                                                                            if(user==null) {
-                                                                                user = SWBContext.getAdminUser();
-                                                                            }
-                                                                            return !p.isValid() || !user.haveAccess(p);
-                                                                        }            
-                                                                    });
+            @Override
+            public boolean filter(Period p) {
+                User user = SWBContext.getSessionUser(getBSC().getUserRepository().getId());
+                if (user == null) {
+                    user = SWBContext.getAdminUser();
+                }
+                return !p.isValid() || !user.haveAccess(p);
+            }
+        });
         return validPeriods;
     }
-    
+
     @Override
     public List<State> listValidStates() {
         return getObjective().listValidStates();
     }
-    
+
     /**
-     * Recupera el período más próximo de medición en base a la fecha actual. 
-     * La diferencia con nextMeasurementPeriod() es que si actualmente es tiempo de medición,
-     * nextMeasurementPeriod() devolverá no este período sino el siguiente.
-     * Siempre devuelve el siguiente.
+     * Recupera el período más próximo de medición en base a la fecha actual. La
+     * diferencia con nextMeasurementPeriod() es que si actualmente es tiempo de
+     * medición, nextMeasurementPeriod() devolverá no este período sino el
+     * siguiente. Siempre devuelve el siguiente.
+     *
      * @return El período más próximo de medición en base a la fecha actual.
      */
-    public Period currentMeasurementPeriod()
-    {
+    public Period currentMeasurementPeriod() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
     @Override
     public String getStatusIconClass() {
         String iconClass;
-        try{
+        try {
             iconClass = getStar().getMeasure().getEvaluation().getStatus().getIconClass();
-        }catch(NullPointerException npe) {
+        } catch (NullPointerException npe) {
             iconClass = "indefinido";
         }
         return iconClass;
     }
-    
+
     @Override
     public String getStatusIconClass(Period period) {
         String iconClass;
         try {
             iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
-        }catch(NullPointerException npe) {
+        } catch (NullPointerException npe) {
             iconClass = "indefinido";
         }
         return iconClass;
     }
 }
- 

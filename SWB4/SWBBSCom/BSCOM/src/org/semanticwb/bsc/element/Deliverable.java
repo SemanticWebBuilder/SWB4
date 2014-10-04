@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.BSC;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import org.semanticwb.bsc.catalogs.Attachment;
+import org.semanticwb.bsc.parser.DeliverableParser;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
-import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 
@@ -21,6 +21,10 @@ import org.semanticwb.model.User;
 public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase 
 {
     public static final String names[] = {"Esfuerzo real","Esfuerzo planeado"};
+    
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Deliverable.class, new DeliverableParser());
+    }
     
     public Deliverable(org.semanticwb.platform.SemanticObject base)
     {
