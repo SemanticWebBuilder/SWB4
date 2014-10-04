@@ -6,12 +6,11 @@ import org.semanticwb.model.GenericIterator;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
-import org.semanticwb.bsc.InitiativeAssignable;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
-import org.semanticwb.bsc.catalogs.Attachment;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
@@ -20,6 +19,7 @@ import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 import static org.semanticwb.bsc.element.Indicator.*;
+import org.semanticwb.bsc.parser.ObjectiveParser;
 import org.semanticwb.model.FormValidateException;
 import org.semanticwb.platform.SemanticProperty;
 
@@ -56,6 +56,8 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
                 }
             }
         });
+        
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Objective.class, new ObjectiveParser());
     }
     
     public Objective(org.semanticwb.platform.SemanticObject base) {

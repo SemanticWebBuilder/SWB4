@@ -1,10 +1,10 @@
 package org.semanticwb.bsc.element;
 
 import java.util.GregorianCalendar;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.bsc.accessory.Period;
-import org.semanticwb.bsc.catalogs.Attachment;
+import org.semanticwb.bsc.parser.AgreementParser;
 import org.semanticwb.bsc.tracing.Meeting;
-import org.semanticwb.model.GenericIterator;
 
 
    /**
@@ -12,6 +12,9 @@ import org.semanticwb.model.GenericIterator;
    */
 public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     
+    static {
+        SWBPortal.getIndexMgr().getDefaultIndexer().registerParser(Agreement.class, new AgreementParser());
+    }
     
     public Agreement(org.semanticwb.platform.SemanticObject base) {
         super(base);
