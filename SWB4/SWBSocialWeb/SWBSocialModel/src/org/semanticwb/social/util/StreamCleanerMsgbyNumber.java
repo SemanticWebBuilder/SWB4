@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.semanticwb.Logger;
+import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.LicenseType;
@@ -76,6 +77,7 @@ public class StreamCleanerMsgbyNumber {
          * Metodo que revisa todos los streams activos en todas las marcas a
          */
         public void run() {
+            Boolean usingLicenseMgr=Boolean.parseBoolean(SWBPortal.getEnv("swbsocial/useLicenseMgr", "false")); 
             Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
             while(itSocialSites.hasNext())
             {
@@ -93,7 +95,8 @@ public class StreamCleanerMsgbyNumber {
 
                             //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
                             long postInNumAccepted=stream.getStream_maxMsg();
-                            if(postInNumAccepted<1000 || postInNumAccepted>streamMaxMessages) postInNumAccepted=streamMaxMessages;
+                            if(usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>streamMaxMessages)) postInNumAccepted=streamMaxMessages;
+                            else if(!usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>100000)) postInNumAccepted=100000;
                             //1000 es el menor número aceptado en un stream, 100,000 es el mayor número aceptado
                             //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 100,000)
                             if(postInNumAccepted<Integer.parseInt(getAllPostInStream(stream)))    
