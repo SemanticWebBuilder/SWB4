@@ -267,6 +267,11 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
         return null;
     }
 
+    @Override
+    public SemanticObject getParent() {
+        return getObjective().getSemanticObject();
+    }
+
     public Series getLastSeries() {
         return getSeries();
     }
