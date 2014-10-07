@@ -16,6 +16,7 @@ import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.platform.SemanticObject;
 
 
 public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase 
@@ -126,6 +127,11 @@ System.out.println("setProgress. value="+value);
         
         }
         return null;
+    }
+
+    @Override
+    public SemanticObject getParent() {
+        return getInitiative().getSemanticObject();
     }
     
     @Override
