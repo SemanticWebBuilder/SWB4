@@ -122,41 +122,33 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     
     public boolean updateAppraisal(Period period)
     {
-        boolean res = Boolean.FALSE;
+        boolean updated = Boolean.FALSE;
         State status;
         PeriodStatus appraisal = getPeriodStatus(period);
         if(appraisal==null) {
             appraisal = PeriodStatus.ClassMgr.createPeriodStatus(getBSC());
             appraisal.setPeriod(period);
             addPeriodStatus(appraisal);
-//            status = getMaximumState();
         }
-//        else
-//        {
-//            status = appraisal.getStatus();
-//        }
         status = getMaximumState();
-System.out.println("0 periodo="+period.getTitle());
-System.out.println("1 status="+status.getTitle());
-        
+        // Determinar el estatus del objetivo
         Iterator<Indicator> indicators = listValidIndicators().iterator();
         while(indicators.hasNext()) {
             Indicator indicator = indicators.next();
-System.out.println("  indicador="+indicator.getTitle());
             Series star = indicator.getStar();
             if(star==null || star.getMeasure(period)==null || star.getMeasure(period).getEvaluation().getStatus()==null) {
                 continue;
             }
-System.out.println("  star="+indicator.getStar().getTitle());
-System.out.println("estado de star para periodo="+star.getMeasure(period).getEvaluation().getStatus().getTitle());
             if( star.getMeasure(period).getEvaluation().getStatus().compareTo(status)<0 ) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
-                res = Boolean.TRUE;
-System.out.println("cambia valor estado.........");
+                updated = Boolean.TRUE;
             }
         }
+        if(!updated) {
+            status = getMinimumState();
+        }
         appraisal.setStatus(status);
-        return res;
+        return updated;
     }
     
     @Override
