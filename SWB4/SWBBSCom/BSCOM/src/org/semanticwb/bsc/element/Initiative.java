@@ -111,9 +111,10 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
     public State getMinimumState() {
         List<State> states = sortStates();
         try {
+System.out.println("minimum state="+states.get(0));
             return states.get(0);
         } catch (IndexOutOfBoundsException e) {
-
+System.out.println("-----------errror="+e);
         }
         return null;
     }
@@ -143,8 +144,7 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
     }
 
     public boolean updateAppraisal(Period period) {
-        boolean res = Boolean.FALSE;
-
+        boolean updated = Boolean.FALSE;
         // Determinar el estatus del período especificado
         State status;
         PeriodStatus appraisal = getPeriodStatus(period);
@@ -154,7 +154,6 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
             addPeriodStatus(appraisal);
         }
         status = getMaximumState();
-
         // Determinar el estatus de la iniciativa
         List<Deliverable> deliverables = listValidDeliverables();
         for (Deliverable deliverable : deliverables) {
@@ -164,15 +163,16 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
             }
             if (star.getMeasure(period).getEvaluation().getStatus().compareTo(status) < 0) {
                 status = star.getMeasure(period).getEvaluation().getStatus();
-                res = Boolean.TRUE;
+                updated = Boolean.TRUE;
             }
         }
+        if(!updated) {
+            status = getMinimumState();
+        }
         appraisal.setStatus(status);
-
         // Calcular el porcentaje de avance
-        setPercentageProgress();
-
-        return res;
+        setPercentageProgress(period);
+        return updated;
     }
 
     private List<State> sortStates() {
@@ -189,19 +189,32 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
         return states;
     }
 
-    public void setPercentageProgress() {
+    public void setPercentageProgress(final Period period) {
         // Calcular el porcentaje de avance de los entregables
         List<Deliverable> deliverables = listValidDeliverables();
         float m;
         float weighingSum = 0;
         float xwSum = 0;
-        for (Deliverable deliverable : deliverables) {
-            if (deliverable.getPriority() == null) {
-                continue;
-            }
-            xwSum += deliverable.getProgress() * deliverable.getPriority().getWeighing();
-            weighingSum += deliverable.getPriority().getWeighing();
-        }
+//        for (Deliverable deliverable : deliverables) {
+//            if (deliverable.getPriority() == null) {
+//                continue;
+//            }
+//            xwSum += deliverable.getProgress() * deliverable.getPriority().getWeighing();
+//            weighingSum += deliverable.getPriority().getWeighing();
+//        }
+// Determinar el porcentaje de avance
+        
+for (Deliverable deliverable : deliverables) {
+    Series star = deliverable.getStar();
+    if (star == null || star.getMeasure(period) == null ) {
+        continue;
+    }
+    if (deliverable.getPriority() == null) {
+        continue;
+    }
+    xwSum += star.getMeasure(period).getValue() * deliverable.getPriority().getWeighing();
+    weighingSum += deliverable.getPriority().getWeighing();
+}        
 
         m = xwSum / weighingSum;
         super.setPercentageProgress(BSCUtils.Formats.round(m, 2).floatValue());
