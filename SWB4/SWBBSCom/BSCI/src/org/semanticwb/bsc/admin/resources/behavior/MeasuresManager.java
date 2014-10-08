@@ -192,11 +192,11 @@ public class MeasuresManager extends GenericAdmResource {
                     try {
                         iconClass = measure.getEvaluation().getStatus().getIconClass().trim();
                     }catch(Exception e) {
-                        iconClass = "noStatus";
+                        iconClass = "swbstrgy-unknown";
                     }
                 }catch(Exception e) {
                     statusTitle = "Not set";
-                    iconClass = "noStatus";
+                    iconClass = "swbstrgy-unknown";
                 }
 
                 String title = period.getTitle(user.getLanguage()) == null ? period.getTitle() : period.getTitle(user.getLanguage());
@@ -483,7 +483,10 @@ public class MeasuresManager extends GenericAdmResource {
                                 measure.setValue(0);
                             }
                         }finally {
+System.out.println("..................\n measure="+measure.getEvaluation().getPeriod().getTitle());
+System.out.println("value="+measure.getValue());
                             measure.evaluate();
+System.out.println("estatus final="+measure.getEvaluation().getStatus().getTitle());                            
                             series.getSm().updateAppraisal(period);
                         }
                     }
