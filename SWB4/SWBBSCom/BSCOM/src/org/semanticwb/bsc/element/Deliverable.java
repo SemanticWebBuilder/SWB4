@@ -109,24 +109,12 @@ System.out.println("setProgress. value="+value);
     
     @Override
     public State getMinimumState() {
-        List<State> states = sortStates();
-        try {
-            return states.get(0);
-        }catch(IndexOutOfBoundsException e) {
-        
-        }
-        return null;
+        return getInitiative().getMinimumState();
     }
     
     @Override
     public State getMaximumState() {
-        List<State> states = sortStates();
-        try {
-            return states.get(states.size()-1);
-        }catch(IndexOutOfBoundsException e) {
-        
-        }
-        return null;
+        return getInitiative().getMaximumState();
     }
 
     @Override
