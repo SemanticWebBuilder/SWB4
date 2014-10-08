@@ -101,10 +101,12 @@ public class DataTableResource extends GenericResource implements ComponentExpor
         out.println("<table class=\"table table-hover table-striped\">"); 
         out.println("<thead>");
         out.println("<tr>");
-        out.println("<th>Periodo</th>");
-        out.println("<th>Estado</th>");
+        out.println("<th width=\"25%\">"+sm.getParent().getSemanticClass().getDisplayName(lang)+"</th>");
+        out.println("<th>"+paramRequest.getLocaleString("lbl_App_Period")+"</th>");
+        out.println("<th>"+paramRequest.getLocaleString("lbl_App_Semaphore")+"</th>");
+        //out.println("<th>&nbsp;</th>");
         for(Series series:serieses) {
-            out.println("<th>"+(series.getTitle(lang)==null?series.getTitle():series.getTitle(lang))+"</th>");
+            out.println("<th width=\"10%\">"+(series.getTitle(lang)==null?series.getTitle():series.getTitle(lang))+"</th>");
         }
         out.println("</tr>");
         out.println("</thead>");
@@ -113,34 +115,31 @@ public class DataTableResource extends GenericResource implements ComponentExpor
             Period period = periods.next();
             boolean inTime = isInMeasurementTime(period);
             out.println("<tr>");
+            // 1.- Elemento padre (objetivo/iniciativa)
+            out.println("<td>"+(sm.getParent().getDisplayName(lang)==null?sm.getParent().getDisplayName():sm.getParent().getDisplayName(lang))+"</td>");
+            // 2.- Período
             out.println("<td>");
             out.println(period.getTitle());            
             out.println("</td>");
+            // 3.- Semáforo (título)
             out.println("<td>");
             if(star.getMeasure(period)!=null) {
-//                Measure measure = Measure.ClassMgr.createMeasure(period.getBSC());
-//                star.addMeasure(measure);
-//                PeriodStatus ps = PeriodStatus.ClassMgr.createPeriodStatus(period.getBSC());
-//                ps.setPeriod(period);
-//                measure.setEvaluation(ps);
-//                measure.setValue(0);
-            
                 State state = star.getMeasure(period).getEvaluation().getStatus();
                 if(state==null) {
                     state = sm.getMinimumState();
                     star.getMeasure(period).getEvaluation().setStatus(state);
                 }
                 if(state==null) {
-                    out.println("<span class=\"state-unknown\">Desconocido</span>");
-                }else {
+                    out.println("<span class=\"swbstrgy-undefined\">Indefinido</span>");
+                }else {                    
                     String title = state.getTitle(lang)==null?state.getTitle():state.getTitle(lang);
-                    out.println("<span class=\""+(state.getIconClass()==null?"state-undefined":state.getIconClass())+"\">"+title+"</span>");
+                    out.println("<span class=\"swbstrgy-semaphore "+(state.getIconClass()==null?"swbstrgy-undefined":state.getIconClass())+"\">"+title+"</span>");
                 }
-                
             }else {
                 out.println("--");
             }
             out.println("</td>");
+            // 4.- Series
             for(Series series:serieses) {
                 out.println("<td>");
                 String value = series.getMeasure(period)==null?"--":series.getFormatter().format(series.getMeasure(period).getValue());
@@ -151,7 +150,6 @@ public class DataTableResource extends GenericResource implements ComponentExpor
                     url.setParameter("pid", period.getId());
                     url.setParameter("sid", series.getId());
                     out.println(renderUpdateInline(prx+series.getId(), url.toString(), value, false, "dijit.form.TextBox", "swb-ile"));
-                    //out.print("<input type=\"text\" value=\""+value+"\" name=\"a\" onchange=\"\" />");
                 }else {                    
                     out.print(value);
                 }
