@@ -7,6 +7,7 @@ import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.Series;
 import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
+import org.semanticwb.platform.SemanticObject;
 
 public interface SM extends org.semanticwb.bsc.base.SMBase
 {
@@ -17,6 +18,8 @@ public interface SM extends org.semanticwb.bsc.base.SMBase
     public State getMaximumState();
     
     public BSC getBSC();
+    
+    public SemanticObject getParent();
     
     /**
      * Recupera el último período de la lista de períodos asignados al indicador.
