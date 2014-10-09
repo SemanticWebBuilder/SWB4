@@ -738,8 +738,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             String periodId = request.getSession().getAttribute(modelName) != null
                     ? (String) request.getSession().getAttribute(modelName)
                     : null;
-            String statusStyleClass = "indefinido";
-            String secondStatusStyleClass = null;
+            String statusStyleClass = "swbstrgy-undefined";
+//            String secondStatusStyleClass = null;
             //Si no hay sesión, la petición puede ser directa (una liga en un correo). Crear sesión y atributo:
             if (periodId == null) {
                 periodId = request.getParameter(modelName) != null ? request.getParameter(modelName) : null;
@@ -752,7 +752,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             GenericObject generic = semObj.createGenericInstance();
             Detailed d = (Detailed) generic;
             statusStyleClass = d.getStatusIconClass(period);
-
             // Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
             //    - Se pide el listado de objetos PeriodStatus asociado al semObj
@@ -761,16 +760,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             //        - Se obtiene el status correspondiente y su &iacte;cono relacionado
             //        - Se agrega el &iacte;cono al encabezado y el t&iacte;tulo del objeto semObj
             html.append("<!-- .....Aqui va el iconclass.............. -->").append("\n");
-            html.append("<p class=\"fa fa-circle");
-            html.append(statusStyleClass);
-            html.append("\"></p>");
             html.append("<h4>");
+            html.append("<span class=\"");
+            html.append(statusStyleClass);
+            html.append("\"></span>");
+            
             //secondStatusStyleClass dejo de asignarse desde el 17/06/14 con el uso de Detailed
-            if (secondStatusStyleClass != null) {
-                html.append("<span class=\"");
-                html.append(secondStatusStyleClass);
-                html.append("\"> &nbsp; </span>");
-            }
+//            if (secondStatusStyleClass != null) {
+//                html.append("<span class=\"");
+//                html.append(secondStatusStyleClass);
+//                html.append("\"> &nbsp; </span>");
+//            }
             html.append(semObj.getDisplayName());
             html.append("</h4>\n");
             html.append("<hr>\n");
@@ -1721,7 +1721,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         }
         html.append("</body>").append("\n");
         html.append("</html>");
-System.out.println("\n\n............................\nhtml=\n"+html);        
         return html;
     }
 
