@@ -203,21 +203,11 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
                         }
                     }
                     if (perStat != null && perStat.getStatus() != null) {
-//                        if (perStat.getStatus().getIcon() != null) {
-//                            status.append("<img src=\"");
-//                            status.append(perStat.getStatus().getIcon());
-//                            status.append("\" title=\"");
-//                            status.append(perStat.getStatus().getTitle());
-//                            status.append("\" />");
-//                        }
-//                        else
-//                        {
-                            status.append("<span class=\"swbstrgy-semaphore ");
-                            status.append(perStat.getStatus().getIconClass());
-                            status.append("\">");
-                            status.append(perStat.getStatus().getTitle());
-                            status.append("</span>");
-//                        }
+                        status.append("<span class=\"swbstrgy-semaphore ");
+                        status.append(perStat.getStatus().getIconClass());
+                        status.append("\">");
+                        status.append(perStat.getStatus().getTitle());
+                        status.append("</span>");
                     } else {
                         status.append("<span class=\"swbstrgy-unknown\"></span>");
                     }
