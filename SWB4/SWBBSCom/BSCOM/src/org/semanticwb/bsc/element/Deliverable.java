@@ -128,18 +128,11 @@ System.out.println("setProgress. value="+value);
     }
         
     private List<State> sortStates() {
-        return sortStates(true);
+        return getInitiative().sortStates();
     }
     
     private List<State> sortStates(boolean ascendent) {
-        //List<State> states = SWBUtils.Collections.copyIterator(listStates());
-        List<State> states = listValidStates();
-        if(ascendent) {
-            Collections.sort(states);
-        }else {            
-            Collections.sort(states, Collections.reverseOrder());
-        }
-        return states;
+        return getInitiative().sortStates(ascendent);
     }
     
     @Override
