@@ -220,9 +220,7 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
     @Override
     public String getStatusIconClass() {
         StringBuilder iconClass = new StringBuilder();
-        iconClass.append(getAutoStatusIconClass());
         boolean iconClassFound = false;
-        iconClass.append(" ");
         try {
             iconClass.append(getStar().getMeasure().getEvaluation().getStatus().getIconClass());
             iconClassFound = true;
@@ -243,8 +241,6 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
     @Override
     public String getStatusIconClass(Period period) {
         StringBuilder iconClass = new StringBuilder();
-        iconClass.append(getAutoStatusIconClass());
-        iconClass.append(" ");
         boolean iconClassFound = false;
         try {
             iconClass.append(getStar().getMeasure(period).getEvaluation().getStatus().getIconClass());
