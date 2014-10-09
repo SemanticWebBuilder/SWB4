@@ -111,10 +111,8 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
     public State getMinimumState() {
         List<State> states = sortStates();
         try {
-System.out.println("minimum state="+states.get(0));
             return states.get(0);
         } catch (IndexOutOfBoundsException e) {
-System.out.println("-----------errror="+e);
         }
         return null;
     }
@@ -225,7 +223,7 @@ for (Deliverable deliverable : deliverables) {
         try {
             iconClass.append(getStatusAssigned().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("indefinido");
+            iconClass.append("swbstrgy-undefined");
         }
         return iconClass.toString();
     }
@@ -233,12 +231,12 @@ for (Deliverable deliverable : deliverables) {
     @Override
     public String getStatusIconClass() {
         StringBuilder iconClass = new StringBuilder();
-        iconClass.append(getAutoStatusIconClass());
-        iconClass.append(" ");
+        /*iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");*/
         try {
             iconClass.append(getPeriodStatus().getStatus().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("indefinido");
+            iconClass.append("swbstrgy-undefined");
         }
         return iconClass.toString();
     }
@@ -246,12 +244,12 @@ for (Deliverable deliverable : deliverables) {
     @Override
     public String getStatusIconClass(Period period) {
         StringBuilder iconClass = new StringBuilder();
-        iconClass.append(getAutoStatusIconClass());
-        iconClass.append(" ");
+        /*iconClass.append(getAutoStatusIconClass());
+        iconClass.append(" ");*/
         try {
             iconClass.append(getPeriodStatus(period).getStatus().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("indefinido");
+            iconClass.append("swbstrgy-undefined");
         }
         return iconClass.toString();
     }
