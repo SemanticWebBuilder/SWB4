@@ -223,7 +223,7 @@ for (Deliverable deliverable : deliverables) {
         try {
             iconClass.append(getStatusAssigned().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("swbstrgy-undefined");
+            iconClass.append("swbstrgy-unknown");
         }
         return iconClass.toString();
     }
@@ -236,7 +236,7 @@ for (Deliverable deliverable : deliverables) {
         try {
             iconClass.append(getPeriodStatus().getStatus().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("swbstrgy-undefined");
+            iconClass.append("swbstrgy-unknown");
         }
         return iconClass.toString();
     }
@@ -249,7 +249,7 @@ for (Deliverable deliverable : deliverables) {
         try {
             iconClass.append(getPeriodStatus(period).getStatus().getIconClass());
         } catch (NullPointerException npe) {
-            iconClass.append("swbstrgy-undefined");
+            iconClass.append("swbstrgy-unknown");
         }
         return iconClass.toString();
     }
