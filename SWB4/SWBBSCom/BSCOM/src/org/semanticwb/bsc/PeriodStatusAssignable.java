@@ -9,7 +9,5 @@ import org.semanticwb.bsc.tracing.PeriodStatus;
    */
 public interface PeriodStatusAssignable extends org.semanticwb.bsc.base.PeriodStatusAssignableBase
 {
-    public State getMinimumState();
-    public State getMaximumState();
     public PeriodStatus getPeriodStatus(Period period);
 }
