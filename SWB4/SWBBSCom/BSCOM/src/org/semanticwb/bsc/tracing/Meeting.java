@@ -1,12 +1,12 @@
 package org.semanticwb.bsc.tracing;
 
+import java.util.Collections;
 import java.util.List;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
-
 
    /**
    * Persiste la información de una Sesión. Existen  dos tipos de sesiones: RAE y NOA 
@@ -47,6 +47,44 @@ public class Meeting extends org.semanticwb.bsc.tracing.base.MeetingBase
     @Override
     public void setPrefix(String value) {
         super.setPrefix(value);           
+    }
+    
+    @Override
+    public State getMinimumState() {
+        List<State> states = sortStates();
+        try {
+            return states.get(0);
+        }catch(IndexOutOfBoundsException e) {
+        
+        }
+        return null;
+    }
+    
+    @Override
+    public State getMaximumState() {
+        List<State> states = sortStates(false);
+        try {
+            return states.get(0);
+        }catch(IndexOutOfBoundsException e) {
+        
+        }
+        return null;
+    }
+    
+    @Override
+    public List<State> sortStates() {
+        return sortStates(true);
+    }
+    
+    @Override
+    public List<State> sortStates(boolean ascendent) {
+        List<State> states = listValidStates();
+        if(ascendent) {
+            Collections.sort(states);
+        }else {            
+            Collections.sort(states, Collections.reverseOrder());
+        }
+        return states;
     }
     
     @Override
