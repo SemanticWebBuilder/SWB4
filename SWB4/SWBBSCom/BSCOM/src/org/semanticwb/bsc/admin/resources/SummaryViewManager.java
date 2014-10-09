@@ -212,14 +212,14 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
 //                        }
 //                        else
 //                        {
-                            status.append("<span class=\"");
+                            status.append("<span class=\"swbstrgy-semaphore ");
                             status.append(perStat.getStatus().getIconClass());
                             status.append("\">");
                             status.append(perStat.getStatus().getTitle());
                             status.append("</span>");
 //                        }
                     } else {
-                        status.append("<span class=\"indefinido\">Indefinido</span>");
+                        status.append("<span class=\"swbstrgy-unknown\"></span>");
                     }
                     try {
                         row.put("status", status.toString());
