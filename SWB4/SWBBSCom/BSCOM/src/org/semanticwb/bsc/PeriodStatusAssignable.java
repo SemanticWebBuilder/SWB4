@@ -1,7 +1,6 @@
 package org.semanticwb.bsc;
 
 import org.semanticwb.bsc.accessory.Period;
-import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.tracing.PeriodStatus;
 
    /**
