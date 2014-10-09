@@ -208,7 +208,7 @@ System.out.println("setProgress. value="+value);
         try {
             iconClass = getAutoStatus().getIconClass();
         }catch(NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass = "state-undefined";
         }
         return iconClass;
     }
@@ -221,7 +221,7 @@ System.out.println("setProgress. value="+value);
         try {
             iconClass.append(getStar().getMeasure().getEvaluation().getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass.append("indefinido");
+            iconClass.append("state-undefined");
         }
         return iconClass.toString();
     }
@@ -234,7 +234,7 @@ System.out.println("setProgress. value="+value);
         try {
             iconClass.append(getStar().getMeasure(period).getEvaluation().getStatus().getIconClass());
         }catch(NullPointerException npe) {
-            iconClass.append("indefinido");
+            iconClass.append("state-undefined");
         }
         return iconClass.toString();
     }
