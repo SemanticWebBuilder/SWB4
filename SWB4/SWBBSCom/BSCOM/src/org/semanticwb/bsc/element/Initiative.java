@@ -173,11 +173,13 @@ public class Initiative extends org.semanticwb.bsc.element.base.InitiativeBase {
         return updated;
     }
 
-    private List<State> sortStates() {
+    @Override
+    public List<State> sortStates() {
         return sortStates(true);
     }
 
-    private List<State> sortStates(boolean ascendent) {
+    @Override
+    public List<State> sortStates(boolean ascendent) {
         List<State> states = listValidStates();
         if (ascendent) {
             Collections.sort(states);
