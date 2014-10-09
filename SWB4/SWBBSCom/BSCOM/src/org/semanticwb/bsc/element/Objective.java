@@ -212,11 +212,13 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
         return periods;
     }
     
-    private List<State> sortStates() {
+    @Override
+    public List<State> sortStates() {
         return sortStates(true);
     }
     
-    private List<State> sortStates(boolean ascendent) {
+    @Override
+    public List<State> sortStates(boolean ascendent) {
         List<State> states = listValidStates();
         if(ascendent) {
             Collections.sort(states);
