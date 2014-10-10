@@ -149,18 +149,11 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
     }
 
     private List<State> sortStates() {
-        return sortStates(true);
+        return getObjective().sortStates();
     }
 
     private List<State> sortStates(boolean ascendent) {
-        //List<State> states = SWBUtils.Collections.copyIterator(listStates());
-        List<State> states = listValidStates();
-        if (ascendent) {
-            Collections.sort(states);
-        } else {
-            Collections.sort(states, Collections.reverseOrder());
-        }
-        return states;
+        return getObjective().sortStates(ascendent);
     }
 
     /**
