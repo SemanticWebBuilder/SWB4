@@ -8,7 +8,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.lang.String;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +30,7 @@ import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
 import org.semanticwb.portal.api.SWBParamRequest;
@@ -53,12 +53,27 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramsRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        final String suri = request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+            response.flushBuffer();
+            return;
+        }
+        SemanticObject semanticObj = SemanticObject.getSemanticObject(suri);
+        final User user = paramRequest.getUser();
+        if(!user.isSigned() || !user.haveAccess(semanticObj.getGenericInstance()))     {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
+            return;
+        }        
+        
         PrintWriter out = response.getWriter();
-        String suri = request.getParameter("suri");
-        SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
-        Resource base = this.getResourceBase();
+        Resource base = getResourceBase();
         
         //Colores a utilizar para cada serie
         String[] colors = {"#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
@@ -101,13 +116,13 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                     }
                 } catch (UndefinedFrequencyException ex) {
                     out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
-                    out.println(paramsRequest.getLocaleString("msgUndefinedFrequencyException"));
+                    out.println(paramRequest.getLocaleString("msgUndefinedFrequencyException"));
                     out.println("</p></div>");
                     out.flush();
                     out.close();
                 } catch (InappropriateFrequencyException ex) {
                     out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
-                    out.println(paramsRequest.getLocaleString("msgInappropriateFrequencyException"));
+                    out.println(paramRequest.getLocaleString("msgInappropriateFrequencyException"));
                     out.println("</p></div>");
                     out.flush();
                     out.close();
@@ -207,7 +222,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                             out.println("<div class=\"swbform\">");
                             out.println("<fieldset>");
                             out.println("</fieldset>");
-                            out.println("<p>" + paramsRequest.getLocaleString("msgNotPeriods") + "</p>");
+                            out.println("<p>" + paramRequest.getLocaleString("msgNotPeriods") + "</p>");
                             out.println("</div>");
                             out.flush();
                             out.close();
@@ -220,7 +235,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                     out.println("<div class=\"swbform\">");
                     out.println("<fieldset>");
                     out.println("</fieldset>");
-                    out.println("<p>" + paramsRequest.getLocaleString("msgNotSerieAct") + "</p>");
+                    out.println("<p>" + paramRequest.getLocaleString("msgSeriesIsNotActive") + "</p>");
                     out.println("</div>");
                     out.flush();
                     out.close();
