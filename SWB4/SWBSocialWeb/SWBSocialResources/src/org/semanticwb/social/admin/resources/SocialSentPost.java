@@ -3541,9 +3541,7 @@ public class SocialSentPost extends GenericResource {
 
         for (int i = 0; i < postOutSocialNet.size(); i++) {
             PostOutNet postOutNet = (PostOutNet) ((SemanticObject) postOutSocialNet.get(i)).createGenericInstance();
-            if (postOutNet.getSocialNetwork() instanceof Twitter) {
-                out.println("THIS IS A TWITTER");
-            } else if (postOutNet.getSocialNetwork() instanceof Facebook) {
+            if (postOutNet.getSocialNetwork() instanceof Facebook) {
                 //out.println("THIS IS A FACEBOOK:" + postOutNet.getPo_socialNetMsgID() +"</br>");
                 if (postOutNet.getStatus() == 1) {
                     //System.out.println("OUTNET:" + postOutNet.getPo_socialNetMsgID());
