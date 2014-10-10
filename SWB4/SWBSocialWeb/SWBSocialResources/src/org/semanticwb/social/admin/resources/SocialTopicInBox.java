@@ -182,16 +182,15 @@ public class SocialTopicInBox extends GenericResource {
             PostIn postIn = (PostIn) semObj.createGenericInstance();
             User user = paramRequest.getUser();
             //Manejo de permisos
-             HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
-            Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
-            while (list.hasNext()) {
-                SemanticProperty sp = list.next();
-                mapa.put(sp.getName(),sp);
+            SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            boolean userCanRemoveMsg = false;
+            boolean userCanRetopicMsg = false;
+            boolean userCanRespondMsg = false;
+            if (socialUserExtAttr != null) {
+                userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
+                userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
+                userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
             }
-            boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();
-           // boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
-            boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
-            boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
             //boolean userCandoEveryThing=false;
             //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
             UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
@@ -614,6 +613,7 @@ public class SocialTopicInBox extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
+        /*
         String nameClassEmoticon = "ascen";
         String typeOrderEmoticon = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "emoticonDown");
@@ -636,6 +636,7 @@ public class SocialTopicInBox extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("emoticon") + "</span>");
         out.println("</a>");
         out.println("</th>");
+        * */
 
 
         String nameClassReplies = "ascen";
@@ -824,21 +825,21 @@ public class SocialTopicInBox extends GenericResource {
         //Manejo de permisos
 
         User user = paramRequest.getUser();
+        //Manejo de permisos
+        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg = false;
         boolean userCanRetopicMsg = false;
-        //boolean userCanRevalueMsg=false;
         boolean userCanRespondMsg = false;
-        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         if (socialUserExtAttr != null) {
             userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
             userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
-            //userCanRevalueMsg=socialUserExtAttr.isUserCanReValueMsg();
             userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
         }
         //boolean userCandoEveryThing=false;
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
         //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
+
 
         Iterator<PostIn> itposts = (Iterator) hmapResult.get("itResult");
         while (itposts != null && itposts.hasNext()) {
@@ -2442,7 +2443,14 @@ public class SocialTopicInBox extends GenericResource {
         User user = paramRequest.getUser();
         String lang = user.getLanguage();
 
-
+        
+         
+        System.out.println("User Temas Jorge:"+user);
+        System.out.println("userCanRemoveMsg:"+userCanRemoveMsg);
+        System.out.println("userCanRetopicMsg:"+userCanRetopicMsg);
+        System.out.println("userCanRespondMsg:"+userCanRespondMsg);
+        System.out.println("userCandoEveryThing:"+userCandoEveryThing);
+        
         //Show Actions
         out.println("<td class=\"accion\">");
 
