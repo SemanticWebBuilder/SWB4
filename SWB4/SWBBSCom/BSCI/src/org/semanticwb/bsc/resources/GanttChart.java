@@ -26,6 +26,7 @@ import org.semanticwb.bsc.element.Initiative;
 import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.GenericObject;
 import org.semanticwb.model.Resource;
+import org.semanticwb.model.User;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.portal.api.GenericAdmResource;
@@ -67,16 +68,32 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        final String suri = request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+            response.flushBuffer();
+            return;
+        }
+        SemanticObject semanticObj = SemanticObject.getSemanticObject(suri);
+        final User user = paramRequest.getUser();
+        if(!user.isSigned() || !user.haveAccess(semanticObj.getGenericInstance()))     {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
+            return;
+        }
+        
         PrintWriter out = response.getWriter();
-        String suri = request.getParameter("suri");
-        SemanticObject semanticObj = SemanticObject.createSemanticObject(suri);
         Resource base = this.getResourceBase();
         StringBuilder output = new StringBuilder(512);
         StringBuilder dataOut = new StringBuilder(512);
-        String graphHeight = base.getAttribute("graphHeight", "500");
-        String graphWidth = base.getAttribute("graphWidth", "600");
+        final String graphHeight = base.getAttribute("graphHeight", "500");
+        final String graphWidth = base.getAttribute("graphWidth", "600");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
