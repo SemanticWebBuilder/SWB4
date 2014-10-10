@@ -16,6 +16,7 @@ import org.semanticwb.bsc.utils.InappropriateFrequencyException;
 import org.semanticwb.bsc.utils.UndefinedFrequencyException;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 
 public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase {
@@ -104,6 +105,13 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
             }
         });
         return validPeriods;
+    }
+    
+    @Override
+    public boolean canView() {
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        return user.haveAccess(this);
     }
 
     @Override
