@@ -1,8 +1,10 @@
 package org.semanticwb.bsc.element;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.bsc.accessory.Period;
+import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.parser.AgreementParser;
 import org.semanticwb.bsc.tracing.Meeting;
 
@@ -23,6 +25,10 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     @Override
     public String getPrefix() {
         return getAgreementNumber();
+    }
+    
+    public List<State> listValidStates() {
+        return getMeeting().listValidStates();
     }
 
     /**
