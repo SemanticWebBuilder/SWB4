@@ -3535,6 +3535,8 @@ public class SocialSentPost extends GenericResource {
         SocialUserExtAttributes socialUserExtAttr = null;
         if (user.isSigned()) {
             socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        }else {
+            return;
         }
 
         for (int i = 0; i < postOutSocialNet.size(); i++) {

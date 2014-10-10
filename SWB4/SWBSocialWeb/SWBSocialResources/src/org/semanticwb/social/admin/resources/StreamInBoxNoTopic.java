@@ -541,7 +541,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-
+        /*
         String nameClassEmoticon = "ascen";
         String typeOrderEmoticon = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "emoticonDown");
@@ -564,7 +564,7 @@ public class StreamInBoxNoTopic extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("emoticon") + "</span>");
         out.println("</a>");
         out.println("</th>");
-
+        * */
 
 
         String nameClassReplies = "ascen";
