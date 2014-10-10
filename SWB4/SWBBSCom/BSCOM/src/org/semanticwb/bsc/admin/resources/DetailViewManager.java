@@ -1402,28 +1402,26 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
-        if (user != null && user.isSigned()) {
-            if (str_role != null) {
+        if(user != null && user.isSigned())
+        {
+            if (str_role != null)
+            {
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 GenericObject gobj = null;
                 try {
                     gobj = ont.getGenericObject(str_role);
-                } catch (Exception e) {
+                }catch (Exception e) {
                     DetailViewManager.log.error("Error InlineEdit.userCanEdit()", e);
                     return Boolean.FALSE;
                 }
-
-                UserGroup ugrp = null;
-                Role urole = null;
-
                 if (gobj != null) {
                     if (gobj instanceof UserGroup) {
-                        ugrp = (UserGroup) gobj;
+                        UserGroup ugrp = (UserGroup) gobj;
                         if (user.hasUserGroup(ugrp)) {
                             access = true;
                         }
                     } else if (gobj instanceof Role) {
-                        urole = (Role) gobj;
+                        Role urole = (Role) gobj;
                         if (user.hasRole(urole)) {
                             access = true;
                         }
