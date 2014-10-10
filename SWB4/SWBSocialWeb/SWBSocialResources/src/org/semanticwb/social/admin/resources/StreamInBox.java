@@ -625,7 +625,7 @@ public class StreamInBox extends GenericResource {
         out.println("</a>");
         out.println("</th>");
 
-
+        /*
         String nameClassEmoticon = "ascen";
         String typeOrderEmoticon = "Ordenar Ascendente";
         urlOderby.setParameter("orderBy", "emoticonDown");
@@ -648,6 +648,7 @@ public class StreamInBox extends GenericResource {
         out.println("<span>" + paramRequest.getLocaleString("emoticon") + "</span>");
         out.println("</a>");
         out.println("</th>");
+        * */
 
 
         String nameClassReplies = "ascen";
@@ -2680,6 +2681,15 @@ public class StreamInBox extends GenericResource {
 
         text = SWBSocialResUtil.Util.replaceSpecialCharacters(text, false);
 
+        /*
+        System.out.println("User:"+user);
+        System.out.println("userCanRemoveMsg:"+userCanRemoveMsg);
+        System.out.println("userCanRetopicMsg:"+userCanRetopicMsg);
+        System.out.println("userCanRevalueMsg:"+userCanRevalueMsg);
+        System.out.println("userCanRespondMsg:"+userCanRespondMsg);
+        System.out.println("userCandoEveryThing:"+userCandoEveryThing);
+        * */
+        
         if (userCanRemoveMsg || userCandoEveryThing) {
             out.println("<div id=\"inStream" + postIn.getId() + "\">");
             out.println("</div>");
