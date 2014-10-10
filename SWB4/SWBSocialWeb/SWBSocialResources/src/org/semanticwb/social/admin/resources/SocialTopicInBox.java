@@ -182,7 +182,7 @@ public class SocialTopicInBox extends GenericResource {
             PostIn postIn = (PostIn) semObj.createGenericInstance();
             User user = paramRequest.getUser();
             //Manejo de permisos
-            SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+            /*SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
             boolean userCanRemoveMsg = false;
             boolean userCanRetopicMsg = false;
             boolean userCanRespondMsg = false;
@@ -190,9 +190,20 @@ public class SocialTopicInBox extends GenericResource {
                 userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
                 userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
                 userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
-            }
+            }*/
             //boolean userCandoEveryThing=false;
             //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
+            
+            HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+        while (list.hasNext()) {
+            SemanticProperty sp = list.next();
+            mapa.put(sp.getName(),sp);
+        }
+        boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();
+        boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
+        boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
+        boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
             UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
             //if(user.hasUserGroup(userAdminGrp) || user.hasUserGroup(userSuperAdminGrp)) userCandoEveryThing=true;
 
@@ -826,7 +837,7 @@ public class SocialTopicInBox extends GenericResource {
 
         User user = paramRequest.getUser();
         //Manejo de permisos
-        SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
+        /*SocialUserExtAttributes socialUserExtAttr = SocialUserExtAttributes.ClassMgr.getSocialUserExtAttributes(user.getId(), SWBContext.getAdminWebSite());
         boolean userCanRemoveMsg = false;
         boolean userCanRetopicMsg = false;
         boolean userCanRespondMsg = false;
@@ -834,7 +845,18 @@ public class SocialTopicInBox extends GenericResource {
             userCanRemoveMsg = socialUserExtAttr.isUserCanRemoveMsg();
             userCanRetopicMsg = socialUserExtAttr.isUserCanReTopicMsg();
             userCanRespondMsg = socialUserExtAttr.isUserCanRespondMsg();
+        }*/
+        HashMap<String, SemanticProperty> mapa = new HashMap<String, SemanticProperty>();
+        Iterator<SemanticProperty> list = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/social#SocialUserExtAttributes").listProperties();
+        while (list.hasNext()) {
+            SemanticProperty sp = list.next();
+            mapa.put(sp.getName(),sp);
         }
+        boolean userCanRetopicMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReTopicMsg"))).booleanValue();
+        boolean userCanRevalueMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanReValueMsg"))).booleanValue();
+        boolean userCanRemoveMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRemoveMsg"))).booleanValue();
+        boolean userCanRespondMsg = ((Boolean)user.getExtendedAttribute(mapa.get("userCanRespondMsg"))).booleanValue();
+        
         //boolean userCandoEveryThing=false;
         //UserGroup userAdminGrp=SWBContext.getAdminWebSite().getUserRepository().getUserGroup("admin");
         UserGroup userSuperAdminGrp = SWBContext.getAdminWebSite().getUserRepository().getUserGroup("su");
@@ -2600,7 +2622,7 @@ public class SocialTopicInBox extends GenericResource {
         out.println("</td>");
 
         //Emoticon
-        out.println("<td>");
+        /*out.println("<td>");
         if (postIn.getPostSentimentalEmoticonType() == 1) {
             out.println("<img title=\"Positivo\" src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "\"/>");
         } else if (postIn.getPostSentimentalEmoticonType() == 2) {
@@ -2608,7 +2630,7 @@ public class SocialTopicInBox extends GenericResource {
         } else if (postIn.getPostSentimentalEmoticonType() == 0) {
             out.println("<img title=\"Neutro\" src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emoneu.png" + "\"/>");
         }
-        out.println("</td>");
+        out.println("</td>");*/
 
 
         //Replicas
