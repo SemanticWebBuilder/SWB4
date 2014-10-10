@@ -485,7 +485,7 @@ public class SentimentalDataClassifier {
 
                     //Revisa si encuentra emoticones en el mensaje
                     //System.out.println("SentimentalData..text/externalString2Clasify:"+externalString2Clasify);
-                    findEmoticones(post, externalString2Clasify_TMP);
+                    //findEmoticones(post, externalString2Clasify_TMP);
                     //MessageIn messageIn=(MessageIn)post;
                     //System.out.println("messageIn final:"+messageIn.getMsg_Text());
 
