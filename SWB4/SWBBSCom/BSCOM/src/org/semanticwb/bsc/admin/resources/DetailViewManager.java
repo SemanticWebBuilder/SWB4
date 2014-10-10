@@ -725,14 +725,34 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
     public void doView(HttpServletRequest request, HttpServletResponse response,
             SWBParamRequest paramRequest) throws SWBResourceException, IOException
     {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache"); 
+        
+        final String suri = request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+            response.flushBuffer();
+            return;
+        }
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        GenericObject generic = semObj.createGenericInstance();
+        Detailed d = (Detailed) generic;
+        final User user = paramRequest.getUser();
+        if(!user.isSigned() || !d.canView()) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
+            return;
+        }
+        
         PrintWriter out = response.getWriter();
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
-        if(message == null) {
+        if(message == null)
+        {
             FileReader reader = retrieveTemplate();
-            String suri = request.getParameter("suri");
-            SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+            
             //Declarar variable para el per&iacte;odo, obteniendo el valor del request
             String modelName = paramRequest.getWebPage().getWebSiteId();
             String periodId = request.getSession().getAttribute(modelName) != null
@@ -749,8 +769,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
             UserGroup collaboration = null;
-            GenericObject generic = semObj.createGenericInstance();
-            Detailed d = (Detailed) generic;
+            
+            
+            
             statusStyleClass = d.getStatusIconClass(period);
             // Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
