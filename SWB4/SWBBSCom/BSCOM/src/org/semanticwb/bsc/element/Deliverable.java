@@ -212,7 +212,7 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
         try {
             iconClass = getAutoStatus().getIconClass();
         } catch (NullPointerException npe) {
-            iconClass = "state-undefined";
+            iconClass = "swbstrgy-unknown";
         }
         return iconClass;
     }
@@ -232,7 +232,7 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
                 getStar().getMeasure().getEvaluation().setStatus(state);
                 iconClass.append(getStar().getMeasure().getEvaluation().getStatus().getIconClass());
             } catch (NullPointerException ex) {
-                iconClass.append("state-undefined");
+                iconClass.append("swbstrgy-unknown");
             }
         }
         return iconClass.toString();
@@ -253,7 +253,7 @@ public class Deliverable extends org.semanticwb.bsc.element.base.DeliverableBase
                 getStar().getMeasure(period).getEvaluation().setStatus(state);
                 iconClass.append(getStar().getMeasure(period).getEvaluation().getStatus().getIconClass());
             } catch (NullPointerException ex) {
-                iconClass.append("state-undefined");
+                iconClass.append("swbstrgy-unknown");
             }
         }
         return iconClass.toString();
