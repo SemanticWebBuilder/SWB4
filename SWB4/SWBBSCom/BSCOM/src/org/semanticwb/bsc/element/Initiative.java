@@ -17,6 +17,7 @@ import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -228,6 +229,13 @@ for (Deliverable deliverable : deliverables) {
             iconClass.append("swbstrgy-unknown");
         }
         return iconClass.toString();
+    }
+    
+    @Override
+    public boolean canView() {
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        return user.haveAccess(this);
     }
 
     @Override
