@@ -21,6 +21,7 @@ import org.semanticwb.platform.SemanticObserver;
 import static org.semanticwb.bsc.element.Indicator.*;
 import org.semanticwb.bsc.parser.ObjectiveParser;
 import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticProperty;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase implements Comparable<Objective>
@@ -322,6 +323,13 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
     @Override
     public boolean isValid() {
         return super.isValid() && getTheme().isValid();
+    }
+    
+    @Override
+    public boolean canView() {
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        return user.haveAccess(this);
     }
 
     @Override
