@@ -40,7 +40,6 @@ public class StreamThreadRemoverbyNumber extends java.lang.Thread {
     @Override
     public void run()
     {
-        System.out.println("Entra J1/StreamThreadRemoverbyNumber");
         try
         {
           if(socialSite!=null && stream!=null){
@@ -49,20 +48,17 @@ public class StreamThreadRemoverbyNumber extends java.lang.Thread {
             else if(!usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>100000)) postInNumAccepted=100000;
             //1000 es el menor número aceptado en un stream, 100,000 es el mayor número aceptado
             //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 100,000)
-            System.out.println("CheckStreamsMsgbyNumber-3/postInNumAccepted:"+postInNumAccepted);
             int postInStream=Integer.parseInt(getAllPostInStream(stream));
-            System.out.println("CheckStreamsMsgbyNumber-3/postInNumAccepted:"+postInNumAccepted+",CheckStreamsMsgbyNumber-4/postInStream:"+postInStream);
             if(postInNumAccepted<postInStream)    
             {
                 long toErase=postInStream-postInNumAccepted;
                 //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM-1:"+stream+",toErase:"+toErase);
                 String query=getAllPostIn2Remove(stream, toErase);
-                System.out.println("query pa eliminarJJ:"+query);
                 Iterator<PostIn> itPostIns2Remove=SWBSocial.executeQueryArray(query, socialSite).iterator();
                 while(itPostIns2Remove.hasNext())
                 {
                     PostIn postIn=itPostIns2Remove.next();
-                    System.out.println("Va a eliminar PostIn:"+postIn);
+                    //System.out.println("Va a eliminar PostIn:"+postIn);
                     postIn.remove();
                 }
             }

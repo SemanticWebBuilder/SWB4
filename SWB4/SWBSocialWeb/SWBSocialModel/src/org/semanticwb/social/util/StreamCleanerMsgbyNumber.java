@@ -77,14 +77,14 @@ public class StreamCleanerMsgbyNumber {
          */
         public void run() {
             Boolean usingLicenseMgr=Boolean.parseBoolean(SWBPortal.getEnv("swbsocial/useLicenseMgr", "false")); 
-            System.out.println("CheckStreamsMsgbyNumber-1/usingLicenseMgr:"+usingLicenseMgr);
+            //System.out.println("CheckStreamsMsgbyNumber-1/usingLicenseMgr:"+usingLicenseMgr);
             Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
             while(itSocialSites.hasNext())
             {
                 SocialSite socialSite=itSocialSites.next();
-                if(socialSite.isValid())
+                //if(socialSite.isValid())
                 {
-                    System.out.println("CheckStreamsMsgbyNumber-2/socialSite:"+socialSite);
+                    //System.out.println("CheckStreamsMsgbyNumber-2/socialSite:"+socialSite);
                     long streamMaxMessages=0;
                     LicenseType licenseType=socialSite.getLicenseType();
                     if(licenseType!=null) streamMaxMessages=Long.parseLong(SWBSocialUtil.getLicenseTypeProp(licenseType.getId().toLowerCase()+".messagenum", "0"));
@@ -94,7 +94,7 @@ public class StreamCleanerMsgbyNumber {
                         //if(!stream.isDeleted()) 
                         {
                             try{
-                                System.out.println("Entra J1");
+                                //System.out.println("Entra J1");
                                 StreamThreadRemoverbyNumber threadRemover=new StreamThreadRemoverbyNumber(socialSite, stream, usingLicenseMgr, streamMaxMessages);
                                 threadRemover.start();
                             }catch(Exception e){log.error(e);
