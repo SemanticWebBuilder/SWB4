@@ -18,6 +18,7 @@ import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
 
@@ -326,6 +327,13 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
      */
     public Period currentMeasurementPeriod() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public boolean canView() {
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        return user.haveAccess(this);
     }
 
     @Override
