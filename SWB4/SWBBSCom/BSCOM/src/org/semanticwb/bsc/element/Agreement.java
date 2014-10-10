@@ -7,6 +7,12 @@ import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
 import org.semanticwb.bsc.parser.AgreementParser;
 import org.semanticwb.bsc.tracing.Meeting;
+import org.semanticwb.model.Role;
+import org.semanticwb.model.SWBClass;
+import org.semanticwb.model.SWBContext;
+import org.semanticwb.model.User;
+import org.semanticwb.model.UserGroup;
+import org.semanticwb.model.WebSite;
 
 
    /**
@@ -82,9 +88,34 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     }
     
     @Override
+    public boolean canView() {
+        boolean access = Boolean.FALSE;
+        SWBClass swbc = getAgreementVisibility();
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        if(user!=null && swbc!=null)
+        {
+            if (swbc instanceof UserGroup) {
+                UserGroup ugrp = (UserGroup) swbc;
+                if (user.hasUserGroup(ugrp)) {
+                    access = true;
+                }
+            }else if (swbc instanceof Role) {
+                Role urole = (Role) swbc;
+                if (user.hasRole(urole)) {
+                    access = true;
+                }
+            }else if(swbc instanceof User) {
+                User usr = (User)swbc;
+                access = user.equals(usr);
+            }
+        }
+        return access;
+    }
+    
+    @Override
     public String getStatusIconClass() {
-        //return getAgreementStatus() == null ? "undefined" : getAgreementStatus().getIconClass();
-        return getAgreementStatus() == null ? "undefined" : getAgreementStatus();
+        return getAgreementStatus() == null ? "swbstrgy-unknown" : getAgreementStatus();
     }
     
     @Override
