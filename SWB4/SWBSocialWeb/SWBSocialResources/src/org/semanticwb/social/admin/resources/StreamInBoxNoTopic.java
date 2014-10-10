@@ -2599,7 +2599,7 @@ public class StreamInBoxNoTopic extends GenericResource {
        out.println("</td>");
 
        //Emoticon
-       out.println("<td align=\"center\">");
+       /*out.println("<td align=\"center\">");
        if (postIn.getPostSentimentalEmoticonType() == 1) {
            out.println("<img title=\"Positivo\" src=\"" + SWBPortal.getContextPath() + "/swbadmin/css/images/emopos.png" + "\"/>");
        } else if (postIn.getPostSentimentalEmoticonType() == 2) {
@@ -2609,7 +2609,7 @@ public class StreamInBoxNoTopic extends GenericResource {
        } else {
            out.println("XXX");
        }
-       out.println("</td>");
+       out.println("</td>");*/
 
 
        //Replicas
