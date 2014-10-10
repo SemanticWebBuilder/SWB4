@@ -29,11 +29,8 @@
 package org.semanticwb.social.listener;
 
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBUtils;
-import org.semanticwb.social.ExternalPost;
 import org.semanticwb.social.SocialNetwork;
 import org.semanticwb.social.Stream;
 
