@@ -36,7 +36,6 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.LicenseType;
-import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
@@ -78,42 +77,53 @@ public class StreamCleanerMsgbyNumber {
          */
         public void run() {
             Boolean usingLicenseMgr=Boolean.parseBoolean(SWBPortal.getEnv("swbsocial/useLicenseMgr", "false")); 
+            System.out.println("CheckStreamsMsgbyNumber-1/usingLicenseMgr:"+usingLicenseMgr);
             Iterator<SocialSite> itSocialSites=SocialSite.ClassMgr.listSocialSites();
             while(itSocialSites.hasNext())
             {
                 SocialSite socialSite=itSocialSites.next();
                 if(socialSite.isValid())
                 {
+                    System.out.println("CheckStreamsMsgbyNumber-2/socialSite:"+socialSite);
                     long streamMaxMessages=0;
                     LicenseType licenseType=socialSite.getLicenseType();
                     if(licenseType!=null) streamMaxMessages=Long.parseLong(SWBSocialUtil.getLicenseTypeProp(licenseType.getId().toLowerCase()+".messagenum", "0"));
                     Iterator<Stream> itStreams = socialSite.listStreams();
                     while (itStreams.hasNext()) {
                         Stream stream = itStreams.next();
-                        if (stream.isValid()) 
+                        //if(!stream.isDeleted()) 
                         {
-
-                            //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM:"+stream);
+                            try{
+                                System.out.println("Entra J1");
+                                StreamThreadRemoverbyNumber threadRemover=new StreamThreadRemoverbyNumber(socialSite, stream, usingLicenseMgr, streamMaxMessages);
+                                threadRemover.start();
+                            }catch(Exception e){log.error(e);
+                            }
+                            /*
                             long postInNumAccepted=stream.getStream_maxMsg();
                             if(usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>streamMaxMessages)) postInNumAccepted=streamMaxMessages;
                             else if(!usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>100000)) postInNumAccepted=100000;
                             //1000 es el menor número aceptado en un stream, 100,000 es el mayor número aceptado
                             //El número de mensajes en el stream no debe ser mayor que el que acepta el stream (entre 1000 y 100,000)
-                            if(postInNumAccepted<Integer.parseInt(getAllPostInStream(stream)))    
+                            System.out.println("CheckStreamsMsgbyNumber-3/postInNumAccepted:"+postInNumAccepted);
+                            int postInStream=Integer.parseInt(getAllPostInStream(stream));
+                            System.out.println("CheckStreamsMsgbyNumber-3/postInNumAccepted:"+postInNumAccepted+",CheckStreamsMsgbyNumber-4/postInStream:"+postInStream);
+                            if(postInNumAccepted<postInStream)    
                             {
                                 long totalExist=Integer.parseInt(getAllPostInStream(stream));
                                 long toErase=totalExist-postInNumAccepted;
                                 //System.out.println("Entra a StreamCleanerMsgbyNumber...EJECUTAR/STREAM-1:"+stream+",toErase:"+toErase);
                                 String query=getAllPostIn2Remove(stream, toErase);
-                                //System.out.println("query pa eliminarJJ:"+query);
+                                System.out.println("query pa eliminarJJ:"+query);
                                 Iterator<PostIn> itPostIns2Remove=SWBSocial.executeQueryArray(query, socialSite).iterator();
                                 while(itPostIns2Remove.hasNext())
                                 {
                                     PostIn postIn=itPostIns2Remove.next();
-                                    //System.out.println("Va a eliminar PostIn:"+postIn);
+                                    System.out.println("Va a eliminar PostIn:"+postIn);
                                     postIn.remove();
                                 }
                             }
+                            * */
                         }
                     }
                 }
