@@ -125,7 +125,6 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
     }
 
     private List<Period> sortValidPeriods(boolean ascendent) {
-        //List<Period> periods = SWBUtils.Collections.copyIterator(listPeriods());
         List<Period> periods = listValidPeriods();
         if (ascendent) {
             Collections.sort(periods);
