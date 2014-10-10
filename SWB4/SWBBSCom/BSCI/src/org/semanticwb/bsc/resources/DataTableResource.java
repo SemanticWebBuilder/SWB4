@@ -18,6 +18,7 @@ import org.semanticwb.SWBException;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.ComponentExportable;
+import org.semanticwb.bsc.Detailed;
 import org.semanticwb.bsc.SM;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
@@ -51,22 +52,23 @@ public class DataTableResource extends GenericResource implements ComponentExpor
     public void doView(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Pragma", "no-cache");        
         
-        User user = paramRequest.getUser();
-        if(user==null || !user.isSigned())
-        {
-            //response.sendError(403);
+        final String suri = request.getParameter("suri");
+        if(suri==null) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
             response.flushBuffer();
             return;
         }
-        final String lang = user.getLanguage();
-         
-        final String suri=request.getParameter("suri");
-        if(suri==null) {
-            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        final User user = paramRequest.getUser();
+        if(!user.isSigned() || !user.haveAccess(semObj.getGenericInstance()))     {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
             return;
         }
+        
+        final String lang = user.getLanguage();
         
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject sobj = ont.getSemanticObject(suri);
