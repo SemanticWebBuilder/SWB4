@@ -15,6 +15,7 @@ import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.Factor;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 
 public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
@@ -208,14 +209,21 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
         }
         return factors.iterator();
     }
+    
+    @Override
+    public boolean canView() {
+        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+        return user.haveAccess(this);
+    }
 
     @Override
     public String getStatusIconClass() {
-        return null;//getStatus.getIconClass;
+        return "";
     }
 
     @Override
     public String getStatusIconClass(Period period) {
-        return null;//getStatus.getIconClass;
+        return "";
     }
 }
