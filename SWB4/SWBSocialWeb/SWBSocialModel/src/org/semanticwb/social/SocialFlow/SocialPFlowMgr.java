@@ -1184,7 +1184,7 @@ public class SocialPFlowMgr {
             }
             if (!(postOut.getPflowInstance().getStatus() == 3 || postOut.getPflowInstance().getStatus() == 2 || postOut.getPflowInstance().getStep() == null))
             {
-                System.out.println("Entra a PflowMgr/isInFlow");
+                //System.out.println("Entra a PflowMgr/isInFlow");
                 return true;
             }
         }
@@ -1233,7 +1233,7 @@ public class SocialPFlowMgr {
                             else
                             {
                                 SocialPFlowInstance instance = resource.getPflowInstance();
-                                System.out.println("FLOW STATUS:"+instance.getStatus()+",resource.getPflowInstance().getStep():"+resource.getPflowInstance().getStep());
+                                //System.out.println("FLOW STATUS:"+instance.getStatus()+",resource.getPflowInstance().getStep():"+resource.getPflowInstance().getStep());
                                 switch (instance.getStatus())
                                 {
                                     case -1:
@@ -1347,7 +1347,7 @@ public class SocialPFlowMgr {
          */
         public static void mailToNotify(PostOut postOut, String activityName, String messageType, String message) 
         {
-            System.out.println("Entra a Mail-1");
+            //System.out.println("Entra a Mail-1");
             User wbuser = postOut.getCreator();
             Locale locale = Locale.getDefault();
             try {
@@ -1374,7 +1374,7 @@ public class SocialPFlowMgr {
                                 }
                                 if (activity.getAttribute("name").equalsIgnoreCase(activityName)) {
                                     if (activity.getAttribute("type").equalsIgnoreCase("AuthorActivity")) {
-                                        System.out.println("mailToNotify--2");
+                                        //System.out.println("mailToNotify--2");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg3") + ".";
 
@@ -1395,7 +1395,7 @@ public class SocialPFlowMgr {
                                         msgMail += "<br/><br/>" + bundle.getString("socialTopic") + ": " + socialTopic.getTitle() + ".<br/><br/>";
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(),bundle.getString("msg0")+":"+ bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg8"), msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("EndActivity")) {
-                                        System.out.println("mailToNotify--3");
+                                        //System.out.println("mailToNotify--3");
                                         User user = postOut.getCreator();
                                         String msgMail = bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + " '" + postOut.getMsg_Text() + "' " + bundle.getString("msg9") + ".";
                                         msgMail += "<br/><br/><b>" + bundle.getString("sitio") + ":</b> " + wsite.getTitle() + ".<br/><br/>";
@@ -1407,7 +1407,7 @@ public class SocialPFlowMgr {
                                         }
                                         SWBUtils.EMAIL.sendBGEmail(user.getEmail(), bundle.getString("msg0")+":" + bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg10") + "", msgMail);
                                     } else if (activity.getAttribute("type").equalsIgnoreCase("Activity")) {
-                                        System.out.println("mailToNotify--4");
+                                        //System.out.println("mailToNotify--4");
                                         HashSet<User> husers = new HashSet<User>();
                                         NodeList users = activity.getElementsByTagName("user");
                                         for (int j = 0; j < users.getLength(); j++) {
@@ -1449,7 +1449,7 @@ public class SocialPFlowMgr {
                                             to = to.substring(0, to.length() - 1);
                                         }
                                         if (!to.equalsIgnoreCase("")) {
-                                            System.out.println("mailToNotify--5");
+                                            //System.out.println("mailToNotify--5");
                                             String subject = bundle.getString("msg0")+":"+bundle.getString("msg7") + " " + postOut.getId() + " " + bundle.getString("msg11");
                                             String msg = "<b>"+bundle.getString("msg1") + " " + postOut.getId() + " " + bundle.getString("msg2") + ":</b>"
                                                     + "  '" + postOut.getMsg_Text() + "' <br/><br/>" 
@@ -1484,7 +1484,7 @@ public class SocialPFlowMgr {
                                                     msg += "<br/><br/>" + bundle.getString("msgr1") + " " + activity.getAttribute("days") + " " + bundle.getString("days") + " " + bundle.getString("and") + " " + activity.getAttribute("hours") + " " + bundle.getString("hours") + " .";
                                                 }
                                             }
-                                            System.out.println("msg:"+msg+",to:"+to);
+                                            //System.out.println("msg:"+msg+",to:"+to);
                                             SWBUtils.EMAIL.sendBGEmail(to, subject, msg);
                                         }
                                     }
