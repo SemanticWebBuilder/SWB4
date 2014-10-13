@@ -46,7 +46,7 @@ public class PeriodSelector extends GenericResource {
             calEnd.setTime(period.getEnd());
             calEnd.set(Calendar.HOUR, 23);
             calEnd.set(Calendar.MINUTE, 59);
-            calEnd.set(Calendar.MILLISECOND, 59);
+            calEnd.set(Calendar.SECOND, 59);
             right.setTime(calEnd.getTime());
             if (current.compareTo(left) >= 0 && current.compareTo(right) <= 0) {
                 return period;
