@@ -4,7 +4,7 @@ package org.semanticwb.bsc.catalogs.base;
    /**
    * Un formato define un patrón para formatear mediciones. Tal como dólares, pesos, porcentaje, etc. 
    */
-public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Countryable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable
+public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog implements org.semanticwb.model.Filterable,org.semanticwb.model.Trashable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Localeable
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_formatPattern=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#formatPattern");
    /**
@@ -191,6 +191,24 @@ public abstract class FormatBase extends org.semanticwb.bsc.catalogs.Catalog imp
     public FormatBase(org.semanticwb.platform.SemanticObject base)
     {
         super(base);
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
    /**
    * Sets the value for the property Country
