@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Modelo que define un Scorecard de la metodologia BalancedScorecard de Norton y Kaplan 
    */
-public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.bsc.Help,org.semanticwb.model.Countryable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Localeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Indexable
+public abstract class BSCBase extends org.semanticwb.model.WebSite implements org.semanticwb.bsc.Help,org.semanticwb.model.Indexable,org.semanticwb.model.Localeable,org.semanticwb.model.Traceable,org.semanticwb.model.Countryable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.OntologyDepable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.FilterableNode
 {
     public static final org.semanticwb.platform.SemanticProperty bsc_values=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#values");
    /**
@@ -35,6 +35,10 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
    * Objeto por medio del cual se define un tipo de componente o recurso
    */
     public static final org.semanticwb.platform.SemanticClass swb_ResourceType=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#ResourceType");
+   /**
+   * Un servidor DNS permite conectarse con la máquina sin necesidad de conocer su dirección IP. En SemanticWebBuilder el DNS local es el nombre asociado al sitio. Al ser invocado el DNS presentará una sección específica a manera de página de inicio.
+   */
+    public static final org.semanticwb.platform.SemanticClass swb_Dns=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/ontology#Dns");
    /**
    * Período de medición.
    */
@@ -792,6 +796,36 @@ public abstract class BSCBase extends org.semanticwb.model.WebSite implements or
     public boolean hasResourceType(String id)
     {
         return org.semanticwb.model.ResourceType.ClassMgr.hasResourceType(id, this);
+    }
+
+    public org.semanticwb.model.Dns getDns(String id)
+    {
+        return org.semanticwb.model.Dns.ClassMgr.getDns(id, this);
+    }
+
+    public java.util.Iterator<org.semanticwb.model.Dns> listDnses()
+    {
+        return org.semanticwb.model.Dns.ClassMgr.listDnses(this);
+    }
+
+    public org.semanticwb.model.Dns createDns(String id)
+    {
+        return org.semanticwb.model.Dns.ClassMgr.createDns(id,this);
+    }
+
+    public org.semanticwb.model.Dns createDns()
+    {
+        long id=getSemanticObject().getModel().getCounter(swb_Dns);
+        return org.semanticwb.model.Dns.ClassMgr.createDns(String.valueOf(id),this);
+    } 
+
+    public void removeDns(String id)
+    {
+        org.semanticwb.model.Dns.ClassMgr.removeDns(id, this);
+    }
+    public boolean hasDns(String id)
+    {
+        return org.semanticwb.model.Dns.ClassMgr.hasDns(id, this);
     }
 
     public org.semanticwb.bsc.accessory.Period getPeriod(String id)

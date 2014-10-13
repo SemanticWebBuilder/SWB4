@@ -1,5 +1,8 @@
 package org.semanticwb.bsc.base;
 
+   /**
+   * Interfaz que define un elemento que trabaja con instancias de Series 
+   */
 public interface SMBase extends org.semanticwb.model.GenericObject
 {
     public static final org.semanticwb.platform.SemanticClass bsc_Series=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#Series");
@@ -8,6 +11,9 @@ public interface SMBase extends org.semanticwb.model.GenericObject
    */
     public static final org.semanticwb.platform.SemanticProperty bsc_star=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#star");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasSeries=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasSeries");
+   /**
+   * Interfaz que define un elemento que trabaja con instancias de Series 
+   */
     public static final org.semanticwb.platform.SemanticClass bsc_SM=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SM");
 
    /**

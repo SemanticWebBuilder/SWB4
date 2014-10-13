@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.model.SWBClass implements org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Serializable
+public abstract class PerspectiveBase extends org.semanticwb.model.SWBClass implements org.semanticwb.bsc.Recognizable,org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.Traceable,org.semanticwb.model.RuleRefable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Serializable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Trashable,org.semanticwb.model.Activeable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode
 {
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.
