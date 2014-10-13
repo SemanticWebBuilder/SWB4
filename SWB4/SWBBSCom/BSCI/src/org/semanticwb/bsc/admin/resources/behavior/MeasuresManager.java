@@ -72,11 +72,7 @@ public class MeasuresManager extends GenericAdmResource {
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject semObj = ont.getSemanticObject(suri);
         Measurable measurable = (Measurable)semObj.getGenericInstance();
-//        if(measurable instanceof Series) {
-            doEditSeries(request, response, paramRequest);
-//        }else if(measurable instanceof Deliverable) {
-//            doEditDeliverable(request, response, paramRequest);
-//        }
+        doEditSeries(request, response, paramRequest);
     }
     
     private void doEditSeries(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ClassCastException
@@ -89,9 +85,7 @@ public class MeasuresManager extends GenericAdmResource {
         Series series = (Series)semObj.getGenericInstance();
         final SM sm = series.getSm();
         Iterator<Period> measurablesPeriods = null;
-        try
-        {
-            //measurablesPeriods = ((Indicator)series.getSm()).listMeasurablesPeriods();
+        try {
             measurablesPeriods = sm.listMeasurablesPeriods();
         }catch(UndefinedFrequencyException e) {
             out.println("<div class=\"swbform\">");
@@ -99,16 +93,12 @@ public class MeasuresManager extends GenericAdmResource {
             out.println("</fieldset>");
             out.println("<p>" + paramRequest.getLocaleString("msgUndefinedFrequencyException") + "</p>");
             out.println("</div>");
-            out.flush();
-            out.close();
         }catch(InappropriateFrequencyException e) {
             out.println("<div class=\"swbform\">");
             out.println("<fieldset>");
             out.println("</fieldset>");
             out.println("<p>" + paramRequest.getLocaleString("msgInappropriateFrequencyException") + "</p>");
             out.println("</div>");
-            out.flush();
-            out.close();
         }   
         if(measurablesPeriods!=null && measurablesPeriods.hasNext())
         {
