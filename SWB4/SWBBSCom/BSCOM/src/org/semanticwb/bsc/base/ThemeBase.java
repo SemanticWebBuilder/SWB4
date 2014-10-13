@@ -4,7 +4,7 @@ package org.semanticwb.bsc.base;
    /**
    * Los temas estratégicos agrupan objetivos con fines en común. A su vez, los temas están agrupados dentro de las perspectivas. 
    */
-public abstract class ThemeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.FilterableClass,org.semanticwb.model.Roleable,org.semanticwb.bsc.Help,org.semanticwb.model.Activeable,org.semanticwb.model.FilterableNode,org.semanticwb.model.RuleRefable,org.semanticwb.model.Hiddenable,org.semanticwb.model.Descriptiveable,org.semanticwb.bsc.Causal,org.semanticwb.model.Filterable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Sortable
+public abstract class ThemeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.bsc.Causal,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.model.FilterableNode,org.semanticwb.bsc.Sortable,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.Hiddenable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable
 {
    /**
    * Define las características de un Objetivo estratégico.
@@ -585,6 +585,24 @@ public abstract class ThemeBase extends org.semanticwb.model.SWBClass implements
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(bsc_index, value);
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
 /**

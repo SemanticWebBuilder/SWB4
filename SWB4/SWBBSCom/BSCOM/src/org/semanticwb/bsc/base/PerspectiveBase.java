@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.base;
 
 
-public abstract class PerspectiveBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.UserGroupable,org.semanticwb.model.Referensable,org.semanticwb.model.FilterableClass,org.semanticwb.bsc.Serializable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Activeable,org.semanticwb.bsc.Help,org.semanticwb.model.RuleRefable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Traceable
+public abstract class PerspectiveBase extends org.semanticwb.model.SWBClass implements org.semanticwb.bsc.Help,org.semanticwb.model.Referensable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Recognizable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.model.FilterableClass,org.semanticwb.model.RuleRefable,org.semanticwb.bsc.Serializable
 {
    /**
    * Un DifferentiatorGroup es una clase que permitir contener uno o varios Differentiator que se dibujan en el mapa estratégico del scorecard.
@@ -498,6 +498,24 @@ public abstract class PerspectiveBase extends org.semanticwb.model.SWBClass impl
     public void setIndex(int value)
     {
         getSemanticObject().setIntProperty(bsc_index, value);
+    }
+
+/**
+* Gets the Deleted property
+* @return boolean with the Deleted
+*/
+    public boolean isDeleted()
+    {
+        return getSemanticObject().getBooleanProperty(swb_deleted);
+    }
+
+/**
+* Sets the Deleted property
+* @param value long with the Deleted
+*/
+    public void setDeleted(boolean value)
+    {
+        getSemanticObject().setBooleanProperty(swb_deleted, value);
     }
 
 /**
