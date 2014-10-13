@@ -1,7 +1,7 @@
 package org.semanticwb.bsc.tracing.base;
 
 
-public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.model.Trashable,org.semanticwb.model.Roleable,org.semanticwb.bsc.Committable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.FilterableNode,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.bsc.Measurable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Filterable,org.semanticwb.bsc.ReadOnly,org.semanticwb.bsc.Help
+public abstract class SeriesBase extends org.semanticwb.bsc.tracing.BSCTracing implements org.semanticwb.bsc.ReadOnly,org.semanticwb.bsc.Help,org.semanticwb.bsc.Committable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Trashable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable,org.semanticwb.bsc.Measurable
 {
     public static final org.semanticwb.platform.SemanticClass bsc_SM=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticClass("http://www.semanticwebbuilder.org/swb4/bsc#SM");
     public static final org.semanticwb.platform.SemanticProperty bsc_hasSeriesInv=org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasSeriesInv");
