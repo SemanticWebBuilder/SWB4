@@ -353,7 +353,7 @@ public class Indicator extends org.semanticwb.bsc.element.base.IndicatorBase {
         try {
             iconClass = getStar().getMeasure(period).getEvaluation().getStatus().getIconClass();
         } catch (NullPointerException npe) {
-            iconClass = "indefinido";
+            iconClass = "swbstrgy-unknown";
         }
         return iconClass;
     }
