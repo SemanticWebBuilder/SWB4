@@ -1,8 +1,6 @@
 package org.semanticwb.bsc.element;
 
 import java.util.Collections;
-import org.semanticwb.bsc.tracing.PeriodStatus;
-import org.semanticwb.model.GenericIterator;
 import java.util.Iterator;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -11,17 +9,19 @@ import org.semanticwb.SWBUtils;
 import org.semanticwb.base.util.GenericFilterRule;
 import org.semanticwb.bsc.accessory.Period;
 import org.semanticwb.bsc.accessory.State;
+import static org.semanticwb.bsc.element.Indicator.*;
+import org.semanticwb.bsc.parser.ObjectiveParser;
+import org.semanticwb.bsc.tracing.PeriodStatus;
 import org.semanticwb.bsc.tracing.Series;
+import org.semanticwb.model.FormValidateException;
+import org.semanticwb.model.GenericIterator;
 import org.semanticwb.model.SWBComparator;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.SWBModel;
 import org.semanticwb.model.User;
+import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticObject;
 import org.semanticwb.platform.SemanticObserver;
-import static org.semanticwb.bsc.element.Indicator.*;
-import org.semanticwb.bsc.parser.ObjectiveParser;
-import org.semanticwb.model.FormValidateException;
-import org.semanticwb.model.WebSite;
 import org.semanticwb.platform.SemanticProperty;
 
 public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase implements Comparable<Objective>
@@ -352,7 +352,7 @@ public class Objective extends org.semanticwb.bsc.element.base.ObjectiveBase imp
             try {
                 iconClass = getMinimumState().getIconClass();
             }catch(Exception e) {
-                iconClass = "undefined";
+                iconClass = "swbstrgy-unknown";
             }
         }
         return iconClass;
