@@ -148,8 +148,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doShowListing(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -505,8 +504,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doEditTemplate(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -723,15 +721,14 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache"); 
-        
+        response.setHeader("Pragma", "no-cache");
+
         final String suri = request.getParameter("suri");
-        if(suri==null) {
-            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+        if (suri == null) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">" + paramRequest.getLocaleString("msgNoSuchSemanticElement") + "</div>");
             response.flushBuffer();
             return;
         }
@@ -739,20 +736,19 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         GenericObject generic = semObj.createGenericInstance();
         Detailed d = (Detailed) generic;
         final User user = paramRequest.getUser();
-        if(!user.isSigned() || !d.canView()) {
-            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+        if (!user.isSigned() || !d.canView()) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">" + paramRequest.getLocaleString("msgUserHasNotPermissions") + "</div>");
             response.flushBuffer();
             return;
         }
-        
+
         PrintWriter out = response.getWriter();
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
 
-        if(message == null)
-        {
+        if (message == null) {
             FileReader reader = retrieveTemplate();
-            
+
             //Declarar variable para el per&iacte;odo, obteniendo el valor del request
             String modelName = paramRequest.getWebPage().getWebSiteId();
             String periodId = request.getSession().getAttribute(modelName) != null
@@ -769,9 +765,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             }
             Period period = Period.ClassMgr.getPeriod(periodId, paramRequest.getWebPage().getWebSite());
             UserGroup collaboration = null;
-            
-            
-            
+
             statusStyleClass = d.getStatusIconClass(period);
             // Agrega encabezado al cuerpo de la vista detalle, en el que se muestre el estado del objeto
             // para el per&iacte;odo especificado y el t&iacte;tulo del objeto, para lo que:
@@ -785,7 +779,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             html.append("<span class=\"");
             html.append(statusStyleClass);
             html.append("\"></span>");
-            
+
             //secondStatusStyleClass dejo de asignarse desde el 17/06/14 con el uso de Detailed
 //            if (secondStatusStyleClass != null) {
 //                html.append("<span class=\"");
@@ -795,13 +789,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             html.append(semObj.getDisplayName());
             html.append("</h4>\n");
             html.append("<hr>\n");
-            
+
             if (reader != null) {
                 html.append(generateDisplay(request, paramRequest, reader, semObj, collaboration));
             } else {
                 html.append(paramRequest.getLocaleString("fileNotRead"));
             }
-        }else { //Si la información de entrada no es válida
+        } else { //Si la información de entrada no es válida
             html.append(paramRequest.getLocaleString(message));
         }
         out.println(html.toString());
@@ -821,8 +815,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * problema con la generaci&oacute;n o escritura de la respuesta
      */
     public void doGetPropertiesInfo(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/json; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -873,18 +866,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void processRequest(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         final String mode = paramRequest.getMode();
-        if("showListing".equalsIgnoreCase(mode)) {
+        if ("showListing".equalsIgnoreCase(mode)) {
             doShowListing(request, response, paramRequest);
-        }else if("editTemplate".equalsIgnoreCase(mode)) {
+        } else if ("editTemplate".equalsIgnoreCase(mode)) {
             doEditTemplate(request, response, paramRequest);
-        }else if("getPropertiesInfo".equalsIgnoreCase(mode)) {
+        } else if ("getPropertiesInfo".equalsIgnoreCase(mode)) {
             doGetPropertiesInfo(request, response, paramRequest);
-        }else if(Mode_StreamPDF.equalsIgnoreCase(mode)) {
+        } else if (Mode_StreamPDF.equalsIgnoreCase(mode)) {
             doGetPDFDocument(request, response, paramRequest);
-        }else {
+        } else {
             super.processRequest(request, response, paramRequest);
         }
     }
@@ -903,8 +895,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      */
     @Override
     public void processAction(HttpServletRequest request, SWBActionResponse response)
-            throws SWBResourceException, IOException
-    {
+            throws SWBResourceException, IOException {
         String action = response.getAction();
         String title = request.getParameter("title");
         String descrip = request.getParameter("description");
@@ -1106,8 +1097,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * corresponde al mensaje de error que describe el problema encontrado en
      * los datos, null de lo contrario.
      */
-    private String validateInput(HttpServletRequest request, SWBParamRequest paramRequest)
-    {
+    private String validateInput(HttpServletRequest request, SWBParamRequest paramRequest) {
         String suri = request.getParameter("suri");
         SemanticObject semObj = SemanticObject.getSemanticObject(suri);
         GenericObject genericObject = semObj != null ? semObj.createGenericInstance() : null;
@@ -1192,8 +1182,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return un objeto {@code FileReader} con el contenido del archivo
      * asociado a la vista detalle asignada como contenido.
      */
-    private FileReader retrieveTemplate()
-    {
+    private FileReader retrieveTemplate() {
         String filePath = SWBPortal.getWorkPath()
                 + this.getActiveDetailView().getWorkPath() + DetailViewManager.TEMPLATE_FILENAME;
         FileReader reader = null;
@@ -1224,8 +1213,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * el parseo del contenido de la plantilla
      */
     private String generateDisplay(HttpServletRequest request, SWBParamRequest paramRequest,
-            FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException
-    {
+            FileReader template, SemanticObject elementBSC, final UserGroup collaboration) throws IOException {
         StringBuilder view = new StringBuilder(512);
         StringBuilder javascript = new StringBuilder(256);
         HtmlStreamTokenizer tok = new HtmlStreamTokenizer(template);
@@ -1309,8 +1297,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return el despliegue del valor almacenado para la propiedad indicada
      */
     private String renderPropertyValue(HttpServletRequest request, SemanticObject elementBSC,
-            String propUri, String lang, Period period, final UserGroup collaboration)
-    {
+            String propUri, String lang, Period period, final UserGroup collaboration) {
         String ret = null;
         SWBFormMgr formMgr = new SWBFormMgr(elementBSC, null, SWBFormMgr.MODE_VIEW);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
@@ -1341,6 +1328,17 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
                     }
+                    
+                    /* Evalua si el responsable del acuerdo es el user actual, para permitirle modificar el estatus*/
+                    if (elementBSC.createGenericInstance() instanceof Agreement && formElement.getURI().equals("http://www.semanticwebbuilder.org/swb4/bsc#dataFromSession")) {
+                        Agreement agreement = (Agreement) elementBSC.createGenericInstance();
+                        final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
+                        final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
+                        if(!agreement.getAgreementResponsible().equals(user)) {
+                            applyInlineEdit = false;
+                        }
+                    }
+
                     if (fe != null) {
                         if (formMgr.getSemanticObject() != null) {
                             fe.setModel(formMgr.getSemanticObject().getModel());
@@ -1374,8 +1372,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return {@literal true} si existe un valor para el displayElement en la
      * ontolog&iacute;a, {@literal false} de lo contrario
      */
-    private boolean displayElementExists(SemanticProperty property)
-    {
+    private boolean displayElementExists(SemanticProperty property) {
         boolean exists = false;
         Statement st = property.getRDFProperty().getProperty(
                 SWBPlatform.getSemanticMgr().getSchema().getRDFOntModel().getProperty(
@@ -1394,23 +1391,20 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return un boleano que representa la posibilidad del usuario de hacer
      * actualizaciones ({@code true}), de lo contrario devuelve {@code false}.
      */
-    private boolean userCanEdit()
-    {
+    private boolean userCanEdit() {
         boolean access = false;
         String str_role = getResourceBase().getAttribute("editRole", null);
 
         final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
 
-        if(user != null && user.isSigned())
-        {
-            if (str_role != null)
-            {
+        if (user != null && user.isSigned()) {
+            if (str_role != null) {
                 SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
                 GenericObject gobj = null;
                 try {
                     gobj = ont.getGenericObject(str_role);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     DetailViewManager.log.error("Error InlineEdit.userCanEdit()", e);
                     return Boolean.FALSE;
                 }
@@ -1444,8 +1438,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * periodo de captura para el periodo indicado {@code true}, o {@code false}
      * de lo contrario.
      */
-    private boolean isInMeasurementTime(final Period period)
-    {
+    private boolean isInMeasurementTime(final Period period) {
         Resource base = getResourceBase();
         int timeBefore = 0;
         int timeAfter = 0;
@@ -1491,8 +1484,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @return {@literal true} si el {@code formElement} puede presentar
      * interface de edici&oacute;n, {@literal false} de lo contrario
      */
-    private boolean isEditable(SemanticObject formElement)
-    {
+    private boolean isEditable(SemanticObject formElement) {
         return formElement.getProperty(TextAreaElement.bsc_editable) == null
                 ? true : formElement.getBooleanProperty(TextAreaElement.bsc_editable);
     }
@@ -1525,8 +1517,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * &eacute;sta es de tipo fecha, de lo contrario, se devuelve una cadena
      * vac&iacute;a
      */
-    private String getDateValue(SemanticObject elementBSC, String propUri)
-    {
+    private String getDateValue(SemanticObject elementBSC, String propUri) {
         StringBuilder toReturn = new StringBuilder(128);
         SemanticProperty semProp = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary().getSemanticProperty(propUri);
 
@@ -1578,8 +1569,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws IOException Excepti&oacute;n de IO
      */
     public void doGetPDFDocument(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         response.setContentType("application/pdf; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
@@ -1687,9 +1677,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private static String getLinks(HttpServletRequest request)
-    {
-        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+    private static String getLinks(HttpServletRequest request) {
+        String port = request.getServerPort() != 80 ? ":" + request.getServerPort() : "";
         String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
         view.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
@@ -1727,8 +1716,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             try {
                 ComponentExportable ce = (ComponentExportable) base;
                 ret.add(ce);
-            }catch (ClassCastException cce) {
-            }catch (NullPointerException cce) {
+            } catch (ClassCastException cce) {
+            } catch (NullPointerException cce) {
             }
         }
         Iterator<ComponentExportable> itRes = ret.iterator();
@@ -1755,9 +1744,8 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
      * Excepti&oacute;n utilizada para recursos de SWB
      * @throws IOException Excepti&oacute;n de IO
      */
-    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest) 
-            throws SWBResourceException, IOException
-    {
+    private StringBuilder getHtml(HttpServletRequest request, SWBParamRequest paramRequest)
+            throws SWBResourceException, IOException {
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
         html.append("<div id=\"container\">").append("\n");
@@ -1812,7 +1800,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             html.append("  </div> <!-- /#header -->").append("\n");
             html.append(" <div id=\"logoSWBS\"></div>").append("\n");
             html.append(" </div> <!-- /#contentHead -->").append("\n");
-            
+
             html.append(" <div id=\"contentDoc\">").append("\n");
             html.append("  <h4").append(" class=\"").append(statusStyleClass).append("\">").append("\n");
             if (secondStatusStyleClass != null) {

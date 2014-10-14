@@ -115,7 +115,13 @@ public class Agreement extends org.semanticwb.bsc.element.base.AgreementBase {
     
     @Override
     public String getStatusIconClass() {
-        return getAgreementStatus() == null ? "swbstrgy-unknown" : getAgreementStatus();
+        StringBuilder iconClass = new StringBuilder();
+        try {
+            iconClass.append(getAgreementStatus().getIconClass());
+        } catch (NullPointerException npe) {
+            iconClass.append("swbstrgy-unknown");
+        }
+        return iconClass.toString();
     }
     
     @Override
