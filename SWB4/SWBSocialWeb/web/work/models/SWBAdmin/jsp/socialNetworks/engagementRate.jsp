@@ -217,7 +217,7 @@
     if(dateTo != null && dateSince != null){
 %>
     
-        <iframe src="<%=paramRequest.getRenderUrl().setMode("showChart").setParameter("suri", socialNet.getURI()).setParameter("chart","chart").setParameter("engagement_inidate",sdf.format(dateSince)).setParameter("engagement_enddate",sdf.format(dateTo))%>" frameborder="0" width="100%" height="550" scrolling="no">
+        <iframe src="<%=paramRequest.getRenderUrl().setMode("showChart").setParameter("suri", socialNet.getURI()).setParameter("chart","chart").setParameter("engagement_inidate",sdf.format(dateSince)).setParameter("engagement_enddate",sdf.format(dateTo))%>"  width="100%" height="550">
         </iframe>
     
 <%
