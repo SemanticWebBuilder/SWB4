@@ -36,6 +36,7 @@ import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.model.WebSite;
 import org.semanticwb.social.LicenseType;
+import org.semanticwb.social.PostIn;
 import org.semanticwb.social.SWBSocial;
 import org.semanticwb.social.SocialSite;
 import org.semanticwb.social.Stream;
@@ -84,22 +85,21 @@ public class StreamCleanerMsgbyNumber {
                 SocialSite socialSite=itSocialSites.next();
                 //if(socialSite.isValid())
                 {
-                    //System.out.println("CheckStreamsMsgbyNumber-2/socialSite:"+socialSite);
                     long streamMaxMessages=0;
                     LicenseType licenseType=socialSite.getLicenseType();
                     if(licenseType!=null) streamMaxMessages=Long.parseLong(SWBSocialUtil.getLicenseTypeProp(licenseType.getId().toLowerCase()+".messagenum", "0"));
+                    try{
+                        StreamThreadRemoverbyNumber threadRemover=new StreamThreadRemoverbyNumber(socialSite, usingLicenseMgr, streamMaxMessages);
+                        threadRemover.start();
+                    }catch(Exception e){log.error(e);
+                    }
+                    /*
+                    System.out.println("CheckStreamsMsgbyNumber-2/socialSite:"+socialSite);
                     Iterator<Stream> itStreams = socialSite.listStreams();
                     while (itStreams.hasNext()) {
                         Stream stream = itStreams.next();
                         //if(!stream.isDeleted()) 
                         {
-                            try{
-                                //System.out.println("Entra J1");
-                                StreamThreadRemoverbyNumber threadRemover=new StreamThreadRemoverbyNumber(socialSite, stream, usingLicenseMgr, streamMaxMessages);
-                                threadRemover.start();
-                            }catch(Exception e){log.error(e);
-                            }
-                            /*
                             long postInNumAccepted=stream.getStream_maxMsg();
                             if(usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>streamMaxMessages)) postInNumAccepted=streamMaxMessages;
                             else if(!usingLicenseMgr && (postInNumAccepted<1000 || postInNumAccepted>100000)) postInNumAccepted=100000;
@@ -122,10 +122,10 @@ public class StreamCleanerMsgbyNumber {
                                     System.out.println("Va a eliminar PostIn:"+postIn);
                                     postIn.remove();
                                 }
-                            }
-                            * */
+                            }                            
                         }
                     }
+                   **/
                 }
             }
 
