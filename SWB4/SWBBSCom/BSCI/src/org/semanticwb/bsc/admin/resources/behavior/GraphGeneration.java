@@ -357,9 +357,9 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
         String uniqueImage = request.getParameter("uniqueImage");
         if (data.trim().length() > 0) {
             float width = base.getAttribute("width") != null
-                    ? Float.parseFloat(base.getAttribute("width")) : 550;
+                    ? Float.parseFloat(base.getAttribute("width")) : 650;
             float height = base.getAttribute("height") != null
-                    ? Float.parseFloat(base.getAttribute("height")) : 250;
+                    ? Float.parseFloat(base.getAttribute("height")) : 500;
 
             int dataIndexOf = data.indexOf("svg");
             int lenght = data.length();
