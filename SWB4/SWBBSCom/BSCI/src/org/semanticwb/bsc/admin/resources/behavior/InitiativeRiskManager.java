@@ -67,9 +67,9 @@ public class InitiativeRiskManager extends GenericResource {
         Risk risk;
         SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
         SemanticObject semObj = ont.getSemanticObject(suri);
-        try {    
+        try {
             risk = (Risk) semObj.createGenericInstance();
-        }catch(ClassCastException cste) {
+        }catch(Exception e) {
             return;
         }
         if(suri == null) {
@@ -82,7 +82,6 @@ public class InitiativeRiskManager extends GenericResource {
         
         
         if (risk != null) {
-           // createInstances(risk, risk.getBSC());
             Iterator<Initiative> it = risk.listInitiatives();
 
             toReturn.append("<script type=\"text/javascript\">");
@@ -237,16 +236,4 @@ public class InitiativeRiskManager extends GenericResource {
             }
         }
     }
-
-    
-    
-    /*private void createInstances(Risk risk, WebSite ws) {
-        Initiative initiative = Initiative.ClassMgr.createInitiative(ws);
-        initiative.setTitle("Acción 1");
-        initiative.setDescription("Descripción de Acción 1");
-        initiative.setActive(true);
-        initiative.setCreated(new Date());
-        initiative.setUpdated(new Date());
-        risk.addInitiativeRisk(initiative);
-    }*/
 }
