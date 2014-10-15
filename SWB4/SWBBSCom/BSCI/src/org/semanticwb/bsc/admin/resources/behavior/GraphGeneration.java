@@ -45,11 +45,14 @@ import org.w3c.dom.Document;
  * @author ana.garcias
  */
 public class GraphGeneration extends GenericAdmResource implements ComponentExportable {
-
-    /**
-     * Realiza operaciones en la bitacora de eventos.
-     */
     private static Logger log = SWBUtils.getLogger(GraphGeneration.class);
+    
+    //Colores a utilizar para cada serie
+    private static final String[] colors = {
+        "#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
+        "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
+        "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
+        "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
 
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
@@ -70,16 +73,12 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
             response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
             response.flushBuffer();
             return;
-        }        
+        }
         
+        final String lang = user.getLanguage();        
         PrintWriter out = response.getWriter();
         Resource base = getResourceBase();
         
-        //Colores a utilizar para cada serie
-        String[] colors = {"#009900", "#0066CC", "#9933FF", "#CC0033", "#FF6633",
-            "#FFFF00", "#33FF66", "#6666FF", "#00CCFF", "#990000",
-            "#CC33FF", "#FF99FF", "#996666", "#0000FF", "#6600FF",
-            "#CCCC66", "#ff0000", "#1F77B4", "#50EE45", "#FF6525"};
         StringBuilder output = new StringBuilder(512);
         StringBuilder firstOutput = new StringBuilder(128);
         StringBuilder svgOutput = new StringBuilder(64);
@@ -97,9 +96,9 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 List<Period> periodsList = new java.util.ArrayList<Period>();
                 StringBuilder usedColors = new StringBuilder(32);
 
-                out.println("<div class=\"row\">");
-                out.println("<div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">");
-                out.println("<div class=\"panel panel-default panel-detalle\">");
+                firstOutput.append("<div class=\"row\">\n");
+                firstOutput.append("<div class=\"col-xs-12\">\n");
+                firstOutput.append("<div class=\"panel panel-default panel-detalle\">\n");
                 
                 try {
                     measurablePeriods = indicator.listMeasurablesPeriods();
@@ -115,19 +114,21 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                         periodsQuantity = periodsList.size();
                     }
                 } catch (UndefinedFrequencyException ex) {
-                    out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
-                    out.println(paramRequest.getLocaleString("msgUndefinedFrequencyException"));
-                    out.println("</p></div>");
+                    out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUndefinedFrequencyException")+"</div>");
                     out.flush();
-                    out.close();
+                    //out.close();
+                    //return;
                 } catch (InappropriateFrequencyException ex) {
-                    out.println("<div class=\"swbform\"><fieldset></fieldset><p>");
-                    out.println(paramRequest.getLocaleString("msgInappropriateFrequencyException"));
-                    out.println("</p></div>");
+                    out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgInappropriateFrequencyException")+"</div>");
                     out.flush();
-                    out.close();
+                    //out.close();
+                    //return;
                 }
                 //Codigo HTML para generar la grafica
+                firstOutput.append("<div class=\"row\">\n");
+                firstOutput.append("<div class=\"col-xs-12\">\n");
+                firstOutput.append("<div class=\"panel panel-default panel-detalle\">\n");
+                
                 firstOutput.append("<div id=\"graphContainer\">\n");
                 firstOutput.append("   <div id=\"chart1\" class=\'with-3d-shadow with-transitions\'>\n");
                 firstOutput.append("       <div class=\"panel-heading head-detalle\">");
@@ -148,7 +149,7 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                 while (seriesIt != null && seriesIt.hasNext()) {
                     Series graphSeries = seriesIt.next();
                     //Valida que la serie este activa
-                    if (graphSeries.isActive() && graphSeries.isValid()) {
+                    if (graphSeries.isValid()) {
                         Format seriesFormat = graphSeries.getFormat();
                         //Valida que la serie contenga periodos asignados
                         if (periodsList.size() > 0) {
@@ -219,26 +220,21 @@ public class GraphGeneration extends GenericAdmResource implements ComponentExpo
                             output.append("  ]");
                             output.append("}");
                         } else {//En caso de que no haya periodos
-                            out.println("<div class=\"swbform\">");
-                            out.println("<fieldset>");
-                            out.println("</fieldset>");
-                            out.println("<p>" + paramRequest.getLocaleString("msgNotPeriods") + "</p>");
-                            out.println("</div>");
+                                    
+                            out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNotPeriods")+"</div>");
                             out.flush();
-                            out.close();
+                            //out.close();
+                            return;
                         }
                         seriesCount++;
                     }
                 }
                 //En caso de que no haya series activas para el indicador
                 if (seriesCount == 0) {
-                    out.println("<div class=\"swbform\">");
-                    out.println("<fieldset>");
-                    out.println("</fieldset>");
-                    out.println("<p>" + paramRequest.getLocaleString("msgSeriesIsNotActive") + "</p>");
-                    out.println("</div>");
+                    out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgSeriesIsNotActive")+"</div>");
                     out.flush();
-                    out.close();
+                    //out.close();
+                    return;
                 }
 
                 //Se termina de armar el Javascript para la presentacion de la grafica
