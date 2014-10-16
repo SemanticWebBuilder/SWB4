@@ -3871,9 +3871,9 @@ public class SWBUtils
                 }
                 else
                 {
-                    email.setMsg(message.getData());
+                    email.setTextMsg(message.getData());
                 }
-
+                
                 if (message.getLogin() != null && message.getPassword() != null)
                 {
                     email.setAuthentication(message.getLogin(), message.getPassword());
