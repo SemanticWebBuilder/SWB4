@@ -52,7 +52,8 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
      */
     public static void sendPost(Action action, PostIn postIn)
     {
-        if(!(action instanceof SendPost) || postIn.getSocialTopic()==null) return;
+        //if(!(action instanceof SendPost) || postIn.getSocialTopic()==null) return;
+        if(!(action instanceof SendPost)) return;
         try
         {
             WebSite wsite=WebSite.ClassMgr.getWebSite(action.getSemanticObject().getModel().getName());
@@ -94,7 +95,16 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         video.setPostInSource(postIn);
                         
                         //Agrego datos del postIn al postOut, para su correcta creación y clasificación
-                        video.setSocialTopic(postIn.getSocialTopic());
+                        if(postIn.getSocialTopic()!=null) {
+                            video.setSocialTopic(postIn.getSocialTopic());
+                        }else  {
+                            SocialSite socialSite=(SocialSite)wsite;
+                            SocialTopic socialTopic=socialSite.getSocialTopic("DefaultTopic");
+                            if(socialTopic!=null)
+                            {
+                                video.setSocialTopic(socialTopic);
+                            }else return;
+                        }
                         video.addSocialNetwork(postIn.getPostInSocialNetwork());
                         Iterator<SocialNetwork> itSendPostActionSocialNets=sendPost.listSocialNetworkses();
                         while(itSendPostActionSocialNets.hasNext())
