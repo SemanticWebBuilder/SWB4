@@ -47,19 +47,10 @@ import org.semanticwb.portal.resources.sem.news.SWBNews;
 public class DownloadCenter extends GenericResource
 {
 
-    private WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
+    private final WBAdmResourceUtils admResUtils = new WBAdmResourceUtils();
     private static final Logger log = SWBUtils.getLogger(SWBNews.class);
 
-    private void createPath(String id, WebSite site, WebPage page)
-    {
-        FriendlyURL friendlyURL = FriendlyURL.ClassMgr.getFriendlyURL(id, site);
-        if (friendlyURL == null)
-        {
-            friendlyURL = FriendlyURL.ClassMgr.createFriendlyURL(id, site);
-        }
-        friendlyURL.setURL(SWBPortal.getContextPath() + "download");
-        friendlyURL.setWebPage(page);
-    }
+    
 
     @Override
     public void doAdmin(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException
@@ -255,25 +246,10 @@ public class DownloadCenter extends GenericResource
             catch (SWBException e)
             {
                 log.error(e);
-            }
-            /*String path = "/swbadmin/jsp/DownloadCenter/admin.jsp";
-             RequestDispatcher dis = request.getRequestDispatcher(path);
-             try
-             {
-             request.setAttribute("paramRequest", paramRequest);
-             dis.include(request, response);
-             }
-             catch (IOException e)
-             {
-             log.error(e);
-             }
-             catch (ServletException e)
-             {
-             log.error(e);
-             }*/
+            }    
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\" language=\"JavaScript\">");
-            out.println("   alert('" + "Actualización correcta" + "');");
+            out.println("   alert('" + paramRequest.getLocaleLogString("OK") + "');");            
             out.println("   location='" + paramRequest.getRenderUrl().setAction("edit").toString() + "';");
             out.println("</script>");
         }
