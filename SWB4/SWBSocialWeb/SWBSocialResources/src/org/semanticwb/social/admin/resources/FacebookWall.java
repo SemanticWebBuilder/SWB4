@@ -2296,7 +2296,7 @@ public class FacebookWall extends GenericResource {
                         writer.write("<li>");
                         writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", comments.getJSONObject(k).getJSONObject("from").getLong("id") + "") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\"><img src=\"http://graph.facebook.com/" + comments.getJSONObject(k).getJSONObject("from").getLong("id") + "/picture?width=30&height=30\" width=\"30\" height=\"30\"/></a>");
 
-                        writer.write("<p>");
+                        writer.write("<p style=\"max-width: 390px; overflow: scroll\";>");
                         writer.write("<a href=\"#\" title=\"" + paramRequest.getLocaleString("viewProfile") + "\" onclick=\"showDialog('" + renderURL.setMode("fullProfile").setParameter("type", "noType").setParameter("id", comments.getJSONObject(k).getJSONObject("from").getLong("id") + "") + "','" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "'); return false;\">" + comments.getJSONObject(k).getJSONObject("from").getString("name") + "</a>:");
                         writer.write(comments.getJSONObject(k).getString("message").replace("\n", "</br>") + "</br>");
                         writer.write("</p>");
