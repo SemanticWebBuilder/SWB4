@@ -59,7 +59,7 @@
         <table width="100%"  border="0" cellpadding="5" cellspacing="5">
             <tr>
                 <td width="200" align="right">
-                    <label for="jspPath" class="swbform-label">Ruta de jsp de vista de centro de descargas</label>
+                    <label for="jspPath" class="swbform-label"><%=paramRequest.getLocaleLogString("path")%></label>
                 </td>
                 <td>
                     <input id="jspPath" name="jspPath" type="text" value="<%=jspPath%>" size="80"/>
@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <td width="200" align="right">
-                    <label for="fileupload" class="swbform-label">Lista de Archivos <i>(sólo es soportado para Internet Explorer 10, Firefox, Opera, Chrome, and Safari)</i></label>
+                    <label for="fileupload" class="swbform-label"><%=paramRequest.getLocaleLogString("addBach")%></label>
                 </td>
                 <td>
                     <input id="fileupload" name="fileupload" type="file" value="" multiple/>
@@ -75,7 +75,7 @@
             </tr>
             <tr>
                 <td width="200" align="right">
-                    <label for="deleteall" class="swbform-label">Borrar todas las imagenes actuales</label>
+                    <label for="deleteall" class="swbform-label"><%=paramRequest.getLocaleLogString("deleteAll")%></label>
                 </td>
                 <td>
                     <input id=deleteall" dojotype="dijit.form.CheckBox" name="deleteall" type="checkbox" />
@@ -83,26 +83,26 @@
             </tr>
             <tr>
                 <td width="200" align="right">
-                    <label for="igcontainer_<%=resourceId%>" class="swbform-label">Lista de archivos de descarga</label>
+                    <label for="igcontainer_<%=resourceId%>" class="swbform-label"><%=paramRequest.getLocaleLogString("list")%></label>
                 </td>
                 <td>
                     <div id="igcontainer_<%=resourceId%>" style="background-color:#F0F0F0; width:100%; height:432px; overflow:visible">                    
                         <div id="iggrid_<%=resourceId%>" style="width:100%;height:400px;left:2px;top:20px;overflow:scroll; background-color:#EFEFEF">
                             <table id="igtbl_<%=resourceId%>" width="99%" cellspacing="1" bgcolor="#769CCB" align="center">
                                 <tr bgcolor="#E1EAF7">
-                                    <td align="center" colspan="4">Administración de archivos</td>
+                                    <td align="center" colspan="4"><%=paramRequest.getLocaleLogString("adminFiles")%></td>
                                     <td align="center" colspan="4">
-                                        <input type="button" value="Agregar" onclick="addRowToTable('igtbl_<%=resourceId%>');" />&nbsp;
+                                        <input type="button" value="<%=paramRequest.getLocaleLogString("add")%>" onclick="addRowToTable('igtbl_<%=resourceId%>');" />&nbsp;
                                         <%--<input type="button" value="Cancelar" onclick="removeRowFromTable('igtbl_<%=resourceId%>');"/></td>--%>
                                     </td>
                                 </tr>
                                 <tr bgcolor="#769CCB">                                    
-                                    <th align="center" scope="col" style="text-align:center;" width="10" height="20" nowrap="nowrap">Eliminar</th>
-                                    <th align="center" scope="col" style="text-align:center;" width="10" height="20" nowrap="nowrap">Editar</th>
-                                    <th align="center" scope="col" style="text-align:center;" width="30" height="20" nowrap="nowrap">Nombre del Archivo</th>                                    
-                                    <th align="center" scope="col" style="text-align:center;" width="10%" height="20" nowrap="nowrap">Tamaño</th>                                    
-                                    <th align="center" scope="col" style="text-align:center;" width="40%" height="20" nowrap="nowrap">Título</th>
-                                    <th align="center" scope="col" style="text-align:center;" width="40%" height="20" nowrap="nowrap">Descripción</th>
+                                    <th align="center" scope="col" style="text-align:center;" width="10" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("delete")%></th>
+                                    <th align="center" scope="col" style="text-align:center;" width="10" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("edit")%></th>
+                                    <th align="center" scope="col" style="text-align:center;" width="30" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("name")%></th>                                    
+                                    <th align="center" scope="col" style="text-align:center;" width="10%" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("size")%></th>                                    
+                                    <th align="center" scope="col" style="text-align:center;" width="40%" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("title")%></th>
+                                    <th align="center" scope="col" style="text-align:center;" width="40%" height="20" nowrap="nowrap"><%=paramRequest.getLocaleLogString("description")%></th>
                                 </tr>
                                 <tr><td colspan="2" height="10"></td></tr>
 
@@ -187,7 +187,7 @@
                     <fieldset>
                         <table width="100%"  border="0" cellpadding="5" cellspacing="0">
                             <tr><td>
-                                    <button dojoType="dijit.form.Button" type="submit" name="submitImgGal" value="Submit" onclick="return true;">Guardar</button>
+                                    <button dojoType="dijit.form.Button" type="submit" name="submitImgGal" value="Submit" onclick="return true;"><%=paramRequest.getLocaleLogString("save")%></button>
                                 </td>
                             </tr>
                         </table>
@@ -210,7 +210,7 @@
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = (d + Math.random() * 16) % 16 | 0;
             d = Math.floor(d / 16);
-            return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16);
+            return (c === 'x' ? r : (r & 0x7 | 0x8)).toString(16);
         });
         return uuid;
     }
