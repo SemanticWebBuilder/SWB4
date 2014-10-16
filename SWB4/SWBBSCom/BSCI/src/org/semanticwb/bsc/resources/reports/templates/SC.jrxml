@@ -37,23 +37,23 @@
 					<imageExpression class="java.io.InputStream"><![CDATA[$F{logo}]]></imageExpression>
 				</image>
 				<textField>
-					<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="92" y="10" width="100" height="20" forecolor="#000000"/>
+					<reportElement positionType="FixRelativeToBottom" isPrintRepeatedValues="false" x="84" y="10" width="92" height="20" forecolor="#000000"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{scoreCard}]]></textFieldExpression>
 				</textField>
-				<textField pattern="MM/dd/yyyy">
-					<reportElement positionType="FixRelativeToBottom" x="407" y="10" width="78" height="20"/>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement positionType="FixRelativeToBottom" x="416" y="10" width="78" height="20"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 				</textField>
 				<textField>
 					<reportElement x="239" y="10" width="100" height="20"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9" isBold="true"/>
+						<font size="10" isBold="true"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{periodTitle}]]></textFieldExpression>
 				</textField>
@@ -64,6 +64,27 @@
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{titleDoc}]]></textFieldExpression>
 				</textField>
+				<staticText>
+					<reportElement x="34" y="10" width="73" height="20" forecolor="#725392"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial Black" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Scorecard:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="199" y="10" width="51" height="20" forecolor="#725392"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial Black" size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Periodo:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="366" y="10" width="72" height="20" forecolor="#725392"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial Black" size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Generado:]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</title>
