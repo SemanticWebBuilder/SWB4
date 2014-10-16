@@ -167,7 +167,16 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         photo.setPostInSource(postIn);
                         
                         //Agrego datos del postIn al postOut, para su correcta creación y clasificación
-                        photo.setSocialTopic(postIn.getSocialTopic());
+                        if(postIn.getSocialTopic()!=null) {
+                            photo.setSocialTopic(postIn.getSocialTopic());
+                        }else  {
+                            SocialSite socialSite=(SocialSite)wsite;
+                            SocialTopic socialTopic=socialSite.getSocialTopic("DefaultTopic");
+                            if(socialTopic!=null)
+                            {
+                                photo.setSocialTopic(socialTopic);
+                            }else return;
+                        }
                         photo.addSocialNetwork(postIn.getPostInSocialNetwork());
                         Iterator<SocialNetwork> itSendPostActionSocialNets=sendPost.listSocialNetworkses();
                         while(itSendPostActionSocialNets.hasNext())
@@ -201,7 +210,16 @@ public class SendPost extends org.semanticwb.social.base.SendPostBase
                         
                         
                         //Agrego datos del postIn al postOut, para su correcta creación y clasificación
-                        message.setSocialTopic(postIn.getSocialTopic());
+                        if(postIn.getSocialTopic()!=null) {
+                            message.setSocialTopic(postIn.getSocialTopic());
+                        }else  {
+                            SocialSite socialSite=(SocialSite)wsite;
+                            SocialTopic socialTopic=socialSite.getSocialTopic("DefaultTopic");
+                            if(socialTopic!=null)
+                            {
+                                message.setSocialTopic(socialTopic);
+                            }else return;
+                        }
                         message.addSocialNetwork(postIn.getPostInSocialNetwork());
                         Iterator<SocialNetwork> itSendPostActionSocialNets=sendPost.listSocialNetworkses();
                         while(itSendPostActionSocialNets.hasNext())
