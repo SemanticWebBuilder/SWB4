@@ -322,7 +322,7 @@ public class StreamInBox extends GenericResource {
             urlrConfirm.setAction("removeConfirm");
 
             out.println("<script type=\"javascript\">");
-            out.println("   if(confirm('" + request.getParameter("leyendReconfirm") + ", " + paramRequest.getLocaleString("deleteAnyWay") + "?')) { postSocialPostInHtml('" + urlrConfirm + "','" + request.getParameter("postUri") + "');}else{}");
+            out.println("   if(confirm('" + request.getParameter("leyendReconfirm") + ", " + paramRequest.getLocaleString("deleteAnyWay") + "?')) { postSocialPostInHtml('" + urlrConfirm + "/stIn','" + request.getParameter("postUri") + "');}else{}");
             out.println("</script>");
             return;
         }
