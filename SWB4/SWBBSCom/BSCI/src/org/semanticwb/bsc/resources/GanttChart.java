@@ -92,8 +92,8 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
         Resource base = this.getResourceBase();
         StringBuilder output = new StringBuilder(512);
         StringBuilder dataOut = new StringBuilder(512);
-        final String graphHeight = base.getAttribute("graphHeight", "500");
-        final String graphWidth = base.getAttribute("graphWidth", "600");
+        final String graphHeight = base.getAttribute("graphHeight", "200");
+        final String graphWidth = base.getAttribute("graphWidth", "1000");
 
         if (semanticObj != null) {
             GenericObject genericObj = semanticObj.createGenericInstance();
@@ -291,10 +291,14 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
                 data = SWBUtils.TEXT.replaceAll(data, "NaN", "0");
                 data = SWBUtils.TEXT.replaceAll(data, "fill: null", "fill: #000");
                 Document svg = SWBUtils.XML.xmlToDom(data);
+                String graphHeight = String.valueOf(250);
+                String graphWidth = String.valueOf(830);
 
                 String destpath = UploaderFileCacheUtils.getHomepath() + "/models/" + paramRequest.getWebPage().getWebSiteId();
                 JPEGTranscoder t = new JPEGTranscoder();
                 t.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+                t.addTranscodingHint(JPEGTranscoder.KEY_WIDTH, Float.parseFloat(graphWidth));
+                t.addTranscodingHint(JPEGTranscoder.KEY_HEIGHT, Float.parseFloat(graphHeight));
                 // Set the transcoder input and output.
                 TranscoderInput input = new TranscoderInput(svg);
                 OutputStream ostream = new FileOutputStream(destpath + "/ganttChart_" + uniqueImage + ".jpg");
@@ -310,7 +314,7 @@ public class GanttChart extends GenericAdmResource implements ComponentExportabl
                 destpath = SWBPlatform.getContextPath() + "/work/models/"
                         + paramRequest.getWebPage().getWebSiteId()
                         + "/ganttChart_" + uniqueImage + ".jpg";
-                sb.append("<p><img width=\"100%\" heigth=\"100%\" src=\"");
+                sb.append("<p><img src=\"");
                 sb.append(destpath);
                 sb.append("\" alt=\"graphics\"/></p>");
 
