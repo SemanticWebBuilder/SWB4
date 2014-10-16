@@ -14,9 +14,9 @@ d3.gantt = function(taskNames) {
     var FIXED_TIME_DOMAIN_MODE = "fixed";
     var margin = {
         top : 10,
-        right : 0,
-        bottom : 20,
-        left : 20
+        right : 10,
+        bottom : 60,
+        left : 15
     };
     var timeDomainStart = d3.time.day.offset(new Date(), -3);
     var timeDomainEnd = d3.time.hour.offset(new Date(), +3);
@@ -75,7 +75,7 @@ d3.gantt = function(taskNames) {
         x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
         y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height ], .1); //height - margin.top - margin.bottom
         xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
-            .tickSize(0).tickPadding(8);  //.tickSize(-availableHeight, 0)
+            .tickSize(5).tickPadding(8);  //.tickSize(-availableHeight, 0)
 
         yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
     };
@@ -136,6 +136,9 @@ d3.gantt = function(taskNames) {
             .attr("transform", "translate(" + gantt.offsetX() + ", " + (height - margin.top - margin.bottom) + ")")
             .transition()
             .call(xAxis);
+        svg.selectAll("text")
+            .attr("transform", "rotate(-65)")
+            .style("text-anchor", "end");
          
         svg.append("g").attr("class", "y axis")
             .attr("transform", "translate(" + gantt.offsetX() + ", " + (0 - margin.top - margin.bottom) + ")")
