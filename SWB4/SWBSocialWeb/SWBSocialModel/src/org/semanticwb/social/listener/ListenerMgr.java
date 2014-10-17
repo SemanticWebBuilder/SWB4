@@ -234,7 +234,7 @@ public class ListenerMgr implements SWBAppObject {
             {
                 //////////////////////Agregado para alerta de cantidad de mensajes inusuales en un Stream
                 int streamIterations=stream.getStreamIterations();
-                //System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations);
+                System.out.println("Ejecuta Timer:"+stream+",streamIterations:"+streamIterations+",stream.getStreamEmail2Alerts:"+stream.getStreamEmail2Alerts());
                 if(streamIterations>0 && stream.getStreamPercentageAlert()>0 && stream.getStreamEmail2Alerts().trim().length()>0) //Si los usuarios escribieron un porcentaje en el dato del Stream, entonces se revisa
                 {
                     float oldStreamPostInAvg=stream.getPromPostNumber();

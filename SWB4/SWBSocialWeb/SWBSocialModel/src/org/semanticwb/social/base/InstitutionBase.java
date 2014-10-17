@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Instituciones que contraten Marcas en SWB Social4Cloud 
    */
-public abstract class InstitutionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class InstitutionBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Instituciones que contraten Marcas en SWB Social4Cloud
