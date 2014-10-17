@@ -4,7 +4,7 @@ package org.semanticwb.social.base;
    /**
    * Tipos de Licencia para SWB Socisal 
    */
-public abstract class LicenseTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Descriptiveable,org.semanticwb.model.Traceable
+public abstract class LicenseTypeBase extends org.semanticwb.model.SWBClass implements org.semanticwb.model.Traceable,org.semanticwb.model.Descriptiveable
 {
    /**
    * Tipos de Licencia para SWB Socisal
