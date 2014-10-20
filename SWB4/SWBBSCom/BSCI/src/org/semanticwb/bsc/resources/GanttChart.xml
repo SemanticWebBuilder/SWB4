@@ -6,6 +6,8 @@
                 <statictext name="fixed">Si desea que todas las gráficas de este tipo tengan el mismo tamaño, configure lo siguiente:</statictext>
                 <select name="graphHeight" label="Pixeles para alto de gráfica">
                     <option value="">Seleccione</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
                     <option value="200">200</option>
                     <option value="250">250</option>
                     <option value="300">300</option>
