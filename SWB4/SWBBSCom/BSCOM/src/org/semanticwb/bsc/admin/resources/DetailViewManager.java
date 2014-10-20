@@ -1723,7 +1723,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         Iterator<ComponentExportable> itRes = ret.iterator();
         while (itRes.hasNext()) {
             ComponentExportable compExpor = itRes.next();
-            html.append("<br/><br/><br/>").append("\n");
+            html.append("<p>&nbsp;</p>").append("\n");
             html.append(compExpor.doComponentExport(request, paramRequest));
             html.append("\n");
         }
