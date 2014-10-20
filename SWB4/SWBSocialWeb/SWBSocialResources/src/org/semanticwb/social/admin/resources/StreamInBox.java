@@ -1930,7 +1930,8 @@ public class StreamInBox extends GenericResource {
                 + "PREFIX social: <http://www.semanticwebbuilder.org/swb4/social#>"
                 + "\n";
         //query+="select count(*)\n";    
-        query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        //query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+        query += "select (COUNT(?postUri) AS ?c1) \n";    //Para Gena
         query +=
                 "where {\n"
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
@@ -1951,7 +1952,8 @@ public class StreamInBox extends GenericResource {
                 + "\n";
         if (isCount) {
             //query+="select count(*)\n";    
-            query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+            //query += "select DISTINCT (COUNT(?postUri) AS ?c1) \n";    //Para Gena
+            query += "select (COUNT(?postUri) AS ?c1) \n";    //Para Gena
         } else {
             query += "select *\n";
         }
@@ -1960,7 +1962,7 @@ public class StreamInBox extends GenericResource {
                 "where {\n"
                 + "  ?postUri social:postInStream <" + stream.getURI() + ">. \n"
                 + "  ?postUri social:pi_createdInSocialNet ?postInCreatedInSN. \n"
-                + "  }\n";
+                 + "  }\n";  
 
         if (!isCount) {
             query += "ORDER BY desc(?postInCreatedInSN) \n";
