@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.semanticwb.Logger;
 import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBUtils;
+import org.semanticwb.model.Language;
+import org.semanticwb.model.ResourceType;
 import org.semanticwb.model.SWBContext;
 import org.semanticwb.model.User;
 import org.semanticwb.model.UserRepository;
@@ -457,6 +459,7 @@ public class NewBrand extends GenericResource {
                         site.commit();
                         ptype.setResourceClassName("org.semanticwb.portal.resources.PHPEditor");
                     }
+                    * */
 
                     if (site.getResourceType("Language") == null)
                     {
@@ -468,7 +471,7 @@ public class NewBrand extends GenericResource {
                         site.commit();
                         ptype.setResourceClassName("org.semanticwb.portal.resources.Language");
                     }
-
+                    /*
                     if (site.getResourceType("TematicIndexXSL") == null) {
                         site.begin();
                         ResourceType ptype = site.createResourceType("TematicIndexXSL");
@@ -809,7 +812,7 @@ public class NewBrand extends GenericResource {
                         dev2.setUserAgent("Opera Mobi");
                         dev2.setParent(dev);
                     }
-
+                    * */
                     //Crear lenguajes por defecto
                     Language lang = site.createLanguage("es");
                     lang.setTitle("Español");
@@ -819,7 +822,7 @@ public class NewBrand extends GenericResource {
                     lang.setTitle("Inglés");
                     lang.setTitle("Inglés", "es");
                     lang.setTitle("English", "en");
-                    * */
+                    
                     //Envia estatus a pantalla
                     
                     out.println("<script type=\"text/javascript\">");
