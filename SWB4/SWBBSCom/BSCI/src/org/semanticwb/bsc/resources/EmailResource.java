@@ -29,6 +29,7 @@ import org.semanticwb.portal.api.SWBActionResponse;
 import org.semanticwb.portal.api.SWBParamRequest;
 import org.semanticwb.portal.api.SWBResourceException;
 import org.semanticwb.portal.api.SWBResourceURL;
+import org.semanticwb.portal.api.SWBResourceURLImp;
 
 /**
  *
@@ -78,166 +79,167 @@ public class EmailResource extends GenericResource {
 
         Iterator<User> itTo = wsite.getUserRepository().listUsers();
         Iterator<User> itCc = wsite.getUserRepository().listUsers();
-        //SWBResourceURL url = paramRequest.getActionUrl().setCallMethod(SWBResourceURL.Call_STRATEGY);
         SWBResourceURL url = paramRequest.getActionUrl();
         url.setAction(SWBResourceURL.Action_ADD);
         url.setParameter("suri", request.getParameter("suri"));
         
-        StringBuilder toReturn = new StringBuilder();
-
-
-        
-        toReturn.append("<script type=\"text/javascript\">").append("\n");        
-        toReturn.append("  dojo.require('dijit.form.Form');").append("\n");        
-        toReturn.append("function validateFrm() {").append("\n");
-        toReturn.append("  var isValid = true;").append("");
+        StringBuilder html = new StringBuilder();
+        html.append("<script type=\"text/javascript\">").append("\n");        
+        html.append("  dojo.require('dijit.form.Form');").append("\n");        
+        html.append("function validateFrm() {").append("\n");
+        html.append("  var isValid = true;").append("\n");
+        // From
+        html.append("  if( !isEmail(dojo.byId('from').value) ) {").append("\n");
+        html.append("    alert('"+paramRequest.getLocaleString("msg_EmailAddressNotRecognized") +"');").append("\n");
+        html.append("    return false;").append("\n");
+        html.append("  }").append("\n");
         // To
-        toReturn.append("  var txt = dojo.byId('toText').value").append("\n");
-        toReturn.append("  if( isEmpty(txt) ) {").append("\n");
-        toReturn.append("    alert('"+paramRequest.getLocaleString("msg_UnspecifiedRecipient")+"');").append("\n");
-        toReturn.append("    return false;").append("\n");
-        toReturn.append("  }").append("\n");
-        toReturn.append("  txt = txt.substring(0,txt.lastIndexOf(';'));").append("\n");
-        toReturn.append("  isValid = txt.split(';').every(isEmail);").append("\n");
-        toReturn.append("  if( !isValid ) {").append("\n");
-        toReturn.append("    alert('"+paramRequest.getLocaleString("msg_EmailAddressNotRecognized") +"');").append("\n");
-        toReturn.append("    return false;").append("\n");
-        toReturn.append("  }").append("\n");
+        html.append("  var txt = dojo.byId('toText').value").append("\n");
+        html.append("  if( isEmpty(txt) ) {").append("\n");
+        html.append("    alert('"+paramRequest.getLocaleString("msg_UnspecifiedRecipient")+"');").append("\n");
+        html.append("    return false;").append("\n");
+        html.append("  }").append("\n");
+        html.append("  txt = txt.substring(0,txt.lastIndexOf(';'));").append("\n");
+        html.append("  isValid = txt.split(';').every(isEmail);").append("\n");
+        html.append("  if( !isValid ) {").append("\n");
+        html.append("    alert('"+paramRequest.getLocaleString("msg_EmailAddressNotRecognized") +"');").append("\n");
+        html.append("    return false;").append("\n");
+        html.append("  }").append("\n");
         // Cc
-        toReturn.append("  txt = dojo.byId('ccText').value").append("\n");
-        toReturn.append("  if( !isEmpty(txt) ) {").append("\n");
-        toReturn.append("    txt = txt.substring(0,txt.lastIndexOf(';'));").append("\n");
-        toReturn.append("    isValid = txt.split(';').every(isEmail);").append("\n");
-        toReturn.append("    if( !isValid ) {").append("\n");
-        toReturn.append("      alert('"+paramRequest.getLocaleString("msg_EmailAddressNotRecognized")+"');").append("\n");
-        toReturn.append("      return false;").append("\n");
-        toReturn.append("    }").append("\n");
-        toReturn.append("  }").append("\n");
-        // Subject
-        toReturn.append("  if( isEmpty(dojo.byId('subject').value) ) {").append("\n");
-        toReturn.append("    alert('"+paramRequest.getLocaleString("msg_UnspecifiedSubject")+"');").append("\n");
-        toReturn.append("    return false;").append("\n");
-        toReturn.append("  }").append("\n");
-        // Message
-        toReturn.append("  if( isEmpty(dojo.byId('message').value) ) {").append("\n");
-        toReturn.append("    alert('"+paramRequest.getLocaleString("msg_UnespecifiedBody")+"');").append("\n");
-        toReturn.append("    return false;").append("\n");
-        toReturn.append("  }").append("\n");
-        toReturn.append("  return true;");
-        toReturn.append("}");
+        html.append("  txt = dojo.byId('ccText').value").append("\n");
+        html.append("  if( !isEmpty(txt) ) {").append("\n");
+        html.append("    txt = txt.substring(0,txt.lastIndexOf(';'));").append("\n");
+        html.append("    isValid = txt.split(';').every(isEmail);").append("\n");
+        html.append("    if( !isValid ) {").append("\n");
+        html.append("      alert('"+paramRequest.getLocaleString("msg_EmailAddressNotRecognized")+"');").append("\n");
+        html.append("      return false;").append("\n");
+        html.append("    }").append("\n");
+        html.append("  }").append("\n");
+        // Subject & message together
+        html.append("  if( isEmpty(dojo.byId('subject').value) && isEmpty(dojo.byId('message').value) ) {").append("\n");
+        html.append("    return confirm('"+paramRequest.getLocaleString("msg_QuerySendNoSubjectNorBodyMessage")+"');").append("\n");
+        html.append("  }").append("\n");
+        // Subject alone
+        html.append("  if( isEmpty(dojo.byId('subject').value) ) {").append("\n");
+        html.append("    isValid = confirm('"+paramRequest.getLocaleString("msg_QuerySendWithoutSubject")+"');").append("\n");
+        html.append("  }").append("\n");
+        // Message alone
+        html.append("  if( isEmpty(dojo.byId('message').value) ) {").append("\n");
+        html.append("    isValid = isValid && confirm('"+paramRequest.getLocaleString("msg_QuerySendWithoutBodyMessage")+"');").append("\n");
+        html.append("  }").append("\n");
+        html.append("  return isValid;");
+        html.append("}");
         
-        toReturn.append("var isEmail = function(str) {").append("\n");
-        toReturn.append("  return isValidEmail(str);").append("\n");
-        toReturn.append("};").append("\n");
-
-
-        toReturn.append("function getTo(rel) {").append("\n");
-        toReturn.append("  var to = rel;").append("\n");
-        toReturn.append("  if(document.getElementById('toText').value.indexOf(to) == -1) {").append("\n");
-        toReturn.append("    document.getElementById('toText').value+=to +\";\";").append("\n");
-        toReturn.append("  }").append("\n");
-        toReturn.append("}").append("\n");
-        toReturn.append("function getCc(rel) {").append("\n");
-        toReturn.append("  var cc = rel;").append("\n");
-        toReturn.append("  if(document.getElementById('ccText').value.indexOf(cc) == -1) {").append("\n");
-        toReturn.append("    document.getElementById('ccText').value+=cc +\";\";").append("\n");
-        toReturn.append("  }").append("\n");
-        toReturn.append("}").append("\n");
-        toReturn.append("</script>").append("\n");
+        html.append("var isEmail = function(str) {").append("\n");
+        html.append("  return isValidEmail(str);").append("\n");
+        html.append("};").append("\n");
         
-        toReturn.append("<div class=\"panel panel-default\">\n");
-        toReturn.append("<form id=\"formEmail\" class=\"form-horizontal\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return validateFrm()\">\n");
-        toReturn.append("  <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">\n");
-        toReturn.append("    <div class=\"row\">\n");       
-        toReturn.append("      <div class=\"form-group\">\n");              
-        toReturn.append("        <div class=\"col-xs-12\">").append("\n");
-        toReturn.append("          <div class=\"input-group\">").append("\n");
-        toReturn.append("            <div class=\"input-group-btn\">").append("\n");
-        toReturn.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_From") + "</strong></button>").append("\n");
-        toReturn.append("            </div>").append("\n");
-        toReturn.append("            <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly>\n");
-        toReturn.append("          </div><!-- /input-group -->").append("\n");
-        toReturn.append("        </div><!-- /.col-xs-12 -->").append("\n");      
-        toReturn.append("      </div>\n");
+        html.append("function getTo(rel) {").append("\n");
+        html.append("  var to = rel;").append("\n");
+        html.append("  if(document.getElementById('toText').value.indexOf(to) == -1) {").append("\n");
+        html.append("    document.getElementById('toText').value+=to +\";\";").append("\n");
+        html.append("  }").append("\n");
+        html.append("}").append("\n");
+        html.append("function getCc(rel) {").append("\n");
+        html.append("  var cc = rel;").append("\n");
+        html.append("  if(document.getElementById('ccText').value.indexOf(cc) == -1) {").append("\n");
+        html.append("    document.getElementById('ccText').value+=cc +\";\";").append("\n");
+        html.append("  }").append("\n");
+        html.append("}").append("\n");
+        html.append("</script>").append("\n");
         
-        toReturn.append("      <div class=\"form-group\">\n");
-        toReturn.append("        <div class=\"col-xs-12\">").append("\n");
-        toReturn.append("          <div class=\"input-group\">").append("\n");
-        toReturn.append("            <div class=\"input-group-btn\">").append("\n");
-        toReturn.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_To") + "</strong></button>").append("\n");
-        toReturn.append("              <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
-        toReturn.append("                <span class=\"caret\"></span>").append("\n");
-        toReturn.append("                <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
-        toReturn.append("              </button>").append("\n");
-        toReturn.append("              <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
+        html.append("<div class=\"panel panel-default\">\n");
+        html.append("<form id=\"formEmail\" class=\"form-horizontal\" action=\"" + url + "\" method=\"post\" enctype='multipart/form-data' onsubmit=\"return validateFrm()\">\n");
+        html.append("  <div class=\"panel-body swb-panel-cuerpo swb-contenido-dialogo\">\n");
+        html.append("    <div class=\"row\">\n");       
+        html.append("      <div class=\"form-group\">\n");              
+        html.append("        <div class=\"col-xs-12\">").append("\n");
+        html.append("          <div class=\"input-group\">").append("\n");
+        html.append("            <div class=\"input-group-btn\">").append("\n");
+        html.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_From") + "</strong></button>").append("\n");
+        html.append("            </div>").append("\n");
+        html.append("            <input id=\"from\" name=\"from\" class=\"form-control\" type=\"text\" value=\"" + user.getEmail() + "\" readonly>\n");
+        html.append("          </div><!-- /input-group -->").append("\n");
+        html.append("        </div><!-- /.col-xs-12 -->").append("\n");      
+        html.append("      </div>\n");
+        
+        html.append("      <div class=\"form-group\">\n");
+        html.append("        <div class=\"col-xs-12\">").append("\n");
+        html.append("          <div class=\"input-group\">").append("\n");
+        html.append("            <div class=\"input-group-btn\">").append("\n");
+        html.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_To") + "</strong></button>").append("\n");
+        html.append("              <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
+        html.append("                <span class=\"caret\"></span>").append("\n");
+        html.append("                <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
+        html.append("              </button>").append("\n");
+        html.append("              <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
         User usr;
         while (itTo.hasNext()) {
             usr = itTo.next();
-            toReturn.append("            <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getTo(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
+            html.append("            <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getTo(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
         }
-        toReturn.append("              </ul>").append("\n");
-        toReturn.append("            </div>").append("\n");
-        toReturn.append("            <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">\n");
-        toReturn.append("          </div><!-- /.input-group -->").append("\n");
-        toReturn.append("        </div><!-- /.col-xs-12 -->").append("\n");      
-        toReturn.append("      </div>\n");
+        html.append("              </ul>").append("\n");
+        html.append("            </div>").append("\n");
+        html.append("            <input id=\"toText\" name=\"toText\" class=\"form-control\" type=\"text\">\n");
+        html.append("          </div><!-- /.input-group -->").append("\n");
+        html.append("        </div><!-- /.col-xs-12 -->").append("\n");      
+        html.append("      </div>\n");
         
-        toReturn.append("      <div class=\"form-group\">\n");
-        toReturn.append("        <div class=\"col-xs-12\">").append("\n");
-        toReturn.append("          <div class=\"input-group\">").append("\n");
-        toReturn.append("            <div class=\"input-group-btn\">").append("\n");
-        toReturn.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_Cc") + "</strong></button>\n");        
-        toReturn.append("              <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
-        toReturn.append("                <span class=\"caret\"></span>").append("\n");
-        toReturn.append("                <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
-        toReturn.append("              </button>").append("\n");
-        toReturn.append("              <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
+        html.append("      <div class=\"form-group\">\n");
+        html.append("        <div class=\"col-xs-12\">").append("\n");
+        html.append("          <div class=\"input-group\">").append("\n");
+        html.append("            <div class=\"input-group-btn\">").append("\n");
+        html.append("              <button class=\"btn btn-default\" tabindex=\"-1\" type=\"button\"><strong>" + paramRequest.getLocaleString("lbl_Cc") + "</strong></button>\n");        
+        html.append("              <button class=\"btn btn-default dropdown-toggle\"  data-toggle=\"dropdown\" type=\"button\">").append("\n");
+        html.append("                <span class=\"caret\"></span>").append("\n");
+        html.append("                <span class=\"sr-only\">Toggle Dropdown</span>").append("\n");
+        html.append("              </button>").append("\n");
+        html.append("              <ul class=\"dropdown-menu\" role=\"menu\">").append("\n");
         while (itCc.hasNext()) {
             usr = itCc.next();
-            toReturn.append("            <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getCc(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
+            html.append("            <li><a href=\"#\" rel=\""+usr.getEmail()+"\" onclick=\"javascript:getCc(rel);\">"+replaceHtml(usr.getFullName())+"</a></li>").append("\n");
         }
-        toReturn.append("              </ul>").append("\n");
-        toReturn.append("            </div><!-- /btn-group -->").append("\n");
-        toReturn.append("            <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>\n");
-        toReturn.append("          </div><!-- /input-group -->").append("\n");
-        toReturn.append("        </div><!-- /.col-xs-12 -->").append("\n"); 
-        toReturn.append("      </div>\n");
+        html.append("              </ul>").append("\n");
+        html.append("            </div><!-- /btn-group -->").append("\n");
+        html.append("            <input id=\"ccText\" name=\"ccText\" class=\"form-control\" type=\"text\"></input>\n");
+        html.append("          </div><!-- /input-group -->").append("\n");
+        html.append("        </div><!-- /.col-xs-12 -->").append("\n"); 
+        html.append("      </div>\n");
         
-        toReturn.append("      <div class=\"form-group\">\n");
+        html.append("      <div class=\"form-group\">\n");
         //toReturn.append("        <label class=\"col-xs-12 col-sm-3 col-md-1 control-label\">"+paramRequest.getLocaleString("lbl_Attach")+"</label>\n");
-        toReturn.append("        <div class=\"col-xs-12\">\n");
-        toReturn.append("          <span class=\"glyphicon glyphicon-paperclip\"></span>");
-        toReturn.append("          <input type=\"file\" name=\"uploadFile\" class=\"glyphicon\">\n");
-        //toReturn.append("          <input type=\"hidden\" name=\"upload\" value=\"upload\">\n");
-        toReturn.append("        </div>\n");
-        toReturn.append("      </div>\n");
+        html.append("        <div class=\"col-xs-12\">\n");
+        html.append("          <span class=\"glyphicon glyphicon-paperclip\"></span>");
+        html.append("          <input type=\"file\" name=\"uploadFile\" class=\"glyphicon\">\n");
+        html.append("        </div>\n");
+        html.append("      </div>\n");
         
-        toReturn.append("      <div class=\"form-group\">\n");
-        toReturn.append("        <div class=\"col-xs-12  col-md-1 \">");
-        toReturn.append("          <label class=\"control-label \">" + paramRequest.getLocaleString("lbl_Subject") + "</label>\n");
-        toReturn.append("        </div>");
-        toReturn.append("        <div class=\"col-xs-12 col-md-11 \">\n");      
-        toReturn.append("          <input name=\"subject\" id=\"subject\" class=\"form-control\" type=\"text\">\n");
-        toReturn.append("        </div>\n");
-        toReturn.append("      </div>\n");
+        html.append("      <div class=\"form-group\">\n");
+        html.append("        <div class=\"col-xs-12  col-md-1 \">");
+        html.append("          <label class=\"control-label \">" + paramRequest.getLocaleString("lbl_Subject") + "</label>\n");
+        html.append("        </div>");
+        html.append("        <div class=\"col-xs-12 col-md-11 \">\n");      
+        html.append("          <input name=\"subject\" id=\"subject\" class=\"form-control\" type=\"text\">\n");
+        html.append("        </div>\n");
+        html.append("      </div>\n");
         
-        toReturn.append("      <div class=\"form-group\">\n");
-        toReturn.append("        <div class=\"col-xs-12  col-md-1 \">");
-        toReturn.append("          <label class=\"control-label\">"+paramRequest.getLocaleString("lbl_Message")+"</label>\n");
-        toReturn.append("        </div>");
-        toReturn.append("        <div class=\"col-xs-12 col-md-11\">\n");
-        toReturn.append("          <textarea name=\"message\" id=\"message\" class=\"form-control\" rows=\"5\"></textarea>\n");
-        toReturn.append("        </div>\n");
-        toReturn.append("      </div>\n");
+        html.append("      <div class=\"form-group\">\n");
+        html.append("        <div class=\"col-xs-12  col-md-1 \">");
+        html.append("          <label class=\"control-label\">"+paramRequest.getLocaleString("lbl_Message")+"</label>\n");
+        html.append("        </div>");
+        html.append("        <div class=\"col-xs-12 col-md-11\">\n");
+        html.append("          <textarea name=\"message\" id=\"message\" class=\"form-control\" rows=\"5\"></textarea>\n");
+        html.append("        </div>\n");
+        html.append("      </div>\n");
         
-        toReturn.append("      <div class=\"btn-group col-xs-12 pull-right\">\n");
-        toReturn.append("        <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>\n");
-        toReturn.append("      </div>\n");
-        toReturn.append("    </div>\n"); // cierra div class row
-        toReturn.append("  </div>\n"); // cierra div class panel body
-        toReturn.append("</form>\n");// cierra form formEmail
-        toReturn.append("</div>\n"); // cierra div panel-default
-        out.println(toReturn.toString());
+        html.append("      <div class=\"btn-group col-xs-12 pull-right\">\n");
+        html.append("        <button class=\"btn btn-default  pull-right swb-boton-enviar\" type=\"submit\">"+ paramRequest.getLocaleString("lbl_Send") + "</button>\n");
+        html.append("      </div>\n");
+        html.append("    </div>\n"); // cierra div class row
+        html.append("  </div>\n"); // cierra div class panel body
+        html.append("</form>\n");// cierra form formEmail
+        html.append("</div>\n"); // cierra div panel-default
+        out.println(html.toString());
     }
 
     /**
@@ -382,7 +384,7 @@ public class EmailResource extends GenericResource {
         Resource base = getResourceBase();
         WebSite wsite = base.getWebSite();
         final User user = response.getUser();
-        
+        final String lang = user.getLanguage()==null?"es":user.getLanguage();
 //        if (SWBResourceURL.Action_ADD.equalsIgnoreCase(action)) {
             response.setMode(SWBResourceURL.Mode_VIEW);
             response.setCallMethod(SWBResourceURL.Call_STRATEGY);
@@ -391,17 +393,27 @@ public class EmailResource extends GenericResource {
             
             final String path = SWBPortal.getWorkPath() + "/models/" + wsite.getId();
             MultipartRequest mrequest = new MultipartRequest(request, path);
-            String subject = (String) mrequest.getParameter("subject") == null ? "" : (String) mrequest.getParameter("subject");
-            String message = (String) mrequest.getParameter("message") == null ? "" : (String) mrequest.getParameter("message");
+            
+            if( !SWBUtils.EMAIL.isValidEmailAddress(user.getEmail()) ) {
+                //SWBResourceURLImp url = new SWBResourceURLImp(request, getResourceBase(), response.getWebPage(), SWBResourceURL.UrlType_RENDER);
+                //url.setCallMethod(SWBResourceURL.Call_DIRECT);
+                //url.setMode(Mode_SendMail);
+                //url.setParameter("suri", URLEncoder.encode(request.getParameter("suri"), "utf-8"));
+                //url.setParameter("rse", "msg_EmailAddressNotRecognized");
+                //response.sendRedirect(url.toString());
+                response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(request.getParameter("suri"), "utf-8")+"&rse=msg_EmailAddressNotRecognized");
+                return;
+            }
+            
+            String subject = mrequest.getParameter("subject").isEmpty() ? response.getLocaleString("lbl_NoSubject") : (String) mrequest.getParameter("subject");
+            String message = mrequest.getParameter("message").isEmpty() ? response.getLocaleString("lbl_NoBodyMessage") : (String) mrequest.getParameter("message");
             String to = (String) mrequest.getParameter("toText") == null ? "" : (String) mrequest.getParameter("toText");
             String cc = (String) mrequest.getParameter("ccText") == null ? "" : (String) mrequest.getParameter("ccText");
             File attachment = mrequest.getFile("uploadFile");
 
-            if(subject==null) {
-            }
-            if(message==null) {
-            }
             if(to==null) {
+                response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(request.getParameter("suri"), "utf-8")+"&rse=msg_UnspecifiedRecipient");
+                return;
             }
             
             SWBMail mail = new SWBMail();
@@ -410,7 +422,7 @@ public class EmailResource extends GenericResource {
             mail.setFromName(user.getFullName());
             mail.setSubject(subject);
             mail.setData(message);
-            if (attachment != null) {
+            if(attachment != null) {
                  EmailAttachment emailAttachment = new EmailAttachment();
                  emailAttachment.setPath(attachment.getPath());
                  emailAttachment.setDisposition(EmailAttachment.ATTACHMENT);
@@ -422,6 +434,7 @@ public class EmailResource extends GenericResource {
             ArrayList<InternetAddress> addresses = null;
             List<String> emailsTo = validateEMailAccounts(to);
             if(emailsTo == null) {
+                response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(request.getParameter("suri"), "utf-8")+"&rse=msg_UnspecifiedRecipient");
                 return;
             }else {
                 addresses = new ArrayList();
@@ -451,7 +464,7 @@ public class EmailResource extends GenericResource {
                 msg = "msg_DeliveryFailure";
             }
 //        }
-        response.sendRedirect(response.getWebPage().getUrl("es")+"?suri="+URLEncoder.encode(request.getParameter("suri"), "utf-8")+"&rse="+msg);
+        response.sendRedirect(response.getWebPage().getUrl(lang)+"?suri="+URLEncoder.encode(request.getParameter("suri"), "utf-8")+"&rse="+msg);
     }
 
     private List<String> validateEMailAccounts(String accounts) {
@@ -461,9 +474,11 @@ public class EmailResource extends GenericResource {
         List<String> list = null;
         String[] mails = accounts.split("[;|,]",0);
         if(mails.length > 0) {            
-            list = new ArrayList();
             for (String account : mails) {
                 if (SWBUtils.EMAIL.isValidEmailAddress(account)) {
+                    if(list==null) {
+                        list = new ArrayList<String>();
+                    }
                     list.add(account);
                 }
             }
