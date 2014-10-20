@@ -14,9 +14,9 @@ d3.gantt = function(taskNames) {
     var FIXED_TIME_DOMAIN_MODE = "fixed";
     var margin = {
         top : 10,
-        right : 10,
+        right : 25,
         bottom : 60,
-        left : 15
+        left : 10
     };
     var timeDomainStart = d3.time.day.offset(new Date(), -3);
     var timeDomainEnd = d3.time.hour.offset(new Date(), +3);
@@ -33,7 +33,7 @@ d3.gantt = function(taskNames) {
     }
     var taskStatus = [];
     var availableWidth = ((container.style && container.style('width') && (parseInt(container.style('width')) > 460) ? parseInt(container.style('width')) : false) || 460) - margin.right - offsetX; //
-    var availableHeight = ((container.style && container.style('height') && (parseInt(container.style('height')) > 350) ? parseInt(container.style('height')) : false) || 350) - margin.top - margin.bottom; //
+    var availableHeight = ((container.style && container.style('height') && (parseInt(container.style('height')) > 100) ? parseInt(container.style('height')) : false) || 100) - margin.top - margin.bottom; //
     var height = availableHeight - 5; //- margin.top - margin.bottom
     var width = availableWidth - 5;  //- margin.right - margin.left
     var tickFormat = "%H:%M"; //  %d/%m/%Y
@@ -46,7 +46,7 @@ d3.gantt = function(taskNames) {
     var x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
     var y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height ], .1);  // - margin.top - margin.bottom
     var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
-	    .tickSize(0).tickPadding(8);  //.tickSize(-availableHeight, 0)
+	    .tickSize(1).tickPadding(8);  //.tickSize(-availableHeight, 0)
     var yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
     var initTimeDomain = function(tasks) {
         if (timeDomainMode === FIT_TIME_DOMAIN_MODE) {
@@ -75,9 +75,9 @@ d3.gantt = function(taskNames) {
         x = d3.time.scale().domain([ timeDomainStart, timeDomainEnd ]).range([ 0, width ]).clamp(true);
         y = d3.scale.ordinal().domain(taskTypes).rangeRoundBands([ 0, height ], .1); //height - margin.top - margin.bottom
         xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(d3.time.format(tickFormat)).tickSubdivide(true)
-            .tickSize(5).tickPadding(8);  //.tickSize(-availableHeight, 0)
+            .tickSize(1).tickPadding(8);  //.tickSize(-availableHeight, 0)
 
-        yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+        yAxis = d3.svg.axis().scale(y).orient("left").tickSize(1);
     };
     
     //Agregadas para manejo de tooltips
@@ -104,12 +104,12 @@ d3.gantt = function(taskNames) {
         var svg = d3.select(selection)
             .append("svg")
             .attr("class", "chart")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", 1200)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
                 .attr("class", "gantt-chart")
-            .attr("width", width)    //+ margin.left + margin.right
-            .attr("height", height)  // + margin.top + margin.bottom
+            .attr("width", width + margin.left + margin.right)    //+ margin.left + margin.right
+            .attr("height", height + margin.top + margin.bottom)  // + margin.top + margin.bottom
             .attr("transform", "translate(" + margin.left + ", " + (margin.top + margin.bottom) + ")");
 	
         svg.selectAll(".chart")
