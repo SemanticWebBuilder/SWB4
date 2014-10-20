@@ -33,9 +33,12 @@ import org.semanticwb.portal.api.SWBResourceURL;
  */
 public class MitigationActionManager extends GenericResource {
 
-    public static org.semanticwb.platform.SemanticProperty bsc_hasMitigationAction = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary()
-            .getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasMitigationAction");
+//    public static org.semanticwb.platform.SemanticProperty bsc_hasMitigationAction = org.semanticwb.SWBPlatform.getSemanticMgr().getVocabulary()
+//            .getSemanticProperty("http://www.semanticwebbuilder.org/swb4/bsc#hasMitigationAction");
     public static final String Action_DELETE = "delete";
+    public static final String Action_ACTIVE_ALL = "actall";
+    public static final String Action_DEACTIVE_ALL = "deactall";
+    public static final String Action_UPDT_ACTIVE = "updactv";
 
     /**
      * M&eacute;todo que se encarga de presentar la vista para visualizar,
@@ -74,8 +77,8 @@ public class MitigationActionManager extends GenericResource {
         SemanticObject semObj = ont.getSemanticObject(suri);
         Risk risk = (Risk) semObj.createGenericInstance();
         if (risk != null) {
-            //createInstances(risk, risk.getBSC());
             Iterator<MitigationAction> it = risk.listMitigationActions();
+            boolean hasMitigationAction = it.hasNext();
 
             toReturn.append("<script type=\"text/javascript\">");
             toReturn.append("  dojo.require('dojo.parser');");
@@ -101,21 +104,33 @@ public class MitigationActionManager extends GenericResource {
             toReturn.append("<th>");
             toReturn.append(paramRequest.getLocaleString("lbl_updated"));
             toReturn.append("</th>");
+            toReturn.append("<th>");
+            toReturn.append(paramRequest.getLocaleString("lbl_active"));
+            toReturn.append("</th>");
             toReturn.append("</tr>");
             toReturn.append("</thead>");
-            
+
             while (it.hasNext()) {
                 MitigationAction mitAction = it.next();
                 SWBResourceURL urlDelete = paramRequest.getActionUrl();
 
-                if (mitAction != null && ((mitAction.isValid() && user.haveAccess(mitAction))
-                        || (!mitAction.isActive()
-                        && semObj.hasObjectProperty(bsc_hasMitigationAction, mitAction.getSemanticObject())
-                        && user.haveAccess(mitAction)))) {
+//                if (mitAction != null && ((mitAction.isValid() && user.haveAccess(mitAction))
+//                        || (!mitAction.isActive()
+//                        && semObj.hasObjectProperty(bsc_hasMitigationAction, mitAction.getSemanticObject())
+//                        && user.haveAccess(mitAction)))) {
+                if (mitAction != null && user.haveAccess(mitAction)) {
+                    SWBResourceURL urlAdd;
+
                     urlDelete.setParameter("suri", suri);
                     urlDelete.setParameter("reloadTab", "true");
                     urlDelete.setParameter("sval", mitAction.getId());
                     urlDelete.setAction(Action_DELETE);
+
+                    urlAdd = paramRequest.getActionUrl();
+                    urlAdd.setParameter("suri", suri);
+                    urlAdd.setParameter("sval", mitAction.getId());
+                    urlAdd.setAction(Action_UPDT_ACTIVE);
+
                     toReturn.append("<tr>");
                     toReturn.append("<td>");
                     toReturn.append("\n<a href=\"#\" onclick=\"if(confirm('");
@@ -159,25 +174,59 @@ public class MitigationActionManager extends GenericResource {
                     toReturn.append("<td>");
                     toReturn.append((mitAction.getCreated() == null ? ""
                             : SWBUtils.TEXT.getStrDate(mitAction.getCreated(),
-                            "es", "dd/mm/yyyy")));
+                                    "es", "dd/mm/yyyy")));
                     toReturn.append("</td>");
                     toReturn.append("<td>");
                     toReturn.append((mitAction.getUpdated() == null ? ""
                             : SWBUtils.TEXT.getStrDate(mitAction.getCreated(),
-                            "es", "dd/mm/yyyy")));
+                                    "es", "dd/mm/yyyy")));
+                    toReturn.append("</td>");
+                    toReturn.append("     <td align=\"center\"><input name=\"");
+                    toReturn.append(MitigationAction.swb_active.getName());
+                    toReturn.append("\"");
+                    toReturn.append(" type=\"checkbox\" value=\"");
+                    toReturn.append(mitAction.getId());
+                    toReturn.append("\"  onchange=\"submitUrl('");
+                    toReturn.append(urlAdd);
+                    toReturn.append("',this.domNode)\" ");
+                    toReturn.append(" dojoType=\"dijit.form.CheckBox\" ");
+                    toReturn.append(mitAction.isActive() ? "checked=\"checked\"" : "");
+                    toReturn.append("/>");
                     toReturn.append("</td>");
                     toReturn.append("</tr>");
                 }
             }
             toReturn.append("</table>");
             toReturn.append("</fieldset>\n");
+
+            if (hasMitigationAction) {
+                SWBResourceURL urlAll = paramRequest.getActionUrl();
+                urlAll.setParameter("suri", suri);
+                urlAll.setAction(Action_ACTIVE_ALL);
+                toReturn.append("<fieldset>");
+                toReturn.append("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('");
+                toReturn.append(urlAll);
+                toReturn.append("',this.domNode); return false;\">");
+                toReturn.append(paramRequest.getLocaleString("lbl_activeAll"));
+                toReturn.append("</button>");
+
+                urlAll.setAction(Action_DEACTIVE_ALL);
+                toReturn.append("<button dojoType=\"dijit.form.Button\" onclick=\"submitUrl('");
+                toReturn.append(urlAll);
+                toReturn.append("',this.domNode); return false;\">");
+                toReturn.append(paramRequest.getLocaleString("lbl_disabledAll"));
+                toReturn.append("</button>");
+                toReturn.append("</fieldset>");
+            }
+
             toReturn.append("</div>");
 
             if (request.getParameter("statmsg") != null
                     && !request.getParameter("statmsg").isEmpty()) {
                 toReturn.append("<div dojoType=\"dojox.layout.ContentPane\">");
                 toReturn.append("<script type=\"dojo/method\">");
-                toReturn.append("showStatus('" + request.getParameter("statmsg"));
+                toReturn.append("showStatus('");
+                toReturn.append(request.getParameter("statmsg"));
                 toReturn.append("');\n");
                 toReturn.append("</script>\n");
                 toReturn.append("</div>");
@@ -227,16 +276,38 @@ public class MitigationActionManager extends GenericResource {
                             .getLocaleString("msgDeleteSuccessful"));
                 }
             }
+        } else if (Action_UPDT_ACTIVE.equalsIgnoreCase(action)) {
+            final String mitActionId = request.getParameter("sval");
+            if (mitActionId != null) {
+                if (MitigationAction.ClassMgr.hasMitigationAction(mitActionId, bsc)) {
+                    MitigationAction mitAction = MitigationAction.ClassMgr.getMitigationAction(mitActionId, bsc);
+                    if (mitAction.isActive()) {
+                        mitAction.setActive(false);
+                        response.setRenderParameter("statmsg", response.getLocaleString("msgDisabledMitAction"));
+                    } else {
+                        mitAction.setActive(true);
+                        response.setRenderParameter("statmsg", response.getLocaleString("msgActiveMitAction"));
+                    }
+                } else {
+                    response.setRenderParameter("statmsg", "Objeto semantico no ubicado");
+                }
+            } else {
+                response.setRenderParameter("statmsg", "Objeto semantico no ubicado.");
+            }
+        } else if (Action_ACTIVE_ALL.equalsIgnoreCase(action)) {
+            Iterator it = risk.listMitigationActions();
+            while (it.hasNext()) {
+                MitigationAction mitAction = (MitigationAction) it.next();
+                mitAction.setActive(true);
+            }
+            response.setRenderParameter("statmsg", response.getLocaleString("msgActiveAllMitAction"));
+        } else if (Action_DEACTIVE_ALL.equalsIgnoreCase(action)) {
+            Iterator it = risk.listMitigationActions();
+            while (it.hasNext()) {
+                MitigationAction mitAction = (MitigationAction) it.next();
+                mitAction.setActive(false);
+            }
+            response.setRenderParameter("statmsg", response.getLocaleString("msgDisabledAllMitAction"));
         }
     }
-
-    /*private void createInstances(Risk risk, WebSite ws) {
-        MitigationAction action = MitigationAction.ClassMgr.createMitigationAction(ws);
-        action.setTitle("Acción 1");
-        action.setDescription("Descripción de Acción 1");
-        action.setActive(true);
-        action.setCreated(new Date());
-        action.setUpdated(new Date());
-        risk.addMitigationAction(action);
-    }*/
 }
