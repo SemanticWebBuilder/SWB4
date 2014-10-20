@@ -4,6 +4,7 @@
     Author     : francisco.jimenez
 --%>
 
+<%@page import="org.openjena.riot.SysRIOT"%>
 <%@page import="org.semanticwb.social.PunctuationSign"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.TreeSet"%>
@@ -127,7 +128,9 @@
     //int posts = 0;
     int randomId = randomId();
     //long startTime = System.currentTimeMillis();
-
+    String[] enStopWords=SWBSocialUtil.Classifier.getEnglishStopWords();
+    List listEnStopWords=Arrays.asList(enStopWords);
+    //System.out.println("That:"+listEnStopWords.contains("that"));
     //int percent = (int)(noOfPosts*0.6);//Only process 60% of stream
     //System.out.println("Size of sample: " + percent);
     while(itPostIns.hasNext()){        
@@ -163,7 +166,6 @@
                 msg = Jsoup.clean(msg, Whitelist.simpleText());
                 msg = SWBSocialUtil.Strings.removePuntualSigns(msg, SWBContext.getGlobalWebSite());
                 
-
                 String[] mgsWords=msg.split("\\s+");  //Dividir valores
                 for(int i = 0; i < mgsWords.length ; i++)
                 {
@@ -174,9 +176,10 @@
                     boolean isStopWord=true;
                     if(lang.equals("es") && !Arrays.asList(SWBSocialUtil.Classifier.getSpanishStopWords()).contains(word)){
                         isStopWord=false;
-                    }else if(lang.equals("en") && !Arrays.asList(SWBSocialUtil.Classifier.getEnglishStopWords()).contains(word)){
+                    }else if(lang.equals("en") && !listEnStopWords.contains(word)){
                         isStopWord=false;
                     }
+                    //System.out.println("Tag lang:"+lang+", word:"+word+",iscontained:"+iscontained+",isStopWord:"+isStopWord);
                     if(!isStopWord && !isInteger(word))
                     {
                         Integer frequency = cloudTags.get(word);
@@ -186,10 +189,17 @@
                             cloudTags.put(word, ++frequency);
                         }
                     }
-                }
+                }                
            }
        }
     }    
+    /* 
+    Iterator<String> itList=listEnStopWords.iterator();
+    while(itList.hasNext())
+    {
+        String xword=itList.next();
+        System.out.println("xword:"+xword+"Fin");
+    }*/
 %>
 <div id="<%=suri%>/<%=randomId%>/CanvasContainer" align="center">
 	<canvas width="500" height="500" id="<%=suri%>/<%=randomId%>/Canvas">
