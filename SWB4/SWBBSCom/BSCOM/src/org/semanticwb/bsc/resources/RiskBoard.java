@@ -30,6 +30,7 @@ import org.semanticwb.bsc.tracing.Control;
 import org.semanticwb.bsc.tracing.DeterminantValue;
 import org.semanticwb.bsc.tracing.Factor;
 import org.semanticwb.bsc.tracing.MitigationAction;
+import org.semanticwb.model.Activeable;
 import org.semanticwb.model.Descriptiveable;
 import org.semanticwb.model.FormElement;
 import org.semanticwb.model.FormValidateException;
@@ -1109,6 +1110,10 @@ public class RiskBoard extends GenericResource {
                 formMgr = new SWBFormMgr(semObj, null, SWBFormMgr.MODE_EDIT);
                 try {
                     formMgr.processForm(request);
+                    if (semObj.createGenericInstance() instanceof Activeable) {
+                        Activeable obj = (Activeable) semObj.createGenericInstance();
+                        obj.setActive(true);
+                    }
                     SWBPortal.getServiceMgr().updateTraceable(semObj, user);
                 } catch (FormValidateException ex) {
                     RiskBoard.log.error("Al modificar informacion de: " + semObj.getURI(), ex);
@@ -1463,33 +1468,35 @@ public class RiskBoard extends GenericResource {
             data.append("      <tbody>\n");
             while (actionIt.hasNext()) {
                 MitigationAction action = actionIt.next();
-                data.append("      <tr>\n");
-                data.append("        <td class=\"tableTdAction\">");
-                data.append(action.getTitle());
-                data.append("</td>\n");
-                if (mode != null && mode.equalsIgnoreCase("edit")) {
+                if (action.isActive()) {
+                    data.append("      <tr>\n");
                     data.append("        <td class=\"tableTdAction\">");
-                    data.append("<a href=\"#\" onclick=\"showMyDialog('"); //class=\"fa fa-pencil fa-2x buttonAction\"
-                    data.append(url);
-                    data.append("?suri=");
-                    data.append(action.getEncodedURI());
-                    data.append("', '");
                     data.append(action.getTitle());
-                    data.append("');\">");
-                    data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
-                    data.append("</a>");
-                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");//class=\"fa fa-trash-o fa-2x buttonAction\" 
-                    data.append(action.getTitle());
-                    data.append("', '");
-                    data.append(urlDelete.toString());
-                    data.append("&suri=");
-                    data.append(action.getEncodedURI());
-                    data.append("');\">");
-                    data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
-                    data.append("</a>");
                     data.append("</td>\n");
+                    if (mode != null && mode.equalsIgnoreCase("edit")) {
+                        data.append("        <td class=\"tableTdAction\">");
+                        data.append("<a href=\"#\" onclick=\"showMyDialog('"); //class=\"fa fa-pencil fa-2x buttonAction\"
+                        data.append(url);
+                        data.append("?suri=");
+                        data.append(action.getEncodedURI());
+                        data.append("', '");
+                        data.append(action.getTitle());
+                        data.append("');\">");
+                        data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
+                        data.append("</a>");
+                        data.append("<a href=\"#\" onclick=\"deleteElement(1, '");//class=\"fa fa-trash-o fa-2x buttonAction\" 
+                        data.append(action.getTitle());
+                        data.append("', '");
+                        data.append(urlDelete.toString());
+                        data.append("&suri=");
+                        data.append(action.getEncodedURI());
+                        data.append("');\">");
+                        data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
+                        data.append("</a>");
+                        data.append("</td>\n");
+                    }
+                    data.append("      </tr>\n");
                 }
-                data.append("      </tr>\n");
             }
             data.append("      </tbody>\n");
             data.append("      </table>\n");
@@ -1534,33 +1541,35 @@ public class RiskBoard extends GenericResource {
             data.append("      <tbody>\n");
             while (iniIt.hasNext()) {
                 Initiative initiative = iniIt.next();
-                data.append("      <tr>\n");
-                data.append("        <td class=\"tableTdAction\">");
-                data.append(initiative.getTitle());
-                data.append("</td>\n");
-                if (mode != null && mode.equalsIgnoreCase("edit")) {
+                if (initiative.isActive()) {
+                    data.append("      <tr>\n");
                     data.append("        <td class=\"tableTdAction\">");
-                    data.append("<a href=\"#\" onclick=\"showMyDialog('");
-                    data.append(url);
-                    data.append("?suri=");
-                    data.append(initiative.getEncodedURI());
-                    data.append("', '");
                     data.append(initiative.getTitle());
-                    data.append("');\">");
-                    data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
-                    data.append("</a>");
-                    data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
-                    data.append(initiative.getTitle());
-                    data.append("', '");
-                    data.append(urlDelete.toString());
-                    data.append("&suri=");
-                    data.append(initiative.getEncodedURI());
-                    data.append("');\">");
-                    data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
-                    data.append("</a>");
                     data.append("</td>\n");
+                    if (mode != null && mode.equalsIgnoreCase("edit")) {
+                        data.append("        <td class=\"tableTdAction\">");
+                        data.append("<a href=\"#\" onclick=\"showMyDialog('");
+                        data.append(url);
+                        data.append("?suri=");
+                        data.append(initiative.getEncodedURI());
+                        data.append("', '");
+                        data.append(initiative.getTitle());
+                        data.append("');\">");
+                        data.append("<span class=\"glyphicon glyphicon-pencil\"></span>");
+                        data.append("</a>");
+                        data.append("<a href=\"#\" onclick=\"deleteElement(1, '");
+                        data.append(initiative.getTitle());
+                        data.append("', '");
+                        data.append(urlDelete.toString());
+                        data.append("&suri=");
+                        data.append(initiative.getEncodedURI());
+                        data.append("');\">");
+                        data.append("<span class=\"glyphicon glyphicon-trash\"></span>");
+                        data.append("</a>");
+                        data.append("</td>\n");
+                    }
+                    data.append("      </tr>\n");
                 }
-                data.append("      </tr>\n");
             }
             data.append("      </tbody>\n");
             data.append("      </table>\n");
@@ -1752,8 +1761,7 @@ public class RiskBoard extends GenericResource {
      * @throws IOException si ocurre un problema con la lectura/escritura de la
      * petici&oacute;n/respuesta.
      */
-    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException
-    {
+    private String doIconExport(HttpServletRequest request, SWBParamRequest paramRequest) throws SWBResourceException, IOException {
         StringBuilder ret = new StringBuilder(128);
         SWBResourceURL url = new SWBResourceURLImp(request, getResourceBase(), paramRequest.getWebPage(), SWBResourceURL.UrlType_RENDER);
         url.setMode("export");
@@ -1913,67 +1921,66 @@ public class RiskBoard extends GenericResource {
      * @throws FileNotFoundException Archivo no ubicado
      * @throws IOException Excepti&oacute;n de IO
      */
-    private String getLinks(HttpServletRequest request)
-    {
-        String port = request.getServerPort()!=80 ? ":"+request.getServerPort() : "";
+    private String getLinks(HttpServletRequest request) {
+        String port = request.getServerPort() != 80 ? ":" + request.getServerPort() : "";
         String baserequest = request.getScheme() + "://" + request.getServerName() + port;
         StringBuilder view = new StringBuilder(256);
         view.append("<link href=\"").append(baserequest).append("/swbadmin/css/strategyPrint.css\" />");
         return view.toString();
     }
     /*private String getLinks(SWBParamRequest paramRequest, HttpServletRequest request)
-            throws FileNotFoundException, IOException {
+     throws FileNotFoundException, IOException {
 
-        User user = paramRequest.getUser();
-        WebPage wp = paramRequest.getWebPage();
+     User user = paramRequest.getUser();
+     WebPage wp = paramRequest.getWebPage();
 
-        Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
-        String filePath = template.getWorkPath() + "/"
-                + template.getActualVersion().getVersionNumber() + "/"
-                + template.getFileName(template.getActualVersion().getVersionNumber());
-        FileReader reader = null;
-        StringBuilder view = new StringBuilder(256);
-        reader = new FileReader(filePath);
+     Template template = SWBPortal.getTemplateMgr().getTemplate(user, wp);
+     String filePath = template.getWorkPath() + "/"
+     + template.getActualVersion().getVersionNumber() + "/"
+     + template.getFileName(template.getActualVersion().getVersionNumber());
+     FileReader reader = null;
+     StringBuilder view = new StringBuilder(256);
+     reader = new FileReader(filePath);
 
-        String port = "";
-        if (request.getServerPort() != 80) {
-            port = ":" + request.getServerPort();
-        }
-        String baserequest = request.getScheme() + "://" + request.getServerName() + port;
+     String port = "";
+     if (request.getServerPort() != 80) {
+     port = ":" + request.getServerPort();
+     }
+     String baserequest = request.getScheme() + "://" + request.getServerName() + port;
 
-        HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
-        HtmlTag tag = new HtmlTag();
-        while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
-            int ttype = tok.getTokenType();
+     HtmlStreamTokenizer tok = new HtmlStreamTokenizer(reader);
+     HtmlTag tag = new HtmlTag();
+     while (tok.nextToken() != HtmlStreamTokenizer.TT_EOF) {
+     int ttype = tok.getTokenType();
 
-            if (ttype == HtmlStreamTokenizer.TT_TAG) {
-                try {
-                    tok.parseTag(tok.getStringValue(), tag);
-                } catch (HtmlException htmle) {
-                    RiskBoard.log.error("Al parsear la plantilla , "
-                            + filePath, htmle);
-                }
-                if (tag.getTagString().toLowerCase().equals("link")) {
-                    String tagTxt = tag.toString();
-                    if (tagTxt.contains("type=\"text/css\"")) {
-                        if (!tagTxt.contains("/>")) {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
-                        }
-                        if (!tagTxt.contains("{webpath}")) {
-                            String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
-                            String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
-                                    tagTxt.length());
-                            tagTxt = tmpTxt + baserequest + tmpTxtAux;
-                        } else {
-                            tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
-                        }
-                        view.append(tagTxt);
-                    }
-                }
-            }
-        }
-        return view.toString();
-    }*/
+     if (ttype == HtmlStreamTokenizer.TT_TAG) {
+     try {
+     tok.parseTag(tok.getStringValue(), tag);
+     } catch (HtmlException htmle) {
+     RiskBoard.log.error("Al parsear la plantilla , "
+     + filePath, htmle);
+     }
+     if (tag.getTagString().toLowerCase().equals("link")) {
+     String tagTxt = tag.toString();
+     if (tagTxt.contains("type=\"text/css\"")) {
+     if (!tagTxt.contains("/>")) {
+     tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, ">", "/>");
+     }
+     if (!tagTxt.contains("{webpath}")) {
+     String tmpTxt = tagTxt.substring(0, (tagTxt.indexOf("href") + 6));
+     String tmpTxtAux = tagTxt.substring((tagTxt.indexOf("href") + 6),
+     tagTxt.length());
+     tagTxt = tmpTxt + baserequest + tmpTxtAux;
+     } else {
+     tagTxt = SWBUtils.TEXT.replaceAll(tagTxt, "{webpath}", baserequest);
+     }
+     view.append(tagTxt);
+     }
+     }
+     }
+     }
+     return view.toString();
+     }*/
 
     /**
      * Genera un {@code String} que representa los estilos CSS a utilizar para
