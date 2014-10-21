@@ -95,7 +95,7 @@
 
                 </div>
                 <div class="panel-footer text-right">
-                    <a class="btn btn-default" style="color: #fff;" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setAction("viewPost").setParameter("threadUri", threadUri)%>"> 
+                    <a class="btn btn-default" href="<%=paramRequest.getRenderUrl().setMode(SWBResourceURL.Mode_VIEW).setAction("viewPost").setParameter("threadUri", threadUri)%>"> 
                         <span class="fa fa-mail-reply"></span>
                         <%=paramRequest.getLocaleString("cancel")%></a>
                     <button type="submit" class="btn btn-success" id="btnSavePost">
