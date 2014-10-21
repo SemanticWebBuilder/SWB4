@@ -209,8 +209,8 @@ public class EmailResource extends GenericResource {
         html.append("      <div class=\"form-group\">\n");
         //toReturn.append("        <label class=\"col-xs-12 col-sm-3 col-md-1 control-label\">"+paramRequest.getLocaleString("lbl_Attach")+"</label>\n");
         html.append("        <div class=\"col-xs-12\">\n");
-        html.append("          <span class=\"glyphicon glyphicon-paperclip\"></span>");
-        html.append("          <input type=\"file\" name=\"uploadFile\" class=\"glyphicon\">\n");
+        html.append("          <span class=\"glyphicon glyphicon-paperclip\">");
+        html.append("          <input type=\"file\" name=\"uploadFile\" class=\"glyphicon\"/></span>\n");
         html.append("        </div>\n");
         html.append("      </div>\n");
         
