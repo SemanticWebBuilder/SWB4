@@ -1328,13 +1328,13 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                         //atributo agregado para permitir administrar los archivos adjuntos
                         request.setAttribute("usrWithGrants", "true");
                     }
-                    
+
                     /* Evalua si el responsable del acuerdo es el user actual, para permitirle modificar el estatus*/
                     if (elementBSC.createGenericInstance() instanceof Agreement && formElement.getURI().equals("http://www.semanticwebbuilder.org/swb4/bsc#dataFromSession")) {
                         Agreement agreement = (Agreement) elementBSC.createGenericInstance();
                         final WebSite scorecard = (WebSite) getSemanticObject().getModel().getModelObject().createGenericInstance();
                         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
-                        if(!agreement.getAgreementResponsible().equals(user)) {
+                        if (!agreement.getAgreementResponsible().equals(user)) {
                             applyInlineEdit = false;
                         }
                     }
@@ -1553,7 +1553,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
                 }
             }
         }
-
         return toReturn.toString();
     }
 
@@ -1706,27 +1705,9 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         html.append(getLinks(request)).append("\n");
         html.append("</head>").append("\n");
         html.append("<body>").append("\n");
+        html.append("<div id=\"container\">").append("\n");
         html.append(getHtml(request, paramRequest)).append("\n");
-        GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
-        TreeSet<ComponentExportable> ret = new TreeSet(new SWBPriorityComparator(true));
-
-        while (it.hasNext()) {
-            Resource resourceIt = it.next();
-            SWBResource base = SWBPortal.getResourceMgr().getResource(resourceIt.getURI());
-            try {
-                ComponentExportable ce = (ComponentExportable) base;
-                ret.add(ce);
-            } catch (ClassCastException cce) {
-            } catch (NullPointerException cce) {
-            }
-        }
-        Iterator<ComponentExportable> itRes = ret.iterator();
-        while (itRes.hasNext()) {
-            ComponentExportable compExpor = itRes.next();
-            html.append("<p>&nbsp;</p>").append("\n");
-            html.append(compExpor.doComponentExport(request, paramRequest));
-            html.append("\n");
-        }
+        html.append("</div> <!-- /#container -->").append("\n");
         html.append("</body>").append("\n");
         html.append("</html>");
         return html;
@@ -1748,7 +1729,7 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             throws SWBResourceException, IOException {
         StringBuilder html = new StringBuilder(256);
         String message = validateInput(request, paramRequest);
-        html.append("<div id=\"container\">").append("\n");
+        //html.append("<div id=\"container\">").append("\n");
         if (message == null) {
             String suri = request.getParameter("suri");
             SemanticObject semObj = SemanticObject.getSemanticObject(suri);
@@ -1813,6 +1794,26 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
             FileReader reader = retrieveTemplate();
             if (reader != null) {
                 html.append(generateDisplayPDF(request, paramRequest, reader, semObj));
+                GenericIterator<Resource> it = paramRequest.getWebPage().listResources();
+                TreeSet<ComponentExportable> ret = new TreeSet(new SWBPriorityComparator(true));
+
+                while (it.hasNext()) {
+                    Resource resourceIt = it.next();
+                    SWBResource base = SWBPortal.getResourceMgr().getResource(resourceIt.getURI());
+                    try {
+                        ComponentExportable ce = (ComponentExportable) base;
+                        ret.add(ce);
+                    } catch (ClassCastException cce) {
+                    } catch (NullPointerException cce) {
+                    }
+                }
+                Iterator<ComponentExportable> itRes = ret.iterator();
+                while (itRes.hasNext()) {
+                    ComponentExportable compExpor = itRes.next();
+                    html.append("<br></br>").append("\n");
+                    html.append(compExpor.doComponentExport(request, paramRequest));
+                    html.append("\n");
+                }
             } else {
                 html.append(paramRequest.getLocaleString("fileNotRead"));
             }
@@ -1820,7 +1821,6 @@ public class DetailViewManager extends org.semanticwb.bsc.admin.resources.base.D
         } else { //Si la información de entrada no es válida
             html.append(paramRequest.getLocaleString(message));
         }
-        html.append("</div> <!-- /#container -->").append("\n");
         return html;
     }
 
