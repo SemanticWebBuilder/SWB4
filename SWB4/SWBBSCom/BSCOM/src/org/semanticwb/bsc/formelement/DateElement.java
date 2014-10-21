@@ -68,7 +68,7 @@ public class DateElement extends org.semanticwb.bsc.formelement.base.DateElement
 
         String ext = disabled?" disabled=\"disabled\"":"";
         
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");//dd/MM/yyyy
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
         String value = request.getParameter(propName);
         if (value == null) {
             dt = obj.getDateProperty(prop);
