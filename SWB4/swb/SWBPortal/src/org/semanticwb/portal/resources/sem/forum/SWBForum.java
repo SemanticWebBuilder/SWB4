@@ -1037,7 +1037,7 @@ public class SWBForum extends org.semanticwb.portal.resources.sem.forum.base.SWB
         }
         int page = 1;
         int itemsPerPage = getPagination() > 0 ? getPagination() : 10;
-        Iterator<Thread> it = SWBComparator.sortByDisplayName(Thread.ClassMgr.listThreads(paramRequest.getWebPage().getWebSite()), lang);
+        Iterator<Thread> it = SWBComparator.sortByCreated(Thread.ClassMgr.listThreads(paramRequest.getWebPage().getWebSite()), false);
         Resource base = paramRequest.getResourceBase();
         while (it.hasNext()) {
             Thread dt = it.next();
