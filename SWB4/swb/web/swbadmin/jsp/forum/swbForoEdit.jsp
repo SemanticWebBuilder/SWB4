@@ -4,6 +4,7 @@
     Author     : carlos.alvarez
 --%>
 
+<%@page import="org.semanticwb.SWBPortal"%>
 <%@page import="org.semanticwb.portal.util.CaptchaUtil"%>
 <%@page import="org.semanticwb.portal.api.SWBResourceURL"%>
 <%@page import="org.semanticwb.SWBUtils"%>
@@ -13,6 +14,8 @@
 <%@page import="org.semanticwb.portal.api.SWBParamRequest"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<link type="text/css" rel="stylesheet" href="<%= SWBPortal.getContextPath() %>/swbadmin/css/bootstrap/bootstrap.css">
+<link type="text/css" rel="stylesheet" href="<%= SWBPortal.getContextPath() %>/swbadmin/css/fontawesome/font-awesome.css">
 <%
     SWBParamRequest paramRequest = (SWBParamRequest) request.getAttribute("paramRequest");
     String threadUri = request.getParameter("threadUri") != null ? request.getParameter("threadUri") : "";

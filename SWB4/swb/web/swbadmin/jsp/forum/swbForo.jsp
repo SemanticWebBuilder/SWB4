@@ -43,6 +43,8 @@ a {text-decoration: none;}
 a:hover {text-decoration: underline;}
 </style>
 -->
+<link type="text/css" rel="stylesheet" href="<%= SWBPortal.getContextPath() %>/swbadmin/css/bootstrap/bootstrap.css">
+<link type="text/css" rel="stylesheet" href="<%= SWBPortal.getContextPath() %>/swbadmin/css/fontawesome/font-awesome.css">
 <%
     WebPage webpage = paramRequest.getWebPage();
     Resource base = paramRequest.getResourceBase();
