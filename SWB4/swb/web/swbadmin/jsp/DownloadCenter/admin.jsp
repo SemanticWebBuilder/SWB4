@@ -169,7 +169,8 @@
                                         <input type="text" value="<%=title%>" name="title_<%=id%>" style="width: 95%">
                                     </td> 
                                     <td align="center">
-                                        <input type="text" value="<%=desc%>" name="desc_<%=id%>" style="width: 95%">
+                                        <%--<input type="text" value="<%=desc%>" name="desc_<%=id%>" style="width: 95%">--%>
+                                        <textarea type="text" name="desc_<%=id%>" style="width: 95%"><%=desc%></textarea>
                                     </td> 
                                 </tr>
                                 <%
@@ -255,7 +256,9 @@
             <input type="text" value="" name="title__id" style="width: 95%">
         </td> 
         <td align="center">
-            <input type="text" value="" name="desc__id" style="width: 95%">
+            <%--<input type="text" value="" name="desc__id" style="width: 95%">--%>
+            
+            <textarea type="text" name="desc__id" style="width: 95%"></textarea>
         </td> 
     </tr>
     </table>
