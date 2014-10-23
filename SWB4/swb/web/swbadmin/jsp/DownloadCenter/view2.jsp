@@ -40,6 +40,22 @@
         return new DecimalFormat("#,##0.#").format(result) + " " + unit;
     }
 %>
+<table border="1" id="tablaManuales">
+    <tbody>
+        <tr>
+            <td width="565px">
+                <h3>Descripción </h3>
+            </td>
+            <td>
+                <h3>Versión </h3>
+            </td>
+            <td width="auto">
+                <h3>Tamaño</h3>
+            </td>
+            <td>
+                <h3>Descargas</h3>
+            </td>
+        </tr>
 <%
     Iterator<String> it = paramRequest.getResourceBase().getAttributeNames();
     while (it.hasNext())
@@ -98,35 +114,22 @@
             int hits = Integer.parseInt(shits);            
 %>
 
-<table border="1" id="tablaManuales">
-    <tbody><tr>
-            <td width="565px">
-                <h3>Descripción </h3>
-            </td>
-            <td>
-                <h3>Versión </h3>
-            </td>
-            <td width="auto">
-                <h3>Tamaño</h3>
-            </td>
-            <td>
-                <h3>Descargas</h3>
-            </td>
-        </tr>
+
         <tr>
             <td><%=desc%>
             </td>
             <td>
-                <h2><a href="<%=url%>"><img align="absmiddle" src="http://www.semanticwebbuilder.org.mx/css/images/descargar.gif">4.5.6.0</a></h2>
+                <h2><a href="<%=url%>"><img align="absmiddle" src="http://www.semanticwebbuilder.org.mx/css/images/descargar.gif"><%=title%></a></h2>
             </td>
             <td width="auto"><%=size%>
 
             </td>
-            <td><%=hits%></td>
+            <td align="center"><%=hits%></td>
         </tr>
-    </tbody></table>
+  
 
 <%        }
     }
 
 %>
+  </tbody></table>
