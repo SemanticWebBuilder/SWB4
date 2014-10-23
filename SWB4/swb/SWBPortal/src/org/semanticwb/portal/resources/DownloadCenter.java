@@ -126,6 +126,7 @@ public class DownloadCenter extends GenericResource
                         base.removeAttribute(key);
                         base.removeAttribute("desc_" + id);
                         base.removeAttribute("title_" + id);
+                        base.removeAttribute("hits_"+id);
                     }
                 }
                 List<FileItem> imagesAddBatch = new ArrayList<FileItem>();
@@ -225,6 +226,7 @@ public class DownloadCenter extends GenericResource
                         paramRequest.getResourceBase().removeAttribute(file_key);
                         paramRequest.getResourceBase().removeAttribute("title_" + id);
                         paramRequest.getResourceBase().removeAttribute("desc_" + id);
+                        paramRequest.getResourceBase().removeAttribute("hits_"+id);
                         if (fileName != null)
                         {
                             File file = new File(SWBPortal.getWorkPath() + paramRequest.getResourceBase().getWorkPath() + "/" + fileName);
@@ -302,7 +304,22 @@ public class DownloadCenter extends GenericResource
                         mimeType = "application/binary";
                     }
                     response.setContentType(mimeType);
-
+                    String shits=base.getAttribute("hits_"+id, "0");
+                    if(shits==null || shits.isEmpty())
+                    {
+                        shits="0";
+                    }
+                    int hits=Integer.parseInt(shits);
+                    hits++;
+                    base.setAttribute("hits_"+id, String.valueOf(hits));
+                    try
+                    {
+                        base.updateAttributesToDB();                    
+                    }
+                    catch(SWBException e)
+                    {
+                        log.error(e);                        
+                    }
                     base.addHit(request, paramRequest.getUser(), paramRequest.getWebPage());
                     SWBUtils.IO.copyStream(new FileInputStream(fileName), response.getOutputStream());
                 }
