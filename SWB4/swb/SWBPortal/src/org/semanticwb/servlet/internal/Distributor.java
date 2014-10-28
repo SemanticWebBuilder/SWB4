@@ -410,6 +410,8 @@ public class Distributor implements InternalServlet
                 
                 String contentType="text/html; charset=ISO-8859-1";
                 
+                boolean showPTime=true;
+                        
                 if(res==null)
                 {
                     res=new SWBHttpServletResponseWrapper(response);
@@ -476,6 +478,7 @@ public class Distributor implements InternalServlet
                     
                     if(pageCache)res.setContentType(contentType);
                     
+                    showPTime=currTemplate.isShowProcessedTime();                    
                 }else
                 {
                     contentType=res.getContentType();
@@ -536,7 +539,10 @@ public class Distributor implements InternalServlet
                 if(!pageCache)user.addVisitedWebPage(webpage);
                 
                 long tfin=System.currentTimeMillis() - tini;
-                out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
+                if(showPTime)
+                {
+                    out.println("\n<!--Time: " + tfin + "ms - SemanticWebBuilder: " + webpage + "--> ");  //TODO: encontrar una forma de configurar esto...
+                }
 
                 out.close();
             } catch (Exception e) {
