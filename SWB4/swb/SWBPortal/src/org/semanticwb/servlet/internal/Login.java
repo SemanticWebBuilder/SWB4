@@ -327,7 +327,7 @@ public class Login implements InternalServlet
                 try {
                     User tmpuser = dparams.getWebPage().getWebSite().getUserRepository().getUserByLogin(request.getParameter("wb_username"));
 
-                    if (null!=tmpuser && (tmpuser.isRequestChangePassword() || 
+                    if (null!=tmpuser && tmpuser.isActive() && (tmpuser.isRequestChangePassword() || 
                             SWBPlatform.getSecValues().isForceChage() || SWBPlatform.getSecValues().getExpires()>0))
                     {
                         String alg = tmpuser.getPassword().substring(1,tmpuser.getPassword().indexOf("}"));
