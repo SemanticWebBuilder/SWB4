@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import javax.servlet.http.*;
 import org.json.JSONArray;
@@ -23,6 +24,7 @@ import org.semanticwb.SWBPlatform;
 import org.semanticwb.SWBPortal;
 import org.semanticwb.SWBUtils;
 import org.semanticwb.bsc.BSC;
+import org.semanticwb.bsc.Detailed;
 import org.semanticwb.bsc.PDFExportable;
 import org.semanticwb.bsc.Seasonable;
 import org.semanticwb.bsc.accessory.Period;
@@ -88,6 +90,32 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
 
         super(base);
     }
+    
+    /**
+     * Obtiene el periodo seleccionado actual
+     *
+     * @param request la petici&oacute;n enviada por el cliente
+     * @param ws sitio web
+     * @return un objeto {@code Periodo} que representa el Periodo actual
+     * seleccionado
+     */
+    private Period getPeriod(HttpServletRequest request) {
+        WebSite model = getResourceBase().getWebSite();
+        Period period = null;
+        HttpSession session = request.getSession(true);
+        final String pid = session.getAttribute(model.getId())==null ? request.getParameter(model.getId()) : (String)session.getAttribute(model.getId());
+        if (Period.ClassMgr.hasPeriod(pid, model)) {
+            period = Period.ClassMgr.getPeriod(pid, model);
+        }
+        if(period == null) {
+            BSC scorecard = (BSC)model;
+            try {
+                period = scorecard.listPeriods().next();
+            }catch(NoSuchElementException nsee) {
+            }
+        }
+        return period;
+    }
 
     /**
      * Genera el c&oacute;digo HTML que representa la vista de este recurso en
@@ -107,334 +135,294 @@ public class SummaryViewManager extends SummaryViewManagerBase implements PDFExp
      */
     @Override
     public void doView(HttpServletRequest request, HttpServletResponse response,
-            SWBParamRequest paramRequest) throws SWBResourceException, IOException {
-
+            SWBParamRequest paramRequest) throws SWBResourceException, IOException
+    {
+        response.setContentType("text/html; charset=ISO-8859-1");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Pragma", "no-cache");
+        
+        final User user = paramRequest.getUser();
+        if(!user.isSigned()) {
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
+            return;
+        }        
+        
         PrintWriter out = response.getWriter();
         StringBuilder output = new StringBuilder(128);
-        String lang = paramRequest.getUser().getLanguage();
-        User user = paramRequest.getUser();
-        if (this.getActiveView() == null) {
-            output.append(paramRequest.getLocaleString("msg_noContentView"));
-        } else {
-            SummaryView activeView = this.getActiveView();
-            List propsInView = SWBUtils.Collections.copyIterator(activeView.listPropertyListItems());
+        final String lang = user.getLanguage();
 
-            //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
-            //se tiene captura de datos en el periodo obtenido
-            SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
-            WebSite website = this.getResourceBase().getWebSite();
-            Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
-            String identifier = "uri"; //de los elementos del grid
-            String filters = null;
-            String periodId = (String) request.getSession(true).getAttribute(website.getId());
-            boolean addStatus = false;
+        SummaryView activeView = this.getActiveView();
+        if(activeView == null)
+        {
+            out.println("<div class=\"alert alert-warning\" role=\"alert\">");
+            out.println(paramRequest.getLocaleString("msg_noContentView"));
+            out.println("</div>");
+            return;
+        }            
 
-            //Si no hay sesion, la peticion puede ser directa (una liga en un correo). Crear sesion y atributo:
-            if (periodId == null) {
-                periodId = request.getParameter(website.getId()) != null
-                        ? request.getParameter(website.getId()) : null;
-                if (periodId != null) {
-                    request.getSession(true).setAttribute(website.getId(), periodId);
-                }
+        //Se obtiene el conjunto de instancias correspondientes al valor de workClass, en el sitio, de las que 
+        //se tiene captura de datos en el periodo obtenido
+        SemanticClass semWorkClass = this.getWorkClass().transformToSemanticClass();
+        WebSite website = this.getResourceBase().getWebSite();
+        Iterator<GenericObject> allInstances = website.listInstancesOfClass(semWorkClass);
+        String identifier = "uri"; //de los elementos del grid
+        String filters = null;
+        boolean addStatus = false;
+
+        final Period thisPeriod = getPeriod(request);
+
+        //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
+        if (semWorkClass.equals(Objective.bsc_Objective)) {
+            identifier = paramRequest.getLocaleString("value_ObjectiveId");
+            filters = paramRequest.getLocaleString("value_ObjectiveFilter");
+            addStatus = true;
+        } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
+            identifier = paramRequest.getLocaleString("value_IndicatorId");
+            filters = paramRequest.getLocaleString("value_IndicatorFilter");
+            addStatus = true;
+        } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
+            identifier = paramRequest.getLocaleString("value_InitiativeId");
+            filters = paramRequest.getLocaleString("value_InitiativeFilter");
+        } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
+            identifier = paramRequest.getLocaleString("value_DeliverableId");
+            filters = paramRequest.getLocaleString("value_DeliverableFilter");
+        } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
+            identifier = paramRequest.getLocaleString("value_AgreementId");
+            filters = paramRequest.getLocaleString("value_AgreementFilter");
+        }
+        //objeto JSON que almacenara la estructura del grid de Dojo
+        JSONObject structure = new JSONObject();
+        JSONArray items = new JSONArray();
+        try {
+            structure.append("identifier", identifier);
+        } catch (JSONException jsone) {
+            SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
+        }
+
+        List<PropertyListItem> propsInView = SWBUtils.Collections.copyIterator(activeView.listPropertyListItems());
+
+        //Para cada instancia de tipo workClass en el scorecard
+        while(allInstances.hasNext())
+        {
+            GenericObject generic = allInstances.next();
+            SemanticObject semObj = generic.getSemanticObject();
+            Detailed d = (Detailed)generic;
+            boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
+            if(!isActive || !d.canView()) {
+                continue;
             }
-            Period thisPeriod = periodId != null
-                    ? Period.ClassMgr.getPeriod(periodId, website)
-                    : null;
 
-            //Define el identificador a utilizar de acuerdo al tipo de objetos a presentar
-            if (semWorkClass.equals(Objective.bsc_Objective)) {
-                identifier = paramRequest.getLocaleString("value_ObjectiveId");
-                filters = paramRequest.getLocaleString("value_ObjectiveFilter");
-                addStatus = true;
-            } else if (semWorkClass.equals(Indicator.bsc_Indicator)) {
-                identifier = paramRequest.getLocaleString("value_IndicatorId");
-                filters = paramRequest.getLocaleString("value_IndicatorFilter");
-                addStatus = true;
-            } else if (semWorkClass.equals(Initiative.bsc_Initiative)) {
-                identifier = paramRequest.getLocaleString("value_InitiativeId");
-                filters = paramRequest.getLocaleString("value_InitiativeFilter");
-            } else if (semWorkClass.equals(Deliverable.bsc_Deliverable)) {
-                identifier = paramRequest.getLocaleString("value_DeliverableId");
-                filters = paramRequest.getLocaleString("value_DeliverableFilter");
-            } else if (semWorkClass.equals(Agreement.bsc_Agreement)) {
-                identifier = paramRequest.getLocaleString("value_AgreementId");
-                filters = paramRequest.getLocaleString("value_AgreementFilter");
-            }
-            //objeto JSON que almacenara la estructura del grid de Dojo
-            JSONObject structure = new JSONObject();
-            JSONArray items = new JSONArray();
+            Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();
+            JSONObject row = new JSONObject();
+            StringBuilder status = new StringBuilder();
+            status.append("<span class=\""+d.getStatusIconClass(thisPeriod)+"\"></span>");
             try {
-                structure.append("identifier", identifier);
+                row.put("status", status.toString());
             } catch (JSONException jsone) {
                 SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
             }
-            //Por cada instancia (de tipo workClass) en el sitio:
-            while (allInstances.hasNext()) {
-                GenericObject generic = allInstances.next();
-                SemanticObject semObj = generic.getSemanticObject();
-                boolean isActive = semObj.getBooleanProperty(org.semanticwb.model.Activeable.swb_active, true);
-                boolean hasPeriod = true;
-                if (thisPeriod != null) {
-                    if (semObj.instanceOf(Seasonable.bsc_Seasonable)) {
-                        hasPeriod = semObj.hasObjectProperty(Seasonable.bsc_hasPeriod, thisPeriod.getSemanticObject());
-                    } else {//Para iniciativas y entregables:
-                        hasPeriod = true;
-                    }
-                }
-                if (!user.haveAccess(generic) || !isActive || !hasPeriod) {
-                    continue;
-                }
-                GenericIterator<PropertyListItem> viewPropertiesList = activeView.listPropertyListItems();
-
-                JSONObject row = new JSONObject();
-                StringBuilder status = new StringBuilder(128);
-
-                if (addStatus) {
-                    PeriodStatus perStat = null;
-                    if (generic instanceof Objective) {
-                        Objective obj = (Objective) generic;
-                        perStat = obj.getPeriodStatus(thisPeriod);
-                    } else if (generic instanceof Indicator) {
-                        Indicator indicator = (Indicator) generic;
-                        Measure measure = indicator.getStar() != null
-                                ? indicator.getStar().getMeasure(thisPeriod) : null;
-                        if (measure != null && measure.getEvaluation() != null) {
-                            perStat = measure.getEvaluation();
-                        }
-                    }
-                    if (perStat != null && perStat.getStatus() != null) {
-                        status.append("<span class=\"swbstrgy-semaphore ");
-                        status.append(perStat.getStatus().getIconClass());
-                        status.append("\">");
-                        status.append(perStat.getStatus().getTitle());
-                        status.append("</span>");
-                    } else {
-                        status.append("<span class=\"swbstrgy-unknown\"></span>");
-                    }
-                    try {
-                        row.put("status", status.toString());
-                    } catch (JSONException jsone) {
-                        SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
-                    }
-
-                }
-
-                //Por cada propiedad en la vista:
-                while (viewPropertiesList.hasNext()) {
-                    PropertyListItem propListItem = viewPropertiesList.next();
-                    SemanticProperty elementProperty = propListItem.getElementProperty().transformToSemanticProperty();
-                    String propertyValue = null; //para las propiedades tipo objeto
-                    //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
-                    propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
-                    try {
-                        row.put(elementProperty.getName(), propertyValue);
-                    } catch (JSONException jsone) {
-                        SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
-                    }
-                }
-
-                //Se utiliza el URI como identificador de los elementos del grid
-                //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
+            //Por cada propiedad en la vista:
+            while (viewPropertiesList.hasNext()) {
+                PropertyListItem propListItem = viewPropertiesList.next();
+                SemanticProperty elementProperty = propListItem.getElementProperty().transformToSemanticProperty();
+                String propertyValue = null; //para las propiedades tipo objeto
+                //Para mostrar los valores de las propiedades, de acuerdo a los FormElements asignados a cada propiedad:
+                propertyValue = renderPropertyValue(request, semObj, elementProperty.getURI(), lang);
                 try {
-                    row.put("uri", semObj.getURI());
+                    row.put(elementProperty.getName(), propertyValue);
                 } catch (JSONException jsone) {
                     SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
                 }
-                //Agrega el objeto "renglon" a la estructura del grid
-                items.put(row);
             }
+            //Se utiliza el URI como identificador de los elementos del grid
+            //Agrega la uri de cada instancia para poder crear las ligas a las vistas detalle
             try {
-                structure.put("items", items);
+                row.put("uri", semObj.getURI());
             } catch (JSONException jsone) {
                 SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
             }
-
-            //Obtiene encabezados de tabla y propiedades para filtros
-            Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();//activeView.listPropertyListItems();
-            ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
-            TreeMap headings2Show = new TreeMap();
-
-            if (addStatus) {
-                String[] statusHeading = {
-                    "status",
-                    "Estado",
-                    "true"
-                };
-                headingsArray.add(statusHeading);//Para los filtros
-                headings2Show.put(Integer.parseInt("0"), statusHeading);
-            }
-
-            boolean showFiltering = false;
-            if (viewPropertiesList != null) {
-                while (viewPropertiesList.hasNext()) {
-                    PropertyListItem propListItem = viewPropertiesList.next();
-                    if (propListItem != null) {
-                        SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
-                        int arrayIndex = propListItem.getPropertyOrder();
-                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
-                            arrayIndex++;
-                        }
-
-                        if (property != null) {
-                            String[] heading = {
-                                property.getName(),
-                                property.getLabel(lang),
-                                (filters != null && filters.contains(property.getName()))
-                                ? "true" : "false"
-                            };
-                            headingsArray.add(heading);
-                            headings2Show.put(Integer.valueOf(arrayIndex), heading);
-                            if (filters != null && filters.contains(property.getName())) {
-                                showFiltering = true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Declara el codigo HTML para inclusion de Dojo.Grid y sus estilos
-            output.append("<script type=\"text/javascript\">\n");
-            output.append("  dojo.require('dojo.parser');\n");
-            output.append("  dojo.require('dojox.layout.ContentPane');\n");
-            output.append("  dojo.require('dijit.form.Form');\n");
-            output.append("  dojo.require('dijit.form.Button');\n");
-            output.append("  dojo.require('dijit.form.MultiSelect');\n");
-            output.append("  dojo.require('dojox.grid.DataGrid');\n");
-            output.append("  dojo.require('dojo.data.ItemFileReadStore');\n");
-            output.append("  var structure = ");
-            try {
-                output.append(structure.toString(2));
-            } catch (JSONException jsone) {
-                SummaryViewManager.log.error("En la escritura de store del grid", jsone);
-                output.append("{}");
-            }
-            output.append(";\n");
-            /* -------------------------------------------------------------- */
-            output.append("  ");
-            output.append("  var myStore, myGrid;\n");
-            output.append("  dojo.addOnLoad(function() {\n");
-            output.append("    myStore = new dojo.data.ItemFileReadStore({\n");
-            output.append("      data : structure\n");
-            output.append("    });\n");
-            output.append("    myGrid = new dojox.grid.DataGrid({\n");
-            output.append("      store: myStore,\n");
-            output.append("      structure: [\n");
-            // Coloca cada columna en la estructura del grid
-            Entry thisHeading = headings2Show.firstEntry();
-            int iCount = 0;
-            while (thisHeading != null) {
-                Integer thisKey = (Integer) thisHeading.getKey();
-
-                if (iCount > 0) {
-                    output.append(",\n");
-                } else {
-                    output.append("\n");
-                }
-                String[] heading = (String[]) thisHeading.getValue();
-                if (heading != null && heading.length > 1) {
-                    output.append("        {\n");
-                    output.append("          name: \"");
-                    output.append(heading[1]);
-                    output.append("\", field: \"");
-                    output.append(heading[0]);
-                    output.append("\", width: \"auto\",\n");
-                    output.append("          formatter: function(content, rowIndex, cell) {\n");
-                    output.append("            var toReturn = content;\n");
-                    output.append("            while (content.indexOf(\"&lt\") > -1) {\n");
-                    output.append("              toReturn = content.replace(\"&lt;\", \"<\");\n");
-                    output.append("              content = toReturn;\n");
-                    output.append("            }\n");
-                    output.append("            return toReturn;\n");
-                    output.append("          }\n");
-                    output.append("        }");
-                }
-                iCount++;
-                thisHeading = headings2Show.higherEntry(thisKey);
-            }
-            output.append("      ],\n");
-            output.append("      rowSelector: '10px', \n");
-            output.append("      autoHeight: true \n");
-            output.append("    }, \"grid\");\n");
-            output.append("    myGrid.startup();\n");
-            output.append("  });\n");
-            output.append("</script>\n");
-
-            //Se evalua el mostrar la forma para filtrado en grid
-            if (filters != null && showFiltering) {
-                output.append("<div class=\"filter\">\n");
-                output.append("  <form dojoType=\"dijit.form.Form\" name=\"filter\" id=\"filterForm");
-                output.append(this.getId());
-                output.append("\" method=\"post\">\n");
-                output.append("    <select name=\"filterCriteria\" id=\"filterCriteria");
-                output.append(this.getId());
-                output.append("\">\n");
-                output.append("        <option value=\"");
-                output.append(identifier);
-                output.append("\">");
-                output.append(paramRequest.getLocaleString("lbl_chooseFilter"));
-                output.append("</option>\n");
-
-                for (int i = 0; i < headingsArray.size(); i++) {
-                    String[] heading = headingsArray.get(i);
-                    if (heading != null && heading.length > 2 && heading[2].equals("true")) {
-                        output.append("        <option value=\"");
-                        output.append(heading[0]);
-                        output.append("\">");
-                        output.append(heading[1]);
-                        output.append("</option>\n");
-                    }
-                }
-                output.append("    </select>\n");
-                output.append("    <script type=\"text/javascript\">");
-                output.append("      function catchKeyStrokes(e) {");
-                output.append("        if (e.keyCode == 13) {");
-                output.append("          e.preventDefault ? e.preventDefault() : e.returnValue = false;");
-                output.append("          return false;");
-                output.append("        }");
-                output.append("      }");
-                output.append("    </script>");
-                output.append("    <input type=\"text\" name=\"filterValue\" id=\"filterValue");
-                output.append(this.getId());
-                output.append("\" onkeydown=\"catchKeyStrokes(event);\">\n");
-                output.append("      <span dojoType='dijit.form.Button'>\n");
-                output.append("          Aplicar\n");
-                //funcion de javascript para aplicacion de filtro en Grid:
-                output.append("          <script type=\"dojo/method\" event='onClick' args='evt'>\n");
-                output.append("                var choosenCriteria = document.getElementById('filterCriteria");
-                output.append(this.getId());
-                output.append("').value;\n");
-                output.append("                var choosenValue = document.getElementById('filterValue");
-                output.append(this.getId());
-                output.append("');\n");
-                output.append("                if (choosenValue.value != '') {\n");
-
-                //Evalua entre los diferentes criterios de filtrado
-                for (int i = 0; i < headingsArray.size(); i++) {
-                    String[] heading = headingsArray.get(i);
-                    if (heading != null && heading.length > 2 && heading[2].equals("true")) {
-                        output.append("                  if (choosenCriteria == '");
-                        output.append(heading[0]);
-                        output.append("') {\n");
-                        output.append("                    myGrid.setQuery({");
-                        output.append(heading[0]);
-                        output.append(": '*' + choosenValue.value + '*'});\n");
-                        output.append("                  }\n");
-                    }
-                }
-                output.append("                } else if (choosenValue.value == '') {\n");
-                output.append("                  myGrid.setQuery({");
-                output.append(identifier);
-                output.append(": '*'});\n");
-                output.append("                }\n");
-                output.append("          </script>\n");
-                output.append("      </span>\n");
-                output.append("  </form>\n");
-                output.append("</div>\n");
-            }
-
-            output.append("<div id=\"grid\"></div>\n");
-
+            //Agrega el objeto "renglon" a la estructura del grid
+            items.put(row);
         }
+        try {
+            structure.put("items", items);
+        }catch(JSONException jsone) {
+            SummaryViewManager.log.error("En la creacion de objetos JSON", jsone);
+        }
+
+        //Obtiene encabezados de tabla y propiedades para filtros
+        Iterator<PropertyListItem> viewPropertiesList = propsInView.iterator();
+        ArrayList<String[]> headingsArray = new ArrayList<String[]>(16);
+        TreeMap headings2Show = new TreeMap();
+
+//            if (addStatus) {
+        String[] statusHeading = {"status", "Estado", "true" };
+        headingsArray.add(statusHeading);//Para los filtros
+        headings2Show.put(Integer.parseInt("0"), statusHeading);
+//            }
+
+        boolean showFiltering = false;
+        if (viewPropertiesList != null) {
+            while (viewPropertiesList.hasNext()) {
+                PropertyListItem propListItem = viewPropertiesList.next();
+                if(propListItem != null)
+                {
+                    SemanticProperty property = propListItem.getElementProperty().transformToSemanticProperty();
+                    int arrayIndex = propListItem.getPropertyOrder();
+//                        if (addStatus) { //Si se agrego la columna de status, las demas se recorren
+                        arrayIndex++;
+//                        }
+                    if(property != null) {
+                        String[] heading = {
+                            property.getName(),
+                            property.getLabel(lang),
+                            (filters != null && filters.contains(property.getName()))
+                            ? "true" : "false"
+                        };
+                        headingsArray.add(heading);
+                        headings2Show.put(Integer.valueOf(arrayIndex), heading);
+                        if (filters != null && filters.contains(property.getName())) {
+                            showFiltering = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Declara el codigo HTML para inclusion de Dojo.Grid y sus estilos
+        output.append("<script type=\"text/javascript\">\n");
+        output.append("  dojo.require('dojo.parser');\n");
+        output.append("  dojo.require('dojox.layout.ContentPane');\n");
+        output.append("  dojo.require('dijit.form.Form');\n");
+        output.append("  dojo.require('dijit.form.Button');\n");
+        output.append("  dojo.require('dijit.form.MultiSelect');\n");
+        output.append("  dojo.require('dojox.grid.DataGrid');\n");
+        output.append("  dojo.require('dojo.data.ItemFileReadStore');\n");
+        output.append("  var structure = ");
+        try {
+            output.append(structure.toString(2));
+        }catch(JSONException jsone) {
+            SummaryViewManager.log.error("En la escritura de store del grid", jsone);
+            output.append("{}");
+        }
+        output.append(";\n");
+
+        output.append("  var myStore, myGrid;\n");
+        output.append("  dojo.addOnLoad(function() {\n");
+        output.append("    myStore = new dojo.data.ItemFileReadStore({\n");
+        output.append("      data : structure\n");
+        output.append("    });\n");
+        output.append("    myGrid = new dojox.grid.DataGrid({\n");
+        output.append("      store: myStore,\n");
+        output.append("      structure: [\n");
+        // Coloca cada columna en la estructura del grid
+        Entry thisHeading = headings2Show.firstEntry();
+        int iCount = 0;
+        while(thisHeading != null)
+        {
+            Integer thisKey = (Integer) thisHeading.getKey();
+            if (iCount > 0) {
+                output.append(",\n");
+            }else {
+                output.append("\n");
+            }
+            String[] heading = (String[]) thisHeading.getValue();
+            if(heading != null && heading.length > 1)
+            {
+                output.append("        {\n");
+                output.append("          name: \"");
+                output.append(heading[1]);
+                output.append("\", field: \"");
+                output.append(heading[0]);
+                output.append("\", width: \"auto\",\n");
+                output.append("          formatter: function(content, rowIndex, cell) {\n");
+                output.append("            var toReturn = content;\n");
+                output.append("            while (content.indexOf(\"&lt\") > -1) {\n");
+                output.append("              toReturn = content.replace(\"&lt;\", \"<\");\n");
+                output.append("              content = toReturn;\n");
+                output.append("            }\n");
+                output.append("            return toReturn;\n");
+                output.append("          }\n");
+                output.append("        }");
+            }
+            iCount++;
+            thisHeading = headings2Show.higherEntry(thisKey);
+        }
+        output.append("      ],\n");
+        output.append("      rowSelector: '10px', \n");
+        output.append("      autoHeight: true \n");
+        output.append("    }, \"grid\");\n");
+        output.append("    myGrid.startup();\n");
+        output.append("  });\n");
+        output.append("</script>\n");
+
+        //Se evalua el mostrar la forma para filtrado en grid
+        if(filters != null && showFiltering)
+        {
+            output.append("<div class=\"filter\">\n");
+            output.append("  <form dojoType=\"dijit.form.Form\" name=\"filter\" id=\"filterForm");
+            output.append(this.getId());
+            output.append("\" method=\"post\">\n");
+            output.append("    <select name=\"filterCriteria\" id=\"filterCriteria\">\n");
+            output.append("        <option value=\"");
+            output.append(identifier);
+            output.append("\">");
+            output.append(paramRequest.getLocaleString("lbl_chooseFilter"));
+            output.append("</option>\n");
+
+            for (int i = 0; i < headingsArray.size(); i++) {
+                String[] heading = headingsArray.get(i);
+                if (heading != null && heading.length > 2 && heading[2].equals("true")) {
+                    output.append("        <option value=\"");
+                    output.append(heading[0]);
+                    output.append("\">");
+                    output.append(heading[1]);
+                    output.append("</option>\n");
+                }
+            }
+            output.append("    </select>\n");
+            output.append("    <script type=\"text/javascript\">");
+            output.append("      function catchKeyStrokes(e) {");
+            output.append("        if (e.keyCode == 13) {");
+            output.append("          e.preventDefault ? e.preventDefault() : e.returnValue = false;");
+            output.append("          return false;");
+            output.append("        }");
+            output.append("      }");
+            output.append("    </script>");
+            output.append("    <input type=\"text\" name=\"filterValue\" id=\"filterValue\" onkeydown=\"catchKeyStrokes(event);\">\n");
+            output.append("      <span dojoType='dijit.form.Button'>\n");
+            output.append("          Aplicar\n");
+            //funcion de javascript para aplicacion de filtro en Grid:
+            output.append("          <script type=\"dojo/method\" event='onClick' args='evt'>\n");
+            output.append("            var choosenCriteria = document.getElementById('filterCriteria').value;\n");
+            output.append("            var choosenValue = document.getElementById('filterValue');\n");
+            output.append("                if (choosenValue.value != '') {\n");
+
+            //Evalua entre los diferentes criterios de filtrado
+            for (int i = 0; i < headingsArray.size(); i++) {
+                String[] heading = headingsArray.get(i);
+                if (heading != null && heading.length > 2 && heading[2].equals("true")) {
+                    output.append("                  if (choosenCriteria == '");
+                    output.append(heading[0]);
+                    output.append("') {\n");
+                    output.append("                    myGrid.setQuery({");
+                    output.append(heading[0]);
+                    output.append(": '*' + choosenValue.value + '*'});\n");
+                    output.append("                  }\n");
+                }
+            }
+            output.append("                } else if (choosenValue.value == '') {\n");
+            output.append("                  myGrid.setQuery({");
+            output.append(identifier);
+            output.append(": '*'});\n");
+            output.append("                }\n");
+            output.append("          </script>\n");
+            output.append("      </span>\n");
+            output.append("  </form>\n");
+            output.append("</div>\n");
+        }
+        output.append("<div id=\"grid\"></div>\n");
         out.println(output.toString());
     }
 
