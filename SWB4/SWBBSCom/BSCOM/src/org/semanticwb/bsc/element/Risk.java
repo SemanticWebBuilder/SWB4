@@ -216,14 +216,14 @@ public class Risk extends org.semanticwb.bsc.element.base.RiskBase {
         final User user = SWBContext.getSessionUser(scorecard.getUserRepository().getId());
         return user.haveAccess(this);
     }
-
+    
     @Override
     public String getStatusIconClass() {
-        return "";
+        return "quadrant_"+calculateQuadrant(Boolean.FALSE);
     }
 
     @Override
     public String getStatusIconClass(Period period) {
-        return "";
+        return getStatusIconClass();
     }
 }
