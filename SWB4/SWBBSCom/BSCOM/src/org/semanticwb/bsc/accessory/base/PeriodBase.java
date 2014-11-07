@@ -4,7 +4,7 @@ package org.semanticwb.bsc.accessory.base;
    /**
    * Período de medición. 
    */
-public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Help,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.Undeleteable,org.semanticwb.bsc.Machinable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.model.FilterableNode,org.semanticwb.model.Roleable,org.semanticwb.model.Traceable
+public abstract class PeriodBase extends org.semanticwb.bsc.accessory.BSCAccessory implements org.semanticwb.bsc.Help,org.semanticwb.bsc.Machinable,org.semanticwb.model.Traceable,org.semanticwb.model.Filterable,org.semanticwb.bsc.Sortable,org.semanticwb.model.Descriptiveable,org.semanticwb.model.UserGroupable,org.semanticwb.model.Activeable,org.semanticwb.model.Undeleteable,org.semanticwb.model.Roleable,org.semanticwb.model.FilterableNode
 {
    /**
    * Indica la fecha incial del periodo representado
