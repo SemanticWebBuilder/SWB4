@@ -48,31 +48,48 @@ public class MeasuresManager extends GenericAdmResource {
         response.setContentType("text/html; charset=ISO-8859-1");
         response.setHeader("Cache-Control", "no-cache");
         response.setHeader("Pragma", "no-cache");
+        PrintWriter out = response.getWriter();
         
-        User user = paramRequest.getUser();
-        if(user==null || !user.isSigned()) {
-            response.sendError(403);
-            return;
-        }
-         
         final String suri = request.getParameter("suri");
         if(suri==null) {
-            response.getWriter().println("No se detect&oacute ning&uacute;n objeto sem&aacute;ntico!");
+            response.getWriter().println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
             response.flushBuffer();
             return;
         }
-        
-        PrintWriter out = response.getWriter();
+        SemanticObject semObj = SemanticObject.getSemanticObject(suri);
+        try {
+            Measurable measurable = (Measurable)semObj.getGenericInstance();
+        }catch(ClassCastException cce) {
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset></fieldset>");
+            out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+            out.println("</div>");
+            response.flushBuffer();
+            return;
+        }
+        final User user = paramRequest.getUser();
+        if(!user.isSigned() ) {
+            out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgUserHasNotPermissions")+"</div>");
+            response.flushBuffer();
+            return;
+        }
         out.println("<script type=\"text/javascript\">");
         if (request.getParameter("statmsg") != null && !request.getParameter("statmsg").isEmpty()) {
             out.println("   showStatus('" + request.getParameter("statmsg") + "');");
         }
         out.println("</script>");
-        
-        SemanticOntology ont = SWBPlatform.getSemanticMgr().getOntology();
-        SemanticObject semObj = ont.getSemanticObject(suri);
-        Measurable measurable = (Measurable)semObj.getGenericInstance();
-        doEditSeries(request, response, paramRequest);
+        try {
+            doEditSeries(request, response, paramRequest);
+        }catch(SWBResourceException e) {
+            throw new SWBResourceException(e.getMessage(), e);
+        }catch(IOException e) {
+            throw new IOException(e.getMessage(), e.getCause());
+        }catch(ClassCastException e) {
+            out.println("<div class=\"swbform\">");
+            out.println("<fieldset></fieldset>");
+            out.println("<div class=\"alert alert-warning\" role=\"alert\">"+paramRequest.getLocaleString("msgNoSuchSemanticElement")+"</div>");
+            out.println("</div>");
+        }
     }
     
     private void doEditSeries(HttpServletRequest request, HttpServletResponse response, SWBParamRequest paramRequest) throws SWBResourceException, IOException, ClassCastException
