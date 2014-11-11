@@ -334,12 +334,8 @@ public class BSC extends org.semanticwb.bsc.base.BSCBase
     public Document getDom(final Period period)
     {
         User user = SWBContext.getSessionUser(getUserRepository().getId());
-System.out.println("\n\ngetDom("+period.getTitle()+")...");
-System.out.println("repositorio="+getUserRepository().getId());
-System.out.println("1. user="+user);
         if(user==null) {
             user = SWBContext.getAdminUser();
-System.out.println("2. user="+user);            
         }
         final String lang = user.getLanguage()==null?"es":user.getLanguage();
         Document  doc = SWBUtils.XML.getNewDocument();
