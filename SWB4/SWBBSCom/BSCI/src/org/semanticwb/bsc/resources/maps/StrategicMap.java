@@ -359,14 +359,11 @@ System.out.println("\n\n****************************\nsvg=\n"+SWBUtils.XML.domTo
     private Period getPeriod(HttpServletRequest request) {
         WebSite model = getResourceBase().getWebSite();
         Period period = null;
-System.out.println("model="+model+", id="+model.getId());
         HttpSession session = request.getSession(true);
         final String pid = (String) session.getAttribute(model.getId());
-System.out.println("pid="+pid);
         if (Period.ClassMgr.hasPeriod(pid, model)) {
             period = Period.ClassMgr.getPeriod(pid, model);
         }
-System.out.println("1. period="+period);
         if(period == null) {
             BSC scorecard = (BSC)model;
             try {
@@ -374,7 +371,6 @@ System.out.println("1. period="+period);
             }catch(NoSuchElementException nsee) {
             }
         }
-System.out.println("2. period="+period.getTitle());
         return period;
     }
     private String urlBase = null;
